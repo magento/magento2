@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="reporting_counts" resource="default">
+  <table name="reporting_counts" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="type" nullable="true" length="255"/>
     <column xsi:type="int" name="count" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -9,7 +9,7 @@
       <column name="entity_id"/>
     </constraint>
   </table>
-  <table name="reporting_module_status" resource="default">
+  <table name="reporting_module_status" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
     <column xsi:type="varchar" name="active" nullable="true" length="255"/>
@@ -20,18 +20,18 @@
       <column name="entity_id"/>
     </constraint>
   </table>
-  <table name="reporting_orders" resource="default">
+  <table name="reporting_orders" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="decimal" name="total" scale="12" precission="4" unsigned="true" nullable="true"/>
-    <column xsi:type="decimal" name="total_base" scale="12" precission="4" unsigned="true" nullable="true"/>
+    <column xsi:type="decimal" name="total" scale="0" precission="10" unsigned="true" nullable="true"/>
+    <column xsi:type="decimal" name="total_base" scale="0" precission="10" unsigned="true" nullable="true"/>
     <column xsi:type="int" name="item_count" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="entity_id"/>
     </constraint>
   </table>
-  <table name="reporting_users" resource="default">
+  <table name="reporting_users" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="type" nullable="true" length="255"/>
     <column xsi:type="varchar" name="action" nullable="true" length="255"/>
@@ -40,7 +40,7 @@
       <column name="entity_id"/>
     </constraint>
   </table>
-  <table name="reporting_system_updates" resource="default">
+  <table name="reporting_system_updates" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="type" nullable="true" length="255"/>
     <column xsi:type="varchar" name="action" nullable="true" length="255"/>

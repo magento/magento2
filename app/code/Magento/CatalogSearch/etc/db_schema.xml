@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
   <table name="catalog_eav_attribute" resource="default">
-    <column xsi:type="float" name="search_weight" scale="10" precission="0" unsigned="true" nullable="false" default="1"/>
+    <column xsi:type="float" name="search_weight" scale="0" precission="10" unsigned="true" nullable="false" default="1"/>
   </table>
-  <table name="catalogsearch_fulltext_scope1" resource="default">
+  <table name="catalogsearch_fulltext_scope1" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="attribute_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="longtext" name="data_index" nullable="true"/>

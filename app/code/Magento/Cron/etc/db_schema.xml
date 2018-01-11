@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="cron_schedule" resource="default">
+  <table name="cron_schedule" resource="default" engine="innodb">
     <column xsi:type="int" name="schedule_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0"/>
     <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="translation" resource="default">
+  <table name="translation" resource="default" engine="innodb">
     <column xsi:type="int" name="key_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="string" nullable="false" length="255" default="Translate String"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>

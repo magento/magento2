@@ -70,14 +70,6 @@ class Index implements DbDefinitionProcessorInterface
     /**
      * @inheritdoc
      */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Index;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function fromDefinition(array $data)
     {
         return [

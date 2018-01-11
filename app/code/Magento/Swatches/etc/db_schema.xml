@@ -3,7 +3,7 @@
   <table name="catalog_eav_attribute" resource="default">
     <column xsi:type="text" name="additional_data" nullable="true"/>
   </table>
-  <table name="eav_attribute_option_swatch" resource="default">
+  <table name="eav_attribute_option_swatch" resource="default" engine="innodb">
     <column xsi:type="int" name="swatch_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>

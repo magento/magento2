@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="admin_user" resource="default">
+  <table name="admin_user" resource="default" engine="innodb">
     <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="firstname" nullable="true" length="32"/>
     <column xsi:type="varchar" name="lastname" nullable="true" length="32"/>
@@ -15,11 +15,11 @@
     <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false" default="1"/>
     <column xsi:type="text" name="extra" nullable="true"/>
     <column xsi:type="text" name="rp_token" nullable="true"/>
-    <column xsi:type="timestamp" name="rp_token_created_at" on_update="false" nullable="true" default="NULL"/>
+    <column xsi:type="timestamp" name="rp_token_created_at" on_update="false" nullable="true"/>
     <column xsi:type="varchar" name="interface_locale" nullable="false" length="16" default="en_US"/>
     <column xsi:type="smallint" name="failures_num" padding="6" unsigned="false" nullable="true" identity="false" default="0"/>
-    <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" default="NULL"/>
-    <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true" default="NULL"/>
+    <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="user_id"/>
     </constraint>
@@ -27,7 +27,7 @@
       <column name="username"/>
     </constraint>
   </table>
-  <table name="admin_passwords" resource="default">
+  <table name="admin_passwords" resource="default" engine="innodb">
     <column xsi:type="int" name="password_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="password_hash" nullable="true" length="100"/>

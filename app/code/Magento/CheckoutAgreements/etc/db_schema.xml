@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="checkout_agreement" resource="default">
+  <table name="checkout_agreement" resource="default" engine="innodb">
     <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
     <column xsi:type="text" name="content" nullable="true"/>
@@ -13,7 +13,7 @@
       <column name="agreement_id"/>
     </constraint>
   </table>
-  <table name="checkout_agreement_store" resource="default">
+  <table name="checkout_agreement_store" resource="default" engine="innodb">
     <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">

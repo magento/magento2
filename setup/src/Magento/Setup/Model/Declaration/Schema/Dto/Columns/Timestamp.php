@@ -29,10 +29,16 @@ class Timestamp extends Column implements
     private $onUpdate;
 
     /**
+     * @var bool
+     */
+    private $nullable;
+
+    /**
      * @param string $name
      * @param string $type
      * @param Table $table
      * @param string $default
+     * @param bool $nullable
      * @param string|null $onUpdate
      * @param string|null $onCreate
      */
@@ -41,12 +47,14 @@ class Timestamp extends Column implements
         string $type,
         Table $table,
         string $default,
+        bool $nullable = true,
         string $onUpdate = null,
         string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $onCreate);
         $this->default = $default;
         $this->onUpdate = $onUpdate;
+        $this->nullable = $nullable;
     }
 
     /**
@@ -80,5 +88,13 @@ class Timestamp extends Column implements
             'default' => $this->getDefault(),
             'onUpdate' => $this->getOnUpdate()
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNullable(): bool
+    {
+        return $this->nullable;
     }
 }

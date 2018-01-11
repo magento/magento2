@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="persistent_session" resource="default">
+  <table name="persistent_session" resource="default" engine="innodb">
     <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="key" nullable="false" length="50"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>

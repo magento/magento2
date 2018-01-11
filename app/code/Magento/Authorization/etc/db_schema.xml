@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="authorization_role" resource="default">
+  <table name="authorization_role" resource="default" engine="innodb">
     <column xsi:type="int" name="role_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="tree_level" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -20,7 +20,7 @@
       <column name="tree_level"/>
     </index>
   </table>
-  <table name="authorization_rule" resource="default">
+  <table name="authorization_rule" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="role_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="resource_id" nullable="true" length="255"/>

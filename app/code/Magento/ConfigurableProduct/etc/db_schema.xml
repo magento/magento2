@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="catalog_product_super_attribute" resource="default">
+  <table name="catalog_product_super_attribute" resource="default" engine="innodb">
     <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -14,7 +14,7 @@
       <column name="attribute_id"/>
     </constraint>
   </table>
-  <table name="catalog_product_super_attribute_label" resource="default">
+  <table name="catalog_product_super_attribute_label" resource="default" engine="innodb">
     <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -33,7 +33,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="catalog_product_super_link" resource="default">
+  <table name="catalog_product_super_link" resource="default" engine="innodb">
     <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>

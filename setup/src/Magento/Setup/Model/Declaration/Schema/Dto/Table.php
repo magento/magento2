@@ -15,7 +15,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
  * Resource is also specified on this strucural element
  */
 class Table extends GenericElement implements
-    ElementInterface
+    ElementInterface,
+    ElementDiffAwareInterface
 {
     /**
      * In case if we will need to change this object: add, modify or drop, we will need
@@ -49,17 +50,24 @@ class Table extends GenericElement implements
     private $resource;
 
     /**
+     * @var string
+     */
+    private $engine;
+
+    /**
      * @param string $name
      * @param string $type
      * @param string $resource
-     * @param array  $columns
-     * @param array  $indexes
-     * @param array  $constraints
+     * @param string $engine
+     * @param array $columns
+     * @param array $indexes
+     * @param array $constraints
      */
     public function __construct(
         string $name,
         string $type,
         string $resource,
+        string $engine,
         array $columns = [],
         array $indexes = [],
         array $constraints = []
@@ -69,6 +77,7 @@ class Table extends GenericElement implements
         $this->indexes = $indexes;
         $this->constraints = $constraints;
         $this->resource = $resource;
+        $this->engine = $engine;
     }
 
     /**
@@ -234,5 +243,24 @@ class Table extends GenericElement implements
     public function getElementType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEngine(): string
+    {
+        return $this->engine;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDiffSensitiveParams()
+    {
+        return [
+            'resource' => $this->getResource(),
+            'engine' => $this->getEngine()
+        ];
     }
 }

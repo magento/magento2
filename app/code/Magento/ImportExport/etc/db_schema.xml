@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="importexport_importdata" resource="default">
+  <table name="importexport_importdata" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="entity" nullable="false" length="50"/>
     <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append"/>
@@ -9,7 +9,7 @@
       <column name="id"/>
     </constraint>
   </table>
-  <table name="import_history" resource="default">
+  <table name="import_history" resource="default" engine="innodb">
     <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="timestamp" name="started_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>

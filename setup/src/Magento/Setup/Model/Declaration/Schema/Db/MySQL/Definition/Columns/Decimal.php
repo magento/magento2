@@ -54,8 +54,8 @@ class Decimal implements DbDefinitionProcessorInterface
             '%s %s(%s, %s) %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
-            $column->getScale(),
             $column->getPrecission(),
+            $column->getScale(),
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
@@ -75,8 +75,8 @@ class Decimal implements DbDefinitionProcessorInterface
              * match[2] - precision
              * match[3] - scale
              */
-            $data['scale'] = $matches[2];
-            $data['precission'] = $matches[3];
+            $data['precission'] = $matches[2];
+            $data['scale'] = $matches[3];
             $data = $this->nullable->fromDefinition($data);
             $data = $this->unsigned->fromDefinition($data);
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="vault_payment_token" resource="default">
+  <table name="vault_payment_token" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="public_hash" nullable="false" length="128"/>
@@ -25,7 +25,7 @@
       <column name="public_hash"/>
     </constraint>
   </table>
-  <table name="vault_payment_token_order_payment_link" resource="default">
+  <table name="vault_payment_token_order_payment_link" resource="default" engine="innodb">
     <column xsi:type="int" name="order_payment_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="payment_token_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">

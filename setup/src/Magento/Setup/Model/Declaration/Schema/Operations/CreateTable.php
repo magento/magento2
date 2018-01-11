@@ -80,6 +80,11 @@ class CreateTable implements OperationInterface
             }
         }
 
-        return $this->dbSchemaWriter->createTable($table->getName(), $table->getResource(), $definition);
+        return $this->dbSchemaWriter->createTable(
+            $table->getName(),
+            $table->getResource(),
+            $definition,
+            ['engine' => $table->getEngine()]
+        );
     }
 }

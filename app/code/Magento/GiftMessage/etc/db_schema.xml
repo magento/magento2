@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="gift_message" resource="default">
+  <table name="gift_message" resource="default" engine="innodb">
     <column xsi:type="int" name="gift_message_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="sender" nullable="true" length="255"/>

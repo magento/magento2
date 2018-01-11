@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="core_config_data" resource="default">
+  <table name="core_config_data" resource="default" engine="innodb">
     <column xsi:type="int" name="config_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="scope" nullable="false" length="8" default="default"/>
     <column xsi:type="int" name="scope_id" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="search_query" resource="default">
+  <table name="search_query" resource="default" engine="innodb">
     <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="query_text" nullable="true" length="255"/>
     <column xsi:type="int" name="num_results" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -33,7 +33,7 @@
     </index>
     <index name="SEARCH_QUERY_SYNONYM_FOR" disabled="1"/>
   </table>
-  <table name="search_synonyms" resource="default">
+  <table name="search_synonyms" resource="default" engine="innodb">
     <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="text" name="synonyms" nullable="false"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>

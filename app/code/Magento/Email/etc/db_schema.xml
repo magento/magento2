@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="email_template" resource="default">
+  <table name="email_template" resource="default" engine="innodb">
     <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="template_code" nullable="false" length="150"/>
     <column xsi:type="text" name="template_text" nullable="false"/>

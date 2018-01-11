@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="product_alert_price" resource="default">
+  <table name="product_alert_price" resource="default" engine="innodb">
     <column xsi:type="int" name="alert_price_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="add_date" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <column xsi:type="timestamp" name="last_send_date" on_update="false" nullable="true"/>
@@ -26,7 +26,7 @@
       <column name="website_id"/>
     </index>
   </table>
-  <table name="product_alert_stock" resource="default">
+  <table name="product_alert_stock" resource="default" engine="innodb">
     <column xsi:type="int" name="alert_stock_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>

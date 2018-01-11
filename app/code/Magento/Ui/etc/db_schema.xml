@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="ui_bookmark" resource="default">
+  <table name="ui_bookmark" resource="default" engine="innodb">
     <column xsi:type="int" name="bookmark_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="namespace" nullable="false" length="255"/>

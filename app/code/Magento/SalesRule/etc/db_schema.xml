@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="salesrule" resource="default">
+  <table name="salesrule" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
     <column xsi:type="text" name="description" nullable="true"/>
@@ -15,8 +15,8 @@
     <column xsi:type="text" name="product_ids" nullable="true"/>
     <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="simple_action" nullable="true" length="32"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_qty" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_qty" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="int" name="discount_step" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="apply_to_shipping" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -34,7 +34,7 @@
       <column name="from_date"/>
     </index>
   </table>
-  <table name="salesrule_coupon" resource="default">
+  <table name="salesrule_coupon" resource="default" engine="innodb">
     <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="code" nullable="true" length="255"/>
@@ -60,7 +60,7 @@
       <column name="rule_id"/>
     </index>
   </table>
-  <table name="salesrule_coupon_usage" resource="default">
+  <table name="salesrule_coupon_usage" resource="default" engine="innodb">
     <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -74,7 +74,7 @@
       <column name="customer_id"/>
     </index>
   </table>
-  <table name="salesrule_customer" resource="default">
+  <table name="salesrule_customer" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_customer_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -93,7 +93,7 @@
       <column name="rule_id"/>
     </index>
   </table>
-  <table name="salesrule_label" resource="default">
+  <table name="salesrule_label" resource="default" engine="innodb">
     <column xsi:type="int" name="label_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>
@@ -111,7 +111,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="salesrule_product_attribute" resource="default">
+  <table name="salesrule_product_attribute" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"/>
@@ -136,19 +136,19 @@
       <column name="attribute_id"/>
     </index>
   </table>
-  <table name="salesrule_coupon_aggregated" resource="default">
+  <table name="salesrule_coupon_aggregated" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50"/>
     <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="total_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="total_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="total_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="total_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="varchar" name="rule_name" nullable="true" length="255"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
@@ -167,19 +167,19 @@
       <column name="rule_name"/>
     </index>
   </table>
-  <table name="salesrule_coupon_aggregated_updated" resource="default">
+  <table name="salesrule_coupon_aggregated_updated" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50"/>
     <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="total_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="total_amount_actual" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="total_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="total_amount_actual" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="varchar" name="rule_name" nullable="true" length="255"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
@@ -198,16 +198,16 @@
       <column name="rule_name"/>
     </index>
   </table>
-  <table name="salesrule_coupon_aggregated_order" resource="default">
+  <table name="salesrule_coupon_aggregated_order" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50"/>
     <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="total_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="total_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="varchar" name="rule_name" nullable="true" length="255"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
@@ -226,7 +226,7 @@
       <column name="rule_name"/>
     </index>
   </table>
-  <table name="salesrule_website" resource="default">
+  <table name="salesrule_website" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -239,7 +239,7 @@
       <column name="website_id"/>
     </index>
   </table>
-  <table name="salesrule_customer_group" resource="default">
+  <table name="salesrule_customer_group" resource="default" engine="innodb">
     <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">

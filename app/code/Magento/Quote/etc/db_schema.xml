@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="quote" resource="quote">
+  <table name="quote" resource="quote" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -10,15 +10,15 @@
     <column xsi:type="smallint" name="is_virtual" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
     <column xsi:type="smallint" name="is_multi_shipping" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
     <column xsi:type="int" name="items_count" padding="10" unsigned="true" nullable="true" identity="false" default="0"/>
-    <column xsi:type="decimal" name="items_qty" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="items_qty" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
     <column xsi:type="int" name="orig_order_id" padding="10" unsigned="true" nullable="true" identity="false" default="0"/>
-    <column xsi:type="decimal" name="store_to_base_rate" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="store_to_quote_rate" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="store_to_base_rate" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="store_to_quote_rate" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
     <column xsi:type="varchar" name="base_currency_code" nullable="true" length="255"/>
     <column xsi:type="varchar" name="store_currency_code" nullable="true" length="255"/>
     <column xsi:type="varchar" name="quote_currency_code" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="grand_total" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="base_grand_total" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="grand_total" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="base_grand_total" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
     <column xsi:type="varchar" name="checkout_method" nullable="true" length="255"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="customer_tax_class_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -39,14 +39,14 @@
     <column xsi:type="varchar" name="password_hash" nullable="true" length="255"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="255"/>
     <column xsi:type="varchar" name="global_currency_code" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="base_to_global_rate" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_to_quote_rate" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_to_global_rate" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="varchar" name="customer_taxvat" nullable="true" length="255"/>
     <column xsi:type="varchar" name="customer_gender" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="subtotal" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_subtotal" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="subtotal_with_discount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_subtotal_with_discount" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="subtotal" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_subtotal" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="int" name="is_changed" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="smallint" name="trigger_recollect" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="text" name="ext_shipping_info" nullable="true"/>
@@ -63,7 +63,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="quote_address" resource="quote">
+  <table name="quote_address" resource="quote" engine="innodb">
     <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -91,34 +91,34 @@
     <column xsi:type="smallint" name="collect_shipping_rates" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="shipping_method" nullable="true" length="120"/>
     <column xsi:type="varchar" name="shipping_description" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="weight" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_subtotal" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="subtotal_with_discount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_subtotal_with_discount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="tax_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_tax_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="shipping_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_shipping_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="shipping_tax_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_shipping_tax_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_discount_amount" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="grand_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_grand_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="weight" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_subtotal" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="tax_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_tax_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="shipping_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_shipping_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_discount_amount" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="grand_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_grand_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="text" name="customer_notes" nullable="true"/>
     <column xsi:type="text" name="applied_taxes" nullable="true"/>
     <column xsi:type="varchar" name="discount_description" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="shipping_discount_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_shipping_discount_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="subtotal_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="shipping_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_shipping_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_subtotal_total_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="text" name="vat_id" nullable="true"/>
     <column xsi:type="smallint" name="vat_is_valid" padding="6" unsigned="false" nullable="true" identity="false"/>
     <column xsi:type="text" name="vat_request_id" nullable="true"/>
@@ -132,7 +132,7 @@
       <column name="quote_id"/>
     </index>
   </table>
-  <table name="quote_item" resource="quote">
+  <table name="quote_item" resource="quote" engine="innodb">
     <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -148,33 +148,33 @@
     <column xsi:type="text" name="additional_data" nullable="true"/>
     <column xsi:type="smallint" name="is_qty_decimal" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="smallint" name="no_discount" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
-    <column xsi:type="decimal" name="weight" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="custom_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_percent" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="base_discount_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="tax_percent" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="tax_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="base_tax_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="row_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_row_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="row_total_with_discount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="row_weight" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="weight" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="qty" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="custom_price" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_percent" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="base_discount_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="tax_percent" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="tax_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="base_tax_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="row_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_row_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="row_total_with_discount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="row_weight" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
     <column xsi:type="varchar" name="product_type" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="base_tax_before_discount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="tax_before_discount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="original_custom_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="tax_before_discount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="original_custom_price" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="varchar" name="redirect_url" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="base_cost" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="price_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_price_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="row_total_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_row_total_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_cost" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="price_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="item_id"/>
     </constraint>
@@ -194,7 +194,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="quote_address_item" resource="quote">
+  <table name="quote_address_item" resource="quote" engine="innodb">
     <column xsi:type="int" name="address_item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="parent_item_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="quote_address_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -203,16 +203,16 @@
     <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"/>
     <column xsi:type="text" name="applied_rule_ids" nullable="true"/>
     <column xsi:type="text" name="additional_data" nullable="true"/>
-    <column xsi:type="decimal" name="weight" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="discount_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="tax_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="row_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="base_row_total" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="row_total_with_discount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="base_discount_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="base_tax_amount" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
-    <column xsi:type="decimal" name="row_weight" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="weight" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="qty" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="discount_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="tax_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="row_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="base_row_total" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="row_total_with_discount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="base_discount_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="base_tax_amount" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
+    <column xsi:type="decimal" name="row_weight" scale="4" precission="12" unsigned="false" nullable="true" default="0"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="super_product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -221,18 +221,18 @@
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
     <column xsi:type="text" name="description" nullable="true"/>
     <column xsi:type="int" name="is_qty_decimal" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_percent" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="price" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_percent" scale="4" precission="12" unsigned="false" nullable="true"/>
     <column xsi:type="int" name="no_discount" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="decimal" name="tax_percent" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_cost" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="price_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_price_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="row_total_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_row_total_incl_tax" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
-    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="12" precission="4" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="tax_percent" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_price" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_cost" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="price_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
+    <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precission="12" unsigned="false" nullable="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="address_item_id"/>
     </constraint>
@@ -249,7 +249,7 @@
       <column name="quote_item_id"/>
     </index>
   </table>
-  <table name="quote_item_option" resource="quote">
+  <table name="quote_item_option" resource="quote" engine="innodb">
     <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"/>
@@ -263,7 +263,7 @@
       <column name="item_id"/>
     </index>
   </table>
-  <table name="quote_payment" resource="quote">
+  <table name="quote_payment" resource="quote" engine="innodb">
     <column xsi:type="int" name="payment_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -291,7 +291,7 @@
       <column name="quote_id"/>
     </index>
   </table>
-  <table name="quote_shipping_rate" resource="quote">
+  <table name="quote_shipping_rate" resource="quote" engine="innodb">
     <column xsi:type="int" name="rate_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="address_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -301,7 +301,7 @@
     <column xsi:type="varchar" name="code" nullable="true" length="255"/>
     <column xsi:type="varchar" name="method" nullable="true" length="255"/>
     <column xsi:type="text" name="method_description" nullable="true"/>
-    <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="text" name="error_message" nullable="true"/>
     <column xsi:type="text" name="method_title" nullable="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -312,7 +312,7 @@
       <column name="address_id"/>
     </index>
   </table>
-  <table name="quote_id_mask" resource="quote">
+  <table name="quote_id_mask" resource="quote" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="masked_id" nullable="true" length="32"/>

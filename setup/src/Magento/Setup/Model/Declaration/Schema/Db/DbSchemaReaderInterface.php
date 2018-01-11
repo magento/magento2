@@ -40,6 +40,15 @@ interface DbSchemaReaderInterface
     public function readColumns($tableName, $resource);
 
     /**
+     * Show table options, like engine, partitioning, etc
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @return array
+     */
+    public function getTableOptions($tableName, $resource);
+
+    /**
      * Read references (foreign keys) from Magento tables
      *
      * @param  string $tableName

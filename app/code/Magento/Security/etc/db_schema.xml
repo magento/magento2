@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="admin_user_session" resource="default">
+  <table name="admin_user_session" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="session_id" nullable="false" length="128"/>
     <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -19,7 +19,7 @@
       <column name="user_id"/>
     </index>
   </table>
-  <table name="password_reset_request_event" resource="default">
+  <table name="password_reset_request_event" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="request_type" padding="5" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="account_reference" nullable="true" length="255"/>

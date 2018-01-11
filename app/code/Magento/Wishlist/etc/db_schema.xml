@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="wishlist" resource="default">
+  <table name="wishlist" resource="default" engine="innodb">
     <column xsi:type="int" name="wishlist_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="shared" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -17,14 +17,14 @@
       <column name="shared"/>
     </index>
   </table>
-  <table name="wishlist_item" resource="default">
+  <table name="wishlist_item" resource="default" engine="innodb">
     <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="wishlist_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true"/>
     <column xsi:type="text" name="description" nullable="true"/>
-    <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"/>
+    <column xsi:type="decimal" name="qty" scale="4" precission="12" unsigned="false" nullable="false"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="wishlist_item_id"/>
     </constraint>
@@ -41,7 +41,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="wishlist_item_option" resource="default">
+  <table name="wishlist_item_option" resource="default" engine="innodb">
     <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"/>

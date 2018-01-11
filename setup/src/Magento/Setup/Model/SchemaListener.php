@@ -379,19 +379,21 @@ class SchemaListener
      * @param string $indexName
      * @param array $fields
      * @param string $indexType
+     * @param string $indexAlhoritm
      */
     public function addIndex(
         $tableName,
         $indexName,
         $fields,
-        $indexType = AdapterInterface::INDEX_TYPE_INDEX
+        $indexType = AdapterInterface::INDEX_TYPE_INDEX,
+        $indexAlhoritm = 'btree'
     ) {
         if (!is_array($fields)) {
             $fields = [$fields];
         }
         if ($indexType == AdapterInterface::INDEX_TYPE_FULLTEXT || $indexType === AdapterInterface::INDEX_TYPE_INDEX) {
             if ($indexType === AdapterInterface::INDEX_TYPE_INDEX) {
-                $indexType = 'btree';
+                $indexType = $indexAlhoritm;
             }
             $dataToLog['indexes'][$indexName] =
                 [
@@ -427,7 +429,7 @@ class SchemaListener
      * @param array $indexes
      * @param string $tableName
      */
-    private function prepareConstraintsAndIndexes(array $foreignKeys, array $indexes, $tableName)
+    private function prepareConstraintsAndIndexes(array $foreignKeys, array $indexes, $tableName, $engine)
     {
         //Process foreign keys
         foreach ($foreignKeys as $name => $foreignKey) {
@@ -446,7 +448,8 @@ class SchemaListener
                 $tableName,
                 $name,
                 $index['COLUMNS'],
-                $index['TYPE']
+                $index['TYPE'],
+                $engine === 'memory' ? 'hash' : 'btree'
             );
         }
     }
@@ -458,8 +461,10 @@ class SchemaListener
      */
     public function createTable(Table $table)
     {
+        $engine = strtolower($table->getOption('type'));
+        $this->tables[$this->getModuleName()][strtolower($table->getName())]['engine'] = $engine;
         $this->prepareColumns($table->getName(), $table->getColumns());
-        $this->prepareConstraintsAndIndexes($table->getForeignKeys(), $table->getIndexes(), $table->getName());
+        $this->prepareConstraintsAndIndexes($table->getForeignKeys(), $table->getIndexes(), $table->getName(), $engine);
     }
 
     /**

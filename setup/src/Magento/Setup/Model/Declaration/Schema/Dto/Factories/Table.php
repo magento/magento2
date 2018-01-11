@@ -14,6 +14,12 @@ use Magento\Framework\ObjectManagerInterface;
 class Table implements FactoryInterface
 {
     /**
+     * Default engine
+     * In this case we use MySQL, but this option can be overrided for another SQL
+     */
+    const DEFAULT_ENGINE = 'innodb';
+
+    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -44,6 +50,10 @@ class Table implements FactoryInterface
      */
     public function create(array $data)
     {
+        if (!isset($data['engine'])) {
+            $data['engine'] = self::DEFAULT_ENGINE;
+        }
+
         return $this->objectManager->create($this->className, $data);
     }
 }

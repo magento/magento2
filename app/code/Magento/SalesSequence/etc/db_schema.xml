@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="sales_sequence_profile" resource="sales">
+  <table name="sales_sequence_profile" resource="sales" engine="innodb">
     <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="prefix" nullable="true" length="32"/>
@@ -20,7 +20,7 @@
       <column name="suffix"/>
     </constraint>
   </table>
-  <table name="sales_sequence_meta" resource="sales">
+  <table name="sales_sequence_meta" resource="sales" engine="innodb">
     <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="entity_type" nullable="false" length="32"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>

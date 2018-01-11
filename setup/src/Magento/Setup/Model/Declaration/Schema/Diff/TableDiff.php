@@ -100,7 +100,7 @@ class TableDiff
         Diff $diff
     ) {
         //Handle changing shard
-        if ($generatedTable->getResource() !== $declaredTable->getResource()) {
+        if ($this->diffManager->shouldBeModified($declaredTable, $generatedTable)) {
             $diff->register(
                 $declaredTable,
                 ReCreateTable::OPERATION_NAME,

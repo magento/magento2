@@ -129,13 +129,13 @@ class InstallSchema implements InstallSchemaInterface
             'total',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '20,2',
-            ['unsigned' => true],
+            ['unsigned' => true, 'precision' => 20, 'scale' => 2],
             'Total From Store'
         )->addColumn(
             'total_base',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '20,2',
-            ['unsigned' => true],
+            ['unsigned' => true, 'precision' => 20, 'scale' => 2],
             'Total From Base Currency'
         )->addColumn(
             'item_count',

@@ -55,7 +55,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * @inheritdoc
      */
-    public function createTable($tableName, $resource, array $definition)
+    public function createTable($tableName, $resource, array $definition, array $options)
     {
         $sql = sprintf(
             "(\n%s\n)",

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="oauth_consumer" resource="default">
+  <table name="oauth_consumer" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="0"/>
@@ -25,7 +25,7 @@
       <column name="updated_at"/>
     </index>
   </table>
-  <table name="oauth_token" resource="default">
+  <table name="oauth_token" resource="default" engine="innodb">
     <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="admin_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -52,7 +52,7 @@
       <column name="consumer_id"/>
     </index>
   </table>
-  <table name="oauth_nonce" resource="default">
+  <table name="oauth_nonce" resource="default" engine="innodb">
     <column xsi:type="varchar" name="nonce" nullable="false" length="32"/>
     <column xsi:type="int" name="timestamp" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="false" identity="false"/>
@@ -62,7 +62,7 @@
       <column name="consumer_id"/>
     </constraint>
   </table>
-  <table name="integration" resource="default">
+  <table name="integration" resource="default" engine="innodb">
     <column xsi:type="int" name="integration_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="name" nullable="false" length="255"/>
     <column xsi:type="varchar" name="email" nullable="false" length="255"/>
@@ -84,12 +84,12 @@
       <column name="consumer_id"/>
     </constraint>
   </table>
-  <table name="oauth_token_request_log" resource="default">
+  <table name="oauth_token_request_log" resource="default" engine="innodb">
     <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="user_name" nullable="false" length="255"/>
     <column xsi:type="smallint" name="user_type" padding="5" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="failures_count" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
-    <column xsi:type="timestamp" name="lock_expires_at" on_update="false" nullable="false"/>
+    <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="log_id"/>
     </constraint>

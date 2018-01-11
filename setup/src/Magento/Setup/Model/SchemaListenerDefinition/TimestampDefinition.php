@@ -20,7 +20,7 @@ class TimestampDefinition implements DefinitionConverterInterface
         $cDefault = $definition['default'] ?? null;
         $cNullable = $definition['nullable'] ?? true;
         $onUpdate = false;
-        if ($cDefault === null) {
+        if ($cDefault === null && !$cNullable) {
             $cDefault = 'NULL';
         } elseif ($cDefault == Table::TIMESTAMP_INIT) {
             $cDefault = 'CURRENT_TIMESTAMP';
@@ -30,8 +30,9 @@ class TimestampDefinition implements DefinitionConverterInterface
         } elseif ($cDefault == Table::TIMESTAMP_INIT_UPDATE) {
             $cDefault = 'CURRENT_TIMESTAMP';
             $onUpdate = true;
-        } elseif ($cNullable && !$cDefault) {
-            $cDefault = null;
+        } elseif (!$cNullable && !$cDefault && $definition['type'] === 'timestamp') {
+            $cDefault = 'CURRENT_TIMESTAMP';
+            $onUpdate = true;
             $cNullable = true;
         }
 

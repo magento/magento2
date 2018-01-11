@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="shipping_tablerate" resource="default">
+  <table name="shipping_tablerate" resource="default" engine="innodb">
     <column xsi:type="int" name="pk" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="website_id" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="dest_country_id" nullable="false" length="4" default="0"/>
     <column xsi:type="int" name="dest_region_id" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="dest_zip" nullable="false" length="10" default="*"/>
     <column xsi:type="varchar" name="condition_name" nullable="false" length="20"/>
-    <column xsi:type="decimal" name="condition_value" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
-    <column xsi:type="decimal" name="cost" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="condition_value" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="cost" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="pk"/>
     </constraint>

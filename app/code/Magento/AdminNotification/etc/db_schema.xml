@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="adminnotification_inbox" resource="default">
+  <table name="adminnotification_inbox" resource="default" engine="innodb">
     <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="date_added" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
@@ -22,7 +22,7 @@
       <column name="is_remove"/>
     </index>
   </table>
-  <table name="admin_system_messages" resource="default">
+  <table name="admin_system_messages" resource="default" engine="innodb">
     <column xsi:type="varchar" name="identity" nullable="false" length="100"/>
     <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>

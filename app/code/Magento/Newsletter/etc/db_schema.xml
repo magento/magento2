@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="newsletter_subscriber" resource="default">
+  <table name="newsletter_subscriber" resource="default" engine="innodb">
     <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
     <column xsi:type="timestamp" name="change_status_at" on_update="false" nullable="true"/>
@@ -19,7 +19,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="newsletter_template" resource="default">
+  <table name="newsletter_template" resource="default" engine="innodb">
     <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="template_code" nullable="true" length="150"/>
     <column xsi:type="text" name="template_text" nullable="true"/>
@@ -44,7 +44,7 @@
       <column name="modified_at"/>
     </index>
   </table>
-  <table name="newsletter_queue" resource="default">
+  <table name="newsletter_queue" resource="default" engine="innodb">
     <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="newsletter_type" padding="11" unsigned="false" nullable="true" identity="false"/>
@@ -64,7 +64,7 @@
       <column name="template_id"/>
     </index>
   </table>
-  <table name="newsletter_queue_link" resource="default">
+  <table name="newsletter_queue_link" resource="default" engine="innodb">
     <column xsi:type="int" name="queue_link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -82,7 +82,7 @@
       <column name="letter_sent_at"/>
     </index>
   </table>
-  <table name="newsletter_queue_store_link" resource="default">
+  <table name="newsletter_queue_store_link" resource="default" engine="innodb">
     <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -95,7 +95,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="newsletter_problem" resource="default">
+  <table name="newsletter_problem" resource="default" engine="innodb">
     <column xsi:type="int" name="problem_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>

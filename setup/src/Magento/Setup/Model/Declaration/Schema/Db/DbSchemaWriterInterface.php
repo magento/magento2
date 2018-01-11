@@ -33,9 +33,10 @@ interface DbSchemaWriterInterface
      * @param $tableName
      * @param $resource
      * @param  array $definition
+     * @param array $options
      * @return Statement
      */
-    public function createTable($tableName, $resource, array $definition);
+    public function createTable($tableName, $resource, array $definition, array $options);
 
     /**
      * Drop table from SQL database

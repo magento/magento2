@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="report_compared_product_index" resource="default">
+  <table name="report_compared_product_index" resource="default" engine="innodb">
     <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -31,7 +31,7 @@
       <column name="product_id"/>
     </index>
   </table>
-  <table name="report_viewed_product_index" resource="default">
+  <table name="report_viewed_product_index" resource="default" engine="innodb">
     <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
@@ -62,7 +62,7 @@
       <column name="product_id"/>
     </index>
   </table>
-  <table name="report_event_types" resource="default">
+  <table name="report_event_types" resource="default" engine="innodb">
     <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="event_name" nullable="false" length="64"/>
     <column xsi:type="smallint" name="customer_login" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -70,7 +70,7 @@
       <column name="event_type_id"/>
     </constraint>
   </table>
-  <table name="report_event" resource="default">
+  <table name="report_event" resource="default" engine="innodb">
     <column xsi:type="bigint" name="event_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="timestamp" name="logged_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -99,13 +99,13 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="report_viewed_product_aggregated_daily" resource="default">
+  <table name="report_viewed_product_aggregated_daily" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="product_price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -125,13 +125,13 @@
       <column name="product_id"/>
     </index>
   </table>
-  <table name="report_viewed_product_aggregated_monthly" resource="default">
+  <table name="report_viewed_product_aggregated_monthly" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="product_price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -151,13 +151,13 @@
       <column name="product_id"/>
     </index>
   </table>
-  <table name="report_viewed_product_aggregated_yearly" resource="default">
+  <table name="report_viewed_product_aggregated_yearly" resource="default" engine="innodb">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
-    <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="product_price" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">

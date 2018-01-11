@@ -67,6 +67,10 @@ class SchemaPersistor
                 $table->addAttribute('name', $tableName);
                 /** @TODO: handle different resources for sales and checkout tables */
                 $table->addAttribute('resource', $tableData['resource']);
+                if (isset($tableData['engine']) && $tableData['engine'] !== null) {
+                    $table->addAttribute('engine', $tableData['engine']);
+                }
+
                 $this->processColumns($tableData, $table);
                 $this->processConstraints($tableData, $table);
                 $this->processIndexes($tableData, $table);

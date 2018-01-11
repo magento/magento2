@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="directory_country" resource="default">
+  <table name="directory_country" resource="default" engine="innodb">
     <column xsi:type="varchar" name="country_id" nullable="false" length="2"/>
     <column xsi:type="varchar" name="iso2_code" nullable="true" length="2"/>
     <column xsi:type="varchar" name="iso3_code" nullable="true" length="3"/>
@@ -8,7 +8,7 @@
       <column name="country_id"/>
     </constraint>
   </table>
-  <table name="directory_country_format" resource="default">
+  <table name="directory_country_format" resource="default" engine="innodb">
     <column xsi:type="int" name="country_format_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="country_id" nullable="true" length="2"/>
     <column xsi:type="varchar" name="type" nullable="true" length="30"/>
@@ -21,7 +21,7 @@
       <column name="type"/>
     </constraint>
   </table>
-  <table name="directory_country_region" resource="default">
+  <table name="directory_country_region" resource="default" engine="innodb">
     <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="country_id" nullable="false" length="4" default="0"/>
     <column xsi:type="varchar" name="code" nullable="true" length="32"/>
@@ -33,7 +33,7 @@
       <column name="country_id"/>
     </index>
   </table>
-  <table name="directory_country_region_name" resource="default">
+  <table name="directory_country_region_name" resource="default" engine="innodb">
     <column xsi:type="varchar" name="locale" nullable="false" length="8"/>
     <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
@@ -46,10 +46,10 @@
       <column name="region_id"/>
     </index>
   </table>
-  <table name="directory_currency_rate" resource="default">
+  <table name="directory_currency_rate" resource="default" engine="innodb">
     <column xsi:type="varchar" name="currency_from" nullable="false" length="3"/>
     <column xsi:type="varchar" name="currency_to" nullable="false" length="3"/>
-    <column xsi:type="decimal" name="rate" scale="24" precission="12" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="rate" scale="12" precission="24" unsigned="false" nullable="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="currency_from"/>
       <column name="currency_to"/>

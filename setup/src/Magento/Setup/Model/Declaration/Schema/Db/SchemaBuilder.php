@@ -68,6 +68,7 @@ class SchemaBuilder
                 $indexes = [];
                 $constraints = [];
 
+                $tableOptions = $this->dbSchemaReader->getTableOptions($tableName, $resource);
                 $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource);
                 $indexesData = $this->dbSchemaReader->readIndexes($tableName, $resource);
                 $constrainsData = $this->dbSchemaReader->readConstraints($tableName, $resource);
@@ -79,7 +80,8 @@ class SchemaBuilder
                     'table',
                     [
                         'name' => $tableName,
-                        'resource' => $resource
+                        'resource' => $resource,
+                        'engine' => strtolower($tableOptions['Engine'])
                     ]
                 );
 

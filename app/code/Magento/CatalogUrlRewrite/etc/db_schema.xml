@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="catalog_url_rewrite_product_category" resource="default">
+  <table name="catalog_url_rewrite_product_category" resource="default" engine="innodb">
     <column xsi:type="int" name="url_rewrite_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"/>

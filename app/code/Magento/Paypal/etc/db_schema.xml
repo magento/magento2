@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="paypal_billing_agreement" resource="default">
+  <table name="paypal_billing_agreement" resource="default" engine="innodb">
     <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="method_code" nullable="false" length="32"/>
@@ -22,7 +22,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="paypal_billing_agreement_order" resource="default">
+  <table name="paypal_billing_agreement_order" resource="default" engine="innodb">
     <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -35,7 +35,7 @@
       <column name="order_id"/>
     </index>
   </table>
-  <table name="paypal_settlement_report" resource="default">
+  <table name="paypal_settlement_report" resource="default" engine="innodb">
     <column xsi:type="int" name="report_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="date" name="report_date"/>
     <column xsi:type="varchar" name="account_id" nullable="true" length="64"/>
@@ -49,7 +49,7 @@
       <column name="account_id"/>
     </constraint>
   </table>
-  <table name="paypal_settlement_report_row" resource="default">
+  <table name="paypal_settlement_report_row" resource="default" engine="innodb">
     <column xsi:type="int" name="row_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="report_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="varchar" name="transaction_id" nullable="true" length="19"/>
@@ -60,10 +60,10 @@
     <column xsi:type="timestamp" name="transaction_initiation_date" on_update="false" nullable="true"/>
     <column xsi:type="timestamp" name="transaction_completion_date" on_update="false" nullable="true"/>
     <column xsi:type="varchar" name="transaction_debit_or_credit" nullable="false" length="2" default="CR"/>
-    <column xsi:type="decimal" name="gross_transaction_amount" scale="20" precission="6" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="gross_transaction_amount" scale="6" precission="20" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="varchar" name="gross_transaction_currency" nullable="true" length="3"/>
     <column xsi:type="varchar" name="fee_debit_or_credit" nullable="true" length="2"/>
-    <column xsi:type="decimal" name="fee_amount" scale="20" precission="6" unsigned="false" nullable="false" default="0"/>
+    <column xsi:type="decimal" name="fee_amount" scale="6" precission="20" unsigned="false" nullable="false" default="0"/>
     <column xsi:type="varchar" name="fee_currency" nullable="true" length="3"/>
     <column xsi:type="varchar" name="custom_field" nullable="true" length="255"/>
     <column xsi:type="varchar" name="consumer_id" nullable="true" length="127"/>
@@ -77,7 +77,7 @@
       <column name="report_id"/>
     </index>
   </table>
-  <table name="paypal_cert" resource="default">
+  <table name="paypal_cert" resource="default" engine="innodb">
     <column xsi:type="smallint" name="cert_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="text" name="content" nullable="true"/>
@@ -90,7 +90,7 @@
       <column name="website_id"/>
     </index>
   </table>
-  <table name="paypal_payment_transaction" resource="default">
+  <table name="paypal_payment_transaction" resource="default" engine="innodb">
     <column xsi:type="int" name="transaction_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="txn_id" nullable="true" length="100"/>
     <column xsi:type="blob" name="additional_information" nullable="true"/>

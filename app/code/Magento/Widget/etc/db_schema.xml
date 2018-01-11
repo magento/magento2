@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="widget" resource="default">
+  <table name="widget" resource="default" engine="innodb">
     <column xsi:type="int" name="widget_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="widget_code" nullable="true" length="255"/>
     <column xsi:type="varchar" name="widget_type" nullable="true" length="255"/>
@@ -12,7 +12,7 @@
       <column name="widget_code"/>
     </index>
   </table>
-  <table name="widget_instance" resource="default">
+  <table name="widget_instance" resource="default" engine="innodb">
     <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="instance_type" nullable="true" length="255"/>
     <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"/>
@@ -25,7 +25,7 @@
     </constraint>
     <constraint xsi:type="foreign" name="WIDGET_INSTANCE_THEME_ID_THEME_THEME_ID" table="widget_instance" column="theme_id" referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
   </table>
-  <table name="widget_instance_page" resource="default">
+  <table name="widget_instance_page" resource="default" engine="innodb">
     <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="page_group" nullable="true" length="25"/>
@@ -42,7 +42,7 @@
       <column name="instance_id"/>
     </index>
   </table>
-  <table name="widget_instance_page_layout" resource="default">
+  <table name="widget_instance_page_layout" resource="default" engine="innodb">
     <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="foreign" name="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID" table="widget_instance_page_layout" column="page_id" referenceTable="widget_instance_page" referenceColumn="page_id" onDelete="CASCADE"/>
@@ -55,7 +55,7 @@
       <column name="page_id"/>
     </index>
   </table>
-  <table name="layout_update" resource="default">
+  <table name="layout_update" resource="default" engine="innodb">
     <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="handle" nullable="true" length="255"/>
     <column xsi:type="text" name="xml" nullable="true"/>
@@ -68,7 +68,7 @@
       <column name="handle"/>
     </index>
   </table>
-  <table name="layout_link" resource="default">
+  <table name="layout_link" resource="default" engine="innodb">
     <column xsi:type="int" name="layout_link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"/>

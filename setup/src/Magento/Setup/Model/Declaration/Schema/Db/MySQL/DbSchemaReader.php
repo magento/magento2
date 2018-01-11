@@ -40,6 +40,16 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getTableOptions($tableName, $resource)
+    {
+        $sql = sprintf('SHOW TABLE STATUS WHERE `Name` = "%s"', $tableName);
+        $adapter = $this->resourceConnection->getConnection($resource);
+        return $adapter->fetchRow($sql);
+    }
+
+    /**
      * Prepare and fetch query: Describe {table_name}
      *
      * @param  string $tableName
@@ -88,7 +98,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     {
         $indexes = [];
         $adapter = $this->resourceConnection->getConnection($resource);
-        $condition = sprintf('Non_unique = 1');
+        $condition = sprintf('`Non_unique` = 1');
         $sql = sprintf('SHOW INDEXES FROM %s WHERE %s', $tableName, $condition);
         $stmt = $adapter->query($sql);
 
@@ -149,7 +159,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     {
         $constraints = [];
         $adapter = $this->resourceConnection->getConnection($resource);
-        $condition = sprintf('Non_unique = 0');
+        $condition = sprintf('`Non_unique` = 0');
         $sql = sprintf('SHOW INDEXES FROM %s WHERE %s', $tableName, $condition);
         $stmt = $adapter->query($sql);
 

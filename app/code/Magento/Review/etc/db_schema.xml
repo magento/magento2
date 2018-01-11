@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="review_entity" resource="default">
+  <table name="review_entity" resource="default" engine="innodb">
     <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="entity_code" nullable="false" length="32"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="entity_id"/>
     </constraint>
   </table>
-  <table name="review_status" resource="default">
+  <table name="review_status" resource="default" engine="innodb">
     <column xsi:type="smallint" name="status_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="status_code" nullable="false" length="32"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="status_id"/>
     </constraint>
   </table>
-  <table name="review" resource="default">
+  <table name="review" resource="default" engine="innodb">
     <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
     <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -35,7 +35,7 @@
       <column name="entity_pk_value"/>
     </index>
   </table>
-  <table name="review_detail" resource="default">
+  <table name="review_detail" resource="default" engine="innodb">
     <column xsi:type="bigint" name="detail_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
@@ -59,7 +59,7 @@
       <column name="customer_id"/>
     </index>
   </table>
-  <table name="review_entity_summary" resource="default">
+  <table name="review_entity_summary" resource="default" engine="innodb">
     <column xsi:type="bigint" name="primary_id" padding="20" unsigned="false" nullable="false" identity="true"/>
     <column xsi:type="bigint" name="entity_pk_value" padding="20" unsigned="false" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="entity_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
@@ -74,7 +74,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="review_store" resource="default">
+  <table name="review_store" resource="default" engine="innodb">
     <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -87,7 +87,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="rating_entity" resource="default">
+  <table name="rating_entity" resource="default" engine="innodb">
     <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="entity_code" nullable="false" length="64"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -97,7 +97,7 @@
       <column name="entity_code"/>
     </constraint>
   </table>
-  <table name="rating" resource="default">
+  <table name="rating" resource="default" engine="innodb">
     <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="entity_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="rating_code" nullable="false" length="64"/>
@@ -114,7 +114,7 @@
       <column name="entity_id"/>
     </index>
   </table>
-  <table name="rating_option" resource="default">
+  <table name="rating_option" resource="default" engine="innodb">
     <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="code" nullable="false" length="32"/>
@@ -128,7 +128,7 @@
       <column name="rating_id"/>
     </index>
   </table>
-  <table name="rating_option_vote" resource="default">
+  <table name="rating_option_vote" resource="default" engine="innodb">
     <column xsi:type="bigint" name="vote_id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="remote_ip" nullable="false" length="16"/>
@@ -148,7 +148,7 @@
       <column name="option_id"/>
     </index>
   </table>
-  <table name="rating_option_vote_aggregated" resource="default">
+  <table name="rating_option_vote_aggregated" resource="default" engine="innodb">
     <column xsi:type="int" name="primary_id" padding="11" unsigned="false" nullable="false" identity="true"/>
     <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="bigint" name="entity_pk_value" padding="20" unsigned="true" nullable="false" identity="false" default="0"/>
@@ -169,7 +169,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="rating_store" resource="default">
+  <table name="rating_store" resource="default" engine="innodb">
     <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -182,7 +182,7 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="rating_title" resource="default">
+  <table name="rating_title" resource="default" engine="innodb">
     <column xsi:type="smallint" name="rating_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <column xsi:type="varchar" name="value" nullable="false" length="255"/>

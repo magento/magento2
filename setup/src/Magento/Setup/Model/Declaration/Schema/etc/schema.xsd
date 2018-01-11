@@ -56,6 +56,7 @@
         </xs:choice>
         <xs:attribute name="name" type="xs:string" />
         <xs:attribute name="resource" type="resourceType" />
+        <xs:attribute name="engine" type="engineType" />
     </xs:complexType>
 
     <xs:simpleType name="resourceType">
@@ -63,6 +64,13 @@
             <xs:enumeration value="default" />
             <xs:enumeration value="quote" />
             <xs:enumeration value="sales" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="engineType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="innodb" />
+            <xs:enumeration value="memory" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
