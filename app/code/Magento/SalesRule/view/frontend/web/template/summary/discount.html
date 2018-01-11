@@ -7,7 +7,7 @@
 <!-- ko if: isDisplayed() -->
 <tr class="totals discount">
     <th class="mark" scope="row">
-        <span class="title" data-bind="text: title"></span>
+        <span class="title" data-bind="text: getTitle()"></span>
         <span class="discount coupon" data-bind="text: getCouponCode()"></span>
     </th>
     <td class="amount">
