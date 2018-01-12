@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="queue_lock" resource="default">
-    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+  <table name="queue_lock" resource="default" engine="innodb">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="message_code" nullable="false" length="255" default=""/>
     <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
     <constraint xsi:type="primary" name="PRIMARY">
