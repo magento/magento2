@@ -7,6 +7,7 @@
 namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
+use Magento\Framework\Search\EngineResolverInterface;
 
 class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,7 +32,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Search\Model\EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $engineResolverMock;
 
