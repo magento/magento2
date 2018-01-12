@@ -2533,6 +2533,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $query = 'DROP TABLE IF EXISTS ' . $table;
         $this->query($query);
         $this->resetDdlCache($tableName, $schemaName);
+        $this->schemaListener->dropTable($tableName);
         return true;
     }
 

@@ -488,6 +488,18 @@ class SchemaListener
     }
 
     /**
+     * @param $tableName
+     */
+    public function dropTable($tableName)
+    {
+        if (isset($this->tables[$this->getModuleName()][strtolower($tableName)])) {
+            unset($this->tables[$this->getModuleName()][strtolower($tableName)]);
+        } else {
+            $this->tables[$this->getModuleName()][strtolower($tableName)]['disabled'] = true;
+        }
+    }
+
+    /**
      * @param string $resource
      */
     public function setResource(string $resource)
