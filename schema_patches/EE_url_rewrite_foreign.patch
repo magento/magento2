@@ -1,0 +1,15 @@
+Index: app/code/Magento/CatalogUrlRewriteStaging/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/CatalogUrlRewriteStaging/etc/db_schema.xml	(revision b2f86eab0b9e9a9ed553d192af0a974734acecba)
++++ app/code/Magento/CatalogUrlRewriteStaging/etc/db_schema.xml	(revision )
+@@ -3,6 +3,7 @@
+   <table name="catalog_url_rewrite_product_category" resource="default">
+     <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_CTGR_ID_SEQUENCE_CAT_CTGR_SEQUENCE_VAL" table="catalog_url_rewrite_product_category" column="category_id" referenceTable="sequence_catalog_category" referenceColumn="sequence_value" onDelete="CASCADE"/>
+     <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID" disabled="1"/>
++    <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID" disabled="1"/>
+     <constraint xsi:type="foreign" name="CAT_URL_REWRITE_PRD_CTGR_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL" table="catalog_url_rewrite_product_category" column="product_id" referenceTable="sequence_product" referenceColumn="sequence_value" onDelete="CASCADE"/>
+   </table>
+ </schema>
