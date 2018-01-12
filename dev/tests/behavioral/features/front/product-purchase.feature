@@ -13,8 +13,8 @@ Feature: Product purchase
     And I click on the element with xpath "//*[@id='maincontent']/div[3]/div[1]/div[3]/ol/li[3]/div/a/span/span/img"
     And I wait for page to load "/index.php/autumn-pullie.html"
 
-    And I wait for element with xpath "//*[@id='product-options-wrapper']/div/div/div[1]/div/div[3]" to appear
-    And I click on the element with xpath "//*[@id='product-options-wrapper']/div/div/div[1]/div/div[3]"
+    #And I wait for element with xpath "//*[@id='product-options-wrapper']/div/div/div[1]/div/div[3]" to appear
+    #And I click on the element with xpath "//*[@id='product-options-wrapper']/div/div/div[1]/div/div[3]"
 
     And I wait for element with xpath "//*[@id='product-options-wrapper']/div/div/div[2]/div/div[1]" to appear
     And I click on the element with xpath "//*[@id='product-options-wrapper']/div/div/div[2]/div/div[1]"
