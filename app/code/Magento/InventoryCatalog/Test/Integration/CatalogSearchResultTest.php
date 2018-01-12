@@ -101,7 +101,7 @@ class CatalogSearchResultTest extends TestCase
      *
      * @return array
      */
-    public function testGetResultCountOnNonDefaultSalesChannelDataProvider()
+    public function testGetResultCountOnNonDefaultSalesChannelDataProvider(): array
     {
         return [
             [10, 1],
