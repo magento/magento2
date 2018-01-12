@@ -22,10 +22,7 @@
                 <group value="customer"/>
                 <group value="create"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-            <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsername"/>
-            <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminLoginFormSection.password}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
             <click selector="{{AdminCustomerMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>
             <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminNewCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>

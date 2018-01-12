@@ -22,10 +22,7 @@
                 <group value="example"/>
                 <group value="login"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
         </test>
     </cest>

@@ -24,10 +24,7 @@
                 <testCaseId value="MAGETWO-23414"/>
                 <group value="product"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-            <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsername"/>
-            <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminLoginFormSection.password}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
             <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>

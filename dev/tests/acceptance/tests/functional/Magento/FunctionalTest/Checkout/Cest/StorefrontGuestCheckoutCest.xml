@@ -61,10 +61,9 @@
             <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" stepKey="grabOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" stepKey="seeOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeEmailYou"/>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
+
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
             <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" stepKey="fillOrderNum"/>

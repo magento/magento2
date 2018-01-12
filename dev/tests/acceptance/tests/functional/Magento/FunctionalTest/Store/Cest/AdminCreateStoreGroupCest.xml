@@ -24,10 +24,7 @@
                 <title value="Create a store group in admin"/>
                 <description value="Create a store group in admin"/>
             </annotations>
-            <amOnPage stepKey="s1" url="{{AdminLoginPage.url}}"/>
-            <fillField stepKey="s3" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
-            <fillField stepKey="s5" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
-            <click stepKey="s7" selector="{{AdminLoginFormSection.signIn}}"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <amOnPage stepKey="s9" url="{{AdminSystemStorePage.url}}"/>
 
             <click stepKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
