@@ -323,4 +323,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
     }
+
+    public function testGetBuyRequestWithNoOption()
+    {
+        $buyRequest = $this->model->getBuyRequest();
+
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
+        $this->assertEquals([
+            'qty' => 0,
+            'original_qty' => null
+        ], $buyRequest->getData());
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -203,9 +203,9 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     public function processCategoryIdsDataProvider()
     {
         return [
-            ['5', 'category_ids_index.category_id = 5'],
-            [3, 'category_ids_index.category_id = 3'],
-            ["' and 1 = 0", 'category_ids_index.category_id = 0'],
+            ['5', ':alias.category_id = 5'],
+            [3, ':alias.category_id = 3'],
+            ["' and 1 = 0", ':alias.category_id = 0'],
         ];
     }
 
@@ -218,7 +218,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     {
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
+        $tableAlias = 'category__alias';
 
+        $this->aliasResolver->expects($this->atLeastOnce())
+            ->method('getAlias')
+            ->willReturn($tableAlias);
         $this->filter->expects($this->exactly(3))
             ->method('getField')
             ->will($this->returnValue('category_ids'));
@@ -233,7 +237,33 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->attribute));
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
+        $expectedResult = strtr($expectedResult, [':alias' => $tableAlias]);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
+    }
+
+    public function testProcessVisibilityIds()
+    {
+        $query = 'visibility in (1, 2)';
+        $tableAlias = 'visibility__alias';
+
+        $this->aliasResolver->expects($this->atLeastOnce())
+            ->method('getAlias')
+            ->willReturn($tableAlias);
+        $this->filter->expects($this->atLeastOnce())
+            ->method('getField')
+            ->will($this->returnValue('visibility'));
+        $this->filter->expects($this->never())
+            ->method('getValue');
+        $this->config->expects($this->once())
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'visibility')
+            ->will($this->returnValue($this->attribute));
+
+        $actualResult = $this->target->process($this->filter, false, $query);
+        $this->assertSame(
+            "$tableAlias.$query",
+            $this->removeWhitespaces($actualResult)
+        );
     }
 
     public function testProcessStaticAttribute()
@@ -246,7 +276,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('static_attribute');
         $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('attr_table_alias');
-        $this->filter->expects($this->exactly(3))
+        $this->filter->expects($this->exactly(4))
             ->method('getField')
             ->will($this->returnValue('static_attribute'));
         $this->config->expects($this->exactly(1))
@@ -285,7 +315,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('termAttrAlias');
 
-        $this->filter->expects($this->exactly(3))
+        $this->filter->expects($this->exactly(4))
             ->method('getField')
             ->willReturn('termField');
         $this->filter->expects($this->exactly(2))
@@ -360,7 +390,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 1234567;
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
-        $this->filter->expects($this->exactly(4))
+        $this->filter->expects($this->exactly(5))
             ->method('getField')
             ->will($this->returnValue('not_static_attribute'));
         $this->config->expects($this->exactly(1))
