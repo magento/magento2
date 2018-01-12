@@ -320,19 +320,29 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => null],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => null,
+                    'store_id' => 1
+                ],
                 null,
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => 12345,
+                    'store_id' => 1
+                ],
                 ['test_attr' => 'test_attr']
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345, 'store_id' => 1],
                 ['test_attr' => '99.9900']
             ]
         ];
