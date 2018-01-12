@@ -21974,6 +21974,7 @@ vars.put("configurable_sku", "Configurable Product - ${__time(YMD)}-${__threadNu
           <collectionProp name="Asserion.test_strings">
             <stringProp name="1853918323">{"error":false}</stringProp>
           </collectionProp>
+
           <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
           <boolProp name="Assertion.assume_success">false</boolProp>
           <intProp name="Assertion.test_type">2</intProp>
