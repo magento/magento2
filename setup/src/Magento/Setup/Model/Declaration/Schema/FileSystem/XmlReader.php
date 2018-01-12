@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\FileSystem;
 
+use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
@@ -37,7 +38,7 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements R
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        FileResolverByModule $fileResolver,
         \Magento\Setup\Model\Declaration\Schema\Config\Converter $converter,
         \Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,

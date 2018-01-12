@@ -42,6 +42,7 @@ class Varchar implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
+        /** @TODO: Make default=null attribute working  */
         return sprintf(
             '%s %s(%s) %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),

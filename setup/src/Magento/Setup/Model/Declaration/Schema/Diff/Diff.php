@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
+use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
@@ -90,7 +91,7 @@ class Diff implements DiffInterface
         if (!$this->whiteListTables) {
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $path) {
                 $whiteListPath = $path . DIRECTORY_SEPARATOR . 'etc' .
-                    DIRECTORY_SEPARATOR . 'declarative_schema_white_list.json';
+                    DIRECTORY_SEPARATOR . TablesWhitelistGenerateCommand::GENERATED_FILE_NAME;
 
                 if (file_exists($whiteListPath)) {
                     $this->whiteListTables = array_replace_recursive(
@@ -107,7 +108,7 @@ class Diff implements DiffInterface
     /**
      * Check whether element can be registered
      *
-     * For example, if element is not in whitelist.json it cant
+     * For example, if element is not in db_schema_whitelist.json it cant
      * be registered due to backward incompatability
      *
      * @param  ElementInterface $object
@@ -116,13 +117,13 @@ class Diff implements DiffInterface
     private function canBeRegistered(ElementInterface $object)
     {
         $whiteList = $this->getWhiteListTables();
-        $type = $object->getType();
+        $type = $object->getElementType();
 
         if ($object instanceof TableElementInterface) {
-            return isset($whiteList['table'][$object->getTable()->getName()][$type][$object->getName()]);
+            return isset($whiteList[$object->getTable()->getName()][$type][$object->getName()]);
         }
 
-        return isset($whiteList['table'][$object->getName()]);
+        return isset($whiteList[$object->getName()]);
     }
 
     /**
@@ -140,6 +141,10 @@ class Diff implements DiffInterface
      */
     public function register(ElementInterface $dtoObject, $operation, ElementInterface $oldDtoObject = null)
     {
+        if (!$this->canBeRegistered($dtoObject)) {
+            return $this;
+        }
+
         $historyData = ['new' => $dtoObject, 'old' => $oldDtoObject];
         $history = $this->elementHistoryFactory->create($historyData);
         $dtoObjectName = $dtoObject instanceof TableElementInterface ?

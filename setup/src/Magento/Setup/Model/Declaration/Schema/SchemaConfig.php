@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema;
 
+use Magento\Framework\Config\FileResolverByModule;
 use Magento\Setup\Model\Declaration\Schema\Db\SchemaBuilder as DbSchemaBuilder;
 use Magento\Setup\Model\Declaration\Schema\Declaration\SchemaBuilder as DeclarativeSchemaBuilder;
 use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
@@ -70,7 +71,7 @@ class SchemaConfig implements SchemaConfigInterface
     public function getDeclarationConfig()
     {
         $schema = $this->schemaFactory->create();
-        $data = $this->readerComposite->read();
+        $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
         $this->declarativeSchemaBuilder->addTablesData($data['table']);
         $schema = $this->declarativeSchemaBuilder->build($schema);
         return $schema;

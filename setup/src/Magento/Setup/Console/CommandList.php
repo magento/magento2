@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Console;
 
+use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -72,7 +73,7 @@ class CommandList
             \Magento\Setup\Console\Command\RollbackCommand::class,
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
-            \Magento\Setup\Console\Command\DeployStaticContentCommand::class,
+            \Magento\Setup\Console\Command\DeployStaticContentCommand::class
         ];
     }
 

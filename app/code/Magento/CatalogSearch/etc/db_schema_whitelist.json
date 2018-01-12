@@ -1,0 +1,1 @@
+{"catalog_eav_attribute":{"column":{"search_weight":true}},"catalogsearch_fulltext_scope1":{"column":{"entity_id":true,"attribute_id":true,"data_index":true},"index":{"FTI_FULLTEXT_DATA_INDEX":true},"constraint":{"IDX_PRIMARY":true}}}

@@ -94,6 +94,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>
+                <item name="whitelist_generation" xsi:type="object">Magento\Developer\Console\Command\TablesWhitelistGenerateCommand</item>
                 <item name="dev_source_theme_deploy" xsi:type="object">Magento\Developer\Console\Command\SourceThemeDeployCommand</item>
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
                 <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
