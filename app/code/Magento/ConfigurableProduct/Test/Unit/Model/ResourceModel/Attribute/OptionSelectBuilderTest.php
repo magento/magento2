@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Attribute;
 
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -58,7 +58,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
      * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scope;
-    
+
     protected function setUp()
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
