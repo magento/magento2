@@ -98,11 +98,11 @@ class ModuleList implements ModuleListInterface
      */
     public function getNames()
     {
-        $this->loadConfigData();
-        if (!$this->configData) {
+        $this->getAll();
+        if (!$this->enabled) {
             return [];
         }
-        $result = array_keys(array_filter($this->configData));
+        $result = array_keys(array_filter($this->enabled));
         return $result;
     }
 
