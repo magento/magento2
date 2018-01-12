@@ -13,7 +13,7 @@ namespace Magento\InventoryCatalog\Model;
 interface GetStockIdForCurrentWebsiteInterface
 {
     /**
-     * Get stock id by code of current website.
+     * Get stock id by code for current website.
      *
      * @return int
      */

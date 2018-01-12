@@ -91,7 +91,7 @@ class CatalogSearchResultTest extends TestCase
 
         self::assertEquals($expectedSize, $collection->getSize());
 
-        //need delete sales channels from stock to have ability to delete stock.
+        //need delete sales channels from stock to give ability to fixture to delete stock.
         $stock->getExtensionAttributes()->setSalesChannels([]);
         $stockRepository->save($stock);
     }

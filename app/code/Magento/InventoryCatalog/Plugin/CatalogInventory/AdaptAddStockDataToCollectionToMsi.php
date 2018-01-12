@@ -48,7 +48,6 @@ class AdaptAddStockDataToCollectionToMsi
     }
 
     /**
-     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection

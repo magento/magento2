@@ -15,7 +15,7 @@ namespace Magento\InventoryApi\Api;
 interface StockIndexTableProviderInterface
 {
     /**
-     * Build index by stock id.
+     * Get stock index table by stock id.
      *
      * @param int $stockId
      *
