@@ -10,8 +10,8 @@
     <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true"/>
     <column xsi:type="varchar" name="gateway_token" nullable="false" length="255"/>
     <column xsi:type="text" name="details" nullable="true"/>
-    <column xsi:type="boolean" name="is_active" nullable="false"/>
-    <column xsi:type="boolean" name="is_visible" nullable="false"/>
+    <column xsi:type="boolean" name="is_active" nullable="false" default="true"/>
+    <column xsi:type="boolean" name="is_visible" nullable="false" default="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="entity_id"/>
     </constraint>
