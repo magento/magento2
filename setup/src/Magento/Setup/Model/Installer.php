@@ -936,6 +936,12 @@ class Installer
         }
         foreach ($moduleNames as $moduleName) {
             $schemaListenerModuleName = $stagingModules[$moduleName] ?? $moduleName;
+            $moduleEnabled = $this->deploymentConfig->get('modules/' . $schemaListenerModuleName);
+
+            if (!$moduleEnabled) {
+                $schemaListenerModuleName = $moduleName;
+            }
+
             $this->schemaListener->setModuleName($schemaListenerModuleName);
             $this->schemaListener->toogleIgnore(
                 SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS

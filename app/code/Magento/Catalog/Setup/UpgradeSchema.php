@@ -504,7 +504,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 'primary' => true,
-                'auto_increment' => true,
+                'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'comment' => 'Record Id'

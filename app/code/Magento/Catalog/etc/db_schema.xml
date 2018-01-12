@@ -334,6 +334,7 @@
       <column name="product_id"/>
     </constraint>
     <constraint xsi:type="foreign" name="CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_category_product" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID" table="catalog_category_product" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
     <constraint xsi:type="unique" name="CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID">
       <column name="category_id"/>
       <column name="product_id"/>
@@ -557,7 +558,7 @@
     <column xsi:type="varchar" name="label" nullable="true" length="255"/>
     <column xsi:type="int" name="position" padding="10" unsigned="true" nullable="true" identity="false"/>
     <column xsi:type="smallint" name="disabled" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="value_id"/>
       <column name="store_id"/>

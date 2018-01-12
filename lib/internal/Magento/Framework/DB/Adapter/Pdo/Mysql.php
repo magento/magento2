@@ -2417,6 +2417,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 }
                 break;
             case Table::TYPE_DECIMAL:
+            case Table::TYPE_FLOAT:
             case Table::TYPE_NUMERIC:
                 $precision  = 10;
                 $scale      = 0;
