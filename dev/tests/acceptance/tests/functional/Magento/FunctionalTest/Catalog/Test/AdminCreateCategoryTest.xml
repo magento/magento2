@@ -18,7 +18,11 @@
             <testCaseId value="MAGETWO-72102"/>
             <group value="category"/>
         </annotations>
-        <loginAsAdmin stepKey="loginAsAdmin"/>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
@@ -32,9 +36,5 @@
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
-
-        <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
-        </after>
     </test>
 </tests>

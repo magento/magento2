@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="CreateSalesRuleByApiCest">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="CreateSalesRuleByApiTest">
         <annotations>
             <features value="Create a Sales Rule By API"/>
             <stories value="Create a Sales Rule By API"/>
@@ -17,8 +17,6 @@
         <before>
             <createData stepKey="saleRule" entity="SimpleSalesRule" />
         </before>
-        <test name="CreateSalesRuleByApiTest">
-            <!--see stepKey="test" userInput="$$saleRule.store_labels[0][store_id]$$" selector="test"/-->
-        </test>
-    </cest>
-</config>
+        <!--see stepKey="test" userInput="$$saleRule.store_labels[0][store_id]$$" selector="test"/-->
+    </test>
+</tests>

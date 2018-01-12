@@ -24,7 +24,11 @@
                 <required-entity createDataKey="createCategory"/>
             </createData>
         </before>
-
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
+        </after>
 
         <!-- todo: Create an order via the api instead of driving the browser  -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
@@ -53,11 +57,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!-- end todo -->
 
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="goToAdmin"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
