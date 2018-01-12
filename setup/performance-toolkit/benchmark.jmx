@@ -12870,6 +12870,9 @@ vars.put("admin_user", adminUser);
 
   //Index of the current product from the cluster
   Random random = new Random();
+  if (${seedForRandom} &gt; 0) {
+    random.setSeed(${seedForRandom} + ${__threadNum});
+  }
   int iterator = random.nextInt(clusterLength);
   if (iterator == 0) {
   	iterator = 1;
@@ -32205,7 +32208,7 @@ vars.put("admin_user", adminUser);
           <stringProp name="RegexExtractor.regex">actions":\{"edit":\{"href":"(?:http|https):\\/\\/(.*?)\\/customer\\/index\\/edit\\/id\\/(\d+)\\/",</stringProp>
           <stringProp name="RegexExtractor.template">/customer/index/edit/id/$2$/</stringProp>
           <stringProp name="RegexExtractor.default"/>
-          <stringProp name="RegexExtractor.match_number">0</stringProp>
+          <stringProp name="RegexExtractor.match_number">1</stringProp>
         </RegexExtractor>
         <hashTree/>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert customer edit url" enabled="true">
@@ -34422,6 +34425,9 @@ vars.put("admin_user", adminUser);
 
   //Index of the current product from the cluster
   Random random = new Random();
+  if (${seedForRandom} &gt; 0) {
+    random.setSeed(${seedForRandom} + ${__threadNum});
+  }
   int iterator = random.nextInt(clusterLength);
   if (iterator == 0) {
   	iterator = 1;
