@@ -47,10 +47,11 @@ define([
         /**
          * Get discount title
          *
-         * @returns {null|string}
+         * @returns {null|String}
          */
         getTitle: function () {
             var discountSegments;
+
             if (!this.totals()) {
                 return null;
             }
