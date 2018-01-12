@@ -77,12 +77,9 @@ class SaveHandler
             $linksByType[$link->getLinkType()][] = $link;
         }
 
-        // Do check
-        $hasPositionLinkType = $this->isPositionSet($linksByType);
-
         // Set array position as a fallback position if necessary
-        foreach ($hasPositionLinkType as $linkType => $hasPosition) {
-            if (!$hasPosition) {
+        foreach ($linksByType as $linkType => $links) {
+            if (!$this->hasPosition($links)) {
                 array_walk($linksByType[$linkType], function ($productLink, $position) {
                     $productLink->setPosition(++$position);
                 });
@@ -101,34 +98,17 @@ class SaveHandler
     }
 
     /**
-     * Check if the position is set for all product links per link type.
-     * array with boolean per type
-     *
-     * @param $linksByType
-     * @return array
+     * Check if at least one link without position
+     * @param $links
+     * @return bool
      */
-    private function isPositionSet($linksByType)
+    public function hasPosition($links)
     {
-        $linkTypes = $this->linkTypeProvider->getLinkTypes();
-
-        // Initialize isPositionSet for existent link types
-        $isPositionSet = [];
-        foreach (array_keys($linkTypes) as $typeName) {
-            if (array_key_exists($typeName, $linksByType)) {
-                $isPositionSet[$typeName] = count($linksByType[$typeName]) > 0;
+        foreach ($links as $link) {
+            if (!array_key_exists('position', $link->getData())) {
+                return false;
             }
         }
-
-        // Check if at least one link without position exists per Link type
-        foreach ($linksByType as $type => $links) {
-            foreach ($links as $link) {
-                if (!array_key_exists('position', $link->getData())) {
-                    $isPositionSet[$type] = false;
-                    break;
-                }
-            }
-        }
-
-        return $isPositionSet;
+        return true;
     }
 }
