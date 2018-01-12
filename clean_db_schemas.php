@@ -45,7 +45,7 @@ $adapter->query('DROP DATABASE ' . $resourceConnection->getSchemaName('default')
 $adapter->query('CREATE DATABASE ' . $resourceConnection->getSchemaName('default'));
 
 foreach ($componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE) as $path) {
-    if (strpos($path, 'magento2b2b') !== false) {
+    if (strpos($path, 'magento2ee') !== false) {
         @unlink($path . DIRECTORY_SEPARATOR . 'etc/db_schema.xml');
     }
 }

@@ -219,19 +219,4 @@
       <column name="option_id"/>
     </constraint>
   </table>
-  <table name="catalog_product_bundle_selection_price_tmp" resource="default" engine="innodb">
-    <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="selection_price_type" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="decimal" name="selection_price_value" scale="4" precission="12" unsigned="false" nullable="false" default="0"/>
-    <constraint xsi:type="primary" name="PRIMARY">
-      <column name="selection_id"/>
-      <column name="parent_product_id"/>
-      <column name="website_id"/>
-    </constraint>
-    <index name="CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE_TMP_WEBSITE_ID" indexType="btree">
-      <column name="website_id"/>
-    </index>
-  </table>
 </schema>
