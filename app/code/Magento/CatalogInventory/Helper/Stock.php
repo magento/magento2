@@ -147,7 +147,7 @@ class Stock
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $stockFlag = 'has_stock_status_filter'; 
+        $stockFlag = 'has_stock_status_filter';
         $childFlag = 'product_children';
         if (!$collection->hasFlag($stockFlag) && !$collection->hasFlag($childFlag)) {
             $isShowOutOfStock = $this->scopeConfig->getValue(
