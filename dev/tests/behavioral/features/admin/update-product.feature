@@ -38,7 +38,7 @@ Feature: Update product feature
     And I select "Microfiber" from "product[material]"
     And I select "Orange" from "product[color]"
     And I select "Shoulder" from "product[strap_bags]"
-    And I select "Laptop Sleeve" from "product[features_bags]"
+   # And I select "Laptop Sleeve" from "product[features_bags]"
 
     And I wait for element with xpath "//*[@id='container']/div/div[2]/div[1]/div/fieldset/div[15]/div/div/label" to appear
     And I click on the element with xpath "//*[@id='container']/div/div[2]/div[1]/div/fieldset/div[15]/div/div/label"
