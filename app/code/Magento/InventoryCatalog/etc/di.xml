@@ -39,6 +39,8 @@
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="inventory_catalog_stock_status_resource_model"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\StockStatusResourceModel"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\AdaptAddStockDataToCollectionToMsi"/>
     </type>
+    <preference for="Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsiteInterface"
+                type="Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite"/>
 </config>

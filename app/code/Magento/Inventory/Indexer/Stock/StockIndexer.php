@@ -11,9 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexHandlerInterface;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndex\IndexTableSwitcherInterface;
-use Magento\Inventory\Model\StockIndexManager;
 
 /**
  * Stock indexer
@@ -44,9 +44,9 @@ class StockIndexer implements ActionInterface
     private $indexHandler;
 
     /**
-     * @var StockIndexManager
+     * @var IndexNameBuilder
      */
-    private $stockIndexManager;
+    private $indexNameBuilder;
 
     /**
      * @var IndexDataProviderByStockId
@@ -64,7 +64,7 @@ class StockIndexer implements ActionInterface
      * @param GetAllAssignedStockIds $getAllAssignedStockIds
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
-     * @param StockIndexManager $stockIndexManager
+     * @param IndexNameBuilder $indexNameBuilder
      * @param IndexDataProviderByStockId $indexDataProviderByStockId
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
@@ -72,14 +72,14 @@ class StockIndexer implements ActionInterface
         GetAllAssignedStockIds $getAllAssignedStockIds,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
-        StockIndexManager $stockIndexManager,
+        IndexNameBuilder $indexNameBuilder,
         IndexDataProviderByStockId $indexDataProviderByStockId,
         IndexTableSwitcherInterface $indexTableSwitcher
     ) {
         $this->getAllAssignedStockIds = $getAllAssignedStockIds;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
-        $this->stockIndexManager = $stockIndexManager;
+        $this->indexNameBuilder = $indexNameBuilder;
         $this->indexDataProviderByStockId = $indexDataProviderByStockId;
         $this->indexTableSwitcher = $indexTableSwitcher;
     }
@@ -107,9 +107,17 @@ class StockIndexer implements ActionInterface
     public function executeList(array $stockIds)
     {
         foreach ($stockIds as $stockId) {
-            $replicaIndexName = $this->stockIndexManager->buildIndex((string)$stockId, Alias::ALIAS_REPLICA);
+            $replicaIndexName = $this->indexNameBuilder
+                ->setIndexId('inventory_stock')
+                ->addDimension('stock_', (string)$stockId)
+                ->setAlias(Alias::ALIAS_REPLICA)
+                ->build();
 
-            $mainIndexName = $this->stockIndexManager->buildIndex((string)$stockId, Alias::ALIAS_MAIN);
+            $mainIndexName = $this->indexNameBuilder
+                ->setIndexId('inventory_stock')
+                ->addDimension('stock_', (string)$stockId)
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->build();
 
             $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
             $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);

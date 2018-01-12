@@ -65,6 +65,7 @@ class CatalogSearchResultTest extends TestCase
      */
     public function testGetResultCountOnNonDefaultSalesChannel(int $stockId, int $expectedSize)
     {
+        //this is not in fixture, because we set salesChannel for different stockId received from data provider.
         /** @var SalesChannelInterface $salesChannel */
         $salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
         $salesChannel->setCode('test');
@@ -81,6 +82,8 @@ class CatalogSearchResultTest extends TestCase
         $storeManager->setCurrentStore('fixture_second_store');
 
         $this->indexer->reindexAll();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
@@ -88,6 +91,7 @@ class CatalogSearchResultTest extends TestCase
 
         self::assertEquals($expectedSize, $collection->getSize());
 
+        //need delete sales channels from stock to have ability to delete stock.
         $stock->getExtensionAttributes()->setSalesChannels([]);
         $stockRepository->save($stock);
     }

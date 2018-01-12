@@ -121,4 +121,5 @@
     <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
         <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
     </type>
+    <preference for="Magento\InventoryApi\Api\StockIndexTableProviderInterface" type="Magento\Inventory\Model\StockIndexTableProvider"/>
 </config>
