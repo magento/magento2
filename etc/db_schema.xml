@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="queue" resource="default">
-    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+  <table name="queue" resource="default" engine="innodb">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
@@ -10,7 +10,7 @@
       <column name="name"/>
     </constraint>
   </table>
-  <table name="queue_message" resource="default">
+  <table name="queue_message" resource="default" engine="innodb">
     <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"/>
     <column xsi:type="varchar" name="topic_name" nullable="true" length="255"/>
     <column xsi:type="longtext" name="body" nullable="true"/>
@@ -18,13 +18,13 @@
       <column name="id"/>
     </constraint>
   </table>
-  <table name="queue_message_status" resource="default">
+  <table name="queue_message_status" resource="default" engine="innodb">
     <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="queue_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="bigint" name="message_id" padding="20" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-    <column xsi:type="smallint" name="status" padding="6" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="number_of_trials" padding="6" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="smallint" name="number_of_trials" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>
