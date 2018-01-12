@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="catalogsearch_recommendations" resource="default">
-    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="query_id" padding="11" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="int" name="relation_id" padding="11" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="catalogsearch_recommendations" resource="default" engine="innodb">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="relation_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>
