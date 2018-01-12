@@ -5,19 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\SourceItem\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**
  * @inheritdoc
  */
-class SourceItemFinder implements SourceItemFinderInterface
+class GetSourceItemsBySku implements GetSourceItemsBySkuInterface
 {
     /**
-     * @var SourceItemRepository
+     * @var SourceItemRepositoryInterface
      */
     private $sourceItemRepository;
 
@@ -27,11 +28,11 @@ class SourceItemFinder implements SourceItemFinderInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @param SourceItemRepository $sourceItemRepository
+     * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        SourceItemRepository $sourceItemRepository,
+        SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
@@ -41,7 +42,7 @@ class SourceItemFinder implements SourceItemFinderInterface
     /**
      * @inheritdoc
      */
-    public function findBySku(string $sku): SourceItemSearchResultsInterface
+    public function execute(string $sku): SourceItemSearchResultsInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $sku)

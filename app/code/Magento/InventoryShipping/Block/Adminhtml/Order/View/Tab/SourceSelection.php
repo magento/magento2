@@ -12,8 +12,8 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryShipping\Model\ShippingAlgorithmInterface;
-use Magento\InventoryShipping\Model\SourceSelectionInterface;
+use Magento\InventoryShipping\Model\ShippingAlgorithmProviderInterface;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface;
 
 /**
  * Tab for source items display on the order editing page
@@ -28,9 +28,9 @@ class SourceSelection extends Template implements TabInterface
     private $registry;
 
     /**
-     * @var ShippingAlgorithmInterface
+     * @var ShippingAlgorithmProviderInterface
      */
-    private $shippingAlgorithm;
+    private $shippingAlgorithmProvider;
 
     /**
      * @var SourceRepositoryInterface
@@ -40,20 +40,20 @@ class SourceSelection extends Template implements TabInterface
     /**
      * @param Context $context
      * @param Registry $registry
-     * @param ShippingAlgorithmInterface $shippingAlgorithm
+     * @param ShippingAlgorithmProviderInterface $shippingAlgorithmProvider
      * @param SourceRepositoryInterface $sourceRepository
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        ShippingAlgorithmInterface $shippingAlgorithm,
+        ShippingAlgorithmProviderInterface $shippingAlgorithmProvider,
         SourceRepositoryInterface $sourceRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
-        $this->shippingAlgorithm = $shippingAlgorithm;
+        $this->shippingAlgorithmProvider = $shippingAlgorithmProvider;
         $this->sourceRepository = $sourceRepository;
     }
 
@@ -65,7 +65,8 @@ class SourceSelection extends Template implements TabInterface
     public function getSourceSelections(): array
     {
         $order = $this->registry->registry('current_order');
-        return $this->shippingAlgorithm->execute($order)->getSourceSelections();
+        $shippingAlgorithm = $this->shippingAlgorithmProvider->execute();
+        return $shippingAlgorithm->execute($order)->getSourceSelections();
     }
 
     /**

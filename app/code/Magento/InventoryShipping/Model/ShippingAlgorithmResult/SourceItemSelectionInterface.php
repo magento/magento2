@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\ShippingAlgorithmResult;
 
 /**
- * Represents part of the shipping algorithm result
+ * Represents shipping algorithm results for the specific source item
  *
  * @api
  */

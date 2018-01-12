@@ -7,7 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Inventory\Model\SourceItemFinderInterface;
+use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterfaceFactory;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterfaceFactory;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
@@ -18,14 +22,9 @@ use Magento\Sales\Api\Data\OrderInterface;
 class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
 {
     /**
-     * @var SourceItemFinderInterface
+     * @var GetSourceItemsBySkuInterface
      */
-    private $sourceItemFinder;
-
-    /**
-     * @var ShippingAlgorithmResultFactory
-     */
-    private $shippingAlgorithmResultFactory;
+    private $getSourceItemsBySku;
 
     /**
      * @var SourceSelectionInterfaceFactory
@@ -38,18 +37,23 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
     private $sourceItemSelectionFactory;
 
     /**
-     * @param SourceItemFinderInterface $sourceItemFinder
+     * @var ShippingAlgorithmResultInterfaceFactory
+     */
+    private $shippingAlgorithmResultFactory;
+
+    /**
+     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
-     * @param ShippingAlgorithmResultFactory $shippingAlgorithmResultFactory
+     * @param ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
      */
     public function __construct(
-        SourceItemFinderInterface $sourceItemFinder,
+        GetSourceItemsBySkuInterface $getSourceItemsBySku,
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
         SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory,
-        ShippingAlgorithmResultFactory $shippingAlgorithmResultFactory
+        ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
     ) {
-        $this->sourceItemFinder = $sourceItemFinder;
+        $this->getSourceItemsBySku = $getSourceItemsBySku;
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceSelectionFactory = $sourceSelectionFactory;
         $this->sourceItemSelectionFactory = $sourceItemSelectionFactory;
@@ -60,6 +64,29 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
      */
     public function execute(OrderInterface $order): ShippingAlgorithmResultInterface
     {
+        $sourceItemSelectionsData = $this->getSourceItemSelectionsData($order);
+
+        $sourceSelections = [];
+        foreach ($sourceItemSelectionsData as $sourceCode => $sourceItemSelections) {
+            $sourceSelections[] = $this->sourceSelectionFactory->create([
+                'sourceCode' => $sourceCode,
+                'sourceItemSelections' => $sourceItemSelections,
+            ]);
+        }
+
+        $shippingResult = $this->shippingAlgorithmResultFactory->create([
+            'sourceSelections' => $sourceSelections,
+        ]);
+        return $shippingResult;
+    }
+
+    /**
+     * Key is source code, value is list of SourceItemSelectionInterface related to this source
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getSourceItemSelectionsData(OrderInterface $order): array
+    {
         $sourceItemSelections = [];
 
         foreach ($order->getItems() as $orderItem) {
@@ -68,7 +95,7 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
             }
 
             $itemSku = $orderItem->getSku();
-            $sourceItems = $this->sourceItemFinder->findBySku($itemSku)->getItems();
+            $sourceItems = $this->getSourceItemsBySku->execute($itemSku)->getItems();
 
             $qtyToDeliver = $orderItem->getQtyOrdered();
             foreach ($sourceItems as $sourceItem) {
@@ -83,26 +110,13 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
                     $sourceItemSelections[$sourceItem->getSourceCode()][] = $this->sourceItemSelectionFactory->create([
                         'sku' => $itemSku,
                         'qty' => $qtyToDeduct,
-                        'qtyAvailable' => $sourceItemQty
+                        'qtyAvailable' => $sourceItemQty,
                     ]);
 
                     $qtyToDeliver -= $qtyToDeduct;
                 }
             }
         }
-
-        $sourceSelections = [];
-        foreach ($sourceItemSelections as $sourceCode => $itemSelections) {
-            $sourceSelections[] = $this->sourceSelectionFactory->create([
-                'sourceCode' => $sourceCode,
-                'sourceItemSelections' => $itemSelections
-            ]);
-        }
-
-        $shippingResult = $this->shippingAlgorithmResultFactory->create([
-            'sourceSelections' => $sourceSelections
-        ]);
-
-        return $shippingResult;
+        return $sourceItemSelections;
     }
 }

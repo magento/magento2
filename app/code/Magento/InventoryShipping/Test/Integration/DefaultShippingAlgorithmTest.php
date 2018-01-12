@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Test\Integration\Model;
+namespace Magento\InventoryShipping\Test\Integration;
 
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryShipping\Model\DefaultShippingAlgorithm;
@@ -18,19 +18,19 @@ use PHPUnit\Framework\TestCase;
 class DefaultShippingAlgorithmTest extends TestCase
 {
     /**
-     * @var string
+     * @var DefaultSourceProviderInterface
      */
-    private $defaultSourceCode;
+    private $defaultSourceProvider;
 
     /**
      * @var OrderItemInterfaceFactory $orderItemFactory
      */
-    protected $orderItemFactory;
+    private $orderItemFactory;
 
     /**
      * @var OrderInterfaceFactory
      */
-    protected $orderFactory;
+    private $orderFactory;
 
     /**
      * @var DefaultShippingAlgorithm
@@ -39,14 +39,10 @@ class DefaultShippingAlgorithmTest extends TestCase
 
     protected function setUp()
     {
-        $this->shippingAlgorithm = Bootstrap::getObjectManager()->create(DefaultShippingAlgorithm::class);
-
-        /** @var DefaultSourceProviderInterface $defaultSourceProvider */
-        $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
-        $this->defaultSourceCode = $defaultSourceProvider->getCode();
-
-        $this->orderFactory = Bootstrap::getObjectManager()->create(OrderInterfaceFactory::class);
-        $this->orderItemFactory = Bootstrap::getObjectManager()->create(OrderItemInterfaceFactory::class);
+        $this->shippingAlgorithm = Bootstrap::getObjectManager()->get(DefaultShippingAlgorithm::class);
+        $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
+        $this->orderFactory = Bootstrap::getObjectManager()->get(OrderInterfaceFactory::class);
+        $this->orderItemFactory = Bootstrap::getObjectManager()->get(OrderItemInterfaceFactory::class);
     }
 
     /**
@@ -58,7 +54,7 @@ class DefaultShippingAlgorithmTest extends TestCase
         $order = $this->createOrder([
             'SKU-1' => 1,
             'SKU-2' => 1,
-            'SKU-3' => 1
+            'SKU-3' => 1,
         ]);
 
         $algorithmResult = $this->shippingAlgorithm->execute($order);
@@ -66,27 +62,20 @@ class DefaultShippingAlgorithmTest extends TestCase
         $sourceSelections = $algorithmResult->getSourceSelections();
         self::assertCount(1, $sourceSelections);
 
-        self::assertArrayHasKey(0, $sourceSelections);
-
-        $defaultSourceSelection = $sourceSelections[0];
-
-        self::assertEquals($this->defaultSourceCode, $defaultSourceSelection->getSourceCode());
+        $defaultSourceSelection = reset($sourceSelections);
+        self::assertEquals($this->defaultSourceProvider->getCode(), $defaultSourceSelection->getSourceCode());
 
         $sourceItemSelections = $defaultSourceSelection->getSourceItemSelections();
-
         self::assertCount(3, $sourceItemSelections);
 
-        self::assertArrayHasKey(0, $sourceItemSelections);
         self::assertEquals('SKU-1', $sourceItemSelections[0]->getSku());
         self::assertEquals(1, $sourceItemSelections[0]->getQty());
         self::assertEquals(5.5, $sourceItemSelections[0]->getQtyAvailable());
 
-        self::assertArrayHasKey(1, $sourceItemSelections);
         self::assertEquals('SKU-2', $sourceItemSelections[1]->getSku());
         self::assertEquals(1, $sourceItemSelections[1]->getQty());
         self::assertEquals(5, $sourceItemSelections[1]->getQtyAvailable());
 
-        self::assertArrayHasKey(1, $sourceItemSelections);
         self::assertEquals('SKU-3', $sourceItemSelections[2]->getSku());
         self::assertEquals(1, $sourceItemSelections[2]->getQty());
         self::assertEquals(6, $sourceItemSelections[2]->getQtyAvailable());
@@ -101,86 +90,76 @@ class DefaultShippingAlgorithmTest extends TestCase
      */
     public function testStockSourceCombination()
     {
+        $expectedResult = [
+            [
+                'source_code' => 'eu-1',
+                'source_item_selections' => [
+                    ['SKU-1', 5.5, 5.5],
+                ],
+            ],
+            [
+                'source_code' => 'eu-2',
+                'source_item_selections' => [
+                    ['SKU-1', 3, 3],
+                    ['SKU-3', 3, 6],
+                ],
+            ],
+            [
+                'source_code' => 'eu-3',
+                'source_item_selections' => [
+                    ['SKU-1', 10, 10],
+                ],
+            ],
+            [
+                'source_code' => 'eu-disabled',
+                'source_item_selections' => [
+                    ['SKU-1', 9, 10],
+                ],
+            ],
+            [
+                'source_code' => 'us-1',
+                'source_item_selections' => [
+                    ['SKU-2', 4.5, 5],
+                ],
+            ],
+        ];
+
         $order = $this->createOrder([
             'SKU-1' => 27.5,
             'SKU-2' => 4.5,
-            'SKU-3' => 3
+            'SKU-3' => 3,
         ]);
-
         $algorithmResult = $this->shippingAlgorithm->execute($order);
 
         $sourceSelections = $algorithmResult->getSourceSelections();
-
-        $expectedResult = [
-            [
-                'sourceCode' => 'eu-1',
-                'selections' => [
-                    ['SKU-1', 5.5, 5.5]
-                ]
-            ],
-            [
-                'sourceCode' => 'eu-2',
-                'selections' => [
-                    ['SKU-1', 3, 3],
-                    ['SKU-3', 3, 6]
-                ]
-            ],
-            [
-                'sourceCode' => 'eu-3',
-                'selections' => [
-                    ['SKU-1', 10, 10]
-                ]
-            ],
-            [
-                'sourceCode' => 'eu-disabled',
-                'selections' => [
-                    ['SKU-1', 9, 10]
-                ]
-            ],
-            [
-                'sourceCode' => 'us-1',
-                'selections' => [
-                    ['SKU-2', 4.5, 5]
-                ]
-            ]
-        ];
-
         self::assertCount(count($expectedResult), $sourceSelections);
 
-        foreach ($expectedResult as $idx => $selectionResult) {
-            $sourceSelection = $sourceSelections[$idx];
-
-            self::assertEquals($selectionResult['sourceCode'], $sourceSelection->getSourceCode());
-
-            $itemSelections = $selectionResult['selections'];
+        foreach ($expectedResult as $i => $expectedSourceSelection) {
+            $sourceSelection = $sourceSelections[$i];
+            self::assertEquals($expectedSourceSelection['source_code'], $sourceSelection->getSourceCode());
 
             $sourceItemSelections = $sourceSelection->getSourceItemSelections();
-            self::assertCount(count($itemSelections), $sourceItemSelections);
+            self::assertCount(count($expectedSourceSelection['source_item_selections']), $sourceItemSelections);
 
-            foreach ($itemSelections as $itemIdx => $itemResult) {
-                $itemSelection = $sourceItemSelections[$itemIdx];
-                self::assertEquals($itemResult[0], $itemSelection->getSku());
-                self::assertEquals($itemResult[1], $itemSelection->getQty());
-                self::assertEquals($itemResult[2], $itemSelection->getQtyAvailable());
+            foreach ($expectedSourceSelection['source_item_selections'] as $j => $expectedSourceItemSelection) {
+                $sourceItemSelection = $sourceItemSelections[$j];
+                self::assertEquals($expectedSourceItemSelection[0], $sourceItemSelection->getSku());
+                self::assertEquals($expectedSourceItemSelection[1], $sourceItemSelection->getQty());
+                self::assertEquals($expectedSourceItemSelection[2], $sourceItemSelection->getQtyAvailable());
             }
-
         }
     }
 
     /**
      * Returns order object with specified products
      *
-     * @param array $productQtys
+     * @param array $productsQty
      * @return OrderInterface
      */
-    private function createOrder(array $productQtys): OrderInterface
+    private function createOrder(array $productsQty): OrderInterface
     {
-        /** @var OrderInterface $order */
-        $order = Bootstrap::getObjectManager()->create(OrderInterface::class);
-
         $orderItems = [];
-
-        foreach ($productQtys as $sku => $qty) {
+        foreach ($productsQty as $sku => $qty) {
             $orderItem = $this->orderItemFactory->create();
             $orderItem->setQtyOrdered($qty);
             $orderItem->setSku($sku);
@@ -189,8 +168,9 @@ class DefaultShippingAlgorithmTest extends TestCase
             $orderItems[] = $orderItem;
         }
 
+        /** @var OrderInterface $order */
+        $order = Bootstrap::getObjectManager()->create(OrderInterface::class);
         $order->setItems($orderItems);
-
         return $order;
     }
 }
