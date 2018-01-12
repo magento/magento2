@@ -138,9 +138,7 @@ define([
                             elementFlags[0].value = 1;
                         }
 
-                        element.addClassName('no-display');
-                        element.addClassName('template');
-                        element.hide();
+                        element.remove();
                         this.totalItems--;
                         this.updateItemsCountField();
                     }
