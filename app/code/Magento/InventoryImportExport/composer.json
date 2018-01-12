@@ -4,6 +4,7 @@
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/framework": "100.3.*",
+        "magento/module-catalog": "100.3.*",
         "magento/module-catalog-import-export": "100.3.*",
         "magento/module-eav": "100.3.*",
         "magento/module-import-export": "100.0.*",

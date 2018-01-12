@@ -146,6 +146,7 @@
         "magento/module-inventory": "100.3.0-dev",
         "magento/module-inventory-api": "100.3.0-dev",
         "magento/module-inventory-catalog": "100.3.0-dev",
+        "magento/module-inventory-catalog-search": "100.3.0-dev",
         "magento/module-inventory-configuration": "100.0.0-dev",
         "magento/module-inventory-configuration-api": "100.0.0-dev",
         "magento/module-inventory-import-export": "100.0.0-dev",

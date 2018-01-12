@@ -71,11 +71,12 @@ class SourcesTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      */
     public function testValidateRowExpectsValidRow()
     {
-        $rowData = $this->buildRowDataArray('eu-2', 'SKU-55', 33, 1);
+        $rowData = $this->buildRowDataArray('eu-2', 'SKU-1', 33, 1);
         $result = $this->importer->validateRow($rowData, 2);
         $this->assertTrue($result, 'Expect result TRUE as given data is valid.');
     }
