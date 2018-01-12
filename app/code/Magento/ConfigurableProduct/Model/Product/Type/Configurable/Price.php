@@ -46,6 +46,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 if (!empty($simpleProduct)) {
                     return $simpleProduct->getPrice();
                 }
+            } elseif ($product->getMinimalPrice() !== null) {
+                return $product->getMinimalPrice();
             }
         }
         return 0;

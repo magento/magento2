@@ -218,6 +218,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
+
+            $product->setMinimalPrice($product->getFinalPrice());
+
             $this->instances[$sku][$cacheKey] = $product;
             $this->instancesById[$product->getId()][$cacheKey] = $product;
         }
@@ -615,6 +618,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->addMinimalPrice();
 
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
