@@ -1,0 +1,15 @@
+Index: app/code/Magento/BundleStaging/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/BundleStaging/etc/db_schema.xml	(revision f7cd349804d17cb3b48b554cfe8fdb4a854200a7)
++++ app/code/Magento/BundleStaging/etc/db_schema.xml	(revision )
+@@ -45,7 +45,7 @@
+   </table>
+   <table name="catalog_product_bundle_selection_price" resource="default">
+     <constraint xsi:type="foreign" name="DCF37523AA05D770A70AA4ED7C2616E4" disabled="1"/>
++    <constraint xsi:type="foreign" name="FK_DCF37523AA05D770A70AA4ED7C2616E4" disabled="1" />
+     <constraint xsi:type="foreign" name="CAT_PRD_BNDL_SELECTION_PRICE_PARENT_PRD_ID_CAT_PRD_ENTT_ROW_ID" table="catalog_product_bundle_selection_price" column="parent_product_id" referenceTable="catalog_product_entity" referenceColumn="row_id" onDelete="CASCADE"/>
+   </table>
+   <table name="catalog_product_bundle_price_index" resource="default">

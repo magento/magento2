@@ -1,0 +1,16 @@
+Index: app/code/Magento/SalesArchive/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/SalesArchive/etc/db_schema.xml	(revision 53e481e128281a19d31da1bb8301a01d51c9bcd9)
++++ app/code/Magento/SalesArchive/etc/db_schema.xml	(revision )
+@@ -233,7 +233,7 @@
+     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
+     <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32"/>
+     <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+-    <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="false" default="'CURRENT_TIMESTAMP'"/>
++    <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+     <column xsi:type="varchar" name="customer_name" nullable="false" length="128"/>
+     <column xsi:type="decimal" name="total_qty" scale="4" precission="12" unsigned="false" nullable="true"/>
+     <column xsi:type="int" name="shipment_status" padding="11" unsigned="false" nullable="true" identity="false"/>
