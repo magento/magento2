@@ -17,6 +17,7 @@ use Magento\Setup\Fixtures\FixtureModel;
 
 /**
  * Command generates fixtures for performance tests
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GenerateFixturesCommand extends Command
 {
@@ -83,6 +84,11 @@ class GenerateFixturesCommand extends Command
                 $fixture->printInfo($output);
             }
 
+            /** @var \Magento\Setup\Fixtures\ConfigsApplyFixture $configFixture */
+            $configFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\ConfigsApplyFixture::class);
+            $configFixture && $this->executeFixture($configFixture, $output);
+
             /** @var $config \Magento\Indexer\Model\Config */
             $config = $fixtureModel->getObjectManager()->get(\Magento\Indexer\Model\Config::class);
             $indexerListIds = $config->getIndexers();
@@ -97,15 +103,15 @@ class GenerateFixturesCommand extends Command
             }
 
             foreach ($fixtureModel->getFixtures() as $fixture) {
-                $output->write('<info>' . $fixture->getActionTitle() . '... </info>');
-                $startTime = microtime(true);
-                $fixture->execute($output);
-                $endTime = microtime(true);
-                $resultTime = $endTime - $startTime;
-                $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
+                $this->executeFixture($fixture, $output);
             }
 
             $this->clearChangelog();
+
+            /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
+            $indexerFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\IndexersStatesApplyFixture::class);
+            $indexerFixture && $this->executeFixture($indexerFixture, $output);
 
             foreach ($indexerListIds as $indexerId) {
                 /** @var $indexer \Magento\Indexer\Model\Indexer */
@@ -147,5 +153,15 @@ class GenerateFixturesCommand extends Command
                 $resource->getConnection()->truncateTable($changeLogTableName);
             }
         }
+    }
+
+    private function executeFixture(\Magento\Setup\Fixtures\Fixture $fixture, OutputInterface $output)
+    {
+        $output->write('<info>' . $fixture->getActionTitle() . '... </info>');
+        $startTime = microtime(true);
+        $fixture->execute($output);
+        $endTime = microtime(true);
+        $resultTime = $endTime - $startTime;
+        $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
     }
 }
