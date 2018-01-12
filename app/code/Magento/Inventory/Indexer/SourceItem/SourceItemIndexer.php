@@ -11,9 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexHandlerInterface;
-use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
+use Magento\Inventory\Model\StockIndexManager;
 
 /**
  * Source Item indexer
@@ -49,9 +49,9 @@ class SourceItemIndexer implements ActionInterface
     private $indexDataBySkuListProvider;
 
     /**
-     * @var IndexNameBuilder
+     * @var StockIndexManager
      */
-    private $indexNameBuilder;
+    private $stockIndexManager;
 
     /**
      * @var StockIndexer
@@ -65,7 +65,7 @@ class SourceItemIndexer implements ActionInterface
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
-     * @param IndexNameBuilder $indexNameBuilder
+     * @param StockIndexManager $stockIndexManager
      * @param StockIndexer $stockIndexer
      */
     public function __construct(
@@ -73,14 +73,14 @@ class SourceItemIndexer implements ActionInterface
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexDataBySkuListProvider $indexDataBySkuListProvider,
-        IndexNameBuilder $indexNameBuilder,
+        StockIndexManager $stockIndexManager,
         StockIndexer $stockIndexer
     ) {
         $this->getSkuListInStock = $getSkuListInStockToUpdate;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
-        $this->indexNameBuilder = $indexNameBuilder;
+        $this->stockIndexManager = $stockIndexManager;
         $this->stockIndexer = $stockIndexer;
     }
 
@@ -111,11 +111,7 @@ class SourceItemIndexer implements ActionInterface
             $stockId = $skuListInStock->getStockId();
             $skuList = $skuListInStock->getSkuList();
 
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
+            $mainIndexName = $this->stockIndexManager->buildIndex((string)$stockId, Alias::ALIAS_MAIN);
 
             if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);

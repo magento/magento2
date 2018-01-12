@@ -19,6 +19,6 @@ class DefaultStockProvider implements DefaultStockProviderInterface
      */
     public function getId(): int
     {
-        return 1;
+        return \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID;
     }
 }

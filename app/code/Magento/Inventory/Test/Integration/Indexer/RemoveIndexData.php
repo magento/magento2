@@ -9,15 +9,15 @@ namespace Magento\Inventory\Test\Integration\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndex\Alias;
-use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructure;
+use Magento\Inventory\Model\StockIndexManager;
 
 class RemoveIndexData
 {
     /**
-     * @var IndexNameBuilder
+     * @var StockIndexManager
      */
-    private $indexNameBuilder;
+    private $stockIndexManager;
 
     /**
      * @var IndexStructure
@@ -25,14 +25,14 @@ class RemoveIndexData
     private $indexStructure;
 
     /**
-     * @param IndexNameBuilder $indexNameBuilder
+     * @param StockIndexManager $stockIndexManager
      * @param IndexStructure $indexStructure
      */
     public function __construct(
-        IndexNameBuilder $indexNameBuilder,
+        StockIndexManager $stockIndexManager,
         IndexStructure $indexStructure
     ) {
-        $this->indexNameBuilder = $indexNameBuilder;
+        $this->stockIndexManager = $stockIndexManager;
         $this->indexStructure = $indexStructure;
     }
 
@@ -43,11 +43,8 @@ class RemoveIndexData
     public function execute(array $stockIds)
     {
         foreach ($stockIds as $stockId) {
-            $indexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
+            $indexName = $this->stockIndexManager->buildIndex((string)$stockId, Alias::ALIAS_MAIN);
+
             $this->indexStructure->delete($indexName, ResourceConnection::DEFAULT_CONNECTION);
         }
     }

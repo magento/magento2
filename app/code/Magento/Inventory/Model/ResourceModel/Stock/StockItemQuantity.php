@@ -9,9 +9,9 @@ namespace Magento\Inventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndex\Alias;
-use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
 use Magento\Inventory\Indexer\IndexStructure;
+use Magento\Inventory\Model\StockIndexManager;
 
 /**
  * The resource model responsible for retrieving StockItem Quantity.
@@ -25,9 +25,9 @@ class StockItemQuantity
     private $resource;
 
     /**
-     * @var IndexNameBuilder
+     * @var StockIndexManager
      */
-    private $indexNameBuilder;
+    private $stockIndexManager;
 
     /**
      * @var IndexNameResolverInterface
@@ -36,16 +36,16 @@ class StockItemQuantity
 
     /**
      * @param ResourceConnection $resource
-     * @param IndexNameBuilder $indexNameBuilder
+     * @param StockIndexManager $stockIndexManager
      * @param IndexNameResolverInterface $indexNameResolver
      */
     public function __construct(
         ResourceConnection $resource,
-        IndexNameBuilder $indexNameBuilder,
+        StockIndexManager $stockIndexManager,
         IndexNameResolverInterface $indexNameResolver
     ) {
         $this->resource = $resource;
-        $this->indexNameBuilder = $indexNameBuilder;
+        $this->stockIndexManager = $stockIndexManager;
         $this->indexNameResolver = $indexNameResolver;
     }
 
@@ -58,11 +58,8 @@ class StockItemQuantity
      */
     public function execute(string $sku, int $stockId): float
     {
-        $indexName = $this->indexNameBuilder
-            ->setIndexId('inventory_stock')
-            ->addDimension('stock_', (string)$stockId)
-            ->setAlias(Alias::ALIAS_MAIN)
-            ->build();
+        $indexName = $this->stockIndexManager->buildIndex((string)$stockId, Alias::ALIAS_MAIN);
+
         $stockItemTableName = $this->indexNameResolver->resolveName($indexName);
 
         $connection = $this->resource->getConnection();

@@ -37,4 +37,8 @@
         <plugin name="update_source_item_at_legacy_stock_item_save"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
+        <plugin name="inventory_catalog_stock_status_resource_model"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\StockStatusResourceModel"/>
+    </type>
 </config>
