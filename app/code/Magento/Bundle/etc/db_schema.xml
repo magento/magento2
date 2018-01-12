@@ -24,16 +24,11 @@
       <column name="value_id"/>
     </constraint>
     <constraint xsi:type="foreign" name="CAT_PRD_BNDL_OPT_VAL_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID" table="catalog_product_bundle_option_value" column="option_id" referenceTable="catalog_product_bundle_option" referenceColumn="option_id" onDelete="CASCADE"/>
-    <constraint xsi:type="unique" name="CATALOG_PRODUCT_BUNDLE_OPTION_VALUE_OPTION_ID_STORE_ID">
-      <column name="option_id"/>
-      <column name="store_id"/>
-    </constraint>
     <constraint xsi:type="unique" name="CAT_PRD_BNDL_OPT_VAL_OPT_ID_PARENT_PRD_ID_STORE_ID">
       <column name="option_id"/>
       <column name="parent_product_id"/>
       <column name="store_id"/>
     </constraint>
-    <index name="CATALOG_PRODUCT_BUNDLE_OPTION_VALUE_OPTION_ID_STORE_ID" disabled="1"/>
   </table>
   <table name="catalog_product_bundle_selection" resource="default" engine="innodb">
     <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="true"/>
