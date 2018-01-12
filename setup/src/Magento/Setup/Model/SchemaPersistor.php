@@ -226,7 +226,7 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        if (strpos($path, 'magento2ce') !== false) {
+        if (strpos($path, 'magento2ee') !== false) {
             $dom = new \DOMDocument('1.0');
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;

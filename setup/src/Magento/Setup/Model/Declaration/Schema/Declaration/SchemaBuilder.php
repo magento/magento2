@@ -212,7 +212,7 @@ class SchemaBuilder
             $tableParams = [
                 'name' => $tableData['name'],
                 'resource' => $resource,
-                'engine' => $tableData['engine']
+                'engine' => $tableData['engine'] ?? null
             ];
             /** @var Table $table */
             $table = $this->elementFactory->create('table', $tableParams);

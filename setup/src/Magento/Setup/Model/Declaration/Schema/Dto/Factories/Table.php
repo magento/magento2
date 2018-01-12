@@ -50,7 +50,7 @@ class Table implements FactoryInterface
      */
     public function create(array $data)
     {
-        if (!isset($data['engine'])) {
+        if ($data['engine'] === null) {
             $data['engine'] = self::DEFAULT_ENGINE;
         }
 
