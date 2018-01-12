@@ -50,12 +50,13 @@ define([
          * @returns {null|string}
          */
         getTitle: function () {
+            var discountSegments;
             if (!this.totals()) {
                 return null;
             }
 
-            var discountSegments = this.totals()['total_segments'].filter(function (segment) {
-                return (segment.code === 'discount');
+            discountSegments = this.totals()['total_segments'].filter(function (segment) {
+                return segment.code === 'discount';
             });
 
             return discountSegments.length ? discountSegments[0].title : null;
