@@ -1,8 +1,6 @@
 PEAR_PackageFile
 Simple_Xml
 PersistentCustomerSegmentation
-SolrClient
-SolrQuery
 RegionUpdater
 Fixture_Module
 TheCompoundNamespace_TheCompoundModule
@@ -48,6 +46,7 @@ Model3
 \Magento\TestModule3\Service\V1\Entity\Parameter
 \Magento\TestModule3\Service\V1\Entity\ParameterBuilder
 \Magento\TestModuleMSC\Api\Data\ItemInterface
+\Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface
 \Magento\TestModule5\Service\V1\Entity\AllSoapAndRest
 \Magento\TestModule5\Service\V2\Entity\AllSoapAndRest
 \Magento\TestModule5\Service\V2\Entity\AllSoapAndRestBuilder

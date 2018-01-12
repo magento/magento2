@@ -30,11 +30,11 @@ class ProductViewTest extends GraphQlAbstract
      */
     public function testQueryAllFieldsSimpleProduct()
     {
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
             attribute_set_id
@@ -96,7 +96,6 @@ class ProductViewTest extends GraphQlAbstract
                     video_url
                 }
             }
-            minimal_price
             msrp
             msrp_display_actual_price_type
             name
@@ -130,7 +129,50 @@ class ProductViewTest extends GraphQlAbstract
                 }
             }
             page_layout
-            price
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
             price_type
             price_view
             product_links
@@ -186,15 +228,12 @@ QUERY;
         );
         $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        $this->setToken($customerToken);
-        $response = $this->graphQlQuery($query);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
+        $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -213,11 +252,11 @@ QUERY;
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
 
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items{
             attribute_set_id
@@ -279,7 +318,6 @@ QUERY;
                     video_url
                 }
             }
-            minimal_price
             msrp
             msrp_display_actual_price_type
             name
@@ -313,7 +351,50 @@ QUERY;
                 }
             }
             page_layout
-            price
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
             price_type
             price_view
             product_links
@@ -368,12 +449,45 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
+        $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
+     */
+    public function testQueryCustomAttributeField()
+    {
+        $prductSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$prductSku}"}})
+    {
+        items
+        {
+            attribute_code_custom
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($prductSku, false, null, true);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertCustomAttribute($product, $response['products']['items'][0]);
     }
 
     /**
@@ -424,8 +538,19 @@ QUERY;
         $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
         $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
         $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-//        $expectedValue = implode(',', $categoryIdsAttributeValue);
         $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertCustomAttribute($product, $actualResponse)
+    {
+        $customAttribute = $product->getCustomAttribute('attribute_code_custom')->getValue();
+        $this->assertNotNull($customAttribute, "Precondition failed: 'manufacturer' must not be null");
+        $this->assertNotEmpty($customAttribute, "Precondition failed: 'manufacturer' must not be empty");
+        $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
 
     /**
@@ -438,9 +563,7 @@ QUERY;
         $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
         foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
             foreach ($tierPriceArray as $key => $value) {
-                /**
-                 * @var \Magento\Catalog\Model\Product\TierPrice $tierPrice
-                 */
+                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
                 $tierPrice = $tierPrices[$tierPriceIndex];
                 $this->assertEquals($value, $tierPrice->getData($key));
             }
@@ -525,15 +648,37 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        /**
-         * ['product_object_field_name', 'expected_value']
-         */
+        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' => $product->getPrice()],
+            ['response_field' => 'price', 'expected_value' =>
+                [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $product->getSpecialPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $product->getPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $product->getSpecialPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ]
+            ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
@@ -564,7 +709,6 @@ QUERY;
             'msrp',
             'gift_message_available',
             'has_options',
-            'minimal_price',
             'msrp_display_actual_price_type',
             'news_from_date',
             'old_id',
