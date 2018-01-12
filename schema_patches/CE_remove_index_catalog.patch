@@ -1,0 +1,28 @@
+Index: app/code/Magento/Catalog/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Catalog/etc/db_schema.xml	(revision 70fe8f55bee18fd3617b6dd55142265fd610733c)
++++ app/code/Magento/Catalog/etc/db_schema.xml	(revision )
+@@ -560,8 +560,6 @@
+     <column xsi:type="smallint" name="disabled" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+     <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+     <constraint xsi:type="primary" name="PRIMARY">
+-      <column name="value_id"/>
+-      <column name="store_id"/>
+       <column name="record_id"/>
+     </constraint>
+     <constraint xsi:type="foreign" name="CAT_PRD_ENTT_MDA_GLR_VAL_VAL_ID_CAT_PRD_ENTT_MDA_GLR_VAL_ID" table="catalog_product_entity_media_gallery_value" column="value_id" referenceTable="catalog_product_entity_media_gallery" referenceColumn="value_id" onDelete="CASCADE"/>
+@@ -1170,11 +1168,6 @@
+       <column name="product_id"/>
+       <column name="store_id"/>
+     </constraint>
+-    <index name="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="hash">
+-      <column name="product_id"/>
+-      <column name="category_id"/>
+-      <column name="store_id"/>
+-    </index>
+   </table>
+   <table name="catalog_product_entity_media_gallery_value_to_entity" resource="default" engine="innodb">
+     <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="false"/>
