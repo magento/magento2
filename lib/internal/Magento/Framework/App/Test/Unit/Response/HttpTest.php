@@ -45,6 +45,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $sessionConfigMock;
 
+    /** @var int */
+    private $cookieLifeTime = 3600;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -111,11 +114,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieLifetime')
-            ->willReturn(3600);
+            ->willReturn($this->cookieLifeTime);
 
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->with([CookieMetadata::KEY_DURATION => 3600])
+            ->with([CookieMetadata::KEY_DURATION => $this->cookieLifeTime])
             ->willReturn($sensitiveCookieMetadataMock);
 
         $this->cookieManagerMock->expects($this->once())
@@ -135,12 +138,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
             ->willReturn(null);
-        $this->sessionConfigMock->expects($this->once())
-            ->method('getCookieLifetime')
-            ->willReturn(120);
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->with([CookieMetadata::KEY_DURATION => 120])
             ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
