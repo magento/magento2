@@ -127,7 +127,6 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      */
     protected function _prepareLayout()
     {
-        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
         $product = $this->getProduct();
         if (!$product) {
             return parent::_prepareLayout();
