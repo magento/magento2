@@ -32,7 +32,8 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
              * Set option and selection ids to 'null' in order to create new option(selection) for duplicated product,
              * but not modifying existing one, which led to lost of option(selection) in original product.
              */
-            foreach ($duplicatedBundleOption->getProductLinks() as $productLink) {
+            $productLinks = $duplicatedBundleOption->getProductLinks() ?: [];
+            foreach ($productLinks as $productLink) {
                 $productLink->setSelectionId(null);
             }
             $duplicatedBundleOption->setOptionId(null);
