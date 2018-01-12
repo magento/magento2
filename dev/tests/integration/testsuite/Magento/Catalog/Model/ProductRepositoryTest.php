@@ -49,4 +49,25 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $updatedProduct->load($productId);
         self::assertSame($newSku, $updatedProduct->getSku());
     }
+
+    /**
+     * Check Product Repository able to correctly create product without specified type.
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testCreateWithoutSpecifiedType()
+    {
+        /** @var Product $product */
+        $product = Bootstrap::getObjectManager()->get(ProductFactory::class)->create();
+        $product->setName('Simple without specified type');
+        $product->setSku('simple_without_specified_type');
+        $product->setPrice(1.12);
+        $product->setWeight(1.23);
+        $product->setAttributeSetId(4);
+        $product = $this->productRepository->save($product);
+
+        self::assertSame('1.1200', $product->getPrice());
+        self::assertSame('1.2300', $product->getWeight());
+        self::assertSame('simple', $product->getTypeId());
+    }
 }
