@@ -27,7 +27,7 @@
         <!-- Create an entity that depends on another entity -->
         <createData entity="_defaultCategory" stepKey="createCategory"/>
         <createData entity="_defaultProduct" stepKey="createProduct">
-            <required-entity createDataKey="createCategory"/>
+            <requiredEntity createDataKey="createCategory"/>
         </createData>
 
         <!-- Parameterized url -->

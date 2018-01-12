@@ -18,12 +18,12 @@
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>
             <createData stepKey="product" entity="SimpleProduct" >
-                <required-entity createDataKey="category"/>
+                <requiredEntity createDataKey="category"/>
             </createData>
             <createData stepKey="customer" entity="Simple_US_Customer"/>
             <createData stepKey="wishlist" entity="Wishlist">
-                <required-entity createDataKey="customer"/>
-                <required-entity createDataKey="product"/>
+                <requiredEntity createDataKey="customer"/>
+                <requiredEntity createDataKey="product"/>
             </createData>
         </before>
         <after>

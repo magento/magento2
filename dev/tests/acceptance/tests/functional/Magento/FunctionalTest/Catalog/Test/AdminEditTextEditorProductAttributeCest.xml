@@ -23,7 +23,7 @@
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWithTwoOptions"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
-                <required-entity createDataKey="myProductAttributeCreation"/>
+                <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
         </before>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid1"/>

@@ -22,7 +22,7 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
-                <required-entity createDataKey="createPreReqCategory"/>
+                <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>

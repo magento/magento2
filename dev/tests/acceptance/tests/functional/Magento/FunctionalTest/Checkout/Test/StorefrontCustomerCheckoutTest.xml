@@ -21,7 +21,7 @@
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
             <createData entity="SimpleProduct" stepKey="simpleproduct1">
-                <required-entity createDataKey="simplecategory"/>
+                <requiredEntity createDataKey="simplecategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>

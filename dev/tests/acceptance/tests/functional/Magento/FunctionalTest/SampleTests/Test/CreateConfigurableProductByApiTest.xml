@@ -17,51 +17,51 @@
         <before>
             <createData stepKey="categoryHandle" entity="SimpleSubCategory" />
             <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
-                <required-entity createDataKey="categoryHandle"/>
+                <requiredEntity createDataKey="categoryHandle"/>
             </createData>
             <createData stepKey="productAttributeHandle" entity="productAttributeWithTwoOptions"/>
 
             <createData stepKey="productAttributeOption1Handle" entity="productAttributeOption1">
-                <required-entity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
             </createData>
             <createData stepKey="productAttributeOption2Handle" entity="productAttributeOption2">
-                <required-entity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
             </createData>
 
             <createData stepKey="addToAttributeSetHandle" entity="AddToDefaultSet">
-                <required-entity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
             </createData>
 
             <getData stepKey="getAttributeOption1Handle" entity="ProductAttributeOptionGetter" index="1">
-                <required-entity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
             </getData>
             <getData stepKey="getAttributeOption2Handle" entity="ProductAttributeOptionGetter" index="2">
-                <required-entity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
             </getData>
 
             <createData stepKey="childProductHandle1" entity="SimpleOne">
-                <required-entity createDataKey="productAttributeHandle"/>
-                <required-entity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
             </createData>
             <createData stepKey="childProductHandle2" entity="SimpleOne">
-                <required-entity createDataKey="productAttributeHandle"/>
-                <required-entity createDataKey="getAttributeOption2Handle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
             </createData>
 
             <createData stepKey="configProductOptionHandle" entity="ConfigurableProductTwoOptions">
-                <required-entity createDataKey="baseConfigProductHandle"/>
-                <required-entity createDataKey="productAttributeHandle"/>
-                <required-entity createDataKey="getAttributeOption1Handle"/>
-                <required-entity createDataKey="getAttributeOption2Handle"/>
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
             </createData>
 
             <createData stepKey="configProductHandle1" entity="ConfigurableProductAddChild">
-                <required-entity createDataKey="childProductHandle1"/>
-                <required-entity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
             </createData>
             <createData stepKey="configProductHandle2" entity="ConfigurableProductAddChild">
-                <required-entity createDataKey="childProductHandle2"/>
-                <required-entity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
             </createData>
         </before>
         <after>

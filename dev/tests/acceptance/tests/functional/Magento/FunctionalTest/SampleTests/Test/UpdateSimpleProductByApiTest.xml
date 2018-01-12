@@ -16,7 +16,7 @@
         <before>
             <createData stepKey="categoryHandle" entity="SimpleSubCategory"/>
             <createData stepKey="productHandle" entity="SimpleProduct" >
-                <required-entity createDataKey="categoryHandle"/>
+                <requiredEntity createDataKey="categoryHandle"/>
             </createData>
             <updateData stepKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
         </before>

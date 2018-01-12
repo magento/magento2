@@ -20,10 +20,10 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct1">
-                <required-entity createDataKey="createPreReqCategory"/>
+                <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
-                <required-entity createDataKey="createPreReqCategory"/>
+                <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>

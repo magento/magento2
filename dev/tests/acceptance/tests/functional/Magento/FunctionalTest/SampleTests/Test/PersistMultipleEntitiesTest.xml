@@ -15,10 +15,10 @@
         <before>
             <createData entity="simplesubcategory" stepKey="simplecategory"/>
             <createData entity="simpleproduct" stepKey="simpleproduct1">
-                <required-entity createDataKey="simplecategory"/>
+                <requiredEntity createDataKey="simplecategory"/>
             </createData>
             <createData entity="simpleproduct" stepKey="simpleproduct2">
-                <required-entity createDataKey="categoryLink"/>
+                <requiredEntity createDataKey="categoryLink"/>
             </createData>
         </before>
         <after>
