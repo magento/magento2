@@ -61,6 +61,7 @@ class StockItemImporterTest extends TestCase
     /**
      * Tests Source Item Import of default source
      *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDbIsolation enabled
      */
     public function testSourceItemImportWithDefaultSource()
