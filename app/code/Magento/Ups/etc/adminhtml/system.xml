@@ -119,7 +119,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="include_taxes" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Include TAX in Rate</label>
+                    <label>Include Tax in Rate</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="shipper_number" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
