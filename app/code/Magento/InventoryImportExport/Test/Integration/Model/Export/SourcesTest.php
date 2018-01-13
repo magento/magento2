@@ -58,7 +58,7 @@ class SourcesTest extends TestCase
         $this->exporter->setParameters([]);
         $this->exporter->export();
 
-        $this->assertEquals(
+        $this->assertContains(
             file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '_files', 'export_full.csv'])),
             file_get_contents($this->exportFilePath)
         );
