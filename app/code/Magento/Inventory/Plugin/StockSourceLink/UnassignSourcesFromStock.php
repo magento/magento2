@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Plugin;
+namespace Magento\Inventory\Plugin\StockSourceLink;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
