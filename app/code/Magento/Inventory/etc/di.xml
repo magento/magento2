@@ -81,7 +81,6 @@
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
-    <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Indexer -->
     <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
     <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
@@ -122,7 +121,7 @@
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
         <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Plugin\StockSourceLink\AssignSourcesToStock" />
     </type>
-    <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
         <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Plugin\StockSourceLink\UnassignSourcesFromStock" />
     </type>
 </config>

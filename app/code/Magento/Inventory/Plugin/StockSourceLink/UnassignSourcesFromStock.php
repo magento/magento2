@@ -9,7 +9,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Plugin;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
-use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 
 /**
  * TODO: remove this plugin (https://github.com/magento-engcom/msi/issues/213)
@@ -31,11 +31,11 @@ class UnassignSourcesFromStock
     }
 
     /**
-     * @param UnassignSourceFromStockInterface $subject
+     * @param StockSourceLinksDeleteInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(UnassignSourceFromStockInterface $subject)
+    public function afterExecute(StockSourceLinksDeleteInterface $subject)
     {
         $indexer = $this->indexerRegistry->get(StockIndexer::INDEXER_ID);
         if ($indexer->isValid()) {

@@ -12,9 +12,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLinkFactory;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 
 /**
  * At the time of processing Stock save form this class used to save links correctly
@@ -43,29 +43,29 @@ class StockSourceLinkProcessor
     private $stockSourceLinksSave;
 
     /**
-     * @var UnassignSourceFromStockInterface
+     * @var StockSourceLinksDeleteInterface
      */
-    private $unassignSourceFromStock;
+    private $stockSourceLinksDelete;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StockSourceLinkFactory $stockSourceLinkFactory
      * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
      * @param StockSourceLinksSaveInterface $stockSourceLinksSave
-     * @param UnassignSourceFromStockInterface $unassignSourceFromStock
+     * @param StockSourceLinksDeleteInterface $stockSourceLinksDelete
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StockSourceLinkFactory $stockSourceLinkFactory,
         GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
         StockSourceLinksSaveInterface $stockSourceLinksSave,
-        UnassignSourceFromStockInterface $unassignSourceFromStock
+        StockSourceLinksDeleteInterface $stockSourceLinksDelete
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
         $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
         $this->stockSourceLinksSave = $stockSourceLinksSave;
-        $this->unassignSourceFromStock = $unassignSourceFromStock;
+        $this->stockSourceLinksDelete = $stockSourceLinksDelete;
     }
 
     /**
@@ -90,13 +90,12 @@ class StockSourceLinkProcessor
             }
         }
 
-        if ($sourceCodesForSave) {
+        if (count($sourceCodesForSave) > 0) {
             $this->stockSourceLinksSave->execute($this->getStockSourceLinks(array_keys($sourceCodesForSave), $stockId));
         }
-        if ($sourceCodesForDelete) {
-            foreach ($sourceCodesForDelete as $sourceCodeForDelete) {
-                $this->unassignSourceFromStock->execute($sourceCodeForDelete, $stockId);
-            }
+
+        if (count($sourceCodesForDelete) > 0) {
+            $this->stockSourceLinksDelete->execute($this->getStockSourceLinks($sourceCodesForDelete, $stockId));
         }
     }
 
@@ -119,7 +118,6 @@ class StockSourceLinkProcessor
      *
      * @param array $sourceCodeList
      * @param int $stockId
-     *
      * @return StockSourceLinkInterface[]
      */
     private function getStockSourceLinks(array $sourceCodeList, $stockId): array
