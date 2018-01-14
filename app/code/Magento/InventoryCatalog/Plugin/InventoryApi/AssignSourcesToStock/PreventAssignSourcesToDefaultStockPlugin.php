@@ -47,10 +47,8 @@ class PreventAssignSourcesToDefaultStockPlugin
         }
 
         foreach ($links as $link) {
-            if (
-                $this->defaultStockProvider->getId() == $link->getStockId() &&
-                $this->defaultSourceProvider->getCode() != $link->getSourceCode()
-            ) {
+            if ($this->defaultStockProvider->getId() == $link->getStockId() &&
+                $this->defaultSourceProvider->getCode() != $link->getSourceCode()) {
                 throw new InputException(__('You can only assign Default Source to Default Stock'));
             }
         }
