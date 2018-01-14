@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmProviderInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmProvider"/>
+    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResult"/>
+    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelection"/>
+    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelection"/>
+</config>

@@ -10,7 +10,7 @@ namespace Magento\InventoryConfigurationApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Represents a configuration object
+ * Represents a Source Item Configuration object
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -50,7 +50,7 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Set notify stock qty
      *
-     * @param float $quantity
+     * @param float|null $quantity
      * @return void
      */
     public function setNotifyStockQty($quantity);

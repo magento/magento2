@@ -13,8 +13,6 @@
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
-        <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
         <plugin name="prevent_assign_sources_to_default_stock"

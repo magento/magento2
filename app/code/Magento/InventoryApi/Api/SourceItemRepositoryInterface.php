@@ -38,7 +38,7 @@ interface SourceItemRepositoryInterface
      * Find SourceItems by SearchCriteria
      *
      * We need to have this method for direct work with SourceItems because this object contains
-     * additional data like as qty, status (for example can de searchable by additional field)
+     * additional data like as qty, status (for example can be searchable by additional field)
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface

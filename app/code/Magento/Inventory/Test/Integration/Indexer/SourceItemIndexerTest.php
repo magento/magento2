@@ -37,7 +37,7 @@ class SourceItemIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(SourceItemIndexer::INDEXER_ID);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
@@ -49,6 +49,9 @@ class SourceItemIndexerTest extends TestCase
         $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
     protected function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
