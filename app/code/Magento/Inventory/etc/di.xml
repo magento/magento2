@@ -80,7 +80,6 @@
     <preference for="Magento\InventoryApi\Api\GetSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
-    <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Indexer -->
@@ -120,10 +119,10 @@
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
     <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>
-    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
-        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\AssignSourcesToStock" />
+    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Plugin\StockSourceLink\AssignSourcesToStock" />
     </type>
     <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
-        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Plugin\StockSourceLink\UnassignSourcesFromStock" />
     </type>
 </config>

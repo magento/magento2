@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock;
 
 use Magento\Framework\Exception\InputException;
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 class PreventAssignSourcesToDefaultStockPlugin
 {
@@ -33,23 +34,27 @@ class PreventAssignSourcesToDefaultStockPlugin
     }
 
     /**
-     * @param AssignSourcesToStockInterface $subject
-     * @param array $sourceCodes
-     * @param int $stockId
+     * @param StockSourceLinksSaveInterface $subject
+     * @param StockSourceLinkInterface[] $links
      * @return array
      * @throws InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(AssignSourcesToStockInterface $subject, array $sourceCodes, int $stockId)
+    public function beforeExecute(StockSourceLinksSaveInterface $subject, array $links)
     {
-        if ($this->defaultStockProvider->getId() !== $stockId || !count($sourceCodes)) {
-            return [$sourceCodes, $stockId];
+        if (0 == count($links)) {
+            return [$links];
         }
 
-        if (count($sourceCodes) > 1 || $this->defaultSourceProvider->getCode() !== (string)$sourceCodes[0]) {
-            throw new InputException(__('You can only assign Default Source to Default Stock'));
+        foreach ($links as $link) {
+            if (
+                $this->defaultStockProvider->getId() == $link->getStockId() &&
+                $this->defaultSourceProvider->getCode() != $link->getSourceCode()
+            ) {
+                throw new InputException(__('You can only assign Default Source to Default Stock'));
+            }
         }
 
-        return [$sourceCodes, $stockId];
+        return [$links];
     }
 }

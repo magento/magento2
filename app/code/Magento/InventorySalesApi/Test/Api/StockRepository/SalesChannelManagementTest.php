@@ -19,7 +19,7 @@ class SalesChannelManagementTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock';
-    const SERVICE_NAME = 'inventorySalesApiStockRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 
     /**

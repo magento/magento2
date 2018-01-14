@@ -5,11 +5,16 @@
  */
 declare(strict_types=1);
 
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterfaceFactory;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var AssignSourcesToStockInterface $assignSourcesToStock */
-$assignSourcesToStock = Bootstrap::getObjectManager()->get(AssignSourcesToStockInterface::class);
+/** @var StockSourceLinksSaveInterface $stockSourceLinksSave */
+$stockSourceLinksSave = Bootstrap::getObjectManager()->get(StockSourceLinksSaveInterface::class);
+/** @var StockSourceLinkInterfaceFactory $stockSourceLinkFactory */
+$stockSourceLinkFactory = Bootstrap::getObjectManager()->get(StockSourceLinkInterfaceFactory::class);
+
 /**
  * EU-source-1(code:eu-1) - EU-stock(id:10)
  * EU-source-2(code:eu-2) - EU-stock(id:10)
@@ -24,6 +29,28 @@ $assignSourcesToStock = Bootstrap::getObjectManager()->get(AssignSourcesToStockI
  * EU-source-disabled(code:eu-disabled) - Global-stock(id:30)
  * US-source-1(code:us-1) - Global-stock(id:30)
  */
-$assignSourcesToStock->execute(['eu-1', 'eu-2', 'eu-3', 'eu-disabled'], 10);
-$assignSourcesToStock->execute(['us-1'], 20);
-$assignSourcesToStock->execute(['eu-1', 'eu-2', 'eu-3', 'eu-disabled', 'us-1'], 30);
+
+/**
+ * $stock ID => list of source codes
+ */
+$linksData = [
+    10 => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled'],
+    20 => ['us-1'],
+    30 => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled', 'us-1']
+];
+
+$links = [];
+
+foreach ($linksData as $stockID => $sourceCodes) {
+    foreach ($sourceCodes as $sourceCode) {
+        /** @var StockSourceLinkInterface $link */
+        $link = $stockSourceLinkFactory->create();
+
+        $link->setStockId($stockID);
+        $link->setSourceCode($sourceCode);
+
+        $links[] = $link;
+    }
+}
+
+$stockSourceLinksSave->execute($links);
