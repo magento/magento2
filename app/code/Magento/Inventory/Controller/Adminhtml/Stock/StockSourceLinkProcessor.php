@@ -136,5 +136,4 @@ class StockSourceLinkProcessor
 
         return $linkList;
     }
-
 }
