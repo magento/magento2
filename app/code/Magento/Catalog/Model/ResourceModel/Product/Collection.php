@@ -1466,10 +1466,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $this->_productLimitationFilters->setUsePriceIndex(true);
 
-        if (!isset($this->_productLimitationFilters['customer_group_id']) && ($customerGroupId === null)) {
+        if (!isset($this->_productLimitationFilters['customer_group_id']) && $customerGroupId === null) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
-        if (!isset($this->_productLimitationFilters['website_id']) && ($websiteId === null)) {
+        if (!isset($this->_productLimitationFilters['website_id']) && $websiteId === null) {
             $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
 
