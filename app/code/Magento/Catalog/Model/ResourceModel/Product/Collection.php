@@ -1092,7 +1092,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
-        $countSelect = ($select === null) ? $this->_getClearSelect() : $this->_buildClearSelect($select);
+        $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
         $countSelect->columns('COUNT(DISTINCT e.entity_id)');
         if ($resetLeftJoins) {
             $countSelect->resetJoinLeft();

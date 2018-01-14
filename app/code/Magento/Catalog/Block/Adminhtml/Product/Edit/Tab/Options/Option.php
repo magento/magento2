@@ -315,7 +315,7 @@ class Option extends Widget
                         'title',
                         $option->getStoreTitle() === null
                     );
-                    $value['scopeTitleDisabled'] = ($option->getStoreTitle() === null) ? 'disabled' : null;
+                    $value['scopeTitleDisabled'] = $option->getStoreTitle() === null ? 'disabled' : null;
                 }
 
                 if ($option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
@@ -381,7 +381,7 @@ class Option extends Widget
                             'price',
                             $option->getStorePrice() === null
                         );
-                        $value['scopePriceDisabled'] = ($option->getStorePrice() === null) ? 'disabled' : null;
+                        $value['scopePriceDisabled'] = $option->getStorePrice() === null ? 'disabled' : null;
                     }
                 }
                 $values[] = new \Magento\Framework\DataObject($value);
