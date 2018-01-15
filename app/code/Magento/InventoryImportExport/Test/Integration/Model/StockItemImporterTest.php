@@ -61,11 +61,11 @@ class StockItemImporterTest extends TestCase
     /**
      * Tests Source Item Import of default source
      *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDbIsolation enabled
      */
     public function testSourceItemImportWithDefaultSource()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/270');
         $stockData = [
             'sku' => 'SKU-1',
             'qty' => 1,
