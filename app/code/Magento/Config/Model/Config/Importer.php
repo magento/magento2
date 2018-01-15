@@ -123,12 +123,14 @@ class Importer implements ImporterInterface
             if ($this->scopeConfig instanceof Config) {
                 $this->scopeConfig->clean();
             }
+
             $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData, $data) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
                 $this->saveProcessor->process($changedData);
             });
+
             $this->scope->setCurrentScope($currentScope);
             $this->flagManager->saveFlag(static::FLAG_CODE, $data);
         } catch (\Exception $e) {
