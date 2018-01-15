@@ -144,6 +144,9 @@ class DomTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
+
+        $actualErrors = [];
+
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
 
@@ -152,6 +155,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ->getElementsByTagName('node')->item(0)
             ->getAttribute('attribute_with_default_value');
 
+        $this->assertEmpty($actualErrors);
         $this->assertEquals($expectedValue, $actualValue);
     }
 
