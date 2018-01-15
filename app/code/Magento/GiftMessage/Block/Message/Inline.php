@@ -283,7 +283,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getItemsHasMesssages()
+    public function getItemsHasMessages()
     {
         foreach ($this->getItems() as $item) {
             if ($item->getGiftMessageId()) {
