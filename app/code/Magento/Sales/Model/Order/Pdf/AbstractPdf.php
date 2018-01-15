@@ -804,7 +804,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid renderer model.'));
         }
 
-        if (is_null($this->_renderers[$type]['renderer'])) {
+        if ($this->_renderers[$type]['renderer'] === null) {
             $this->_renderers[$type]['renderer'] = $this->_pdfItemsFactory->get($this->_renderers[$type]['model']);
         }
 
