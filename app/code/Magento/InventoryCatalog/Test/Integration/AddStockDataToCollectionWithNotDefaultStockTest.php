@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogInventory\Helper\Stock;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -20,12 +20,12 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test catalog search with different stocks on second website.
  */
-class AddIsInStockFilterToCollectionTest extends TestCase
+class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
 {
     /**
-     * @var Stock
+     * @var StockStatus
      */
-    private $stock;
+    private $stockStatus;
 
     /**
      * @var IndexerInterface
@@ -49,7 +49,9 @@ class AddIsInStockFilterToCollectionTest extends TestCase
 
     protected function setUp()
     {
-        $this->stock = Bootstrap::getObjectManager()->create(Stock::class);
+        parent::setUp();
+
+        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
         $this->salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
@@ -68,9 +70,12 @@ class AddIsInStockFilterToCollectionTest extends TestCase
      *
      * @param int $stockId
      * @param int $expectedSize
+     * @param bool $isFilterInStock
+     * @return void
+     *
      * @dataProvider getResultCountDataProvider
      */
-    public function testGetResultCount(int $stockId, int $expectedSize)
+    public function testGetResultCount(int $stockId, int $expectedSize, bool $isFilterInStock)
     {
         // this is not in fixture, because we set salesChannel for different stockId received from data provider
         $this->salesChannel->setCode('test');
@@ -87,7 +92,7 @@ class AddIsInStockFilterToCollectionTest extends TestCase
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stock->addIsInStockFilterToCollection($collection);
+        $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
         self::assertEquals($expectedSize, $collection->getSize());
 
@@ -102,9 +107,12 @@ class AddIsInStockFilterToCollectionTest extends TestCase
     public function getResultCountDataProvider(): array
     {
         return [
-            [10, 1],
-            [20, 1],
-            [30, 2],
+            [10, 1, true],
+            [20, 1, true],
+            [30, 2, true],
+            [10, 2, false],
+            [20, 1, false],
+            [30, 3, false],
         ];
     }
 }

@@ -33,18 +33,19 @@ class AddStockDataToCollection
      * @param Collection $collection
      * @param bool $isFilterInStock
      * @param int $stockId
+     *
+     * @return void
      */
     public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
     {
         $tableName = $this->stockIndexTableProvider->execute($stockId);
-        $method = $isFilterInStock ? 'join' : 'joinLeft';
 
         $isSalableExpression = $collection->getConnection()->getCheckSql(
             'stock_status_index.' . IndexStructure::QUANTITY . ' > 0',
             1,
             0
         );
-        $collection->getSelect()->$method(
+        $collection->getSelect()->join(
             ['stock_status_index' => $tableName],
             'e.sku = stock_status_index.' . IndexStructure::SKU,
             ['is_salable' => $isSalableExpression]

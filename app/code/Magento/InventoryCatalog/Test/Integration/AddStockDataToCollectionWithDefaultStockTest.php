@@ -8,18 +8,18 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogInventory\Helper\Stock;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class AddIsInStockFilterToCollectionIfStockIsDefaultTest extends TestCase
+class AddStockDataToCollectionWithDefaultStockTest extends TestCase
 {
     /**
-     * @var Stock
+     * @var StockStatus
      */
-    private $stock;
+    private $stockStatus;
 
     /**
      * @var IndexerInterface
@@ -28,7 +28,9 @@ class AddIsInStockFilterToCollectionIfStockIsDefaultTest extends TestCase
 
     protected function setUp()
     {
-        $this->stock = Bootstrap::getObjectManager()->create(Stock::class);
+        parent::setUp();
+
+        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
 
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(SourceIndexer::INDEXER_ID);
@@ -37,14 +39,31 @@ class AddIsInStockFilterToCollectionIfStockIsDefaultTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     *
+     * @param int $expectedSize
+     * @param bool $isFilterInStock
+     * @return void
+     *
+     * @dataProvider getResultCountDataProvider
      */
-    public function testGetResultCount()
+    public function testGetResultCount(int $expectedSize, bool $isFilterInStock)
     {
         $this->indexer->reindexAll();
 
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stock->addIsInStockFilterToCollection($collection);
+        $collection = $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
-        self::assertEquals(2, $collection->getSize());
+        self::assertEquals($expectedSize, $collection->getSize());
+    }
+
+    /**
+     * @return array
+     */
+    public function getResultCountDataProvider(): array
+    {
+        return [
+            [2, true],
+            [3, false],
+        ];
     }
 }
