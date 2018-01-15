@@ -7,7 +7,6 @@
 namespace Magento\InventoryCatalog\Test\Api\Bundle;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Bundle\Api\Data\LinkInterface;
 
@@ -17,20 +16,6 @@ class BundleProductShouldBeInStockOnCreateTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
     const BUNDLE_PRODUCT_SKU = 'SKU-1-test-product-bundle';
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    protected $productCollection;
-
-    /**
-     * Execute per test initialization
-     */
-    public function setUp()
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-    }
 
     /**
      * Execute per test cleanup
