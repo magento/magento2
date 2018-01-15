@@ -7,16 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test catalog search with default stock on default website.
- */
-class CatalogSearchResultDefaultSalesChannelTest extends TestCase
+class AddIsInStockFilterToCollectionIfStockIsDefaultTest extends TestCase
 {
     /**
      * @var Stock
@@ -43,10 +41,10 @@ class CatalogSearchResultDefaultSalesChannelTest extends TestCase
     public function testGetResultCount()
     {
         $this->indexer->reindexAll();
-        $collection = Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-        );
+
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $this->stock->addIsInStockFilterToCollection($collection);
+
         self::assertEquals(2, $collection->getSize());
     }
 }

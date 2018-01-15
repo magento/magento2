@@ -12,18 +12,12 @@ use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexNameResolver;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
-use Magento\InventoryApi\Api\StockIndexTableProviderInterface;
 
 /**
  * Stock index table provider.
  */
 class StockIndexTableProvider implements StockIndexTableProviderInterface
 {
-    /**
-     * @var string
-     */
-    private $dimensionName = 'stock_';
-
     /**
      * @var IndexNameBuilder
      */
@@ -40,18 +34,26 @@ class StockIndexTableProvider implements StockIndexTableProviderInterface
     private $resourceConnection;
 
     /**
+     * @var string
+     */
+    private $dimensionName;
+
+    /**
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexNameResolver $indexNameResolver
      * @param ResourceConnection $resourceConnection
+     * @param string $dimensionName
      */
     public function __construct(
         IndexNameBuilder $indexNameBuilder,
         IndexNameResolver $indexNameResolver,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        string $dimensionName
     ) {
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexNameResolver = $indexNameResolver;
         $this->resourceConnection = $resourceConnection;
+        $this->dimensionName = $dimensionName;
     }
 
     /**

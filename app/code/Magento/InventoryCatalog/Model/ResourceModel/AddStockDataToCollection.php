@@ -7,20 +7,36 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Inventory\Indexer\IndexStructure;
+use Magento\Inventory\Model\StockIndexTableProviderInterface;
 
 /**
- * Adapt adding stock data to collection for MSI.
+ * Add Stock data to collection
  */
-class AdaptedAddStockDataToCollection
+class AddStockDataToCollection
 {
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-     * @param bool $isFilterInStock
-     * @param string $tableName
+     * @var StockIndexTableProviderInterface
      */
-    public function addStockDataToCollection($collection, $isFilterInStock, string $tableName)
+    private $stockIndexTableProvider;
+
+    /**
+     * @param StockIndexTableProviderInterface $stockIndexTableProvider
+     */
+    public function __construct(StockIndexTableProviderInterface $stockIndexTableProvider)
     {
+        $this->stockIndexTableProvider = $stockIndexTableProvider;
+    }
+
+    /**
+     * @param Collection $collection
+     * @param bool $isFilterInStock
+     * @param int $stockId
+     */
+    public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
+    {
+        $tableName = $this->stockIndexTableProvider->execute($stockId);
         $method = $isFilterInStock ? 'join' : 'joinLeft';
 
         $isSalableExpression = $collection->getConnection()->getCheckSql(

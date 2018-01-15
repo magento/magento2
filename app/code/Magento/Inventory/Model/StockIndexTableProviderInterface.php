@@ -5,20 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryApi\Api;
+namespace Magento\Inventory\Model;
 
 /**
- * Stock Index table provider.
+ * Stock Index table provider. Get stock index table by stock id
  *
  * @api
  */
 interface StockIndexTableProviderInterface
 {
     /**
-     * Get stock index table by stock id.
-     *
      * @param int $stockId
-     *
      * @return string
      */
     public function execute(int $stockId): string;

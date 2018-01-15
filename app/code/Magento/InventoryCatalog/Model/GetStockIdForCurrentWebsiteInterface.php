@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 /**
- * Sugar service for get stock if.
+ * Sugar service for get stock id by code for current website
+ *
+ * @api
  */
 interface GetStockIdForCurrentWebsiteInterface
 {
     /**
-     * Get stock id by code for current website.
-     *
      * @return int
      */
     public function execute(): int;

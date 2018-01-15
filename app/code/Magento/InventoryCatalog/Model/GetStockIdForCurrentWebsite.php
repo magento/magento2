@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -41,7 +39,7 @@ class GetStockIdForCurrentWebsite implements GetStockIdForCurrentWebsiteInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(): int
     {

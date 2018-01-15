@@ -79,6 +79,12 @@
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Indexer -->
+    <preference for="Magento\Inventory\Model\StockIndexTableProviderInterface" type="Magento\Inventory\Model\StockIndexTableProvider"/>
+    <type name="Magento\Inventory\Model\StockIndexTableProvider">
+        <arguments>
+            <argument name="dimensionName" xsi:type="number">stock_</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
     <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
     <type name="Magento\Inventory\Indexer\IndexHandler">
@@ -98,12 +104,12 @@
             <argument name="indexHandler" xsi:type="object">Magento\Inventory\Indexer\IndexHandler</argument>
         </arguments>
     </type>
-    <type name="\Magento\Inventory\Indexer\SourceItem\GetSkuListInStock">
+    <type name="Magento\Inventory\Indexer\SourceItem\GetSkuListInStock">
         <arguments>
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
-    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
+    <type name="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
         <arguments>
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
@@ -121,5 +127,4 @@
     <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
         <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
     </type>
-    <preference for="Magento\InventoryApi\Api\StockIndexTableProviderInterface" type="Magento\Inventory\Model\StockIndexTableProvider"/>
 </config>

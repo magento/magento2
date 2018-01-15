@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
@@ -19,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test catalog search with different stocks on second website.
  */
-class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
+class AddIsInStockFilterToCollectionTest extends TestCase
 {
     /**
      * @var Stock
@@ -48,16 +49,9 @@ class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
 
     protected function setUp()
     {
-        /** @var Stock stock */
         $this->stock = Bootstrap::getObjectManager()->create(Stock::class);
-
-        /** @var SalesChannelInterface $salesChannel */
         $this->salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
-
-        /** @var StockRepositoryInterface $stockRepository */
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-
-        /** @var StoreManagerInterface $storeManager */
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
@@ -74,12 +68,11 @@ class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
      *
      * @param int $stockId
      * @param int $expectedSize
-     *
-     * @dataProvider testGetResultCountOnNonDefaultSalesChannelDataProvider
+     * @dataProvider getResultCountOnNonDefaultSalesChannelDataProvider
      */
     public function testGetResultCountOnNonDefaultSalesChannel(int $stockId, int $expectedSize)
     {
-        //this is not in fixture, because we set salesChannel for different stockId received from data provider.
+        // this is not in fixture, because we set salesChannel for different stockId received from data provider
         $this->salesChannel->setCode('test');
         $this->salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
 
@@ -87,15 +80,13 @@ class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
         $stock->getExtensionAttributes()->setSalesChannels([$this->salesChannel]);
         $this->stockRepository->save($stock);
 
-        //switch to second website.
+        // switch to second website
         $this->storeManager->setCurrentStore('fixture_second_store');
 
         $this->indexer->reindexAll();
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-        );
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $this->stock->addIsInStockFilterToCollection($collection);
 
         self::assertEquals($expectedSize, $collection->getSize());
@@ -106,11 +97,9 @@ class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
     }
 
     /**
-     * Data provider for testGetResultCountOnNonDefaultSalesChannel().
-     *
      * @return array
      */
-    public function testGetResultCountOnNonDefaultSalesChannelDataProvider(): array
+    public function getResultCountOnNonDefaultSalesChannelDataProvider(): array
     {
         return [
             [10, 1],
