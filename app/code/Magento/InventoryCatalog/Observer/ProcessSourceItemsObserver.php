@@ -73,6 +73,9 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
+        if ($product->getTypeId() == 'bundle') {
+            return;
+        }
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
