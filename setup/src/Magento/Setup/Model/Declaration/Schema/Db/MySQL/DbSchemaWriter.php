@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Db\Statement;
+use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
@@ -46,8 +47,10 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
      */
-    public function __construct(ResourceConnection $resourceConnection, StatementFactory $statementFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        StatementFactory $statementFactory
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
     }
@@ -58,11 +61,13 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     public function createTable($tableName, $resource, array $definition, array $options)
     {
         $sql = sprintf(
-            "(\n%s\n)",
-            implode(", \n", $definition)
+            "(\n%s\n) ENGINE=%s",
+            implode(", \n", $definition),
+            $options['engine']
         );
 
         return $this->statementFactory->create(
+            $tableName,
             $tableName,
             self::CREATE_TYPE,
             $sql,
@@ -78,6 +83,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     public function dropTable($tableName, $resource)
     {
         return $this->statementFactory->create(
+            $tableName,
             $tableName,
             self::DROP_TYPE,
             '',
@@ -124,10 +130,12 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             $elementDefinition
         );
         return $this->statementFactory->create(
+            $elementName,
             $tableName,
             self::ALTER_TYPE,
             $sql,
-            $resource
+            $resource,
+            $elementType
         );
     }
 
@@ -136,13 +144,14 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      *
      * @inheritdoc
      */
-    public function modifyColumn($resource, $tableName, $columnDefinition)
+    public function modifyColumn($columnName, $resource, $tableName, $columnDefinition)
     {
         $sql = sprintf(
             'MODIFY COLUMN %s',
             $columnDefinition
         );
         return $this->statementFactory->create(
+            $columnName,
             $tableName,
             self::ALTER_TYPE,
             $sql,
@@ -165,29 +174,39 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             )
         );
         return $this->statementFactory->create(
+            $elementName,
             $tableName,
             self::ALTER_TYPE,
             $sql,
-            $resource
+            $resource,
+            $type
         );
     }
 
     /**
      * @inheritdoc
      */
-    public function compile(Statement $statement)
+    public function compile(StatementAggregator $statementAggregator)
     {
-        $adapter = $this->resourceConnection->getConnection($statement->getResource());
-        $adapter->query(
-            sprintf(
-                $this->statementDirectives[$statement->getType()],
-                $adapter->quoteIdentifier($statement->getTableName()),
-                implode(", ", $statement->getStatements())
-            )
-        );
-        //Do post update, like SQL DML operations or etc...
-        foreach ($statement->getTriggers() as $trigger) {
-            call_user_func($trigger);
+        foreach ($statementAggregator->getStatementsBank() as $statementBank) {
+            $statementsSql = [];
+            /** @var Statement $statement */
+            foreach ($statementBank as $statement) {
+                $statementsSql[] = $statement->getStatement();
+            }
+
+            $adapter = $this->resourceConnection->getConnection($statement->getResource());
+            $adapter->query(
+                sprintf(
+                    $this->statementDirectives[$statement->getType()],
+                    $adapter->quoteIdentifier($statement->getTableName()),
+                    implode(", ", $statementsSql)
+                )
+            );
+            //Do post update, like SQL DML operations or etc...
+            foreach ($statement->getTriggers() as $trigger) {
+                call_user_func($trigger);
+            }
         }
     }
 }

@@ -82,6 +82,7 @@ class ModifyElement implements OperationInterface
         $definition = $this->definitionAggregator->toDefinition($column);
 
         return $this->dbSchemaWriter->modifyColumn(
+            $column->getName(),
             $column->getTable()->getResource(),
             $column->getTable()->getName(),
             $definition
@@ -99,11 +100,11 @@ class ModifyElement implements OperationInterface
         $element = $elementHistory->getNew();
 
         if ($element instanceof Constraint || $element instanceof Index) {
-            $statement = $this->dropElement->doOperation($elementHistory);
-            return $statement->merge($this->addElement->doOperation($elementHistory));
+            $statements = $this->dropElement->doOperation($elementHistory);
+            return array_merge($statements, $this->addElement->doOperation($elementHistory));
         } else {
             /** @var Column $element */
-            return $this->modifyColumn($element);
+            return [$this->modifyColumn($element)];
         }
     }
 }

@@ -16,7 +16,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  */
 class Timestamp extends Column implements
     ElementDiffAwareInterface,
-    ColumnDefaultAwareInterface
+    ColumnDefaultAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * @var string

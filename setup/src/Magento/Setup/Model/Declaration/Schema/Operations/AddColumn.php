@@ -109,9 +109,9 @@ class AddColumn implements OperationInterface
             $element->getTable()->getResource(),
             $element->getTable()->getName(),
             $definition,
-            $element->getElementType()
+            Column::TYPE
         );
         $statement = $this->setupTriggersIfExists($statement, $element);
-        return $statement;
+        return [$statement];
     }
 }

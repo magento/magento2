@@ -324,7 +324,6 @@ class Installer
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
-        $script[] = ['Installing database schema:', 'declarativeInstallSchema', [$request]];
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
@@ -776,11 +775,9 @@ class Installer
      */
     public function declarativeInstallSchema(array $request)
     {
-        if (isset($request[InstallCommand::DECLARATION_MODE_KEY]) && $request[InstallCommand::DECLARATION_MODE_KEY]) {
-            /** @var DeclarationInstaller $declarativeInstaller */
-            $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
-            $declarativeInstaller->installSchema($request);
-        }
+        /** @var DeclarationInstaller $declarativeInstaller */
+        $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
+        $declarativeInstaller->installSchema($request);
     }
 
     /**
@@ -797,6 +794,7 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
+        $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema', $request);
     }
 
@@ -813,9 +811,7 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        #if (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY]) {
-            $this->handleDBSchemaData($setup, 'data', $request);
-        #}
+        $this->handleDBSchemaData($setup, 'data', $request);
     }
 
     /**
@@ -870,9 +866,7 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
-        if ($type !== 'schema' ||
-            (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY])
-        ) {
+        if ($type !== 'schema') {
             foreach ($moduleNames as $moduleName) {
                 $this->schemaListener->setModuleName($moduleName);
                 $this->schemaListener->setResource('default');

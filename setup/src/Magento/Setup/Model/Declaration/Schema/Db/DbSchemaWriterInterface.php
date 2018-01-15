@@ -66,12 +66,13 @@ interface DbSchemaWriterInterface
      *
      * Please note: that from all structural elements only column can be modified
      *
-     * @param $resource
-     * @param $tableName
+     * @param string $columnName
+     * @param string $resource
+     * @param string $tableName
      * @param  string $columnDefinition
      * @return Statement
      */
-    public function modifyColumn($resource, $tableName, $columnDefinition);
+    public function modifyColumn($columnName, $resource, $tableName, $columnDefinition);
 
     /**
      * Drop any element (constraint, column, index) from index
@@ -87,8 +88,8 @@ interface DbSchemaWriterInterface
     /**
      * Compile statements and make SQL request from them
      *
-     * @param Statement $statement
+     * @param StatementAggregator $statementAggregator
      * @return void
      */
-    public function compile(Statement $statement);
+    public function compile(StatementAggregator $statementAggregator);
 }

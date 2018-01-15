@@ -62,9 +62,7 @@ class TableDiff
     private function excludeAutoIndexes(Table $table, array $indexes)
     {
         foreach ($table->getReferenceConstraints() as $constraint) {
-            $indexNameToExclude = $constraint->getColumn()->getName();
-            $name = 'index' . $indexNameToExclude;
-            unset($indexes[$name]);
+            unset($indexes[$constraint->getName()]);
         }
 
         return $indexes;
@@ -99,6 +97,7 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
+        $tableName = $declaredTable->getName();
         //Handle changing shard
         if ($this->diffManager->shouldBeModified($declaredTable, $generatedTable)) {
             $diff->register(
@@ -111,12 +110,8 @@ class TableDiff
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];
         //We do inspection for each element type
         foreach ($types as $elementType) {
-            $generatedElements = $this->preprocessConstraintsAndIndexes(
-                $generatedTable->getElementsByType($elementType)
-            );
-            $declaredElements = $this->preprocessConstraintsAndIndexes(
-                $declaredTable->getElementsByType($elementType)
-            );
+            $generatedElements = $generatedTable->getElementsByType($elementType);
+            $declaredElements = $declaredTable->getElementsByType($elementType);
 
             if ($elementType === self::INDEX_DIFF_TYPE) {
                 $generatedElements = $this->excludeAutoIndexes($generatedTable, $generatedElements);

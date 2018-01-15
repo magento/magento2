@@ -53,6 +53,6 @@ class ReCreateTable implements OperationInterface
     public function doOperation(ElementHistory $elementHistory)
     {
         $statement = $this->dropTable->doOperation($elementHistory);
-        return $statement->merge($this->createTable->doOperation($elementHistory));
+        return array_merge($statement, $this->createTable->doOperation($elementHistory));
     }
 }

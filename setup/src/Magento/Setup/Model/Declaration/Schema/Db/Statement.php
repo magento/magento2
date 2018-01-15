@@ -8,13 +8,15 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
  * Statement object aggregates different SQL statements and run all of them for one table
+ * All statements are independent with each other, but not each statement can be included with each other
+ * in one alter query, for example
  */
 class Statement
 {
     /**
-     * @var array
+     * @var string
      */
-    private $statements;
+    private $statement;
 
     /**
      * Type can be: ALTER, CREATE or DROP operations
@@ -40,45 +42,37 @@ class Statement
     private $triggers = [];
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
      * @param string $tableName
      * @param string $type
      * @param string $statement
      * @param string $resource
      */
     public function __construct(
+        string $name,
         string $tableName,
         string $type,
         string $statement,
         string $resource
     ) {
-        $this->statements[] = $statement;
+        $this->statement = $statement;
         $this->type = $type;
         $this->tableName = $tableName;
         $this->resource = $resource;
+        $this->name = $name;
     }
 
     /**
-     * Can merge few different statements with each other
-     *
-     * @param Statement $statement
-     * @return $this
+     * @return string
      */
-    public function merge(Statement $statement)
+    public function getStatement(): string
     {
-        $this->statements = array_merge(
-            $this->getStatements(),
-            $statement->getStatements()
-        );
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getStatements(): array
-    {
-        return $this->statements;
+        return $this->statement;
     }
 
     /**
@@ -98,27 +92,6 @@ class Statement
     public function getType(): string
     {
         return $this->type;
-    }
-
-    /**
-     * Before we will do merge, we need to ensure that we can do it
-     *
-     * @param Statement $statement
-     * @return bool
-     */
-    public function canDoMerge(Statement $statement)
-    {
-        if (!empty($this->triggers)) {
-            /**
-             * If we add trigger after some specific statement, than we say that statement is final
-             * and can`t be updated anymore. Otherwise trigger can fails
-             */
-            return false;
-        }
-
-        return $statement->getType() === $this->getType() &&
-            $statement->getTableName() === $this->getTableName() &&
-            $statement->getResource() === $this->getResource();
     }
 
     /**
@@ -143,5 +116,13 @@ class Statement
     public function getTriggers(): array
     {
         return $this->triggers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

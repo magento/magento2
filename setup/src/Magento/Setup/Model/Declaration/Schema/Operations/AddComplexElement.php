@@ -71,8 +71,8 @@ class AddComplexElement implements OperationInterface
             $element->getTable()->getResource(),
             $element->getTable()->getName(),
             $definition,
-            $element->getElementType()
+            $element->getType()
         );
-        return $statement;
+        return [$statement];
     }
 }
