@@ -10,13 +10,16 @@ namespace Magento\InventoryCatalog\Test\Integration;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 
-class CatalogSearchResultTest extends TestCase
+/**
+ * Test catalog search with different stocks on second website.
+ */
+class CatalogSearchResultNotDefaultSalesChannelTest extends TestCase
 {
     /**
      * @var Stock
@@ -28,26 +31,37 @@ class CatalogSearchResultTest extends TestCase
      */
     private $indexer;
 
+    /**
+     * @var SalesChannelInterface
+     */
+    private $salesChannel;
+
+    /**
+     * @var StockRepositoryInterface
+     */
+    private $stockRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     protected function setUp()
     {
+        /** @var Stock stock */
         $this->stock = Bootstrap::getObjectManager()->create(Stock::class);
+
+        /** @var SalesChannelInterface $salesChannel */
+        $this->salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
+
+        /** @var StockRepositoryInterface $stockRepository */
+        $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
+
+        /** @var StoreManagerInterface $storeManager */
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(SourceIndexer::INDEXER_ID);
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
-     */
-    public function testGetResultCount()
-    {
-        $this->indexer->reindexAll();
-        $collection = Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-        );
-        $this->stock->addIsInStockFilterToCollection($collection);
-        self::assertEquals(2, $collection->getSize());
     }
 
     /**
@@ -66,20 +80,15 @@ class CatalogSearchResultTest extends TestCase
     public function testGetResultCountOnNonDefaultSalesChannel(int $stockId, int $expectedSize)
     {
         //this is not in fixture, because we set salesChannel for different stockId received from data provider.
-        /** @var SalesChannelInterface $salesChannel */
-        $salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
-        $salesChannel->setCode('test');
-        $salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
+        $this->salesChannel->setCode('test');
+        $this->salesChannel->setType(SalesChannelInterface::TYPE_WEBSITE);
 
-        /** @var StockRepositoryInterface $stockRepository */
-        $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-        $stock = $stockRepository->get($stockId);
-        $stock->getExtensionAttributes()->setSalesChannels([$salesChannel]);
-        $stockRepository->save($stock);
+        $stock = $this->stockRepository->get($stockId);
+        $stock->getExtensionAttributes()->setSalesChannels([$this->salesChannel]);
+        $this->stockRepository->save($stock);
 
-        /** @var StoreManagerInterface $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $storeManager->setCurrentStore('fixture_second_store');
+        //switch to second website.
+        $this->storeManager->setCurrentStore('fixture_second_store');
 
         $this->indexer->reindexAll();
 
@@ -93,7 +102,7 @@ class CatalogSearchResultTest extends TestCase
 
         //need delete sales channels from stock to give ability to fixture to delete stock.
         $stock->getExtensionAttributes()->setSalesChannels([]);
-        $stockRepository->save($stock);
+        $this->stockRepository->save($stock);
     }
 
     /**
