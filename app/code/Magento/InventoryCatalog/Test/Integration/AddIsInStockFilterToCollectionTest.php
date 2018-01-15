@@ -68,9 +68,9 @@ class AddIsInStockFilterToCollectionTest extends TestCase
      *
      * @param int $stockId
      * @param int $expectedSize
-     * @dataProvider getResultCountOnNonDefaultSalesChannelDataProvider
+     * @dataProvider getResultCountDataProvider
      */
-    public function testGetResultCountOnNonDefaultSalesChannel(int $stockId, int $expectedSize)
+    public function testGetResultCount(int $stockId, int $expectedSize)
     {
         // this is not in fixture, because we set salesChannel for different stockId received from data provider
         $this->salesChannel->setCode('test');
@@ -99,7 +99,7 @@ class AddIsInStockFilterToCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getResultCountOnNonDefaultSalesChannelDataProvider(): array
+    public function getResultCountDataProvider(): array
     {
         return [
             [10, 1],
