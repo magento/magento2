@@ -251,17 +251,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * Test getWeeeAmountExclTax method
      *
      * @param string $productTypeId
-     * @param string $prodcuctPriceType
+     * @param string $productPriceType
      * @dataProvider getWeeeAmountExclTaxDataProvider
      */
-    public function testGetWeeeAmountExclTax($productTypeId, $prodcuctPriceType)
+    public function testGetWeeeAmountExclTax($productTypeId, $productPriceType)
     {
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getPriceType'])
             ->getMock();
         $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
-        $product->expects($this->any())->method('getPriceType')->willReturn($prodcuctPriceType);
+        $product->expects($this->any())->method('getPriceType')->willReturn($productPriceType);
         $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAmountExclTax'])
