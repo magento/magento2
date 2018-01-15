@@ -97,8 +97,8 @@ class SaveHandler
 
         try {
             $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-            $prodyctHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
-            $productData = $prodyctHydrator->extract($product);
+            $productHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
+            $productData = $productHydrator->extract($product);
             $this->linkResource->saveProductLinks(
                 $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
                 $links,
