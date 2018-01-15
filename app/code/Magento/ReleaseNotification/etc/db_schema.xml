@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="release_notification_viewer_log" resource="default" engine="innodb">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="viewer_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="varchar" name="last_view_version" nullable="false" length="16"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID_ADMIN_USER_USER_ID" table="release_notification_viewer_log" column="viewer_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID">
+      <column name="viewer_id"/>
+    </constraint>
+  </table>
+</schema>
