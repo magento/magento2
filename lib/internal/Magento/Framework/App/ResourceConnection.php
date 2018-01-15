@@ -92,13 +92,14 @@ class ResourceConnection
     {
         $connectionName = $this->config->getConnectionName($resourceName);
         $connection = $this->getConnectionByName($connectionName);
-        if (preg_match('/sales/', $resourceName)) {
-            $connection->getSchemaListener()->setResource('sales');
-        }
-
-        if (preg_match('/checkout/', $resourceName) || preg_match('/quote/', $resourceName)) {
-            $connection->getSchemaListener()->setResource('quote');
-        }
+        /** @TODO: remove this after schema XML become stable */
+//        if (preg_match('/sales/', $resourceName)) {
+//            $connection->getSchemaListener()->setResource('sales');
+//        }
+//
+//        if (preg_match('/checkout/', $resourceName) || preg_match('/quote/', $resourceName)) {
+//            $connection->getSchemaListener()->setResource('quote');
+//        }
 
         return $connection;
     }
