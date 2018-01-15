@@ -83,7 +83,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
-        $this->checkWebsitesInIndex();
+        //$this->checkWebsitesInIndex();
 
         return $this;
     }
@@ -100,11 +100,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $select = $connection->select()->from($idxTable, null);
 
-        $select->joinInner(
+        /*$select->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
             "cpe.entity_id = {$idxTable}.source_id",
             []
-        );
+        );*/
         $select->joinInner(
             ['s' => $this->getTable('store')],
             "s.store_id = {$idxTable}.store_id",
@@ -117,7 +117,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         );
         $select->joinLeft(
             ['cpw' => $this->getTable('catalog_product_website')],
-            "cpe.entity_id = cpw.product_id AND sw.website_id = cpw.website_id",
+            "{$idxTable}.source_id = cpw.product_id AND sw.website_id = cpw.website_id",
             []
         );
         $select->where('cpw.product_id IS NULL');
@@ -206,6 +206,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
             []
@@ -221,6 +222,16 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
             []
+        )->joinInner(
+            ['sw' => $this->getTable('store_website')],
+            "cs.website_id = sw.website_id",
+            []
+        )->joinLeft(
+            ['cpw' => $this->getTable('catalog_product_website')],
+            "i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id",
+            []
+        )->where(
+            'cpw.product_id IS NOT NULL'
         )->group(
             ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
         )->columns(
@@ -249,6 +260,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
                 'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
+
+        $a = 1;
 
         return $select;
     }
