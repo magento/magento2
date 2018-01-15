@@ -19,18 +19,11 @@ class SchemaPersistor
     private $componentRegistrar;
 
     /**
-     * @var Shell
-     */
-    private $shell;
-
-    /**
      * @param ComponentRegistrar $componentRegistrar
-     * @param Shell $shell
      */
-    public function __construct(ComponentRegistrar $componentRegistrar, Shell $shell)
+    public function __construct(ComponentRegistrar $componentRegistrar)
     {
         $this->componentRegistrar = $componentRegistrar;
-        $this->shell = $shell;
     }
 
     /**
