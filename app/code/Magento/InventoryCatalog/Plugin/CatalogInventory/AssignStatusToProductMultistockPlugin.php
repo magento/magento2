@@ -9,8 +9,8 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock as Helper;
-use Magento\Inventory\Model\GetProductQuantityInStock;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\IsProductInStockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -32,23 +32,23 @@ class AssignStatusToProductMultistockPlugin
     private $storeManager;
 
     /**
-     * @var GetProductQuantityInStock
+     * @var IsProductInStockInterface
      */
-    private $getProductQuantityInStock;
+    private $isProductInStock;
 
     /**
      * @param StockResolverInterface $stockResolver
      * @param StoreManagerInterface $storeManager
-     * @param GetProductQuantityInStock $getProductQuantityInStock
+     * @param IsProductInStockInterface $isProductInStock
      */
     public function __construct(
         StockResolverInterface $stockResolver,
         StoreManagerInterface $storeManager,
-        GetProductQuantityInStock $getProductQuantityInStock
+        IsProductInStockInterface $isProductInStock
     ) {
         $this->stockResolver = $stockResolver;
         $this->storeManager = $storeManager;
-        $this->getProductQuantityInStock = $getProductQuantityInStock;
+        $this->isProductInStock = $isProductInStock;
     }
 
     /**
@@ -89,13 +89,7 @@ class AssignStatusToProductMultistockPlugin
             $website = $this->storeManager->getWebsite();
             /** @var StockInterface $stock */
             $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
-            /**
-             * Temporary solution.
-             * Now we cannot use Magento\Inventory\Model\IsProductInStock::execute because otherwise
-             * plugin Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin::aroundExecute
-             * will cause recursive calls to self::aroundAssignStatusToProduct.
-             */
-            $status = (int)$this->getProductQuantityInStock->execute($product->getSku(), (int)$stock->getStockId()) > 0;
+            $status = (int)$this->isProductInStock->execute($product->getSku(), (int)$stock->getStockId());
         }
         $product->setIsSalable($status);
     }

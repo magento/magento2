@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\InventoryApi;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
  * Adapt backorders to IsProductInStockInterface
@@ -29,23 +29,23 @@ class BackorderStockStatusPlugin
     private $stockItemCriteriaFactory;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var GetProductIdsBySkusInterface
      */
-    private $productRepository;
+    private $getProductIdsBySkusInterface;
 
     /**
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
-     * @param ProductRepositoryInterface $productRepository
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkusInterface
      */
     public function __construct(
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        ProductRepositoryInterface $productRepository
+        GetProductIdsBySkusInterface $getProductIdsBySkusInterface
     ) {
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
-        $this->productRepository = $productRepository;
+        $this->getProductIdsBySkusInterface = $getProductIdsBySkusInterface;
     }
 
     /**
@@ -64,8 +64,8 @@ class BackorderStockStatusPlugin
         string $sku,
         int $stockId
     ): bool {
-        $productData = $this->productRepository->get($sku);
-        $productId = $productData->getId();
+        $productIds = $this->getProductIdsBySkusInterface->execute([$sku]);
+        $productId = $productIds[$sku];
 
         $stockItemCriteria = $this->stockItemCriteriaFactory->create();
         $stockItemCriteria->setProductsFilter($productId);
