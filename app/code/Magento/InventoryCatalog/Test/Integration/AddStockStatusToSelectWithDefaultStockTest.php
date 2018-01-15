@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\InventoryCatalog\Test\Integration;
+
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Inventory\Indexer\Source\SourceIndexer;
+use Magento\Store\Model\Website;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test add stock status to select on default website.
+ */
+class AddStockStatusToSelectWithDefaultStockTest extends TestCase
+{
+    /**
+     * @var StockStatus
+     */
+    private $stockStatus;
+
+    /**
+     * @var IndexerInterface
+     */
+    private $indexer;
+
+    /**
+     * @var Website
+     */
+    private $website;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->website = Bootstrap::getObjectManager()->create(Website::class);
+
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
+        $this->indexer->load(SourceIndexer::INDEXER_ID);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     */
+    public function testAddStockStatusToSelect()
+    {
+        $actualIsSalableCount = $actualNotSalableCount = 0;
+        $expectedIsSalableCount = 2;
+        $expectedNotSalableCount = 1;
+
+        $this->indexer->reindexAll();
+
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+
+        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
+
+        foreach ($collection as $item) {
+            $item->getIsSalable() === true ? $actualIsSalableCount++ : $actualNotSalableCount++;
+        }
+
+        self::assertEquals($expectedIsSalableCount, $actualIsSalableCount);
+        self::assertEquals($expectedNotSalableCount, $actualNotSalableCount);
+        self::assertEquals($expectedNotSalableCount + $expectedIsSalableCount, $collection->getSize());
+    }
+}

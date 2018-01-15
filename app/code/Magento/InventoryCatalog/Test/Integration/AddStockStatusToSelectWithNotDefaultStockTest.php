@@ -11,13 +11,13 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Source\SourceIndexer;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test catalog search with different stocks on second website.
+ * Test add stock status to select on not default website.
  */
-class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChannelProvider
+class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannelProvider
 {
     /**
      * @var StockStatus
@@ -30,9 +30,9 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
     private $indexer;
 
     /**
-     * @var StoreManagerInterface
+     * @var Website
      */
-    private $storeManager;
+    private $website;
 
     /**
      * @inheritdoc
@@ -42,7 +42,8 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
         parent::setUp();
 
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
+
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(SourceIndexer::INDEXER_ID);
     }
@@ -56,40 +57,44 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      *
      * @param int $stockId
-     * @param int $expectedSize
-     * @param bool $isFilterInStock
-     * @return void
+     * @param int $expectedIsSalableCount
+     * @param int $expectedNotSalableCount
      *
-     * @dataProvider getResultCountDataProvider
+     * @dataProvider addStockStatusToSelectDataProvider
      */
-    public function testGetResultCount(int $stockId, int $expectedSize, bool $isFilterInStock)
+    public function testAddStockStatusToSelect(int $stockId, int $expectedIsSalableCount, $expectedNotSalableCount)
     {
-        $this->addSalesChannelTypeWebsiteToStock($stockId, 'test');
+        $this->addSalesChannelTypeWebsiteToStock($stockId, 'base');
 
-        // switch to second website
-        $this->storeManager->setCurrentStore('fixture_second_store');
+        $actualIsSalableCount = $actualNotSalableCount = 0;
 
         $this->indexer->reindexAll();
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
-        self::assertEquals($expectedSize, $collection->getSize());
+        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
+
+        foreach ($collection as $item) {
+            $item->getIsSalable() == 1 ? $actualIsSalableCount++ : $actualNotSalableCount++;
+        }
+
+        self::assertEquals($expectedIsSalableCount, $actualIsSalableCount);
+        self::assertEquals($expectedNotSalableCount, $actualNotSalableCount);
+        self::assertEquals($expectedNotSalableCount + $expectedIsSalableCount, $collection->getSize());
     }
 
     /**
+     * Data provider for testAddStockStatusToSelect().
+     *
      * @return array
      */
-    public function getResultCountDataProvider(): array
+    public function addStockStatusToSelectDataProvider(): array
     {
         return [
-            [10, 1, true],
-            [20, 1, true],
-            [30, 2, true],
-            [10, 2, false],
-            [20, 1, false],
-            [30, 3, false],
+            [10, 1, 2],
+            [20, 1, 2],
+            [30, 2, 1],
         ];
     }
 }
