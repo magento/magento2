@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
-use Zend\Di\Di;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Setup\Model\Declaration\Schema\Dto\Schema
@@ -13,33 +13,31 @@ use Zend\Di\Di;
 class SchemaFactory
 {
     /**
-     * @var Di
-     */
-    private $zendDi;
-
-    /**
      * @var string
      */
     private $instanceName = Schema::class;
 
     /**
-     * EntityFactory constructor.
-     *
-     * @param Di $zendDi
+     * @var ObjectManagerInterface
      */
-    public function __construct(Di $zendDi)
+    private $objectManager;
+
+    /**
+     * SchemaFactory constructor.
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(ObjectManagerInterface $objectManager)
     {
-        $this->zendDi = $zendDi;
+        $this->objectManager = $objectManager;
     }
 
     /**
      * Create class instance with specified parameters
      *
-     * @param  array $data
-     * @return \Magento\Setup\Model\Declaration\Schema\Dto\Schema | object
+     * @return \Magento\Setup\Model\Declaration\Schema\Dto\Schema
      */
-    public function create(array $data = [])
+    public function create()
     {
-        return $this->zendDi->newInstance($this->instanceName, $data);
+        return $this->objectManager->create($this->instanceName);
     }
 }

@@ -42,15 +42,15 @@ class Varchar implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
-        /** @TODO: Make default=null attribute working  */
+        $default = $column->getDefault() !== null ? sprintf('DEFAULT "%s"', $column->getDefault()) : '';
+        $default = strtolower($column->getDefault()) === 'null' ? 'DEFAULT NULL' : $default;
         return sprintf(
             '%s %s(%s) %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
             $column->getLength(),
             $this->nullable->toDefinition($column),
-            $column->getDefault() !== null && $column->getDefault() !== ''  ?
-                sprintf('DEFAULT "%s"', $column->getDefault()) : ''
+            $default
         );
     }
 

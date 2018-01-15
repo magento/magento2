@@ -46,6 +46,9 @@ class ForeignKey implements DbDefinitionProcessorInterface
         $adapter = $this->resourceConnection->getConnection(
             $foreignKey->getTable()->getResource()
         );
+        $referenceTable = $this->resourceConnection->getTableName(
+            $foreignKey->getReferenceTable()->getName()
+        );
         //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option
         /** @TODO: purge records, if the are not satisfied on delete statement */
         $foreignKeySql = sprintf(
@@ -53,7 +56,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
             $adapter->quoteIdentifier($foreignKey->getName()),
             self::FOREIGN_KEY_NAME,
             $adapter->quoteIdentifier($foreignKey->getColumn()->getName()),
-            $adapter->quoteIdentifier($foreignKey->getReferenceTable()->getName()),
+            $adapter->quoteIdentifier($referenceTable),
             $adapter->quoteIdentifier($foreignKey->getReferenceColumn()->getName()),
             $foreignKey->getOnDelete() ? sprintf(" ON DELETE %s", $foreignKey->getOnDelete()) : ''
         );

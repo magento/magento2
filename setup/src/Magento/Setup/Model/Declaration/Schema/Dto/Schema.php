@@ -5,12 +5,28 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Schema is aggregation root, which holds all structural elements
  * and allow access to tables by their names
  */
 class Schema
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * Schema constructor.
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(ResourceConnection $resourceConnection)
+    {
+        $this->resourceConnection = $resourceConnection;
+    }
+
     /**
      * @var Table[]
      */
@@ -46,6 +62,7 @@ class Schema
      */
     public function getTableByName($name)
     {
+        $name = $this->resourceConnection->getTableName($name);
         return isset($this->tables[$name]) ? $this->tables[$name] : false;
     }
 }

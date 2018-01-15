@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -30,15 +31,23 @@ class Table implements FactoryInterface
     private $className;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param ResourceConnection $resourceConnection
+     * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        ResourceConnection $resourceConnection,
         $className = \Magento\Setup\Model\Declaration\Schema\Dto\Table::class
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -53,7 +62,8 @@ class Table implements FactoryInterface
         if ($data['engine'] === null) {
             $data['engine'] = self::DEFAULT_ENGINE;
         }
-
+        $data['nameWithoutPrefix'] = $data['name'];
+        $data['name'] = $this->resourceConnection->getTableName($data['name']);
         return $this->objectManager->create($this->className, $data);
     }
 }

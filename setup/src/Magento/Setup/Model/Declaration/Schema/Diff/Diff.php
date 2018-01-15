@@ -10,6 +10,7 @@ use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\Request;
@@ -111,7 +112,7 @@ class Diff implements DiffInterface
      * For example, if element is not in db_schema_whitelist.json it cant
      * be registered due to backward incompatability
      *
-     * @param  ElementInterface $object
+     * @param  ElementInterface | Table $object
      * @return bool
      */
     private function canBeRegistered(ElementInterface $object)
@@ -120,10 +121,10 @@ class Diff implements DiffInterface
         $type = $object->getElementType();
 
         if ($object instanceof TableElementInterface) {
-            return isset($whiteList[$object->getTable()->getName()][$type][$object->getName()]);
+            return isset($whiteList[$object->getTable()->getNameWithoutPrefix()][$type][$object->getName()]);
         }
 
-        return isset($whiteList[$object->getName()]);
+        return isset($whiteList[$object->getNameWithoutPrefix()]);
     }
 
     /**

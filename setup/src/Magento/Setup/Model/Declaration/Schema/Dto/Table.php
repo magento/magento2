@@ -55,16 +55,24 @@ class Table extends GenericElement implements
     private $engine;
 
     /**
+     * @var string
+     */
+    private $nameWithoutPrefix;
+
+    /**
      * @param string $name
+     * @param string $nameWithoutPrefix
      * @param string $type
      * @param string $resource
      * @param string $engine
      * @param array $columns
      * @param array $indexes
      * @param array $constraints
+     * @internal param string $nameWithPrefix
      */
     public function __construct(
         string $name,
+        string $nameWithoutPrefix,
         string $type,
         string $resource,
         string $engine,
@@ -78,6 +86,7 @@ class Table extends GenericElement implements
         $this->constraints = $constraints;
         $this->resource = $resource;
         $this->engine = $engine;
+        $this->nameWithoutPrefix = $nameWithoutPrefix;
     }
 
     /**
@@ -262,5 +271,13 @@ class Table extends GenericElement implements
             'resource' => $this->getResource(),
             'engine' => $this->getEngine()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameWithoutPrefix(): string
+    {
+        return $this->nameWithoutPrefix;
     }
 }

@@ -32,8 +32,10 @@ class ElementFactory
      * @param FactoryInterface[] $typeFactories
      * @param BooleanUtils       $booleanUtils
      */
-    public function __construct(array $typeFactories, BooleanUtils $booleanUtils)
-    {
+    public function __construct(
+        array $typeFactories,
+        BooleanUtils $booleanUtils
+    ) {
         $this->typeFactories = $typeFactories;
         $this->booleanUtils = $booleanUtils;
     }
