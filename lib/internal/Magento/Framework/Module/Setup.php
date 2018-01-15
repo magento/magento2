@@ -63,27 +63,14 @@ class Setup implements SetupInterface
      */
     public function getConnection($connectionName = null)
     {
-        $resource = 'default';
-        if (preg_match('/sales/', $connectionName)) {
-            $resource = 'sales';
-        }
-
-        if (preg_match('/checkout/', $connectionName) || preg_match('/quote/', $connectionName)) {
-            $resource = 'quote';
-        }
-
         if ($connectionName !== null) {
             try {
-                $connection = $this->resourceModel->getConnectionByName($connectionName);
-                $connection->getSchemaListener()->setResource($resource);
-                return $connection;
+                return $this->resourceModel->getConnectionByName($connectionName);
             } catch (\DomainException $exception) {
                 //Fallback to default connection
             }
         }
-        $connection = $this->getDefaultConnection();
-        $connection->getSchemaListener()->setResource($resource);
-        return $connection;
+        return $this->getDefaultConnection();
     }
 
     /**

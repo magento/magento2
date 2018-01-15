@@ -305,13 +305,7 @@ class SalesSetup extends EavSetup
 
     public function getConnection()
     {
-        $setup = $this->getSetup();
-        /** @var SchemaListener $schemaListener */
-        $schemaListener = $setup->getConnection()->getSchemaListener();
-        $newConnection = $this->getSetup()->getConnection(self::$connectionName);
-        $newConnection->setSchemaListener($schemaListener);
-        $schemaListener->setResource('sales');
-        return $newConnection;
+        return $this->getSetup()->getConnection();
     }
 
     /**

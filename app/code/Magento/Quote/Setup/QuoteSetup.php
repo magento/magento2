@@ -204,13 +204,7 @@ class QuoteSetup extends EavSetup
      */
     public function getConnection()
     {
-        $setup = $this->getSetup();
-        /** @var SchemaListener $schemaListener */
-        $schemaListener = $setup->getConnection()->getSchemaListener();
-        $schemaListener->setResource('checkout');
-        $newConnection = $this->getSetup()->getConnection(self::$connectionName);
-        $newConnection->setSchemaListener($schemaListener);
-        return $newConnection;
+        return $this->getSetup()->getConnection();
     }
 
     /**
