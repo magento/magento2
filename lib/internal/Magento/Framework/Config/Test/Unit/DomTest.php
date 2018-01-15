@@ -140,7 +140,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedValue
      * @dataProvider validateWithDefaultValueDataProvider
      */
-    public function testValidateWithDefaultValue($xml, $expectedValue) {
+    public function testValidateWithDefaultValue($xml, $expectedValue)
+    {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
