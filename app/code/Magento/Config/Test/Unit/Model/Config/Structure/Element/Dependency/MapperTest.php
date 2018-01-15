@@ -98,7 +98,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     {
         $expected = [];
         $rowData = array_values($this->_testData);
-        $count = $this->_testData;
+        $count = count($this->_testData);
         for ($i = 0; $i < $count; ++$i) {
             $data = $rowData[$i];
             $dependentPath = 'some path ' . $i;
