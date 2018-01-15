@@ -319,6 +319,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * @deprecated Misspelled method - use retrieveProductsByCachedSkus() instead
+     */
+    protected function retrieveProducsByCachedSkus() {
+        return $this->retrieveProductsByCachedSkus();
+    }
+
+    /**
      * Retrieve mapping between skus and products.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
