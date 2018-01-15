@@ -9,7 +9,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
 
     <!-- Enable Free Shipping method -->
-    <entity name="EnableFreeShippinMethod" type="free_shipping_method">
+    <entity name="FreeShippinMethodConfig" type="free_shipping_method">
         <required-entity type="active">freeActiveEnable</required-entity>
     </entity>
 

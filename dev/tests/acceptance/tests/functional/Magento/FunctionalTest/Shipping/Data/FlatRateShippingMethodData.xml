@@ -8,8 +8,8 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
 
-    <!-- Enable Flat Rate Shipping method -->
-    <entity name="EnableFlatRateShippingMethod" type="flat_rate_shipping_method">
+    <!-- Enable Flat Rate Shipping method config -->
+    <entity name="FlatRateShippingMethodConfig" type="flat_rate_shipping_method">
         <required-entity type="active">flatRateActiveEnable</required-entity>
     </entity>
 
