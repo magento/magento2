@@ -54,7 +54,7 @@ class AdaptAddStockDataToCollectionToMultiStocks
         $isFilterInStock
     ) {
         $stockId = $this->stockIdForCurrentWebsite->execute();
-        $this->addStockDataToCollection->addStockDataToCollection($collection, $isFilterInStock, $stockId);
+        $this->addStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;
     }
