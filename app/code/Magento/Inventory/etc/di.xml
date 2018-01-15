@@ -83,7 +83,7 @@
     <preference for="Magento\Inventory\Model\StockIndexTableProviderInterface" type="Magento\Inventory\Model\StockIndexTableProvider"/>
     <type name="Magento\Inventory\Model\StockIndexTableProvider">
         <arguments>
-            <argument name="dimensionName" xsi:type="number">stock_</argument>
+            <argument name="dimensionName" xsi:type="string">stock_</argument>
         </arguments>
     </type>
     <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
