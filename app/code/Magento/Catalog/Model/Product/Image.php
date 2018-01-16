@@ -179,8 +179,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $cachePrefix = 'IMG_INFO';
 
     /**
-     * serializer Serializer Instance
-     *
      * @var SerializerInterface
      */
     private $serializer;
