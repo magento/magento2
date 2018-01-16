@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Framework\Config;
+namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\GraphQl\Argument\ValueParserInterface;
 use Magento\Framework\GraphQl\Argument\ArgumentValueInterface;

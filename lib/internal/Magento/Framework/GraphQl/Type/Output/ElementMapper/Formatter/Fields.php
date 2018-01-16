@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\Framework\Config\FieldConfig;
+use Magento\Framework\GraphQl\Config\FieldConfig;
 
 /**
  * Formats all fields configured for given type structure, if any.
@@ -55,7 +55,7 @@ class Fields implements FormatterInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param \Magento\GraphQl\Framework\Config\FieldConfig $fieldConfig
+     * @param \Magento\Framework\GraphQl\Config $fieldConfig
      * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
