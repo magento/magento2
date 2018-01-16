@@ -18,7 +18,7 @@
                     <arguments>
                         <argument name="exportTypes" xsi:type="array">
                             <item name="csv" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">*/*/exportLowstockCsv</item>
+                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report_product/exportLowstockCsv</item>
                                 <item name="label" xsi:type="string" translate="true">CSV</item>
                             </item>
                             <item name="excel" xsi:type="array">
