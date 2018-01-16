@@ -1,5 +1,5 @@
 {
-    "name": "magento/module—catalog-url-rewrite-graph-ql",
+    "name": "magento/module-catalog-url-rewrite-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
     "version": "100.0.0-dev",
