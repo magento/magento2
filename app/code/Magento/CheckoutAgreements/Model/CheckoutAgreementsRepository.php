@@ -10,6 +10,7 @@ use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory a
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection as AgreementCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
@@ -61,6 +62,21 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface
+     */
+    private $agreementsListing;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
@@ -69,6 +85,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface|null $agreementsListing
+     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -77,7 +96,10 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         ScopeConfigInterface $scopeConfig,
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface $agreementsListing = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
@@ -85,6 +107,15 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $this->resourceModel = $agreementResource;
         $this->agreementFactory = $agreementFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->agreementsListing = $agreementsListing ?: ObjectManager::getInstance()->get(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface::class
+        );
+        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\FilterBuilder::class
+        );
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
     }
 
     /**
@@ -97,18 +128,21 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
             return [];
         }
-        $storeId = $this->storeManager->getStore()->getId();
-        /** @var $agreementCollection AgreementCollection */
-        $agreementCollection = $this->collectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process($agreementCollection);
-        $agreementCollection->addStoreFilter($storeId);
-        $agreementCollection->addFieldToFilter('is_active', 1);
-        $agreementDataObjects = [];
-        foreach ($agreementCollection as $agreement) {
-            $agreementDataObjects[] = $agreement;
-        }
 
-        return $agreementDataObjects;
+        $storeFilter = $this->filterBuilder
+            ->setField('store_id')
+            ->setConditionType('eq')
+            ->setValue($this->storeManager->getStore()->getId())
+            ->create();
+        $isActiveFilter = $this->filterBuilder
+            ->setField('is_active')
+            ->setConditionType('eq')
+            ->setValue(1)
+            ->create();
+
+        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
+        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
+        return $this->agreementsListing->getListing($this->searchCriteriaBuilder->create());
     }
 
     /**

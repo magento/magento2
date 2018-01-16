@@ -25,6 +25,8 @@ interface CheckoutAgreementsRepositoryInterface
      * Lists active checkout agreements.
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
+     * @deprecated
+     * @see \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface::getListing
      */
     public function getList();
 
