@@ -60,8 +60,6 @@ class Boolean implements FactoryInterface
     {
         if (isset($data['default'])) {
             $data['default'] = $this->booleanUtils->toBoolean($data['default']);
-        } else {
-            $data['default'] = self::DEFAULT_BOOLEAN;
         }
 
         return $this->objectManager->create($this->className, $data);
