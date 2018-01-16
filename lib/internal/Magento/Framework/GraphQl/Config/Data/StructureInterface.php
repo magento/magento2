@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Config\Data;
 
 /**
- * Defines a contract for a structured data objects, that combined represent a configured GraphQL schema.
+ * Defines contracts for structured data objects that, combined, represent a configured GraphQL schema.
  */
 interface StructureInterface
 {
