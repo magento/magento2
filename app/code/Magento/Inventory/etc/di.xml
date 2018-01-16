@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Source -->
     <preference for="Magento\InventoryApi\Api\SourceRepositoryInterface" type="Magento\Inventory\Model\SourceRepository"/>
-    <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source" />
+    <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
@@ -75,13 +75,12 @@
             <argument name="stockValidator" xsi:type="object">Magento\Inventory\Model\Stock\Validator\ValidatorChain</argument>
         </arguments>
     </type>
+    <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemQuantity"/>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Reservation -->
-    <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
-    <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
@@ -91,4 +90,8 @@
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
+    <preference for="Magento\Inventory\Model\GetReservationsQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\GetReservationsQuantity"/>
+    <!-- Query interfaces -->
+    <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
+    <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
 </config>
