@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <actionGroup name="AdminCreateStoreViewActionGroup">
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToNewStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <!--Create Store View-->
+        <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="Main Website Store" stepKey="selectStore" />
+        <fillField selector="{{AdminNewStoreSection.storeNameTextField}}" userInput="{{customStore.name}}" stepKey="enterStoreViewName" />
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode" />
+        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
+        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
+        <seeInSource html="'Warning message'" stepKey="seeWarning" />
+        <click selector="//*[@id='html-body']/div[4]/aside[2]/div[2]/footer/button[2]" stepKey="dismissModal" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="You saved the store view." stepKey="seeSavedMessage" />
+    </actionGroup>
+</config>
