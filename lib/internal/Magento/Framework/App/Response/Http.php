@@ -91,8 +91,8 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     {
         $varyString = $this->context->getVaryString();
         if ($varyString) {
-            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
-            $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
+            $sensitiveCookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
+            $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookieMetadata);
         } elseif ($this->request->get(self::COOKIE_VARY_STRING)) {
             $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
