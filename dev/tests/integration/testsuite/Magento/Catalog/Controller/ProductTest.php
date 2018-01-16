@@ -11,6 +11,7 @@ namespace Magento\Catalog\Controller;
 
 /**
  * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
  */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
