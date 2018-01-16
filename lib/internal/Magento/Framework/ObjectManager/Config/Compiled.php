@@ -1,15 +1,18 @@
 <?php
 /**
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
-class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
+/**
+ * Provides object manager configuration when in compiled mode
+ */
+class Compiled implements ConfigInterface
 {
     /**
      * @var array
@@ -70,13 +73,15 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getArguments($type)
     {
-        if (isset($this->arguments[$type])) {
+        if (array_key_exists($type, $this->arguments)) {
             if (is_string($this->arguments[$type])) {
                 $this->arguments[$type] = unserialize($this->arguments[$type]);
+            } else if ($this->arguments[$type] === null) {
+                $this->arguments[$type] = [];
             }
             return $this->arguments[$type];
         } else {
-            return [['_i_' => 'Magento\Framework\ObjectManagerInterface']];
+            return null;
         }
     }
 

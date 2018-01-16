@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,6 +46,8 @@ class CartPriceRulesFixture extends Fixture
     private $ruleFactory;
 
     /**
+     * Constructor
+     *
      * @param FixtureModel $fixtureModel
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
      */
@@ -234,11 +236,11 @@ class CartPriceRulesFixture extends Fixture
             }
             unset($data['rule']);
 
-            $rule = $ruleFactory->create();
-            $rule->loadPost($data);
+            $model = $ruleFactory->create();
+            $model->loadPost($data);
             $useAutoGeneration = (int)!empty($data['use_auto_generation']);
-            $rule->setUseAutoGeneration($useAutoGeneration);
-            $rule->save();
+            $model->setUseAutoGeneration($useAutoGeneration);
+            $model->save();
         }
     }
 
@@ -425,11 +427,11 @@ class CartPriceRulesFixture extends Fixture
             }
             unset($data['rule']);
 
-            $rule = $ruleFactory->create();
-            $rule->loadPost($data);
+            $model = $ruleFactory->create();
+            $model->loadPost($data);
             $useAutoGeneration = (int)!empty($data['use_auto_generation']);
-            $rule->setUseAutoGeneration($useAutoGeneration);
-            $rule->save();
+            $model->setUseAutoGeneration($useAutoGeneration);
+            $model->save();
         }
     }
 

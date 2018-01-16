@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SalesRule\Model\RuleFactory
      */
     private $ruleFactory;
-    
+
     /**
      * @var \Magento\Setup\Fixtures\CartPriceRulesFixture
      */
@@ -59,7 +59,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $websiteMock->expects($this->atLeastOnce())
             ->method('getGroups')
             ->will($this->returnValue([$storeMock]));
-        $websiteMock->expects($this->atLeastOnce())
+        $websiteMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue('website_id'));
 
@@ -75,7 +75,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             true,
             ['getAllChildren']
         );
-        $abstractDbMock->expects($this->atLeastOnce())
+        $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
@@ -92,10 +92,10 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->will($this->returnValue($abstractDbMock));
-        $categoryMock->expects($this->atLeastOnce())
+        $categoryMock->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue('path/to/file'));
-        $categoryMock->expects($this->atLeastOnce())
+        $categoryMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue('category_id'));
 
@@ -109,7 +109,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValue($storeManagerMock));
-        $objectManagerMock->expects($this->atLeastOnce())
+        $objectManagerMock->expects($this->once())
             ->method('get')
             ->will($this->returnValueMap($objectValueMap));
 
@@ -285,6 +285,8 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testIntroduceParamLabels()
     {
-        $this->assertSame(['cart_price_rules' => 'Cart Price Rules'], $this->model->introduceParamLabels());
+        $this->assertSame([
+            'cart_price_rules' => 'Cart Price Rules'
+        ], $this->model->introduceParamLabels());
     }
 }
