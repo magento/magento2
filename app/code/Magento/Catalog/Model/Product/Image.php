@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @method string getFile()
@@ -173,6 +174,18 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $imageAsset;
 
     /**
+     * @var string
+     */
+    private $cachePrefix = 'IMG_INFO';
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -190,6 +203,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param \Magento\Catalog\Model\View\Asset\ImageFactory|null $viewAssetImageFactory
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory|null $viewAssetPlaceholderFactory
+     * @param Json|null $json
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -208,7 +222,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory = null,
-        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $viewAssetPlaceholderFactory = null
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $viewAssetPlaceholderFactory = null,
+        Json $json = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -223,6 +238,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             ->get(\Magento\Catalog\Model\View\Asset\ImageFactory::class);
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -418,7 +434,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             return 0;
         }
 
-        $imageInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($file));
+        $imageInfo = $this->getimagesize($this->_mediaDirectory->getAbsolutePath($file));
 
         if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
             return 0;
@@ -890,7 +906,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 $image = $this->imageAsset->getPath();
             }
 
-            $imageProperties = getimagesize($image);
+            $imageProperties = $this->getimagesize($image);
 
             return $imageProperties;
         } finally {
@@ -931,5 +947,27 @@ class Image extends \Magento\Framework\Model\AbstractModel
         }
 
         return $miscParams;
+    }
+
+    /**
+     * Get image size
+     *
+     * @param string $imagePath
+     * @return array
+     */
+    private function getImageSize($imagePath)
+    {
+        $key = $this->cachePrefix  . $imagePath;
+        $size = $this->_cacheManager->load($key);
+        if (!$size) {
+            $size = getimagesize($imagePath);
+            $this->_cacheManager->save(
+                $this->json->serialize($size),
+                $key
+            );
+        } else {
+            $size = $this->json->unserialize($size);
+        }
+        return $size;
     }
 }
