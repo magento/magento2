@@ -1303,9 +1303,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             foreach ($skuData as $sku => $attributes) {
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
-                        ->from($this->getResource()->getTable('catalog_product_entity'))
+                        ->from(
+                            $this->getResource()->getTable('catalog_product_entity'),
+                            [$this->getProductEntityLinkField()]
+                        )
                         ->where('sku = ?', (string)$sku)
-                        ->columns($this->getProductEntityLinkField())
                 );
 
                 foreach ($attributes as $attributeId => $storeValues) {
