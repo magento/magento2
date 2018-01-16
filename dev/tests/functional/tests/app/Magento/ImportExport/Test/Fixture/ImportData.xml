@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="importData"
              module="Magento_ImportExport"
@@ -23,4 +23,4 @@
         <field name="import_file" is_required="1" source="Magento\ImportExport\Test\Fixture\Import\File" />
         <field name="import_images_file_dir" is_required="0" />
     </fixture>
-</entities>
+</config>

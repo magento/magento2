@@ -6,25 +6,22 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="AdminConfigurationEnableDisableAdvancedReportingCest">
-        <annotations>
-            <features value="Analytics"/>
-            <stories value="Enable/disable Advanced Reporting"/>
-        </annotations>
-        <after>
-            <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
-        </after>
         <test name="EnableDisableAdvancedReporting">
             <annotations>
+                <features value="Analytics"/>
+                <stories value="Enable/disable Advanced Reporting"/>
                 <title value="Enable Disable Advanced Reporting"/>
                 <description value="An admin user can enable/disable Advanced Reporting."/>
                 <severity value="NORMAL"/>
                 <testCaseId value="MAGETWO-66465"/>
                 <group value="analytics"/>
             </annotations>
-            <loginAsAdmin stepKey="loginAsAdmin"/>
+            <after>
+                <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
+            </after>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Goto admin stores configure page -->
             <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
             <!--Enable Advanced Reporting-->
@@ -46,5 +43,4 @@
             <see stepKey="seeAdvancedReportingServiceStatus" selector="{{AdminConfigSection.advancedReportingServiceStatus}}" userInput="Subscription status: Disabled"/>
 
         </test>
-    </cest>
-</config>
+</tests>

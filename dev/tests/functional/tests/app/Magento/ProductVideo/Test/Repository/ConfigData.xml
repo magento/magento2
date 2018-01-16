@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="youtube_api_key">
             <field name="catalog/product_video/youtube_api_key" xsi:type="array">
@@ -40,4 +40,4 @@
             </field>
         </dataset>
     </repository>
-</entities>
+</config>

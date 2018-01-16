@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="braintree">
             <field name="payment/braintree_section/braintree/braintree_required/merchant_id" xsi:type="array">
@@ -440,4 +440,4 @@
             </field>
         </dataset>
     </repository>
-</entities>
+</config>
