@@ -51,17 +51,18 @@ class ReindexAfterSourceItemsSavePlugin
         $result,
         array $sourceItems
     ) {
-        // TODO: replace on multi operation
-        $sourceItemIds = array_map(
-            function (SourceItemInterface $sourceItem) {
-                return $this->getSourceItemId->execute($sourceItem->getSku(), $sourceItem->getSourceCode());
-            },
-            $sourceItems
-        );
 
-        /** @var IndexerInterface $indexer */
-        $indexer = $this->indexerFactory->create();
-        $indexer->load(SourceItemIndexer::INDEXER_ID);
-        $indexer->reindexList($sourceItemIds);
+        $sourceItemIds = [];
+        foreach ($sourceItems as $sourceItem) {
+            // TODO: replace on multi operation
+            $sourceItemIds = $this->getSourceItemId->execute($sourceItem->getSku(), $sourceItem->getSourceCode());
+        }
+
+        if (count($sourceItemIds)) {
+            /** @var IndexerInterface $indexer */
+            $indexer = $this->indexerFactory->create();
+            $indexer->load(SourceItemIndexer::INDEXER_ID);
+            $indexer->reindexList($sourceItemIds);
+        }
     }
 }

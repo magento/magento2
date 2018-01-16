@@ -51,20 +51,18 @@ class ReindexAfterSourceItemsDeletePlugin
         callable $proceed,
         array $sourceItems
     ) {
-
-        // TODO: replace on multi operation
-        $sourceCodes = array_map(
-            function (SourceItemInterface $sourceItem) {
-                return $sourceItem->getSourceCode();
-            },
-            $sourceItems
-        );
+        $sourceCodes = [];
+        foreach ($sourceItems as $sourceItem) {
+            $sourceCodes = $sourceItem->getSourceCode();
+        }
 
         $proceed($sourceItems);
 
-        /** @var IndexerInterface $indexer */
-        $indexer = $this->indexerFactory->create();
-        $indexer->load(SourceIndexer::INDEXER_ID);
-        $indexer->reindexList($sourceCodes);
+        if (count($sourceCodes)) {
+            /** @var IndexerInterface $indexer */
+            $indexer = $this->indexerFactory->create();
+            $indexer->load(SourceIndexer::INDEXER_ID);
+            $indexer->reindexList($sourceCodes);
+        }
     }
 }
