@@ -17,7 +17,7 @@ use Magento\InventoryIndex\Indexer\IndexStructure;
 /**
  * @inheritdoc
  */
-class StockItemQuantity implements GetStockItemQuantityInterface
+class GetStockItemQuantity implements GetStockItemQuantityInterface
 {
     /**
      * @var ResourceConnection

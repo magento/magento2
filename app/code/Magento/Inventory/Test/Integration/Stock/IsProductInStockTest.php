@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\InventoryIndex\Indexer\Stock\StockIndexer;
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\InventoryIndex\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
@@ -19,11 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class IsProductInStockTest extends TestCase
 {
-    /**
-     * @var IndexerInterface
-     */
-    private $indexer;
-
     /**
      * @var ReservationBuilderInterface
      */
@@ -44,44 +36,23 @@ class IsProductInStockTest extends TestCase
      */
     private $isProductInStock;
 
-    /**
-     * @var RemoveIndexData
-     */
-    private $removeIndexData;
-
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(StockIndexer::INDEXER_ID);
-
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
-
-        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
-        $this->removeIndexData->execute([10]);
-    }
-
-    /**
-     * We broke transaction during indexation so we need to clean db state manually
-     */
-    protected function tearDown()
-    {
-        $this->removeIndexData->execute([10]);
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testProductIsInStock()
     {
-        $this->indexer->reindexRow(10);
-
         self::assertTrue($this->isProductInStock->execute('SKU-1', 10));
     }
 
@@ -89,13 +60,11 @@ class IsProductInStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testProductIsOutOfStockIfReservationsArePresent()
     {
-        $this->indexer->reindexRow(10);
-
         // emulate order placement (reserve -8.5 units)
         $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),

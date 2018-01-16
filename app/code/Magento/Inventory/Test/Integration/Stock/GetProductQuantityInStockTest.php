@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\InventoryIndex\Indexer\Stock\StockIndexer;
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\InventoryIndex\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
@@ -19,11 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class GetProductQuantityInStockTest extends TestCase
 {
-    /**
-     * @var IndexerInterface
-     */
-    private $indexer;
-
     /**
      * @var ReservationBuilderInterface
      */
@@ -44,26 +36,14 @@ class GetProductQuantityInStockTest extends TestCase
      */
     private $getProductQtyInStock;
 
-    /**
-     * @var RemoveIndexData
-     */
-    private $removeIndexData;
-
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(StockIndexer::INDEXER_ID);
-
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
-
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
             GetProductQuantityInStockInterface::class
         );
-
-        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
-        $this->removeIndexData->execute([10]);
     }
 
     /**
@@ -71,7 +51,6 @@ class GetProductQuantityInStockTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->removeIndexData->execute([10]);
         $this->cleanupReservations->execute();
     }
 
@@ -79,13 +58,11 @@ class GetProductQuantityInStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testGetProductQuantity()
     {
-        $this->indexer->reindexRow(10);
-
         self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
     }
 
@@ -93,13 +70,11 @@ class GetProductQuantityInStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testGetProductQuantityIfReservationsArePresent()
     {
-        $this->indexer->reindexRow(10);
-
         $this->appendReservations->execute([
             // emulate order placement reserve 5 units)
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
