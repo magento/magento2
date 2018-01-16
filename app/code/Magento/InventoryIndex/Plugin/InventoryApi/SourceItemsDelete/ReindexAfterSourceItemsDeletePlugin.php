@@ -53,7 +53,7 @@ class ReindexAfterSourceItemsDeletePlugin
     ) {
         $sourceCodes = [];
         foreach ($sourceItems as $sourceItem) {
-            $sourceCodes = $sourceItem->getSourceCode();
+            $sourceCodes[] = $sourceItem->getSourceCode();
         }
 
         $proceed($sourceItems);

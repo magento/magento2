@@ -55,7 +55,7 @@ class ReindexAfterSourceItemsSavePlugin
         $sourceItemIds = [];
         foreach ($sourceItems as $sourceItem) {
             // TODO: replace on multi operation
-            $sourceItemIds = $this->getSourceItemId->execute($sourceItem->getSku(), $sourceItem->getSourceCode());
+            $sourceItemIds[] = $this->getSourceItemId->execute($sourceItem->getSku(), $sourceItem->getSourceCode());
         }
 
         if (count($sourceItemIds)) {
