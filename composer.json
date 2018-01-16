@@ -150,7 +150,7 @@
         "magento/module-inventory-configuration": "100.0.0-dev",
         "magento/module-inventory-configuration-api": "100.0.0-dev",
         "magento/module-inventory-import-export": "100.0.0-dev",
-        "magento/module-inventory-index": "100.0.0-dev",
+        "magento/module-inventory-indexer": "100.0.0-dev",
         "magento/module-inventory-sales": "100.0.0-dev",
         "magento/module-inventory-sales-api": "100.0.0-dev",
         "magento/module-inventory-shipping": "100.0.0-dev",

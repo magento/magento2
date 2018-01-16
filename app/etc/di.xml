@@ -174,8 +174,8 @@
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
-    <preference for="Magento\Framework\MultiDimensionalIndex\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndex\IndexTableSwitcher" />
-    <preference for="Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndex\IndexNameResolver" />
+    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher" />
+    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1348,7 +1348,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\MultiDimensionalIndex\IndexNameResolver">
+    <type name="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>

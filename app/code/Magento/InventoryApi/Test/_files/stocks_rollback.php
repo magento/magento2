@@ -6,7 +6,7 @@
 declare(strict_types=1);
 
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryIndex\Test\Integration\Indexer\RemoveIndexData;
+use Magento\InventoryIndexer\Test\Integration\Indexer\RemoveIndexData;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var StockRepositoryInterface $stockRepository */
