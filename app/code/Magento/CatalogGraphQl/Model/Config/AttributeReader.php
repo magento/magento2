@@ -17,8 +17,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 
 /**
  * Adds custom/eav attribute to Catalog product types in the GraphQL config.
@@ -61,9 +61,18 @@ class AttributeReader implements ReaderInterface
     private $attributeSetRepository;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param MapperInterface $mapper
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param Type $typeLocator
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param AttributeManagementInterface $attributeManagement
+     * @param AttributeSetRepositoryInterface $attributeSetRepository
      */
     public function __construct(
         MapperInterface $mapper,
@@ -72,7 +81,8 @@ class AttributeReader implements ReaderInterface
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributeManagementInterface $attributeManagement,
-        AttributeSetRepositoryInterface $attributeSetRepository
+        AttributeSetRepositoryInterface $attributeSetRepository,
+        CollectionFactory $collectionFactory
     ) {
         $this->mapper = $mapper;
         $this->productAttributeRepository = $productAttributeRepository;
@@ -81,6 +91,7 @@ class AttributeReader implements ReaderInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributeManagement = $attributeManagement;
         $this->attributeSetRepository = $attributeSetRepository;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -93,47 +104,14 @@ class AttributeReader implements ReaderInterface
      */
     public function read($scope = null)
     {
-        $this->searchCriteriaBuilder->addFilters(
-            [
-                $this->filterBuilder
-                    ->setField('entity_type_code')
-                    ->setValue(\Magento\Catalog\Model\Product::ENTITY)
-                    ->setConditionType('eq')
-                    ->create(),
-            ]
-        );
-        $attributeSetList = $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create())->getItems();
-        $attributes = [];
-        $eavStaticAttributeCodes = [];
-        foreach ($attributeSetList as $attributeSet) {
-            try {
-                $attributes = array_merge(
-                    $attributes,
-                    $this->attributeManagement->getAttributes(
-                        \Magento\Catalog\Model\Product::ENTITY,
-                        $attributeSet->getAttributeSetId()
-                    )
-                );
-            } catch (NoSuchEntityException $exception) {
-                throw new GraphQlInputException(
-                    __('Entity code %1 does not exist.', [\Magento\Catalog\Model\Product::ENTITY])
-                );
-            }
-        }
-        /** @var AttributeInterface $attribute */
-        foreach ($attributes as $attribute) {
-            $eavStaticAttributeCodes[] = $attribute->getAttributeCode();
-        }
         $targetStructures = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
         $config =[];
-        $attributeList = $this->productAttributeRepository->getCustomAttributesMetadata();
-        $attributeCodes = [];
-        foreach ($attributeList as $attribute) {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('is_user_defined', '1');
+        $collection->addFieldToFilter('attribute_code', ['neq' => 'cost']);
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        foreach ($collection as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
-            $attributeCodes[] = $attributeCode;
-            if (in_array($attributeCode, $eavStaticAttributeCodes)) {
-                continue;
-            }
             $locatedType = $this->typeLocator->getType(
                 $attributeCode,
                 \Magento\Catalog\Model\Product::ENTITY
@@ -147,6 +125,7 @@ class AttributeReader implements ReaderInterface
                 ];
             }
         }
+
         return $config;
     }
 }

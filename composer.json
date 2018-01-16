@@ -140,7 +140,7 @@
         "magento/module-google-analytics": "100.3.0-dev",
         "magento/module-google-optimizer": "100.3.0-dev",
         "magento/module-graph-ql": "100.0.0-dev",
-        "magento/module—catalog-graph-ql": "100.0.0-dev",
+        "magento/module-catalog-graph-ql": "100.0.0-dev",
         "magento/module-configurable-product-graph-ql": "100.0.0-dev",
         "magento/module-customer-graph-ql": "100.0.0-dev",
         "magento/module-eav-graph-ql": "100.0.0-dev",
