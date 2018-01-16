@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\GraphQl\Type\Definition;
 use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
@@ -23,12 +22,12 @@ class TypeFactory
 {
     /**
      * @param string $type
-     * @return Type
+     * @return Type|null
      */
     public function createScalar(string $type)
     {
         $scalarTypes = Type::getInternalTypes();
-        return $scalarTypes[$type];
+        return isset($scalarTypes[$type]) ? $scalarTypes[$type] : null;
     }
 
     /**

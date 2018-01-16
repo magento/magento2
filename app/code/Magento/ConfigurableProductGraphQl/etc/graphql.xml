@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="ConfigurableProduct">
+        <implements interface="ProductInterface" copyFields="true"/>
+        <field xsi:type="ObjectArrayOutputField" name="configurable_product_links" itemType="SimpleProduct"/>
+        <field xsi:type="ObjectArrayOutputField" name="configurable_product_options" itemType="ConfigurableProductOptions"/>
+    </type>
+    <type xsi:type="OutputType" name="ConfigurableProductOptions">
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="attribute_id" type="String"/>
+        <field xsi:type="ScalarOutputField" name="label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="is_use_default" type="Boolean"/>
+        <field xsi:type="ObjectArrayOutputField" name="values" itemType="ConfigurableProductOptionsValues"/>
+        <field xsi:type="ScalarOutputField" name="product_id" type="Int"/>
+    </type>
+    <type xsi:type="OutputType" name="ConfigurableProductOptionsValues">
+        <field xsi:type="ScalarOutputField" name="value_index" type="Int"/>
+    </type>
+</config>

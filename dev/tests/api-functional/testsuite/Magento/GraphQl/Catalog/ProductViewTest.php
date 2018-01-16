@@ -52,22 +52,10 @@ class ProductViewTest extends GraphQlAbstract
             custom_layout
             custom_layout_update
             description
-            gallery
             gift_message_available
-            has_options
             id
             image
             image_label
-            links_exist
-            links_purchased_separately
-            links_title
-            media_gallery
-            {
-                images
-                {
-                    file
-                }
-            }
             meta_description
             meta_keyword
             meta_title
@@ -96,12 +84,9 @@ class ProductViewTest extends GraphQlAbstract
                     video_url
                 }
             }
-            msrp
-            msrp_display_actual_price_type
             name
-            news_from_date
-            news_to_date
-            old_id
+            new_from_date
+            new_to_date
             options_container
             options
             {
@@ -173,8 +158,6 @@ class ProductViewTest extends GraphQlAbstract
                 }
               }
             }
-            price_type
-            price_view
             product_links
             {
                 link_type
@@ -184,9 +167,6 @@ class ProductViewTest extends GraphQlAbstract
                 qty
                 sku
             }
-            required_options
-            samples_title
-            shipment_type
             short_description
             sku
             small_image
@@ -194,7 +174,6 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            status
             swatch_image
             tax_class_id
             thumbnail
@@ -212,10 +191,8 @@ class ProductViewTest extends GraphQlAbstract
             updated_at
             url_key
             url_path
-            visibility
             website_ids
             weight
-            weight_type
         }
     }
 }
@@ -274,22 +251,10 @@ QUERY;
             custom_layout
             custom_layout_update
             description
-            gallery
             gift_message_available
-            has_options
             id
             image
             image_label
-            links_exist
-            links_purchased_separately
-            links_title
-            media_gallery
-            {
-                images
-                {
-                    file
-                }
-            }
             meta_description
             meta_keyword
             meta_title
@@ -318,12 +283,9 @@ QUERY;
                     video_url
                 }
             }
-            msrp
-            msrp_display_actual_price_type
             name
-            news_from_date
-            news_to_date
-            old_id
+            new_from_date
+            new_to_date
             options_container
             options
             {
@@ -395,8 +357,6 @@ QUERY;
                 }
               }
             }
-            price_type
-            price_view
             product_links
             {
                 link_type
@@ -406,9 +366,6 @@ QUERY;
                 qty
                 sku
             }
-            required_options
-            samples_title
-            shipment_type
             short_description
             sku
             small_image
@@ -416,7 +373,6 @@ QUERY;
             special_from_date
             special_price
             special_to_date
-            status
             swatch_image
             tax_class_id
             thumbnail
@@ -434,10 +390,8 @@ QUERY;
             updated_at
             url_key
             url_path
-            visibility
             website_ids
             weight
-            weight_type
         }
     }
 }
@@ -462,6 +416,9 @@ QUERY;
      */
     public function testQueryCustomAttributeField()
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $prductSku = 'simple';
 
         $query = <<<QUERY
@@ -547,9 +504,7 @@ QUERY;
      */
     private function assertCustomAttribute($product, $actualResponse)
     {
-        $customAttribute = $product->getCustomAttribute('attribute_code_custom')->getValue();
-        $this->assertNotNull($customAttribute, "Precondition failed: 'manufacturer' must not be null");
-        $this->assertNotEmpty($customAttribute, "Precondition failed: 'manufacturer' must not be empty");
+        $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
 
@@ -680,10 +635,8 @@ QUERY;
                 ]
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
-            ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-            ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
@@ -699,21 +652,15 @@ QUERY;
         $eavAttributes = [
             'url_key',
             'description',
-            'has_options',
             'meta_description',
             'meta_keyword',
             'meta_title',
             'short_description',
             'tax_class_id',
             'country_of_manufacture',
-            'msrp',
             'gift_message_available',
-            'has_options',
-            'msrp_display_actual_price_type',
             'news_from_date',
-            'old_id',
             'options_container',
-            'required_options',
             'special_price',
             'special_from_date',
             'special_to_date',
@@ -721,13 +668,31 @@ QUERY;
         $assertionMap = [];
         foreach ($eavAttributes as $attributeCode) {
             $expectedAttribute = $product->getCustomAttribute($attributeCode);
+
             $assertionMap[] = [
-                'response_field' => $attributeCode,
+                'response_field' => $this->eavAttributesToGrahQlSchemaFieldTranslator($attributeCode),
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
             ];
         }
 
         $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param string $eavAttributeCode
+     * @return string
+     */
+    private function eavAttributesToGrahQlSchemaFieldTranslator(string $eavAttributeCode)
+    {
+        switch ($eavAttributeCode) {
+            case 'news_from_date':
+                $eavAttributeCode = 'new_from_date';
+                break;
+            case 'news_to_date':
+                $eavAttributeCode = 'new_to_date';
+                break;
+        }
+        return $eavAttributeCode;
     }
 
     /**

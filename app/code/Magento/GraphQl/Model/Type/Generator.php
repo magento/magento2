@@ -6,11 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\GraphQl\TypeFactory;
-use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use Magento\GraphQl\Model\QueryConfig;
+use Magento\Framework\GraphQl\SchemaProvider;
 
 /**
  * {@inheritdoc}
@@ -18,101 +15,42 @@ use Magento\GraphQl\Model\QueryConfig;
 class Generator implements GeneratorInterface
 {
     /**
-     * @var Pool
-     */
-    private $typePool;
-
-    /**
-     * @var HandlerConfig
-     */
-    private $typeConfig;
-
-    /**
-     * @var QueryConfig
-     */
-    private $queryConfig;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
 
     /**
-     * @var HandlerFactory
+     * @var SchemaProvider
      */
-    private $handlerFactory;
+    private $schemaProvider;
 
     /**
-     * @param Pool $typePool
-     * @param HandlerConfig $typeConfig
-     * @param QueryConfig $queryConfig
      * @param TypeFactory $typeFactory
-     * @param HandlerFactory $handlerFactory
+     * @param SchemaProvider $schemaProvider
      */
     public function __construct(
-        Pool $typePool,
-        HandlerConfig $typeConfig,
-        QueryConfig $queryConfig,
         TypeFactory $typeFactory,
-        HandlerFactory $handlerFactory
+        SchemaProvider $schemaProvider
     ) {
-        $this->typePool = $typePool;
-        $this->typeConfig = $typeConfig;
-        $this->queryConfig = $queryConfig;
         $this->typeFactory = $typeFactory;
-        $this->handlerFactory = $handlerFactory;
+        $this->schemaProvider = $schemaProvider;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateTypes(string $typeName)
+    public function generateTypes()
     {
         $types = [];
-        /** @var string $handlerName */
-        foreach ($this->typeConfig->getTypes() as $typeName => $handlerName) {
-            $handler = $this->handlerFactory->create($handlerName);
-            $type = $handler->getType();
-            if (!$this->typePool->isTypeRegistered($typeName)) {
-                $this->typePool->registerType($type);
-                $types[] = $type;
-            } else {
-                $types[] = $this->typePool->getType($typeName);
+        foreach ($this->schemaProvider->getTypes() as $name => $type) {
+            if ($name == 'Query') {
+                continue;
             }
+            $types[] = $type;
         }
-
-        $fields = [];
-        foreach ($this->queryConfig->getQueryFields() as $fieldName => $values) {
-            $arguments = [];
-            if (!isset($values['args'])) {
-                $values['args'] = [];
-            }
-            foreach ($values['args'] as $argName => $argType) {
-                // Replace '[]' with an 's' to express plurality
-                $realArgName = str_replace('!', '', str_replace('[]', 's', $argName));
-                $arguments[$realArgName] = ['type' => $this->decorateType($argName, $argType)];
-            }
-
-            $fields[$fieldName] = ['type' => $this->typePool->getType($values['type']), 'args' => $arguments];
-        }
-
-        return ['fields' => $fields, 'types' => $types];
-    }
-
-    /**
-     * Decorate type as non-null or as a list if formatted (with a '!' or '[]' appended, respectively)
-     *
-     * @param string $argumentName
-     * @param string $argumentType
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
-     * @throws GraphQlInputException
-     */
-    private function decorateType(string $argumentName, string $argumentType)
-    {
-        $type = $this->typePool->getType($argumentType);
-        $type = strpos($argumentName, '[]') !== false ? $this->typeFactory->createList($type) : $type;
-        $type = strpos($argumentName, '!') !== false ? $this->typeFactory->createNonNull($type) : $type;
-
-        return $type;
+        return [
+            'fields' => $this->schemaProvider->getQuery()->getFields(),
+            'types' => $types
+        ];
     }
 }

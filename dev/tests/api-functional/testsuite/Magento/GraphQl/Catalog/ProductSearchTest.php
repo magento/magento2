@@ -55,9 +55,7 @@ class ProductSearchTest extends GraphQlAbstract
          }
          name
          weight
-         status
          type_id
-         visibility
          attribute_set_id
        }    
         total_count
@@ -108,8 +106,7 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }
-           visibility:{in:["2", "3","4"]}
+          }           
            weight:{eq:"1"} 
         }
         pageSize:6
@@ -132,10 +129,8 @@ QUERY;
             }
            }
            name
-           weight
-           status
-           type_id
-           visibility
+           weight           
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -183,8 +178,7 @@ QUERY;
           {
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
-          }
-           visibility:{in:["2", "3","4"]}
+          }           
            weight:{eq:"1"} 
         }
         pageSize:2
@@ -208,9 +202,7 @@ QUERY;
            }
            name
            weight
-           status
-           type_id
-           visibility
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -251,7 +243,6 @@ QUERY;
            sku:{like:"%simple%"}
            name:{like:"%configurable%"}
           }
-           visibility:{in:["2", "3","4"]}
            weight:{eq:"1"} 
         }
         pageSize:1
@@ -275,9 +266,7 @@ QUERY;
            }
            name
            weight
-           status
-           type_id
-           visibility
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -345,9 +334,7 @@ QUERY;
            }
            name
            weight
-           status
-           type_id
-           visibility
+           type_id           
            attribute_set_id
          }    
         total_count
@@ -419,10 +406,8 @@ QUERY;
             }
         }
         name
-        status
         type_id
-           weight
-           visibility
+           weight           
            attribute_set_id
          }    
         total_count
@@ -450,12 +435,12 @@ QUERY;
     }
 
     /**
-     * Sorting by visibility and price in the DESC order from the filtered items with default pageSize
+     * Sorting by price in the DESC order from the filtered items with default pageSize
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQuerySortByVisibilityAndPriceDESCWithDefaultPageSize()
+    public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
         $query
             = <<<QUERY
@@ -468,12 +453,11 @@ QUERY;
             {
               sku:{like:"%simple%"}
               name:{like:"%Configurable%"}
-              visibility:{in:["2", "3","4"]}
             }
         }
          sort:
          {
-          visibility:DESC
+          
           price:DESC
          }
      ) 
@@ -491,9 +475,7 @@ QUERY;
         }
         name
         weight
-        status
         type_id
-        visibility
         attribute_set_id       
       }           
         total_count
@@ -540,7 +522,7 @@ products(
     {
         special_price:{lt:"15"}
         price:{lt:"50"}
-        visibility:{eq:"2"}
+        weight:{gt:"4"}
         or:
         {
             sku:{like:"simple%"}
@@ -568,9 +550,7 @@ products(
        }
        name
        weight
-       status
        type_id
-       visibility
        attribute_set_id
      }    
     total_count
@@ -623,10 +603,8 @@ QUERY;
             }
         }
         name
-        status
         type_id
            weight
-           visibility
            attribute_set_id
          }
         total_count
@@ -671,9 +649,7 @@ QUERY;
                          ]
                      ]
                  ],
-                 'status' =>$filteredProducts[$itemIndex]->getStatus(),
                  'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                 'visibility' =>$filteredProducts[$itemIndex]->getVisibility(),
                  'weight' => $filteredProducts[$itemIndex]->getWeight()
                 ]
             );

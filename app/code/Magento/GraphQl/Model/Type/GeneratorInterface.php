@@ -14,8 +14,7 @@ interface GeneratorInterface
     /**
      * Generate type definitions for all fields of given GraphQl query or mutation name
      *
-     * @param string $typeName
      * @return array Represented as ['fields' => ['fieldName' => Type, {...}], 'types' => Types[]]
      */
-    public function generateTypes(string $typeName);
+    public function generateTypes();
 }

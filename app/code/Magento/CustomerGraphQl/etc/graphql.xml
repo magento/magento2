@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="Query">
+        <field xsi:type="ObjectOutputField" name="customer" type="Customer" resolver="Magento\CustomerGraphQl\Model\Resolver\Customer"/>
+    </type>
+    <type xsi:type="OutputType" name="Customer">
+        <field xsi:type="ScalarOutputField" name="created_at" type="String"/>
+        <field xsi:type="ScalarOutputField" name="group_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="prefix" type="String"/>
+        <field xsi:type="ScalarOutputField" name="firstname" type="String"/>
+        <field xsi:type="ScalarOutputField" name="middlename" type="String"/>
+        <field xsi:type="ScalarOutputField" name="lastname" type="String"/>
+        <field xsi:type="ScalarOutputField" name="suffix" type="String"/>
+        <field xsi:type="ScalarOutputField" name="email" type="String"/>
+        <field xsi:type="ScalarOutputField" name="default_billing" type="String"/>
+        <field xsi:type="ScalarOutputField" name="default_shipping" type="String"/>
+        <field xsi:type="ScalarOutputField" name="dob" type="String"/>
+        <field xsi:type="ScalarOutputField" name="taxvat" type="String"/>
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="dob" type="String"/>
+        <field xsi:type="ScalarOutputField" name="is_subscribed" type="Boolean"/>
+        <field xsi:type="ObjectArrayOutputField" name="addresses" itemType="CustomerAddress"/>
+    </type>
+    <type xsi:type="OutputType" name="CustomerAddress">
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="customer_id" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="region" type="CustomerAddressRegion"/>
+        <field xsi:type="ScalarOutputField" name="region_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="country_id" type="String"/>
+        <field xsi:type="ScalarArrayOutputField" name="street" itemType="String"/>
+        <field xsi:type="ScalarOutputField" name="company" type="String"/>
+        <field xsi:type="ScalarOutputField" name="telephone" type="String"/>
+        <field xsi:type="ScalarOutputField" name="fax" type="String"/>
+        <field xsi:type="ScalarOutputField" name="postcode" type="String"/>
+        <field xsi:type="ScalarOutputField" name="city" type="String"/>
+        <field xsi:type="ScalarOutputField" name="firstname" type="String"/>
+        <field xsi:type="ScalarOutputField" name="lastname" type="String"/>
+        <field xsi:type="ScalarOutputField" name="middlename" type="String"/>
+        <field xsi:type="ScalarOutputField" name="prefix" type="String"/>
+        <field xsi:type="ScalarOutputField" name="suffix" type="String"/>
+        <field xsi:type="ScalarOutputField" name="vat_id" type="String"/>
+        <field xsi:type="ScalarOutputField" name="default_shipping" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="default_billing" type="Boolean"/>
+    </type>
+    <type xsi:type="OutputType" name="CustomerAddressRegion">
+        <field xsi:type="ScalarOutputField" name="region_code" type="String"/>
+        <field xsi:type="ScalarOutputField" name="region" type="String"/>
+        <field xsi:type="ScalarOutputField" name="region_id" type="Int"/>
+    </type>
+</config>
