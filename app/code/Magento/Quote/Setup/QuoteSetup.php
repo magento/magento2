@@ -11,7 +11,6 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Setup\Model\SchemaListener;
 
 /**
  * Quote module setup class

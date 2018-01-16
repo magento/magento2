@@ -238,7 +238,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         DateTime $dateTime,
         LoggerInterface $logger,
         SelectFactory $selectFactory,
-        SchemaListener $schemaListener,
         array $config = [],
         SerializerInterface $serializer = null
     ) {
@@ -264,7 +263,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } catch (\Zend_Db_Adapter_Exception $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
-        $this->schemaListener = $schemaListener;
     }
 
     /**
@@ -850,7 +848,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 );
                 $this->resetDdlCache($tableName, $schemaName);
                 $this->rawQuery($sql);
-                $this->schemaListener->dropForeignKey($tableName, $fkName);
+                //$this->schemaListener->dropForeignKey($tableName, $fkName);
             }
         }
         return $this;
@@ -929,7 +927,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function setSchemaListener(SchemaListener $schemaListener)
     {
-        $this->schemaListener = $schemaListener;
+        //$this->schemaListener = $schemaListener;
     }
 
     /**
@@ -948,7 +946,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
     {
-        $this->schemaListener->addColumn($tableName, $columnName, $definition);
+        //$this->schemaListener->addColumn($tableName, $columnName, $definition);
         if ($this->tableColumnExists($tableName, $columnName, $schemaName)) {
             return true;
         }
@@ -993,13 +991,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!$this->tableColumnExists($tableName, $columnName, $schemaName)) {
             return true;
         }
-        $this->schemaListener->dropColumn($tableName, $columnName);
+        //$this->schemaListener->dropColumn($tableName, $columnName);
         $alterDrop = [];
 
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
         foreach ($foreignKeys as $fkProp) {
             if ($fkProp['COLUMN_NAME'] == $columnName) {
-                $this->schemaListener->dropForeignKey($tableName, $fkProp['FK_NAME']);
+                //$this->schemaListener->dropForeignKey($tableName, $fkProp['FK_NAME']);
                 $alterDrop[] = 'DROP FOREIGN KEY ' . $this->quoteIdentifier($fkProp['FK_NAME']);
             }
         }
@@ -1011,7 +1009,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             if ($idxColumnKey !== false) {
                 unset($idxColumns[$idxColumnKey]);
                 if (empty($idxColumns)) {
-                    $this->schemaListener->dropIndex($tableName, $idxData['KEY_NAME'], 'index');
+                    //$this->schemaListener->dropIndex($tableName, $idxData['KEY_NAME'], 'index');
                 }
                 if ($idxColumns && $this->_getIndexByColumns($tableName, $idxColumns, $schemaName)) {
                     $this->dropIndex($tableName, $idxData['KEY_NAME'], $schemaName);
@@ -1072,11 +1070,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $flushData = false,
         $schemaName = null
     ) {
-        $this->schemaListener->changeColumn($tableName,
-            $oldColumnName,
-            $newColumnName,
-            $definition
-        );
+        //$this->schemaListener->changeColumn($tableName,
+//            $oldColumnName,
+//            $newColumnName,
+//            $definition
+//        );
         if (!$this->tableColumnExists($tableName, $oldColumnName, $schemaName)) {
             throw new \Zend_Db_Exception(
                 sprintf(
@@ -1122,9 +1120,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
-        $this->schemaListener->modifyColumn(
-            $tableName, $columnName, $definition
-        );
+        //$this->schemaListener->modifyColumn(
+//            $tableName, $columnName, $definition
+//        );
         if (!$this->tableColumnExists($tableName, $columnName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Column "%s" does not exist in table "%s".', $columnName, $tableName));
         }
@@ -2086,7 +2084,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function createTable(Table $table)
     {
-        $this->schemaListener->createTable($table);
+        //$this->schemaListener->createTable($table);
         $columns = $table->getColumns();
         foreach ($columns as $columnEntry) {
             if (empty($columnEntry['COMMENT'])) {
@@ -2533,7 +2531,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $query = 'DROP TABLE IF EXISTS ' . $table;
         $this->query($query);
         $this->resetDdlCache($tableName, $schemaName);
-        $this->schemaListener->dropTable($tableName);
+        //$this->schemaListener->dropTable($tableName);
         return true;
     }
 
@@ -2603,7 +2601,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($this->isTableExists($newTableName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Table "%s" already exists', $newTableName));
         }
-        $this->schemaListener->renameTable($oldTableName, $newTableName);
+        //$this->schemaListener->renameTable($oldTableName, $newTableName);
         $oldTable = $this->_getTableName($oldTableName, $schemaName);
         $newTable = $this->_getTableName($newTableName, $schemaName);
 
@@ -2636,12 +2634,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $indexType = AdapterInterface::INDEX_TYPE_INDEX,
         $schemaName = null
     ) {
-        $this->schemaListener->addIndex(
-            $tableName,
-            $indexName,
-            $fields,
-            $indexType
-        );
+        //$this->schemaListener->addIndex(
+//            $tableName,
+//            $indexName,
+//            $fields,
+//            $indexType
+//        );
         $columns = $this->describeTable($tableName, $schemaName);
         $keyList = $this->getIndexList($tableName, $schemaName);
 
@@ -2744,7 +2742,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->quoteIdentifier($this->_getTableName($tableName, $schemaName)),
             $cond
         );
-        $this->schemaListener->dropIndex($tableName, $keyName, $indexType);
+        //$this->schemaListener->dropIndex($tableName, $keyName, $indexType);
         $this->resetDdlCache($tableName, $schemaName);
 
         return $this->rawQuery($sql);
@@ -2796,14 +2794,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $query .= ' ON DELETE ' . strtoupper($onDelete);
         }
 
-        $this->schemaListener->addForeignKey(
-            $fkName,
-            $tableName,
-            $columnName,
-            $refTableName,
-            $refColumnName,
-            $onDelete
-        );
+        //$this->schemaListener->addForeignKey(
+//            $fkName,
+//            $tableName,
+//            $columnName,
+//            $refTableName,
+//            $refColumnName,
+//            $onDelete
+//        );
 
         $result = $this->rawQuery($query);
         $this->resetDdlCache($tableName);
@@ -2815,7 +2813,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function getSchemaListener()
     {
-        return $this->schemaListener;
+        return;//$this->schemaListener;
     }
 
     /**

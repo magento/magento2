@@ -295,8 +295,8 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->schemaListener = $objectManagerProvider->get()->get(SchemaListener::class);
-        $this->schemaPersistor = $objectManagerProvider->get()->get(SchemaPersistor::class);
+        //$this->schemaListener = $objectManagerProvider->get()->get(SchemaListener::class);
+        //$this->schemaPersistor = $objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
@@ -351,7 +351,7 @@ class Installer
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
-        $this->schemaPersistor->persist($this->schemaListener);
+        //$this->schemaPersistor->persist($this->schemaListener);
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
             'Magento Admin URI: /'
@@ -858,8 +858,8 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
-        $setup->getConnection()
-            ->setSchemaListener($this->schemaListener);
+//        $setup->getConnection()
+//            ->setSchemaListener($this->schemaListener);
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
@@ -868,8 +868,8 @@ class Installer
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         if ($type !== 'schema') {
             foreach ($moduleNames as $moduleName) {
-                $this->schemaListener->setModuleName($moduleName);
-                $this->schemaListener->setResource('default');
+//                $this->schemaListener->setModuleName($moduleName);
+//                $this->schemaListener->setResource('default');
                 $this->log->log("Module '{$moduleName}':");
                 $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
                 $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -920,7 +920,7 @@ class Installer
             'Magento_Wishlist' => 'Magento_CatalogStaging',
         ];
 
-        $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
+        //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
@@ -936,11 +936,11 @@ class Installer
                 $schemaListenerModuleName = $moduleName;
             }
 
-            $this->schemaListener->setModuleName($schemaListenerModuleName);
-            $this->schemaListener->toogleIgnore(
-                SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS
-            );
-            $this->schemaListener->setResource('default');
+            //$this->schemaListener->setModuleName($schemaListenerModuleName);
+            //$this->schemaListener->toogleIgnore(
+            //    SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS
+            //);
+            //$this->schemaListener->setResource('default');
 
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
@@ -949,9 +949,9 @@ class Installer
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
-            $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
+            //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         }
-        $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
+        //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
     }
 
     /**
