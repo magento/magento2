@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class AssignStatusToProductPluginTest extends TestCase
+class AssignStatusToProductMultistockPluginTest extends TestCase
 {
     /**
      * @var Helper
