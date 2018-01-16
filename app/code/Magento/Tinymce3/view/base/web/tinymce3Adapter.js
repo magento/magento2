@@ -284,10 +284,13 @@ define([
 
         /**
          * Set the status of the editor and toolbar
+         *
+         * @param {Boolean} enabled
          */
         setEditorStatus: function (enabled) {
             if (this.activeEditor()) {
                 this.activeEditor().getBody().setAttribute('contenteditable', enabled);
+                this.activeEditor().readonly = !enabled;
                 this.setToolbarStatus(enabled);
             }
 
