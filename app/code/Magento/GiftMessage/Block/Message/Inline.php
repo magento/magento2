@@ -278,7 +278,8 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @deprecated Misspelled method - use getItemsHasMessages() instead
+     * @deprecated Misspelled method
+     * @see getItemsHasMessages
      */
     public function getItemsHasMesssages()
     {
