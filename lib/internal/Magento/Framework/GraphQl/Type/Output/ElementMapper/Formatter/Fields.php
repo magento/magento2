@@ -29,7 +29,7 @@ class Fields implements FormatterInterface
     private $objectManager;
 
     /**
-     * @var \Magento\GraphQl\Framework\Config\FieldConfig
+     * @var FieldConfig
      */
     private $fieldConfig;
 
