@@ -21,32 +21,31 @@ class XmlConverter implements ConverterInterface
      * @param \DOMNode $source
      * @return array|string
      */
-    private function convertNode(\DOMNode $source)
+    private function convertNodeToArray(\DOMNode $source)
     {
-        $result = [];
+        $converted = [];
         if ($source->hasAttributes()) {
-            $attrs = $source->attributes;
-            foreach ($attrs as $attr) {
-                $result[$attr->name] = $attr->value;
+            $attributes = $source->attributes;
+            foreach ($attributes as $attribute) {
+                $converted[$attribute->name] = $attribute->value;
             }
         }
         if ($source->hasChildNodes()) {
-            $children = $source->childNodes;
-            if ($children->length == 1) {
-                $child = $children->item(0);
+            $childNodes = $source->childNodes;
+            if ($childNodes->length == 1) {
+                $child = $childNodes->item(0);
                 if ($child->nodeType == XML_TEXT_NODE) {
-                    $result['_value'] = $child->nodeValue;
-                    return count($result) == 1 ? $result['_value'] : $result;
+                    $converted['_value'] = $child->nodeValue;
+                    return count($converted) == 1 ? $converted['_value'] : $converted;
                 }
             }
-            foreach ($children as $child) {
-                if ($child instanceof \DOMCharacterData) {
-                    continue;
+            foreach ($childNodes as $child) {
+                if (! $child instanceof \DOMCharacterData) {
+                    $converted[$child->nodeName][] = $this->convertNodeToArray($child);
                 }
-                $result[$child->nodeName][] = $this->convertNode($child);
             }
         }
-        return $result;
+        return $converted;
     }
 
     /**
@@ -57,6 +56,6 @@ class XmlConverter implements ConverterInterface
      */
     public function convert($source)
     {
-        return $this->convertNode($source);
+        return $this->convertNodeToArray($source);
     }
 }
