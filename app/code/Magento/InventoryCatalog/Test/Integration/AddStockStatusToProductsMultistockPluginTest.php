@@ -94,6 +94,8 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
     {
         $this->indexer->reindexAll();
         $this->productCollection->clear();
+        $this->productCollection->addFieldToFilter('sku', ['in' => null]);
+        $this->productCollection->load();
         foreach ($productsData as $productData) {
             $product = $this->productRepository->get($productData['sku']);
             $this->productCollection->addItem($product);
