@@ -79,36 +79,6 @@
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
-    <!-- Indexer -->
-    <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
-    <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
-    <type name="Magento\Inventory\Indexer\IndexHandler">
-        <arguments>
-            <argument name="batchSize" xsi:type="string">100</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Inventory\Indexer\SourceItem\SourceItemIndexer">
-        <arguments>
-            <argument name="indexStructureHandler" xsi:type="object">Magento\Inventory\Indexer\IndexStructure</argument>
-            <argument name="indexHandler" xsi:type="object">Magento\Inventory\Indexer\IndexHandler</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Inventory\Indexer\Stock\StockIndexer">
-        <arguments>
-            <argument name="indexStructureHandler" xsi:type="object">Magento\Inventory\Indexer\IndexStructure</argument>
-            <argument name="indexHandler" xsi:type="object">Magento\Inventory\Indexer\IndexHandler</argument>
-        </arguments>
-    </type>
-    <type name="\Magento\Inventory\Indexer\SourceItem\GetSkuListInStock">
-        <arguments>
-            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
-        </arguments>
-    </type>
-    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
-        <arguments>
-            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
-        </arguments>
-    </type>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
     <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
@@ -116,10 +86,9 @@
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
     <preference for="Magento\Inventory\Model\CleanupReservationsInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations"/>
-    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
-        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\AssignSourcesToStock" />
-    </type>
-    <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
-        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
+    <type name="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
     </type>
 </config>

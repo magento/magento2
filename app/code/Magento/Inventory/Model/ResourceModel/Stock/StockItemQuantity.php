@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
-use Magento\Inventory\Indexer\IndexStructure;
+use Magento\InventoryIndex\Indexer\IndexStructure;
 
 /**
  * The resource model responsible for retrieving StockItem Quantity.

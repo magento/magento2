@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\Indexer\Model\Indexer;
-use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
+use Magento\InventoryIndex\Indexer\SourceItem\SourceItemIndexer;
 
 class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 {

@@ -9,9 +9,9 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Indexer\Model\Indexer;
-use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
+use Magento\InventoryIndex\Indexer\SourceItem\SourceItemIndexer;
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
+use Magento\InventoryIndex\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
