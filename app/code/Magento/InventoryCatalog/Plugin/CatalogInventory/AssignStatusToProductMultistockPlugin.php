@@ -68,8 +68,9 @@ class AssignStatusToProductMultistockPlugin
         Product $product,
         $status = null
     ) {
+        $temporaryProduct = clone $product;
         // We need it to not prevent the execution of all the plugins next in the chain.
-        $proceed($product, $status);
+        $proceed($temporaryProduct, $status);
         $this->assignStatusToProduct($product, $status);
     }
 
