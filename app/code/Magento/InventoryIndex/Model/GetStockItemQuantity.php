@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\Stock;
+namespace Magento\InventoryIndex\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
+use Magento\Inventory\Model\GetStockItemQuantityInterface;
 use Magento\InventoryIndex\Indexer\IndexStructure;
 
 /**
- * The resource model responsible for retrieving StockItem Quantity.
- * Used by Service Contracts that are agnostic to the Data Access Layer.
+ * @inheritdoc
  */
-class StockItemQuantity
+class StockItemQuantity implements GetStockItemQuantityInterface
 {
     /**
      * @var ResourceConnection
@@ -50,11 +50,7 @@ class StockItemQuantity
     }
 
     /**
-     * Given a product sku and a stock id, return stock item quantity.
-     *
-     * @param string $sku
-     * @param int $stockId
-     * @return float
+     * @inheritdoc
      */
     public function execute(string $sku, int $stockId): float
     {

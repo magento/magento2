@@ -42,4 +42,6 @@
     <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
         <plugin name="reindex_after_unassign_sources_from_stock" type="Magento\InventoryIndex\Plugin\InventoryApi\UnassignSourceFromStock\ReindexAfterUnassignSourcesFromStockPlugin" />
     </type>
+    <!-- Stock -->
+    <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\InventoryIndex\Model\GetStockItemQuantity"/>
 </config>

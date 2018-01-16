@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\Reservation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Inventory\Model\GetReservationsQuantityInterface;
 use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
- * The resource model responsible for retrieving Reservation Quantity.
- * Used by Service Contracts that are agnostic to the Data Access Layer.
+ * @inheritdoc
  */
-class ReservationQuantity
+class GetReservationsQuantity implements GetReservationsQuantityInterface
 {
     /**
      * @var ResourceConnection
@@ -32,11 +32,7 @@ class ReservationQuantity
     }
 
     /**
-     * Given a product sku and a stock id, return reservation quantity.
-     *
-     * @param string $sku
-     * @param int $stockId
-     * @return float
+     * @inheritdoc
      */
     public function execute(string $sku, int $stockId): float
     {
