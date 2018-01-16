@@ -125,7 +125,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapperMock->expects($this->once())
             ->method('getFilter')
@@ -133,7 +133,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
-            ->willReturn($transations);
+            ->willReturn($transactions);
 
         $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
@@ -157,7 +157,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithNullLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapperMock->expects($this->once())
             ->method('getFilter')
@@ -165,7 +165,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
-            ->willReturn($transations);
+            ->willReturn($transactions);
 
         $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
