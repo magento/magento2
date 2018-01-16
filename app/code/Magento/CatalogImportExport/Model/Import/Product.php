@@ -844,7 +844,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
-            ->_initImagesArrayKeys();
+            ->initImagesArrayKeys();
         $this->validator->init($this);
     }
 
@@ -1092,7 +1092,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return $this
      */
-    protected function _initImagesArrayKeys()
+    private function initImagesArrayKeys()
     {
         $this->_imagesArrayKeys = $this->imageTypeProcessor->getImageTypes();
         return $this;
