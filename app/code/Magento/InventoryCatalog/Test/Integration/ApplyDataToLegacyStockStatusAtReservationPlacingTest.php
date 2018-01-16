@@ -12,9 +12,9 @@ use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\Indexer\Model\Indexer;
-use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
+use Magento\InventoryIndex\Indexer\SourceItem\SourceItemIndexer;
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
+use Magento\InventoryIndex\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
@@ -23,11 +23,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
 {
-    /**
-     * @var Indexer
-     */
-    private $indexer;
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -63,18 +58,9 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
      */
     private $defaultStockProvider;
 
-    /**
-     * @var RemoveIndexData
-     */
-    private $removeIndexData;
-
     protected function setUp()
     {
         $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/368');
-        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
-        $this->indexer->load(SourceItemIndexer::INDEXER_ID);
-        $this->indexer->reindexAll();
-
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 
         $this->legacyStockStatusCriteriaFactory = Bootstrap::getObjectManager()->get(
@@ -87,7 +73,6 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
         $this->reservationCleanup = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
 
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
-        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
     }
 
     /**
@@ -95,7 +80,6 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->removeIndexData->execute([$this->defaultStockProvider->getId()]);
         $this->reservationCleanup->execute();
     }
 
