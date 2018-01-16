@@ -12,7 +12,7 @@ use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryIndex\Indexer\SourceItem\GetSourceItemId;
-use Magento\InventoryIndex\Indexer\SourceItem\SourceItemIndexer;
+use Magento\InventoryIndex\Indexer\Source\SourceIndexer;
 
 /**
  * Reindex after source items delete plugin
@@ -53,9 +53,9 @@ class ReindexAfterSourceItemsDeletePlugin
     ) {
 
         // TODO: replace on multi operation
-        $sourceItemIds = array_map(
+        $sourceCodes = array_map(
             function (SourceItemInterface $sourceItem) {
-                return $this->getSourceItemId->execute($sourceItem->getSku(), $sourceItem->getSourceCode());
+                return $sourceItem->getSourceCode();
             },
             $sourceItems
         );
@@ -64,7 +64,7 @@ class ReindexAfterSourceItemsDeletePlugin
 
         /** @var IndexerInterface $indexer */
         $indexer = $this->indexerFactory->create();
-        $indexer->load(SourceItemIndexer::INDEXER_ID);
-        $indexer->reindexList($sourceItemIds);
+        $indexer->load(SourceIndexer::INDEXER_ID);
+        $indexer->reindexList($sourceCodes);
     }
 }
