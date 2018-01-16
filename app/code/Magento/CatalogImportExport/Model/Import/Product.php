@@ -1096,18 +1096,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $this->_imagesArrayKeys = $this->imageTypeProcessor->getImageTypes();
         return $this;
-        $select = $this->_connection->select()->from(
-            $this->getResource()->getTable('eav_attribute'),
-            ['code' => 'attribute_code']
-        )->where(
-            'frontend_input = :frontend_input'
-        );
-        $bind = [':frontend_input' => 'media_image'];
-
-        $this->_imagesArrayKeys   = $this->_connection->fetchCol($select, $bind);
-        $this->_imagesArrayKeys[] = '_media_image';
-
-        return $this;
     }
 
     /**
