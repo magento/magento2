@@ -31,5 +31,4 @@ class DefaultMapper implements MapperInterface
     {
         return isset($this->map[$entityName]) ? $this->map[$entityName] : [];
     }
-
 }

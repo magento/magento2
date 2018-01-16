@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper;
+
 use GraphQL\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\Config\Data\Type;
 

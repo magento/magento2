@@ -435,16 +435,11 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
 
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
-        $this->assertCustomAttribute($product, $response['products']['items'][0]);
+        $this->assertCustomAttribute($response['products']['items'][0]);
     }
 
     /**
@@ -502,7 +497,7 @@ QUERY;
      * @param ProductInterface $product
      * @param array $actualResponse
      */
-    private function assertCustomAttribute($product, $actualResponse)
+    private function assertCustomAttribute($actualResponse)
     {
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);

@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Model;
 
 use Magento\Framework\GraphQl\Type\SchemaFactory;
+use Magento\GraphQl\Framework\Config\FieldConfig;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\TypeFactory;

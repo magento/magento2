@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model;
+namespace Magento\GraphQl\Framework\Config;
+use Magento\GraphQl\Model\ArgumentConfig;
+use Magento\GraphQl\Model\ArgumentConfigFactory;
 
 /**
  * Class that stores configuration for processing value of arguments for GraphQl fields

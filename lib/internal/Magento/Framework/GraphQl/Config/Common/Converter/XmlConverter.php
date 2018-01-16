@@ -16,7 +16,7 @@ use Magento\Framework\Config\ConverterInterface;
 class XmlConverter implements ConverterInterface
 {
     /**
-     * Converts XML node into corresponding array.
+     * Converts GraphQL XML node describing schema into processable array.
      *
      * @param \DOMNode $source
      * @return array|string
@@ -50,7 +50,7 @@ class XmlConverter implements ConverterInterface
     }
 
     /**
-     * Converts XML document into corresponding array.
+     * Converts GraphQL XML document describing schema into processable array.
      *
      * @param \DOMDocument $source
      * @return array

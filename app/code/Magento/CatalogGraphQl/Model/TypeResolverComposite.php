@@ -17,9 +17,9 @@ class TypeResolverComposite implements TypeResolverInterface
     private $productTypeNameResolvers = [];
 
     /**
-     * @param $productTypeNameResolvers
+     * @param TypeResolverInterface[] $productTypeNameResolvers
      */
-    public function __construct($productTypeNameResolvers = [])
+    public function __construct(array $productTypeNameResolvers = [])
     {
         $this->productTypeNameResolvers = $productTypeNameResolvers;
     }

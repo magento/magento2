@@ -173,7 +173,11 @@ return [
          <field xsi:type="ScalarOutputField" type="Int" name="anyName" resolver="pathToResolver">
             <argument xsi:type="ObjectArgument" type="String" name="NameIsRequired" required="true"/>
             <argument xsi:type="ScalarArgument" name ="pageFont" type ="String" required="true"/>            
-            <argument xsi:type="ObjectArrayArgument" required="1" name ="objectArrayName" itemType=" " itemsRequired ="false"/>
+            <argument xsi:type="ObjectArrayArgument"
+            required="1"
+            name ="objectArrayName"
+            itemType=" "
+            itemsRequired ="false"/>
             <argument xsi:type="SortArgument" name="Sort"/></field>
          </type></config>',
         [
