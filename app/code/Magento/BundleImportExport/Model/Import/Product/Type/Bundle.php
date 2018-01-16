@@ -319,7 +319,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
-     * @deprecated Misspelled method - use retrieveProductsByCachedSkus() instead
+     * @deprecated Misspelled method
+     * @see retrieveProductsByCachedSkus
      */
     protected function retrieveProducsByCachedSkus()
     {
