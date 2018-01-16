@@ -110,6 +110,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $options
             );
             $valueOptions = (isset($options['value']) && is_array($options['value'])) ? $options['value'] : [];
+            foreach ($valueOptions as $key => $val) {
+                if (isset($options['delete'][$key]) && $options['delete'][$key]) {
+                    unset($valueOptions[$key]);
+                }
+            }
             $this->checkEmptyOption($response, $valueOptions);
         }
 
