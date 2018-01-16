@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexNameResolver;
-use Magento\Inventory\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndex\Indexer\Stock\StockIndexer;
 
 /**
  * Stock index table provider.

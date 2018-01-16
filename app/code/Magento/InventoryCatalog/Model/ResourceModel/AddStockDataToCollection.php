@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Inventory\Indexer\IndexStructure;
+use Magento\InventoryIndex\Indexer\IndexStructure;
 use Magento\Inventory\Model\StockIndexTableProviderInterface;
 
 /**
