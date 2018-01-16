@@ -166,16 +166,16 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImageHtmlDeclaration($filename, $renderAsTag = false)
     {
-        $fileurl = $this->getCurrentUrl() . $filename;
+        $fileUrl = $this->getCurrentUrl() . $filename;
         $mediaUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
-        $mediaPath = str_replace($mediaUrl, '', $fileurl);
+        $mediaPath = str_replace($mediaUrl, '', $fileUrl);
         $directive = sprintf('{{media url="%s"}}', $mediaPath);
         if ($renderAsTag) {
-            $src = $this->isUsingStaticUrlsAllowed() ? $fileurl : htmlentities($directive, ENT_QUOTES);
+            $src = $this->isUsingStaticUrlsAllowed() ? $fileUrl : htmlentities($directive, ENT_QUOTES);
             $html = sprintf('<img src="%s" alt="" />', $src);
         } else {
             if ($this->isUsingStaticUrlsAllowed()) {
-                $html = $fileurl; // $mediaPath;
+                $html = $fileUrl;
             } else {
                 $directive = $this->urlEncoder->encode($directive);
                 $html = $this->_backendData->getUrl('cms/wysiwyg/directive', ['___directive' => $directive]);

@@ -192,7 +192,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'add_variables' => true,
                 'add_widgets' => true,
                 'no_display' => false,
-                'encode_directives' => true,
+                'add_directives' => true,
                 'width' => '100%',
                 'height' => '500px',
                 'plugins' => [],
