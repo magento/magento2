@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Model;
+namespace Magento\Inventory\Model;
 
 /**
  * Stock Index table provider. Get stock index table by stock id
