@@ -81,11 +81,7 @@ class Storage
             $select->from($this->_customerCollection->getMainTable(), ['entity_id', 'website_id', 'email']);
             $results = $connection->fetchAll($select);
             foreach ($results as $customer) {
-                $email = strtolower(trim($customer['email']));
-                if (!isset($this->_customerIds[$email])) {
-                    $this->_customerIds[$email] = [];
-                }
-                $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+                $this->addCustomerByArray($customer);
             }
 
             $this->_isCollectionLoaded = true;
@@ -93,18 +89,30 @@ class Storage
     }
 
     /**
+     * @param array $customer
+     * @return $this
+     */
+    public function addCustomerByArray(array $customer)
+    {
+        $email = strtolower(trim($customer['email']));
+        if (!isset($this->_customerIds[$email])) {
+            $this->_customerIds[$email] = [];
+        }
+        $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+
+        return $this;
+    }
+
+    /**
      * Add customer to array
      *
+     * @deprecated @see addCustomerByArray
      * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
      */
     public function addCustomer(\Magento\Framework\DataObject $customer)
     {
-        $email = strtolower(trim($customer->getEmail()));
-        if (!isset($this->_customerIds[$email])) {
-            $this->_customerIds[$email] = [];
-        }
-        $this->_customerIds[$email][$customer->getWebsiteId()] = $customer->getId();
+        $this->addCustomerByArray($customer->toArray());
 
         return $this;
     }
