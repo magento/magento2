@@ -16,4 +16,8 @@
         <field xsi:type="ObjectInputField" name="url_key" type="SortEnum"/>
         <field xsi:type="ObjectInputField" name="url_path" type="SortEnum"/>
     </type>
+    <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum">
+        <item name="PRODUCT">PRODUCT</item>
+        <item name="CATEGORY">CATEGORY</item>
+    </type>
 </config>

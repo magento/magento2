@@ -50,7 +50,7 @@ class UrlRewrite implements ResolverInterface
                 return [
                     'id' => $urlRewrite->getEntityId(),
                     'canonical_url' => $urlRewrite->getTargetPath(),
-                    'type' => $urlRewrite->getEntityType()
+                    'type' => $this->sanitizeType($urlRewrite->getEntityType())
                 ];
             }
         }
@@ -88,5 +88,16 @@ class UrlRewrite implements ResolverInterface
                 'store_id' => $this->storeManager->getStore()->getId()
             ]
         );
+    }
+
+    /**
+     * Sanitizes the type to fit schema specs
+     *
+     * @param string $type
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     */
+    private function sanitizeType(string $type)
+    {
+        return strtoupper(str_replace('-', '_', $type));
     }
 }

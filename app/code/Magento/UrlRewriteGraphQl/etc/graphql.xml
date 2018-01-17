@@ -12,6 +12,7 @@
     <type xsi:type="OutputType" name="EntityUrl">
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="canonical_url" type="String"/>
-        <field xsi:type="ObjectOutputField" name="type" type="String"/>
+        <field xsi:type="ObjectOutputField" name="type" type="UrlRewriteEntityTypeEnum"/>
     </type>
+    <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum"/>
 </config>

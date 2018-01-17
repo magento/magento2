@@ -58,13 +58,9 @@
             <argument name="idAttributes" xsi:type="array">
                 <item name="/config/type" xsi:type="string">name</item>
                 <item name="/config/type/field" xsi:type="string">name</item>
+                <item name="/config/type/item" xsi:type="string">name</item>
                 <item name="/config/type/implements" xsi:type="string">interface</item>
-                <item name="/config/interface" xsi:type="string">name</item>
-                <item name="/config/interface/field" xsi:type="string">name</item>
-                <item name="/config/interface/implements" xsi:type="string">interface</item>
-                <item name="/config/enum" xsi:type="string">name</item>
-                <item name="/config/enum/value" xsi:type="string">name</item>
-            </argument>
+                 </argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\GraphQl\Type\Output\OutputFactory">
