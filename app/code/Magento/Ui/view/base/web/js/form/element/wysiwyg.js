@@ -105,14 +105,12 @@ define([
                 this.$wysiwygEditorButton.attr('disabled', disabled);
             }
 
-            if (!_.isUndefined(wysiwyg)) {
-                if (disabled) {
-                    wysiwyg.setEditorStatus(false);
-                    wysiwyg.getPluginButtons().attr('disabled', 'disabled');
-                } else {
-                    wysiwyg.setEditorStatus(true);
-                    wysiwyg.getPluginButtons().removeAttr('disabled');
-                }
+            if (wysiwyg && disabled) {
+                wysiwyg.setEditorStatus(false);
+                wysiwyg.getPluginButtons().attr('disabled', 'disabled');
+            } else if (wysiwyg) {
+                wysiwyg.setEditorStatus(true);
+                wysiwyg.getPluginButtons().removeAttr('disabled');
             }
         }
     });
