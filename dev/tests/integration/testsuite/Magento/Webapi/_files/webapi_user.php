@@ -19,6 +19,6 @@ $model->setFirstname("Web")
     ->setResourceId('Magento_Backend::all')
     ->setPrivileges("")
     ->setAssertId(0)
-    ->setRoleId(2)
+    ->setRoleId(1)
     ->setPermission('allow');
 $model->save();
