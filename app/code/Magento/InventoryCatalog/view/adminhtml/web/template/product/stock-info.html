@@ -4,41 +4,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset class="admin__field"
-          visible="visible"
-          css="_required: required"
-          attr="'data-index': index">
-    <legend class="admin__field-label" if="showLabel">
-        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
-    </legend>
+<div class="admin__field-complex" data-bind="css: $data.additionalClasses, attr: {'data-index': index}">
 
-    <!--<div class="admin__field-control" css="$data.additionalClasses">
-        <each args="elems">
-            <if args="visible()" if="!$data.additionalForGroup">
-                <div>
-                    <h2>show template</h2>
-                </div>
-                <render args="elementTmpl"/>
-
-            </if>
-        </each>
-    </div>-->
-
-    <!--<ul data-bind="foreach: { data: $data.getStocksQtyInfo($data.source.data), as: '$stockQtyInfo' }">-->
-    <!--<ul data-bind="foreach: $parent.source.data.stocks">-->
-    <ul data-bind="foreach: { data: getStocksQtyInfo($data.source.data), as: '$stockQtyInfo'}">
-        <!--<ul data-bind="foreach: $data">-->
-        <li>
-            <strong data-bind="text: $stockQtyInfo.stock_name"></strong>
-            :
-            <!--<span data-bind="text: $stockQtyInfo.qty"></span>-->
-            <span data-bind="text: $stockQtyInfo.qty"></span>
-        </li>
-        <!--</ul>-->
-    </ul>
-
-    <div>
-        <h2>show another template</h2>
+    <div class="admin__field-complex-content">
+        <div data-bind="foreach: { data: getStocksQtyInfo($data.source.data), as: '$stockQtyInfo'}">
+            <div>
+                <strong data-bind="text: $stockQtyInfo.stock_name"></strong>
+                :
+                <span data-bind="text: $stockQtyInfo.qty"></span>
+            </div>
+        </div>
     </div>
 
-</fieldset>
+</div>
+
+

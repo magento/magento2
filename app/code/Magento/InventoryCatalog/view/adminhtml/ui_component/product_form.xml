@@ -172,17 +172,12 @@
         </modal>
     </fieldset>
 
-    <fieldset name="stocks_information" sortOrder="6">
+    <fieldset name="stocks_information" sortOrder="55">
         <settings>
             <label translate="true">Stocks Information</label>
             <collapsible>true</collapsible>
             <opened>false</opened>
         </settings>
-        <!--<container name="stocks_information_container">
-            <htmlContent name="html_content">
-                <block name="information_per_stock" class="Magento\InventoryCatalog\Block\Adminhtml\Product\Edit\Tab\StockInformation" />
-            </htmlContent>
-        </container>-->
         <container name="stocks_information_container" class="Magento\InventoryCatalog\Ui\Component\StockInformation" component="Magento_InventoryCatalog/js/product/components/stock-info">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -14,27 +14,15 @@ define([
 
     return Abstract.extend({
         defaults: {
-            visible: true,
-            label: '',
-            showLabel: true,
-            required: false,
-            template: 'Magento_InventoryCatalog/product/stock-info',
-            //template: 'ui/group/group',
-            //fieldTemplate: 'ui/form/field',
-            //fieldTemplate: 'Magento_InventoryCatalog/product/stock-info-field',
-            breakLine: true,
-            validateWholeGroup: false,
-            additionalClasses: {}
+            template: 'Magento_InventoryCatalog/product/stock-info'
         },
 
         getStocksQtyInfo: function (dataSource) {
-            var $this = this;
-            //var result = dataSource[this.index] ? dataSource[this.index] : [];
-            var result = dataSource.stocks;
+            var result,
+                stocks = dataSource.stocks;
 
+            result = stocks ? stocks : [];
             return result;
         }
-
-
     });
 });
