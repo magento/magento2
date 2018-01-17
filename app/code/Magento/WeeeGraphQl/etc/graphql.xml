@@ -4,7 +4,8 @@
   See COPYING.txt for license details.
   -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
-    <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum">
-        <item name="cms_page">CMS_PAGE</item>
+    <type xsi:type="Enum" name="PriceAdjustmentCodesEnum">
+        <item name="wee">WEE</item>
+        <item name="wee_tax">WEETAX</item>
     </type>
 </config>

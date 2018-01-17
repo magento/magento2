@@ -84,13 +84,13 @@ class Price implements FormatterInterface
         foreach ($adjustments as $adjustmentCode => $adjustment) {
             if ($amount->hasAdjustment($adjustmentCode) && $amount->getAdjustmentAmount($adjustmentCode)) {
                 $priceAdjustmentsArray[] = [
-                    'code' => ucfirst($adjustmentCode),
+                    'code' => strtoupper($adjustmentCode),
                     'amount' => [
                         'value' => $amount->getAdjustmentAmount($adjustmentCode),
                         'currency' => $store->getCurrentCurrencyCode(),
                     ],
                     'description' => $adjustment->isIncludedInDisplayPrice() ?
-                        'Included' : 'Excluded'
+                        'INCLUDED' : 'EXCLUDED'
                 ];
             }
         }

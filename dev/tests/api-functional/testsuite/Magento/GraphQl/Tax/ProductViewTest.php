@@ -265,8 +265,8 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'Tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -283,8 +283,8 @@ QUERY;
                                             'value' => 0.750001,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'Tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -301,8 +301,8 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'Tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
