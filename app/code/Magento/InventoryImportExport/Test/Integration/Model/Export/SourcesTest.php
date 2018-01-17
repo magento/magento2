@@ -58,12 +58,17 @@ class SourcesTest extends TestCase
         $this->exporter->setParameters([]);
         $this->exporter->export();
 
-        /*
-         * @todo travis fix
-         * $this->assertEquals(
-         *   file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '_files', 'export_full.csv'])),
-         *   file_get_contents($this->exportFilePath)
-        );*/
+        $exportFullLines = file(
+            implode(DIRECTORY_SEPARATOR, [__DIR__, '_files', 'export_full.csv']),
+            FILE_IGNORE_NEW_LINES
+        );
+
+        foreach ($exportFullLines as $line) {
+            $this->assertContains(
+                $line,
+                file_get_contents($this->exportFilePath)
+            );
+        }
     }
 
     /**

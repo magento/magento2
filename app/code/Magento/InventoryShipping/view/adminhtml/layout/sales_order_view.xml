@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="sales_order_tabs">
+            <block class="Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection" name="order_tab_source_selection" template="Magento_InventoryShipping::order/view/tab/source_selection.phtml"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">order_source_selection</argument>
+                <argument name="block" xsi:type="string">order_tab_source_selection</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

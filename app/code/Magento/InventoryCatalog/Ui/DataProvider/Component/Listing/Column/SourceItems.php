@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -21,42 +19,34 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class SourceItems extends Column
 {
     /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var SourceRepositoryInterface
      */
     private $sourceRepository;
 
     /**
+     * @var GetSourceItemsBySkuInterface
+     */
+    private $getSourceItemsBySku;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param SourceItemRepositoryInterface $sourceItemRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
+     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        SourceItemRepositoryInterface $sourceItemRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
+        GetSourceItemsBySkuInterface $getSourceItemsBySku,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->sourceItemRepository = $sourceItemRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
+        $this->getSourceItemsBySku = $getSourceItemsBySku;
     }
 
     /**
@@ -85,10 +75,7 @@ class SourceItems extends Column
      */
     private function getSourceItemsData(string $sku): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, $sku)
-            ->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        $sourceItems = $this->getSourceItemsBySku->execute($sku)->getItems();
 
         $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {

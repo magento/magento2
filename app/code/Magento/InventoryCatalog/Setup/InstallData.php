@@ -13,7 +13,6 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\InventoryCatalog\Setup\Operation\AssignSourceToStock;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
-use Magento\InventoryCatalog\Setup\Operation\ReindexDefaultStock;
 use Magento\InventoryCatalog\Setup\Operation\UpdateInventorySourceItem;
 
 /**
@@ -42,29 +41,21 @@ class InstallData implements InstallDataInterface
     private $updateInventorySourceItem;
 
     /**
-     * @var ReindexDefaultStock
-     */
-    private $reindexDefaultStock;
-
-    /**
      * @param CreateDefaultSource $createDefaultSource
      * @param CreateDefaultStock $createDefaultStock
      * @param AssignSourceToStock $assignSourceToStock
      * @param UpdateInventorySourceItem $updateInventorySourceItem
-     * @param ReindexDefaultStock $reindexDefaultStock
      */
     public function __construct(
         CreateDefaultSource $createDefaultSource,
         CreateDefaultStock $createDefaultStock,
         AssignSourceToStock $assignSourceToStock,
-        UpdateInventorySourceItem $updateInventorySourceItem,
-        ReindexDefaultStock $reindexDefaultStock
+        UpdateInventorySourceItem $updateInventorySourceItem
     ) {
         $this->createDefaultSource = $createDefaultSource;
         $this->createDefaultStock = $createDefaultStock;
         $this->assignSourceToStock = $assignSourceToStock;
         $this->updateInventorySourceItem = $updateInventorySourceItem;
-        $this->reindexDefaultStock = $reindexDefaultStock;
     }
 
     /**
@@ -77,6 +68,5 @@ class InstallData implements InstallDataInterface
         $this->createDefaultStock->execute();
         $this->assignSourceToStock->execute();
         $this->updateInventorySourceItem->execute($setup);
-        $this->reindexDefaultStock->execute();
     }
 }

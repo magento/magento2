@@ -7,37 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
-use Magento\Inventory\Model\ResourceModel\Reservation\ReservationQuantity;
-use Magento\Inventory\Model\ResourceModel\Stock\StockItemQuantity;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 
 /**
- * Return Quantity of product available to be sold by Product SKU and Stock Id
- *
- * @see \Magento\InventoryApi\Api\GetProductQuantityInStockInterface
+ * @inheritdoc
  */
 class GetProductQuantityInStock implements GetProductQuantityInStockInterface
 {
     /**
-     * @var StockItemQuantity
+     * @var GetStockItemQuantityInterface
      */
-    private $stockItemQty;
+    private $getStockItemQuantity;
 
     /**
-     * @var ReservationQuantity
+     * @var GetReservationsQuantityInterface
      */
-    private $reservationQty;
+    private $getReservationsQuantity;
 
     /**
-     * @param StockItemQuantity $stockItemQty
-     * @param ReservationQuantity $reservationQty
+     * @param GetStockItemQuantityInterface $getStockItemQuantity
+     * @param GetReservationsQuantityInterface $getReservationsQuantity
      */
     public function __construct(
-        StockItemQuantity $stockItemQty,
-        ReservationQuantity $reservationQty
+        GetStockItemQuantityInterface $getStockItemQuantity,
+        GetReservationsQuantityInterface $getReservationsQuantity
     ) {
-        $this->stockItemQty = $stockItemQty;
-        $this->reservationQty = $reservationQty;
+        $this->getStockItemQuantity = $getStockItemQuantity;
+        $this->getReservationsQuantity = $getReservationsQuantity;
     }
 
     /**
@@ -45,8 +41,8 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        $productQtyInStock = $this->stockItemQty->execute($sku, $stockId) +
-            $this->reservationQty->execute($sku, $stockId);
+        $productQtyInStock = $this->getStockItemQuantity->execute($sku, $stockId) +
+            $this->getReservationsQuantity->execute($sku, $stockId);
         return $productQtyInStock;
     }
 }
