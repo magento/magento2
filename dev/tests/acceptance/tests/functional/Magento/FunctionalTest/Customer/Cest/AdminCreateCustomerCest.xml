@@ -21,6 +21,7 @@
                 <testCaseId value="MAGETWO-72095"/>
                 <group value="customer"/>
                 <group value="create"/>
+                <group value="skip"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsername"/>
