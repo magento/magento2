@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Config\Data;
 
+use Magento\Framework\GraphQl\Config\Data\Enum\Value;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -115,14 +116,14 @@ class DataFactory
      *
      * @param array $interfaceData
      * @param array $fields
-     * @return TypeInterface
+     * @return InterfaceType
      */
     public function createInterface(
         array $interfaceData,
         array $fields
-    ) : TypeInterface {
+    ) : InterfaceType {
         return $this->objectManager->create(
-            TypeInterface::class,
+            InterfaceType::class,
             [
                 'name' => $interfaceData['name'],
                 'typeResolver' => $interfaceData['typeResolver'],

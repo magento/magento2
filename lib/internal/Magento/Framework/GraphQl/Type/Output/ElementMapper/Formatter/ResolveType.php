@@ -7,10 +7,10 @@
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use GraphQL\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\Config\Data\Type;
+use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Config\Data\TypeInterface;
+use Magento\Framework\GraphQl\Config\Data\InterfaceType;
 
 /**
  * Add resolveType field to schema config array based on type structure properties.
@@ -33,10 +33,10 @@ class ResolveType implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(Type $typeStructure, OutputType $outputType)
+    public function format(StructureInterface $typeStructure, OutputType $outputType)
     {
         $config = [];
-        if ($typeStructure instanceof TypeInterface) {
+        if ($typeStructure instanceof InterfaceType) {
             $typeResolver = $this->objectManager->create($typeStructure->getTypeResolver());
             $config['resolveType'] = function ($value) use ($typeResolver) {
                 return $typeResolver->resolveType($value);

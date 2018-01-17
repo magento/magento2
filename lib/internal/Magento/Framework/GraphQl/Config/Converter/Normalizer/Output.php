@@ -52,6 +52,8 @@ class Output implements NormalizerInterface
     }
 
     /**
+     * Normalize all output types inside of GraphQL configuration array.
+     *
      * @param array $source
      * @return array
      */
@@ -66,6 +68,8 @@ class Output implements NormalizerInterface
     }
 
     /**
+     * Normalize all output interfaces inside of GraphQL configuration array.
+     *
      * @param array $source
      * @return array
      */
@@ -80,6 +84,8 @@ class Output implements NormalizerInterface
     }
 
     /**
+     * Output normalized array read from GraphQL configuration.
+     *
      * @param array $source
      * @param string $configKey
      * @param string $configType

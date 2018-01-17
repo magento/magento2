@@ -10,7 +10,9 @@
     },
     "suggest": {
         "magento/module-url-rewrite": "100.3.*",
-        "magento/module-catalog-graph-ql": "100.0.*"
+        "magento/module-catalog-graph-ql": "100.0.*",
+        "magento/module-graph-ql": "100.0.*",
+        "magento/module-store": "100.3.*"
     },
     "license": [
         "OSL-3.0",

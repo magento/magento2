@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\GraphQl\Config\Data;
 
+use Magento\Framework\GraphQl\Config\Data\Enum\Value;
+
 /**
  * Structured data object for configured GraphQL enum types.
  */

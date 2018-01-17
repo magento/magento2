@@ -32,7 +32,7 @@ class Field
     private $required;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $itemType;
 

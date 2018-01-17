@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper;
 
-use Magento\Framework\GraphQl\Config\Data\Type;
+use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use GraphQL\Type\Definition\OutputType;
 
 /**
@@ -17,9 +17,9 @@ interface FormatterInterface
     /**
      * Format specific type structure elements to GraphQL-readable array.
      *
-     * @param Type $typeStructure
+     * @param StructureInterface $typeStructure
      * @param OutputType $outputType
      * @return array
      */
-    public function format(Type $typeStructure, OutputType $outputType);
+    public function format(StructureInterface $typeStructure, OutputType $outputType);
 }

@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
 use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
 use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Connective;
-use Magento\Framework\GraphQl\Config\Data\TypeInterface;
+use Magento\Framework\GraphQl\Config\Data\InterfaceType;
 
 /**
  * Converts the input value for "find" to a @see Connective format
@@ -114,8 +114,8 @@ class AstConverter
      */
     private function getCatalogProductFields()
     {
-        $productTypeSchema = $this->config->get('ProductInterface');
-        if (! $productTypeSchema instanceof TypeInterface) {
+        $productTypeSchema = $this->config->getTypeStructure('ProductInterface');
+        if (! $productTypeSchema instanceof InterfaceType) {
             throw new \LogicException(__("ProductInterface type not defined in schema."));
         }
 

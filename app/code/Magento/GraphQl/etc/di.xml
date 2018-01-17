@@ -67,7 +67,7 @@
         <arguments>
             <argument name="prototypes" xsi:type="array">
                 <item name="Magento\Framework\GraphQl\Config\Data\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputTypeObject</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\TypeInterface" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputInterfaceObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Data\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Output\OutputInterfaceObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Data\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
             </argument>
         </arguments>
@@ -76,7 +76,7 @@
         <arguments>
             <argument name="prototypes" xsi:type="array">
                 <item name="Magento\Framework\GraphQl\Config\Data\Type" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
-                <item name="Magento\Framework\GraphQl\Config\Data\TypeInterface" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
+                <item name="Magento\Framework\GraphQl\Config\Data\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Type\Input\InputObjectType</item>
                 <item name="Magento\Framework\GraphQl\Config\Data\Enum" xsi:type="string">Magento\Framework\GraphQl\Type\Enum\Enum</item>
             </argument>
         </arguments>

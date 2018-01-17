@@ -45,11 +45,11 @@ class Config implements ConfigInterface
      * @return StructureInterface
      * @throws \LogicException
      */
-    public function get(string $key) : StructureInterface
+    public function getTypeStructure(string $key) : StructureInterface
     {
         $data = $this->data->get($key);
         if (!isset($data['type'])) {
-            throw new \LogicException(sprintf('Type %s not declared in graphql schema', $key));
+            throw new \LogicException(sprintf('Type %s not declared in GraphQL schema', $key));
         }
         return $this->mappers[$data['type']]->map($data);
     }
