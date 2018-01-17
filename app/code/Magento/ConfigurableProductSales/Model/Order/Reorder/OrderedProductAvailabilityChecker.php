@@ -45,7 +45,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
     public function isAvailable(Item $item)
     {
         $buyRequest = $item->getBuyRequest();
-        $superAttribute = $buyRequest->getData()['super_attribute'];
+        $superAttribute = $buyRequest->getData()['super_attribute'] ?? [];
         $connection = $this->getConnection();
         $select = $connection->select();
         $orderItemParentId = $item->getParentItem()->getProductId();
