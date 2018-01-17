@@ -97,7 +97,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->callbackMock = function (RequestInterface $request) {
+        $this->callbackMock = function () {
             return 'response';
         };
 

@@ -74,8 +74,7 @@ class Context
         AbstractAction $subject,
         \Closure $call,
         RequestInterface $request
-    )
-    {
+    ) {
         /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
