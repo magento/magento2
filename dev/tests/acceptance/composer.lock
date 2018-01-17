@@ -1641,11 +1641,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "acb1162186e6545512e9aa82b9c43afc327105f1"
+                "reference": "234972f966e96746035ad60fd92bc7f6978627b9"
             },
             "require": {
                 "codeception/codeception": "~2.3.4",
@@ -1698,7 +1698,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-01-13T01:45:40+00:00"
+            "time": "2018-01-17T12:02:50+00:00"
         },
         {
             "name": "moontoast/math",
