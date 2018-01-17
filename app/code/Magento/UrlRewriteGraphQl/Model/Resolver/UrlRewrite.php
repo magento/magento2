@@ -10,6 +10,7 @@ use Magento\GraphQl\Model\ResolverContextInterface;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\GraphQl\Model\ContextInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -22,12 +23,20 @@ class UrlRewrite implements ResolverInterface
     private $urlFinder;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param UrlFinderInterface $urlFinder
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        StoreManagerInterface $storeManager
     ) {
         $this->urlFinder = $urlFinder;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -36,7 +45,7 @@ class UrlRewrite implements ResolverInterface
     public function resolve(array $args, ResolverContextInterface $context)
     {
         if (isset($args['url'])) {
-            $urlRewrite = $this->urlFinder->findOneByData(['request_path' => $args['url']->getValue()]);
+            $urlRewrite = $this->findCanonicalUrl($args['url']->getValue());
             if ($urlRewrite) {
                 return [
                     'id' => $urlRewrite->getEntityId(),
@@ -46,5 +55,38 @@ class UrlRewrite implements ResolverInterface
             }
         }
         return null;
+    }
+
+    /**
+     * Recursively find the canonical url passing through all redirects
+     *
+     * @param string $requestPath
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     */
+    public function findCanonicalUrl(string $requestPath)
+    {
+        $urlRewrite = $this->findUrl($requestPath);
+        if ($urlRewrite->getRedirectType() > 0) {
+            while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
+                $urlRewrite = $this->findUrl($urlRewrite->getTargetPath());
+            }
+        }
+        return $urlRewrite;
+    }
+
+    /**
+     * Find a url from a request url on the current store
+     *
+     * @param string $requestPath
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     */
+    public function findUrl(string $requestPath)
+    {
+        return $this->urlFinder->findOneByData(
+            [
+                'request_path' => $requestPath,
+                'store_id' => $this->storeManager->getStore()->getId()
+            ]
+        );
     }
 }
