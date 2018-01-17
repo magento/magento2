@@ -444,7 +444,7 @@ define([
          * @param {String} directive
          */
         makeDirectiveUrl: function (directive) {
-            return this.config['directives_url'].replace('directive', 'directive/___directive/' + directive);
+            return this.config['directives_url'].replace(/directive.*/, 'directive/___directive/' + directive);
         },
 
         /**
@@ -503,7 +503,7 @@ define([
         decodeDirectives: function (content) {
             // escape special chars in directives url to use it in regular expression
             var url = this.makeDirectiveUrl('%directive%').replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
-                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9%,_-]+)'));
+                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9%,_-]+)\/?'));
 
             return content.gsub(reg, function (match) { //eslint-disable-line no-extra-bind
                 return Base64.mageDecode(decodeURIComponent(match[1])).replace(/"/g, '&quot;');
