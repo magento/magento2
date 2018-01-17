@@ -15,6 +15,7 @@
             <title value="You should be able to add variable to WYSIWYG Editor of Block"/>
             <description value="You should be able to add variable to WYSIWYG Editor Block"/>
             <testCaseId value="MAGETWO-84378"/>
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />

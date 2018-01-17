@@ -17,6 +17,7 @@
             <description value="Create CMS Page With Widget Type: Recently Compared Products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83792"/>
+            <group value="skip" />
         </annotations>
         <!--Main test-->
         <before>
