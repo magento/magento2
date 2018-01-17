@@ -12,7 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Helper\Stock as Helper;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Stock\StockIndexer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -35,11 +34,6 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
      * @var ProductRepositoryInterface
      */
     private $productRepository;
-
-    /**
-     * @var IndexerInterface
-     */
-    private $indexer;
 
     /**
      * @var StoreManagerInterface
@@ -70,8 +64,8 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stores.php
@@ -92,7 +86,6 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
      */
     private function addStockStatusToProducts(array $productsData)
     {
-        $this->indexer->reindexAll();
         $this->productCollection->clear();
         $this->productCollection->addFieldToFilter('sku', ['in' => null]);
         $this->productCollection->load();
@@ -171,8 +164,6 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
     protected function setUp()
     {
         $this->helper = Bootstrap::getObjectManager()->get(Helper::class);
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(StockIndexer::INDEXER_ID);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->productCollection = Bootstrap::getObjectManager()->create(ProductCollection::class);
