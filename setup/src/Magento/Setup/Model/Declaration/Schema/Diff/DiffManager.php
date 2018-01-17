@@ -15,7 +15,9 @@ use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\DropReference;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropTable;
+use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
 
 /**
@@ -73,9 +75,10 @@ class DiffManager
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
+        $operation = $element instanceof Column ? ModifyColumn::OPERATION_NAME : ModifyElement::OPERATION_NAME;
         $diff->register(
             $element,
-            ModifyElement::OPERATION_NAME,
+            $operation,
             $generatedElement
         );
         return $diff;
@@ -158,7 +161,7 @@ class DiffManager
     {
         $diff->register(
             $reference,
-            DropElement::OPERATION_NAME,
+            DropReference::OPERATION_NAME,
             $reference,
             $reference->getReferenceTable()->getName()
         );

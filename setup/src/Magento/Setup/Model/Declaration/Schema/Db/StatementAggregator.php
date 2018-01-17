@@ -30,6 +30,11 @@ class StatementAggregator
      */
     private function canDoMerge(Statement $bankStatement, Statement $statement)
     {
+        /** We can modify reference only in 2 different requests */
+        if ($statement instanceof ReferenceStatement && $statement->getName() === $bankStatement->getName()) {
+            return false;
+        }
+
         /**
          * If we add trigger after some specific statement, than we say that statement is final
          * and can`t be updated anymore. Otherwise trigger can fails

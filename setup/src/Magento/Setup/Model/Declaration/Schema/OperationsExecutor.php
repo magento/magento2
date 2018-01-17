@@ -84,6 +84,8 @@ class OperationsExecutor
         foreach ($this->sharding->getResources() as $resource) {
             $this->resourceConnection->getConnection($resource)
                 ->startSetup();
+            $this->resourceConnection->getConnection($resource)
+                ->query('SET UNIQUE_CHECKS=0');
         }
     }
 

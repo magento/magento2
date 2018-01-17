@@ -12,7 +12,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
@@ -70,17 +72,31 @@ class AddColumn implements OperationInterface
      *
      * @param Statement $statement
      * @param Column $column
-     * @return Statement
+     * @return array
      */
     private function setupTriggersIfExists(Statement $statement, Column $column)
     {
+        $statements = [$statement];
         if (preg_match('/migrateDataFrom\(([^\)]+)\)/', $column->getOnCreate(), $matches)) {
-            $callback = function() use ($column, $matches) {
+            $isAutoIncrement = $column instanceof Integer && $column->isIdentity();
+            if ($isAutoIncrement) {
+                $indexStatement = $this->dbSchemaWriter->addElement(
+                    'AUTO_INCREMENT_TMP_INDEX',
+                    $column->getTable()->getResource(),
+                    $column->getTable()->getName(),
+                    sprintf('INDEX `AUTO_INCREMENT_TMP_INDEX` (%s)', $column->getName()),
+                    Index::TYPE
+                );
+                array_unshift($statements, $indexStatement);
+            }
+
+            $callback = function() use ($column, $matches, $isAutoIncrement) {
+                $tableName = $column->getTable()->getName();
                 $adapter = $this->resourceConnection->getConnection(
                     $column->getTable()->getResource()
                 );
                 $adapter->update(
-                    $column->getTable()->getName(),
+                    $tableName,
                     [
                         $column->getName() => new Expression($matches[1])
                     ]
@@ -90,7 +106,7 @@ class AddColumn implements OperationInterface
             $statement->addTrigger($callback);
         }
 
-        return $statement;
+        return $statements;
     }
 
     /**
@@ -111,7 +127,7 @@ class AddColumn implements OperationInterface
             $definition,
             Column::TYPE
         );
-        $statement = $this->setupTriggersIfExists($statement, $element);
-        return [$statement];
+        $statements = $this->setupTriggersIfExists($statement, $element);
+        return $statements;
     }
 }

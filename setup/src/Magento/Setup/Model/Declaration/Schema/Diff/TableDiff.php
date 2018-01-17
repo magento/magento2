@@ -14,6 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
@@ -86,7 +87,7 @@ class TableDiff
      */
     private function turnOffForeignKeys(Table $declaredTable, Table $generatedTable, Diff $diff)
     {
-        $changes = $diff->getChange($generatedTable->getName(), ModifyElement::OPERATION_NAME);
+        $changes = $diff->getChange($generatedTable->getName(), ModifyColumn::OPERATION_NAME);
 
         foreach ($changes as $elementHistory) {
             /** If this is column we need to recreate foreign key */
