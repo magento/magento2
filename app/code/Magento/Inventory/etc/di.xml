@@ -94,8 +94,8 @@
     <!-- Query interfaces -->
     <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
     <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
-    <preference for="Magento\Inventory\Model\StockIndexTableProviderInterface" type="Magento\Inventory\Model\StockIndexTableProvider"/>
-    <type name="Magento\Inventory\Model\StockIndexTableProvider">
+    <preference for="Magento\Inventory\Model\StockIndexTableNameResolverInterface" type="Magento\Inventory\Model\StockIndexTableNameResolver"/>
+    <type name="Magento\Inventory\Model\StockIndexTableNameResolver">
         <arguments>
             <argument name="dimensionName" xsi:type="string">stock_</argument>
         </arguments>
