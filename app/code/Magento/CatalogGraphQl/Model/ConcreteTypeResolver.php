@@ -18,7 +18,7 @@ class ConcreteTypeResolver implements TypeResolverInterface
     {
         if (!isset($data['type_id'])) {
             throw new InputException(
-                __('%1 key doesn\'t exist in product data', 'type_id')
+                __('%1 key doesn\'t exist in product data', [$data['type_id']])
             );
         }
 
