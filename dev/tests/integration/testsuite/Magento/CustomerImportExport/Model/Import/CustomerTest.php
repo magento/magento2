@@ -153,7 +153,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
         $customersCollection->resetData();
         $customersCollection->clear();
@@ -172,7 +172,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $existingCustomer = $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->registry(
             '_fixture/Magento_ImportExport_Customer'
         );
@@ -207,6 +207,12 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $existingCustomer->getCreatedAt(),
             $updatedCustomer->getCreatedAt(),
             'Creation date must not be changed'
+        );
+
+        $this->assertEquals(
+            $existingCustomer->getCustomerGroupId(),
+            $updatedCustomer->getCustomerGroupId(),
+            'Customer group must not be changed'
         );
     }
 
