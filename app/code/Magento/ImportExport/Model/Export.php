@@ -30,6 +30,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     const FILTER_TYPE_SELECT = 'select';
 
+    const FILTER_TYPE_MULTISELECT ='multiselect';
+
     const FILTER_TYPE_INPUT = 'input';
 
     const FILTER_TYPE_DATE = 'date';
@@ -215,7 +217,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
         if ($attribute->usesSource() || $attribute->getFilterOptions()) {
-            return self::FILTER_TYPE_SELECT;
+            return 'multiselect' == $attribute->getFrontendInput() ?
+                self::FILTER_TYPE_MULTISELECT : self::FILTER_TYPE_SELECT;
         } elseif ('datetime' == $attribute->getBackendType()) {
             return self::FILTER_TYPE_DATE;
         } elseif ('decimal' == $attribute->getBackendType() || 'int' == $attribute->getBackendType()) {
