@@ -179,7 +179,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getProduct()
     {
-        if (is_null($this->_product)) {
+        if ($this->_product === null) {
             $this->_product = $this->getOption()->getProduct();
         }
         return $this->_product;
