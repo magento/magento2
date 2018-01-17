@@ -5,6 +5,7 @@
     "version": "100.0.0-dev",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "100.3.*",
         "magento/module-gift-message": "100.3.*",
         "magento/module-catalog-graph-ql": "100.0.*"
       },
