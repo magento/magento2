@@ -12,9 +12,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLinkFactory;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetSourceLinksInterface;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
 
 /**
  * At the time of processing Stock save form this class used to save links correctly
@@ -33,11 +33,6 @@ class StockSourceLinkProcessor
     private $stockSourceLinkFactory;
 
     /**
-     * @var GetAssignedSourcesForStockInterface
-     */
-    private $getAssignedSourcesForStock;
-
-    /**
      * @var StockSourceLinksSaveInterface
      */
     private $stockSourceLinksSave;
@@ -48,24 +43,29 @@ class StockSourceLinkProcessor
     private $stockSourceLinksDelete;
 
     /**
+     * @var GetSourceLinksInterface
+     */
+    private $getSourceLinks;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StockSourceLinkFactory $stockSourceLinkFactory
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
      * @param StockSourceLinksSaveInterface $stockSourceLinksSave
      * @param StockSourceLinksDeleteInterface $stockSourceLinksDelete
+     * @param GetSourceLinksInterface $getSourceLinks
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StockSourceLinkFactory $stockSourceLinkFactory,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
         StockSourceLinksSaveInterface $stockSourceLinksSave,
-        StockSourceLinksDeleteInterface $stockSourceLinksDelete
+        StockSourceLinksDeleteInterface $stockSourceLinksDelete,
+        GetSourceLinksInterface $getSourceLinks
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
         $this->stockSourceLinksSave = $stockSourceLinksSave;
         $this->stockSourceLinksDelete = $stockSourceLinksDelete;
+        $this->getSourceLinks = $getSourceLinks;
     }
 
     /**
@@ -78,15 +78,15 @@ class StockSourceLinkProcessor
     {
         $this->validateStockSourceData($stockSourceLinksData);
 
-        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
+        $assignedLinks = $this->getAssignedLinks($stockId);
         $sourceCodesForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE));
         $sourceCodesForDelete = [];
 
-        foreach ($assignedSources as $assignedSource) {
-            if (array_key_exists($assignedSource->getSourceCode(), $sourceCodesForSave)) {
-                unset($sourceCodesForSave[$assignedSource->getSourceCode()]);
+        foreach ($assignedLinks as $assignedLink) {
+            if (array_key_exists($assignedLink->getSourceCode(), $sourceCodesForSave)) {
+                unset($sourceCodesForSave[$assignedLink->getSourceCode()]);
             } else {
-                $sourceCodesForDelete[] = $assignedSource->getSourceCode();
+                $sourceCodesForDelete[] = $assignedLink->getSourceCode();
             }
         }
 
@@ -135,5 +135,22 @@ class StockSourceLinkProcessor
         }
 
         return $linkList;
+    }
+
+    /**
+     * Retrieves links that are assigned to $stockId
+     *
+     * @param int $stockId
+     * @return array
+     */
+    private function getAssignedLinks(int $stockId):array
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->create();
+
+        $searchResult = $this->getSourceLinks->execute($searchCriteria);
+
+        return $searchResult->getItems();
     }
 }
