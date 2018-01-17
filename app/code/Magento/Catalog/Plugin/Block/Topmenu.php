@@ -154,7 +154,7 @@ class Topmenu
      * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category, $currentCategory, $isParentActive)
+    protected function getCategoryAsArray($category, $currentCategory, $isParentActive)
     {
         return [
             'name' => $category->getName(),
