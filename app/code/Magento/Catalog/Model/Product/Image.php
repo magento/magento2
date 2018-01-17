@@ -371,86 +371,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param string|null $file
-     * @return bool
-     */
-    protected function _checkMemory($file = null)
-    {
-        return $this->_getMemoryLimit() > $this->_getMemoryUsage() + $this->_getNeedMemoryForFile(
-            $file
-        )
-        || $this->_getMemoryLimit() == -1;
-    }
-
-    /**
-     * @return string
-     */
-    protected function _getMemoryLimit()
-    {
-        $memoryLimit = trim(strtoupper(ini_get('memory_limit')));
-
-        if (!isset($memoryLimit[0])) {
-            $memoryLimit = "128M";
-        }
-
-        if (substr($memoryLimit, -1) == 'K') {
-            return substr($memoryLimit, 0, -1) * 1024;
-        }
-        if (substr($memoryLimit, -1) == 'M') {
-            return substr($memoryLimit, 0, -1) * 1024 * 1024;
-        }
-        if (substr($memoryLimit, -1) == 'G') {
-            return substr($memoryLimit, 0, -1) * 1024 * 1024 * 1024;
-        }
-        return $memoryLimit;
-    }
-
-    /**
-     * @return int
-     */
-    protected function _getMemoryUsage()
-    {
-        if (function_exists('memory_get_usage')) {
-            return memory_get_usage();
-        }
-        return 0;
-    }
-
-    /**
-     * @param string|null $file
-     * @return float|int
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _getNeedMemoryForFile($file = null)
-    {
-        $file = $file === null ? $this->getBaseFile() : $file;
-        if (!$file) {
-            return 0;
-        }
-
-        if (!$this->_mediaDirectory->isExist($file)) {
-            return 0;
-        }
-
-        $imageInfo = $this->getimagesize($this->_mediaDirectory->getAbsolutePath($file));
-
-        if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
-            return 0;
-        }
-        if (!isset($imageInfo['channels'])) {
-            // if there is no info about this parameter lets set it for maximum
-            $imageInfo['channels'] = 4;
-        }
-        if (!isset($imageInfo['bits'])) {
-            // if there is no info about this parameter lets set it for maximum
-            $imageInfo['bits'] = 8;
-        }
-        return round(
-            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
-        );
-    }
-
-    /**
      * Convert array of 3 items (decimal r, g, b) to string of their hex values
      *
      * @param int[] $rgbArray
@@ -486,9 +406,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 'filePath' => $file,
             ]
         );
-        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())
-            || !$this->_checkMemory($this->imageAsset->getSourceFile())
-        ) {
+        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())) {
             $this->_isBaseFilePlaceholder = true;
             $this->imageAsset = $this->viewAssetPlaceholderFactory->create(
                 [
@@ -696,11 +614,14 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return bool|void
+     * @return bool
      */
     public function isCached()
     {
-        return file_exists($this->imageAsset->getPath());
+        return (
+            is_array($this->loadImageInfoFromCache($this->imageAsset->getPath())) ||
+            file_exists($this->imageAsset->getPath())
+        );
     }
 
     /**
@@ -955,17 +876,46 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function getImageSize($imagePath)
     {
-        $key = $this->cachePrefix  . $imagePath;
-        $size = $this->_cacheManager->load($key);
-        if (!$size) {
-            $size = getimagesize($imagePath);
-            $this->_cacheManager->save(
-                $this->serializer->serialize($size),
-                $key
-            );
+        $imageInfo = $this->loadImageInfoFromCache($imagePath);
+        if (!isset($imageInfo['size'])) {
+            $imageSize = getimagesize($imagePath);
+            $this->saveImageInfoToCache(['size' => $imageSize], $imagePath);
+            return $imageSize;
         } else {
-            $size = $this->serializer->unserialize($size);
+            return $imageInfo['size'];
         }
-        return $size;
+    }
+
+    /**
+     * Save image data to cache
+     *
+     * @param array $imageInfo
+     * @param string $imagePath
+     * @return void
+     */
+    private function saveImageInfoToCache(array $imageInfo, string $imagePath)
+    {
+        $imagePath = $this->cachePrefix  . $imagePath;
+        $this->_cacheManager->save(
+            $this->serializer->serialize($imageInfo),
+            $imagePath
+        );
+    }
+
+    /**
+     * Load image data from cache
+     *
+     * @param string $imagePath
+     * @return array|false
+     */
+    private function loadImageInfoFromCache(string $imagePath)
+    {
+        $imagePath = $this->cachePrefix  . $imagePath;
+        $cacheData = $this->_cacheManager->load($imagePath);
+        if (!$cacheData) {
+            return false;
+        } else {
+            return $this->serializer->unserialize($cacheData);
+        }
     }
 }
