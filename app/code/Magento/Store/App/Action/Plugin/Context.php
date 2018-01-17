@@ -7,12 +7,18 @@
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class ContextPlugin
@@ -40,21 +46,30 @@ class Context
     protected $storeCookieManager;
 
     /**
+     * @var PageFactory
+     */
+    private $pageFactory;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
+     * @param PageFactory|null $pageFactory
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        StoreCookieManagerInterface $storeCookieManager
+        StoreCookieManagerInterface $storeCookieManager,
+        PageFactory $pageFactory = null
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
+        $this->pageFactory = $pageFactory
+            ?: ObjectManager::getInstance()->get(PageFactory::class);
     }
 
     /**
@@ -62,12 +77,18 @@ class Context
      *
      * @param AbstractAction $subject
      * @param RequestInterface $request
-     * @return void
+     * @param \Closure $call
+     *
+     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    public function aroundDispatch(
+        AbstractAction $subject,
+        \Closure $call,
+        RequestInterface $request
+    )
     {
-        /** @var \Magento\Store\Model\Store $defaultStore */
+        /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
         $storeCode = $request->getParam(
@@ -81,8 +102,17 @@ class Context
             }
             $storeCode = $storeCode['_data']['code'];
         }
-        /** @var \Magento\Store\Model\Store $currentStore */
-        $currentStore = $storeCode ? $this->storeManager->getStore($storeCode) : $defaultStore;
+        try {
+            $currentStore = $storeCode
+                ? $this->storeManager->getStore($storeCode) : $defaultStore;
+        } catch (NoSuchEntityException $exception) {
+            //If invalid store code received from request then triggering
+            //default mechanism for invalid URLs.
+            throw new NotFoundException(
+                __($exception->getMessage()),
+                $exception
+            );
+        }
 
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
@@ -95,5 +125,7 @@ class Context
             $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
             $defaultStore->getDefaultCurrencyCode()
         );
+
+        return $call($request);
     }
 }
