@@ -12,6 +12,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
+use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\Request;
 
@@ -81,6 +82,18 @@ class Diff implements DiffInterface
     }
 
     /**
+     * Retrieve all changes for specific table
+     *
+     * @param string $table
+     * @param string $operation
+     * @return ElementHistory[]
+     */
+    public function getChange($table, $operation)
+    {
+        return $this->changes[$table][$operation] ?? [];
+    }
+
+    /**
      * Retrieve array of whitelisted tables
      * Whitelist tables should have JSON format and should be added through
      * CLI command: should be done in next story
@@ -140,8 +153,12 @@ class Diff implements DiffInterface
      * @param TableElementInterface $dtoObject
      * @inheritdoc
      */
-    public function register(ElementInterface $dtoObject, $operation, ElementInterface $oldDtoObject = null)
-    {
+    public function register(
+        ElementInterface $dtoObject,
+        $operation,
+        ElementInterface $oldDtoObject = null,
+        $tableKey = null
+    ) {
         if (!$this->canBeRegistered($dtoObject)) {
             return $this;
         }
@@ -150,8 +167,9 @@ class Diff implements DiffInterface
         $history = $this->elementHistoryFactory->create($historyData);
         $dtoObjectName = $dtoObject instanceof TableElementInterface ?
             $dtoObject->getTable()->getName() : $dtoObject->getName();
+        $tableKey = $tableKey === null ? $dtoObjectName : $tableKey;
         //dtoObjects can have 4 types: column, constraint, index, table
-        $this->changes[$dtoObjectName][$operation][] = $history;
+        $this->changes[$tableKey][$operation][] = $history;
         $this->debugChanges[$operation][] = $history;
         return $this;
     }

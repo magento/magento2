@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
@@ -62,13 +63,13 @@ class DiffManager
     /**
      * Register element, that should changes
      *
-     * @param  DiffInterface    $diff
+     * @param  Diff    $diff
      * @param  ElementInterface $element
      * @param  ElementInterface $generatedElement
      * @return DiffInterface
      */
     public function registerModification(
-        DiffInterface $diff,
+        Diff $diff,
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
@@ -90,11 +91,16 @@ class DiffManager
      * @return DiffInterface
      */
     public function registerRemoval(
-        DiffInterface $diff,
+        Diff $diff,
         array $generatedElements,
         array $elements
     ) {
         foreach ($generatedElements as $generatedElement) {
+            if ($generatedElement instanceof Reference) {
+                $this->registerReferenceDrop($generatedElement, $diff);
+                continue;
+            }
+
             $operation = $generatedElement instanceof Table ? DropTable::OPERATION_NAME : DropElement::OPERATION_NAME;
             if (isset($elements[$generatedElement->getName()])) {
                 throw new \LogicException(
@@ -135,6 +141,27 @@ class DiffManager
             $operation
         );
 
+        return $diff;
+    }
+
+    /**
+     * We need to register drop of foreign key in scope of reference table
+     *
+     * This done because reference table is goes first and starting from this table
+     * there should be no foreign key on modified column
+     *
+     * @param Reference $reference
+     * @param Diff $diff
+     * @return Diff
+     */
+    public function registerReferenceDrop(Reference $reference, Diff $diff)
+    {
+        $diff->register(
+            $reference,
+            DropElement::OPERATION_NAME,
+            $reference,
+            $reference->getReferenceTable()->getName()
+        );
         return $diff;
     }
 

@@ -222,7 +222,7 @@ class SchemaBuilder
             //Add indexes to table
             $table->addIndexes($this->processIndexes($tableData, $resource, $table));
             //Add internal and reference constraints
-            $table->addConstraints($this->processConstraints($tableData, $resource, $schema));
+            $table->addConstraints($this->processConstraints($tableData, $resource, $schema, $table));
         }
 
         return $schema->getTableByName($tableData['name']);
@@ -279,12 +279,13 @@ class SchemaBuilder
     /**
      * Convert and instantiate constraint objects
      *
-     * @param  array    $tableData
+     * @param  array $tableData
      * @param  $resource
-     * @param  Schema   $schema
+     * @param  Schema $schema
+     * @param Table $table
      * @return Constraint[]
      */
-    private function processConstraints(array $tableData, $resource, Schema $schema)
+    private function processConstraints(array $tableData, $resource, Schema $schema, Table $table)
     {
         if (!isset($tableData['constraint'])) {
             return [];
@@ -296,23 +297,15 @@ class SchemaBuilder
             if ($this->isDisabled($constraintData)) {
                 continue;
             }
-            $table = $schema->getTableByName($tableData['name']);
             $constraintData = $this->processGenericData($constraintData, $resource, $table);
             //As foreign constraint has different schema we need to process it in different way
             if ($constraintData['type'] === 'foreign') {
-                $constraintData['column'] = $table->getColumnByName(
-                    $constraintData['column']
-                );
-                //always in foreign key name will be old and in raw data will be always old too
-                $schema->addTable(
-                    $this->processTable(
-                        $schema,
-                        $this->tablesData[$constraintData['referenceTable']]
-                    )
-                );
-                $referenceTable = $schema->getTableByName(
-                    $constraintData['referenceTable']
-                );
+                $constraintData['column'] = $table->getColumnByName($constraintData['column']);
+                $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
+                //If we are referenced to the same table we need to specify it
+                $referenceTable = $referenceTableData['name'] === $table->getName() ?
+                    $table :
+                    $this->processTable($schema, $referenceTableData);
 
                 if ($referenceTable->getResource() !== $table->getResource()) {
                     continue; //we should avoid creating foreign keys

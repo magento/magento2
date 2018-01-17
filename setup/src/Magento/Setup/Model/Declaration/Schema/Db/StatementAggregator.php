@@ -30,16 +30,14 @@ class StatementAggregator
      */
     private function canDoMerge(Statement $bankStatement, Statement $statement)
     {
-        /** We can modify reference only in 2 different requests */
-        if ($statement instanceof ReferenceStatement && $statement->getName() === $bankStatement->getName()) {
-            return false;
-        }
-
         /**
          * If we add trigger after some specific statement, than we say that statement is final
          * and can`t be updated anymore. Otherwise trigger can fails
+         * For example, when we want to migrate data from one column to another
+         * and another column should be removed, we need to ensure that we create new column
+         * finalize statement, do insert and only after insert do all other statements like DROP old column
          */
-        return empty($statement->getTriggers()) &&
+        return empty($bankStatement->getTriggers()) &&
             $statement->getType() === $bankStatement->getType() &&
             $statement->getTableName() === $bankStatement->getTableName() &&
             $statement->getResource() === $bankStatement->getResource();

@@ -120,7 +120,7 @@ class Table extends GenericElement implements
 
         foreach ($this->getConstraints() as $constraint) {
             if ($constraint instanceof Reference) {
-                $constraints[] = $constraint;
+                $constraints[$constraint->getName()] = $constraint;
             }
         }
 

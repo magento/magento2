@@ -6,11 +6,15 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
@@ -69,21 +73,46 @@ class TableDiff
     }
 
     /**
-     * @param array $elements
-     * @return array
+     * As foreign key is constraint, that do not allow to change column schema definition
+     * we need to disable it in order to change column definition. When column definition
+     * will be changed we need to enable foreign key again
+     * We need to start column modification from parent table (reference table) and then go to
+     * tables that have foreign keys
+     *
+     * @param Table $declaredTable
+     * @param Table $generatedTable
+     * @param Diff $diff
+     * @return Diff
      */
-    private function preprocessConstraintsAndIndexes(array $elements)
+    private function turnOffForeignKeys(Table $declaredTable, Table $generatedTable, Diff $diff)
     {
-        foreach ($elements as $name => $element) {
-            $newName = $name;
-            if (($element instanceof Index || $element instanceof Constraint) && !$element instanceof Reference)  {
-                $newName = $element->getElementType() . implode("_", $element->getColumnNames());
-            }
+        $changes = $diff->getChange($generatedTable->getName(), ModifyElement::OPERATION_NAME);
 
-            unset($elements[$name]);
-            $elements[$newName] = $element;
+        foreach ($changes as $elementHistory) {
+            /** If this is column we need to recreate foreign key */
+            if ($elementHistory->getNew() instanceof Column) {
+                $column = $elementHistory->getNew();
+                $references = $generatedTable->getReferenceConstraints();
+                $declaredReferences = $declaredTable->getReferenceConstraints();
+
+                foreach ($references as $reference) {
+                    /** In case when we have foreign key on column, that should be modified */
+                    if ($reference->getReferenceColumn()->getName() === $column->getName() &&
+                        isset($declaredReferences[$reference->getName()])
+                    ) {
+                        /**
+                         * Lets disable foreign key and enable it again
+                         * As between drop and create operations we have operation of modification
+                         * we will drop key, modify column, add key
+                         */
+                        $diff = $this->diffManager->registerReferenceDrop($reference, $diff);
+                        $diff->register($reference, AddComplexElement::OPERATION_NAME);
+                    }
+                }
+            }
         }
-        return $elements;
+
+        return $diff;
     }
 
     /**
@@ -97,7 +126,6 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
-        $tableName = $declaredTable->getName();
         //Handle changing shard
         if ($this->diffManager->shouldBeModified($declaredTable, $generatedTable)) {
             $diff->register(
@@ -141,6 +169,7 @@ class TableDiff
             }
         }
 
+        $diff = $this->turnOffForeignKeys($declaredTable, $generatedTable, $diff);
         return $diff;
     }
 }
