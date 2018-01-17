@@ -9,8 +9,6 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -25,11 +23,6 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
     private $stockStatus;
 
     /**
-     * @var IndexerInterface
-     */
-    private $indexer;
-
-    /**
      * @var Website
      */
     private $website;
@@ -42,10 +35,7 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
         parent::setUp();
 
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
-        $this->website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
-
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
+        $this->website = Bootstrap::getObjectManager()->create(Website::class);
     }
 
     /**
@@ -67,8 +57,6 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
         $this->addSalesChannelTypeWebsiteToStock($stockId, 'base');
 
         $actualIsSalableCount = $actualNotSalableCount = 0;
-
-        $this->indexer->reindexAll();
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration;
 
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +30,11 @@ abstract class AbstractSalesChannelProvider extends TestCase
     private $stockRepository;
 
     /**
+     * @var IndexerInterface
+     */
+    private $indexer;
+
+    /**
      * @var null|int
      */
     private $stockId = null;
@@ -39,7 +46,8 @@ abstract class AbstractSalesChannelProvider extends TestCase
     {
         $this->salesChannel = Bootstrap::getObjectManager()->get(SalesChannelInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
+        $this->indexer->load(SourceIndexer::INDEXER_ID);
         parent::setUp();
     }
 
@@ -61,6 +69,8 @@ abstract class AbstractSalesChannelProvider extends TestCase
 
         $this->stockRepository->save($stock);
         $this->stockId = $stockId;
+
+        $this->indexer->reindexAll();
     }
 
     /**

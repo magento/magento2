@@ -9,10 +9,6 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -25,11 +21,6 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
      * @var StockStatus
      */
     private $stockStatus;
-
-    /**
-     * @var IndexerInterface
-     */
-    private $indexer;
 
     /**
      * @var StoreManagerInterface
@@ -45,8 +36,6 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
 
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
     }
 
     /**
@@ -70,8 +59,6 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
 
         // switch to second website
         $this->storeManager->setCurrentStore('fixture_second_store');
-
-        $this->indexer->reindexAll();
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

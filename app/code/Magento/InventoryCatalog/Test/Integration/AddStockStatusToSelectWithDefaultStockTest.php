@@ -9,8 +9,6 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -26,11 +24,6 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
     private $stockStatus;
 
     /**
-     * @var IndexerInterface
-     */
-    private $indexer;
-
-    /**
      * @var Website
      */
     private $website;
@@ -42,9 +35,6 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
     {
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
         $this->website = Bootstrap::getObjectManager()->create(Website::class);
-
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
     }
 
     /**
@@ -56,8 +46,6 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
         $actualIsSalableCount = $actualNotSalableCount = 0;
         $expectedIsSalableCount = 2;
         $expectedNotSalableCount = 1;
-
-        $this->indexer->reindexAll();
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);

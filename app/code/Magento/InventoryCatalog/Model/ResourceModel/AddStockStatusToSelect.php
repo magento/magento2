@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Indexer\IndexStructure;
-use Magento\Inventory\Model\StockIndexTableProviderInterface;
+use Magento\InventoryIndexer\Indexer\IndexStructure;
+use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
 /**
  * Adapt adding stock status to select for Multi Stocks.
@@ -17,14 +17,14 @@ use Magento\Inventory\Model\StockIndexTableProviderInterface;
 class AddStockStatusToSelect
 {
     /**
-     * @var StockIndexTableProviderInterface
+     * @var StockIndexTableNameResolverInterface
      */
     private $stockIndexTableProvider;
 
     /**
-     * @param StockIndexTableProviderInterface $stockIndexTableProvider
+     * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
      */
-    public function __construct(StockIndexTableProviderInterface $stockIndexTableProvider)
+    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableProvider)
     {
         $this->stockIndexTableProvider = $stockIndexTableProvider;
     }
