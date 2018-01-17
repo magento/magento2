@@ -72,12 +72,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $filterBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilderMock;
+    private $agreementsFilterMock;
 
     protected function setUp()
     {
@@ -106,8 +101,9 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->agreementsListMock = $this->createMock(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->agreementsFilterMock = $this->createMock(
+            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+        );
 
         $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository(
             $this->factoryMock,
@@ -117,8 +113,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->agrFactoryMock,
             $this->extensionAttributesJoinProcessorMock,
             $this->agreementsListMock,
-            $this->filterBuilderMock,
-            $this->searchCriteriaBuilderMock
+            $this->agreementsFilterMock
         );
     }
 
@@ -141,35 +136,10 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue(true));
 
-        $storeId = 1;
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-
-        $storeFilterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $activeFilterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-
-        $this->filterBuilderMock->expects($this->at(0))->method('setField')->with('store_id')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(1))->method('setConditionType')->with('eq')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(2))->method('setValue')->with($storeId)->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(3))->method('create')->willReturn($storeFilterMock);
-
-        $this->filterBuilderMock->expects($this->at(4))->method('setField')->with('is_active')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(5))->method('setConditionType')->with('eq')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(6))->method('setValue')->with(1)->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(7))->method('create')->willReturn($activeFilterMock);
-
-        $this->searchCriteriaBuilderMock->expects($this->at(0))
-            ->method('addFilters')
-            ->with([$storeFilterMock])
-            ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->at(1))
-            ->method('addFilters')
-            ->with([$activeFilterMock])
-            ->willReturnSelf();
-
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->searchCriteriaBuilderMock->expects($this->at(2))->method('create')->willReturn($searchCriteriaMock);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
 
         $this->agreementsListMock->expects($this->once())
             ->method('getList')

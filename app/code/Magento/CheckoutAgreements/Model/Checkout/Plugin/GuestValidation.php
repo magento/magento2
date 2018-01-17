@@ -6,8 +6,8 @@
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
 /**
  * Class GuestValidation
@@ -39,53 +39,29 @@ class GuestValidation
     private $checkoutAgreementsList;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter
      */
-    private $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    private $activeStoreAgreementsFilter;
 
     /**
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
-     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
-     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList
+     * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
+        \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
-        $this->checkoutAgreementsList = $checkoutAgreementsList ?: ObjectManager::getInstance()->get(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
-        );
-        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\FilterBuilder::class
-        );
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(
-            \Magento\Store\Model\StoreManagerInterface::class
-        );
+        $this->checkoutAgreementsList = $checkoutAgreementsList;
+        $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
     }
 
     /**
@@ -95,6 +71,7 @@ class GuestValidation
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
@@ -116,6 +93,7 @@ class GuestValidation
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSavePaymentInformation(
@@ -158,20 +136,8 @@ class GuestValidation
             AgreementsProvider::PATH_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
-        $storeFilter = $this->filterBuilder
-            ->setField('store_id')
-            ->setConditionType('eq')
-            ->setValue($this->storeManager->getStore()->getId())
-            ->create();
-        $isActiveFilter = $this->filterBuilder->setField('is_active')
-            ->setConditionType('eq')
-            ->setValue(1)
-            ->create();
-        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
-        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
-
         $agreementsList = $isAgreementsEnabled
-            ? $this->checkoutAgreementsList->getList($this->searchCriteriaBuilder->create())
+            ? $this->checkoutAgreementsList->getList($this->activeStoreAgreementsFilter->buildSearchCriteria())
             : [];
         return (bool)($isAgreementsEnabled && count($agreementsList) > 0);
     }

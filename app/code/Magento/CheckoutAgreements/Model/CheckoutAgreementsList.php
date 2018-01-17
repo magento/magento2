@@ -6,6 +6,9 @@
 
 namespace Magento\CheckoutAgreements\Model;
 
+/**
+ * {@inheritdoc}
+ */
 class CheckoutAgreementsList implements \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
 {
     /**

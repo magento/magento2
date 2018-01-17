@@ -53,17 +53,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $filterBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManagerMock;
+    private $agreementsFilterMock;
 
     protected function setUp()
     {
@@ -83,18 +73,16 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->checkoutAgreementsListMock = $this->createMock(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->agreementsFilterMock = $this->createMock(
+            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+        );
 
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
             $repositoryMock,
             $this->checkoutAgreementsListMock,
-            $this->filterBuilderMock,
-            $this->searchCriteriaBuilderMock,
-            $this->storeManagerMock
+            $this->agreementsFilterMock
         );
     }
 
@@ -107,9 +95,13 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
         $this->checkoutAgreementsListMock->expects($this->once())
             ->method('getList')
-            ->with($this->buildSearchCriteria())
+            ->with($searchCriteriaMock)
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
@@ -132,9 +124,13 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
         $this->checkoutAgreementsListMock->expects($this->once())
             ->method('getList')
-            ->with($this->buildSearchCriteria())
+            ->with($searchCriteriaMock)
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
@@ -153,9 +149,13 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->agreementsFilterMock->expects($this->once())
+            ->method('buildSearchCriteria')
+            ->willReturn($searchCriteriaMock);
         $this->checkoutAgreementsListMock->expects($this->once())
             ->method('getList')
-            ->with($this->buildSearchCriteria())
+            ->with($searchCriteriaMock)
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
@@ -163,45 +163,5 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
-    }
-
-    /**
-     * Build mock object for search criteria
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function buildSearchCriteria() : \PHPUnit_Framework_MockObject_MockObject
-    {
-        $storeId = 1;
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-
-        $storeFilterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $activeFilterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-
-        $this->filterBuilderMock->expects($this->at(0))->method('setField')->with('store_id')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(1))->method('setConditionType')->with('eq')->willReturnSelf();
-
-        $this->filterBuilderMock->expects($this->at(2))->method('setValue')->with($storeId)->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(3))->method('create')->willReturn($storeFilterMock);
-
-        $this->filterBuilderMock->expects($this->at(4))->method('setField')->with('is_active')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(5))->method('setConditionType')->with('eq')->willReturnSelf();
-
-        $this->filterBuilderMock->expects($this->at(6))->method('setValue')->with(1)->willReturnSelf();
-        $this->filterBuilderMock->expects($this->at(7))->method('create')->willReturn($activeFilterMock);
-
-        $this->searchCriteriaBuilderMock->expects($this->at(0))
-            ->method('addFilters')
-            ->with([$storeFilterMock])
-            ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->at(1))
-            ->method('addFilters')
-            ->with([$activeFilterMock])
-            ->willReturnSelf();
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->searchCriteriaBuilderMock->expects($this->at(2))->method('create')->willReturn($searchCriteriaMock);
-        return $searchCriteriaMock;
     }
 }

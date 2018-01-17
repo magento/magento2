@@ -7,7 +7,6 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory as AgreementCollectionFactory;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection as AgreementCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -16,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement as AgreementResource;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
 /**
  * Checkout agreement repository.
@@ -67,14 +66,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $agreementsList;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var ActiveStoreAgreementsFilter
      */
-    private $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $activeStoreAgreementsFilter;
 
     /**
      * Constructs a checkout agreement data object.
@@ -88,6 +82,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $agreementsList
      * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
      * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -98,8 +93,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         AgreementFactory $agreementFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null
+        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
@@ -110,11 +104,8 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $this->agreementsList = $agreementsList ?: ObjectManager::getInstance()->get(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
-        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\FilterBuilder::class
-        );
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
+            ActiveStoreAgreementsFilter::class
         );
     }
 
@@ -128,21 +119,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
             return [];
         }
-
-        $storeFilter = $this->filterBuilder
-            ->setField('store_id')
-            ->setConditionType('eq')
-            ->setValue($this->storeManager->getStore()->getId())
-            ->create();
-        $isActiveFilter = $this->filterBuilder
-            ->setField('is_active')
-            ->setConditionType('eq')
-            ->setValue(1)
-            ->create();
-
-        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
-        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
-        return $this->agreementsList->getList($this->searchCriteriaBuilder->create());
+        return $this->agreementsList->getList($this->activeStoreAgreementsFilter->buildSearchCriteria());
     }
 
     /**

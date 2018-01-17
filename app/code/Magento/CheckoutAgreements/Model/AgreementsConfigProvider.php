@@ -8,6 +8,7 @@ namespace Magento\CheckoutAgreements\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
 /**
  * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
@@ -35,28 +36,16 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     private $checkoutAgreementsList;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var ActiveStoreAgreementsFilter
      */
-    private $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    private $activeStoreAgreementsFilter;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
-     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -64,9 +53,7 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
         \Magento\Framework\Escaper $escaper,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
@@ -74,14 +61,8 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         $this->checkoutAgreementsList = $checkoutAgreementsList ?: ObjectManager::getInstance()->get(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
-        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\FilterBuilder::class
-        );
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(
-            \Magento\Store\Model\StoreManagerInterface::class
+        $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
+            ActiveStoreAgreementsFilter::class
         );
     }
 
@@ -108,20 +89,9 @@ class AgreementsConfigProvider implements ConfigProviderInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        $storeFilter = $this->filterBuilder
-            ->setField('store_id')
-            ->setConditionType('eq')
-            ->setValue($this->storeManager->getStore()->getId())
-            ->create();
-        $isActiveFilter = $this->filterBuilder
-            ->setField('is_active')
-            ->setConditionType('eq')
-            ->setValue(1)
-            ->create();
-        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
-        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
-
-        $agreementsList = $this->checkoutAgreementsList->getList($this->searchCriteriaBuilder->create());
+        $agreementsList = $this->checkoutAgreementsList->getList(
+            $this->activeStoreAgreementsFilter->buildSearchCriteria()
+        );
         $agreementConfiguration['isEnabled'] = (bool)($isAgreementsEnabled && count($agreementsList) > 0);
 
         foreach ($agreementsList as $agreement) {
