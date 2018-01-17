@@ -15,6 +15,28 @@ class Interfaces implements FormatterInterface
 {
     /**
      * {@inheritDoc}
+     * Format of input entry should conform to the following structure for interfaces that output type implements to be
+     * processed correctly:
+     * ['implements' => [ // Required
+     *     $indexOfImplementedInterface => [
+     *         'interface' => $nameOfInterfaceType, // Required
+     *         'copyFields' => $shouldCopyFields // Optional - should be string that says "true" or "false"
+     *     ],
+     *     .
+     *     .
+     *     .
+     * ]
+     *
+     * Format of output entry for interfaces that type implements is as follows:
+     * ['implements' => [
+     *     $interfaceName => [
+     *         'interface' => $interfaceName,
+     *         'copyFields' => $shouldCopyFields // Present only if given in input, string that says "true" or "false"
+     *     ],
+     *     .
+     *     .
+     *     .
+     * ]
      */
     public function format(array $entry): array
     {

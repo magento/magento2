@@ -7,9 +7,9 @@
 namespace Magento\Framework\GraphQl\Config\Data;
 
 /**
- * Describes all the configured data of an Output or Input type in GraphQL.
+ * Describes the configured data for a GraphQL interface type.
  */
-class Type implements StructureInterface
+class InterfaceType implements StructureInterface
 {
     /**
      * @var string
@@ -22,9 +22,9 @@ class Type implements StructureInterface
     private $fields;
 
     /**
-     * @var string[]
+     * @var string
      */
-    private $interfaces;
+    private $typeResolver;
 
     /**
      * @var string
@@ -33,19 +33,19 @@ class Type implements StructureInterface
 
     /**
      * @param string $name
+     * @param string $typeResolver
      * @param Field[] $fields
-     * @param string[] $interfaces
      * @param string $description
      */
     public function __construct(
         string $name,
+        string $typeResolver,
         array $fields,
-        array $interfaces,
-        string $description
+        string $description = ""
     ) {
         $this->name = $name;
         $this->fields = $fields;
-        $this->interfaces = $interfaces;
+        $this->typeResolver = $typeResolver;
         $this->description = $description;
     }
 
@@ -70,13 +70,13 @@ class Type implements StructureInterface
     }
 
     /**
-     * Get interfaces the type implements, if any. Return an empty array if none are configured.
+     * Return the name of the resolver class that determines the concrete type to display in the result.
      *
-     * @return string[]
+     * @return string
      */
-    public function getInterfaces() : array
+    public function getTypeResolver()
     {
-        return $this->interfaces;
+        return $this->typeResolver;
     }
 
     /**

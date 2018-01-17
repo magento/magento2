@@ -15,6 +15,48 @@ class Fields implements FormatterInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * Format of input entry should conform to the following structure for fields to be processed correctly:
+     * ['field' => [ // Required
+     *     $indexOfField => [ // At least 1 item required
+     *         'name' => $nameOfField, // Required
+     *         'type' => $nameOfFieldType, // Required
+     *         'required => $boolean, // Optional - will default to false if not specified
+     *         'itemType' => $nameOfListItemType, // Required if field is a list
+     *         'resolver' => $fullyQualifiedResolverClassName, // Required only if field needs custom resolution
+     *         'description' => $descriptionString, // Optional
+     *         'argument' => [ // Optional
+     *             'name' => $argumentName, // Required if arguments exist
+     *             'type' => $argumentTypeName, // Required if arguments exist
+     *             [...] // Other optional type data from argument
+     *         ],
+     *     ],
+     *     .
+     *     .
+     *     .
+     * ]
+     *
+     * Format of output entry will have the following structure:
+     * ['fields => [
+     *     $fieldName => [
+     *         'name' => $fieldName,
+     *         'type' => $typeName,
+     *         'required => $isRequiredField, // Defaults to false
+     *         'itemType => $nameOfListItemType, // Present only if list type,
+     *         'resolver' => $fullyQualifiedResolverClassName, // Present only if custom type resolution required
+     *         'description' => $descriptionString, // Present only if configured
+     *         'arguments' => [ // Present only if field has configured arguments
+     *             $argumentName => [
+     *                 'name' => $argumentName,
+     *                 'type' => $argumentTypeName,
+     *                 [...] // Other optional type data from argument
+     *             ],
+     *         ]
+     *     ],
+     *     .
+     *     .
+     *     .
+     * ]
      */
     public function format(array $entry): array
     {

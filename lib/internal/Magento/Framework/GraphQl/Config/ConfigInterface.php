@@ -16,12 +16,12 @@ use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 interface ConfigInterface
 {
     /**
-     * Access a type's, identified by its name.
+     * Access a type's structure object containing it's information and configuration, identified by its name.
      *
      * @param string $key
      * @return StructureInterface
      */
-    public function get(string $key) : StructureInterface;
+    public function getTypeStructure(string $key) : StructureInterface;
 
     /**
      * Return all type names from a GraphQL schema's configuration.

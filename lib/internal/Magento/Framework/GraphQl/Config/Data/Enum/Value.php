@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\Config\Data;
+namespace Magento\Framework\GraphQl\Config\Data\Enum;
 
 /**
  * Describes a value for an enum type.

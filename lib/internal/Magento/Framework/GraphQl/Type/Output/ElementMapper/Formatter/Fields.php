@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use GraphQL\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\ArgumentFactory;
-use Magento\Framework\GraphQl\Config\Data\Type;
+use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
@@ -55,7 +55,7 @@ class Fields implements FormatterInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\GraphQl\Config $fieldConfig
+     * @param FieldConfig $fieldConfig
      * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
@@ -81,7 +81,7 @@ class Fields implements FormatterInterface
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function format(Type $typeStructure, OutputType $outputType)
+    public function format(StructureInterface $typeStructure, OutputType $outputType)
     {
         $config = [];
         foreach ($typeStructure->getFields() as $field) {
@@ -162,12 +162,12 @@ class Fields implements FormatterInterface
     /**
      * Determine field's type based on configured attributes.
      *
-     * @param Type $typeStructure
+     * @param StructureInterface $typeStructure
      * @param Field $field
      * @param OutputType $outputType
      * @return OutputType
      */
-    private function getFieldType(Type $typeStructure, Field $field, OutputType $outputType)
+    private function getFieldType(StructureInterface $typeStructure, Field $field, OutputType $outputType)
     {
         if ($typeStructure->getName() == $field->getType()) {
             $type = $outputType;

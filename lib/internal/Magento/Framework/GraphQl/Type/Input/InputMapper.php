@@ -55,7 +55,7 @@ class InputMapper
         $type = $argument->isList() ? $argument->getItemType() : $argument->getType();
         $instance = $this->typeFactory->createScalar($type);
         if (!$instance) {
-            $configElement = $this->config->get($type);
+            $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
         }
         if ($argument->isList()) {
@@ -71,7 +71,7 @@ class InputMapper
     {
         $instance = $this->typeFactory->createScalar($type);
         if (!$instance) {
-            $configElement = $this->config->get($type);
+            $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
         }
         return $instance;

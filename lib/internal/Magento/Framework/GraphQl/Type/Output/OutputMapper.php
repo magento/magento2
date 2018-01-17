@@ -55,7 +55,7 @@ class OutputMapper
     {
         $instance = $this->typeFactory->createScalar($type);
         if (!$instance) {
-            $configElement = $this->config->get($type);
+            $configElement = $this->config->getTypeStructure($type);
             $instance = $this->outputFactory->create($configElement);
         }
         return $instance;
@@ -71,7 +71,7 @@ class OutputMapper
     {
         $instance = $this->typeFactory->createScalar($type);
         if (!$instance) {
-            $configElement = $this->config->get($type);
+            $configElement = $this->config->getTypeStructure($type);
             $instance = $this->outputFactory->create($configElement);
         }
         if ($instance instanceof OutputInterfaceObject) {

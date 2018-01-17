@@ -15,6 +15,11 @@ class Description implements FormatterInterface
 {
     /**
      * {@inheritDoc}
+     * Input format:
+     * ['description' => $descriptionString]
+     *
+     * Output format:
+     * ['description' => $descriptionString] or []
      */
     public function format(array $entry): array
     {

@@ -298,13 +298,6 @@
         <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry"/>
         <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices"/>
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
-        <!-- TODO:
-             left from list TARGET RULE
-                  'related_tgtr_position_limit' => 'int',
-                  'related_tgtr_position_behavior' => 'int',
-                  'upsell_tgtr_position_limit' => 'int',
-                  'upsell_tgtr_position_behavior' => 'int',
-        -->
     </type>
     <type xsi:type="OutputType" name="SimpleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
