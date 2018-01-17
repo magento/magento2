@@ -10,7 +10,9 @@ namespace Magento\InventoryCatalog\Test\Integration;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Source\SourceIndexer;
+use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 

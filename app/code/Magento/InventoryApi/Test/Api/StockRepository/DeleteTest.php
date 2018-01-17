@@ -46,6 +46,7 @@ class DeleteTest extends WebapiAbstract
 
     /**
      * @param int $deletedStockId
+     * @throws \Exception
      */
     private function checkIsStockDeleted($deletedStockId)
     {

@@ -9,8 +9,6 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Source\SourceIndexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -22,18 +20,13 @@ class AddStockDataToCollectionWithDefaultStockTest extends TestCase
     private $stockStatus;
 
     /**
-     * @var IndexerInterface
+     * @inheritdoc
      */
-    private $indexer;
-
     protected function setUp()
     {
         parent::setUp();
 
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
-
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
     }
 
     /**
@@ -48,8 +41,6 @@ class AddStockDataToCollectionWithDefaultStockTest extends TestCase
      */
     public function testGetResultCount(int $expectedSize, bool $isFilterInStock)
     {
-        $this->indexer->reindexAll();
-
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection = $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
