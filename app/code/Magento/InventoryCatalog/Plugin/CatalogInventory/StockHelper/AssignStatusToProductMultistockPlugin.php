@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory\StockHelper;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock as Helper;

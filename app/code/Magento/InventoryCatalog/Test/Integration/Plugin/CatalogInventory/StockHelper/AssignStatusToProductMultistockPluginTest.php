@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\Plugin\CatalogInventory;
+namespace Magento\InventoryCatalog\Test\Integration\Plugin\CatalogInventory\StockHelper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
