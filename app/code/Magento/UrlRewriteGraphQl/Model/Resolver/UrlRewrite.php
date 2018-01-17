@@ -63,7 +63,7 @@ class UrlRewrite implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    public function findCanonicalUrl(string $requestPath)
+    private function findCanonicalUrl(string $requestPath)
     {
         $urlRewrite = $this->findUrl($requestPath);
         if ($urlRewrite->getRedirectType() > 0) {
@@ -80,7 +80,7 @@ class UrlRewrite implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    public function findUrl(string $requestPath)
+    private function findUrl(string $requestPath)
     {
         return $this->urlFinder->findOneByData(
             [
