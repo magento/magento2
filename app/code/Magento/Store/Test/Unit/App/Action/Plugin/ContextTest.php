@@ -8,6 +8,7 @@ namespace Magento\Store\Test\Unit\App\Action\Plugin;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -73,6 +74,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
+     * @var \Closure
+     */
+    private $callbackMock;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -91,6 +97,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->callbackMock = function (RequestInterface $request) {
+            return 'response';
+        };
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\Store\App\Action\Plugin\Context::class,
@@ -98,7 +107,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
                 'session' => $this->sessionMock,
                 'httpContext' => $this->httpContextMock,
                 'storeManager' => $this->storeManager,
-                'storeCookieManager' => $this->storeCookieManager,
+                'storeCookieManager' => $this->storeCookieManager
             ]
         );
         $this->storeManager->expects($this->once())
@@ -119,7 +128,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(self::CURRENCY_CURRENT_STORE));
     }
 
-    public function testBeforeDispatchCurrencyFromSession()
+    public function testAroundDispatchCurrencyFromSession()
     {
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrencyCode')
@@ -153,7 +162,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_SESSION, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->aroundDispatch(
+            $this->subjectMock,
+            $this->callbackMock,
+            $this->requestMock
+        );
     }
 
     public function testDispatchCurrentStoreCurrency()
@@ -186,7 +199,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->aroundDispatch(
+            $this->subjectMock,
+            $this->callbackMock,
+            $this->requestMock
+        );
     }
 
     public function testDispatchStoreParameterIsArray()
@@ -226,7 +243,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->aroundDispatch(
+            $this->subjectMock,
+            $this->callbackMock,
+            $this->requestMock
+        );
     }
 
     /**
@@ -256,6 +277,27 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue($store));
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->aroundDispatch(
+            $this->subjectMock,
+            $this->callbackMock,
+            $this->requestMock
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     */
+    public function testDispatchNonExistingStore()
+    {
+        $storeId = 'NonExisting';
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('___store')
+            ->willReturn($storeId);
+        $this->storeManager->method('getStore')
+            ->with($storeId)
+            ->willThrowException(new NoSuchEntityException());
+
+        $this->plugin->aroundDispatch($this->subjectMock, $this->callbackMock, $this->requestMock);
     }
 }

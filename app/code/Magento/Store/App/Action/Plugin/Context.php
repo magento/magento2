@@ -7,8 +7,6 @@
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\Http\Context as HttpContext;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
@@ -18,7 +16,6 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class ContextPlugin
@@ -46,30 +43,21 @@ class Context
     protected $storeCookieManager;
 
     /**
-     * @var PageFactory
-     */
-    private $pageFactory;
-
-    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
-     * @param PageFactory|null $pageFactory
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        StoreCookieManagerInterface $storeCookieManager,
-        PageFactory $pageFactory = null
+        StoreCookieManagerInterface $storeCookieManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
-        $this->pageFactory = $pageFactory
-            ?: ObjectManager::getInstance()->get(PageFactory::class);
     }
 
     /**
