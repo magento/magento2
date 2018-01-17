@@ -171,7 +171,8 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         $mediaPath = str_replace($mediaUrl, '', $fileurl);
         $directive = sprintf('{{media url="%s"}}', $mediaPath);
         if ($renderAsTag) {
-            $html = sprintf('<img src="%s" alt="" />', $this->isUsingStaticUrlsAllowed() ? $fileurl : $directive);
+            $src = $this->isUsingStaticUrlsAllowed() ? $fileurl : htmlentities($directive, ENT_QUOTES);
+            $html = sprintf('<img src="%s" alt="" />', $src);
         } else {
             if ($this->isUsingStaticUrlsAllowed()) {
                 $html = $fileurl; // $mediaPath;

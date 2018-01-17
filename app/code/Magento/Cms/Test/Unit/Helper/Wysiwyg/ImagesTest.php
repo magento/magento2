@@ -426,7 +426,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['http://localhost', 'test.png', true, '<img src="http://localhost/test.png" alt="" />'],
-            ['http://localhost', 'test.png', false, '<img src="{{media url="/test.png"}}" alt="" />']
+            ['http://localhost', 'test.png', false, '<img src="{{media url=&quot;/test.png&quot;}}" alt="" />']
         ];
     }
 
