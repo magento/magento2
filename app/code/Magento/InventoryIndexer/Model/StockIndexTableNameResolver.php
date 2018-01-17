@@ -5,18 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\MultiDimensionalIndex\Alias;
-use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
-use Magento\Framework\MultiDimensionalIndex\IndexNameResolver;
-use Magento\InventoryIndex\Indexer\Stock\StockIndexer;
+use Magento\Framework\MultiDimensionalIndexer\Alias;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameResolver;
+use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
  * Stock index table provider.
  */
-class StockIndexTableProvider implements StockIndexTableProviderInterface
+class StockIndexTableNameResolver implements StockIndexTableNameResolverInterface
 {
     /**
      * @var IndexNameBuilder
