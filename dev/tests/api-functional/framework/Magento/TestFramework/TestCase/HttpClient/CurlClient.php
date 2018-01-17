@@ -22,7 +22,6 @@ class CurlClient
      */
     public function get($url, $data = [], $headers = [])
     {
-        $data['XDEBUG_SESSION_START'] = 'PHPSTORM';
         if (!empty($data)) {
             $url .= '?' . http_build_query($data);
         }
