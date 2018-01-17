@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository" />
     <preference for="Magento\CheckoutAgreements\Api\Data\AgreementInterface" type="Magento\CheckoutAgreements\Model\Agreement" />
-    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsListing" />
+    <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsList" />
     <type name="Magento\CheckoutAgreements\Model\AgreementsValidator">
         <arguments>
             <argument name="list" xsi:type="array">
@@ -23,7 +23,7 @@
     <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
         <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation"/>
     </type>
-    <type name="\Magento\CheckoutAgreements\Model\CheckoutAgreementsListing">
+    <type name="\Magento\CheckoutAgreements\Model\CheckoutAgreementsList">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\CheckoutAgreements\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>

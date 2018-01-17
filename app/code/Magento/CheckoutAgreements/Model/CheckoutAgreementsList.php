@@ -6,7 +6,7 @@
 
 namespace Magento\CheckoutAgreements\Model;
 
-class CheckoutAgreementsListing implements \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface
+class CheckoutAgreementsList implements \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
 {
     /**
      * Collection factory.
@@ -18,7 +18,7 @@ class CheckoutAgreementsListing implements \Magento\CheckoutAgreements\Api\Check
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
-    private $extAttributesJoinProcessor;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
@@ -36,19 +36,19 @@ class CheckoutAgreementsListing implements \Magento\CheckoutAgreements\Api\Check
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->extAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getListing(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array
     {
         /** @var $collection \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection */
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $this->extAttributesJoinProcessor->process($collection);
+        $this->extensionAttributesJoinProcessor->process($collection);
         return $collection->getItems();
     }
 }

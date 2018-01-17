@@ -62,9 +62,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
      */
-    private $agreementsListing;
+    private $agreementsList;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
@@ -85,7 +85,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface|null $agreementsListing
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $agreementsList
      * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
      * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @codeCoverageIgnore
@@ -97,7 +97,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface $agreementsListing = null,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
         \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
@@ -107,8 +107,8 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $this->resourceModel = $agreementResource;
         $this->agreementFactory = $agreementFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->agreementsListing = $agreementsListing ?: ObjectManager::getInstance()->get(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface::class
+        $this->agreementsList = $agreementsList ?: ObjectManager::getInstance()->get(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
         $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Api\FilterBuilder::class
@@ -142,7 +142,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
 
         $this->searchCriteriaBuilder->addFilters([$storeFilter]);
         $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
-        return $this->agreementsListing->getListing($this->searchCriteriaBuilder->create());
+        return $this->agreementsList->getList($this->searchCriteriaBuilder->create());
     }
 
     /**

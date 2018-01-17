@@ -11,13 +11,13 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class CheckoutAgreementsListingTest extends WebapiAbstract
+class CheckoutAgreementsListTest extends WebapiAbstract
 {
     /**
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_active_with_html_content.php
      * @magentoApiDataFixture Magento/CheckoutAgreements/_files/agreement_inactive_with_text_content.php
      */
-    public function testGetListing()
+    public function testGetList()
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
@@ -60,12 +60,12 @@ class CheckoutAgreementsListingTest extends WebapiAbstract
     {
         return [
             'soap' => [
-                'service' => 'checkoutAgreementsCheckoutAgreementsListingV1',
+                'service' => 'checkoutAgreementsCheckoutAgreementsListV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutAgreementsCheckoutAgreementsListingV1getListing',
+                'operation' => 'checkoutAgreementsCheckoutAgreementsListV1getList',
             ],
             'rest' => [
-                'resourcePath' => '/V1/carts/licence/listing' . '?' . http_build_query($requestData),
+                'resourcePath' => '/V1/carts/licence/list' . '?' . http_build_query($requestData),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];

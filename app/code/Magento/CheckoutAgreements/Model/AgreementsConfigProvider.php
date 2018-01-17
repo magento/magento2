@@ -6,6 +6,7 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -29,19 +30,59 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     protected $escaper;
 
     /**
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
+     */
+    private $checkoutAgreementsList;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $checkoutAgreementsList
+     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
         $this->escaper = $escaper;
+        $this->checkoutAgreementsList = $checkoutAgreementsList ?: ObjectManager::getInstance()->get(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+        );
+        $this->filterBuilder = $filterBuilder ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\FilterBuilder::class
+        );
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
     }
 
     /**
@@ -67,7 +108,20 @@ class AgreementsConfigProvider implements ConfigProviderInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        $agreementsList = $this->checkoutAgreementsRepository->getList();
+        $storeFilter = $this->filterBuilder
+            ->setField('store_id')
+            ->setConditionType('eq')
+            ->setValue($this->storeManager->getStore()->getId())
+            ->create();
+        $isActiveFilter = $this->filterBuilder
+            ->setField('is_active')
+            ->setConditionType('eq')
+            ->setValue(1)
+            ->create();
+        $this->searchCriteriaBuilder->addFilters([$storeFilter]);
+        $this->searchCriteriaBuilder->addFilters([$isActiveFilter]);
+
+        $agreementsList = $this->checkoutAgreementsList->getList($this->searchCriteriaBuilder->create());
         $agreementConfiguration['isEnabled'] = (bool)($isAgreementsEnabled && count($agreementsList) > 0);
 
         foreach ($agreementsList as $agreement) {

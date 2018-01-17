@@ -6,10 +6,10 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-class CheckoutAgreementsListingTest extends \PHPUnit\Framework\TestCase
+class CheckoutAgreementsListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\CheckoutAgreementsListing
+     * @var \Magento\CheckoutAgreements\Model\CheckoutAgreementsList
      */
     private $model;
 
@@ -39,14 +39,14 @@ class CheckoutAgreementsListingTest extends \PHPUnit\Framework\TestCase
         $this->collectionProcessorMock = $this->createMock(
             \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
-        $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsListing(
+        $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsList(
             $this->collectionFactoryMock,
             $this->attributesJoinProcessorMock,
             $this->collectionProcessorMock
         );
     }
 
-    public function testGetListing()
+    public function testGetList()
     {
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(
@@ -59,6 +59,6 @@ class CheckoutAgreementsListingTest extends \PHPUnit\Framework\TestCase
         $this->attributesJoinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
         $agreementMock = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$agreementMock]);
-        $this->assertEquals([$agreementMock], $this->model->getListing($searchCriteriaMock));
+        $this->assertEquals([$agreementMock], $this->model->getList($searchCriteriaMock));
     }
 }

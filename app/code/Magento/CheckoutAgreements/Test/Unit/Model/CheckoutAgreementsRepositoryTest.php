@@ -67,7 +67,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $agreementsListingMock;
+    private $agreementsListMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -103,8 +103,8 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             ['process']
         );
 
-        $this->agreementsListingMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListingInterface::class
+        $this->agreementsListMock = $this->createMock(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
@@ -116,7 +116,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->resourceMock,
             $this->agrFactoryMock,
             $this->extensionAttributesJoinProcessorMock,
-            $this->agreementsListingMock,
+            $this->agreementsListMock,
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock
         );
@@ -171,8 +171,8 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->searchCriteriaBuilderMock->expects($this->at(2))->method('create')->willReturn($searchCriteriaMock);
 
-        $this->agreementsListingMock->expects($this->once())
-            ->method('getListing')
+        $this->agreementsListMock->expects($this->once())
+            ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([$this->agreementMock]);
         $this->assertEquals([$this->agreementMock], $this->model->getList());
