@@ -319,7 +319,7 @@ define([
                 storeId = this.config['store_id'] !== null ? this.config['store_id'] : 0,
                 frameDialog = jQuery(o.win.frameElement).parents('[role="dialog"]'),
                 wUrl = this.config['files_browser_window_url'] +
-                    'target_element_id/' + this.id + '/' +
+                    'target_element_id/' + this.getId() + '/' +
                     'store/' + storeId + '/';
 
             this.mediaBrowserOpener = o.win;
@@ -371,14 +371,14 @@ define([
          * @return {jQuery|*|HTMLElement}
          */
         getToggleButton: function () {
-            return $('toggle' + this.id);
+            return $('toggle' + this.getId());
         },
 
         /**
          * Get plugins button.
          */
         getPluginButtons: function () {
-            return $$('#buttons' + this.id + ' > button.plugin');
+            return jQuery('#buttons' + this.getId() + ' > button.plugin');
         },
 
         /**
@@ -390,7 +390,7 @@ define([
 
             this.setup(mode);
 
-            tinyMCE3.execCommand('mceAddControl', false, this.id);
+            tinyMCE3.execCommand('mceAddControl', false, this.getId());
 
             this.getPluginButtons().each(function (e) {
                 e.hide();
@@ -405,7 +405,7 @@ define([
         turnOff: function () {
             this.closePopups();
 
-            tinyMCE3.execCommand('mceRemoveControl', false, this.id);
+            tinyMCE3.execCommand('mceRemoveControl', false, this.getId());
 
             this.getPluginButtons().each(function (e) {
                 e.show();
@@ -420,8 +420,8 @@ define([
         closePopups: function () {
             if (typeof closeEditorPopup == 'function') {
                 // close all popups to avoid problems with updating parent content area
-                closeEditorPopup('widget_window' + this.id);
-                closeEditorPopup('browser_window' + this.id);
+                closeEditorPopup('widget_window' + this.getId());
+                closeEditorPopup('browser_window' + this.getId());
             }
         },
 
@@ -429,7 +429,7 @@ define([
          * @return {Boolean}
          */
         toggle: function () {
-            if (!tinyMCE3.get(this.id)) {
+            if (!tinyMCE3.get(this.getId())) {
                 this.turnOn();
 
                 return true;
@@ -455,8 +455,8 @@ define([
          * On form validation.
          */
         onFormValidation: function () {
-            if (tinyMCE3.get(this.id)) {
-                $(this.id).value = tinyMCE3.get(this.id).getContent();
+            if (tinyMCE3.get(this.getId())) {
+                $(this.getId()).value = tinyMCE3.get(this.getId()).getContent();
             }
         },
 
@@ -588,7 +588,7 @@ define([
          * Update text area.
          */
         updateTextArea: function () {
-            var editor = tinyMCE3.get(this.id),
+            var editor = tinyMCE3.get(this.getId()),
                 content;
 
             if (!editor) {
@@ -605,7 +605,7 @@ define([
          * @return {Object} jQuery textarea element
          */
         getTextArea: function () {
-            return jQuery('#' + this.id);
+            return jQuery('#' + this.getId());
         },
 
         /**
