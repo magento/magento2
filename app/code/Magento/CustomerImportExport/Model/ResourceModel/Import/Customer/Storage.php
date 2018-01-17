@@ -76,16 +76,17 @@ class Storage
     public function load()
     {
         if ($this->_isCollectionLoaded == false) {
-            $collection = clone $this->_customerCollection;
-            $collection->removeAttributeToSelect();
-            $tableName = $collection->getResource()->getEntityTable();
-            $collection->getSelect()->from($tableName, ['entity_id', 'website_id', 'email']);
-
-            $this->_byPagesIterator->iterate(
-                $this->_customerCollection,
-                $this->_pageSize,
-                [[$this, 'addCustomer']]
-            );
+            $connection = $this->_customerCollection->getConnection();
+            $select = $connection->select();
+            $select->from($this->_customerCollection->getMainTable(), ['entity_id', 'website_id', 'email']);
+            $results = $connection->fetchAll($select);
+            foreach ($results as $customer) {
+                $email = strtolower(trim($customer['email']));
+                if (!isset($this->_customerIds[$email])) {
+                    $this->_customerIds[$email] = [];
+                }
+                $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+            }
 
             $this->_isCollectionLoaded = true;
         }
