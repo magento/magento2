@@ -7,7 +7,6 @@
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
-    <!-- TODO: Change dataType to salesrule_coupon after MQE-467 is fixed -->
     <operation name="CreateSalesRuleCoupon" dataType="SalesRuleCoupon" type="create" auth="adminOauth" url="/V1/coupons" method="POST">
         <contentType>application/json</contentType>
         <object key="coupon" dataType="SalesRuleCoupon">
@@ -25,7 +24,6 @@
         </object>
     </operation>
 
-    <!-- TODO: Change dataType to salesrule_coupon after MQE-467 is fixed -->
     <operation name="UpdateSalesRuleCoupon" dataType="SalesRuleCoupon" type="update" auth="adminOauth" url="/V1/coupons" method="PUT">
         <contentType>application/json</contentType>
         <object key="coupon" dataType="SalesRuleCoupon">
@@ -43,7 +41,6 @@
         </object>
     </operation>
 
-    <!-- TODO: Change dataType to salesrule_coupon after MQE-467 is fixed -->
     <operation name="DeleteSalesRuleCoupon" dataType="SalesRuleCoupon" type="delete" auth="adminOauth" url="/V1/coupons/{coupon_id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
