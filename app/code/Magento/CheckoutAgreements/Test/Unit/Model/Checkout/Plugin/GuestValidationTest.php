@@ -8,6 +8,10 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class GuestValidationTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
