@@ -25,11 +25,6 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 class AdaptStockStatusFilterPlugin
 {
     /**
-     * Stock table names and aliases
-     */
-    const TABLE_ALIAS_STOCK_INDEX = 'stock_index';
-
-    /**
      * @var ConditionManager
      */
     private $conditionManager;
@@ -92,6 +87,7 @@ class AdaptStockStatusFilterPlugin
      * @param bool $showOutOfStockFlag
      * @return Select
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundApply(
         StockStatusFilter $subject,
