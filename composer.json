@@ -149,6 +149,8 @@
         "magento/module-swatches-graph-ql": "100.0.0-dev",
         "magento/module-tax-graph-ql": "100.0.0-dev",
         "magento/module-url-rewrite-graph-ql": "100.0.0-dev",
+        "magento/module-cms-url-rewrite-graph-ql": "100.0.0-dev",
+        "magento/module-weee-graph-ql": "100.0.0-dev",
         "magento/module-grouped-import-export": "100.3.0-dev",
         "magento/module-grouped-product": "100.3.0-dev",
         "magento/module-import-export": "100.3.0-dev",

@@ -206,9 +206,9 @@ QUERY;
     }
 
     /**
-     *  Tests if null is returned when an invalid request_path is provided as input to urlResolver
+     * Tests if null is returned when an invalid request_path is provided as input to urlResolver
      *
-     *  @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testInvalidUrlResolverInput()
     {
