@@ -5,8 +5,7 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/framework": "100.3.*",
         "magento/module-inventory-api": "100.0.*",
-        "magento/module-inventory": "100.0.*",
-        "magento/module-inventory-catalog": "100.0.*"
+        "magento/module-inventory": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",
