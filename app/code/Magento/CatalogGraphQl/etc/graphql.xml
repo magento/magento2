@@ -294,6 +294,7 @@
         <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry"/>
         <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices"/>
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
+        <field xsi:type="ScalarOutputField" name="gift_message_available" type="String"/>
     </type>
     <type xsi:type="OutputType" name="SimpleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
@@ -335,6 +336,7 @@
         <field xsi:type="ObjectInputField" name="updated_at" type="FilterTypeInput"/>
         <field xsi:type="ObjectInputField" name="country_of_manufacture" type="FilterTypeInput"/>
         <field xsi:type="ObjectInputField" name="custom_layout" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="gift_message_available" type="FilterTypeInput"/>
         <field xsi:type="ObjectInputField" name="or" type="ProductFilterInput"/>
     </type>
     <type xsi:type="InputType" name="ProductSortInput">
@@ -374,6 +376,7 @@
         <field xsi:type="ObjectInputField" name="updated_at" type="SortEnum"/>
         <field xsi:type="ObjectInputField" name="country_of_manufacture" type="SortEnum"/>
         <field xsi:type="ObjectInputField" name="custom_layout" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="gift_message_available" type="SortEnum"/>
     </type>
     <type xsi:type="OutputType" name="Products">
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="ProductInterface"/>
