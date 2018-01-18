@@ -69,9 +69,7 @@ define([
                 }),
                 expected = {
                     countryId: 'CA',
-                    regionId: 66,
-                    regionCode: null,
-                    region: null
+                    regionId: 66
                 };
 
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
