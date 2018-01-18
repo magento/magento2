@@ -29,7 +29,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
@@ -158,7 +158,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new \StdClass();
+        $checkResult = (object) [];
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',
