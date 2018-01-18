@@ -30,7 +30,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     const FILTER_TYPE_SELECT = 'select';
 
-    const FILTER_TYPE_MULTISELECT ='multiselect';
+    const FILTER_TYPE_MULTISELECT = 'multiselect';
 
     const FILTER_TYPE_INPUT = 'input';
 
@@ -68,6 +68,17 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     protected $_exportAdapterFac;
 
     /**
+     * @var array
+     */
+    public static $backendTypeToFilterMapper = [
+        'datetime' => self::FILTER_TYPE_DATE,
+        'decimal' => self::FILTER_TYPE_NUMBER,
+        'int' => self::FILTER_TYPE_NUMBER,
+        'varchar' => self::FILTER_TYPE_INPUT,
+        'text' => self::FILTER_TYPE_INPUT
+    ];
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
@@ -82,7 +93,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac,
         array $data = []
-    ) {
+    )
+    {
         $this->_exportConfig = $exportConfig;
         $this->_entityFactory = $entityFactory;
         $this->_exportAdapterFac = $exportAdapterFac;
@@ -219,19 +231,19 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         if ($attribute->usesSource() || $attribute->getFilterOptions()) {
             return 'multiselect' == $attribute->getFrontendInput() ?
                 self::FILTER_TYPE_MULTISELECT : self::FILTER_TYPE_SELECT;
-        } elseif ('datetime' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_DATE;
-        } elseif ('decimal' == $attribute->getBackendType() || 'int' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_NUMBER;
-        } elseif ('varchar' == $attribute->getBackendType() || 'text' == $attribute->getBackendType()) {
-            return self::FILTER_TYPE_INPUT;
-        } elseif ($attribute->isStatic()) {
-            return self::getStaticAttributeFilterType($attribute);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We can\'t determine the attribute filter type.')
-            );
         }
+
+        if (isset(self::$backendTypeToFilterMapper[$attribute->getBackendType()])) {
+            return self::$backendTypeToFilterMapper[$attribute->getBackendType()];
+        }
+
+        if ($attribute->isStatic()) {
+            return self::getStaticAttributeFilterType($attribute);
+        }
+
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __('We can\'t determine the attribute filter type.')
+        );
     }
 
     /**
