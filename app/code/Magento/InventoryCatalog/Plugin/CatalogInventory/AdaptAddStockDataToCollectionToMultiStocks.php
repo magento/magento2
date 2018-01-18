@@ -9,16 +9,16 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsiteInterface;
+use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 
 /**
- * Adapt adding stock data to collection for multi stocks
+ * Adapt adding stock data to collection for multi stocks.
  */
 class AdaptAddStockDataToCollectionToMultiStocks
 {
     /**
-     * @var GetStockIdForCurrentWebsiteInterface
+     * @var GetStockIdForCurrentWebsite
      */
     private $stockIdForCurrentWebsite;
 
@@ -28,11 +28,11 @@ class AdaptAddStockDataToCollectionToMultiStocks
     private $addStockDataToCollection;
 
     /**
-     * @param GetStockIdForCurrentWebsiteInterface $stockIdForCurrentWebsite
+     * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
      * @param AddStockDataToCollection $addStockDataToCollection
      */
     public function __construct(
-        GetStockIdForCurrentWebsiteInterface $stockIdForCurrentWebsite,
+        GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
         AddStockDataToCollection $addStockDataToCollection
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;

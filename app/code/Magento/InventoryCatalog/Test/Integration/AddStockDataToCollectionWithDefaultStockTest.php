@@ -37,9 +37,9 @@ class AddStockDataToCollectionWithDefaultStockTest extends TestCase
      * @param bool $isFilterInStock
      * @return void
      *
-     * @dataProvider getResultCountDataProvider
+     * @dataProvider addStockDataToCollectionDataProvider
      */
-    public function testGetResultCount(int $expectedSize, bool $isFilterInStock)
+    public function testAddStockDataToCollection(int $expectedSize, bool $isFilterInStock)
     {
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection = $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
@@ -50,7 +50,7 @@ class AddStockDataToCollectionWithDefaultStockTest extends TestCase
     /**
      * @return array
      */
-    public function getResultCountDataProvider(): array
+    public function addStockDataToCollectionDataProvider(): array
     {
         return [
             [2, true],

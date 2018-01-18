@@ -66,7 +66,8 @@ class SelectBuilder
                 [
                     SourceItemInterface::SKU,
                     SourceItemInterface::QUANTITY => 'SUM(IF(source_item.' . SourceItemInterface::STATUS . ' = '
-                        . SourceItemInterface::STATUS_OUT_OF_STOCK . ', 0, ' . SourceItemInterface::QUANTITY . '))',
+                        //todo  https://github.com/magento-engcom/msi/issues/429
+                        . SourceItemInterface::STATUS_OUT_OF_STOCK . ', 0, IF(quantity > 0, quantity, 1)))',
                 ]
             )
             ->joinLeft(

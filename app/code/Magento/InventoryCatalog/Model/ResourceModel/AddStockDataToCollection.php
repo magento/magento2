@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\Inventory\Model\StockIndexTableNameResolverInterface;
+use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
 /**
  * Add Stock data to collection
@@ -19,14 +19,14 @@ class AddStockDataToCollection
     /**
      * @var StockIndexTableNameResolverInterface
      */
-    private $stockIndexTableProvider;
+    private $stockIndexTableNameResolver;
 
     /**
-     * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      */
-    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableProvider)
+    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableNameResolver)
     {
-        $this->stockIndexTableProvider = $stockIndexTableProvider;
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
     }
 
     /**
@@ -38,16 +38,20 @@ class AddStockDataToCollection
      */
     public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
     {
-        $tableName = $this->stockIndexTableProvider->execute($stockId);
+        $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 
-        $isSalableExpression = $collection->getConnection()->getCheckSql(
-            'stock_status_index.' . IndexStructure::QUANTITY . ' > 0',
-            1,
-            0
+        $isSalableExpression = $collection->getConnection()
+            ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);
+
+        $resource = $collection->getResource();
+        $collection->getSelect()->joinInner(
+            ['product' => $resource->getTable('catalog_product_entity')],
+            sprintf('product.entity_id = %s.entity_id', Collection::MAIN_TABLE_ALIAS),
+            []
         );
         $collection->getSelect()->join(
             ['stock_status_index' => $tableName],
-            'e.sku = stock_status_index.' . IndexStructure::SKU,
+            'product.sku = stock_status_index.' . IndexStructure::SKU,
             ['is_salable' => $isSalableExpression]
         );
 

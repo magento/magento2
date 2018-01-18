@@ -12,9 +12,9 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * @inheritdoc
+ * Service for get stock id by code for current website.
  */
-class GetStockIdForCurrentWebsite implements GetStockIdForCurrentWebsiteInterface
+class GetStockIdForCurrentWebsite
 {
     /**
      * @var StoreManagerInterface
@@ -39,7 +39,7 @@ class GetStockIdForCurrentWebsite implements GetStockIdForCurrentWebsiteInterfac
     }
 
     /**
-     * @inheritdoc
+     * @return int
      */
     public function execute(): int
     {

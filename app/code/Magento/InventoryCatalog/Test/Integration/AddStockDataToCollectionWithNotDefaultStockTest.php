@@ -51,9 +51,9 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
      * @param bool $isFilterInStock
      * @return void
      *
-     * @dataProvider getResultCountDataProvider
+     * @dataProvider addStockDataToCollectionDataProvider
      */
-    public function testGetResultCount(int $stockId, int $expectedSize, bool $isFilterInStock)
+    public function testAddStockDataToCollection(int $stockId, int $expectedSize, bool $isFilterInStock)
     {
         $this->addSalesChannelTypeWebsiteToStock($stockId, 'test');
 
@@ -70,7 +70,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends AbstractSalesChann
     /**
      * @return array
      */
-    public function getResultCountDataProvider(): array
+    public function addStockDataToCollectionDataProvider(): array
     {
         return [
             [10, 1, true],

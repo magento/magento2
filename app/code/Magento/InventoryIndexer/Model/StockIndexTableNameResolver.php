@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
@@ -14,7 +14,7 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameResolver;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
- * Stock index table provider.
+ * @inheritdoc
  */
 class StockIndexTableNameResolver implements StockIndexTableNameResolverInterface
 {
