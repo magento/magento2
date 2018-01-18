@@ -233,41 +233,52 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected function _createCustomerStorageMock()
     {
+        /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from'])
+            ->getMock();
+        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+
+        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['select', 'fetchAll'])
+            ->getMock();
+        $connectionMock->expects($this->any())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject $customerCollection */
         $customerCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
+        $customerCollection->expects($this->any())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
+
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $collectionFactory */
         $collectionFactory = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory
-            ->expects($this->any())
+        $collectionFactory->expects($this->any())
             ->method('create')
             ->willReturn($customerCollection);
+
+        /** @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory|\PHPUnit_Framework_MockObject_MockObject $byPagesIteratorFactory */
         $byPagesIteratorFactory = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
         /** @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage|\PHPUnit_Framework_MockObject_MockObject $customerStorage */
         $customerStorage = $this->getMockBuilder(\Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage::class)
             ->setMethods(['load'])
             ->setConstructorArgs([$collectionFactory, $byPagesIteratorFactory])
             ->getMock();
-        $resourceMock = $this->createPartialMock(
-            \Magento\Customer\Model\ResourceModel\Customer::class,
-            ['getIdFieldName']
-        );
-        $selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from']);
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
-        $connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'fetchAll']
-        );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $customerCollection->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
+
         foreach ($this->_customers as $customerData) {
             $customerStorage->addCustomerByArray($customerData);
         }
