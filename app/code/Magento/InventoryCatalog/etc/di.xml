@@ -38,7 +38,7 @@
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
-        <plugin name="adapt_add_stock_sata_to_collection_to_multi_stocks"
+        <plugin name="adapt_add_stock_data_to_collection_to_multi_stocks"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\AdaptAddStockDataToCollectionToMultiStocks"/>
     </type>
 </config>

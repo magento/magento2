@@ -19,14 +19,14 @@ class AddStockDataToCollection
     /**
      * @var StockIndexTableNameResolverInterface
      */
-    private $stockIndexTableProvider;
+    private $stockIndexTableNameResolver;
 
     /**
-     * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      */
-    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableProvider)
+    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableNameResolver)
     {
-        $this->stockIndexTableProvider = $stockIndexTableProvider;
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
     }
 
     /**
@@ -38,7 +38,7 @@ class AddStockDataToCollection
      */
     public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
     {
-        $tableName = $this->stockIndexTableProvider->execute($stockId);
+        $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $isSalableExpression = $collection->getConnection()
             ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);

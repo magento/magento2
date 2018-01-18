@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 /**
- * Stock Index table tame resolver. Get stock index table by stock id.
+ * Stock Index table name resolver. Get stock index table by stock id.
  *
  * @api
  */
