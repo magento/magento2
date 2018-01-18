@@ -50,9 +50,7 @@ define([
 
         it('Check on regionId with country object in address data.', function () {
             var result = newCustomerAddress({
-                    region: {
-                        'country_id': 'CA'
-                    }
+                    'country_id': 'CA'
                 }),
                 expected = {
                     countryId: 'CA',
@@ -65,7 +63,9 @@ define([
         it('Check on regionId with countryId and regionId in address data.', function () {
             var result = newCustomerAddress({
                     'country_id': 'CA',
-                    'region_id': 66
+                    region: {
+                        'region_id': 66
+                    }
                 }),
                 expected = {
                     countryId: 'CA',
