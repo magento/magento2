@@ -6,6 +6,10 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
 
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +37,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
 
-        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->setMethods(['select', 'fetchAll'])
@@ -45,8 +49,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('fetchAll')
             ->will($this->returnValue([]));
 
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject $customerCollection */
-        $customerCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $customerCollection */
+        $customerCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection','getMainTable'])
             ->getMock();
@@ -58,8 +62,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('getMainTable')
             ->willReturn('customer_entity');
 
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $collectionFactory */
-        $collectionFactory = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
+        /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $collectionFactory */
+        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -67,13 +71,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($customerCollection);
 
-        /** @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory|\PHPUnit_Framework_MockObject_MockObject $byPagesIteratorFactory */
-        $byPagesIteratorFactory = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
+        /** @var CollectionByPagesIteratorFactory|\PHPUnit_Framework_MockObject_MockObject $byPagesIteratorFactory */
+        $byPagesIteratorFactory = $this->getMockBuilder(CollectionByPagesIteratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->_model = new \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage(
+        $this->_model = new Storage(
             $collectionFactory,
             $byPagesIteratorFactory
         );
