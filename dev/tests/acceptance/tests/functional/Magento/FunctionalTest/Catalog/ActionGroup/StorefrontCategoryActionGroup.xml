@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Check the category page -->
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
@@ -33,4 +33,4 @@
         <!-- @TODO: MAGETWO-75411 Move to Magento_Checkout -->
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
-</config>
+</actionGroups>

@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Check the simple product on the product page -->
     <actionGroup name="StorefrontCheckSimpleProduct">
         <arguments>
@@ -23,4 +23,4 @@
         <!-- @TODO: MAGETWO-75411 Add Product Image Check -->
         <!-- @TODO: MAGETWO-75411 Add Product Description Check -->
     </actionGroup>
-</config>
+</actionGroups>

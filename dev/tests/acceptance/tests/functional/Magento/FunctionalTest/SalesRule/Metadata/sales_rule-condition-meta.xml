@@ -5,8 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateSalesRuleCondition" dataType="SalesRuleCondition" type="create">
         <field key="condition_type" required="true">string</field>
         <array key="conditions" required="true">
@@ -30,4 +30,4 @@
         <field key="value">mixed</field>
         <field key="extension_attributes">empty_extension_attribute</field>
     </operation>
-</config>
+</operations>

@@ -11,7 +11,7 @@
         "sort-packages": true
     },
     "require": {
-        "magento/magento2-functional-testing-framework": "1.0.0",
+        "magento/magento2-functional-testing-framework": "~2.0.0",
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "autoload": {

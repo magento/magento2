@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Add Product to Cart from the category page and check message and product count in Minicart -->
     <actionGroup name="StorefrontAddCategoryProductToCartActionGroup">
         <arguments>
@@ -78,4 +78,4 @@
         <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="clickShowMinicart" />
         <click selector="{{StorefrontMinicartSection.ViewAndEditCart}}" stepKey="clickCart" />
     </actionGroup>
-</config>
+</actionGroups>

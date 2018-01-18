@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Apply Sales Rule Coupon to the cart -->
     <actionGroup name="StorefrontApplyCouponActionGroup">
         <arguments>
@@ -36,4 +36,4 @@
         <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel" />
         <see userInput="-${{discount}}" selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="assertDiscountTotal" />
     </actionGroup>
-</config>
+</actionGroups>

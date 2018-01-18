@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
@@ -29,4 +29,4 @@
         <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="scrollToClickCategoryFilter"/>
         <click selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="clickCategoryFilter" />
     </actionGroup>
-</config>
+</actionGroups>

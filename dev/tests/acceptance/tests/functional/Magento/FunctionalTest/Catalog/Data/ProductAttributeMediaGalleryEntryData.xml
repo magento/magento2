@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
         <data key="media_type">image</data>
         <data key="label" unique="suffix">Test Image </data>
@@ -18,7 +18,7 @@
             <item>thumbnail</item>
         </array>
         <data key="disabled">false</data>
-        <required-entity type="ImageContent">TestImageContent</required-entity>
+        <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
     </entity>
     <entity name="ApiProductAttributeMediaGalleryEntryMagentoLogo" type="ProductAttributeMediaGalleryEntry">
         <data key="media_type">image</data>
@@ -28,6 +28,6 @@
             <item>small_image</item>
         </array>
         <data key="disabled">false</data>
-        <required-entity type="ImageContent">MagentoLogoImageContent</required-entity>
+        <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
     </entity>
-</config>
+</entities>

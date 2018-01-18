@@ -6,8 +6,8 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!-- Add Product to Compare from the category page and check message -->
     <actionGroup name="StorefrontAddCategoryProductToCompareActionGroup">
         <arguments>
@@ -68,4 +68,4 @@
         <waitForElement selector="{{StorefrontMessagesSection.message('You cleared the comparison list.')}}" time="30" stepKey="AssertMessageCleared"/>
         <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="assertNoItems"/>
     </actionGroup>
-</config>
+</actionGroups>

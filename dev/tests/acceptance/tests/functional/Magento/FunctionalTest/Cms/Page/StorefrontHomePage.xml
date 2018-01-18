@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontHomePage" url="/" module="Magento_Cms">
-        <section name="StorefrontHomePageCategoriesSection"/>
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="StorefrontHomePage" url="/" module="Magento_Cms" area="storefront">
+        <section name="StorefrontHeaderSection"/>
     </page>
-</config>
+</pages>
