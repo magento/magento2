@@ -43,6 +43,11 @@ class Context
     protected $storeCookieManager;
 
     /**
+     * @var bool
+     */
+    private $called = false;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -65,33 +70,37 @@ class Context
      *
      * @param AbstractAction $subject
      * @param RequestInterface $request
-     * @param \Closure $call
-     *
-     * @return mixed
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         AbstractAction $subject,
-        \Closure $call,
         RequestInterface $request
     ) {
-        /** @var StoreInterface $defaultStore */
-        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
+        if ($this->called) {
+            //Avoiding recursion.
+            return;
+        }
 
+        $this->called = true;
         $storeCode = $request->getParam(
             StoreResolverInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
-
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                throw new \InvalidArgumentException(new Phrase('Invalid store parameter.'));
+                //Triggering default mechanism for invalid pages requested.
+                throw new NotFoundException(new Phrase('Invalid store parameter.'));
             }
             $storeCode = $storeCode['_data']['code'];
         }
+        if ($storeCode === '') {
+            //Empty store code was explicitly given so
+            //triggering default mechanism for invalid pages requested.
+            throw new NotFoundException(new Phrase('Invalid store parameter.'));
+        }
         try {
-            $currentStore = $storeCode
-                ? $this->storeManager->getStore($storeCode) : $defaultStore;
+            $currentStore = $this->storeManager->getStore($storeCode);
         } catch (NoSuchEntityException $exception) {
             //If invalid store code received from request then triggering
             //default mechanism for invalid URLs.
@@ -107,12 +116,12 @@ class Context
             $this->storeManager->getDefaultStoreView()->getCode()
         );
 
+        /** @var StoreInterface $defaultStore */
+        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
             $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
             $defaultStore->getDefaultCurrencyCode()
         );
-
-        return $call($request);
     }
 }

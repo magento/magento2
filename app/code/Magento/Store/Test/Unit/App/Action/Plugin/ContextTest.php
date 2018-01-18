@@ -74,11 +74,6 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
-     * @var \Closure
-     */
-    private $callbackMock;
-
-    /**
      * Set up
      */
     protected function setUp()
@@ -97,9 +92,6 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->callbackMock = function () {
-            return 'response';
-        };
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\Store\App\Action\Plugin\Context::class,
@@ -110,16 +102,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
                 'storeCookieManager' => $this->storeCookieManager
             ]
         );
-        $this->storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->will($this->returnValue($this->websiteMock));
+
         $this->storeManager->method('getDefaultStoreView')
             ->willReturn($this->storeMock);
-
-        $this->websiteMock->expects($this->once())
-            ->method('getDefaultStore')
-            ->will($this->returnValue($this->storeMock));
-
         $this->storeCookieManager->expects($this->once())
             ->method('getStoreCodeFromCookie')
             ->will($this->returnValue('storeCookie'));
@@ -128,8 +113,15 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(self::CURRENCY_CURRENT_STORE));
     }
 
-    public function testAroundDispatchCurrencyFromSession()
+    public function testBeforeDispatchCurrencyFromSession()
     {
+        $this->storeManager->expects($this->once())
+            ->method('getWebsite')
+            ->will($this->returnValue($this->websiteMock));
+        $this->websiteMock->expects($this->once())
+            ->method('getDefaultStore')
+            ->will($this->returnValue($this->storeMock));
+
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrencyCode')
             ->will($this->returnValue(self::CURRENCY_DEFAULT));
@@ -162,15 +154,21 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_SESSION, self::CURRENCY_DEFAULT);
 
-        $this->plugin->aroundDispatch(
+        $this->plugin->beforeDispatch(
             $this->subjectMock,
-            $this->callbackMock,
             $this->requestMock
         );
     }
 
     public function testDispatchCurrentStoreCurrency()
     {
+        $this->storeManager->expects($this->once())
+            ->method('getWebsite')
+            ->will($this->returnValue($this->websiteMock));
+        $this->websiteMock->expects($this->once())
+            ->method('getDefaultStore')
+            ->will($this->returnValue($this->storeMock));
+
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrencyCode')
             ->will($this->returnValue(self::CURRENCY_DEFAULT));
@@ -199,15 +197,21 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->aroundDispatch(
+        $this->plugin->beforeDispatch(
             $this->subjectMock,
-            $this->callbackMock,
             $this->requestMock
         );
     }
 
     public function testDispatchStoreParameterIsArray()
     {
+        $this->storeManager->expects($this->once())
+            ->method('getWebsite')
+            ->will($this->returnValue($this->websiteMock));
+        $this->websiteMock->expects($this->once())
+            ->method('getDefaultStore')
+            ->will($this->returnValue($this->storeMock));
+
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrencyCode')
             ->will($this->returnValue(self::CURRENCY_DEFAULT));
@@ -243,16 +247,14 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->aroundDispatch(
+        $this->plugin->beforeDispatch(
             $this->subjectMock,
-            $this->callbackMock,
             $this->requestMock
         );
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid store parameter.
+     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatchStoreParameterIsInvalidArray()
     {
@@ -277,9 +279,8 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue($store));
-        $this->plugin->aroundDispatch(
+        $this->plugin->beforeDispatch(
             $this->subjectMock,
-            $this->callbackMock,
             $this->requestMock
         );
     }
@@ -298,6 +299,6 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->with($storeId)
             ->willThrowException(new NoSuchEntityException());
 
-        $this->plugin->aroundDispatch($this->subjectMock, $this->callbackMock, $this->requestMock);
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }
