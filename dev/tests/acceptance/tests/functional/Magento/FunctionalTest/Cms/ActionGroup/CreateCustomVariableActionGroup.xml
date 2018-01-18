@@ -6,8 +6,8 @@
           */
         -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
 <actionGroup name="CreateCustomVariableActionGroup">
     <amOnPage url="admin/admin/system_variable/new/" stepKey="goToNewCustomVarialePage" />
     <waitForPageLoad stepKey="waitForPageLoad" />
@@ -26,4 +26,4 @@
     <click selector="{{CustomVariableSection.confirmDelete}}" stepKey="confirmDelete" />
     <waitForPageLoad stepKey="waitForPageLoad2" />
 </actionGroup>
-</config>
+</actionGroups>
