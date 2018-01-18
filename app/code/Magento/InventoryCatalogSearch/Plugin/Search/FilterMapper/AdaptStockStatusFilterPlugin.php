@@ -12,12 +12,10 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\MultiDimensionalIndexer\Alias;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 
 /**
  * Adapt stock status filter to multi stocks
@@ -40,14 +38,9 @@ class AdaptStockStatusFilterPlugin
     private $stockResolver;
 
     /**
-     * @var IndexNameBuilder
+     * @var StockIndexTableNameResolverInterface
      */
-    private $indexNameBuilder;
-
-    /**
-     * @var IndexNameResolverInterface
-     */
-    private $indexNameResolver;
+    private $stockIndexTableNameResolver;
 
     /**
      * @var ResourceConnection
@@ -58,23 +51,20 @@ class AdaptStockStatusFilterPlugin
      * @param ConditionManager $conditionManager
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
-     * @param IndexNameBuilder $indexNameBuilder
-     * @param IndexNameResolverInterface $indexNameResolver
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ConditionManager $conditionManager,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
-        IndexNameBuilder $indexNameBuilder,
-        IndexNameResolverInterface $indexNameResolver,
+        StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         ResourceConnection $resourceConnection
     ) {
         $this->conditionManager = $conditionManager;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
-        $this->indexNameBuilder = $indexNameBuilder;
-        $this->indexNameResolver = $indexNameResolver;
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -204,12 +194,7 @@ class AdaptStockStatusFilterPlugin
             SalesChannelInterface::TYPE_WEBSITE,
             $website->getCode()
         );
-        $indexName = $this->indexNameBuilder
-            ->setIndexId('inventory_stock')
-            ->addDimension('stock_', (string)$stock->getStockId())
-            ->setAlias(Alias::ALIAS_MAIN)
-            ->build();
-        $tableName = $this->indexNameResolver->resolveName($indexName);
+        $tableName = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
         return $this->resourceConnection->getTableName($tableName);
     }
 }
