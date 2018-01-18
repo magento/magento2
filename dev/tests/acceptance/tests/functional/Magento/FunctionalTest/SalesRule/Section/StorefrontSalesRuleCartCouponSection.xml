@@ -13,8 +13,5 @@
         <element name="couponField" type="text" selector="//*[@id='coupon_code']"/>
         <element name="applyButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'apply')]"/>
         <element name="cancelButton" type="text" selector="//*[@id='discount-coupon-form']//button[contains(@class, 'cancel')]"/>
-
-        <element name="discountLabel" type="text" selector="//*[@id='cart-totals']//tr//th//span[contains(@class, 'coupon')]"/>
-        <element name="discountTotal" type="text" selector="//*[@id='cart-totals']//tr[.//th//span[contains(@class, 'coupon')]]//td//span[@class='price']"/>
     </section>
 </config>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <!-- Quick search the phrase and check if the result page contains correct information -->
+    <actionGroup name="StorefrontCheckQuickSearchActionGroup">
+        <arguments>
+            <argument name="phrase"/>
+        </arguments>
+        <!-- @TODO: MAGETWO-75411 Add Search URL check -->
+        <fillField userInput="{{phrase}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillQuickSearch"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickQuickSearchButton" />
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+
+    <!-- Select the category in the filter -->
+    <actionGroup name="StorefrontSelectFilterCategoryActionGroup">
+        <arguments>
+            <argument name="category"/>
+        </arguments>
+        <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" stepKey="clickCategoryFilterTitle" />
+        <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="scrollToClickCategoryFilter"/>
+        <click selector="{{StorefrontCategoryFilterSection.CategoryByName(category.name)}}" stepKey="clickCategoryFilter" />
+    </actionGroup>
+</config>

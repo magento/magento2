@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <!-- Check the simple product on the product page -->
+    <actionGroup name="StorefrontCheckSimpleProduct">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <!-- @TODO: MAGETWO-75411 Add Product Url Check -->
+        <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see userInput="${{product.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart" />
+        <!-- @TODO: MAGETWO-75411 Add Product Image Check -->
+        <!-- @TODO: MAGETWO-75411 Add Product Description Check -->
+    </actionGroup>
+</config>

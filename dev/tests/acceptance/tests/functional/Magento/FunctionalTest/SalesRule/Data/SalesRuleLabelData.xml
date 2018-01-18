@@ -8,11 +8,12 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="ApiSalesRuleCoupon" type="SalesRuleCoupon">
-        <data key="code" unique="suffix">salesCoupon</data>
-        <data key="times_used">0</data>
-        <data key="is_primary">1</data>
-        <data key="type">0</data>
-        <var key="rule_id" entityType="SalesRule" entityKey="rule_id"/>
+    <entity name="SalesRuleLabelDefault" type="SalesRuleLabel">
+        <data key="store_id">0</data>
+        <data key="store_label" unique="suffix">Sales Rule (Default) </data>
+    </entity>
+    <entity name="SalesRuleLabelStore1" type="SalesRuleLabel">
+        <data key="store_id">1</data>
+        <data key="store_label" unique="suffix">Sales Rule (Store 1) </data>
     </entity>
 </config>

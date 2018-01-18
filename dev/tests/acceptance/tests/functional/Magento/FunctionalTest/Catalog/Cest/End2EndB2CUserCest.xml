@@ -19,28 +19,47 @@
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct1">
                 <required-entity createDataKey="createCategory"/>
             </createData>
-            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createProductImage11">
+                <required-entity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryMagentoLogo" stepKey="createProductImage12">
+                <required-entity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct2">
                 <required-entity createDataKey="createCategory"/>
             </createData>
-            <createData entity="_defaultCategory" stepKey="createCategory1"/>
-            <createData entity="_defaultProduct" stepKey="createSimpleProduct11">
+            <createData entity="ApiProductAttributeMediaGalleryEntryMagentoLogo" stepKey="createProductImage2">
+                <required-entity createDataKey="createSimpleProduct2"/>
+            </createData>
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
+            <createData entity="ApiCategory" stepKey="createCategory1"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct11">
                 <required-entity createDataKey="createCategory1"/>
             </createData>
-            <createData entity="_defaultApiSalesRule" stepKey="createSalesRule"/>
-            <createData entity="_defaultApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
+            <!-- @TODO: MAGETWO-75411 Move to SalesRule -->
+            <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
                 <required-entity createDataKey="createSalesRule"/>
             </createData>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createProductImage11" stepKey="deleteProductImage11"/>-->
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createProductImage12" stepKey="deleteProductImage12"/>-->
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createProductImage2" stepKey="deleteProductImage2"/>-->
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
+            <!-- @TODO: MAGETWO-75411 Move to SalesRule -->
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
         </after>
         <test name="End2EndB2CUser">
@@ -50,157 +69,254 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-75411"/>
             </annotations>
+
             <!-- Step 1: User browses catalog -->
             <amOnPage url="{{StorefrontHomePage}}" stepKey="amOnHomePage"/>
+            <waitForPageLoad stepKey="homeWaitForPageLoad"/>
+            <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
+            <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
 
             <!-- Open Category -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory" />
-            <seeInTitle userInput="$$createCategory.name$$" stepKey="browseAssertCategoryNameTitle"/>
-            <see userInput="$$createCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="browseAssertCategoryName"/>
-            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="browseAssertCategoryProductCount"/>
-            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct1Price"/>
-            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseAssertCategorySimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct2Price"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategory">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct2">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
 
             <!-- View Simple Product 1 -->
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" />
-            <seeInTitle userInput="$$createSimpleProduct1.name$$" stepKey="browseAssertSimpleProduct1NameTitle"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="browseAssertSimpleProduct1Name"/>
-            <see userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="browseAssertSimpleProduct1Sku"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="browseAssertSimpleProduct1Price"/>
-            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="browseAssertSimpleProduct1Stock"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
 
             <!-- View Simple Product 2 -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory1" />
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" />
-            <seeInTitle userInput="$$createSimpleProduct2.name$$" stepKey="browseAssertSimpleProduct2NameTitle"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="browseAssertSimpleProduct2Name"/>
-            <see userInput="$$createSimpleProduct2.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="browseAssertSimpleProduct2Sku"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="browseAssertSimpleProduct2Price"/>
-            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="browseAssertSimpleProduct2Stock"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory1"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
 
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
+
+            <!-- @TODO: MAGETWO-75411 Move to CatalogSearch -->
             <!-- Step 2: User searches for product -->
             <!-- Quick Search with Product 1 Name -->
-            <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearch"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButton" />
-            <seeInTitle userInput="Search results for: '$$createSimpleProduct1.name$$'" stepKey="searchAssertQuickSearchTitle"/>
-            <see userInput="Search results for: '$$createSimpleProduct1.name$$'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchName"/>
-            <see userInput="1" selector="{{StorefrontQuickSearchMainSection.productCount}} span" stepKey="searchAssertProductCount"/>
-            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$   )}}" stepKey="searchAssertSimpleProduct1Price"/>
+            <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchQuickSearchProduct1">
+                <argument name="phrase" value="$$createSimpleProduct1.name$$"/>
+            </actionGroup>
+            <see userInput="1" selector="{{StorefrontQuickSearchMainSection.productCount}} span" stepKey="searchAssertProduct1Count"/>
+
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertSimpleProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
             <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchClickSimpleProduct1View"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="searchAssertSimpleProduct1PageName"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="searchAssertSimpleProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
 
             <!-- Quick Search with common part of product names -->
-            <fillField userInput="testProductName" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearchCommonPart"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButtonCommonPart" />
-            <seeInTitle userInput="Search results for: 'testProductName'" stepKey="searchAssertQuickSearchTitleCommonPart"/>
-            <see userInput="Search results for: 'testProductName'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchNameCommonPart"/>
-            <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" stepKey="searchClickCategoryFilterTitleCommonPart" />
-            <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" stepKey="searchScrollToClickCategoryFilterCommonPart"/>
-            <click selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" stepKey="searchClickCategoryFilterCommonPart" />
-            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="searchAssertCategoryProductCount"/>
-            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertCategorySimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertCategorySimpleProduct1Price"/>
-            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="searchAssertCategorySimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="searchAssertCategorySimpleProduct2Price"/>
+            <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchQuickSearchCommonPart">
+                <argument name="phrase" value="CONST.apiSimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontSelectFilterCategoryActionGroup" stepKey="searchSelectFilterCategoryCommonPart">
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="searchAssertFilterCategoryProductCountCommonPart"/>
+
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertFilterCategorySimpleProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertFilterCategorySimpleProduct2">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+
             <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="searchClickSimpleProduct2View"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="searchAssertSimpleProduct2PageName"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="searchAssertSimpleProduct2Page">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
 
             <!-- Quick Search with non-existent product name -->
-            <fillField userInput="nonexistent$$createSimpleProduct1.name$$nonexistent" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearchNonExistent"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButtonNonExistent" />
-            <seeInTitle userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" stepKey="searchAssertQuickSearchTitleNonExistent"/>
-            <see userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchNameNonExistent"/>
+            <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchFillQuickSearchNonExistent">
+                <argument name="phrase" value="CONST.nonexistentProductName"/>
+            </actionGroup>
             <see userInput="Your search returned no results." selector="{{StorefrontQuickSearchMainSection.message}}" stepKey="searchAssertQuickSearchMessageNonExistent"/>
 
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
+
+            <!-- @TODO: MAGETWO-75411 Move to Checkout -->
             <!-- Step 3: User adds products to cart -->
             <!-- Add Simple Product 1 to cart -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" />
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
             <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickSimpleProduct1"/>
-            <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="cartClickAddSimpleProduct1ToCart" />
-            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct1.name$$ to your shopping cart.')}}" time="30" stepKey="cartMessageSimpleProduct1AddedToCart"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProduct1ToCart">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+                <argument name="productCount" value="CONST.one"/>
+            </actionGroup>
 
             <!-- Add Simple Product 2 to cart -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" />
-            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createSimpleProduct2.name$$)}}" stepKey="cartMoveMouseOverSimpleProduct2" />
-            <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickAddSimpleProduct2ToCart" />
-            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct2.name$$ to your shopping cart.')}}" time="30" stepKey="cartMessageSimpleProduct2AddedToCart"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="cartAssertSimpleProduct2">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="cartAddProduct2ToCart">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Check products in minicart -->
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct1" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart" />
-            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickMinicartSimpleProduct1" />
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertMinicartSimpleProduct1Name"/>
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct2" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart1" />
-            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickMinicartSimpleProduct2" />
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertMinicartSimpleProduct2Name"/>
+            <actionGroup ref="StorefrontOpenMinicartProductActionGroup" stepKey="cartOpenMinicartProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenMinicartProductActionGroup" stepKey="cartOpenMinicartProduct2Page">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct2Page">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Check products in cart -->
-            <amOnPage url="{{CheckoutCartPage}}" stepKey="cartOnCheckoutCart"/>
-            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Price"/>
-            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Quantity"/>
+            <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart"/>
+            <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart">
+                <argument name="subtotal" value="CONST.twohundredfourtysix00"/>
+                <argument name="shipping" value="CONST.ten00"/>
+                <argument name="shippingMethod" value="CONST.flatRateFixed"/>
+                <argument name="total" value="CONST.twohundredfiftysix00"/>
+            </actionGroup>
+
+            <actionGroup ref="StorefrontCheckCartProductActionGroup" stepKey="cartAssertCartSimpleProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+                <argument name="productQuantity" value="CONST.one"/>
+            </actionGroup>
             <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickCartSimpleProduct1" />
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertAfterCartSimpleProduct1Name"/>
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct21" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart2" />
-            <click selector="{{StorefrontMinicartSection.ViewAndEditCart}}" stepKey="cartClickViewAndEditCart" />
-            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Price"/>
-            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Quantity"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+
+            <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart1"/>
+            <actionGroup ref="StorefrontCheckCartProductActionGroup" stepKey="cartAssertCartSimpleProduct2">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+                <argument name="productQuantity" value="CONST.one"/>
+            </actionGroup>
             <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickCartSimpleProduct2" />
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertAfterCartSimpleProduct2Name"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct2Page">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Step 4: User compares products -->
             <!-- Add Simple Product 1 to comparison -->
             <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="compareAssertSimpleProduct1">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
             <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1"/>
-            <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="compareScrollToAddSimpleProduct1ToCompare"/>
-            <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="compareClickAddSimpleProduct1ToCompare"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct1.name$$ to the comparison list.')}}" time="30" stepKey="compareMessageSimpleProduct1AddedToCompare"/>
+            <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="compareAssertProduct1Page">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+                <argument name="productCount" value="CONST.one"/>
+            </actionGroup>
 
             <!-- Add Simple Product 2 to comparison -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1" />
-            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createSimpleProduct2.name$$)}}" stepKey="compareMoveMouseOverSimpleProduct2" />
-            <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByName($$createSimpleProduct2.name$$)}}" stepKey="compareClickAddSimpleProduct2ToCompare"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct2.name$$ to the comparison list.')}}" time="30" stepKey="compareMessageSimpleProduct2AddedToCompare"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="compareAssertSimpleProduct2">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Check products in comparison sidebar -->
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareSimpleProduct1InSidebar"/>
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="compareSimpleProduct2InSidebar"/>
+            <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct1InSidebar">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct2InSidebar">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Check products on comparison page -->
-            <click selector="{{StorefrontComparisonSidebarSection.Compare}}" stepKey="compareClickCompare"/>
-            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="compareAssertCompareSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="compareAssertCompareSimpleProduct1Price"/>
-            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="compareAssertCompareSimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="compareAssertCompareSimpleProduct2Price"/>
+            <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="compareOpenComparePage"/>
+            <actionGroup ref="StorefrontCheckCompareProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCompareProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
+                <argument name="product" value="$$createSimpleProduct2$$"/>
+            </actionGroup>
+            <!-- @TODO: MAGETWO-75411 Add Configurable Product -->
 
             <!-- Clear comparison sidebar -->
             <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear"/>
-            <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ClearAll}}" time="30" stepKey="compareWaitForClearAll"/>
-            <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="compareClickClearAll"/>
-            <waitForElementVisible selector="{{ModalConfirmationSection.OkButton}}" time="30" stepKey="compareWaitForClearOk"/>
-            <scrollTo selector="{{ModalConfirmationSection.OkButton}}" stepKey="compareClickClearOk"/>
-            <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="compareClickClearOk"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You cleared the comparison list.')}}" time="30" stepKey="compareMessageCleared"/>
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="compareNoItems"/>
+            <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory2">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="productCount" value="CONST.two"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="compareClearCompare"/>
 
+            <!-- @TODO: MAGETWO-75411 Move to SalesRule -->
             <!-- Step 5: User uses coupon codes -->
-            <amOnPage url="{{CheckoutCartPage}}" stepKey="couponOnCartPage"/>
-            <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" stepKey="couponClickCouponHeader" />
-            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="couponWaitForCouponField" />
-            <fillField userInput="$$createSalesRuleCoupon.code$$" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="couponFillCouponField"/>
-            <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="couponClickApplyButton"/>
-            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" stepKey="couponWaitForDiscountTotal" />
-            <!--<see userInput="$$createSalesRule.store_labels[0]['store_label']$$" selector="{{StorefrontSalesRuleCartCouponSection.discountLabel}}" stepKey="couponAssertDiscountLabel" />-->
-            <see userInput="-$24.60" selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" stepKey="couponAssertDiscountTotal" />
+            <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart"/>
 
+            <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon">
+                <argument name="coupon" value="$$createSalesRuleCoupon$$"/>
+            </actionGroup>
 
+            <actionGroup ref="StorefrontCheckCouponAppliedActionGroup" stepKey="couponCheckAppliedDiscount">
+                <argument name="rule" value="$$createSalesRule$$"/>
+                <argument name="discount" value="CONST.twentyfour60"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="couponCheckCartWithDiscount">
+                <argument name="subtotal" value="CONST.twohundredfourtysix00"/>
+                <argument name="shipping" value="CONST.ten00"/>
+                <argument name="shippingMethod" value="CONST.flatRateFixed"/>
+                <argument name="total" value="CONST.twohundredthirtyone40"/>
+            </actionGroup>
 
+            <actionGroup ref="StorefrontCancelCouponActionGroup" stepKey="couponCancelCoupon"/>
+            <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart">
+                <argument name="subtotal" value="CONST.twohundredfourtysix00"/>
+                <argument name="shipping" value="CONST.ten00"/>
+                <argument name="shippingMethod" value="CONST.flatRateFixed"/>
+                <argument name="total" value="CONST.twohundredfiftysix00"/>
+            </actionGroup>
         </test>
     </cest>
 </config>

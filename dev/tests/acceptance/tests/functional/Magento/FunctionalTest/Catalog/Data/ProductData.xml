@@ -21,6 +21,19 @@
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
         <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
     </entity>
+    <entity name="ApiSimpleProduct" type="product">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+    </entity>
     <entity name="SimpleProduct" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
@@ -52,5 +65,17 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">logo.png</data>
+    </entity>
+    <entity name="CONST" type="CONST">
+        <data key="one">1</data>
+        <data key="two">2</data>
+        <data key="twohundredfourtysix00">246.00</data>
+        <data key="twentyfour60">24.60</data>
+        <data key="ten00">10.00</data>
+        <data key="twohundredfiftysix00">256.00</data>
+        <data key="twohundredthirtyone40">231.40</data>
+        <data key="flatRateFixed">Flat Rate - Fixed</data>
+        <data key="apiSimpleProduct">Api Simple Product</data>
+        <data key="nonexistentProductName">NonexistentProductName</data>
     </entity>
 </config>
