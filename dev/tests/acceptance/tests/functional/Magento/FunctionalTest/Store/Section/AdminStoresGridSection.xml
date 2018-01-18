@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminStoresGridSection">
         <element name="storeGrpFilterTextField" type="input" selector="#storeGrid_filter_group_title"/>
         <element name="websiteFilterTextField" type="input" selector="#storeGrid_filter_website_title"/>
@@ -17,4 +17,4 @@
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title>a"/>
 
     </section>
-</config>
+</sections>

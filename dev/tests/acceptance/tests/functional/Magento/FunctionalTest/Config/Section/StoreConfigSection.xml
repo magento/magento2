@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StoreConfigSection">
         <element name="CheckIfTabExpand" type="button" selector="#general_store_information-head:not(.open)"/>
@@ -14,4 +14,4 @@
         <element name="City" type="input" selector="#general_store_information_city"/>
         <element name="Save" type="button" selector="#save"/>
     </section>
-</config>
+</sections>

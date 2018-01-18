@@ -6,12 +6,12 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ConfigurableProductTwoOptions" type="ConfigurableProductOption">
         <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
         <data key="label">option</data>
-        <required-entity type="ValueIndex">ValueIndex1</required-entity>
-        <required-entity type="ValueIndex">ValueIndex2</required-entity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex2</requiredEntity>
     </entity>
-</config>
+</entities>
