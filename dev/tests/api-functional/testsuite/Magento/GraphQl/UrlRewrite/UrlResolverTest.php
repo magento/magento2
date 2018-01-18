@@ -20,18 +20,13 @@ class UrlResolverTest extends GraphQlAbstract
     /** @var  ObjectManager */
     private $objectManager;
 
-    /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
-     */
-    private $urlPathGenerator;
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
-     * Tests if the target_path(canonical_url) when a Product entity with a valid url_key (request_path) is provided
+     * Tests if target_path(canonical_url) is resolved for Product entity
      *
      *  @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -74,7 +69,9 @@ QUERY;
     }
 
     /**
-     *  @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * Tests the use case where canonical_url is provided as resolver input in the Query
+     *
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testProductUrlWithCanonicalUrlInput()
     {
@@ -117,7 +114,8 @@ QUERY;
     }
 
     /**
-     *Test the
+     * Test for category entity
+     *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testCategoryUrlResolver()
