@@ -15,7 +15,7 @@ define([
 
             window.checkoutConfig = {
                 defaultCountryId: 'US',
-                defaultRegionId: '12'
+                defaultRegionId: 12
             };
 
             newCustomerAddress = NewCustomerAddress;
@@ -67,6 +67,7 @@ define([
                 }),
                 expected = {
                     countryId: 'US',
+                    regionId: 12,
                     regionCode: null,
                     region: null
                 };
