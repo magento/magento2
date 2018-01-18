@@ -187,7 +187,7 @@ class EavTest extends AbstractModifierTest
      * @var ObjectManager
      */
     protected $objectManager;
-    
+
     /**
      * @var Eav
      */
@@ -324,7 +324,7 @@ class EavTest extends AbstractModifierTest
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        
+
         $this->eav =$this->getModel();
         $this->objectManager->setBackwardCompatibleProperty(
             $this->eav,
@@ -561,7 +561,7 @@ class EavTest extends AbstractModifierTest
                 'required'    => true,
                 'notice'      => null,
                 'default'     => null,
-                'label'       => null,
+                'label'       => new Phrase(''),
                 'code'        => 'code',
                 'source'      => 'product-details',
                 'scopeLabel'  => '',
@@ -588,7 +588,7 @@ class EavTest extends AbstractModifierTest
                 'required'    => false,
                 'notice'      => null,
                 'default'     => null,
-                'label'       => null,
+                'label'       => new Phrase(''),
                 'code'        => 'code',
                 'source'      => 'product-details',
                 'scopeLabel'  => '',
@@ -615,7 +615,7 @@ class EavTest extends AbstractModifierTest
                 'required'    => false,
                 'notice'      => null,
                 'default'     => 'required_value',
-                'label'       => null,
+                'label'       => new Phrase(''),
                 'code'        => 'code',
                 'source'      => 'product-details',
                 'scopeLabel'  => '',
@@ -642,7 +642,7 @@ class EavTest extends AbstractModifierTest
                 'required'    => false,
                 'notice'      => null,
                 'default'     => 'required_value',
-                'label'       => null,
+                'label'       => new Phrase(''),
                 'code'        => 'code',
                 'source'      => 'product-details',
                 'scopeLabel'  => '',
@@ -669,7 +669,7 @@ class EavTest extends AbstractModifierTest
                 'required'    => false,
                 'notice'      => __('example notice'),
                 'default'     => 'required_value',
-                'label'       => null,
+                'label'       => new Phrase(''),
                 'code'        => 'code',
                 'source'      => 'product-details',
                 'scopeLabel'  => '',
