@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\Inventory\Model\StockIndexTableNameResolverInterface;
+use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
 /**
  * Add Stock data to collection

@@ -41,6 +41,4 @@
         <plugin name="adapt_add_stock_sata_to_collection_to_multi_stocks"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\AdaptAddStockDataToCollectionToMultiStocks"/>
     </type>
-    <preference for="Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsiteInterface"
-                type="Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite"/>
 </config>
