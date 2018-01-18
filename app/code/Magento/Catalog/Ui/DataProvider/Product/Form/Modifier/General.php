@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Ui\Component\Form;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form;
 
 /**
  * Data provider for main panel of product page
@@ -42,19 +45,27 @@ class General extends AbstractModifier
     private $attributeRepository;
 
     /**
+     * @var StockStateInterface
+     */
+    private $stockState;
+
+    /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
      * @param AttributeRepositoryInterface|null $attributeRepository
+     * @param StockStateInterface|null $stockState
      */
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        AttributeRepositoryInterface $attributeRepository = null
+        AttributeRepositoryInterface $attributeRepository = null,
+        StockStateInterface $stockState = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
         $this->attributeRepository = $attributeRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
+        $this->stockState = $stockState ?: ObjectManager::getInstance()->get(StockStateInterface::class);;
     }
 
     /**
@@ -125,7 +136,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    $this->formatPriceQty($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
             }
         }
 
@@ -393,10 +404,28 @@ class General extends AbstractModifier
     private function getLocaleCurrency()
     {
         if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->localeCurrency = ObjectManager::getInstance()
                 ->get(\Magento\Framework\Locale\CurrencyInterface::class);
         }
         return $this->localeCurrency;
+    }
+
+    /**
+     * Make price qty even int or decimal
+     *
+     * @param string|int|float $priceQty
+     *
+     * @return int
+     */
+    private function formatPriceQty($priceQty)
+    {
+        $productId = $this->locator->getProduct()->getId();
+
+        if ($this->stockState->isStockQtyDecimal((int)$productId)) {
+            return $priceQty;
+        }
+
+        return (int) $priceQty;
     }
 
     /**
@@ -437,7 +466,7 @@ class General extends AbstractModifier
         $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
-                                                'precision' => $precision]);
+            'precision' => $precision]);
 
         return $value;
     }

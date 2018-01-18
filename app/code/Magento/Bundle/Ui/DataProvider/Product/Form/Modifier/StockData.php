@@ -5,9 +5,9 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Bundle\Model\Product\Type;
 
 /**
  * Class StockData hides unnecessary fields in Advanced Inventory Modal
@@ -28,7 +28,8 @@ class StockData extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      */
     public function modifyData(array $data)
     {
@@ -36,7 +37,8 @@ class StockData extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $meta
+     * @return array
      */
     public function modifyMeta(array $meta)
     {

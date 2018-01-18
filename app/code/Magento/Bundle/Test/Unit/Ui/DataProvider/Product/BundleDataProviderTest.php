@@ -7,10 +7,10 @@ namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Bundle\Ui\DataProvider\Product\BundleDataProvider;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Bundle\Helper\Data;
+use Magento\CatalogInventory\Api\StockStateInterface;
 
 class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,11 +20,6 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
      * @var ObjectManager
      */
     protected $objectManager;
-
-    /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
 
     /**
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -42,14 +37,20 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $dataHelperMock;
 
     /**
+     * @var StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockStateMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+        $this->stockStateMock = $this->getMockBuilder(StockStateInterface::class)
             ->getMockForAbstractClass();
+
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -86,8 +87,8 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
             'primaryFieldName' => 'testPrimaryFieldName',
             'requestFieldName' => 'testRequestFieldName',
             'collectionFactory' => $this->collectionFactoryMock,
-            'request' => $this->requestMock,
             'dataHelper' =>  $this->dataHelperMock,
+            'stockState' => $this->stockStateMock,
             'addFieldStrategies' => [],
             'addFilterStrategies' => [],
             'meta' => [],
@@ -95,6 +96,11 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    /**
+     * Testing getData() method
+     *
+     * @return void
+     */
     public function testGetData()
     {
         $items = ['testProduct1', 'testProduct2'];
@@ -127,6 +133,11 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedData, $this->getModel()->getData());
     }
 
+    /**
+     * Testing getCollection() method
+     *
+     * @return void
+     */
     public function testGetCollection()
     {
         $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());

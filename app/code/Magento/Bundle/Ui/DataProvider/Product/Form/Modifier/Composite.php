@@ -5,13 +5,13 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Api\ProductOptionRepositoryInterface;
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Bundle\Model\Product\Type;
-use Magento\Bundle\Api\ProductOptionRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class Bundle customizes Bundle product creation flow
@@ -67,7 +67,7 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -87,7 +87,8 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Ui\DataProvider\Product;
 
+use Magento\Bundle\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
-use Magento\Bundle\Helper\Data;
+use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\Framework\App\ObjectManager;
 
 class BundleDataProvider extends ProductDataProvider
 {
@@ -17,6 +20,11 @@ class BundleDataProvider extends ProductDataProvider
     protected $dataHelper;
 
     /**
+     * @var StockStateInterface
+     */
+    private $stockState;
+
+    /**
      * Construct
      *
      * @param string $name
@@ -24,10 +32,11 @@ class BundleDataProvider extends ProductDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param Data $dataHelper
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
+     * @param StockStateInterface $stockState
      */
     public function __construct(
         $name,
@@ -38,7 +47,8 @@ class BundleDataProvider extends ProductDataProvider
         array $meta = [],
         array $data = [],
         array $addFieldStrategies = [],
-        array $addFilterStrategies = []
+        array $addFilterStrategies = [],
+        StockStateInterface $stockState = null
     ) {
         parent::__construct(
             $name,
@@ -52,6 +62,7 @@ class BundleDataProvider extends ProductDataProvider
         );
 
         $this->dataHelper = $dataHelper;
+        $this->stockState = $stockState ?: ObjectManager::getInstance()->get(StockStateInterface::class);
     }
 
     /**
@@ -73,6 +84,13 @@ class BundleDataProvider extends ProductDataProvider
             $this->getCollection()->load();
         }
         $items = $this->getCollection()->toArray();
+
+        foreach ($items as $index => $item) {
+            if (!is_array($item) || !array_key_exists('entity_id', $item)) {
+                continue;
+            }
+            $items[$index]['selection_qty_is_integer'] = !$this->stockState->isStockQtyDecimal((int)$item['entity_id']);
+        }
 
         return [
             'totalRecords' => $this->getCollection()->getSize(),

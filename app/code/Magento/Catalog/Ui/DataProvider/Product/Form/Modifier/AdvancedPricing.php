@@ -7,14 +7,16 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
-use Magento\Directory\Helper\Data;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form\Element\DataType\Number;
 use Magento\Ui\Component\Form\Element\DataType\Price;
@@ -23,7 +25,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
@@ -101,6 +102,11 @@ class AdvancedPricing extends AbstractModifier
     private $customerGroupSource;
 
     /**
+     * @var StockStateInterface
+     */
+    private $stockState;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param GroupRepositoryInterface $groupRepository
@@ -111,6 +117,7 @@ class AdvancedPricing extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
+     * @param StockStateInterface $stockState
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +130,8 @@ class AdvancedPricing extends AbstractModifier
         Data $directoryHelper,
         ArrayManager $arrayManager,
         $scopeName = '',
-        GroupSourceInterface $customerGroupSource = null
+        GroupSourceInterface $customerGroupSource = null,
+        StockStateInterface $stockState = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -136,10 +144,12 @@ class AdvancedPricing extends AbstractModifier
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
             ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
+        $this->stockState = $stockState ?: ObjectManager::getInstance()->get(StockStateInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $meta
+     * @return array
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -158,7 +168,8 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -270,7 +281,7 @@ class AdvancedPricing extends AbstractModifier
                 'value' => 0,
             ]
         ];
-        $product = $this->locator->getProduct();
+        $product = $this->getProduct();
 
         if (!$this->isScopeGlobal() && $product->getStoreId()) {
             /** @var \Magento\Store\Model\Website $website */
@@ -495,14 +506,21 @@ class AdvancedPricing extends AbstractModifier
                                         'formElement' => Input::NAME,
                                         'componentType' => Field::NAME,
                                         'dataType' => Number::NAME,
+                                        'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
                                         'sortOrder' => 30,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => false,
+                                            'validate-number' => false,
                                             'validate-number' => true,
+                                            'validate-digits' => $this->hasPriceQtyDigitsValidationPassed(),
+                                        ],
+                                        'imports' => [
+                                            'handleChanges' => '${ $.provider }:data.product.stock_data.is_qty_decimal',
+                                            'changeValueType' =>
+                                                '${$.provider}:data.product.stock_data.enable_qty_increments'
                                         ],
                                     ],
                                 ],
@@ -624,7 +642,7 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
-            'onCancel' => 'actionDone',
+            'onCancel' => 'closeModal',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [
@@ -675,5 +693,30 @@ class AdvancedPricing extends AbstractModifier
     private function getStore()
     {
         return $this->locator->getStore();
+    }
+
+    /**
+     * @since 102.0.2
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     */
+    private function getProduct()
+    {
+        return $this->locator->getProduct();
+    }
+
+    /**
+     * Get Price Qty digits validation
+     * @since 102.0.2
+     *
+     * @return bool
+     */
+    private function hasPriceQtyDigitsValidationPassed()
+    {
+        if (!$this->getProduct()->getId()) {
+            return false;
+        }
+
+        return !$this->stockState->isStockQtyDecimal($this->getProduct()->getId());
     }
 }

@@ -26,6 +26,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
     ) {
         $this->config = $config;
+
         parent::__construct($context);
     }
 

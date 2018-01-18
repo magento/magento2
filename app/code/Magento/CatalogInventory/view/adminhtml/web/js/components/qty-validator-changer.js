@@ -20,8 +20,24 @@ define([
             var isDigits = value !== 1;
 
             this.validation['validate-integer'] = isDigits;
+            this.validation['validate-digits'] = isDigits;
             this.validation['less-than-equals-to'] = isDigits ? 99999999 : 99999999.9999;
             this.validate();
+        },
+
+        /**
+         * Change input value type when "Enable Qty Increments" is "No"
+         *
+         * @param {Number|undefined} value
+         */
+        changeValueType: function (value) {
+            var isEnableQtyIncrements = value === 1;
+
+            if (!isEnableQtyIncrements && typeof this.value() !== 'undefined') {
+                if (this.value().length) {
+                    this.value(parseInt(this.value(), 10));
+                }
+            }
         }
     });
 });

@@ -5,15 +5,17 @@
  */
 namespace Magento\CatalogInventory\Model;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Api\StockQtyDecimalInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 
 /**
  * Interface StockState
  */
-class StockState implements StockStateInterface
+class StockState implements StockStateInterface, StockQtyDecimalInterface
 {
     /**
      * @var StockStateProviderInterface
@@ -155,5 +157,20 @@ class StockState implements StockStateInterface
         // }
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
+    }
+
+    /**
+     * @param int $productId
+     * @param string|int|null $scopeId
+     *
+     * @return bool
+     */
+    public function isStockQtyDecimal(int $productId, $scopeId = null): bool
+    {
+        $scopeId = $scopeId ?? $this->stockConfiguration->getDefaultScopeId();
+        /** @var StockItemInterface $stockItem */
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
+        return $stockItem->getIsQtyDecimal();
     }
 }

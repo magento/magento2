@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -30,7 +30,7 @@ class BundleWeight extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -76,12 +76,13 @@ class BundleWeight extends AbstractModifier
                 ]
             ]
         );
-        
+
         return $meta;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      */
     public function modifyData(array $data)
     {
