@@ -23,7 +23,7 @@ class ReaderComposite implements ReaderInterface
     /**
      * @param ReaderInterface[] $readers
      */
-    public function __construct(array $readers)
+    public function __construct(array $readers = [])
     {
         $this->readers = $readers;
     }
