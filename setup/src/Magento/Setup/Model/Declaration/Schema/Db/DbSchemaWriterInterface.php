@@ -62,6 +62,15 @@ interface DbSchemaWriterInterface
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType);
 
     /**
+     * Return statements which reset auto_increment to 1
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @return Statement
+     */
+    public function resetAutoIncrement($tableName, $resource);
+
+    /**
      * Modify column and change it definition
      *
      * Please note: that from all structural elements only column can be modified

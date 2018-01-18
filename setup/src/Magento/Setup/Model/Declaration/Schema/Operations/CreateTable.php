@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
@@ -37,15 +38,23 @@ class CreateTable implements OperationInterface
     private $definitionAggregator;
 
     /**
+     * @var DDLTriggerInterface[]
+     */
+    private $triggers;
+
+    /**
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param DefinitionAggregator $definitionAggregator
+     * @param array $triggers
      */
     public function __construct(
         DbSchemaWriterInterface $dbSchemaWriter,
-        DefinitionAggregator $definitionAggregator
+        DefinitionAggregator $definitionAggregator,
+        array $triggers = []
     ) {
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->definitionAggregator = $definitionAggregator;
+        $this->triggers = $triggers;
     }
 
     /**
@@ -80,14 +89,25 @@ class CreateTable implements OperationInterface
             }
         }
 
-        return [
-            $this->dbSchemaWriter
-                ->createTable(
-                    $table->getName(),
-                    $table->getResource(),
-                    $definition,
-                    ['engine' => $table->getEngine()]
-                )
-        ];
+        $createTableStatement = $this->dbSchemaWriter
+            ->createTable(
+                $table->getName(),
+                $table->getResource(),
+                $definition,
+                ['engine' => $table->getEngine()]
+        );
+
+        //Setup triggers for all column for table
+        foreach ($table->getColumns() as $column) {
+            foreach ($this->triggers as $trigger) {
+                if ($trigger->isApplicable($column->getOnCreate())) {
+                    $createTableStatement->addTrigger(
+                        $trigger->getCallback($column)
+                    );
+                }
+            }
+        }
+
+        return [$createTableStatement];
     }
 }

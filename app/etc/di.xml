@@ -1410,6 +1410,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Setup\Model\Declaration\Schema\Operations\AddColumn">
+        <arguments>
+            <argument name="triggers" xsi:type="array">
+                <item name="migrateDataFromSameTable" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFrom</item>
+                <item name="migrateDataFromAnotherTable" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFromAnotherTable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Setup\Model\Declaration\Schema\Operations\CreateTable">
+        <arguments>
+            <argument name="triggers" xsi:type="array">
+                <item name="migrateDataFromAnotherTable" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFromAnotherTable</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="\Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite">
         <arguments>
             <argument name="readers" xsi:type="array">

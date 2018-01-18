@@ -186,6 +186,21 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * @inheritdoc
      */
+    public function resetAutoIncrement($tableName, $resource)
+    {
+        $sql = 'AUTO_INCREMENT = 1';
+        return $this->statementFactory->create(
+            sprintf('RESET_AUTOINCREMENT_%s', $tableName),
+            $tableName,
+            self::ALTER_TYPE,
+            $sql,
+            $resource
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function compile(StatementAggregator $statementAggregator)
     {
         foreach ($statementAggregator->getStatementsBank() as $statementBank) {
