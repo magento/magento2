@@ -50,18 +50,26 @@ class Boolean implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
      * @param Nullable $nullable
      * @param BooleanUtils $booleanUtils
      * @param ResourceConnection $resourceConnection
+     * @param Comment $comment
      */
     public function __construct(
         Nullable $nullable,
         BooleanUtils $booleanUtils,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        Comment $comment
     ) {
         $this->nullable = $nullable;
         $this->booleanUtils = $booleanUtils;
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -71,12 +79,13 @@ class Boolean implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s %s %s',
+            '%s %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             self::TYPE,
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
-                sprintf('DEFAULT %s', $column->getDefault() ? 1 : 0) : ''
+                sprintf('DEFAULT %s', $column->getDefault() ? 1 : 0) : '',
+            $this->comment->toDefinition($column)
         );
     }
 

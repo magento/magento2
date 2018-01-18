@@ -33,15 +33,26 @@ class Decimal implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
      * @param Nullable $nullable
      * @param Unsigned $unsigned
+     * @param Comment $comment
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Nullable $nullable, Unsigned $unsigned, ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        Nullable $nullable,
+        Unsigned $unsigned,
+        Comment $comment,
+        ResourceConnection $resourceConnection
+    ) {
         $this->nullable = $nullable;
         $this->unsigned = $unsigned;
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -51,7 +62,7 @@ class Decimal implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s(%s, %s) %s %s %s',
+            '%s %s(%s, %s) %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
             $column->getPrecission(),
@@ -59,7 +70,8 @@ class Decimal implements DbDefinitionProcessorInterface
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
-                sprintf('DEFAULT %s', $column->getDefault()) : ''
+                sprintf('DEFAULT %s', $column->getDefault()) : '',
+            $this->comment->toDefinition($column)
         );
     }
 

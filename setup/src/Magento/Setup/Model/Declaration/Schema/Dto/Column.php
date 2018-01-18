@@ -30,20 +30,28 @@ class Column extends GenericElement implements
     private $onCreate;
 
     /**
+     * @var string
+     */
+    private $comment;
+
+    /**
      * @param string $name
      * @param string $type
      * @param Table $table
+     * @param string $comment
      * @param string|null $onCreate
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
+        string $comment = null,
         string $onCreate = null
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
         $this->onCreate = $onCreate;
+        $this->comment = $comment;
     }
 
     /**
@@ -70,5 +78,13 @@ class Column extends GenericElement implements
     public function getOnCreate()
     {
         return $this->onCreate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

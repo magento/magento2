@@ -26,17 +26,26 @@ class Blob implements DbDefinitionProcessorInterface
      * @var ResourceConnection
      */
     private $resourceConnection;
+    /**
+     * @var Comment
+     */
+    private $comment;
 
     /**
      * Text constructor.
      *
      * @param Nullable $nullable
+     * @param Comment $comment
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Nullable $nullable, ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        Nullable $nullable,
+        Comment $comment,
+        ResourceConnection $resourceConnection
+    ) {
         $this->nullable = $nullable;
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -46,10 +55,11 @@ class Blob implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s %s',
+            '%s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
-            $this->nullable->toDefinition($column)
+            $this->nullable->toDefinition($column),
+            $this->comment->toDefinition($column)
         );
     }
 

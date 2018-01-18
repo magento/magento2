@@ -53,6 +53,7 @@ class Integer extends Column implements
      * @param bool $unsigned
      * @param bool $identity
      * @param float|int $default
+     * @param string|null $comment
      * @param string|null $onCreate
      */
     public function __construct(
@@ -64,9 +65,10 @@ class Integer extends Column implements
         bool $unsigned = false,
         bool $identity = false,
         int $default = null,
+        string $comment = null,
         string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table, $onCreate);
+        parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;
         $this->default = $default;
         $this->unsigned = $unsigned;

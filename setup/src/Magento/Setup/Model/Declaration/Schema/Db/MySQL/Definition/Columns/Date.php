@@ -23,11 +23,18 @@ class Date implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @var Comment
      */
-    public function __construct(ResourceConnection $resourceConnection)
+    private $comment;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     * @param Comment $comment
+     */
+    public function __construct(ResourceConnection $resourceConnection, Comment $comment)
     {
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -37,9 +44,10 @@ class Date implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s',
+            '%s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
-            $column->getType()
+            $column->getType(),
+            $this->comment->toDefinition($column)
         );
     }
 

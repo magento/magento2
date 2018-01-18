@@ -61,9 +61,10 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     public function createTable($tableName, $resource, array $definition, array $options)
     {
         $sql = sprintf(
-            "(\n%s\n) ENGINE=%s",
+            "(\n%s\n) ENGINE=%s %s",
             implode(", \n", $definition),
-            $options['engine']
+            $options['engine'],
+            isset($options['comment']) ? sprintf('COMMENT="%s"', $options['comment']) : ''
         );
 
         return $this->statementFactory->create(

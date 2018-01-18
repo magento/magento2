@@ -27,13 +27,20 @@ class Varchar implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
      * @param Nullable $nullable
      * @param ResourceConnection $resourceConnection
+     * @param Comment $comment
      */
-    public function __construct(Nullable $nullable, ResourceConnection $resourceConnection)
+    public function __construct(Nullable $nullable, ResourceConnection $resourceConnection, Comment $comment)
     {
         $this->nullable = $nullable;
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -45,12 +52,13 @@ class Varchar implements DbDefinitionProcessorInterface
         $default = $column->getDefault() !== null ? sprintf('DEFAULT "%s"', $column->getDefault()) : '';
         $default = strtolower($column->getDefault()) === 'null' ? 'DEFAULT NULL' : $default;
         return sprintf(
-            '%s %s(%s) %s %s',
+            '%s %s(%s) %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
             $column->getLength(),
             $this->nullable->toDefinition($column),
-            $default
+            $default,
+            $this->comment->toDefinition($column)
         );
     }
 

@@ -34,6 +34,7 @@ class Boolean extends Column implements
      * @param Table $table
      * @param bool $nullable
      * @param bool $default
+     * @param string|null $comment
      * @param string|null $onCreate
      */
     public function __construct(
@@ -42,9 +43,10 @@ class Boolean extends Column implements
         Table $table,
         bool $nullable = true,
         bool $default = null,
+        string $comment = null,
         string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table, $onCreate);
+        parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;
         $this->default = $default;
     }

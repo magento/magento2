@@ -54,6 +54,7 @@ class Decimal extends Column implements
      * @param bool $nullable
      * @param bool $unsigned
      * @param float $default
+     * @param string|null $comment
      * @param string|null $onCreate
      */
     public function __construct(
@@ -65,9 +66,10 @@ class Decimal extends Column implements
         bool $nullable = true,
         bool $unsigned = false,
         float $default = null,
+        string $comment = null,
         string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table, $onCreate);
+        parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->precission = $precission;
         $this->scale = $scale;
         $this->nullable = $nullable;

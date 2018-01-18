@@ -81,7 +81,6 @@ foreach ( $componentRegistrar->getPaths('module') as $path ) {
                     }
                 }
             }
-
         }
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;

@@ -60,11 +60,17 @@ class Table extends GenericElement implements
     private $nameWithoutPrefix;
 
     /**
+     * @var null|string
+     */
+    private $comment;
+
+    /**
      * @param string $name
      * @param string $nameWithoutPrefix
      * @param string $type
      * @param string $resource
      * @param string $engine
+     * @param string|null $comment
      * @param array $columns
      * @param array $indexes
      * @param array $constraints
@@ -76,6 +82,7 @@ class Table extends GenericElement implements
         string $type,
         string $resource,
         string $engine,
+        string $comment = null,
         array $columns = [],
         array $indexes = [],
         array $constraints = []
@@ -87,6 +94,7 @@ class Table extends GenericElement implements
         $this->resource = $resource;
         $this->engine = $engine;
         $this->nameWithoutPrefix = $nameWithoutPrefix;
+        $this->comment = $comment;
     }
 
     /**
@@ -279,5 +287,13 @@ class Table extends GenericElement implements
     public function getNameWithoutPrefix(): string
     {
         return $this->nameWithoutPrefix;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

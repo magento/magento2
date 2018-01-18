@@ -43,10 +43,16 @@ class Integer implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
      * @param Unsigned $unsigned
      * @param bool $boolean
      * @param Nullable $nullable
      * @param Identity $identity
+     * @param Comment $comment
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -54,6 +60,7 @@ class Integer implements DbDefinitionProcessorInterface
         Boolean $boolean,
         Nullable $nullable,
         Identity $identity,
+        Comment $comment,
         ResourceConnection $resourceConnection
     ) {
         $this->unsigned = $unsigned;
@@ -61,6 +68,7 @@ class Integer implements DbDefinitionProcessorInterface
         $this->nullable = $nullable;
         $this->identity = $identity;
         $this->resourceConnection = $resourceConnection;
+        $this->comment = $comment;
     }
 
     /**
@@ -70,7 +78,7 @@ class Integer implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s(%s) %s %s %s %s',
+            '%s %s(%s) %s %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
             $column->getPadding(),
@@ -78,7 +86,8 @@ class Integer implements DbDefinitionProcessorInterface
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
                 sprintf('DEFAULT %s', (string) intval($column->getDefault())) : '',
-            $this->identity->toDefinition($column)
+            $this->identity->toDefinition($column),
+            $this->comment->toDefinition($column)
         );
     }
 

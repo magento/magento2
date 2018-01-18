@@ -41,6 +41,7 @@ class Timestamp extends Column implements
      * @param string $default
      * @param bool $nullable
      * @param string|null $onUpdate
+     * @param string|null $comment
      * @param string|null $onCreate
      */
     public function __construct(
@@ -50,9 +51,10 @@ class Timestamp extends Column implements
         string $default,
         bool $nullable = true,
         string $onUpdate = null,
+        string $comment = null,
         string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table, $onCreate);
+        parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->default = $default;
         $this->onUpdate = $onUpdate;
         $this->nullable = $nullable;

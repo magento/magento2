@@ -38,15 +38,26 @@ class Timestamp implements DbDefinitionProcessorInterface
     private $nullable;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
      * @param OnUpdate $onUpdate
      * @param Nullable $nullable
+     * @param Comment $comment
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(OnUpdate $onUpdate, Nullable $nullable, ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        OnUpdate $onUpdate,
+        Nullable $nullable,
+        Comment $comment,
+        ResourceConnection $resourceConnection
+    ) {
         $this->onUpdate = $onUpdate;
         $this->resourceConnection = $resourceConnection;
         $this->nullable = $nullable;
+        $this->comment = $comment;
     }
 
     /**
@@ -60,12 +71,13 @@ class Timestamp implements DbDefinitionProcessorInterface
             '' : sprintf('DEFAULT %s', $column->getDefault());
 
         return sprintf(
-            '%s %s %s %s %s',
+            '%s %s %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
             $nullable,
             $default,
-            $this->onUpdate->toDefinition($column)
+            $this->onUpdate->toDefinition($column),
+            $this->comment->toDefinition($column)
         );
     }
 

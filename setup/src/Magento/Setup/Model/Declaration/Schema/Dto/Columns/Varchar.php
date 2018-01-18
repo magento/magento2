@@ -41,6 +41,7 @@ class Varchar extends Column implements
      * @param int $length
      * @param bool $nullable
      * @param string $default
+     * @param string|null $comment
      * @param string|null $onCreate
      */
     public function __construct(
@@ -50,9 +51,10 @@ class Varchar extends Column implements
         int $length,
         bool $nullable = true,
         string $default = null,
+        string $comment = null,
         string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table, $onCreate);
+        parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;
         $this->default = $default;
         $this->length = $length;
