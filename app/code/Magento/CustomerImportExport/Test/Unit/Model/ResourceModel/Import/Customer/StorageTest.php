@@ -102,6 +102,20 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     public function testAddCustomer()
     {
+        $customer = new \Magento\Framework\DataObject(['id' => 1, 'website_id' => 1, 'email' => 'test@test.com']);
+        $this->_model->addCustomer($customer);
+
+        $propertyName = '_customerIds';
+        $this->assertAttributeCount(1, $propertyName, $this->_model);
+        $this->assertAttributeContains([$customer->getWebsiteId() => $customer->getId()], $propertyName, $this->_model);
+        $this->assertEquals(
+            $customer->getId(),
+            $this->_model->getCustomerId($customer->getEmail(), $customer->getWebsiteId())
+        );
+    }
+
+    public function testAddCustomerByArray()
+    {
         $propertyName = '_customerIds';
         $customer = $this->_addCustomerToStorage();
 

@@ -112,7 +112,11 @@ class Storage
      */
     public function addCustomer(\Magento\Framework\DataObject $customer)
     {
-        $this->addCustomerByArray($customer->toArray());
+        $customerData = $customer->toArray();
+        if (!isset($customerData['entity_id']) && isset($customer['id'])) {
+            $customerData['entity_id'] = $customerData['id'];
+        }
+        $this->addCustomerByArray($customerData);
 
         return $this;
     }
