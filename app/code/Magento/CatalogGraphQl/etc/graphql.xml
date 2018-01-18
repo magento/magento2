@@ -185,14 +185,10 @@
         <item name="trl">TRL</item>
         <item name="xpf">XPF</item>
     </type>
-    <type xsi:type="Enum" name="PriceAdjustmentCodesEnum">
-        <item name="tax">Tax</item>
-        <item name="wee">Wee</item>
-        <item name="wee_tax">WeeTax</item>
-    </type>
+    <type xsi:type="Enum" name="PriceAdjustmentCodesEnum"/>
     <type xsi:type="Enum" name="PriceAdjustmentDescriptionEnum">
-        <item name="included">Included</item>
-        <item name="excluded">Excluded</item>
+        <item name="included">INCLUDED</item>
+        <item name="excluded">EXCLUDED</item>
     </type>
     <type xsi:type="OutputType" name="Money">
         <field xsi:type="ScalarOutputField" name="value" type="Float"/>

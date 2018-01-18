@@ -6,7 +6,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="Query">
         <field xsi:type="ObjectOutputField" name="urlResolver" type="EntityUrl" resolver="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite">
-            <argument xsi:type="ScalarArgument" name="url" type="String"/>
+            <argument xsi:type="ScalarArgument" name="url" type="String" required="true"/>
          </field>
     </type>
     <type xsi:type="OutputType" name="EntityUrl">

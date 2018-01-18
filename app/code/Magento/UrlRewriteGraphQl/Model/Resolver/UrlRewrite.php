@@ -65,11 +65,14 @@ class UrlRewrite implements ResolverInterface
      */
     private function findCanonicalUrl(string $requestPath)
     {
-        $urlRewrite = $this->findUrl($requestPath);
-        if ($urlRewrite->getRedirectType() > 0) {
+        $urlRewrite = $this->findUrlFromRequestPath($requestPath);
+        if ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
             while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-                $urlRewrite = $this->findUrl($urlRewrite->getTargetPath());
+                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath());
             }
+        }
+        if (!$urlRewrite) {
+            $urlRewrite = $this->findUrlFromTargetPath($requestPath);
         }
         return $urlRewrite;
     }
@@ -80,11 +83,27 @@ class UrlRewrite implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findUrl(string $requestPath)
+    private function findUrlFromRequestPath(string $requestPath)
     {
         return $this->urlFinder->findOneByData(
             [
                 'request_path' => $requestPath,
+                'store_id' => $this->storeManager->getStore()->getId()
+            ]
+        );
+    }
+
+    /**
+     * Find a url from a target url on the current store
+     *
+     * @param string $targetPath
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     */
+    private function findUrlFromTargetPath(string $targetPath)
+    {
+        return $this->urlFinder->findOneByData(
+            [
+                'target_path' => $targetPath,
                 'store_id' => $this->storeManager->getStore()->getId()
             ]
         );

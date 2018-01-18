@@ -13,4 +13,7 @@
     <type xsi:type="InputType" name="ProductSortInput">
         <field xsi:type="ObjectInputField" name="tax_class_id" type="SortEnum"/>
     </type>
+    <type xsi:type="Enum" name="PriceAdjustmentCodesEnum">
+        <item name="tax">TAX</item>
+    </type>
 </config>
