@@ -310,7 +310,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
                     $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
