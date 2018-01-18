@@ -13,10 +13,10 @@ use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
-use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
-use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
+use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
@@ -28,6 +28,12 @@ class AddColumn implements OperationInterface
      * Operation name
      */
     const OPERATION_NAME = 'add_column';
+
+    /**
+     * This key is service key and need only for migration of data
+     * on auto_increment field
+     */
+    const TEMPORARY_KEY = 'AUTO_INCREMENT_TEMPORARY_KEY';
 
     /**
      * @var DefinitionAggregator
@@ -45,18 +51,69 @@ class AddColumn implements OperationInterface
     private $resourceConnection;
 
     /**
+     * @var ElementFactory
+     */
+    private $elementFactory;
+
+    /**
+     * @var ElementHistoryFactory
+     */
+    private $elementHistoryFactory;
+
+    /**
+     * @var AddComplexElement
+     */
+    private $addComplexElement;
+
+    /**
+     * @var DropElement
+     */
+    private $dropElement;
+
+    /**
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param ResourceConnection $resourceConnection
+     * @param ElementFactory $elementFactory
+     * @param ElementHistoryFactory $elementHistoryFactory
+     * @param AddComplexElement $addComplexElement
+     * @param DropElement $dropElement
      */
     public function __construct(
         DefinitionAggregator $definitionAggregator,
         DbSchemaWriterInterface $dbSchemaWriter,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ElementFactory $elementFactory,
+        ElementHistoryFactory $elementHistoryFactory,
+        AddComplexElement $addComplexElement,
+        DropElement $dropElement
     ) {
         $this->definitionAggregator = $definitionAggregator;
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->resourceConnection = $resourceConnection;
+        $this->elementFactory = $elementFactory;
+        $this->elementHistoryFactory = $elementHistoryFactory;
+        $this->addComplexElement = $addComplexElement;
+        $this->dropElement = $dropElement;
+    }
+
+    /**
+     * Creates index history
+     *
+     * @param Column $column
+     * @return ElementHistory
+     */
+    private function getTemporaryIndexHistory(Column $column)
+    {
+        $index = $this->elementFactory->create(
+            Index::TYPE,
+            [
+                'name' => self::TEMPORARY_KEY,
+                'columns' => [$column],
+                'table' => $column->getTable()
+            ]
+        );
+        return $this->elementHistoryFactory->create(['new' => $index]);
     }
 
     /**
@@ -65,6 +122,17 @@ class AddColumn implements OperationInterface
     public function getOperationName()
     {
         return self::OPERATION_NAME;
+    }
+
+    /**
+     * Check whether column is auto increment or not
+     *
+     * @param Column $column
+     * @return bool
+     */
+    private function columnIsAutoIncrement(Column $column)
+    {
+        return $column instanceof Integer && $column->isIdentity();
     }
 
     /**
@@ -78,19 +146,22 @@ class AddColumn implements OperationInterface
     {
         $statements = [$statement];
         if (preg_match('/migrateDataFrom\(([^\)]+)\)/', $column->getOnCreate(), $matches)) {
-            $isAutoIncrement = $column instanceof Integer && $column->isIdentity();
-            if ($isAutoIncrement) {
-                $indexStatement = $this->dbSchemaWriter->addElement(
-                    'AUTO_INCREMENT_TMP_INDEX',
-                    $column->getTable()->getResource(),
-                    $column->getTable()->getName(),
-                    sprintf('INDEX `AUTO_INCREMENT_TMP_INDEX` (%s)', $column->getName()),
-                    Index::TYPE
-                );
-                array_unshift($statements, $indexStatement);
+            if ($this->columnIsAutoIncrement($column)) {
+                /**
+                 * We need to create additional index for auto_increment
+                 * As we create new field, and for this field we do not have any key/index, that are
+                 * required by SQL on any auto_increment field
+                 * Primary key will be added to the column later, because column is empty at the moment
+                 * and if the table is not empty we will get error, such as "Duplicate key entry:"
+                 */
+                $indexHistory = $this->getTemporaryIndexHistory($column);
+                /** Add index should goes first */
+                $statements = array_merge($this->addComplexElement->doOperation($indexHistory), $statements);
+                /** Drop index should goes last and in another query */
+                $statements = array_merge($statements, $this->dropElement->doOperation($indexHistory));
             }
 
-            $callback = function() use ($column, $matches, $isAutoIncrement) {
+            $callback = function() use ($column, $matches) {
                 $tableName = $column->getTable()->getName();
                 $adapter = $this->resourceConnection->getConnection(
                     $column->getTable()->getResource()
