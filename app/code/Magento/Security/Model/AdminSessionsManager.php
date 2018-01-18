@@ -328,7 +328,7 @@ class AdminSessionsManager
         return (float) max(
             1,
             min(
-                log((float)$this->securityConfig->getAdminSessionLifetime()),
+                4 * log((float)$this->securityConfig->getAdminSessionLifetime()),
                 $this->maxIntervalBetweenConsecutiveProlongs
             )
         );
