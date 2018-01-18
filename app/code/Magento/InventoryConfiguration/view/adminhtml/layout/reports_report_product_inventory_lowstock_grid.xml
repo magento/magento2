@@ -22,7 +22,7 @@
                                 <item name="label" xsi:type="string" translate="true">CSV</item>
                             </item>
                             <item name="excel" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">*/*/exportLowstockExcel</item>
+                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report_product/exportLowstockExcel</item>
                                 <item name="label" xsi:type="string" translate="true">Excel XML</item>
                             </item>
                         </argument>
