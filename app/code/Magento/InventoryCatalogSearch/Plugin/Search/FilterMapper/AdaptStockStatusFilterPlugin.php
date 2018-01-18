@@ -100,8 +100,7 @@ class AdaptStockStatusFilterPlugin
         $stockValues,
         $type,
         $showOutOfStockFlag
-    )
-    {
+    ) {
         if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
             && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
         ) {
