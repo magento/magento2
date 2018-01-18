@@ -73,7 +73,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
      * @param bool $isFilterInStock
      * @return void
      *
-     * @dataProvider AddStockDataToCollectionDataProvider
+     * @dataProvider addStockDataToCollectionDataProvider
      */
     public function testAddStockDataToCollection(int $stockId, int $expectedSize, bool $isFilterInStock)
     {
