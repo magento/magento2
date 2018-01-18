@@ -5,32 +5,29 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogSearch\Plugin;
+namespace Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper;
 
+use InvalidArgumentException;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter as OriginStockStatusFilter;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\MultiDimensionalIndex\Alias;
-use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
-use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
+use Magento\Framework\MultiDimensionalIndexer\Alias;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 
 /**
- * @inheritdoc
+ * Adapt stock status filter to multi stocks
  */
-class StockStatusFilter
+class AdaptStockStatusFilterPlugin
 {
     /**
      * Stock table names and aliases
      */
-    const TABLE_ALIAS_PRODUCT =  'product';
-    const TABLE_ALIAS_SUB_PRODUCT =  'sub_product';
-    const TABLE_ALIAS_STOCK_INDEX =  'stock_index';
-    const TABLE_ALIAS_SUB_PRODUCT_STOCK_INDEX =  'sub_product_stock_index';
+    const TABLE_ALIAS_STOCK_INDEX = 'stock_index';
 
     /**
      * @var ConditionManager
@@ -58,48 +55,57 @@ class StockStatusFilter
     private $indexNameResolver;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexNameResolverInterface $indexNameResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ConditionManager $conditionManager,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
         IndexNameBuilder $indexNameBuilder,
-        IndexNameResolverInterface $indexNameResolver
+        IndexNameResolverInterface $indexNameResolver,
+        ResourceConnection $resourceConnection
     ) {
         $this->conditionManager = $conditionManager;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexNameResolver = $indexNameResolver;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param OriginStockStatusFilter $subject
+     * @param StockStatusFilter $subject
      * @param callable $proceed
      * @param Select $select
      * @param array $stockValues
      * @param string $type
      * @param bool $showOutOfStockFlag
      * @return Select
-     * @throws LocalizedException
+     * @throws \InvalidArgumentException
      */
     public function aroundApply(
-        OriginStockStatusFilter $subject,
+        StockStatusFilter $subject,
         callable $proceed,
         Select $select,
         $stockValues,
         $type,
         $showOutOfStockFlag
-    ) {
-        if ($type !== OriginStockStatusFilter::FILTER_JUST_ENTITY
-            && $type !== OriginStockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
+    )
+    {
+        if ($type !== StockStatusFilter::FILTER_JUST_ENTITY
+            && $type !== StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS
         ) {
-            throw new \InvalidArgumentException(sprintf('Invalid filter type: %s', $type));
+            throw new InvalidArgumentException('Invalid filter type: ' . $type);
         }
 
         $select = clone $select;
@@ -107,7 +113,7 @@ class StockStatusFilter
         $this->addProductEntityJoin($select, $mainTableAlias);
         $this->addInventoryStockJoin($select, $showOutOfStockFlag);
 
-        if ($type === OriginStockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS) {
+        if ($type === StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS) {
             $this->addSubProductEntityJoin($select, $mainTableAlias);
             $this->addSubProductInventoryStockJoin($select, $showOutOfStockFlag);
         }
@@ -122,8 +128,8 @@ class StockStatusFilter
     private function addProductEntityJoin(Select $select, $mainTableAlias)
     {
         $select->joinInner(
-            [self::TABLE_ALIAS_PRODUCT => 'catalog_product_entity'],
-            sprintf('%s.entity_id = %s.entity_id', self::TABLE_ALIAS_PRODUCT, $mainTableAlias),
+            ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            sprintf('product.entity_id = %s.entity_id', $mainTableAlias),
             []
         );
     }
@@ -135,8 +141,8 @@ class StockStatusFilter
     private function addSubProductEntityJoin(Select $select, $mainTableAlias)
     {
         $select->joinInner(
-            [self::TABLE_ALIAS_SUB_PRODUCT => 'catalog_product_entity'],
-            sprintf('%s.entity_id = %s.source_id', self::TABLE_ALIAS_SUB_PRODUCT, $mainTableAlias),
+            ['sub_product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            sprintf('sub_product.entity_id = %s.source_id', $mainTableAlias),
             []
         );
     }
@@ -144,50 +150,34 @@ class StockStatusFilter
     /**
      * @param Select $select
      * @param bool $showOutOfStockFlag
-     * @throws LocalizedException
+     * @return void
      */
     private function addInventoryStockJoin(Select $select, $showOutOfStockFlag)
     {
         $select->joinInner(
-            [self::TABLE_ALIAS_STOCK_INDEX => $this->getStockTableName()],
-            sprintf(
-                '%s.sku = %s.sku',
-                self::TABLE_ALIAS_STOCK_INDEX,
-                self::TABLE_ALIAS_PRODUCT
-            ),
+            ['stock_index' => $this->getStockTableName()],
+            'stock_index.sku = product.sku',
             []
         );
         if ($showOutOfStockFlag === false) {
-            $select->where($this->conditionManager->generateCondition(
-                sprintf('%s.quantity', self::TABLE_ALIAS_STOCK_INDEX),
-                '>',
-                0
-            ));
+            $select->where($this->conditionManager->generateCondition('stock_index.quantity', '>', 0));
         }
     }
 
     /**
      * @param Select $select
      * @param bool $showOutOfStockFlag
-     * @throws LocalizedException
+     * @return void
      */
-    private function addSubProductInventoryStockJoin(Select $select, $showOutOfStockFlag)
+    private function addSubProductInventoryStockJoin(Select $select, bool $showOutOfStockFlag)
     {
         $select->joinInner(
-            [self::TABLE_ALIAS_SUB_PRODUCT_STOCK_INDEX => $this->getStockTableName()],
-            sprintf(
-                '%s.sku = %s.sku',
-                self::TABLE_ALIAS_SUB_PRODUCT_STOCK_INDEX,
-                self::TABLE_ALIAS_SUB_PRODUCT
-            ),
+            ['sub_product_stock_index' => $this->getStockTableName()],
+            'sub_product_stock_index.sku = sub_product.sku',
             []
         );
         if ($showOutOfStockFlag === false) {
-            $select->where($this->conditionManager->generateCondition(
-                sprintf('%s.quantity', self::TABLE_ALIAS_SUB_PRODUCT_STOCK_INDEX),
-                '>',
-                0
-            ));
+            $select->where($this->conditionManager->generateCondition('sub_product_stock_index.quantity', '>', 0));
         }
     }
 
@@ -196,7 +186,6 @@ class StockStatusFilter
      *
      * @param Select $select
      * @return string|null
-     * @throws \Zend_Db_Select_Exception
      */
     private function extractTableAliasFromSelect(Select $select)
     {
@@ -212,8 +201,6 @@ class StockStatusFilter
 
     /**
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     private function getStockTableName(): string
     {
@@ -227,6 +214,7 @@ class StockStatusFilter
             ->addDimension('stock_', (string)$stock->getStockId())
             ->setAlias(Alias::ALIAS_MAIN)
             ->build();
-        return  $this->indexNameResolver->resolveName($indexName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+        return $this->resourceConnection->getTableName($tableName);
     }
 }
