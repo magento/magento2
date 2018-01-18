@@ -98,7 +98,7 @@ class TableDiff
 
                 foreach ($references as $reference) {
                     /** In case when we have foreign key on column, that should be modified */
-                    if ($reference->getReferenceColumn()->getName() === $column->getName() &&
+                    if ($reference->getColumn()->getName() === $column->getName() &&
                         isset($declaredReferences[$reference->getName()])
                     ) {
                         /**
