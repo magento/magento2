@@ -14,6 +14,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
+ */
 class UrlResolverTest extends GraphQlAbstract
 {
 
@@ -28,7 +31,7 @@ class UrlResolverTest extends GraphQlAbstract
     /**
      * Tests if target_path(canonical_url) is resolved for Product entity
      *
-     *  @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
     public function testProductUrlResolver()
     {
