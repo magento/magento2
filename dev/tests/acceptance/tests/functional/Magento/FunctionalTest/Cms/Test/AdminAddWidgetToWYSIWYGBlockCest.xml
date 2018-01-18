@@ -16,6 +16,7 @@
             <description value="You should be able to add widget to WYSIWYG Editor Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84654"/>
+            <group value="skip" />
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
