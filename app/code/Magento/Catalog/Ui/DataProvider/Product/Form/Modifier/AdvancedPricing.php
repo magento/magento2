@@ -24,6 +24,7 @@ use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Services\GetProductStockIsQtyDecimalService;
 
 /**
  * Class AdvancedPricing
@@ -101,6 +102,11 @@ class AdvancedPricing extends AbstractModifier
     private $customerGroupSource;
 
     /**
+     * @var GetProductStockIsQtyDecimalService
+     */
+    protected $getProductStockIsQtyDecimalService;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param GroupRepositoryInterface $groupRepository
@@ -111,6 +117,7 @@ class AdvancedPricing extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
+     * @param GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +130,8 @@ class AdvancedPricing extends AbstractModifier
         Data $directoryHelper,
         ArrayManager $arrayManager,
         $scopeName = '',
-        GroupSourceInterface $customerGroupSource = null
+        GroupSourceInterface $customerGroupSource = null,
+        GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -136,6 +144,7 @@ class AdvancedPricing extends AbstractModifier
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
             ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
+        $this->getProductStockIsQtyDecimalService = $getProductStockIsQtyDecimalService;
     }
 
     /**
@@ -270,7 +279,7 @@ class AdvancedPricing extends AbstractModifier
                 'value' => 0,
             ]
         ];
-        $product = $this->locator->getProduct();
+        $product = $this->getProduct();
 
         if (!$this->isScopeGlobal() && $product->getStoreId()) {
             /** @var \Magento\Store\Model\Website $website */
@@ -494,13 +503,19 @@ class AdvancedPricing extends AbstractModifier
                                         'formElement' => Input::NAME,
                                         'componentType' => Field::NAME,
                                         'dataType' => Number::NAME,
+                                        'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
                                         'sortOrder' => 30,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-digits' => true,
+                                            'validate-number' => true,
+                                            'validate-digits' => $this->getShouldValidatePriceQtyDigits(),
+                                        ],
+                                        'imports' => [
+                                            'handleChanges' => '${ $.provider }:data.product.stock_data.is_qty_decimal',
+                                            'changeValueType' => '${$.provider}:data.product.stock_data.enable_qty_increments'
                                         ],
                                     ],
                                 ],
@@ -673,5 +688,30 @@ class AdvancedPricing extends AbstractModifier
     private function getStore()
     {
         return $this->locator->getStore();
+    }
+
+    /**
+     * @since 102.0.2
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     */
+    private function getProduct()
+    {
+        return $this->locator->getProduct();
+    }
+
+    /**
+     * Get Price Qty digits validation
+     * @since 102.0.2
+     *
+     * @return bool
+     */
+    private function getShouldValidatePriceQtyDigits()
+    {
+        if (!$this->getProduct()->getId()) {
+            return false;
+        }
+
+        return !$this->getProductStockIsQtyDecimalService->execute($this->getProduct()->getId());
     }
 }

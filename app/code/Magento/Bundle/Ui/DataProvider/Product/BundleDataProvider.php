@@ -8,6 +8,7 @@ namespace Magento\Bundle\Ui\DataProvider\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Bundle\Helper\Data;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 
 class BundleDataProvider extends ProductDataProvider
 {
@@ -15,6 +16,12 @@ class BundleDataProvider extends ProductDataProvider
      * @var Data
      */
     protected $dataHelper;
+
+
+    /**
+     * @var StockItemRepositoryInterface
+     */
+    protected $stockItemRepository;
 
     /**
      * Construct
@@ -34,6 +41,7 @@ class BundleDataProvider extends ProductDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        StockItemRepositoryInterface $stockItemRepository,
         Data $dataHelper,
         array $meta = [],
         array $data = [],
@@ -52,6 +60,7 @@ class BundleDataProvider extends ProductDataProvider
         );
 
         $this->dataHelper = $dataHelper;
+        $this->stockItemRepository = $stockItemRepository;
     }
 
     /**
@@ -73,10 +82,26 @@ class BundleDataProvider extends ProductDataProvider
             $this->getCollection()->load();
         }
         $items = $this->getCollection()->toArray();
+        
+        foreach ($items as $index => $item) {
+            $items[$index]['selection_qty_is_integer'] = !$this->getIsProductQtyDecimal($item['entity_id']);
+        }
 
         return [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+    }
+
+    /**
+     * @param $productId
+     *
+     * @return bool
+     */
+    protected function getIsProductQtyDecimal($productId)
+    {
+        $productStock = $this->stockItemRepository->get($productId);
+
+        return $productStock->getIsQtyDecimal();
     }
 }

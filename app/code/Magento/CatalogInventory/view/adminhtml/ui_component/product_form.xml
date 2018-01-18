@@ -575,6 +575,7 @@
                         <dataScope>qty_increments</dataScope>
                         <imports>
                             <link name="handleChanges">${$.provider}:data.product.stock_data.is_qty_decimal</link>
+                            <link name="changeValueType">${$.provider}:data.product.stock_data.enable_qty_increments</link>
                         </imports>
                     </settings>
                 </field>

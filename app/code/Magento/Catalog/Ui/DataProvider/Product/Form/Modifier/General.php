@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Services\GetProductStockIsQtyDecimalService;
 
 /**
  * Data provider for main panel of product page
@@ -35,16 +36,20 @@ class General extends AbstractModifier
      */
     private $localeCurrency;
 
+    protected $getProductStockIsQtyDecimalService;
+
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->getProductStockIsQtyDecimalService = $getProductStockIsQtyDecimalService;
     }
 
     /**
@@ -106,7 +111,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    $this->formatPriceQty($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
             }
         }
 
@@ -393,6 +398,17 @@ class General extends AbstractModifier
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;
+    }
+
+    protected function formatPriceQty($priceQty)
+    {
+        $productId = $this->locator->getProduct()->getId();
+
+        if ($this->getProductStockIsQtyDecimalService->execute($productId)) {
+            return $priceQty;
+        }
+
+        return (int) $priceQty;
     }
 
     /**
