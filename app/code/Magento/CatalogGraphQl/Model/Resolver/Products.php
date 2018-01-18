@@ -6,12 +6,10 @@
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 use Magento\GraphQl\Model\ResolverContextInterface;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Model\ContextInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 
