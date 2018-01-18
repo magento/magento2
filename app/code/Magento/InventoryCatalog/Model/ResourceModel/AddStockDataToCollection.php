@@ -40,14 +40,18 @@ class AddStockDataToCollection
     {
         $tableName = $this->stockIndexTableProvider->execute($stockId);
 
-        $isSalableExpression = $collection->getConnection()->getCheckSql(
-            'stock_status_index.' . IndexStructure::QUANTITY . ' > 0',
-            1,
-            0
+        $isSalableExpression = $collection->getConnection()
+            ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);
+
+        $resource = $collection->getResource();
+        $collection->getSelect()->joinInner(
+            ['product' => $resource->getTable('catalog_product_entity')],
+            sprintf('product.entity_id = %s.entity_id', Collection::MAIN_TABLE_ALIAS),
+            []
         );
         $collection->getSelect()->join(
             ['stock_status_index' => $tableName],
-            'e.sku = stock_status_index.' . IndexStructure::SKU,
+            'product.sku = stock_status_index.' . IndexStructure::SKU,
             ['is_salable' => $isSalableExpression]
         );
 
