@@ -13,7 +13,6 @@
             <argument xsi:type="ObjectArgument" name="sort" type="ProductSortInput"/>
         </field>
     </type>
-    <!-- we need a way to grab currencies enum dynamically -->
     <type xsi:type="Enum" name="CurrencyEnum">
         <item name="usd">USD</item>
         <item name="eur">EUR</item>
@@ -119,7 +118,6 @@
         <field xsi:type="ScalarOutputField" name="small_image" type="String"/>
         <field xsi:type="ScalarOutputField" name="thumbnail" type="String"/>
         <field xsi:type="ScalarOutputField" name="color" type="Int"/>
-        <!-- TODO: correct name NEW FROM DATE -->
         <field xsi:type="ScalarOutputField" name="news_from_date" type="String"/>
         <field xsi:type="ScalarOutputField" name="news_to_date" type="String"/>
         <field xsi:type="ScalarOutputField" name="tier_price" type="Float"/>
