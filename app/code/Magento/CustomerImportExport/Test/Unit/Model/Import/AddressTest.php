@@ -56,8 +56,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected $_customers = [
-        ['id' => 1, 'email' => 'test1@email.com', 'website_id' => 1],
-        ['id' => 2, 'email' => 'test2@email.com', 'website_id' => 2],
+        ['entity_id' => 1, 'email' => 'test1@email.com', 'website_id' => 1],
+        ['entity_id' => 2, 'email' => 'test2@email.com', 'website_id' => 2],
     ];
 
     /**
@@ -233,28 +233,43 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected function _createCustomerStorageMock()
     {
-        $customerStorage = $this->createPartialMock(
-            \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage::class,
-            ['load']
-        );
+        $customerCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection'])
+            ->getMock();
+        $collectionFactory = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $collectionFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($customerCollection);
+        $byPagesIteratorFactory = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        /** @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage|\PHPUnit_Framework_MockObject_MockObject $customerStorage */
+        $customerStorage = $this->getMockBuilder(\Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage::class)
+            ->setMethods(['load'])
+            ->setConstructorArgs([$collectionFactory, $byPagesIteratorFactory])
+            ->getMock();
         $resourceMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Customer::class,
             ['getIdFieldName']
         );
+        $selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from']);
+        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'fetchAll']
+        );
+        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $customerCollection->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
         foreach ($this->_customers as $customerData) {
-            $data = [
-                'resource' => $resourceMock,
-                'data' => $customerData,
-                $this->createMock(\Magento\Customer\Model\Config\Share::class),
-                $this->createMock(\Magento\Customer\Model\AddressFactory::class),
-                $this->createMock(\Magento\Customer\Model\ResourceModel\Address\CollectionFactory::class),
-                $this->createMock(\Magento\Customer\Model\GroupFactory::class),
-                $this->createMock(\Magento\Customer\Model\AttributeFactory::class),
-            ];
-            /** @var $customer \Magento\Customer\Model\Customer */
-            $customer = $this->_objectManagerMock->getObject(\Magento\Customer\Model\Customer::class, $data);
-            $customerStorage->addCustomer($customer);
+            $customerStorage->addCustomerByArray($customerData);
         }
         return $customerStorage;
     }
