@@ -432,7 +432,7 @@ class EavAttribute
             $options = $attribute->getData('optiontext');
         }
         if ($options && !$this->isOptionsValid($options, $attribute)) {
-            throw new InputException(__('Admin is a required field in the each row'));
+            throw new InputException(__('Admin is a required field in each row'));
         }
         return true;
     }
