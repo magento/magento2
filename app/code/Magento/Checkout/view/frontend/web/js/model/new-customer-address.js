@@ -28,7 +28,7 @@ define([
         return {
             email: addressData.email,
             countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
-            regionId: regionId || addressData.regionId,
+            regionId: regionId || addressData.regionId || window.checkoutConfig.defaultRegionId,
             regionCode: addressData.region ? addressData.region['region_code'] : null,
             region: addressData.region ? addressData.region.region : null,
             customerId: addressData['customer_id'] || addressData.customerId,

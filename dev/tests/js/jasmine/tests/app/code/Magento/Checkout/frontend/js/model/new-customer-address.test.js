@@ -14,7 +14,8 @@ define([
         beforeEach(function () {
 
             window.checkoutConfig = {
-                defaultCountryId: 'US'
+                defaultCountryId: 'US',
+                defaultRegionId: '12'
             };
 
             newCustomerAddress = NewCustomerAddress;
@@ -27,6 +28,7 @@ define([
         it('Check on empty object.', function () {
             var expected = {
                 countryId: 'US',
+                regionId: 12,
                 regionCode: null,
                 region: null
             };
