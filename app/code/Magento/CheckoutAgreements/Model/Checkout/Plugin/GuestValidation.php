@@ -24,11 +24,6 @@ class GuestValidation
     private $scopeConfiguration;
 
     /**
-     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
-     */
-    private $checkoutAgreementsRepository;
-
-    /**
      * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     private $agreementsValidator;
@@ -46,20 +41,17 @@ class GuestValidation
     /**
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
-     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
         \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
-        $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
         $this->checkoutAgreementsList = $checkoutAgreementsList;
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
     }

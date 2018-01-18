@@ -66,10 +66,6 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ['getAgreementIds']
         );
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $repositoryMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
-        );
-
         $this->checkoutAgreementsListMock = $this->createMock(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
         );
@@ -80,7 +76,6 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
-            $repositoryMock,
             $this->checkoutAgreementsListMock,
             $this->agreementsFilterMock
         );
