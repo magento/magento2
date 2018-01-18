@@ -22,6 +22,8 @@ use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
+
 
 /**
  * Front controller for WebAPI REST area.
@@ -136,6 +138,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     private $inputParamsResolver;
 
     /**
+     * @var RequestProcessorPool
+     */
+    protected $requestProcessorPool;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -172,7 +179,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ParamsOverrider $paramsOverrider,
         ServiceOutputProcessor $serviceOutputProcessor,
         Generator $swaggerGenerator,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        RequestProcessorPool $requestProcessorPool
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -189,6 +197,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
+        $this->requestProcessorPool = $requestProcessorPool;
     }
 
     /**
@@ -232,12 +241,10 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+
         try {
-            if ($this->isSchemaRequest()) {
-                $this->processSchemaRequest();
-            } else {
-                $this->processApiRequest();
-            }
+            $requestProcessor = $this->requestProcessorPool->getRequestProcessor($this->_request);
+            $requestProcessor->process($this->_request);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
