@@ -54,7 +54,7 @@ class Index implements DbDefinitionProcessorInterface
             '%sINDEX %s%s (%s)',
             $isFullText ? 'FULLTEXT ' : '',
             $adapter->quoteIdentifier($index->getName()),
-            !$isFullText ? sprintf(' USING %s', strtoupper($indexType)) : '',
+            !$isFullText && 0 ? sprintf(' USING %s', strtoupper($indexType)) : '',
             implode(
                 ',',
                 array_map(
