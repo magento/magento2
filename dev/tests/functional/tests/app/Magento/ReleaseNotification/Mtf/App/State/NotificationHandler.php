@@ -38,6 +38,7 @@ class NotificationHandler implements StateHandlerInterface
      * @param AbstractState $state
      * @return bool
      * @throws \Exception
+     * @SuppressWarnings("unused")
      */
     public function execute(AbstractState $state)
     {
