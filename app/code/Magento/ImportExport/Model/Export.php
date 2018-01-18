@@ -93,8 +93,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac,
         array $data = []
-    )
-    {
+    ) {
         $this->_exportConfig = $exportConfig;
         $this->_entityFactory = $entityFactory;
         $this->_exportAdapterFac = $exportAdapterFac;
