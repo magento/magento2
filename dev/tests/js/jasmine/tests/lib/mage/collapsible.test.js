@@ -21,6 +21,7 @@ define([
 
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
+            group.remove();
         });
 
         describe('Test enable, disable, activate and deactivate methods', function () {
@@ -87,6 +88,7 @@ define([
 
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
+            group.remove();
         });
 
         it('check state classes', function () {
@@ -113,6 +115,7 @@ define([
 
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
+            group.remove();
         });
 
         it('check if icons are added to title when initialized and removed when destroyed', function () {
@@ -135,6 +138,7 @@ define([
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
             expect(title.children('[data-role=icons]').length).toBeFalsy();
+            group.remove();
         });
 
         it('check if icon classes are changed when content gets expanded/collapsed', function () {
@@ -163,49 +167,7 @@ define([
 
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
-        });
-
-        it('check keyboard support', function () {
-            var group = $('<div id="7"></div>'),
-                title = $('<div data-role="title"></div>').appendTo(group),
-                content = $('<div data-role="content"></div>').appendTo(group);
-
-            group.appendTo('body');
-
-            group.collapsible();
-            expect(group.is(':mage-collapsible')).toBeTruthy();
-
-            group.collapsible('deactivate');
-            expect(content.is(':hidden')).toBeTruthy();
-
-            title.on('focus', function () {
-                title.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.ENTER
-                }));
-                expect(content.is(':visible')).toBeTruthy();
-
-                title.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.ENTER
-                }));
-                expect(content.is(':hidden')).toBeTruthy();
-
-                title.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.SPACE
-                }));
-                expect(content.is(':visible')).toBeTruthy();
-
-                title.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.SPACE
-                }));
-                expect(content.is(':hidden')).toBeTruthy();
-            });
-
-            setTimeout(function () {
-                title.focus();
-            }, 10);
-
-            group.collapsible('destroy');
-            expect(group.is(':mage-collapsible')).toBeFalsy();
+            group.remove();
         });
 
         it('check if content gets updated via Ajax when title is clicked', function () {
@@ -243,6 +205,7 @@ define([
 
             group.collapsible('destroy');
             expect(group.is(':mage-collapsible')).toBeFalsy();
+            group.remove();
         });
     });
 });

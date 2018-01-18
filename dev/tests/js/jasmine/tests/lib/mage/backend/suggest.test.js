@@ -17,21 +17,30 @@ define([
             var $suggest = $('<input name="test-suggest" id="suggest" />');
 
             $('body').append($suggest);
+            $('body').append('<script type="text/template" id="test-template">' +
+                '<div><%= data.test %></div>' +
+                '</script>');
         });
 
         afterEach(function () {
             $(suggestSelector).remove();
+            $('#test-template').remove();
             $(suggestSelector).suggest('destroy');
         });
 
         it('Check that suggest inited', function () {
-            var $suggest = $(suggestSelector).suggest();
+            var $suggest = $(suggestSelector).suggest({
+                template: '#test-template',
+                choiceTemplate: '<li/>'
+            });
 
             expect($suggest.is(':mage-suggest')).toBe(true);
         });
 
         it('Check suggest create', function () {
             var options = {
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     controls: {
                         selector: '.test',
                         eventsMap: {
@@ -80,6 +89,8 @@ define([
 
         it('Check suggest render', function () {
             var options = {
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     dropdownWrapper: '<div class="wrapper-test"></div>',
                     className: 'test-suggest',
                     inputWrapper: '<div class="test-input-wrapper"></div>'
@@ -108,7 +119,10 @@ define([
         });
 
         it('Check suggest createValueField', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 valueField = suggestInstance._createValueField();
 
             expect(valueField.is('input')).toBe(true);
@@ -116,7 +130,9 @@ define([
 
             $(suggestSelector).suggest('destroy');
             suggestInstance = $(suggestSelector).suggest({
-                multiselect: true
+                multiselect: true,
+                template: '#test-template',
+                choiceTemplate: '<li/>'
             }).data('mage-suggest');
             valueField = suggestInstance._createValueField();
 
@@ -126,7 +142,10 @@ define([
         });
 
         it('Check suggest prepareValueField', function () {
-            var $suggest = $(suggestSelector).suggest(),
+            var $suggest = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }),
                 suggestInstance = $suggest.data('mage-suggest'),
                 suggestName = $suggest.attr('name');
 
@@ -140,6 +159,8 @@ define([
 
         it('Check suggest destroy', function () {
             var options = {
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     inputWrapper: '<div class="test-input-wrapper"></div>',
                     valueField: null
                 },
@@ -167,8 +188,14 @@ define([
             $(suggestSelector).val(value);
             $('body').append('<div id="suggest-div">' + value + '</div>');
 
-            suggestInstance = $(suggestSelector).suggest().data('mage-suggest');
-            suggestDivInstance = $('#suggest-div').suggest().data('mage-suggest');
+            suggestInstance = $(suggestSelector).suggest({
+                template: '#test-template',
+                choiceTemplate: '<li/>'
+            }).data('mage-suggest');
+            suggestDivInstance = $('#suggest-div').suggest({
+                template: '#test-template',
+                choiceTemplate: '<li/>'
+            }).data('mage-suggest');
 
             expect(suggestInstance._value()).toBe(value);
             expect(suggestDivInstance._value()).toBe(value);
@@ -178,6 +205,8 @@ define([
         it('Check suggest bind', function () {
             var eventIsBinded = false,
                 options = {
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     events: {
                         /** Stub function */
                         click: function () {
@@ -192,7 +221,10 @@ define([
         });
 
         it('Check suggest focus/blur', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 uiHash = {
                     item: {
                         id: 1,
@@ -215,7 +247,10 @@ define([
         });
 
         it('Check suggest select', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 uiHash = {
                     item: {
                         id: 1,
@@ -243,6 +278,8 @@ define([
 
         it('Check suggest multiselect', function () {
             var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     multiselect: true
                 }).data('mage-suggest'),
                 uiHash = {
@@ -282,7 +319,10 @@ define([
         });
 
         it('Check suggest reset value', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest');
+            var suggestInstance = $(suggestSelector).suggest({
+                template: '#test-template',
+                choiceTemplate: '<li/>'
+            }).data('mage-suggest');
 
             suggestInstance.valueField.val('test');
             expect(suggestInstance.valueField.val()).toBe('test');
@@ -292,6 +332,8 @@ define([
 
         it('Check suggest reset multiselect value', function () {
             var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     multiselect: true
                 }).data('mage-suggest'),
                 uiHash = {
@@ -314,7 +356,10 @@ define([
         });
 
         it('Check suggest read item data', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 testElement = $('<div/>');
 
             expect(suggestInstance._readItemData(testElement)).toEqual(suggestInstance._nonSelectedItem);
@@ -324,7 +369,8 @@ define([
 
         it('Check suggest template', function () {
             var suggestInstance = $(suggestSelector).suggest({
-                    template: '<div><%= data.test %></div>'
+                    template: '<div><%= data.test %></div>',
+                    choiceTemplate: '<li/>'
                 }).data('mage-suggest'),
                 tmpl = suggestInstance.templates[suggestInstance.templateName],
                 html = $('<div/>').append(tmpl({
@@ -340,7 +386,8 @@ define([
                 '</script>');
 
             suggestInstance = $(suggestSelector).suggest({
-                template: '#test-template'
+                template: '#test-template',
+                choiceTemplate: '<li/>'
             }).data('mage-suggest');
             tmpl = suggestInstance.templates[suggestInstance.templateName];
             html = $('<div />').append(tmpl({
@@ -354,7 +401,10 @@ define([
         });
 
         it('Check suggest dropdown visibility', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest');
+            var suggestInstance = $(suggestSelector).suggest({
+                template: '#test-template',
+                choiceTemplate: '<li/>'
+            }).data('mage-suggest');
 
             suggestInstance.dropdown.hide();
             expect(suggestInstance.isDropdownShown()).toBe(false);
@@ -366,7 +416,10 @@ define([
         });
 
         it('Check suggest create option', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 uiHash = {
                     item: {
                         id: 1,
@@ -382,7 +435,10 @@ define([
         });
 
         it('Check suggest add option', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 uiHash = {
                     item: {
                         id: 1,
@@ -402,7 +458,10 @@ define([
         });
 
         it('Check suggest get option', function () {
-            var suggestInstance = $(suggestSelector).suggest().data('mage-suggest'),
+            var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>'
+                }).data('mage-suggest'),
                 uiHash = {
                     item: {
                         id: 1,
@@ -420,6 +479,8 @@ define([
 
         it('Check suggest last added', function () {
             var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     multiselect: true
                 }).data('mage-suggest'),
                 uiHash = {
@@ -437,6 +498,8 @@ define([
 
         it('Check suggest remove option', function () {
             var suggestInstance = $(suggestSelector).suggest({
+                    template: '#test-template',
+                    choiceTemplate: '<li/>',
                     multiselect: true
                 }).data('mage-suggest'),
                 uiHash = {

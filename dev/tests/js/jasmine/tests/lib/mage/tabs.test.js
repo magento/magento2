@@ -89,31 +89,5 @@ define([
             $title1.trigger('click');
             expect($content1.is(':visible')).toBe(true);
         });
-
-        it('Check tabs keyboard support', function (done) {
-            var $title1 = $('#title1'),
-                $title2 = $('#title2'),
-                $content1 = $('#content1'),
-                $content2 = $('#content2');
-
-            $(tabsSelector).tabs();
-
-            $title1.one('focus', function () {
-                expect($content1.is(':visible')).toBe(true);
-                $title1.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.RIGHT
-                }));
-                expect($content2.is(':visible')).toBe(true);
-                expect($content1.is(':hidden')).toBe(true);
-                $title2.trigger($.Event('keydown', {
-                    keyCode: $.ui.keyCode.LEFT
-                }));
-                expect($content1.is(':visible')).toBe(true);
-                expect($content2.is(':hidden')).toBe(true);
-                done();
-            });
-
-            $title1.trigger('focus');
-        });
     });
 });

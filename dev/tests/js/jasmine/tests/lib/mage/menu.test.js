@@ -30,9 +30,9 @@ define([
                     $menuItems = $menu.find('li'),
                     $submenu = $menuItems.find('ul');
 
-                $menu.menu({
+                menu.menu({
                     expanded: true
-                });
+                }, $menu);
                 expect($submenu.hasClass('expanded')).toBe(true);
             });
         });
