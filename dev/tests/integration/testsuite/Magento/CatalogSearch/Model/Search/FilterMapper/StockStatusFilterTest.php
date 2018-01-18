@@ -65,6 +65,7 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyGeneralFilterWithOutOfStock()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/429');
         $select = $this->resource->getConnection()->select();
         $select->from(
             ['some_index' => 'some_table'],
@@ -89,6 +90,7 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyGeneralFilterWithoutOutOfStock()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/429');
         $select = $this->resource->getConnection()->select();
         $select->from(
             ['some_index' => 'some_table'],
@@ -113,6 +115,7 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyFullFilterWithOutOfStock()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/429');
         $select = $this->resource->getConnection()->select();
         $select->from(
             ['some_index' => 'some_table'],
@@ -137,6 +140,7 @@ class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyFullFilterWithoutOutOfStock()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/429');
         $select = $this->resource->getConnection()->select();
         $select->from(
             ['some_index' => 'some_table'],
