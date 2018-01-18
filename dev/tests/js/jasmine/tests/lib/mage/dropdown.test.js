@@ -243,7 +243,7 @@ define([
             jasmine.clock().uninstall();
         });
 
-        it('check if the dialog gets closed with the specified delay', function () {
+        it('check if the dialog gets closed with the specified delay', function (done) {
             var container = $('<div/>'),
                 dialog = $('<div/>').attr('id', 'dialog').appendTo(container);
 
@@ -251,8 +251,6 @@ define([
             $('<div/>').attr('id', 'opener').appendTo(container);
 
             container.appendTo('body');
-
-            jasmine.clock().install();
 
             dialog.dropdownDialog({
                 'timeout': 5
@@ -263,11 +261,11 @@ define([
             dialog.trigger('mouseleave');
             expect(dialog.dropdownDialog('isOpen')).toBeTruthy();
 
-            jasmine.clock().tick(10);
-            expect(dialog.dropdownDialog('isOpen')).toBeFalsy();
-            dialog.dropdownDialog('destroy');
-
-            jasmine.clock().uninstall();
+            setTimeout(function () {
+                expect(dialog.dropdownDialog('isOpen')).toBeFalsy();
+                dialog.dropdownDialog('destroy');
+                done();
+            }, 6);
         });
 
         /*
