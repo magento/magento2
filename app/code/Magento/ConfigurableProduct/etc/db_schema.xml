@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="catalog_product_super_attribute" resource="default" engine="innodb">
-    <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="catalog_product_super_attribute" resource="default" engine="innodb" comment="Catalog Product Super Attribute Table">
+    <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Product Super Attribute ID"/>
+    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Product ID"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Attribute ID"/>
+    <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Position"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="product_super_attribute_id"/>
     </constraint>
@@ -14,12 +14,12 @@
       <column name="attribute_id"/>
     </constraint>
   </table>
-  <table name="catalog_product_super_attribute_label" resource="default" engine="innodb">
-    <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="use_default" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
-    <column xsi:type="varchar" name="value" nullable="true" length="255"/>
+  <table name="catalog_product_super_attribute_label" resource="default" engine="innodb" comment="Catalog Product Super Attribute Label Table">
+    <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Value ID"/>
+    <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Product Super Attribute ID"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Store ID"/>
+    <column xsi:type="smallint" name="use_default" padding="5" unsigned="true" nullable="true" identity="false" default="0" comment="Use Default Value"/>
+    <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="value_id"/>
     </constraint>
@@ -33,10 +33,10 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="catalog_product_super_link" resource="default" engine="innodb">
-    <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="catalog_product_super_link" resource="default" engine="innodb" comment="Catalog Product Super Link Table">
+    <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Link ID"/>
+    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Product ID"/>
+    <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Parent ID"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="link_id"/>
     </constraint>

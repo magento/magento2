@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="persistent_session" resource="default" engine="innodb">
-    <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="key" nullable="false" length="50"/>
-    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="text" name="info" nullable="true"/>
-    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+  <table name="persistent_session" resource="default" engine="innodb" comment="Persistent Session">
+    <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Session id"/>
+    <column xsi:type="varchar" name="key" nullable="false" length="50" comment="Unique cookie key"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Customer id"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Website ID"/>
+    <column xsi:type="text" name="info" nullable="true" comment="Session Data"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="persistent_id"/>
     </constraint>
@@ -22,7 +22,7 @@
       <column name="updated_at"/>
     </index>
   </table>
-  <table name="quote" resource="quote">
-    <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
+  <table name="quote" resource="quote" comment="Sales Flat Quote">
+    <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false" default="0" comment="Is Quote Persistent"/>
   </table>
 </schema>

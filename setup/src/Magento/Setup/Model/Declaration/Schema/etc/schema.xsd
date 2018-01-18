@@ -57,6 +57,7 @@
         <xs:attribute name="name" type="xs:string" />
         <xs:attribute name="resource" type="resourceType" />
         <xs:attribute name="engine" type="engineType" />
+        <xs:attribute name="comment" type="xs:string" />
     </xs:complexType>
 
     <xs:simpleType name="resourceType">

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="store_website" resource="default" engine="innodb">
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-    <column xsi:type="varchar" name="name" nullable="true" length="64"/>
-    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="default_group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
+  <table name="store_website" resource="default" engine="innodb" comment="Websites">
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Website Id"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32" comment="Code"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="64" comment="Website Name"/>
+    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Sort Order"/>
+    <column xsi:type="smallint" name="default_group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Default Group Id"/>
+    <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="true" identity="false" default="0" comment="Defines Is Website Default"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="website_id"/>
     </constraint>
@@ -20,13 +20,13 @@
       <column name="default_group_id"/>
     </index>
   </table>
-  <table name="store_group" resource="default" engine="innodb">
-    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="varchar" name="name" nullable="false" length="255"/>
-    <column xsi:type="int" name="root_category_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
+  <table name="store_group" resource="default" engine="innodb" comment="Store Groups">
+    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Group Id"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Website Id"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Store Group Name"/>
+    <column xsi:type="int" name="root_category_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Root Category Id"/>
+    <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Default Store Id"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32" comment="Store group unique code"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="group_id"/>
     </constraint>
@@ -41,14 +41,14 @@
       <column name="default_store_id"/>
     </index>
   </table>
-  <table name="store" resource="default" engine="innodb">
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="varchar" name="name" nullable="false" length="255"/>
-    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="store" resource="default" engine="innodb" comment="Stores">
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Store Id"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32" comment="Code"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Website Id"/>
+    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Group Id"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Store Name"/>
+    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Store Sort Order"/>
+    <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Store Activity"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="store_id"/>
     </constraint>

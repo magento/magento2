@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="tax_class" resource="default" engine="innodb">
-    <column xsi:type="smallint" name="class_id" padding="6" unsigned="false" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="class_name" nullable="false" length="255"/>
-    <column xsi:type="varchar" name="class_type" nullable="false" length="8" default="CUSTOMER"/>
+  <table name="tax_class" resource="default" engine="innodb" comment="Tax Class">
+    <column xsi:type="smallint" name="class_id" padding="6" unsigned="false" nullable="false" identity="true" comment="Class Id"/>
+    <column xsi:type="varchar" name="class_name" nullable="false" length="255" comment="Class Name"/>
+    <column xsi:type="varchar" name="class_type" nullable="false" length="8" default="CUSTOMER" comment="Class Type"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="class_id"/>
     </constraint>
   </table>
-  <table name="tax_calculation_rule" resource="default" engine="innodb">
-    <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="code" nullable="false" length="255"/>
-    <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="int" name="calculate_subtotal" padding="11" unsigned="false" nullable="false" identity="false"/>
+  <table name="tax_calculation_rule" resource="default" engine="innodb" comment="Tax Calculation Rule">
+    <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tax Calculation Rule Id"/>
+    <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+    <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false" comment="Priority"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" comment="Position"/>
+    <column xsi:type="int" name="calculate_subtotal" padding="11" unsigned="false" nullable="false" identity="false" comment="Calculate off subtotal option"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="tax_calculation_rule_id"/>
     </constraint>
@@ -25,16 +25,16 @@
       <column name="code"/>
     </index>
   </table>
-  <table name="tax_calculation_rate" resource="default" engine="innodb">
-    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="tax_country_id" nullable="false" length="2"/>
-    <column xsi:type="int" name="tax_region_id" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="varchar" name="tax_postcode" nullable="true" length="21"/>
-    <column xsi:type="varchar" name="code" nullable="false" length="255"/>
-    <column xsi:type="decimal" name="rate" scale="4" precission="12" unsigned="false" nullable="false"/>
-    <column xsi:type="smallint" name="zip_is_range" padding="6" unsigned="false" nullable="true" identity="false"/>
-    <column xsi:type="int" name="zip_from" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="int" name="zip_to" padding="10" unsigned="true" nullable="true" identity="false"/>
+  <table name="tax_calculation_rate" resource="default" engine="innodb" comment="Tax Calculation Rate">
+    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tax Calculation Rate Id"/>
+    <column xsi:type="varchar" name="tax_country_id" nullable="false" length="2" comment="Tax Country Id"/>
+    <column xsi:type="int" name="tax_region_id" padding="11" unsigned="false" nullable="false" identity="false" comment="Tax Region Id"/>
+    <column xsi:type="varchar" name="tax_postcode" nullable="true" length="21" comment="Tax Postcode"/>
+    <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+    <column xsi:type="decimal" name="rate" scale="4" precission="12" unsigned="false" nullable="false" comment="Rate"/>
+    <column xsi:type="smallint" name="zip_is_range" padding="6" unsigned="false" nullable="true" identity="false" comment="Zip Is Range"/>
+    <column xsi:type="int" name="zip_from" padding="10" unsigned="true" nullable="true" identity="false" comment="Zip From"/>
+    <column xsi:type="int" name="zip_to" padding="10" unsigned="true" nullable="true" identity="false" comment="Zip To"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="tax_calculation_rate_id"/>
     </constraint>
@@ -54,12 +54,12 @@
       <column name="tax_postcode"/>
     </index>
   </table>
-  <table name="tax_calculation" resource="default" engine="innodb">
-    <column xsi:type="int" name="tax_calculation_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="customer_tax_class_id" padding="6" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="product_tax_class_id" padding="6" unsigned="false" nullable="false" identity="false"/>
+  <table name="tax_calculation" resource="default" engine="innodb" comment="Tax Calculation">
+    <column xsi:type="int" name="tax_calculation_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tax Calculation Id"/>
+    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="false" comment="Tax Calculation Rate Id"/>
+    <column xsi:type="int" name="tax_calculation_rule_id" padding="11" unsigned="false" nullable="false" identity="false" comment="Tax Calculation Rule Id"/>
+    <column xsi:type="smallint" name="customer_tax_class_id" padding="6" unsigned="false" nullable="false" identity="false" comment="Customer Tax Class Id"/>
+    <column xsi:type="smallint" name="product_tax_class_id" padding="6" unsigned="false" nullable="false" identity="false" comment="Product Tax Class Id"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="tax_calculation_id"/>
     </constraint>
@@ -82,11 +82,11 @@
       <column name="product_tax_class_id"/>
     </index>
   </table>
-  <table name="tax_calculation_rate_title" resource="default" engine="innodb">
-    <column xsi:type="int" name="tax_calculation_rate_title_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="false"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="varchar" name="value" nullable="false" length="255"/>
+  <table name="tax_calculation_rate_title" resource="default" engine="innodb" comment="Tax Calculation Rate Title">
+    <column xsi:type="int" name="tax_calculation_rate_title_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Tax Calculation Rate Title Id"/>
+    <column xsi:type="int" name="tax_calculation_rate_id" padding="11" unsigned="false" nullable="false" identity="false" comment="Tax Calculation Rate Id"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="value" nullable="false" length="255" comment="Value"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="tax_calculation_rate_title_id"/>
     </constraint>
@@ -100,15 +100,15 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="tax_order_aggregated_created" resource="default" engine="innodb">
-    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="date" name="period"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="varchar" name="code" nullable="false" length="255"/>
-    <column xsi:type="varchar" name="order_status" nullable="false" length="50"/>
-    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true"/>
-    <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true"/>
+  <table name="tax_order_aggregated_created" resource="default" engine="innodb" comment="Tax Order Aggregation">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="date" name="period" comment="Period"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+    <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
+    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true" comment="Percent"/>
+    <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Orders Count"/>
+    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>
@@ -124,15 +124,15 @@
       <column name="store_id"/>
     </index>
   </table>
-  <table name="tax_order_aggregated_updated" resource="default" engine="innodb">
-    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="date" name="period"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="varchar" name="code" nullable="false" length="255"/>
-    <column xsi:type="varchar" name="order_status" nullable="false" length="50"/>
-    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true"/>
-    <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true"/>
+  <table name="tax_order_aggregated_updated" resource="default" engine="innodb" comment="Tax Order Aggregated Updated">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="date" name="period" comment="Period"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
+    <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
+    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true" comment="Percent"/>
+    <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Orders Count"/>
+    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>

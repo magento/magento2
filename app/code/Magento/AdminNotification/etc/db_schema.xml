@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="adminnotification_inbox" resource="default" engine="innodb">
-    <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="timestamp" name="date_added" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-    <column xsi:type="varchar" name="title" nullable="false" length="255"/>
-    <column xsi:type="text" name="description" nullable="true"/>
-    <column xsi:type="varchar" name="url" nullable="true" length="255"/>
-    <column xsi:type="smallint" name="is_read" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="is_remove" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="adminnotification_inbox" resource="default" engine="innodb" comment="Adminnotification Inbox">
+    <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Notification id"/>
+    <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Problem type"/>
+    <column xsi:type="timestamp" name="date_added" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Create date"/>
+    <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Title"/>
+    <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+    <column xsi:type="varchar" name="url" nullable="true" length="255" comment="Url"/>
+    <column xsi:type="smallint" name="is_read" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Flag if notification read"/>
+    <column xsi:type="smallint" name="is_remove" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Flag if notification might be removed"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="notification_id"/>
     </constraint>
@@ -22,10 +22,10 @@
       <column name="is_remove"/>
     </index>
   </table>
-  <table name="admin_system_messages" resource="default" engine="innodb">
-    <column xsi:type="varchar" name="identity" nullable="false" length="100"/>
-    <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+  <table name="admin_system_messages" resource="default" engine="innodb" comment="Admin System Messages">
+    <column xsi:type="varchar" name="identity" nullable="false" length="100" comment="Message id"/>
+    <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Problem type"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Create date"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="identity"/>
     </constraint>

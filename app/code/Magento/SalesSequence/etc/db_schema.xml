@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="sales_sequence_profile" resource="sales" engine="innodb">
-    <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="varchar" name="prefix" nullable="true" length="32"/>
-    <column xsi:type="varchar" name="suffix" nullable="true" length="32"/>
-    <column xsi:type="int" name="start_value" padding="10" unsigned="true" nullable="false" identity="false" default="1"/>
-    <column xsi:type="int" name="step" padding="10" unsigned="true" nullable="false" identity="false" default="1"/>
-    <column xsi:type="int" name="max_value" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="int" name="warning_value" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="boolean" name="is_active" nullable="false"/>
+  <table name="sales_sequence_profile" resource="sales" engine="innodb" comment="sales_sequence_profile">
+    <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Meta_id"/>
+    <column xsi:type="varchar" name="prefix" nullable="true" length="32" comment="Prefix"/>
+    <column xsi:type="varchar" name="suffix" nullable="true" length="32" comment="Suffix"/>
+    <column xsi:type="int" name="start_value" padding="10" unsigned="true" nullable="false" identity="false" default="1" comment="Start value for sequence"/>
+    <column xsi:type="int" name="step" padding="10" unsigned="true" nullable="false" identity="false" default="1" comment="Step for sequence"/>
+    <column xsi:type="int" name="max_value" padding="10" unsigned="true" nullable="false" identity="false" comment="MaxValue for sequence"/>
+    <column xsi:type="int" name="warning_value" padding="10" unsigned="true" nullable="false" identity="false" comment="WarningValue for sequence"/>
+    <column xsi:type="boolean" name="is_active" nullable="false" comment="isActive flag"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="profile_id"/>
     </constraint>
@@ -20,11 +20,11 @@
       <column name="suffix"/>
     </constraint>
   </table>
-  <table name="sales_sequence_meta" resource="sales" engine="innodb">
-    <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="entity_type" nullable="false" length="32"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="varchar" name="sequence_table" nullable="false" length="32"/>
+  <table name="sales_sequence_meta" resource="sales" engine="innodb" comment="sales_sequence_meta">
+    <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+    <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="sequence_table" nullable="false" length="32" comment="table for sequence"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="meta_id"/>
     </constraint>

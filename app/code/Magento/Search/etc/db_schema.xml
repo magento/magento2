@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="search_query" resource="default" engine="innodb">
-    <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="varchar" name="query_text" nullable="true" length="255"/>
-    <column xsi:type="int" name="num_results" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="int" name="popularity" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="varchar" name="redirect" nullable="true" length="255"/>
+  <table name="search_query" resource="default" engine="innodb" comment="Search query table">
+    <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Query ID"/>
+    <column xsi:type="varchar" name="query_text" nullable="true" length="255" comment="Query text"/>
+    <column xsi:type="int" name="num_results" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Num results"/>
+    <column xsi:type="int" name="popularity" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Popularity"/>
+    <column xsi:type="varchar" name="redirect" nullable="true" length="255" comment="Redirect"/>
     <column xsi:type="varchar" name="synonym_for" nullable="true" length="255" disabled="true"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="display_in_terms" padding="6" unsigned="false" nullable="false" identity="false" default="1"/>
-    <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="true" identity="false" default="1"/>
-    <column xsi:type="smallint" name="is_processed" padding="6" unsigned="false" nullable="true" identity="false" default="0"/>
-    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Store ID"/>
+    <column xsi:type="smallint" name="display_in_terms" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Display in terms"/>
+    <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="true" identity="false" default="1" comment="Active status"/>
+    <column xsi:type="smallint" name="is_processed" padding="6" unsigned="false" nullable="true" identity="false" default="0" comment="Processed status"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated at"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="query_id"/>
     </constraint>
@@ -33,11 +33,11 @@
     </index>
     <index name="SEARCH_QUERY_SYNONYM_FOR" disabled="1"/>
   </table>
-  <table name="search_synonyms" resource="default" engine="innodb">
-    <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="text" name="synonyms" nullable="false"/>
-    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
-    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+  <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
+    <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true" comment="Synonyms Group Id"/>
+    <column xsi:type="text" name="synonyms" nullable="false" comment="list of synonyms making up this group"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Store Id - identifies the store view these synonyms belong to"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Website Id - identifies the website id these synonyms belong to"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="group_id"/>
     </constraint>

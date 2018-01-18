@@ -11,6 +11,7 @@
     <xs:attributeGroup name="baseColumn">
         <xs:attributeGroup ref="basicOperations" />
         <xs:attribute name="name" type="nameType" use="required" />
+        <xs:attribute name="comment" type="xs:string" />
         <xs:attribute name="onCreate" type="xs:string">
             <xs:annotation>
                 <xs:documentation>

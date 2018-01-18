@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-  <table name="vault_payment_token" resource="default" engine="innodb">
-    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
-    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"/>
-    <column xsi:type="varchar" name="public_hash" nullable="false" length="128"/>
-    <column xsi:type="varchar" name="payment_method_code" nullable="false" length="128"/>
-    <column xsi:type="varchar" name="type" nullable="false" length="128"/>
-    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-    <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true"/>
-    <column xsi:type="varchar" name="gateway_token" nullable="false" length="255"/>
-    <column xsi:type="text" name="details" nullable="true"/>
+  <table name="vault_payment_token" resource="default" engine="innodb" comment="Vault tokens of payment">
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Customer Id"/>
+    <column xsi:type="varchar" name="public_hash" nullable="false" length="128" comment="Hash code for using on frontend"/>
+    <column xsi:type="varchar" name="payment_method_code" nullable="false" length="128" comment="Payment method code"/>
+    <column xsi:type="varchar" name="type" nullable="false" length="128" comment="Type"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+    <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true" comment="Expires At"/>
+    <column xsi:type="varchar" name="gateway_token" nullable="false" length="255" comment="Gateway Token"/>
+    <column xsi:type="text" name="details" nullable="true" comment="Details"/>
     <column xsi:type="boolean" name="is_active" nullable="false" default="true"/>
     <column xsi:type="boolean" name="is_visible" nullable="false" default="true"/>
     <constraint xsi:type="primary" name="PRIMARY">
@@ -25,9 +25,9 @@
       <column name="public_hash"/>
     </constraint>
   </table>
-  <table name="vault_payment_token_order_payment_link" resource="default" engine="innodb">
-    <column xsi:type="int" name="order_payment_id" padding="10" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="int" name="payment_token_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+  <table name="vault_payment_token_order_payment_link" resource="default" engine="innodb" comment="Order payments to vault token">
+    <column xsi:type="int" name="order_payment_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Order payment Id"/>
+    <column xsi:type="int" name="payment_token_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Payment token Id"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="order_payment_id"/>
       <column name="payment_token_id"/>
