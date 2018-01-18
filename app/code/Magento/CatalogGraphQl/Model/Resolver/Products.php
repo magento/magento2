@@ -61,11 +61,11 @@ class Products implements ResolverInterface
             $searchResult = $this->filterQuery->getResult($searchCriteria);
         }
 
-        //division by 0
+        //possible division by 0
         if ($searchCriteria->getPageSize()) {
             $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
         } else {
-            $maxPages = 0 ;
+            $maxPages = 0;
         }
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(

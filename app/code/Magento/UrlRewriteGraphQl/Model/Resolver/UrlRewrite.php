@@ -58,7 +58,7 @@ class UrlRewrite implements ResolverInterface
     }
 
     /**
-     * Recursively find the canonical url passing through all redirects
+     * Find the canonical url passing through all redirects if any
      *
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
@@ -110,7 +110,7 @@ class UrlRewrite implements ResolverInterface
     }
 
     /**
-     * Sanitizes the type to fit schema specs
+     * Sanitize the type to fit schema specifications
      *
      * @param string $type
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null

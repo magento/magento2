@@ -60,7 +60,7 @@
                 <item name="/config/type/field" xsi:type="string">name</item>
                 <item name="/config/type/item" xsi:type="string">name</item>
                 <item name="/config/type/implements" xsi:type="string">interface</item>
-                 </argument>
+            </argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\GraphQl\Type\Output\OutputFactory">
