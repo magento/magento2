@@ -9,6 +9,9 @@ namespace Magento\CatalogGraphQl\Model;
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * {@inheritdoc}
+ */
 class ConcreteTypeResolver implements TypeResolverInterface
 {
     /**
