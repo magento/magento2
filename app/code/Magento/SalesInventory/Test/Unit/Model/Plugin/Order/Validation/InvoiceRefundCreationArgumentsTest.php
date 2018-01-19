@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 
 /**
- * Class InvoiceRefundCreatetionArgumentsTest
+ * Class InvoiceRefundCreationArgumentsTest
  */
 class InvoiceRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
