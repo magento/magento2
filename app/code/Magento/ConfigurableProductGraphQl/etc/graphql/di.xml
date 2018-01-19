@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
+        <arguments>
+            <argument name="formatterInstances" xsi:type="array">
+                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="configurableProducttypeResolver" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\ConcreteTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

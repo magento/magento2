@@ -176,10 +176,8 @@ class ProductViewTest extends GraphQlAbstract
               }
             }
             sku
-            status
             type_id
             updated_at
-            visibility
             weight
         }
     }
@@ -267,8 +265,8 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -285,8 +283,8 @@ QUERY;
                                             'value' => 0.750001,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
@@ -303,18 +301,16 @@ QUERY;
                                             'value' => 0.286501,
                                             'currency' => 'USD',
                                         ],
-                                        'code' => 'tax',
-                                        'description' => 'Included',
+                                        'code' => 'TAX',
+                                        'description' => 'INCLUDED',
                                 ],
                         ]
                     ],
                 ]
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
-            ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-            ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
