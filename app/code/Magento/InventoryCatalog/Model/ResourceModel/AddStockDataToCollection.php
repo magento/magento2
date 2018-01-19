@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\InventoryCatalog\Model\InStockConditionResolver;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
@@ -22,18 +23,27 @@ class AddStockDataToCollection
     private $stockIndexTableNameResolver;
 
     /**
-     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+     * @var InStockConditionResolver
      */
-    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableNameResolver)
-    {
+    private $inStockConditionResolver;
+
+    /**
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+     * @param InStockConditionResolver $inStockConditionResolver
+     */
+    public function __construct(
+        StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
+        InStockConditionResolver $inStockConditionResolver
+    ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
+        $this->inStockConditionResolver = $inStockConditionResolver;
+
     }
 
     /**
      * @param Collection $collection
      * @param bool $isFilterInStock
      * @param int $stockId
-     *
      * @return void
      */
     public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
@@ -41,7 +51,7 @@ class AddStockDataToCollection
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $isSalableExpression = $collection->getConnection()
-            ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);
+            ->getCheckSql($this->inStockConditionResolver->execute('stock_status_index'), 1, 0);
 
         $resource = $collection->getResource();
         $collection->getSelect()->joinInner(
@@ -57,7 +67,7 @@ class AddStockDataToCollection
 
         if ($isFilterInStock) {
             $collection->getSelect()->where(
-                'stock_status_index.' . IndexStructure::QUANTITY . ' > 0'
+                $this->inStockConditionResolver->execute('stock_status_index')
             );
         }
     }

@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
 use Magento\Store\Model\Website;
@@ -36,22 +37,30 @@ class AdaptResourceModelStockStatusToMultiStocks
     private $adaptedAddStockDataToCollection;
 
     /**
+     * @var AddIsInStockFilterToCollection
+     */
+    private $adaptedAddIsInStockFilterToCollection;
+
+    /**
      * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
      * @param AddStockDataToCollection $adaptedAddStockDataToCollection
+     * @param AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
         AddStockStatusToSelect $adaptedAddStockStatusToSelect,
-        AddStockDataToCollection $adaptedAddStockDataToCollection
+        AddStockDataToCollection $adaptedAddStockDataToCollection,
+        AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
         $this->adaptedAddStockDataToCollection = $adaptedAddStockDataToCollection;
+        $this->adaptedAddIsInStockFilterToCollection = $adaptedAddIsInStockFilterToCollection;
     }
 
     /**
-     * Adapt AddStockStatusToSelect method.
+     * Adapt addStockStatusToSelect method.
      *
      * @param Status $stockStatus
      * @param callable $proceed
@@ -73,7 +82,7 @@ class AdaptResourceModelStockStatusToMultiStocks
     }
 
     /**
-     * Adapt AddStockDataToCollection method.
+     * Adapt addStockDataToCollection method.
      *
      * @param Status $stockStatus
      * @param callable $proceed
@@ -92,5 +101,25 @@ class AdaptResourceModelStockStatusToMultiStocks
         $this->adaptedAddStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;
+    }
+
+    /**
+     * Adapt addIsInStockFilterToCollection method.
+     *
+     * @param Status $stockStatus
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return Status
+     */
+    public function aroundAddIsInStockFilterToCollection(
+        Status $stockStatus,
+        callable $proceed,
+        $collection
+    ) {
+        $stockId = $this->stockIdForCurrentWebsite->execute();
+        $this->adaptedAddIsInStockFilterToCollection->addIsInStockFilterToCollection($collection, $stockId);
+
+        return $stockStatus;
     }
 }
