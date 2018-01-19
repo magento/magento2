@@ -1255,7 +1255,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
-     * Initialize entity ubject property value
+     * Initialize entity object property value
      *
      * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
      *
