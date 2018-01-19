@@ -66,6 +66,8 @@
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="filter_index" xsi:type="string">inventory_source_code</argument>
                             <argument name="index" xsi:type="string">source_code</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid\Options\SourceCodeOptionHash"/>
                             <argument name="header_css_class" xsi:type="string">col-source-code</argument>
                             <argument name="column_css_class" xsi:type="string">col-source-code</argument>
                         </arguments>
