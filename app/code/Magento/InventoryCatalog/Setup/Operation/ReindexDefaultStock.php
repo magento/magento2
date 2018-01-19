@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Setup\Operation;
+namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
