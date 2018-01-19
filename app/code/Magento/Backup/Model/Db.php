@@ -173,6 +173,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
             }
         }
         $backup->write($this->getResource()->getTableForeignKeysSql());
+        $backup->write($this->getResource()->getTableTriggersSql());
         $backup->write($this->getResource()->getFooter());
 
         $this->getResource()->commitTransaction();

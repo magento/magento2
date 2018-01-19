@@ -241,7 +241,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 } else {
                     $addEmptyOption = true;
                 }
-                $selectOptions = $attributeObject->getSource()->getAllOptions($addEmptyOption);
+                $selectOptions = $this->removeTagsFromLabel(
+                    $attributeObject->getSource()->getAllOptions($addEmptyOption)
+                );
             }
         }
 
@@ -733,5 +735,22 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attribute = $this->getAttributeObject();
 
         return 'at_' . $attribute->getAttributeCode();
+    }
+
+    /**
+     * Remove html tags from attribute labels.
+     *
+     * @param array $selectOptions
+     * @return array
+     */
+    private function removeTagsFromLabel(array $selectOptions)
+    {
+        foreach ($selectOptions as &$option) {
+            if (isset($option['label'])) {
+                $option['label'] = strip_tags($option['label']);
+            }
+        }
+
+        return $selectOptions;
     }
 }

@@ -9,7 +9,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -610,7 +609,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
-        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -634,7 +633,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(['error1', 'error2']);
-        $this->productMock->expects($this->never())->method('getId');
+        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -1178,7 +1177,21 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery'] = $newEntriesData;
+        $this->productData['media_gallery_entries'] = [
+            [
+                'id' => null,
+                'label' => "label_text",
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'content' => [
+                        ImageContentInterface::NAME => 'filename',
+                        ImageContentInterface::TYPE => 'image/jpeg',
+                        ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
+                ],
+                'media_type' => 'media_type',
+            ]
+        ];
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -1288,7 +1301,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         //update one entry, delete one entry
         $newEntries = [
             [
-                'value_id' => 5,
+                'id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
                 'position' => 10,
@@ -1316,7 +1329,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             [
                 'value_id' => 5,
-                'value_id' => 5,
+                'id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
                 'position' => 10,
@@ -1332,7 +1345,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery']['images'] = $newEntries;
+        $this->productData['media_gallery_entries'] = $newEntries;
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')

@@ -148,21 +148,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Join product entities to select existing products items only
-     *
-     * @return void
-     */
-    protected function _beforeLoad()
-    {
-        parent::_beforeLoad();
-        $this->join(
-            ['cpe' => $this->getResource()->getTable('catalog_product_entity')],
-            "cpe.entity_id = main_table.product_id",
-            []
-        );
-    }
-
-    /**
      * After load processing
      *
      * @return $this
@@ -171,18 +156,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     {
         parent::_afterLoad();
 
-        /**
-         * Assign parent items
-         */
+        $productIds = [];
         foreach ($this as $item) {
+            // Assign parent items
             if ($item->getParentItemId()) {
                 $item->setParentItem($this->getItemById($item->getParentItemId()));
             }
             if ($this->_quote) {
                 $item->setQuote($this->_quote);
             }
+            // Collect quote products ids
+            $productIds[] = (int)$item->getProductId();
         }
-
+        $this->_productIds = array_merge($this->_productIds, $productIds);
+        $this->removeItemsWithAbsentProducts();
         /**
          * Assign options and products
          */
@@ -220,12 +207,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected function _assignProducts()
     {
         \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, ['group' => 'QUOTE', 'method' => __METHOD__]);
-        $productIds = [];
-        foreach ($this as $item) {
-            $productIds[] = (int)$item->getProductId();
-        }
-        $this->_productIds = array_merge($this->_productIds, $productIds);
-
         $productCollection = $this->_productCollectionFactory->create()->setStoreId(
             $this->getStoreId()
         )->addIdFilter(
@@ -318,6 +299,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $productCollection->addTierPriceData();
         } else {
             $productCollection->addTierPriceDataByGroupId($this->_quote->getCustomerGroupId());
+        }
+    }
+
+    /**
+     * Find and remove quote items with non existing products
+     *
+     * @return void
+     */
+    private function removeItemsWithAbsentProducts()
+    {
+        $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
+        $existingProductsIds = $productCollection->getAllIds();
+        $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
+        // Remove not existing products from items collection
+        if (!empty($absentProductsIds)) {
+            foreach ($absentProductsIds as $productIdToExclude) {
+                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
+                $quoteItem = $this->getItemByColumnValue('product_id', $productIdToExclude);
+                $this->removeItemByKey($quoteItem->getId());
+            }
         }
     }
 }
