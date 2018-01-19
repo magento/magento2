@@ -93,7 +93,6 @@ class AdaptStockStatusFilterPlugin
             throw new InvalidArgumentException('Invalid filter type: ' . $type);
         }
 
-        $select = clone $select;
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
         $this->addProductEntityJoin($select, $mainTableAlias);
         $this->addInventoryStockJoin($select, $showOutOfStockFlag);
