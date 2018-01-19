@@ -28,13 +28,20 @@ class Date implements DbDefinitionProcessorInterface
     private $comment;
 
     /**
+     * @var Nullable
+     */
+    private $nullable;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param Nullable $nullable
      * @param Comment $comment
      */
-    public function __construct(ResourceConnection $resourceConnection, Comment $comment)
+    public function __construct(ResourceConnection $resourceConnection, Nullable $nullable, Comment $comment)
     {
         $this->resourceConnection = $resourceConnection;
         $this->comment = $comment;
+        $this->nullable = $nullable;
     }
 
     /**
@@ -44,9 +51,10 @@ class Date implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s %s',
+            '%s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
+            $this->nullable->toDefinition($column),
             $this->comment->toDefinition($column)
         );
     }

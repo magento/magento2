@@ -1355,7 +1355,7 @@
             <argument name="typeFactories" xsi:type="array">
                 <item name="table" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Table</item>
                 <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
-                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
+                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\FloatFactory</item>
                 <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
                 <item name="smallint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="tinyint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>

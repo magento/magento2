@@ -8,10 +8,11 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Date caster
- * Remove default and nullable attributes, as date type must not have any attributes
+ * This type is equal to SQL DECIMAL(SCALE,PRECISION) type. Usually it is used for accurate operations
+ * with decimal numbers. For example, for price
+ * Usually decimal is concatinated from 2 integers, so it has not round problems
  */
-class Date implements FactoryInterface
+class FloatFactory implements FactoryInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -29,7 +30,7 @@ class Date implements FactoryInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Date::class
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal::class
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
@@ -44,6 +45,18 @@ class Date implements FactoryInterface
      */
     public function create(array $data)
     {
+        if (!isset($data['precission'])) {
+            $data['precission'] = 0;
+        }
+
+        if (!isset($data['scale'])) {
+            $data['scale'] = 0;
+        }
+
+        if (isset($data['default'])) {
+            $data['default'] = (float) $data['default'];
+        }
+
         return $this->objectManager->create($this->className, $data);
     }
 }

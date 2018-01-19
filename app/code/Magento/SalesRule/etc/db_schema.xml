@@ -138,7 +138,7 @@
   </table>
   <table name="salesrule_coupon_aggregated" resource="default" engine="innodb" comment="Coupon Aggregated">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
-    <column xsi:type="date" name="period" comment="Period"/>
+    <column xsi:type="date" name="period" nullable="false" comment="Period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
@@ -169,7 +169,7 @@
   </table>
   <table name="salesrule_coupon_aggregated_updated" resource="default" engine="innodb" comment="Salesrule Coupon Aggregated Updated">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
-    <column xsi:type="date" name="period" comment="Period"/>
+    <column xsi:type="date" name="period" nullable="false" comment="Period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
@@ -200,7 +200,7 @@
   </table>
   <table name="salesrule_coupon_aggregated_order" resource="default" engine="innodb" comment="Coupon Aggregated Order">
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
-    <column xsi:type="date" name="period" comment="Period"/>
+    <column xsi:type="date" name="period" nullable="false" comment="Period"/>
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
     <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
     <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>

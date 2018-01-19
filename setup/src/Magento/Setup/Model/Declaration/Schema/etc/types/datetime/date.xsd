@@ -17,6 +17,7 @@
             </xs:documentation>
         </xs:annotation>
 
+        <xs:attribute name="nullable" type="xs:boolean" />
         <xs:attributeGroup ref="baseColumn" />
     </xs:complexType>
 </xs:schema>

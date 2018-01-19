@@ -106,9 +106,9 @@
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
     <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
     <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true" comment="Percent"/>
+    <column xsi:type="float" name="percent" unsigned="false" nullable="true" comment="Percent"/>
     <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Orders Count"/>
-    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
+    <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>
@@ -130,9 +130,9 @@
     <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Store Id"/>
     <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
     <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
-    <column xsi:type="float" name="percent" scale="0" precission="10" unsigned="false" nullable="true" comment="Percent"/>
+    <column xsi:type="float" name="percent" unsigned="false" nullable="true" comment="Percent"/>
     <column xsi:type="int" name="orders_count" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Orders Count"/>
-    <column xsi:type="float" name="tax_base_amount_sum" scale="0" precission="10" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
+    <column xsi:type="float" name="tax_base_amount_sum" unsigned="false" nullable="true" comment="Tax Base Amount Sum"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="id"/>
     </constraint>

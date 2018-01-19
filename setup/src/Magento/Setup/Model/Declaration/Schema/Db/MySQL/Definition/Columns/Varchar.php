@@ -49,8 +49,13 @@ class Varchar implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
-        $default = $column->getDefault() !== null ? sprintf('DEFAULT "%s"', $column->getDefault()) : '';
-        $default = strtolower($column->getDefault()) === 'null' ? 'DEFAULT NULL' : $default;
+        if (strtolower($column->getDefault()) === 'null') {
+            $default = 'DEFAULT NULL';
+        } elseif ($column->getDefault() !== null) {
+            $default = sprintf('DEFAULT "%s"', $column->getDefault());
+        } else {
+            $default = '';
+        }
         return sprintf(
             '%s %s(%s) %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),

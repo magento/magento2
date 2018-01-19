@@ -838,7 +838,7 @@
   <table name="catalog_product_index_website" resource="default" engine="innodb" comment="Catalog Product Website Index Table">
     <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Website ID"/>
     <column xsi:type="date" name="website_date" comment="Website Date"/>
-    <column xsi:type="float" name="rate" scale="0" precission="10" unsigned="false" nullable="true" default="1" comment="Rate"/>
+    <column xsi:type="float" name="rate" unsigned="false" nullable="true" default="1" comment="Rate"/>
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="website_id"/>
     </constraint>
@@ -1156,7 +1156,7 @@
       <column name="min_price"/>
     </index>
   </table>
-  <table name="catalog_category_product_index_tmp" resource="default" engine="memory" comment="Catalog Category Product Indexer temporary table">
+  <table name="catalog_category_product_index_tmp" resource="default" engine="memory" comment="Catalog Category Product Indexer Temp Table">
     <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Category ID"/>
     <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Product ID"/>
     <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
@@ -1168,6 +1168,11 @@
       <column name="product_id"/>
       <column name="store_id"/>
     </constraint>
+    <index name="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="btree">
+      <column name="product_id"/>
+      <column name="category_id"/>
+      <column name="store_id"/>
+    </index>
   </table>
   <table name="catalog_product_entity_media_gallery_value_to_entity" resource="default" engine="innodb" comment="Link Media value to Product entity table">
     <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Value media Entry ID"/>

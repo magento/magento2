@@ -61,12 +61,16 @@ class Decimal implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
+        if ($column->getPrecission() === 0 && $column->getScale() === 0) {
+            $type = $column->getType();
+        } else {
+            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getPrecission(), $column->getScale());
+        }
+
         return sprintf(
-            '%s %s(%s, %s) %s %s %s %s',
+            '%s %s %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
-            $column->getType(),
-            $column->getPrecission(),
-            $column->getScale(),
+            $type,
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
