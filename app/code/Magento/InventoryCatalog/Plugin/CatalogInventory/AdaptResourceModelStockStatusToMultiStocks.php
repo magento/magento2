@@ -9,18 +9,26 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
+use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
+use Magento\Store\Model\Website;
 
 /**
- * Adapt adding stock data to collection for multi stocks.
+ * Adapt Resource Model Stock Status for Multi-Source Inventory.
  */
-class AdaptAddStockDataToCollectionToMultiStocks
+class AdaptResourceModelStockStatusToMultiStocks
 {
     /**
      * @var GetStockIdForCurrentWebsite
      */
     private $stockIdForCurrentWebsite;
+
+    /**
+     * @var AddStockStatusToSelect
+     */
+    private $adaptedAddStockStatusToSelect;
 
     /**
      * @var AddStockDataToCollection
@@ -29,17 +37,44 @@ class AdaptAddStockDataToCollectionToMultiStocks
 
     /**
      * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
+     * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
      * @param AddStockDataToCollection $addStockDataToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
+        AddStockStatusToSelect $adaptedAddStockStatusToSelect,
         AddStockDataToCollection $addStockDataToCollection
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
+        $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
         $this->addStockDataToCollection = $addStockDataToCollection;
     }
 
     /**
+     * Adapt AddStockStatusToSelect method.
+     *
+     * @param Status $stockStatus
+     * @param callable $proceed
+     * @param Select $select
+     * @param Website $website
+     * @return Status
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundAddStockStatusToSelect(
+        Status $stockStatus,
+        callable $proceed,
+        Select $select,
+        Website $website
+    ) {
+        $stockId = $this->stockIdForCurrentWebsite->execute();
+        $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
+
+        return $stockStatus;
+    }
+
+    /**
+     * Adapt AddStockDataToCollection method.
+     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Collection $collection

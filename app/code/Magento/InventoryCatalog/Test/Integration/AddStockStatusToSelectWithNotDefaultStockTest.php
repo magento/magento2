@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -28,6 +29,11 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
     private $website;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -36,6 +42,7 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
 
         $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
         $this->website = Bootstrap::getObjectManager()->create(Website::class);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -54,7 +61,10 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends AbstractSalesChannel
      */
     public function testAddStockStatusToSelect(int $stockId, int $expectedIsSalableCount, $expectedNotSalableCount)
     {
-        $this->addSalesChannelTypeWebsiteToStock($stockId, 'base');
+        $this->addSalesChannelTypeWebsiteToStock($stockId, 'test');
+
+        // switch to second website
+        $this->storeManager->setCurrentStore('fixture_second_store');
 
         $actualIsSalableCount = $actualNotSalableCount = 0;
 
