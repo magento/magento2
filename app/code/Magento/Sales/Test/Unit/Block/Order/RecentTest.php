@@ -64,7 +64,6 @@ class RecentTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructMethod()
     {
-        $data = [];
         $attribute = ['customer_id', 'store_id', 'status'];
         $customerId = 25;
         $storeId = 4;
@@ -130,8 +129,8 @@ class RecentTest extends \PHPUnit\Framework\TestCase
             $this->orderCollectionFactory,
             $this->customerSession,
             $this->orderConfig,
-            $this->storeManagerMock,
-            $data
+            [],
+            $this->storeManagerMock
         );
         $this->assertEquals($orderCollection, $this->block->getOrders());
     }

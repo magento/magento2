@@ -10,6 +10,7 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Customer\Model\Session;
 use Magento\Sales\Model\Order\Config;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Sales order history block
@@ -57,15 +58,16 @@ class Recent extends \Magento\Framework\View\Element\Template
         CollectionFactory $orderCollectionFactory,
         Session $customerSession,
         Config $orderConfig,
-        StoreManagerInterface $storeManager,
-        array $data = []
+        array $data = [],
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
-        $this->storeManager = $storeManager;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
+        parent::__construct($context, $data);
     }
 
     /**
