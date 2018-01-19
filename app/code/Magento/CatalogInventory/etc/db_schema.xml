@@ -126,13 +126,13 @@
       <column name="website_id"/>
       <column name="stock_id"/>
     </constraint>
-    <index name="CATALOGINVENTORY_STOCK_STATUS_REPLICA_STOCK_ID" indexType="btree">
+    <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
       <column name="stock_id"/>
     </index>
-    <index name="CATALOGINVENTORY_STOCK_STATUS_REPLICA_WEBSITE_ID" indexType="btree">
+    <index name="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
       <column name="website_id"/>
     </index>
-    <index name="CATALOGINVENTORY_STOCK_STATUS_REPLICA_STOCK_STATUS" indexType="btree">
+    <index name="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
       <column name="stock_status"/>
     </index>
   </table>

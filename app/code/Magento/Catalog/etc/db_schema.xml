@@ -1197,13 +1197,13 @@
       <column name="value"/>
       <column name="source_id"/>
     </constraint>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_REPLICA_ATTRIBUTE_ID" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_ATTRIBUTE_ID" indexType="btree">
       <column name="attribute_id"/>
     </index>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_REPLICA_STORE_ID" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_STORE_ID" indexType="btree">
       <column name="store_id"/>
     </index>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_REPLICA_VALUE" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_VALUE" indexType="btree">
       <column name="value"/>
     </index>
   </table>
@@ -1220,13 +1220,13 @@
       <column name="value"/>
       <column name="source_id"/>
     </constraint>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_ATTRIBUTE_ID" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_ATTRIBUTE_ID" indexType="btree">
       <column name="attribute_id"/>
     </index>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_STORE_ID" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_STORE_ID" indexType="btree">
       <column name="store_id"/>
     </index>
-    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_REPLICA_VALUE" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_VALUE" indexType="btree">
       <column name="value"/>
     </index>
   </table>
@@ -1245,13 +1245,13 @@
       <column name="customer_group_id"/>
       <column name="website_id"/>
     </constraint>
-    <index name="CATALOG_PRODUCT_INDEX_PRICE_REPLICA_CUSTOMER_GROUP_ID" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
       <column name="customer_group_id"/>
     </index>
-    <index name="CATALOG_PRODUCT_INDEX_PRICE_REPLICA_MIN_PRICE" indexType="btree">
+    <index name="CATALOG_PRODUCT_INDEX_PRICE_MIN_PRICE" indexType="btree">
       <column name="min_price"/>
     </index>
-    <index name="CAT_PRD_IDX_PRICE_REPLICA_WS_ID_CSTR_GROUP_ID_MIN_PRICE" indexType="btree">
+    <index name="CAT_PRD_IDX_PRICE_WS_ID_CSTR_GROUP_ID_MIN_PRICE" indexType="btree">
       <column name="website_id"/>
       <column name="customer_group_id"/>
       <column name="min_price"/>
@@ -1269,7 +1269,7 @@
       <column name="product_id"/>
       <column name="store_id"/>
     </constraint>
-    <index name="CAT_CTGR_PRD_IDX_REPLICA_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY" indexType="btree">
+    <index name="CAT_CTGR_PRD_IDX_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY" indexType="btree">
       <column name="product_id"/>
       <column name="store_id"/>
       <column name="category_id"/>

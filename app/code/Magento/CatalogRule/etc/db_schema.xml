@@ -165,19 +165,19 @@
       <column name="product_id"/>
       <column name="sort_order"/>
     </constraint>
-    <index name="CATALOGRULE_PRODUCT_REPLICA_CUSTOMER_GROUP_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_CUSTOMER_GROUP_ID" indexType="btree">
       <column name="customer_group_id"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_REPLICA_WEBSITE_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_WEBSITE_ID" indexType="btree">
       <column name="website_id"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_REPLICA_FROM_TIME" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_FROM_TIME" indexType="btree">
       <column name="from_time"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_REPLICA_TO_TIME" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_TO_TIME" indexType="btree">
       <column name="to_time"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_REPLICA_PRODUCT_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_PRODUCT_ID" indexType="btree">
       <column name="product_id"/>
     </index>
   </table>
@@ -193,19 +193,19 @@
     <constraint xsi:type="primary" name="PRIMARY">
       <column name="rule_product_price_id"/>
     </constraint>
-    <constraint xsi:type="unique" name="CATRULE_PRD_PRICE_REPLICA_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
+    <constraint xsi:type="unique" name="CATRULE_PRD_PRICE_RULE_DATE_WS_ID_CSTR_GROUP_ID_PRD_ID">
       <column name="rule_date"/>
       <column name="website_id"/>
       <column name="customer_group_id"/>
       <column name="product_id"/>
     </constraint>
-    <index name="CATALOGRULE_PRODUCT_PRICE_REPLICA_CUSTOMER_GROUP_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
       <column name="customer_group_id"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_PRICE_REPLICA_WEBSITE_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_PRICE_WEBSITE_ID" indexType="btree">
       <column name="website_id"/>
     </index>
-    <index name="CATALOGRULE_PRODUCT_PRICE_REPLICA_PRODUCT_ID" indexType="btree">
+    <index name="CATALOGRULE_PRODUCT_PRICE_PRODUCT_ID" indexType="btree">
       <column name="product_id"/>
     </index>
   </table>
@@ -218,10 +218,10 @@
       <column name="customer_group_id"/>
       <column name="website_id"/>
     </constraint>
-    <index name="CATALOGRULE_GROUP_WEBSITE_REPLICA_CUSTOMER_GROUP_ID" indexType="btree">
+    <index name="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
       <column name="customer_group_id"/>
     </index>
-    <index name="CATALOGRULE_GROUP_WEBSITE_REPLICA_WEBSITE_ID" indexType="btree">
+    <index name="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID" indexType="btree">
       <column name="website_id"/>
     </index>
   </table>
