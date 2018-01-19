@@ -37,7 +37,6 @@ class AddStockDataToCollection
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->inStockConditionResolver = $inStockConditionResolver;
-
     }
 
     /**

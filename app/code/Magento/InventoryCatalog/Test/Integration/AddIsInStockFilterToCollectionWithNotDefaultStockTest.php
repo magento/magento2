@@ -11,11 +11,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test add in in stock filter to collection with different stocks on second website.
+ * Test add in in stock filter to collection with different stocks on different websites.
  */
-class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends AbstractSalesChannelProvider
+class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
 {
     /**
      * @var StockStatus
@@ -39,29 +40,26 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends AbstractSale
     }
 
     /**
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
      *
-     * @param int $stockId
+     * @param string $store
      * @param int $expectedSize
      * @return void
      *
      * @dataProvider addIsInStockFilterToCollectionDataProvider
      */
-    public function testAddIsInStockFilterToCollection(int $stockId, int $expectedSize)
+    public function testAddIsInStockFilterToCollection(string $store, int $expectedSize)
     {
-        $this->addSalesChannelTypeWebsiteToStock($stockId, 'test');
-
-        // switch to second website
-        $this->storeManager->setCurrentStore('fixture_second_store');
+        $this->storeManager->setCurrentStore($store);
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-
         $this->stockStatus->addIsInStockFilterToCollection($collection);
 
         self::assertEquals($expectedSize, $collection->getSize());
@@ -73,9 +71,9 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends AbstractSale
     public function addIsInStockFilterToCollectionDataProvider(): array
     {
         return [
-            [10, 1, true],
-            [20, 1, true],
-            [30, 2, true],
+            ['store_for_eu_website', 1, true],
+            ['store_for_us_website', 1, true],
+            ['store_for_global_website', 2, true],
         ];
     }
 }

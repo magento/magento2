@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test catalog search with different stocks on second website.
+ * Test catalog search with different stocks on different websites.
  */
 class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
 {
