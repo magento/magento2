@@ -33,12 +33,11 @@
             </thead>
             <?php $_items = $_invoice->getItemsCollection(); ?>
             <?php foreach ($_items as $_item): ?>
-                <?php if ($_item->getOrderItem()->getParentItem()): ?>
-                    continue;
+                <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+                    <tbody>
+                        <?= $block->getItemHtml($_item) ?>
+                    </tbody>
                 <?php endif; ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
             <?php endforeach; ?>
             <tfoot>
                 <?= $block->getInvoiceTotalsHtml($_invoice) ?>
