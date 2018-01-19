@@ -7,7 +7,6 @@ namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\State;
 
 /**
  * @package Magento\Deploy\Test\Unit\Console\Command
@@ -63,6 +62,18 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
         $tester->execute(['mode' => 'developer']);
         $this->assertContains(
             "developer mode",
+            $tester->getDisplay()
+        );
+    }
+
+    public function testSetDefaultMode()
+    {
+        $this->modeMock->expects($this->once())->method('enableDefaultMode');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['mode' => 'default']);
+        $this->assertContains(
+            "default mode",
             $tester->getDisplay()
         );
     }
