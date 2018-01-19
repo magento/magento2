@@ -71,7 +71,6 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
         $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
         self::assertEquals($expectedSize, $collection->getSize());
-
     }
 
     /**
