@@ -15,7 +15,7 @@ $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::
 /** @var SalesChannelInterfaceFactory $salesChannelFactory */
 $salesChannelFactory = Bootstrap::getObjectManager()->get(SalesChannelInterfaceFactory::class);
 
-$websiteCodes = ['eu_website', 'us_website'];
+$websiteCodes = ['eu_website', 'us_website', 'global_website'];
 $defaultStock = $stockRepository->get(1);
 $extensionAttributes = $defaultStock->getExtensionAttributes();
 $salesChannels = $extensionAttributes->getSalesChannels();
