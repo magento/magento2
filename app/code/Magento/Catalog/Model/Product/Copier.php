@@ -1,18 +1,24 @@
 <?php
 /**
- * Catalog product copier. Creates product duplicate
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 
+/**
+ * Catalog product copier. Creates product duplicate
+ */
 class Copier
 {
     /**
-     * @var Option\Repository
+     * @var OptionRepository
      */
     protected $optionRepository;
 
@@ -22,22 +28,22 @@ class Copier
     protected $copyConstructor;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     protected $metadataPool;
 
     /**
      * @param CopyConstructorInterface $copyConstructor
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ProductFactory $productFactory
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        ProductFactory $productFactory
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
@@ -46,18 +52,16 @@ class Copier
     /**
      * Create product duplicate
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $product
+     * @return Product
      */
-    public function copy(\Magento\Catalog\Model\Product $product)
+    public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
-        /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
         $productData = $product->getData();
         $productData = $this->removeStockItem($productData);
@@ -83,6 +87,7 @@ class Copier
                 $duplicate->save();
                 $isDuplicateSaved = true;
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            } catch (\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException $e) {
             }
         } while (!$isDuplicateSaved);
         $this->getOptionRepository()->duplicate($product, $duplicate);
@@ -94,27 +99,25 @@ class Copier
     }
 
     /**
-     * @return Option\Repository
+     * @return OptionRepository
      * @deprecated 101.0.0
      */
     private function getOptionRepository()
     {
         if (null === $this->optionRepository) {
-            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
+            $this->optionRepository = ObjectManager::getInstance()->get(OptionRepository::class);
         }
         return $this->optionRepository;
     }
 
     /**
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }

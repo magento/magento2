@@ -208,4 +208,44 @@ class ImagesResizeCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->imageCache);
     }
+
+    public function testExecuteWithExceptionInGenerate()
+    {
+        $productsIds = [1, 2];
+
+        $this->appState->expects($this->once())
+            ->method('setAreaCode')
+            ->with(Area::AREA_GLOBAL)
+            ->willReturnSelf();
+
+        $this->productCollection->expects($this->once())
+            ->method('getAllIds')
+            ->willReturn($productsIds);
+
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->productRepository->expects($this->at(0))
+            ->method('getById')
+            ->with($productsIds[0])
+            ->willReturn($productMock);
+        $this->productRepository->expects($this->at(1))
+            ->method('getById')
+            ->with($productsIds[1])
+            ->willThrowException(new NoSuchEntityException());
+
+        $this->imageCache->expects($this->exactly(count($productsIds) - 1))
+            ->method('generate')
+            ->with($productMock)
+            ->willThrowException(new \Magento\Framework\Exception\RuntimeException(__('Some text is here.')));
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute([]);
+
+        $this->assertContains(
+            'Some text is here.',
+            $commandTester->getDisplay()
+        );
+    }
 }
