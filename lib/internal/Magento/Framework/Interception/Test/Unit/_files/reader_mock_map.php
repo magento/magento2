@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainerPlugin\Simple;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple as ImportPluginSimple;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash\Plugin;
 
 return [
@@ -14,7 +16,7 @@ return [
                 'plugins' => [
                     'simple_plugin' => [
                         'sortOrder' => 10,
-                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
+                        'instance' => ImportPluginSimple::class,
                     ],
                 ],
             ]
@@ -27,7 +29,7 @@ return [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                        'instance' => Advanced::class,
                     ],
                 ],
             ],
@@ -57,7 +59,7 @@ return [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                        'instance' => Advanced::class,
                     ],
                 ],
             ],

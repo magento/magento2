@@ -156,11 +156,11 @@ class CategoryUrlRewriteGenerator
     {
         $categoryFromRepository = $this->categoryRepository->get($category->getId(), $storeId);
         $category->addData(
-                [
-                    'url_key' => $categoryFromRepository->getUrlKey(),
-                    'url_path' => $categoryFromRepository->getUrlPath()
-                ]
-            );
+            [
+                'url_key' => $categoryFromRepository->getUrlKey(),
+                'url_path' => $categoryFromRepository->getUrlPath()
+            ]
+        );
     }
 
     /**

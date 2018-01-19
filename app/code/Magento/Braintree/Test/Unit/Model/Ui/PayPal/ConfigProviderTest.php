@@ -85,6 +85,8 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function getConfigDataProvider()
     {
+        $paymentAcceptanceMarkSrc = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png';
+
         return [
             [
                 'expected' => [
@@ -95,7 +97,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
                             'locale' => 'en_US',
-                            'paymentAcceptanceMarkSrc' => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
+                            'paymentAcceptanceMarkSrc' => $paymentAcceptanceMarkSrc,
                             'vaultCode' => ConfigProvider::PAYPAL_VAULT_CODE,
                             'skipOrderReview' => false,
                             'paymentIcon' => [

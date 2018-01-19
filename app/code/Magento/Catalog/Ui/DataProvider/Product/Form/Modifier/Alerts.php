@@ -84,10 +84,10 @@ class Alerts extends AbstractModifier
                                 'componentType' => Fieldset::NAME,
                                 'dataScope' => static::DATA_SCOPE,
                                 'sortOrder' => $this->getNextGroupSortOrder(
-                                        $meta,
-                                        self::$previousGroup,
-                                        self::$sortOrder
-                                    ),
+                                    $meta,
+                                    self::$previousGroup,
+                                    self::$sortOrder
+                                ),
                             ],
                         ],
                     ],

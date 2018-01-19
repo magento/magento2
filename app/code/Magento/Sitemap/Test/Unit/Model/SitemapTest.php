@@ -560,7 +560,10 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                                             ]
                                         ),
                                         new \Magento\Framework\DataObject(
-                                            ['url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png', 'caption' => null]
+                                            [
+                                                'url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png',
+                                                'caption' => null
+                                            ]
                                         ),
                                     ],
                                     'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',

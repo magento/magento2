@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Config\Model\Config\Backend\Encrypted;
+
 return [
     'config' => [
         'noNamespaceSchemaLocation' => 'urn:magento:module:Magento_Config:etc/system_file.xsd',
@@ -34,7 +36,7 @@ return [
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 2',
-                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
+                                    'backend_model' => Encrypted::class,
                                     '_elementType' => 'field',
                                 ],
                             ],
@@ -75,7 +77,7 @@ return [
                                                     'id' => 'field_3_1_1',
                                                     'translate' => 'label',
                                                     'showInWebsite' => '1',
-                                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
+                                                    'backend_model' => Encrypted::class,
                                                     'type' => 'text',
                                                     'label' => 'Field 3.1.1',
                                                     '_elementType' => 'field',
@@ -138,7 +140,7 @@ return [
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 4',
-                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
+                                    'backend_model' => Encrypted::class,
                                     'attribute_1' => 'test_value_1',
                                     'attribute_2' => 'test_value_2',
                                     'attribute_text' => '<test_value>',

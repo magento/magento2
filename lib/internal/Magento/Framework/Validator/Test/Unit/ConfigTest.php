@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
+use Magento\Framework\App\Arguments\ValidationState;
+use Magento\Framework\Config\ValidationStateInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -74,9 +77,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $appObjectManager->configure(
             [
                 'preferences' => [
-                    \Magento\Framework\Config\ValidationStateInterface::class => \Magento\Framework\App\Arguments\ValidationState::class,
+                    ValidationStateInterface::class => ValidationState::class,
                 ],
-                \Magento\Framework\App\Arguments\ValidationState::class => [
+                ValidationState::class => [
                     'arguments' => [
                         'appMode' => 'developer',
                     ]
