@@ -89,7 +89,8 @@ class Timestamp extends Column implements
         return [
             'type' => $this->getType(),
             'default' => $this->getDefault(),
-            'onUpdate' => $this->getOnUpdate()
+            'onUpdate' => $this->getOnUpdate(),
+            'comment' => $this->getComment()
         ];
     }
 

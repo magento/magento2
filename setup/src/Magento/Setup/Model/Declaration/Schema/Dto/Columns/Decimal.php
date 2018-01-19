@@ -139,7 +139,8 @@ class Decimal extends Column implements
             'precission' => $this->getPrecission(),
             'scale' => $this->getScale(),
             'unsigned' => $this->isUnsigned(),
-            'default' => $this->getDefault()
+            'default' => $this->getDefault(),
+            'comment' => $this->getComment()
         ];
     }
 }

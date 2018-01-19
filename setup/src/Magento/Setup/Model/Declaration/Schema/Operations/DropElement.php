@@ -16,6 +16,8 @@ use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
  * Drop element operation
+ * Mean any structural element, except table element
+ * @see ElementInterface
  */
 class DropElement implements OperationInterface
 {

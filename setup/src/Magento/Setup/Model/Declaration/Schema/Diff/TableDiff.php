@@ -127,13 +127,8 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
-        //Handle changing shard
         if ($this->diffManager->shouldBeModified($declaredTable, $generatedTable)) {
-            $diff->register(
-                $declaredTable,
-                ReCreateTable::OPERATION_NAME,
-                $generatedTable
-            );
+            $this->diffManager->registerTableModification($declaredTable, $generatedTable, $diff);
         }
 
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];

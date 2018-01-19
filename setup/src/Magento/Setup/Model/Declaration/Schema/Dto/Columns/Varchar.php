@@ -100,7 +100,8 @@ class Varchar extends Column implements
             'type' => $this->getType(),
             'nullable' => $this->isNullable(),
             'default' => $this->getDefault(),
-            'length' => $this->getLength()
+            'length' => $this->getLength(),
+            'comment' => $this->getComment()
         ];
     }
 }

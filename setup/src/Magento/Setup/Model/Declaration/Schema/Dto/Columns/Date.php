@@ -51,7 +51,8 @@ class Date extends Column
     {
         return [
             'type' => $this->getType(),
-            'nullable' => $this->isNullable()
+            'nullable' => $this->isNullable(),
+            'comment' => $this->getComment()
         ];
     }
 

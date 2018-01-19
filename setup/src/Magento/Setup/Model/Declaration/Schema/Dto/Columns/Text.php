@@ -60,6 +60,7 @@ class Text extends Column implements
         return [
             'type' => $this->getType(),
             'nullable' => $this->isNullable(),
+            'comment' => $this->getComment()
         ];
     }
 }

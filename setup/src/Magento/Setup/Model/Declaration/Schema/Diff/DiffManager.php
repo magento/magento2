@@ -19,6 +19,8 @@ use Magento\Setup\Model\Declaration\Schema\Operations\DropReference;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\ModifyTable;
+use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
@@ -166,6 +168,34 @@ class DiffManager
             $reference->getReferenceTable()->getName()
         );
         return $diff;
+    }
+
+    /**
+     * Depends on what should be changed we can re-create table or modify it
+     *
+     * For example, we can modify table if we need to change comment or engine
+     * Or we can re-create table, when we need to change it shard
+     *
+     * @param Table $declaredTable
+     * @param Table $generatedTable
+     * @param Diff $diff
+     * @return void
+     */
+    public function registerTableModification(Table $declaredTable, Table $generatedTable, Diff $diff)
+    {
+        if ($declaredTable->getResource() !== $generatedTable->getResource()) {
+            $diff->register(
+                $declaredTable,
+                ReCreateTable::OPERATION_NAME,
+                $generatedTable
+            );
+        } else {
+            $diff->register(
+                $declaredTable,
+                ModifyTable::OPERATION_NAME,
+                $generatedTable
+            );
+        }
     }
 
     /**

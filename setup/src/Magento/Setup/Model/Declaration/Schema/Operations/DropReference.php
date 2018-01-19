@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop element operation
+ * Drop foreign key operation
  */
 class DropReference implements OperationInterface
 {

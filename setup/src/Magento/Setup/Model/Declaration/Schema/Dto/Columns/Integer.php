@@ -138,7 +138,8 @@ class Integer extends Column implements
             'padding' => $this->getPadding(),
             'unsigned' => $this->isUnsigned(),
             'identity' => $this->isIdentity(),
-            'default' => $this->getDefault()
+            'default' => $this->getDefault(),
+            'comment' => $this->getComment()
         ];
     }
 }

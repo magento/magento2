@@ -79,7 +79,8 @@ class Boolean extends Column implements
     {
         return [
             'nullable' => $this->isNullable(),
-            'default' => $this->getDefault()
+            'default' => $this->getDefault(),
+            'comment' => $this->getComment()
         ];
     }
 }

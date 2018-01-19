@@ -141,6 +141,20 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function modifyTableOption($tableName, $resource, $optionName, $optionValue)
+    {
+        return $this->statementFactory->create(
+            $tableName,
+            $tableName,
+            self::ALTER_TYPE,
+            sprintf("%s='%s'", strtoupper($optionName), $optionValue),
+            $resource
+        );
+    }
+
+    /**
      * Modify column and change it definition
      *
      * @inheritdoc

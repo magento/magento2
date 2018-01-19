@@ -84,6 +84,17 @@ interface DbSchemaWriterInterface
     public function modifyColumn($columnName, $resource, $tableName, $columnDefinition);
 
     /**
+     * Modify any table option, like comment, engine, etc...
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @param string $optionName
+     * @param string $optionValue
+     * @return Statement
+     */
+    public function modifyTableOption($tableName, $resource, $optionName, $optionValue);
+
+    /**
      * Drop any element (constraint, column, index) from index
      *
      * @param string $resource

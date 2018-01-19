@@ -277,7 +277,8 @@ class Table extends GenericElement implements
     {
         return [
             'resource' => $this->getResource(),
-            'engine' => $this->getEngine()
+            'engine' => $this->getEngine(),
+            'comment' => $this->getComment()
         ];
     }
 
