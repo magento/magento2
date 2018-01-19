@@ -181,7 +181,7 @@ return [
             <argument xsi:type="SortArgument" name="Sort"/></field>
          </type></config>',
         [
-            "Element 'argument': The attribute 'baseType' is required but missing.\nLine: 7\n"
+            "Element 'argument': The attribute 'baseType' is required but missing.\nLine: 11\n"
         ],
     ],
     'invalid_argument_FilterArgument_with missing baseType attribute' => [

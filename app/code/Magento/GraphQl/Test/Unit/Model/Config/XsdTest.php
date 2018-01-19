@@ -7,17 +7,16 @@ namespace Magento\GraphQl\Test\Unit\Model\Config;
 
 class XsdTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Path to xsd schema file
      * @var string
      */
-    protected $_xsdSchema;
+    private $xsdSchema;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
-    protected $_xsdValidator;
+    private $xsdValidator;
 
     protected function setUp()
     {
@@ -25,8 +24,8 @@ class XsdTest extends \PHPUnit\Framework\TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_GraphQl:etc/graphql.xsd');
-        $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
+        $this->xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_GraphQl:etc/graphql.xsd');
+        $this->xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
     /**
@@ -36,14 +35,14 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
-        $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualError = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
         $this->assertEquals($expectedError, $actualError);
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/graphql_simple_configurable.xml');
-        $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualResult = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
         $this->assertEmpty($actualResult);
     }
 

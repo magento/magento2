@@ -10,12 +10,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\GraphQl\Config\Converter
      */
-    protected $graphQlConverter;
+    private $graphQlConverter;
 
     /**
      * @var \DOMDocument
      */
-    protected $source;
+    private $source;
 
     protected function setUp()
     {
@@ -27,10 +27,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-
     public function testConvert()
     {
-        $actualOutput = [];
         $this->source= new \DOMDocument();
         $this->source->load(__DIR__ . '../../_files/input_graphql.xml');
         $actualOutput = $this->graphQlConverter->convert($this->source);
