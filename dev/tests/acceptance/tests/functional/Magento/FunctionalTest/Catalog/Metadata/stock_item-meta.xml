@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateStockItem" dataType="stock_item" type="create">
         <field key="qty">integer</field>
@@ -16,4 +16,4 @@
         <field key="qty">integer</field>
         <field key="is_in_stock">boolean</field>
     </operation>
-</config>
+</operations>
