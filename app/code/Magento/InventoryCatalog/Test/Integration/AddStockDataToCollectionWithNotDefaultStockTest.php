@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -57,7 +58,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
+        $this->indexer->load(InventoryIndexer::INDEXER_ID);
     }
 
     /**

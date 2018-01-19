@@ -23,20 +23,20 @@ class ReindexDefaultStock
     private $defaultStockProvider;
 
     /**
-     * @var IndexerInterfaceFactory
+     * @var StockIndexer
      */
-    private $indexerFactory;
+    private $stockIndexer;
 
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param IndexerInterfaceFactory $indexerFactory
+     * @param StockIndexer $stockIndexer
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
-        IndexerInterfaceFactory $indexerFactory
+        StockIndexer $stockIndexer
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->indexerFactory = $indexerFactory;
+        $this->stockIndexer = $stockIndexer;
     }
 
     /**
@@ -46,9 +46,6 @@ class ReindexDefaultStock
      */
     public function execute()
     {
-        /** @var IndexerInterface $indexer */
-        $indexer = $this->indexerFactory->create();
-        $indexer->load(StockIndexer::INDEXER_ID);
-        $indexer->reindexRow($this->defaultStockProvider->getId());
+        $this->stockIndexer->executeRow($this->defaultStockProvider->getId());
     }
 }
