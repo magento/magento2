@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputInterface" name="ProductInterface">
+        <field xsi:type="ScalarOutputField" name="url_key" type="String"/>
+        <field xsi:type="ScalarOutputField" name="url_path" type="String"/>
+    </type>
+    <type xsi:type="InputType" name="ProductFilterInput">
+        <field xsi:type="ObjectInputField" name="url_key" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="url_path" type="FilterTypeInput"/>
+    </type>
+    <type xsi:type="InputType" name="ProductSortInput">
+        <field xsi:type="ObjectInputField" name="url_key" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="url_path" type="SortEnum"/>
+    </type>
+    <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum">
+        <item name="product">PRODUCT</item>
+        <item name="category">CATEGORY</item>
+    </type>
+</config>
