@@ -53,7 +53,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expecteExceptionMessage (c,d,e)
+     * @expectedExceptionMessage (c,d,e)
      */
     public function testSaveCreateMergeConflict()
     {
@@ -138,7 +138,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expecteExceptionMessage (d,h,i)
+     * @expectedExceptionMessage (d,h,i)
      */
     public function testSaveUpdateMergeConflict()
     {
