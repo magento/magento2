@@ -33,21 +33,21 @@ class AdaptResourceModelStockStatusToMultiStocks
     /**
      * @var AddStockDataToCollection
      */
-    private $addStockDataToCollection;
+    private $adaptedAddStockDataToCollection;
 
     /**
      * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
-     * @param AddStockDataToCollection $addStockDataToCollection
+     * @param AddStockDataToCollection $adaptedAddStockDataToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
         AddStockStatusToSelect $adaptedAddStockStatusToSelect,
-        AddStockDataToCollection $addStockDataToCollection
+        AddStockDataToCollection $adaptedAddStockDataToCollection
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
-        $this->addStockDataToCollection = $addStockDataToCollection;
+        $this->adaptedAddStockDataToCollection = $adaptedAddStockDataToCollection;
     }
 
     /**
@@ -89,7 +89,7 @@ class AdaptResourceModelStockStatusToMultiStocks
         $isFilterInStock
     ) {
         $stockId = $this->stockIdForCurrentWebsite->execute();
-        $this->addStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
+        $this->adaptedAddStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;
     }

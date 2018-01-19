@@ -19,14 +19,14 @@ class AddStockStatusToSelect
     /**
      * @var StockIndexTableNameResolverInterface
      */
-    private $stockIndexTableProvider;
+    private $stockIndexTableNameResolver;
 
     /**
-     * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      */
-    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableProvider)
+    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableNameResolver)
     {
-        $this->stockIndexTableProvider = $stockIndexTableProvider;
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
     }
 
     /**
@@ -37,7 +37,7 @@ class AddStockStatusToSelect
      */
     public function addStockStatusToSelect(Select $select, int $stockId)
     {
-        $tableName = $this->stockIndexTableProvider->execute($stockId);
+        $tableName = $this->stockIndexTableNameResolver->execute($stockId);
         $isSalableExpression = $select->getConnection()->getCheckSql(
             'stock_status.' . IndexStructure::QUANTITY . ' > 0',
             1,
