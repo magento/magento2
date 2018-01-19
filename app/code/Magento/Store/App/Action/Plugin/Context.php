@@ -43,11 +43,6 @@ class Context
     protected $storeCookieManager;
 
     /**
-     * @var bool
-     */
-    private $called = false;
-
-    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -77,42 +72,68 @@ class Context
         AbstractAction $subject,
         RequestInterface $request
     ) {
-        if ($this->called) {
-            //Avoiding recursion.
+        if ($this->isAlreadySet()) {
+            //If required store related value were already set for
+            //HTTP processors then just continuing as we were.
             return;
         }
 
-        $this->called = true;
+        /** @var string|array|null $storeCode */
         $storeCode = $request->getParam(
             StoreResolverInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                //Triggering default mechanism for invalid pages requested.
-                throw new NotFoundException(new Phrase('Invalid store parameter.'));
+                $this->processInvalidStoreRequested();
             }
             $storeCode = $storeCode['_data']['code'];
         }
         if ($storeCode === '') {
-            //Empty store code was explicitly given so
-            //triggering default mechanism for invalid pages requested.
-            throw new NotFoundException(new Phrase('Invalid store parameter.'));
+            //Empty code - is an invalid code and it was given explicitly
+            //(the value would be null if the code wasn't found).
+            $this->processInvalidStoreRequested();
         }
         try {
             $currentStore = $this->storeManager->getStore($storeCode);
         } catch (NoSuchEntityException $exception) {
-            //If invalid store code received from request then triggering
-            //default mechanism for invalid URLs.
-            throw new NotFoundException(
-                __($exception->getMessage()),
-                $exception
-            );
+            $this->processInvalidStoreRequested($exception);
         }
 
+        $this->updateContext($currentStore);
+    }
+
+    /**
+     * Take action in case of invalid store requested.
+     *
+     * @param \Throwable|null  $previousException
+     *
+     * @throws NotFoundException
+     */
+    private function processInvalidStoreRequested(
+        \Throwable $previousException = null
+    ) {
+        $store = $this->storeManager->getStore();
+        $this->updateContext($store);
+
+        throw new NotFoundException(
+            $previousException
+                ? __($previousException->getMessage())
+                : __('Invalid store requested.'),
+            $previousException
+        );
+    }
+
+    /**
+     * Update context accordingly to the store found.
+     *
+     * @param StoreInterface $store
+     */
+    private function updateContext(StoreInterface $store)
+    {
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
-            $currentStore->getCode(),
+            $store->getCode(),
             $this->storeManager->getDefaultStoreView()->getCode()
         );
 
@@ -120,8 +141,21 @@ class Context
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
-            $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
+            $this->session->getCurrencyCode()
+                ?: $store->getDefaultCurrencyCode(),
             $defaultStore->getDefaultCurrencyCode()
         );
+    }
+
+    /**
+     * Check if there a need to find the current store.
+     *
+     * @return bool
+     */
+    private function isAlreadySet(): bool
+    {
+        $storeKey = StoreManagerInterface::CONTEXT_STORE;
+
+        return $this->httpContext->getValue($storeKey) !== null;
     }
 }
