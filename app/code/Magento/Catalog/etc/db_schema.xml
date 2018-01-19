@@ -361,12 +361,12 @@
       <column name="category_id"/>
       <column name="visibility"/>
     </index>
-    <index name="IDX_87EB2E3059853CF89A75B4C55074810B" indexType="btree">
-      <column name="store_id"/>
-      <column name="category_id"/>
-      <column name="visibility"/>
-      <column name="is_parent"/>
-      <column name="position"/>
+    <index name="CAT_CTGR_PRD_IDX_STORE_ID_CTGR_ID_VISIBILITY_IS_PARENT_POSITION" indexType="btree">
+      <column name="store_id" />
+      <column name="category_id" />
+      <column name="visibility" />
+      <column name="is_parent" />
+      <column name="position" />
     </index>
   </table>
   <table name="catalog_compare_item" resource="default" engine="innodb" comment="Catalog Compare Table">
@@ -1275,7 +1275,7 @@
       <column name="category_id"/>
       <column name="visibility"/>
     </index>
-    <index name="IDX_87EB2E3059853CF89A75B4C55074810B" indexType="btree">
+    <index name="CAT_CTGR_PRD_IDX_STORE_ID_CTGR_ID_VISIBILITY_IS_PARENT_POSITION" indexType="btree">
       <column name="store_id"/>
       <column name="category_id"/>
       <column name="visibility"/>
