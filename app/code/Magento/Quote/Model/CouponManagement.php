@@ -50,6 +50,7 @@ class CouponManagement implements CouponManagementInterface
      */
     public function set($cartId, $couponCode)
     {
+        $couponCode = trim($couponCode);
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {

@@ -147,6 +147,14 @@ class UiComponentFactory extends DataObject
         }
         $components = array_filter($components);
         $componentArguments['components'] = $components;
+
+       /**
+        * Prevent passing ACL restricted blocks to htmlContent constructor
+        */
+        if (isset($componentArguments['block']) && !$componentArguments['block']) {
+            return null;
+        }
+
         if (!isset($componentArguments['context'])) {
             $componentArguments['context'] = $renderContext;
         }

@@ -108,6 +108,14 @@ class UpgradeData implements UpgradeDataInterface
                 [$setup]
             );
         }
+        if (version_compare($context->getVersion(), '2.0.9', '<')) {
+            //Correct wrong source model for "invoice" entity type, introduced by mistake in 2.0.1 upgrade.
+            $salesSetup->updateEntityType(
+                'invoice',
+                'entity_model',
+                \Magento\Sales\Model\ResourceModel\Order\Invoice::class
+            );
+        }
         $this->eavConfig->clear();
     }
 
