@@ -80,8 +80,6 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $agreementsList
-     * @param \Magento\Framework\Api\FilterBuilder|null $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
      * @codeCoverageIgnore
      */
