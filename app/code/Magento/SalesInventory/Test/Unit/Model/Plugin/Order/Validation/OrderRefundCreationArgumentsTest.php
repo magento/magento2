@@ -15,7 +15,7 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Class OrderRefundCreatetionArgumentsTest
+ * Class OrderRefundCreationArgumentsTest
  */
 class OrderRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
