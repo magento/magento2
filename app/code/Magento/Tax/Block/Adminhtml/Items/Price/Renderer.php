@@ -137,7 +137,7 @@ class Renderer extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve formated price, use different formatter depending on type of item
+     * Retrieve formatted price, use different formatter depending on type of item
      *
      * @param float $price
      * @return string
