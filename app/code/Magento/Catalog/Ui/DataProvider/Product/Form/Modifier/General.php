@@ -36,7 +36,7 @@ class General extends AbstractModifier
      */
     private $localeCurrency;
 
-    protected $getProductStockIsQtyDecimalService;
+    protected $isProductQtyDecimal;
 
     /**
      * @param LocatorInterface $locator
@@ -45,11 +45,11 @@ class General extends AbstractModifier
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
+        GetProductStockIsQtyDecimalService $isProductQtyDecimal
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
-        $this->getProductStockIsQtyDecimalService = $getProductStockIsQtyDecimalService;
+        $this->isProductQtyDecimal = $isProductQtyDecimal;
     }
 
     /**
@@ -404,7 +404,7 @@ class General extends AbstractModifier
     {
         $productId = $this->locator->getProduct()->getId();
 
-        if ($this->getProductStockIsQtyDecimalService->execute($productId)) {
+        if ($this->isProductQtyDecimal->execute($productId)) {
             return $priceQty;
         }
 

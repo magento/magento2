@@ -84,7 +84,7 @@ class BundleDataProvider extends ProductDataProvider
         $items = $this->getCollection()->toArray();
         
         foreach ($items as $index => $item) {
-            $items[$index]['selection_qty_is_integer'] = !$this->getIsProductQtyDecimal($item['entity_id']);
+            $items[$index]['selection_qty_is_integer'] = !$this->isProductQtyDecimal($item['entity_id']);
         }
 
         return [
@@ -98,7 +98,7 @@ class BundleDataProvider extends ProductDataProvider
      *
      * @return bool
      */
-    protected function getIsProductQtyDecimal($productId)
+    protected function isProductQtyDecimal($productId)
     {
         $productStock = $this->stockItemRepository->get($productId);
 

@@ -104,7 +104,7 @@ class AdvancedPricing extends AbstractModifier
     /**
      * @var GetProductStockIsQtyDecimalService
      */
-    protected $getProductStockIsQtyDecimalService;
+    protected $isProductQtyDecimal;
 
     /**
      * @param LocatorInterface $locator
@@ -117,7 +117,7 @@ class AdvancedPricing extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
-     * @param GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
+     * @param GetProductStockIsQtyDecimalService $isProductQtyDecimal
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,7 +131,7 @@ class AdvancedPricing extends AbstractModifier
         ArrayManager $arrayManager,
         $scopeName = '',
         GroupSourceInterface $customerGroupSource = null,
-        GetProductStockIsQtyDecimalService $getProductStockIsQtyDecimalService
+        GetProductStockIsQtyDecimalService $isProductQtyDecimal
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -144,7 +144,7 @@ class AdvancedPricing extends AbstractModifier
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
             ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
-        $this->getProductStockIsQtyDecimalService = $getProductStockIsQtyDecimalService;
+        $this->isProductQtyDecimal = $isProductQtyDecimal;
     }
 
     /**
@@ -511,7 +511,7 @@ class AdvancedPricing extends AbstractModifier
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
                                             'validate-number' => true,
-                                            'validate-digits' => $this->getShouldValidatePriceQtyDigits(),
+                                            'validate-digits' => $this->hasPriceQtyDigitsValidationPassed(),
                                         ],
                                         'imports' => [
                                             'handleChanges' => '${ $.provider }:data.product.stock_data.is_qty_decimal',
@@ -706,12 +706,12 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return bool
      */
-    private function getShouldValidatePriceQtyDigits()
+    private function hasPriceQtyDigitsValidationPassed()
     {
         if (!$this->getProduct()->getId()) {
             return false;
         }
 
-        return !$this->getProductStockIsQtyDecimalService->execute($this->getProduct()->getId());
+        return !$this->isProductQtyDecimal->execute($this->getProduct()->getId());
     }
 }
