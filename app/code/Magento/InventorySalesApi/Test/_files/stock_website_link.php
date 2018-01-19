@@ -12,7 +12,6 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
-
 /** @var StockRepositoryInterface $stockRepository */
 $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
 /** @var SalesChannelInterfaceFactory $salesChannelFactory */
