@@ -439,7 +439,7 @@ class RowCustomizer implements RowCustomizerInterface
             $optionsTitles[$option->getId()]['name'] = $option->getTitle();
         }
         $storeIds = $product->getStoreIds();
-        if (array_count_values($storeIds) > 1) {
+        if (count($storeIds) > 1) {
             foreach ($storeIds as $storeId) {
                 $optionCollections = $this->getProductOptionCollections($product, $storeId);
                 /** @var \Magento\Bundle\Model\Option $option */

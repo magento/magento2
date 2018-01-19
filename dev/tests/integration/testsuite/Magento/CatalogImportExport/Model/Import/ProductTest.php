@@ -552,6 +552,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param string $pathToFile
      * @param string $storeCode
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getExpectedOptionsData($pathToFile, $storeCode = '')
     {
@@ -570,7 +572,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 break;
             }
         }
-            foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionId => $optionData) {
+            foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionData) {
                 $option = array_values(
                     array_map(
                         function ($input) {
