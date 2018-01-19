@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
-use Magento\Payment\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Payment\Gateway\Config\Config;
 use Magento\Store\Model\ScopeInterface;
 
 /**

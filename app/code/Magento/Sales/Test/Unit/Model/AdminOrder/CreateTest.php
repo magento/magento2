@@ -25,7 +25,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Sales\Model\AdminOrder\Create;
-use Magento\Sales\Model\AdminOrder\Product;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

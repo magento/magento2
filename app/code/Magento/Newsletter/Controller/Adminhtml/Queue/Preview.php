@@ -20,7 +20,7 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
         $isEmptyRequestData = empty($data) || !isset($data['id']);
         $isEmptyPreviewData = !$this->_getSession()->hasPreviewData() || empty($this->_getSession()->getPreviewData());
-        
+
         if ($isEmptyRequestData && $isEmptyPreviewData) {
             $this->_forward('noroute');
             return;

@@ -7,8 +7,8 @@
 namespace Magento\Checkout\Model\Cart;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**

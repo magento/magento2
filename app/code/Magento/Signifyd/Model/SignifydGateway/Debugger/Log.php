@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Debugger;
 
-use Psr\Log\LoggerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 /**
  * Debugger writes information about request, response and possible exception to standard system log.

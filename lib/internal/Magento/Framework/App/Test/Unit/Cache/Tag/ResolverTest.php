@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag;
 
-use \Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\App\Cache\Tag\Resolver;
 
 class ResolverTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,7 +48,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     public function testGetTagsForObject()
     {
         $strategyReturnValue = ['test tag'];
-        $object = new \stdClass;
+        $object = new \stdClass();
         $this->strategy->expects($this->once())
             ->method('getTags')
             ->with($object)

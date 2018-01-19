@@ -5,10 +5,10 @@
  */
 namespace Magento\Review\Ui\Component\Listing\Columns;
 
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Store\Model\System\Store;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\System\Store;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Visibility

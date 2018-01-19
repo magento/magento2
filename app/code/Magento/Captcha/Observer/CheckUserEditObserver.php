@@ -6,9 +6,9 @@
 namespace Magento\Captcha\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

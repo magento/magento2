@@ -5,13 +5,13 @@
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model;
 
-use Magento\NewRelicReporting\Model\Counter;
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Customer\Api\CustomerManagementInterface;
-use Magento\Store\Api\WebsiteManagementInterface;
+use Magento\NewRelicReporting\Model\Counter;
 use Magento\Store\Api\StoreManagementInterface;
+use Magento\Store\Api\WebsiteManagementInterface;
 
 /**
  * Class CounterTest

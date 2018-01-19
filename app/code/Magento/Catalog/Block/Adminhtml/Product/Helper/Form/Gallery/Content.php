@@ -14,9 +14,9 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\Media\Uploader;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\View\Element\AbstractBlock;
 
 class Content extends \Magento\Backend\Block\Widget
 {

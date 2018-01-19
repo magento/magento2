@@ -7,8 +7,8 @@
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression as RequestBoolQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

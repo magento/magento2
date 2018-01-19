@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-use Magento\Framework\App\Config\MetadataProcessor;
-use Magento\Framework\App\Config\Initial;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Framework\App\Config\Initial;
+use Magento\Framework\App\Config\MetadataProcessor;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * {@inheritdoc}

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class RelationComposite
@@ -48,7 +48,7 @@ class RelationComposite
             $processor->processRelation($object);
         }
         $this->eventManager->dispatch(
-            $object->getEventPrefix(). '_process_relation',
+            $object->getEventPrefix() . '_process_relation',
             [
                 'object' => $object
             ]

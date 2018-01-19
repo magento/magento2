@@ -11,10 +11,10 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Image;
 
-use \Magento\Theme\Model\Theme\Image\Path;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+
 use Magento\Framework\View\Design\Theme\Image\PathInterface;
+use Magento\Theme\Model\Theme\Image\Path;
 
 class PathTest extends \PHPUnit\Framework\TestCase
 {

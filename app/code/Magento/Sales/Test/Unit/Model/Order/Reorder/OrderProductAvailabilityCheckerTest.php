@@ -6,10 +6,10 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
 use Magento\ConfigurableProductSales\Model\Order\Reorder\OrderedProductAvailabilityChecker as ConfigurableChecker;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Class OrderProductAvailabilityCheckerTest

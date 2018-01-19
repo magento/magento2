@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Client;
 
-use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 
 /**
  * Class ResponseHandler

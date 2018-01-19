@@ -8,8 +8,8 @@
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Dob;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
 
 /**
@@ -480,7 +480,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
             );
         $this->assertNull($this->_block->getMaxDateRange());
     }
-    
+
     public function testGetHtmlExtraParamsWithoutRequiredOption()
     {
         $this->escaper->expects($this->any())
@@ -508,7 +508,6 @@ class DobTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
             ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
-
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 

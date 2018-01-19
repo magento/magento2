@@ -6,8 +6,8 @@
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\ConsolidatedConfig as Config;
 use Magento\Integration\Model\Cache\TypeConsolidated as Type;
+use Magento\Integration\Model\ConsolidatedConfig as Config;
 
 /**
  * Unit test for \Magento\Integration\Model\ConsolidatedConfig

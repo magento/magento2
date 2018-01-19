@@ -6,8 +6,8 @@
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns;
 
 use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 class Name extends \Magento\Ui\Component\Listing\Columns\Column
 {

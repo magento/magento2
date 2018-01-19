@@ -7,13 +7,13 @@ namespace Magento\Theme\Model\Theme\Plugin;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
-use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State as AppState;
-use Magento\Theme\Model\Theme\Collection as ThemeCollection;
-use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeLoader;
 use Magento\Framework\Config\Theme;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeLoader;
+use Magento\Theme\Model\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

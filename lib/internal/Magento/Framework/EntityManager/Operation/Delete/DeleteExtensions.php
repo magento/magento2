@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\EntityManager\Operation\Delete;
 
-use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\EntityManager\Operation\ExtensionPool;
+use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class DeleteExtensions

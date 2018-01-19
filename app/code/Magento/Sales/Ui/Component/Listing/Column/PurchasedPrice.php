@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class Price

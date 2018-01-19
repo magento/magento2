@@ -5,10 +5,10 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\CalculatorFactory;
-
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation\CalculatorFactory;
 
 /**
  * Test class for \Magento\Tax\Model\CalculatorFactory

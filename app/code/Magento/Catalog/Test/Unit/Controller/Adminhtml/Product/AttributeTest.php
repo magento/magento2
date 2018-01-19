@@ -9,10 +9,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class AttributeTest

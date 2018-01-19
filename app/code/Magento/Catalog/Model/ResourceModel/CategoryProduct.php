@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**

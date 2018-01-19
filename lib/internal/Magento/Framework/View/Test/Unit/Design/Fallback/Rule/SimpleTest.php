@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use \Magento\Framework\View\Design\Fallback\Rule\Simple;
+use Magento\Framework\View\Design\Fallback\Rule\Simple;
 
 /**
  * Simple Test

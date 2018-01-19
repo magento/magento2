@@ -6,8 +6,8 @@
 namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Plugin for product type transition manager

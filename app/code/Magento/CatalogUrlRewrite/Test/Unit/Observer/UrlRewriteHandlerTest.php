@@ -6,17 +6,16 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\MergeDataProvider;
-use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

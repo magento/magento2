@@ -6,8 +6,8 @@
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Model\AttributeChecker;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer address edit block

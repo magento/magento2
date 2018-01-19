@@ -8,10 +8,10 @@
 
 namespace Magento\Paypal\Test\Unit\Model\Express;
 
+use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
-use Magento\Quote\Api\Data\CartExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

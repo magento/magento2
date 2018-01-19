@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -17,7 +18,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * DataProvider for Catalog search Mysql.

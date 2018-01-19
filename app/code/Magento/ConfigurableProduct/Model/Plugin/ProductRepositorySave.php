@@ -5,14 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\InputException;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
 class ProductRepositorySave
 {

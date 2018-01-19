@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\Page\Config\Generator;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config\Structure;
-use Magento\Framework\App\ObjectManager;
 
 class Head implements Layout\GeneratorInterface
 {

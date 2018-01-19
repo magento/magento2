@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Registry;
+use Magento\Framework\Registry;
 
 /**
  * Registry model test. Test cases for managing values in registry

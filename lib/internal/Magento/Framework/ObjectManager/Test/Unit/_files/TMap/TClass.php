@@ -9,6 +9,5 @@ namespace {
 
     class TClass implements TInterface
     {
-
     }
 }

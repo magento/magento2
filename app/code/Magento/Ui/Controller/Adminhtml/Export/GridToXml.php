@@ -7,8 +7,8 @@ namespace Magento\Ui\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Model\Export\ConvertToXml;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Ui\Model\Export\ConvertToXml;
 
 /**
  * Class Render

@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
+use Cm\RedisSession\ConcurrentConnectionsExceededException;
+use Cm\RedisSession\ConnectionFailedException;
 use Cm\RedisSession\Handler\ConfigInterface;
 use Cm\RedisSession\Handler\LoggerInterface;
-use Cm\RedisSession\ConnectionFailedException;
-use Cm\RedisSession\ConcurrentConnectionsExceededException;
-use Magento\Framework\Exception\SessionException;
-use Magento\Framework\Phrase;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Phrase;
 
 class Redis extends \Cm\RedisSession\Handler
 {

@@ -7,12 +7,12 @@ namespace Magento\Framework\Message\Test\Unit;
 
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Message\ExceptionMessageLookupFactory;
 
 /**
  * \Magento\Framework\Message\Manager test case

@@ -134,10 +134,8 @@ class BundlePanel extends AbstractModifier
                                             'autoRender' => false,
                                             'componentType' => 'insertListing',
                                             'dataScope' => 'bundle_product_listing',
-                                            'externalProvider' =>
-                                                'bundle_product_listing.bundle_product_listing_data_source',
-                                            'selectionsProvider' =>
-                                                'bundle_product_listing.bundle_product_listing.product_columns.ids',
+                                            'externalProvider' => 'bundle_product_listing.bundle_product_listing_data_source',
+                                            'selectionsProvider' => 'bundle_product_listing.bundle_product_listing.product_columns.ids',
                                             'ns' => 'bundle_product_listing',
                                             'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                             'realTimeLink' => false,

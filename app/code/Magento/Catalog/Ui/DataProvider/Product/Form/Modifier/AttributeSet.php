@@ -8,7 +8,6 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Form\Field;
 

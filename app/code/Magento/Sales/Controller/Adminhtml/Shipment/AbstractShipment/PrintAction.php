@@ -7,10 +7,10 @@
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\ResponseInterface;
 
 abstract class PrintAction extends \Magento\Backend\App\Action
 {

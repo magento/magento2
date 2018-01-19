@@ -6,12 +6,12 @@
 namespace Magento\Paypal\Model\Payflow\Service\Response;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Session\Generic;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
-use Magento\Framework\Session\Generic;
+use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\Data\OrderPaymentInterface;

@@ -10,5 +10,4 @@ use Magento\Framework\Exception\LocalizedException;
 
 class UnsupportedVarnishVersion extends LocalizedException
 {
-
 }

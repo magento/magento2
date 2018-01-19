@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
+use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {

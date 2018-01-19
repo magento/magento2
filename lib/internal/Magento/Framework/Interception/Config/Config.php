@@ -7,8 +7,8 @@
  */
 namespace Magento\Framework\Interception\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 class BundleOption extends AbstractExtensibleModel implements BundleOptionInterface
 {

@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Ui\DataProvider\Modifier\ModifierFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Ui\DataProvider\Modifier\ModifierFactory;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**

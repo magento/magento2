@@ -7,8 +7,8 @@
 namespace Magento\Ui\Test\Unit\TemplateEngine\Xhtml;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Ui\TemplateEngine\Xhtml\Result;
@@ -91,7 +91,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ->with('<script type="text/x-magento-init"><![CDATA[{"*": {"Magento_Ui/js/core/app": '
                 . '["text before <![CDATA[cdata text]]]]><![CDATA[>"]'
                 . '}}]]></script>');
-        
+
         $this->testModel->appendLayoutConfiguration();
     }
 }

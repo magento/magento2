@@ -6,19 +6,19 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Ui;
 
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
-use Magento\Catalog\Model\ProductRenderFactory;
-use Magento\Framework\EntityManager\Hydrator;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Url;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManager;
-use Magento\Store\Model\Store;
-use Magento\Framework\Registry;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Block\Ui\ProductViewCounter;
+use Magento\Catalog\Model\ProductRenderFactory;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
+use Magento\Framework\EntityManager\Hydrator;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Url;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

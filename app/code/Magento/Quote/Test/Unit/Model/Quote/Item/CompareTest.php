@@ -230,7 +230,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                     $this->getOptionMock('option-1', $comparedOptionValue)
                 ]
             );
-        
+
         $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }

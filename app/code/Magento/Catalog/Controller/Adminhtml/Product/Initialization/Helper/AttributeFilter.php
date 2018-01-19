@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
-use \Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class provides functionality to check and filter data came with product form.

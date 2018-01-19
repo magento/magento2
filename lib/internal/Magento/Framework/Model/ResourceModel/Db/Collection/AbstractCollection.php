@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
 
-use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
-use \Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Abstract Resource Collection

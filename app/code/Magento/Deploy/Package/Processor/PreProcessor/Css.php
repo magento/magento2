@@ -9,11 +9,11 @@ use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Url\CssResolver;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Url\CssResolver;
 
 /**
  * Pre-processor for speeding up deployment of CSS files

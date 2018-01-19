@@ -6,10 +6,10 @@
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 class ChildrenUrlRewriteGenerator
 {

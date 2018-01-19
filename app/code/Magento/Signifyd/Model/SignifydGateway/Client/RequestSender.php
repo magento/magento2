@@ -5,9 +5,9 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Client;
 
-use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
-use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Framework\HTTP\ZendClient;
+use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
+use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
 
 /**
  * Class RequestSender

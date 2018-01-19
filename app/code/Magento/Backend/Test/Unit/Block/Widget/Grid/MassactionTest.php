@@ -237,7 +237,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
-        
+
         if ($this->_block->getMassactionIdField()) {
             $massActionIdField = $this->_block->getMassactionIdField();
         } else {

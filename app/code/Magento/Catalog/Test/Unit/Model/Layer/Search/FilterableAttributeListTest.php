@@ -35,7 +35,6 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
             $this->collectionFactoryMock,
             $this->storeManagerMock
         );
-
     }
 
     /**

@@ -7,13 +7,13 @@
 namespace Magento\Config\Test\Unit\App\Config\Type;
 
 use Magento\Config\App\Config\Type\System;
+use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Config\App\Config\Type\System\Reader;
 
 /**
  * Test how Class process source, cache them and retrieve value by path

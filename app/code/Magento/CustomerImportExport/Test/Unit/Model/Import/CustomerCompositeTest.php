@@ -8,9 +8,9 @@
 
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
-use Magento\CustomerImportExport\Model\Import\CustomerComposite;
-use Magento\CustomerImportExport\Model\Import\Customer;
 use Magento\CustomerImportExport\Model\Import\Address;
+use Magento\CustomerImportExport\Model\Import\Customer;
+use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\ImportExport\Model\Import;

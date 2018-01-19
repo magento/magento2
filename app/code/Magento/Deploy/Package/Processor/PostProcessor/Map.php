@@ -5,14 +5,14 @@
  */
 namespace Magento\Deploy\Package\Processor\PostProcessor;
 
-use Magento\Deploy\Package\PackageFile;
-use Magento\Deploy\Service\DeployStaticFile;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\PackageFileFactory;
-use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Deploy\Service\DeployStaticFile;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\RepositoryMap;
 
 /**

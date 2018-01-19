@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**

@@ -16,7 +16,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
      * @var Confirmation
      */
     private $model;
-    
+
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -59,7 +59,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        
+
         $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -84,7 +84,7 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
-        
+
         $this->requestMock->expects($this->once())->method('getPost')->with('email')->willReturn(null);
 
         $resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)

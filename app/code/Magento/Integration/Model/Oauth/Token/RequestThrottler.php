@@ -5,10 +5,10 @@
  */
 namespace Magento\Integration\Model\Oauth\Token;
 
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
 use Magento\Integration\Model\Oauth\Token\RequestLog\ReaderInterface as RequestLogReader;
 use Magento\Integration\Model\Oauth\Token\RequestLog\WriterInterface as RequestLogWriter;
-use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
-use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Model for OAuth admin/customer token requests throttling.

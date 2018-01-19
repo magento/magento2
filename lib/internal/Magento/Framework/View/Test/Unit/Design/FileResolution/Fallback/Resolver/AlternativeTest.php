@@ -8,9 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
 
 class AlternativeTest extends \PHPUnit\Framework\TestCase
 {

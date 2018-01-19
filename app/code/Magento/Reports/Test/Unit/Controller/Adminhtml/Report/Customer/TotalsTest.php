@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
-use Magento\Reports\Controller\Adminhtml\Report\Customer\Totals;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Customer\Totals;
 
 class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {

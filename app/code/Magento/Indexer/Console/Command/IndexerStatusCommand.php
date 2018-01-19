@@ -5,10 +5,10 @@
  */
 namespace Magento\Indexer\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer;
 use Magento\Framework\Mview;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for displaying status of indexers.

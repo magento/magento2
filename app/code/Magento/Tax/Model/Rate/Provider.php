@@ -5,9 +5,9 @@
  */
 namespace Magento\Tax\Model\Rate;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Convert\DataObject as Converter;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Tax\Model\Calculation\Rate;
 
 /**

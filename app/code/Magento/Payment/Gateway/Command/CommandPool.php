@@ -5,10 +5,10 @@
  */
 namespace Magento\Payment\Gateway\Command;
 
-use Magento\Framework\ObjectManager\TMap;
-use Magento\Payment\Gateway\CommandInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
+use Magento\Payment\Gateway\CommandInterface;
 
 /**
  * Class CommandPool

@@ -6,8 +6,8 @@
 namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

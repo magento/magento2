@@ -6,8 +6,8 @@
 
 namespace Magento\Tax\Model\Calculation;
 
-use Magento\Tax\Api\Data\GrandTotalDetailsInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Tax\Api\Data\GrandTotalDetailsInterface;
 
 /**
  * Grand Total Tax Details Model

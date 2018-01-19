@@ -6,8 +6,8 @@
 
 namespace Magento\Cron\Model;
 
-use Magento\Framework\Exception\CronException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CronException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**

@@ -12,13 +12,13 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer model

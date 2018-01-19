@@ -15,7 +15,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
      * @var ObjectManager
      */
     private $objectManager;
-    
+
     /**
      * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -39,7 +39,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     private $weeeHelperMock;
-    
+
     /**
      * @var TaxAddressManagerInterface|MockObject
      */
@@ -126,7 +126,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
         $this->addressManagerMock->expects($isNeedSetAddress ? $this->once() : $this->never())
             ->method('setDefaultAddressAfterSave')
             ->with($address);
-        
+
         $this->session->execute($this->observerMock);
     }
 

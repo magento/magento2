@@ -8,13 +8,13 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Framework\Search\Request\QueryInterface;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogSearch\Model\Search\FiltersExtractor;
 use Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface;
+use Magento\CatalogSearch\Model\Search\FiltersExtractor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper

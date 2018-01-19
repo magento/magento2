@@ -5,12 +5,12 @@
  */
 namespace Magento\Store\Test\Unit\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Store\Console\Command\StoreListCommand;
-use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Store\Model\Store;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\TableHelper;
-use Magento\Store\Model\Store;
-use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @package Magento\Store\Test\Unit\Console\Command

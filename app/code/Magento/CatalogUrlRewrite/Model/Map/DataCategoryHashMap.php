@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\CategoryFactory;
-use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ResourceModel\CategoryFactory;
 
 /**
  * Map that holds data for category ids and its subcategories ids

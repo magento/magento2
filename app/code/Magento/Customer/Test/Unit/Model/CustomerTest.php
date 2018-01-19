@@ -11,8 +11,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\Customer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

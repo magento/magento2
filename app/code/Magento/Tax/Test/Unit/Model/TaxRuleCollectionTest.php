@@ -13,7 +13,7 @@ use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Tax\Api\Data\TaxRateSearchResultsInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\Rule;
-use \Magento\Tax\Model\TaxRuleCollection;
+use Magento\Tax\Model\TaxRuleCollection;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase

@@ -5,9 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Model\Design\Backend\File;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

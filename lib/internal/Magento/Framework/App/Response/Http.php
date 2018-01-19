@@ -9,10 +9,10 @@ namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {

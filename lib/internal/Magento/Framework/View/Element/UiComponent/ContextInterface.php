@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
  * Interface ContextInterface

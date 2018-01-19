@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Address;
 
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterface;
-use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order payment collection

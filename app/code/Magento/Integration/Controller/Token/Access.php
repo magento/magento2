@@ -6,9 +6,9 @@
  */
 namespace Magento\Integration\Controller\Token;
 
-use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\IntegrationServiceInterface as IntegrationService;
 use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
+use Magento\Integration\Model\Integration as IntegrationModel;
 
 class Access extends \Magento\Framework\App\Action\Action
 {

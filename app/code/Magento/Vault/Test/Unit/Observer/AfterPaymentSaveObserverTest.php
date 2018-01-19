@@ -10,7 +10,6 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;

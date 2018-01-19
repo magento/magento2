@@ -7,7 +7,6 @@ namespace Magento\Payment\Gateway\Validator;
 
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class CountryValidator

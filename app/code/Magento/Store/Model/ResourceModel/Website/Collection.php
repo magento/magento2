@@ -151,7 +151,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ) // view is admin
                 ->addOrder('store_table.sort_order', \Magento\Framework\DB\Select::SQL_ASC) // view sort order
                 ->addOrder('store_table.name', \Magento\Framework\DB\Select::SQL_ASC)       // view name
-            ;
+;
         }
         return $this;
     }

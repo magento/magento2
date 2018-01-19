@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Ui\Component\Listing\Column\Online;
 
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Customer\Model\Visitor;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Type

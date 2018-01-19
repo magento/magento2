@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogRule\Model\Indexer;
 
-use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
-use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {

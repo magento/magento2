@@ -9,8 +9,8 @@ namespace Magento\Customer\Test\Unit\Model;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Model\AttributeChecker;
 use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\AttributeChecker;
 use Magento\Customer\Model\Metadata\AttributeResolver;
 
 class AttributeCheckerTest extends \PHPUnit\Framework\TestCase

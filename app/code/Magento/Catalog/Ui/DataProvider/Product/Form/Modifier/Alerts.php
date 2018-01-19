@@ -38,7 +38,7 @@ class Alerts extends AbstractModifier
      * @var LayoutFactory
      */
     private $layoutFactory;
-    
+
     /**
      * Alerts constructor.
      * @param ScopeConfigInterface $scopeConfig
@@ -83,8 +83,7 @@ class Alerts extends AbstractModifier
                                 'collapsible' => true,
                                 'componentType' => Fieldset::NAME,
                                 'dataScope' => static::DATA_SCOPE,
-                                'sortOrder' =>
-                                    $this->getNextGroupSortOrder(
+                                'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         self::$previousGroup,
                                         self::$sortOrder
@@ -134,8 +133,7 @@ class Alerts extends AbstractModifier
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/html',
                         'additionalClasses' => 'admin__fieldset-note',
-                        'content' =>
-                            '<h4>' . __('Alert Stock') . '</h4>' .
+                        'content' => '<h4>' . __('Alert Stock') . '</h4>' .
                             $this->layoutFactory->create()->createBlock(
                                 Stock::class
                             )->toHtml(),
@@ -159,8 +157,7 @@ class Alerts extends AbstractModifier
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/html',
                         'additionalClasses' => 'admin__fieldset-note',
-                        'content' =>
-                            '<h4>' . __('Alert Price') . '</h4>' .
+                        'content' => '<h4>' . __('Alert Price') . '</h4>' .
                             $this->layoutFactory->create()->createBlock(
                                 Price::class
                             )->toHtml(),

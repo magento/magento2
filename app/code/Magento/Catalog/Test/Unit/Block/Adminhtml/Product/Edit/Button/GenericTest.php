@@ -6,10 +6,10 @@
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Button;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 
 /**
  * Class GenericTest

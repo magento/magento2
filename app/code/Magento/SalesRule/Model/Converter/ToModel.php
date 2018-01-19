@@ -5,8 +5,8 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
-use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 

@@ -7,8 +7,8 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\Backend\App\AbstractAction;
+use Magento\Framework\App\RequestInterface;
 
 class MassactionKey
 {

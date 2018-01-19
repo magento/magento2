@@ -6,10 +6,10 @@
 
 namespace Magento\Weee\Model\Total\Creditmemo;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Weee\Helper\Data as WeeeHelper;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
 
 class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {

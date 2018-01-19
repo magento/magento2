@@ -10,17 +10,17 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Model\Entity\Attribute;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Store\Model\Website;
 use Magento\Catalog\Model\ResourceModel\Attribute\ConditionBuilder;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
+use Magento\Store\Model\Website;
 
 /**
  * Class AttributeConditionsBuilderTest

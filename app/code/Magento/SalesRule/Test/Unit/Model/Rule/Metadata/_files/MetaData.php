@@ -6,18 +6,13 @@
 
 return [
     'rule_information' => [
-        'children' =>
-            [
+        'children' => [
                 'website_ids' => ['arguments' => ['data' => ['config' => ['options' => []]]]],
                 'is_active' => [
-                    'arguments' =>
-                        [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
-                                            'options' =>
-                                                [
+                    'arguments' => [
+                            'data' => [
+                                    'config' => [
+                                            'options' => [
                                                     [
                                                         'label' => __('Active'),
                                                         'value' => '1',
@@ -34,12 +29,9 @@ return [
                 'customer_group_ids' => ['arguments' => ['data' => ['config' => ['options' => []]]]],
                 'coupon_type' => [
                     'arguments' => [
-                        'data' =>
-                            [
-                                'config' =>
-                                    [
-                                        'options' =>
-                                            [
+                        'data' => [
+                                'config' => [
+                                        'options' => [
                                                 [
                                                     'label' => 'couponType1',
                                                     'value' => 'key1',
@@ -54,14 +46,10 @@ return [
                     ],
                 ],
                 'is_rss' => [
-                    'arguments' =>
-                        [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
-                                            'options' =>
-                                                [
+                    'arguments' => [
+                            'data' => [
+                                    'config' => [
+                                            'options' => [
                                                     [
                                                         'label' => __('Yes'),
                                                         'value' => '1',
@@ -78,17 +66,12 @@ return [
             ],
     ],
     'actions' => [
-        'children' =>
-            [
+        'children' => [
                 'simple_action' => [
-                    'arguments' =>
-                        [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
-                                            'options' =>
-                                                [
+                    'arguments' => [
+                            'data' => [
+                                    'config' => [
+                                            'options' => [
                                                     [
                                                         'label' => __('Percent of product price discount'),
                                                         'value' => 'by_percent',
@@ -115,14 +98,10 @@ return [
                 'discount_amount' => ['arguments' => ['data' => ['config' => ['value' => '0']]]],
                 'discount_qty' => ['arguments' => ['data' => ['config' => ['value' => '0']]]],
                 'apply_to_shipping' => [
-                    'arguments' =>
-                        [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
-                                            'options' =>
-                                                [
+                    'arguments' => [
+                            'data' => [
+                                    'config' => [
+                                            'options' => [
                                                     [
                                                         'label' => __('Yes'),
                                                         'value' => '1'
@@ -137,15 +116,11 @@ return [
                         ],
                 ],
                 'stop_rules_processing' => [
-                    'arguments' =>
-                        [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
+                    'arguments' => [
+                            'data' => [
+                                    'config' => [
 
-                                            'options' =>
-                                                [
+                                            'options' => [
                                                     [
                                                         'label' => __('Yes'),
                                                         'value' => '1'

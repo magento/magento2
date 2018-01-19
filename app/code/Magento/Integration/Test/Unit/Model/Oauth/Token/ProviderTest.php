@@ -7,8 +7,8 @@
 namespace Magento\Integration\Test\Unit\Model\Oauth\Token;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Model\Oauth\Token;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Integration\Model\Oauth\Token;
 
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Token\Provider

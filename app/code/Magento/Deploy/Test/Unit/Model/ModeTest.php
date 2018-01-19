@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Deploy\Model\Filesystem;
@@ -17,11 +17,11 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc

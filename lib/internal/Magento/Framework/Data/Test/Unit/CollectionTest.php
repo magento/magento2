@@ -173,7 +173,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
         $this->_model->each('testCallback');
     }
-    
+
     public function testEachCallsMethodOnEachItemWithArgs()
     {
         for ($i = 0; $i < 3; $i++) {

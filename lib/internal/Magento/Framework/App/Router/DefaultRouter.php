@@ -8,9 +8,9 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
-use Magento\Framework\App\ActionInterface;
 
 class DefaultRouter implements RouterInterface
 {

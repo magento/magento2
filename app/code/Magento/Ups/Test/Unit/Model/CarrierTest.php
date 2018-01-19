@@ -5,9 +5,9 @@
  */
 namespace Magento\Ups\Test\Unit\Model;
 
+use Magento\Directory\Model\Country;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Ups\Model\Carrier;
-use Magento\Directory\Model\Country;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

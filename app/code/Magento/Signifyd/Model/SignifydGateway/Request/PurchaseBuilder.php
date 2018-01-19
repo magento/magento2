@@ -10,9 +10,9 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
-use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 
 /**
  * Prepare data related to purchase event represented in case creation request.

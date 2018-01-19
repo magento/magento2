@@ -12,8 +12,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Ui\Api\Data\BookmarkInterface;
-use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Ui\Model\ResourceModel\Bookmark as ResourceBookmark;
+use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 
 /**
  * Domain class Bookmark

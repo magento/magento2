@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Sales\Api\Data\ShippingInterface;
 
 class Shipping extends AbstractExtensibleModel implements ShippingInterface
 {

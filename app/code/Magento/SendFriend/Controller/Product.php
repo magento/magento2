@@ -5,9 +5,9 @@
  */
 namespace Magento\SendFriend\Controller;
 
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Email to a Friend Product Controller

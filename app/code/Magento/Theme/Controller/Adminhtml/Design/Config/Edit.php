@@ -9,10 +9,10 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
-use Magento\Framework\App\ScopeResolverPool;
 
 /**
  * Edit action controller

@@ -7,7 +7,7 @@
  */
 namespace Magento\Webapi\Controller\Rest;
 
-use \Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\Webapi\Rest\Request;
 
 class Router
 {

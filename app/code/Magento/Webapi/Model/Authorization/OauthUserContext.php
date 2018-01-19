@@ -9,8 +9,8 @@ namespace Magento\Webapi\Model\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Request as OauthRequestHelper;
 use Magento\Framework\Oauth\OauthInterface as OauthService;
-use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Framework\Webapi\Request;
+use Magento\Integration\Api\IntegrationServiceInterface;
 
 /**
  * A user context determined by OAuth headers in a HTTP request.

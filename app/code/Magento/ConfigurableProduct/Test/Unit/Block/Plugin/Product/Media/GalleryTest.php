@@ -5,8 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\Product\Media;
 
-use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -14,7 +14,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testAfterGetOptions()
     {
         $jsonMock = $this->createJsonMock();

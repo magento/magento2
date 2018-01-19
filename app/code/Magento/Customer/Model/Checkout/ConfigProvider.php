@@ -6,13 +6,13 @@
 namespace Magento\Customer\Model\Checkout;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Customer\Model\Form;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ConfigProvider implements ConfigProviderInterface
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Communication\Config\Reader;
 
-use Magento\Framework\Communication\Config\Reader\EnvReader\Validator;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Communication\Config\Reader\EnvReader\Validator;
 
 /**
  * Communication configuration reader. Reads data from env.php.

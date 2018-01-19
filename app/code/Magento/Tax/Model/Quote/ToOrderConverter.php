@@ -5,9 +5,9 @@
  */
 namespace Magento\Tax\Model\Quote;
 
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
+use Magento\Sales\Api\Data\OrderInterface;
 
 class ToOrderConverter
 {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Validation;
 
-use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
 
 /**
  * Class TrackValidatorTest

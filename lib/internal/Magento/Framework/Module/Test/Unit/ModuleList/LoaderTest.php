@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
-use \Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Module\ModuleList\Loader;
 
 class LoaderTest extends \PHPUnit\Framework\TestCase
 {

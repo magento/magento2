@@ -6,8 +6,8 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Adminhtml sales orders creation process controller

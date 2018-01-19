@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
-use Magento\Indexer\Model\Config\Data;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Indexer\Model\Config\Data;
 
 class IndexerConfigData
 {
@@ -41,7 +41,7 @@ class IndexerConfigData
             if (!$path && isset($data[$indexerId])) {
                 unset($data[$indexerId]);
             } elseif ($path) {
-                list($firstKey,) = explode('/', $path);
+                list($firstKey, ) = explode('/', $path);
                 if ($firstKey == $indexerId) {
                     $data = $default;
                 }

@@ -9,7 +9,6 @@ namespace Magento\Quote\Test\Unit\Model\Webapi;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Webapi\ParamOverriderCartId;
 
 /**

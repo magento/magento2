@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
 
 /**
  * Class StatusTextTest

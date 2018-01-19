@@ -5,12 +5,12 @@
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
-use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
 /**

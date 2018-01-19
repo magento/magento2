@@ -5,9 +5,9 @@
  */
 namespace Magento\PageCache\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey as DataFormKey;
+use Magento\Framework\Event\ObserverInterface;
 
 class FlushFormKey implements ObserverInterface
 {

@@ -11,8 +11,8 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Stock indexer for grouped product.

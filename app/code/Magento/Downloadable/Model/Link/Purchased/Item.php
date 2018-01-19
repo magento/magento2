@@ -5,8 +5,6 @@
  */
 namespace Magento\Downloadable\Model\Link\Purchased;
 
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
-
 /**
  * Downloadable links purchased item model
  *

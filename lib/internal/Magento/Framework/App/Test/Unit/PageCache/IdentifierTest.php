@@ -7,8 +7,8 @@ namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\PageCache\Identifier;
-use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

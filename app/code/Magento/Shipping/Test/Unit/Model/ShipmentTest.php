@@ -8,7 +8,6 @@
 
 namespace Magento\Shipping\Test\Unit\Model;
 
-use \Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

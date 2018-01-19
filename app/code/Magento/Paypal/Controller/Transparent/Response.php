@@ -5,11 +5,11 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
-use Magento\Framework\Registry;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Payment\Block\Transparent\Iframe;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;

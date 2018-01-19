@@ -5,13 +5,13 @@
  */
 namespace Magento\Store\Test\Unit\Console\Command;
 
-use Magento\Store\Console\Command\WebsiteListCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\TableHelper;
-use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Console\Command\WebsiteListCommand;
+use Magento\Store\Model\Website;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @package Magento\Store\Test\Unit\Console\Command

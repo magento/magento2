@@ -7,12 +7,12 @@ namespace Magento\Signifyd\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Api\Data\CaseInterfaceFactory;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\DB\Adapter\DuplicateException;
 
 /**
  *

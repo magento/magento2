@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Ui\DataProvider\Modifier\Pool;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\Pool;
 
 /**
  * Class ProductDataProviderTest

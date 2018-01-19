@@ -7,7 +7,6 @@
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

@@ -5,10 +5,8 @@
  */
 namespace Magento\Braintree\Gateway\Validator;
 
-use Braintree\Result\Error;
 use Braintree\Result\Successful;
 use Braintree\Transaction;
-use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ResponseValidator

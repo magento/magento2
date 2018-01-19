@@ -32,7 +32,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
      * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
-    
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

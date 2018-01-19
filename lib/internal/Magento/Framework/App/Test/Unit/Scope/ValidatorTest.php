@@ -6,12 +6,12 @@
 namespace Magento\Framework\App\Test\Unit\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Scope\Validator;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\App\Scope\Validator;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {

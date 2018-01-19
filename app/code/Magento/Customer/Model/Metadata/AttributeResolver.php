@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class AttributeResolver

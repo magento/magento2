@@ -5,11 +5,11 @@
  */
 namespace Magento\Contact\Model;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Area;
 
 class Mail implements MailInterface
 {

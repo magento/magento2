@@ -44,8 +44,7 @@ class ValueHandlerPoolTest extends \PHPUnit\Framework\TestCase
             ->with(
                 [
                     'array' => [
-                        ValueHandlerPool::DEFAULT_HANDLER =>
-                            \Magento\Payment\Gateway\Config\ValueHandlerInterface::class,
+                        ValueHandlerPool::DEFAULT_HANDLER => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class,
                         'some_value' => \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
                     ],
                     'type' => ValueHandlerInterface::class

@@ -43,16 +43,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @var array
      */
     protected $_messageTemplates = [
-        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER =>
-            'Attribute with code "%s" is not super',
-        self::ERROR_INVALID_OPTION_VALUE =>
-            'Invalid option value for attribute "%s"',
-        self::ERROR_INVALID_WEBSITE =>
-            'Invalid website code for super attribute',
-        self::ERROR_DUPLICATED_VARIATIONS =>
-            'SKU %s contains duplicated variations',
-        self::ERROR_UNIDENTIFIABLE_VARIATION =>
-            'Configurable variation "%s" is unidentifiable',
+        self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with code "%s" is not super',
+        self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value for attribute "%s"',
+        self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
+        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
     ];
 
     /**
