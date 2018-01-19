@@ -66,9 +66,7 @@ class AddStockStatusToProductsMultistockPlugin
         callable $proceed,
         AbstractCollection $productCollection
     ) {
-        // We need to prevent the collection modification by plugins next in the chain.
-        $temporaryCollection = clone $productCollection;
-        $proceed($temporaryCollection);
+        $proceed($productCollection);
         $this->addStockStatusToProducts($productCollection);
     }
 
