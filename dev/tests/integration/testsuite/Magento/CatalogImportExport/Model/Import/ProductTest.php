@@ -762,7 +762,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         }
     }
 
-
     /**
      * Export CSV string to array
      *
