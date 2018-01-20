@@ -29,10 +29,8 @@ class SaveHandler implements ExtensionInterface
      * @param MetadataPool $metadataPool
      * @param Block $resourceBlock
      */
-    public function __construct(
-        MetadataPool $metadataPool,
-        Block $resourceBlock
-    ) {
+    public function __construct(MetadataPool $metadataPool, Block $resourceBlock)
+    {
         $this->metadataPool = $metadataPool;
         $this->resourceBlock = $resourceBlock;
     }
@@ -42,6 +40,7 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
     {

@@ -42,6 +42,7 @@ class DefaultScope implements SourceInterface
      *
      * @param string|null $scopeCode
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function get($scopeCode = null)
     {

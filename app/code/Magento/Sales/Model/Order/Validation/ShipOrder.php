@@ -61,6 +61,7 @@ class ShipOrder implements ShipOrderInterface
      * @param array $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(
         $order,

@@ -15,11 +15,15 @@ use Magento\Framework\Event\ObserverInterface;
 class BindCustomerLoginObserver implements ObserverInterface
 {
     /**
+     * @var Item
+     */
+    private $item;
+
+    /**
      * @param Item $item
      */
-    public function __construct(
-        Item $item
-    ) {
+    public function __construct(Item $item)
+    {
         $this->item = $item;
     }
 
@@ -28,7 +32,7 @@ class BindCustomerLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
