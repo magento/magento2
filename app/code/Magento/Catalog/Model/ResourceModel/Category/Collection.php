@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -83,6 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      *
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -97,7 +99,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -110,7 +113,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $connection
+            $connection,
+            $resourceModelPool
         );
         $this->scopeConfig = $scopeConfig ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);

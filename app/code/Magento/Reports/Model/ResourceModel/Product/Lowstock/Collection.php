@@ -11,7 +11,10 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,6 +82,9 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -108,7 +114,10 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -134,7 +143,10 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
             $eventTypeFactory,
             $productType,
             $quoteResource,
-            $connection
+            $connection,
+            $productLimitationFactory,
+            $metadataPool,
+            $resourceModelPool
         );
         $this->stockRegistry = $stockRegistry;
         $this->stockConfiguration = $stockConfiguration;

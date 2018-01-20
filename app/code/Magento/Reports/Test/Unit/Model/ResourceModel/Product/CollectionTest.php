@@ -25,7 +25,9 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -87,7 +89,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getTableName', 'getConnection']);
         $eavEntityFactoryMock = $this->createMock(EavEntityFactory::class);
         $resourceHelperMock = $this->createMock(Helper::class);
-        $universalFactoryMock = $this->createMock(UniversalFactory::class);
+        $resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
         $storeManagerMock = $this->createPartialMockForAbstractClass(
             StoreManagerInterface::class,
             ['getStore', 'getId']
@@ -133,7 +135,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeManagerMock);
         $storeManagerMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
-        $universalFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($productMock);
+        $resourceModelPoolMock->expects($this->atLeastOnce())->method('get')->willReturn($productMock);
         $this->resourceMock->expects($this->atLeastOnce())->method('getTableName')->willReturn('test_table');
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
@@ -147,7 +149,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->resourceMock,
             $eavEntityFactoryMock,
             $resourceHelperMock,
-            $universalFactoryMock,
+            $this->createMock(UniversalFactory::class),
             $storeManagerMock,
             $moduleManagerMock,
             $productFlatStateMock,
@@ -162,7 +164,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $this->eventTypeFactoryMock,
             $productTypeMock,
             $quoteResourceMock,
-            $this->connectionMock
+            $this->connectionMock,
+            $this->createMock(ResourceProduct\Collection\ProductLimitationFactory::class),
+            $this->createMock(MetadataPool::class),
+            $resourceModelPoolMock
         );
     }
 

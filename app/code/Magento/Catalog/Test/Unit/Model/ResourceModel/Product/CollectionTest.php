@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -86,7 +87,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $resourceHelper = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $universalFactory = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
+        $resourceModelPool = $this->getMockBuilder(ResourceModelPoolInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
@@ -148,7 +149,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManager->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturnSelf();
-        $universalFactory->expects($this->exactly(1))->method('create')->willReturnOnConsecutiveCalls(
+        $resourceModelPool->expects($this->exactly(1))->method('get')->willReturnOnConsecutiveCalls(
             $this->entityMock
         );
         $this->entityMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
@@ -176,7 +177,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'resource' => $resource,
                 'eavEntityFactory' => $eavEntityFactory,
                 'resourceHelper' => $resourceHelper,
-                'universalFactory' => $universalFactory,
+                'resourceModelPool' => $resourceModelPool,
                 'storeManager' => $this->storeManager,
                 'moduleManager' => $moduleManager,
                 'catalogProductFlatState' => $catalogProductFlatState,

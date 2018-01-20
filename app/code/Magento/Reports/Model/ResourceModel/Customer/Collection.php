@@ -9,6 +9,8 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Customer;
 
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -91,6 +93,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param mixed $connection
      * @param string $modelName
      *
+     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +112,8 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        $modelName = self::CUSTOMER_MODEL_NAME
+        $modelName = self::CUSTOMER_MODEL_NAME,
+        ResourceModelPoolInterface $resourceModelPool = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -124,7 +128,8 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             $entitySnapshot,
             $fieldsetConfig,
             $connection,
-            $modelName
+            $modelName,
+            $resourceModelPool
         );
         $this->orderResource = $orderResource;
         $this->quoteRepository = $quoteRepository;

@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,8 +45,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $universalFactoryMock;
+    /** @var ResourceModelPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $resourceModelPoolMock;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
@@ -99,8 +100,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($select);
         $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
-        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
-        $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
+        $this->resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
+        $this->resourceModelPoolMock->expects($this->any())->method('get')->will($this->returnValue($entity));
         $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->any())
@@ -136,7 +137,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'resource' => $this->resourceMock,
                 'eavEntityFactory' => $this->entityFactoryMock2,
                 'resourceHelper' => $this->helperMock,
-                'universalFactory' => $this->universalFactoryMock,
+                'resourceModelPool' => $this->resourceModelPoolMock,
                 'storeManager' => $this->storeManagerMock,
                 'catalogData' => $this->catalogHelperMock,
                 'catalogProductFlatState' => $this->stateMock,
