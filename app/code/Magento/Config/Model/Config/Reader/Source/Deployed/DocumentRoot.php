@@ -6,9 +6,9 @@
 
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Class DocumentRoot

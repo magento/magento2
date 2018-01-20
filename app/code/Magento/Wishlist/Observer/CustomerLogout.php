@@ -6,9 +6,9 @@
 
 namespace Magento\Wishlist\Observer;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\Session;
 
 /**
  * Class CustomerLogout
@@ -34,6 +34,7 @@ class CustomerLogout implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(Observer $observer)
     {

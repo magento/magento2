@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Eav;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\BatchSizeManagement;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 
 class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
 {

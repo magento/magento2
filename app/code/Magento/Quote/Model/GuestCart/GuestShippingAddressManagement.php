@@ -5,7 +5,6 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ShippingAddressManagementInterface;

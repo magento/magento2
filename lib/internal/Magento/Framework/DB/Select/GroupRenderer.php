@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\DB\Select;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Platform;
 use Magento\Framework\DB\Platform\Quote;
+use Magento\Framework\DB\Select;
 
 /**
  * Class GroupRenderer

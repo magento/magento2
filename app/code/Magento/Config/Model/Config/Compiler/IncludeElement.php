@@ -6,12 +6,12 @@
 namespace Magento\Config\Model\Config\Compiler;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Class IncludeElement

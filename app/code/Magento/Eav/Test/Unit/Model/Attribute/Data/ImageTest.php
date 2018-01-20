@@ -159,4 +159,4 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-};
+}

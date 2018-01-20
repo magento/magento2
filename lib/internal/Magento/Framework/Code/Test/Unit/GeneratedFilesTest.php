@@ -46,7 +46,6 @@ class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testCleanGeneratedFiles($getPathMap, $isDirectoryMap, $deleteMap)
     {
-
         $this->writeInterface
             ->expects($this->any())
             ->method('isExist')

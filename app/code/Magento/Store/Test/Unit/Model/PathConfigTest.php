@@ -8,10 +8,10 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PathConfigTest extends \PHPUnit\Framework\TestCase
 {

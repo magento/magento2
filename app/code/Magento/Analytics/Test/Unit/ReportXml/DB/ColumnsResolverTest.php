@@ -8,9 +8,9 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
-use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -113,8 +113,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
                     'expectedGroup' => [
                         'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
                     ],
-                    'entityConfig' =>
-                        [
+                    'entityConfig' => [
                             'name' => 'catalog_product_entity',
                             'alias' => 'cpe',
                             'attribute' => [
@@ -132,8 +131,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
                     'avg_name' => new ColumnValueExpression('AVG(`cpe`.`name`)')
                 ],
                 'expectedGroup' => [],
-                'entityConfig' =>
-                    [
+                'entityConfig' => [
                         'name' => 'catalog_product_entity',
                         'alias' => 'cpe',
                         'attribute' => [

@@ -11,10 +11,10 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\JsonValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for advanced inventory form

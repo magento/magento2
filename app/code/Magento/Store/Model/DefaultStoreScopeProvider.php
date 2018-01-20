@@ -6,9 +6,8 @@
 
 namespace Magento\Store\Model;
 
-use Magento\Framework\Model\Entity\ScopeProviderInterface;
-use Magento\Store\Model\Store;
 use Magento\Framework\Model\Entity\ScopeFactory;
+use Magento\Framework\Model\Entity\ScopeProviderInterface;
 
 /**
  * Class StoreScope

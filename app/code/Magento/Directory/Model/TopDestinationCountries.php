@@ -6,8 +6,8 @@
 
 namespace Magento\Directory\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class TopDestinationCountries

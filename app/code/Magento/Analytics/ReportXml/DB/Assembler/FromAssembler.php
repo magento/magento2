@@ -7,8 +7,8 @@
 namespace Magento\Analytics\ReportXml\DB\Assembler;
 
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
-use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Analytics\ReportXml\DB\NameResolver;
+use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -57,8 +57,7 @@ class FromAssembler implements AssemblerInterface
     {
         $selectBuilder->setFrom(
             [
-                $this->nameResolver->getAlias($queryConfig['source']) =>
-                    $this->resourceConnection
+                $this->nameResolver->getAlias($queryConfig['source']) => $this->resourceConnection
                         ->getTableName($this->nameResolver->getName($queryConfig['source'])),
             ]
         );

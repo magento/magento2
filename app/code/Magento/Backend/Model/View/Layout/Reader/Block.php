@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Model\View\Layout\Reader;
 
-use Magento\Framework\View\Layout;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 /**

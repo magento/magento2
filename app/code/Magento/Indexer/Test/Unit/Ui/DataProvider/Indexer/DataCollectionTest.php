@@ -55,10 +55,10 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->getMock();
-        
+
         $this->dataCollection = $this->objectManagerHelper->getObject(
             DataCollection::class,
             [

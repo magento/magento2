@@ -38,8 +38,8 @@ $_fullInfo  = $block->getFullTaxInfo();
     <?php if (isset($_fullInfo[0]['rates'])): ?>
         <?php foreach ($_fullInfo as $info): ?>
             <?php if (isset($info['hidden']) && $info['hidden']) {
-                continue;
-            } ?>
+    continue;
+} ?>
             <?php
             $percent    = $info['percent'];
             $amount     = $info['amount'];

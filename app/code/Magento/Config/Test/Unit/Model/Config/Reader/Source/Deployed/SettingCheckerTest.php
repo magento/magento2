@@ -5,12 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Placeholder\PlaceholderFactory;
+use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Config\Model\Placeholder\PlaceholderInterface;
-use Magento\Config\Model\Placeholder\PlaceholderFactory;
 
 /**
  * Test class for checking settings that defined in config file

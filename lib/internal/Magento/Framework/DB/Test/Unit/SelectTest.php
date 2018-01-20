@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-use \Magento\Framework\DB\Select;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Select;
 
 /**
  * Class SelectTest

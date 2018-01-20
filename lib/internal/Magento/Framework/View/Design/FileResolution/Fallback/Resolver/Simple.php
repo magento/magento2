@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
@@ -53,7 +52,6 @@ class Simple implements Fallback\ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {
             if ($param === null) {

@@ -518,11 +518,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $methods[] = 'beforeSave';
         }
 
-        $this->_sitemapCategoryMock->expects(
-            $this->any()
-        )->method(
-            'getCollection'
-        )->will(
+        $this->_sitemapCategoryMock->expects($this->any())->method('getCollection')->will(
             $this->returnValue(
                 [
                     new \Magento\Framework\DataObject(
@@ -536,11 +532,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         );
 
         $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
-        $this->_sitemapProductMock->expects(
-            $this->any()
-        )->method(
-            'getCollection'
-        )->will(
+        $this->_sitemapProductMock->expects($this->any())->method('getCollection')->will(
             $this->returnValue(
                 [
                     new \Magento\Framework\DataObject(
@@ -555,15 +547,18 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                                     'collection' => [
                                         new \Magento\Framework\DataObject(
                                             [
-                                                'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                                'url' => $storeBaseMediaUrl . 'i/m/image1.png',
                                                 'caption' => 'caption & > title < "'
                                             ]
                                         ),
                                         new \Magento\Framework\DataObject(
-                                            ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
+                                            [
+                                                'url' => $storeBaseMediaUrl . 'i/m/image_no_caption.png',
+                                                'caption' => null
+                                            ]
                                         ),
                                     ],
-                                    'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
+                                    'thumbnail' => $storeBaseMediaUrl . 't/h/thumbnail.jpg',
                                     'title' => 'Product & > title < "',
                                 ]
                             ),

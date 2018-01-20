@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Exception\Test\Unit;
 
-use \Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Phrase;
 
 /**

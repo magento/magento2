@@ -6,9 +6,8 @@
 
 namespace Magento\Catalog\Model\ProductRender;
 
-use Magento\Catalog\Api\Data\ProductRender\AddToCartInterface;
-use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface;
+use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
 
 /**
  * @inheritdoc

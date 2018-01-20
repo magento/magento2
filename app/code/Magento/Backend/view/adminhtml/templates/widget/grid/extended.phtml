@@ -190,7 +190,7 @@ $numColumns = sizeof($block->getColumns());
                                 ?>
                             <td <?= ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
                                 class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
-                                        <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
+                                        <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : '' ?>">
                                 <?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                                 </td><?php
                                 if ($block->shouldRenderEmptyCell($_item, $_column)):
@@ -207,7 +207,7 @@ $numColumns = sizeof($block->getColumns());
                                 <?php $i = 0;
                                 foreach ($block->getMultipleRowColumns($_i) as $_column): ?>
                                     <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
-                                        <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
+                                        <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : '' ?>">
                                         <?= (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                                     </td>
                                 <?php endforeach; ?>
@@ -220,7 +220,7 @@ $numColumns = sizeof($block->getColumns());
                             <?php $i = 0;
                             foreach ($block->getSubTotalColumns() as $_column): ?>
                                 <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>
-                                           <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?>">
+                                           <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : '' ?>">
                                     <?php /* @escapeNotVerified */ echo($_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() :
                                         $_column->getRowField($block->getSubTotalItem($_item))
                                     );
@@ -262,7 +262,7 @@ $numColumns = sizeof($block->getColumns());
     <?php endif; ?>
 
     require(deps, function(<?= ($block->getDependencyJsObject() ? 'registry' : '') ?>){
-        <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
+        <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed?>
 
         //<![CDATA[
     <?php if ($block->getDependencyJsObject()): ?>

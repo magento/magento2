@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Steps;
 
-use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Button;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
+use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
 
 class SelectAttributesTest extends \PHPUnit\Framework\TestCase
 {

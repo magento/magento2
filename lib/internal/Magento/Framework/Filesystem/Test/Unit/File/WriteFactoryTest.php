@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
-use \Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\Filesystem\File\WriteFactory;
 
 /**
  * Class WriteFactoryTest

@@ -6,9 +6,9 @@
 namespace Magento\Bundle\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Bundle Option Resource Model

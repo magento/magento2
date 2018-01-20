@@ -5,19 +5,18 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Catalog\Model\Product\Type as CatalogType;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Ui\DataProvider\Modifier\ModifierFactory;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
  * Customize Downloadable panel
  */
 class Composite extends AbstractModifier
 {
-
     const CHILDREN_PATH = 'downloadable/children';
     const CONTAINER_LINKS = 'container_links';
     const CONTAINER_SAMPLES = 'container_samples';

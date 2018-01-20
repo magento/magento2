@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogInventory\Model;
 
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

@@ -14,7 +14,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
-use Magento\Sales\Model\Order\InvoiceFactory;
 
 /**
  * Order creditmemo model

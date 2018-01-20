@@ -6,9 +6,9 @@
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Wizard

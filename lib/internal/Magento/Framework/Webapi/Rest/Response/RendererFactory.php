@@ -80,7 +80,7 @@ class RendererFactory
         /** If server does not have renderer for any of the accepted types it SHOULD send 406 (not acceptable). */
         throw new \Magento\Framework\Webapi\Exception(
             new Phrase(
-                'Server cannot match any of the given Accept HTTP header media type(s) from the request: "%1" '.
+                'Server cannot match any of the given Accept HTTP header media type(s) from the request: "%1" ' .
                 'with media types from the config of response renderer.',
                 $acceptTypes
             ),
@@ -101,7 +101,7 @@ class RendererFactory
         if ($acceptType == '*/*' && isset($this->_renders['default'])) {
             return $this->_renders['default'];
         }
-        
+
         foreach ($this->_renders as $rendererConfig) {
             $rendererType = $rendererConfig['type'];
             if ($acceptType == $rendererType

@@ -6,10 +6,10 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Modal;
-use Magento\Ui\Component\Form;
-use Magento\Ui\Component\Container;
 use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Container;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Attribute Set handler in the Configurable products
@@ -202,8 +202,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         'validation' => ['required-entry' => true],
                         'imports' => [
                             'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
-                            'disabled' =>
-                                '!ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
+                            'disabled' => '!ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
                         ]
                     ],
                 ],
@@ -241,8 +240,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'imports' => [
                                     'value' => 'ns = ${ $.ns }, index = attribute_set_id:value',
                                     'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
-                                    'disabled' =>
-                                        '!ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
+                                    'disabled' => '!ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
                                 ],
                             ],
                         ],

@@ -8,9 +8,9 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Phrase;
 use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Message\Error;
+use Magento\Framework\Phrase;
 
 /**
  * Exception to be thrown when data validation fails

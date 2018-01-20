@@ -7,15 +7,15 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Customer;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObjectFactory;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * Class to invalidate tokens for customers

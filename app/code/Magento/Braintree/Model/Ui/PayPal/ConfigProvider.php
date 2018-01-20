@@ -47,6 +47,8 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $paymentAcceptanceMarkSrc = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png';
+
         return [
             'payment' => [
                 self::PAYPAL_CODE => [
@@ -55,8 +57,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
                     'locale' => $this->resolver->getLocale(),
-                    'paymentAcceptanceMarkSrc' =>
-                        'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
+                    'paymentAcceptanceMarkSrc' => $paymentAcceptanceMarkSrc,
                     'vaultCode' => self::PAYPAL_VAULT_CODE,
                     'skipOrderReview' => $this->config->isSkipOrderReview(),
                     'paymentIcon' => $this->config->getPayPalIcon(),

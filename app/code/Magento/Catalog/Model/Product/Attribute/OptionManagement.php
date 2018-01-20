@@ -45,7 +45,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
         if (is_array($currentOptions)) {
             array_walk($currentOptions, function (&$attributeOption) {
                 /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $attributeOption */
-                    $attributeOption = $attributeOption->getLabel();
+                $attributeOption = $attributeOption->getLabel();
             });
             if (in_array($option->getLabel(), $currentOptions)) {
                 return false;

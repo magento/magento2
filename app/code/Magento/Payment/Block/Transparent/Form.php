@@ -5,12 +5,12 @@
  */
 namespace Magento\Payment\Block\Transparent;
 
+use Magento\Checkout\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\Config;
 use Magento\Payment\Model\Method\Adapter;
 use Magento\Payment\Model\Method\TransparentInterface;
-use Magento\Checkout\Model\Session;
-use Magento\Payment\Model\Config;
-use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Transparent form block

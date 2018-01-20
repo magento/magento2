@@ -15,5 +15,4 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class GeneratorException extends LocalizedException
 {
-
 }

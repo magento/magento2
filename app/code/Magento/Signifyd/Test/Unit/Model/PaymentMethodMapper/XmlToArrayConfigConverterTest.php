@@ -5,9 +5,8 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model\PaymentMethodMapper;
 
-use Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter;
 
 class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
 {

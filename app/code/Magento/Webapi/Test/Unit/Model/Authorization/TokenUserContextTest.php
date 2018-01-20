@@ -6,17 +6,17 @@
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
-use Magento\Webapi\Model\Authorization\TokenUserContext;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Integration\Model\Oauth\Token;
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Framework\Webapi\Request;
-use Magento\Integration\Helper\Oauth\Data as OauthHelper;
-use Magento\Framework\Stdlib\DateTime\DateTime as Date;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Webapi\Request;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Webapi\Model\Authorization\TokenUserContext;
 
 /**
  * Tests TokenUserContext

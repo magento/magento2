@@ -6,10 +6,10 @@
 namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway\Response;
 
 use Magento\Framework\Json\DecoderInterface;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageFactory;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 
 /**
  * Class WebhookMessageReaderTest

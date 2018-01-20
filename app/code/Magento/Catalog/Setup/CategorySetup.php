@@ -7,13 +7,16 @@
  */
 namespace Magento\Catalog\Setup;
 
+use Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,8 +87,7 @@ class CategorySetup extends EavSetup
                 'attribute_model' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
                 'table' => 'catalog_category_entity',
                 'additional_attribute_table' => 'catalog_eav_attribute',
-                'entity_attribute_collection' =>
-                    \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection::class,
+                'entity_attribute_collection' => Collection::class,
                 'attributes' => [
                     'name' => [
                         'type' => 'varchar',
@@ -302,8 +304,7 @@ class CategorySetup extends EavSetup
                         'source' => \Magento\Catalog\Model\Category\Attribute\Source\Sortby::class,
                         'backend' => \Magento\Catalog\Model\Category\Attribute\Backend\Sortby::class,
                         'sort_order' => 50,
-                        'input_renderer' =>
-                            \Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby::class,
+                        'input_renderer' => DefaultSortby::class,
                         'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                         'group' => 'Display Settings',
                     ],
@@ -355,8 +356,7 @@ class CategorySetup extends EavSetup
                 'attribute_model' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
                 'table' => 'catalog_product_entity',
                 'additional_attribute_table' => 'catalog_eav_attribute',
-                'entity_attribute_collection' =>
-                    \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
+                'entity_attribute_collection' => ProductAttributeCollection::class,
                 'attributes' => [
                     'name' => [
                         'type' => 'varchar',

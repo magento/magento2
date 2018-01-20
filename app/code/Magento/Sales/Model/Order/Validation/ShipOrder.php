@@ -7,9 +7,9 @@ namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
 use Magento\Sales\Model\ValidatorResultMerger;
 
@@ -61,6 +61,7 @@ class ShipOrder implements ShipOrderInterface
      * @param array $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(
         $order,

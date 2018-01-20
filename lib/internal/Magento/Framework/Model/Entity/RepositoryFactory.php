@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Model\Entity;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class RepositoryFactory

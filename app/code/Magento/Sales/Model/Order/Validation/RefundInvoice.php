@@ -8,17 +8,18 @@ namespace Magento\Sales\Model\Order\Validation;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundInvoice
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoice implements RefundInvoiceInterface
 {

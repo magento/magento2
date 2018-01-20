@@ -6,10 +6,10 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 
 class TemplateHintsDisableCommand extends Command
 {
@@ -57,6 +57,6 @@ class TemplateHintsDisableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->resourceConfig->saveConfig('dev/debug/template_hints_storefront', 0, 'default', 0);
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        $output->writeln("<info>" . self::SUCCESS_MESSAGE . "</info>");
     }
 }

@@ -5,9 +5,9 @@
  */
 namespace Magento\Wishlist\Model\Item;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Item option model

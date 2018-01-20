@@ -9,9 +9,9 @@ use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\ReadHandler;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Catalog\Model\Product;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Ui\Component\Listing\Column\Guarantee;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Escaper;
 use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**

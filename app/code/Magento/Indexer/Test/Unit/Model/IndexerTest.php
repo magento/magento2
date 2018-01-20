@@ -279,7 +279,6 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
      */
     public function testReindexAllWithError()
     {
-
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
 
@@ -306,7 +305,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $actionMock->expects($this->once())->method('executeFull')->will(
             $this->returnCallback(
                 function () {
-                     throw new \Error('Test Engine Error');
+                    throw new \Error('Test Engine Error');
                 }
             )
         );

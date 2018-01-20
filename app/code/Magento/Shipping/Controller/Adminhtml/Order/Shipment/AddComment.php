@@ -6,9 +6,9 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 
 class AddComment extends \Magento\Backend\App\Action
 {

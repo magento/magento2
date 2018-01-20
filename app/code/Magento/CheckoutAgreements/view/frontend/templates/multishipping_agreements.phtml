@@ -26,7 +26,7 @@
                     <?= nl2br($block->escapeHtml($agreement->getContent())) ?>
                 <?php endif; ?>
             </div>
-            <?php if($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL): ?>
+            <?php if ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL): ?>
             <div id="checkout-agreements-form-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>" class="field choice agree required">
                 <input type="checkbox"
                        id="agreement-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>"
@@ -39,7 +39,7 @@
                     <span><?= $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
                 </label>
             </div>
-            <?php elseif($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO): ?>
+            <?php elseif ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO): ?>
             <div id="checkout-agreements-form-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>" class="field choice agree">
                 <span><?= $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
             </div>

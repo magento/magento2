@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use \Magento\Framework\View\Layout\Reader\Container;
-
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
+use Magento\Framework\View\Layout\Reader\Container;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 class ContainerTest extends \PHPUnit\Framework\TestCase
 {
@@ -107,7 +107,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                 ->method('unsetElementFromListToRemove')
                 ->with($elementCurrent->getAttribute('name'));
         }
-        
+
         $this->container->interpret($contextMock, $elementCurrent);
     }
 

@@ -5,12 +5,12 @@
  */
 namespace Magento\UrlRewrite\Block\Plugin\Store\Switcher;
 
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ActionInterface;
 
 class SetRedirectUrl
 {

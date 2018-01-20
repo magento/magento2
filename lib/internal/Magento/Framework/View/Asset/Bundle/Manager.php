@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\View\Asset\Bundle;
 
-use Magento\Framework\View\Asset;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Asset;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * BundleService model

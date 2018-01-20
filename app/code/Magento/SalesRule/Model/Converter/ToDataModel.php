@@ -5,13 +5,13 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SalesRule\Api\Data\RuleExtensionFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionInterface;
-use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
-use Magento\Framework\Serialize\Serializer\Json;
 
 class ToDataModel
 {

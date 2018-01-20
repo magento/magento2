@@ -5,12 +5,11 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class CustomerGroup

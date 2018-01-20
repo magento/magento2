@@ -5,8 +5,8 @@
  */
 namespace Magento\Search\Model\Synonym;
 
-use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
 
 /**
  * Class DataProvider

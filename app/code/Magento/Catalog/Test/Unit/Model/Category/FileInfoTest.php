@@ -67,7 +67,7 @@ class FileInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with($mediaPath. '/' . ltrim($fileName, '/'))
+            ->with($mediaPath . '/' . ltrim($fileName, '/'))
             ->willReturn($absoluteFilePath);
 
         $this->mime->expects($this->once())

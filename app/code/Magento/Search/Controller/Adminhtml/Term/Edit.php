@@ -5,10 +5,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Magento\Search\Controller\Adminhtml\Term as TermController;
 
 class Edit extends TermController
 {

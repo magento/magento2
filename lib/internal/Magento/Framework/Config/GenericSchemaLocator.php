@@ -18,17 +18,17 @@ class GenericSchemaLocator implements SchemaLocatorInterface
      * @var ModuleDirReader
      */
     private $moduleDirReader;
-    
+
     /**
      * @var string
      */
     private $moduleName;
-    
+
     /**
      * @var string
      */
     private $perFileSchema;
-    
+
     /**
      * @var string|null
      */

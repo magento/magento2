@@ -8,8 +8,8 @@
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Taxvat;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class TaxvatTest extends \PHPUnit\Framework\TestCase
 {

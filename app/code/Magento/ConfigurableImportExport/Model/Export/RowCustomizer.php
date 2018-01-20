@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableImportExport\Model\Export;
 
-use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ImportExport\Model\Import;
 
 class RowCustomizer implements RowCustomizerInterface

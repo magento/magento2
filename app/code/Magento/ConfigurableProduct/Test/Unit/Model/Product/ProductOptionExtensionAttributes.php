@@ -12,5 +12,4 @@ use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
  */
 abstract class ProductOptionExtensionAttributes implements ProductOptionExtensionInterface
 {
-
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-use \Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\HTTP\PhpEnvironment\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {

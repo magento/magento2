@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\App\Area;

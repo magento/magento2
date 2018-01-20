@@ -5,9 +5,8 @@
  */
 namespace Magento\Tax\Model\Quote;
 
-use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 
 class GrandTotalDetailsPlugin
 {
@@ -94,7 +93,6 @@ class GrandTotalDetailsPlugin
         array $totalSegments,
         array $addressTotals = []
     ) {
-
         if (!array_key_exists($this->code, $addressTotals)) {
             return $totalSegments;
         }

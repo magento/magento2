@@ -13,8 +13,8 @@ use Magento\Framework\App\Response\Http as Response;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Model\Rate\Provider as RatesProvider;
 use Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates;
+use Magento\Tax\Model\Rate\Provider as RatesProvider;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

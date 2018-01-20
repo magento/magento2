@@ -5,8 +5,6 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Rule;
 
-use Magento\SalesRule\Model\ResourceModel\Rule\DateApplier;
-
 /**
  * Class DateApplierTest
  */

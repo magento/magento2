@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Validator;
 
-use \Zend\Uri\Uri;
+use Zend\Uri\Uri;
 
 /**
  * Check is URI starts from allowed protocol

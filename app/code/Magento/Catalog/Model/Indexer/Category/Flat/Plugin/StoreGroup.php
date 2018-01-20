@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class StoreGroup
 {

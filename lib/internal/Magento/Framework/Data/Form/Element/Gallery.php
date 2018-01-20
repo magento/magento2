@@ -48,7 +48,7 @@ class Gallery extends AbstractElement
             '<td class="gallery" valign="middle" align="center">Small Thumb</td>' .
             '<td class="gallery" valign="middle" align="center">Sort Order</td>' .
             '<td class="gallery" valign="middle" align="center">Delete</td>' .
-            '</tr>'.
+            '</tr>' .
             '</thead>';
         $widgetButton = $this->getForm()->getParent()->getLayout();
         $buttonHtml = $widgetButton->createBlock(

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
-use \Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 class Build
 {

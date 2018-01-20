@@ -5,11 +5,11 @@
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
-use Magento\Framework\App\Action\Context;
-use Magento\Multishipping\Controller\Checkout\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Action\Context;
+use Magento\Multishipping\Controller\Checkout\Address;
 
 /**
  * Class ShippingSaved

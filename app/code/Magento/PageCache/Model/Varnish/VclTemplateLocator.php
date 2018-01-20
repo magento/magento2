@@ -7,11 +7,11 @@
 namespace Magento\PageCache\Model\Varnish;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
+use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {

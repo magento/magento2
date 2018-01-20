@@ -5,13 +5,13 @@
  */
 namespace Magento\Deploy\Service;
 
-use Magento\Framework\Locale\ResolverInterfaceFactory;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\RequireJs\Model\FileManagerFactory;
-use Magento\Framework\View\DesignInterfaceFactory;
-use Magento\Framework\View\Design\Theme\ListInterface;
-use Magento\Framework\View\Asset\RepositoryFactory;
+use Magento\Framework\Locale\ResolverInterfaceFactory;
 use Magento\Framework\RequireJs\ConfigFactory;
+use Magento\Framework\View\Asset\RepositoryFactory;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\DesignInterfaceFactory;
+use Magento\RequireJs\Model\FileManagerFactory;
 
 /**
  * Deploy RequireJS configuration service

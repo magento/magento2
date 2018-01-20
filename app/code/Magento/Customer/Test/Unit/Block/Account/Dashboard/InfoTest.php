@@ -8,8 +8,8 @@
 
 namespace Magento\Customer\Test\Unit\Block\Account\Dashboard;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Account\Dashboard\Info;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Test class for \Magento\Customer\Block\Account\Dashboard\Info.

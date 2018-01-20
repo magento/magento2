@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 
 class CartItemProcessor implements CartItemProcessorInterface
 {

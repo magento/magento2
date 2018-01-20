@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\Config\ViewFactory;
+use Magento\Framework\View\Asset\Repository;
 
 /**
  * Handles theme view.xml files

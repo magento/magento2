@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class RegularPriceTest

@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @api

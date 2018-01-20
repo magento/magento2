@@ -10,10 +10,10 @@ namespace Magento\Review\Ui\DataProvider\Product\Form\Modifier;
  */
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Form;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Form;
 
 /**
  * Review modifier for catalog product form
@@ -102,12 +102,11 @@ class Review extends AbstractModifier
                         'collapsible' => true,
                         'opened' => false,
                         'componentType' => Form\Fieldset::NAME,
-                        'sortOrder' =>
-                            $this->getNextGroupSortOrder(
-                                $meta,
-                                static::GROUP_CONTENT,
-                                static::SORT_ORDER
-                            ),
+                        'sortOrder' => $this->getNextGroupSortOrder(
+                            $meta,
+                            static::GROUP_CONTENT,
+                            static::SORT_ORDER
+                        ),
                     ],
                 ],
             ],

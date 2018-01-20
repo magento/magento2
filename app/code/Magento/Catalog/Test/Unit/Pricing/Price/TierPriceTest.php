@@ -8,12 +8,12 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Test for \Magento\Catalog\Pricing\Price\TierPrice
@@ -422,6 +422,5 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ['0.7', 0.7],
             ['0.0000000', 1]
         ];
-
     }
 }

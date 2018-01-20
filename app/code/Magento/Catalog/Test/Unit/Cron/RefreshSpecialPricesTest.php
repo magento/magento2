@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Cron;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**

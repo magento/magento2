@@ -48,8 +48,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'xml' =>
-                    <<<XML
+                'xml' => <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <indexer id="indexer_1" view_id="view_one" class="Index\Class\Name\One">

@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
-use \Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\View\Subscription;
 
 class SubscriptionTest extends \PHPUnit\Framework\TestCase
 {

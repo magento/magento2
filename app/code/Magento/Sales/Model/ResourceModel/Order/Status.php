@@ -5,12 +5,7 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface as LogWriter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\SalesSequence\Model\Manager;
-use \Magento\Sales\Model\ResourceModel\EntityAbstract;
-use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * Order status resource model

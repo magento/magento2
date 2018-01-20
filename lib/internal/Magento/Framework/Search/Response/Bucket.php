@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\Search\Response;
 
-use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
-use Magento\Framework\Search\Response\Aggregation\Value;
 
 /**
  * Facet Bucket

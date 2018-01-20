@@ -5,14 +5,14 @@
  */
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
+use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
-use Magento\Braintree\Observer\DataAssignObserver;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
-use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 
 /**
  * Class QuoteUpdaterTest

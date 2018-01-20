@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Indexer\Handler;
 
-use Magento\Framework\Indexer\HandlerInterface;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use Magento\Framework\Indexer\HandlerInterface;
 
 class ConcatHandler implements HandlerInterface
 {
@@ -31,6 +31,7 @@ class ConcatHandler implements HandlerInterface
      * @param string $alias
      * @param array $fieldInfo
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {

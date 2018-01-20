@@ -9,15 +9,15 @@ use Magento\Deploy\Model\Filesystem as DeployFilesystem;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\Lists;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Locale;
 use Magento\Store\Model\Config\StoreView;
 use Magento\User\Model\ResourceModel\User\Collection;
 use Magento\User\Model\User;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\Setup\Lists;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

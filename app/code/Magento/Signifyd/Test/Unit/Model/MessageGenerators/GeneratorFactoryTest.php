@@ -7,9 +7,9 @@ namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
+use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

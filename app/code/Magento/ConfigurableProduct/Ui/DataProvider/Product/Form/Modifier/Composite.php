@@ -6,13 +6,13 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Ui\AllowedProductTypes;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use Magento\Catalog\Model\Product\Type;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
-use Magento\Catalog\Ui\AllowedProductTypes;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
  * Data provider for Configurable products

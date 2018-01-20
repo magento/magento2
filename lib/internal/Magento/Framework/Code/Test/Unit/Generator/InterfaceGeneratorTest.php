@@ -120,24 +120,25 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
             'Valid data' => [
                 'additionalMethodsData' => [],
                 'expectedException' => '',
-                'expectedExceptionMessage' => ''
+                'expectedExceptionMessage' => '',
             ],
             '"final" usage exception' => [
                 'additionalMethodsData' => ['testMethod1' => ['final' => true]],
                 'expectedException' => '\LogicException',
-                'expectedExceptionMessage' => "Interface method cannot be marked as 'final'. Method name: 'testMethod1'"
+                'expectedExceptionMessage' =>
+                    "Interface method cannot be marked as 'final'. Method name: 'testMethod1'",
             ],
             'Non public interface method  exception' => [
                 'additionalMethodsData' => ['testMethod2' => ['visibility' => 'protected']],
-                'expectedException' => '\LogicException',
+                'expectedException' => \LogicException::class,
                 'expectedExceptionMessage' =>
-                    "Interface method visibility can only be 'public'. Method name: 'testMethod2'"
+                    "Interface method visibility can only be 'public'. Method name: 'testMethod2'",
             ],
             '"abstract" usage exception' => [
                 'additionalMethodsData' => ['testMethod1' => ['abstract' => true]],
                 'expectedException' => '\LogicException',
                 'expectedExceptionMessage' =>
-                    "'abstract' modifier cannot be used for interface method. Method name: 'testMethod1'"
+                    "'abstract' modifier cannot be used for interface method. Method name: 'testMethod1'",
             ],
         ];
     }

@@ -27,10 +27,10 @@ $_order = $block->getOrder() ?>
         <?php $_items = $block->getItemsCollection();?>
         <?php $i = 0; foreach ($_items as $_item):?>
             <?php if ($_item->getParentItem()) {
-                continue;
-            } else {
-                $i++;
-            }?>
+                    continue;
+                } else {
+                    $i++;
+                }?>
             <tbody class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
                 <?= $block->getItemHtml($_item) ?>
                 <?= $block->getItemExtraInfoHtml($_item) ?>

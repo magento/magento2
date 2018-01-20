@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
-use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
-use Magento\Framework\Model\AbstractModel;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
 
 /**
  * Plugin for Magento\Store\Model\ResourceModel\Group

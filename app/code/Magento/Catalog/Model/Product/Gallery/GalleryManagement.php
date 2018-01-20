@@ -8,10 +8,10 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\ImportExport\Model\Import;
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 
 /**
  * Export entity product model

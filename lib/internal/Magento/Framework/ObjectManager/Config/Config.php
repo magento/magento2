@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {

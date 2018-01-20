@@ -8,10 +8,9 @@
 
 namespace Magento\Checkout\Test\Unit\Helper;
 
-use \Magento\Checkout\Helper\Data;
+use Magento\Checkout\Helper\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,17 +40,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_checkoutSession;
+    protected $_checkoutSession;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_scopeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_collectionFactory;
+    protected $_collectionFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

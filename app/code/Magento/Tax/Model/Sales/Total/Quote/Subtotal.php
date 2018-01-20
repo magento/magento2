@@ -9,8 +9,8 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address;
 
 class Subtotal extends CommonTaxCollector
 {
@@ -61,6 +61,7 @@ class Subtotal extends CommonTaxCollector
      * @param Address\Total $total
      * @return null
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

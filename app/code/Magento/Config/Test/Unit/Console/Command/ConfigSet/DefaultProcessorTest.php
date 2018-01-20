@@ -7,14 +7,14 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

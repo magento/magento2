@@ -6,16 +6,16 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Downloadable\Model\Product\TypeHandler\Link as LinkHandler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class LinkRepository

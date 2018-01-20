@@ -5,11 +5,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
-use Magento\Framework\Validator\Exception as ValidatorException;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Security\Model\SecurityCookie;
 
 /**

@@ -5,8 +5,8 @@
  */
 namespace Magento\Persistent\Controller\Index;
 
-use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Persistent\Controller\Index;
 
 class UnsetCookie extends Index
 {

@@ -6,8 +6,8 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
 class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {

@@ -11,7 +11,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-use \Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

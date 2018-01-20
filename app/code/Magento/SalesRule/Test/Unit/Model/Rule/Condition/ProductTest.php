@@ -5,21 +5,20 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\DB\Select;
-use \Magento\Framework\Model\AbstractModel;
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\AttributeLoaderInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use \Magento\Rule\Model\Condition\Context;
-use \Magento\Backend\Helper\Data;
-use \Magento\Eav\Model\Config;
-use \Magento\Catalog\Model\ProductFactory;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Eav\Model\Entity\AbstractEntity;
-use \Magento\Catalog\Model\ResourceModel\Product;
-use \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
-use \Magento\Framework\Locale\FormatInterface;
-use \Magento\Eav\Model\Entity\AttributeLoaderInterface;
-use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
+use Magento\Rule\Model\Condition\Context;
+use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
