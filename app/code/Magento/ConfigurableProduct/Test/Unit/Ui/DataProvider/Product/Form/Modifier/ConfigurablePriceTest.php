@@ -73,7 +73,8 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                         'arguments' => [
                                             'data' => [
                                                 'config' => [
-                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                    'component' =>
+                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
                                                 ],
                                             ],
                                         ],
@@ -102,7 +103,8 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                         'arguments' => [
                                             'data' => [
                                                 'config' => [
-                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                    'component' =>
+                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
                                                 ]
                                             ]
                                         ]

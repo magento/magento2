@@ -269,17 +269,20 @@ class Categories extends AbstractModifier
                                     'template' => 'ui/form/components/button/container',
                                     'actions' => [
                                         [
-                                            'targetName' => 'product_form.product_form.create_category_modal',
+                                            'targetName' =>
+                                                'product_form.product_form.create_category_modal',
                                             'actionName' => 'toggleModal',
                                         ],
                                         [
-                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
-                                            'actionName' => 'render'
+                                            'targetName' =>
+                                                'product_form.product_form.create_category_modal.create_category',
+                                            'actionName' => 'render',
                                         ],
                                         [
-                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
-                                            'actionName' => 'resetForm'
-                                        ]
+                                            'targetName' =>
+                                                'product_form.product_form.create_category_modal.create_category',
+                                            'actionName' => 'resetForm',
+                                        ],
                                     ],
                                     'additionalForGroup' => true,
                                     'provider' => false,
