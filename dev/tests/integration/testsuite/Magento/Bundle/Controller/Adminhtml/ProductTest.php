@@ -49,6 +49,7 @@ class ProductTest extends AbstractBackendController
      * Get necessary request post params for creating and duplicating bundle product.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getRequestParamsForDuplicate()
     {
