@@ -35,6 +35,7 @@ class Json extends AbstractResult
 
     /**
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         InlineInterface $translateInline,
