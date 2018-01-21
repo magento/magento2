@@ -345,7 +345,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation wheather product 'Is Virtual'.
+     * Preparation weather product 'Is Virtual'.
      *
      * @return void
      */
