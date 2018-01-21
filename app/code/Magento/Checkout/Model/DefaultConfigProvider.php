@@ -341,12 +341,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
             foreach ($customer->getAddresses() as $key => $address) {
                 $customerData['addresses'][$key]['inline'] = $this->getCustomerAddressInline($address);
                 $custom_attributes = isset($customerData['addresses'][$key]['custom_attributes'])?$customerData['addresses'][$key]['custom_attributes']:'';
-                if($custom_attributes) {
+                if ($custom_attributes) {
                     foreach ($custom_attributes as $indexkey => $item) {
-                        if(isset($item['attribute_code'])) {
+                        if (isset($item['attribute_code'])) {
                             $attributeId = $this->eavAttribute->getIdByCode('customer_address', $item['attribute_code']);
                             $formattribute = $this->customerFormAttribute->create()->addFieldToFilter('main_table.attribute_id', $attributeId);
-                            if(is_array($formattribute->getData())) {
+                            if (is_array($formattribute->getData())) {
                                 $customerData['addresses'][$key]['custom_attributes'][$indexkey]['allowed_types'] = $formattribute->getData();
                             }
                         }
