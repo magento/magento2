@@ -10,6 +10,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid as GridWidget;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Data\Collection as DataCollection;
+use Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\Collection as LowstockCollection;
 use Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
 /**
@@ -39,6 +40,7 @@ class Grid extends GridWidget
         array $data = []
     ) {
         $this->lowstockCollectionFactory = $lowstockCollectionFactory;
+
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -63,7 +65,7 @@ class Grid extends GridWidget
             $storeId = null;
         }
 
-        /** @var $collection \Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\Collection  */
+        /** @var $collection LowstockCollection  */
         $collection = $this->lowstockCollectionFactory->create();
         $collection->addFieldToSelect(
             '*'
@@ -79,6 +81,7 @@ class Grid extends GridWidget
 
 
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 }

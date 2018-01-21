@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product Low Stock Report Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -28,8 +23,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
- * @since 100.0.2
  */
 class Collection extends SourceItemCollection
 {
@@ -65,6 +58,9 @@ class Collection extends SourceItemCollection
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _initSelect()
     {
         $this->addFilterToMap('inventory_source_code', 'main_table.source_code');
@@ -74,32 +70,40 @@ class Collection extends SourceItemCollection
         return parent::_initSelect();
     }
 
+    /**
+     * Join tables with product information
+     *
+     * @return $this
+     */
     public function joinCatalogProduct()
     {
+        $productEntityTable = $this->getTable('catalog_product_entity');
+        $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
         $nameAttribute = $this->attributeRepositoryInterface->get('catalog_product', 'name');
+
         $this->getSelect()->joinLeft(
-            'catalog_product_entity', // TODO: replace the hardcoded value
+            $productEntityTable,
             sprintf(
                 'main_table.%s = %s.' . SourceItemInterface::SKU,
                 ProductInterface::SKU,
-                'catalog_product_entity'
+                $productEntityTable
             ),
             []
         );
 
         /* Join product name */
         $joinExpression = sprintf(
-            'catalog_product_entity_varchar.entity_id = %s.entity_id', // TODO: replace the hardcoded values
-            'catalog_product_entity'
+            $productEavVarcharTable . '.entity_id = %s.entity_id',
+            $productEntityTable
         );
 
         $joinExpression .= sprintf(
-            ' AND catalog_product_entity_varchar.attribute_id = %s', // TODO: replace the hardcoded values
+            ' AND ' . $productEavVarcharTable . '.attribute_id = %s',
             $nameAttribute->getAttributeId()
         );
 
         $this->getSelect()->joinLeft(
-            'catalog_product_entity_varchar', // TODO: replace the hardcoded value
+            $productEavVarcharTable,
             $joinExpression,
             ['value as name']
         );
@@ -107,6 +111,11 @@ class Collection extends SourceItemCollection
         return $this;
     }
 
+    /**
+     * Join inventory configuration table
+     *
+     * @return $this
+     */
     public function joinInventoryConfiguration()
     {
         /* Join by sku field */
@@ -145,6 +154,7 @@ class Collection extends SourceItemCollection
             throw new LocalizedException(__('The product type filter specified is incorrect.'));
         }
         $this->addFieldToFilter('type_id', $typeFilter);
+
         return $this;
     }
 
@@ -169,14 +179,17 @@ class Collection extends SourceItemCollection
     {
         $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
             '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;
+
         $notifyStockExpression = $this->getConnection()->getIfNullSql(
             $notifyQtyField,
             (int)$this->stockConfiguration->getNotifyStockQty($storeId)
         );
+
         $this->getSelect()->where(
             SourceItemInterface::QUANTITY . ' < ?',
             $notifyStockExpression
         );
+        
         return $this;
     }
 }

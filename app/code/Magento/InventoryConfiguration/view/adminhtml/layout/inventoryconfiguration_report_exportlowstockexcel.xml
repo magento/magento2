@@ -6,7 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="reports_report_product_inventory_lowstock_grid"/>
+    <update handle="inventoryconfiguration_lowstock_grid"/>
     <body>
         <block class="Magento\Reports\Block\Adminhtml\Product\Lowstock" name="adminhtml.report.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
     </body>

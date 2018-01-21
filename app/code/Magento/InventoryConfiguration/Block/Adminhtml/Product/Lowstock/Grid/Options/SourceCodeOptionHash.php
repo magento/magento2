@@ -5,10 +5,11 @@
  */
 namespace Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid\Options;
 
+use Magento\Framework\Option\ArrayInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
-class SourceCodeOptionHash implements \Magento\Framework\Option\ArrayInterface
+class SourceCodeOptionHash implements ArrayInterface
 {
     /**
      * @var SourceRepositoryInterface
@@ -25,7 +26,6 @@ class SourceCodeOptionHash implements \Magento\Framework\Option\ArrayInterface
     ) {
         $this->sourceRepository = $sourceRepository;
     }
-
 
     /**
      * Return array of available sources

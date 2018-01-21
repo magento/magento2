@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.report.grid.container">
-            <block class="Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid" name="adminhtml.block.report.product.inventory.grid" as="grid">
+            <block class="Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid" name="adminhtml.block.report.product.inventory.lowstock.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">gridLowstock</argument>
                     <argument name="use_ajax" xsi:type="string">0</argument>
@@ -18,11 +18,11 @@
                     <arguments>
                         <argument name="exportTypes" xsi:type="array">
                             <item name="csv" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report_product/exportLowstockCsv</item>
+                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report/exportLowstockCsv</item>
                                 <item name="label" xsi:type="string" translate="true">CSV</item>
                             </item>
                             <item name="excel" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report_product/exportLowstockExcel</item>
+                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report/exportLowstockExcel</item>
                                 <item name="label" xsi:type="string" translate="true">Excel XML</item>
                             </item>
                         </argument>
