@@ -31,7 +31,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fetchStrategyMock;
 
@@ -74,17 +74,11 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->coreEntityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->createMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
-        );
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->configMock = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->coreResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resourceHelperMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Helper::class);
-        $this->resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
         $this->entityFactoryMock = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->statementMock = $this->createPartialMock(\Magento\Framework\DB\Statement\Pdo\Mysql::class, ['fetch']);
         /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
@@ -95,9 +89,12 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnCallback([$this, 'getMagentoObject'])
         );
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects($this->any())->method('query')->willReturn($this->statementMock);
 
+        $this->coreResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->coreResourceMock->expects(
             $this->any()
         )->method(
@@ -109,6 +106,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
 
+        $this->resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
         $this->resourceModelPoolMock->expects(
             $this->any()
         )->method(

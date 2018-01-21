@@ -54,9 +54,7 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['select'])
             ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
         $connection->expects($this->any())->method('select')->willReturn($select);
 
         $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
