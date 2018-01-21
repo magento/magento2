@@ -69,11 +69,10 @@ class SaveHandler
                 $this->productLinkRepository->delete($link);
             }
         }
-        $productLinks = $entity->getProductLinks();
 
         // Build links per type
         $linksByType = [];
-        foreach ($productLinks as $link) {
+        foreach ($entity->getProductLinks() as $link) {
             $linksByType[$link->getLinkType()][] = $link;
         }
 
@@ -99,10 +98,10 @@ class SaveHandler
 
     /**
      * Check if at least one link without position
-     * @param $links
+     * @param array $links
      * @return bool
      */
-    public function hasPosition($links)
+    private function hasPosition($links)
     {
         foreach ($links as $link) {
             if (!array_key_exists('position', $link->getData())) {
