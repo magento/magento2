@@ -160,6 +160,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $urlBuilder;
 
     /**
+     * @var customerFormAttribute
+     */
+    protected $customerFormAttribute;
+
+    /**
+     * @var eavAttribute
+     */
+    protected $eavAttribute;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -186,6 +196,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param UrlInterface $urlBuilder
+     * @param \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection $customerFormAttribute,
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute,
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -215,7 +227,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Shipping\Model\Config $shippingMethodConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        \Magento\Customer\Model\ResourceModel\Form\Attribute\CollectionFactory $customerFormAttribute,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -243,6 +257,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->storeManager = $storeManager;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->urlBuilder = $urlBuilder;
+        $this->customerFormAttribute = $customerFormAttribute;
+        $this->eavAttribute = $eavAttribute;
     }
 
     /**
@@ -324,6 +340,18 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $customerData = $customer->__toArray();
             foreach ($customer->getAddresses() as $key => $address) {
                 $customerData['addresses'][$key]['inline'] = $this->getCustomerAddressInline($address);
+                $custom_attributes = isset($customerData['addresses'][$key]['custom_attributes'])?$customerData['addresses'][$key]['custom_attributes']:'';
+                if($custom_attributes) {
+                    foreach ($custom_attributes as $indexkey => $item) {
+                        if(isset($item['attribute_code'])) {
+                            $attributeId = $this->eavAttribute->getIdByCode('customer_address', $item['attribute_code']);
+                            $formattribute = $this->customerFormAttribute->create()->addFieldToFilter('main_table.attribute_id', $attributeId);
+                            if(is_array($formattribute->getData())) {
+                                $customerData['addresses'][$key]['custom_attributes'][$indexkey]['allowed_types'] = $formattribute->getData();
+                            }
+                        }
+                    }
+                }
             }
         }
         return $customerData;
