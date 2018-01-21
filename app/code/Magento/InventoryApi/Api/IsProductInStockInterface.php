@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api;
 
 /**
- * Service which detects whether Product is In Stock for a given Stock
+ * Service which detects whether Product is In Stock for a given Stock (stock data + reservations)
  *
  * @api
  */
