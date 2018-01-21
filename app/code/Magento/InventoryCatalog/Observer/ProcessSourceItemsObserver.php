@@ -73,7 +73,6 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
