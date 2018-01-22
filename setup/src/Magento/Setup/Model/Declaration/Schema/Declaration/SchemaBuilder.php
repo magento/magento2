@@ -58,24 +58,32 @@ class SchemaBuilder
     private $validationComposite;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * SchemaBuilder constructor.
      *
-     * @param    ElementFactory      $elementFactory
-     * @param    BooleanUtils        $booleanUtils
-     * @param    Sharding            $sharding
+     * @param    ElementFactory $elementFactory
+     * @param    BooleanUtils $booleanUtils
+     * @param    Sharding $sharding
      * @param    ValidationComposite $validationComposite
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @internal param array $tablesData
      */
     public function __construct(
         ElementFactory $elementFactory,
         BooleanUtils $booleanUtils,
         Sharding $sharding,
-        ValidationComposite $validationComposite
+        ValidationComposite $validationComposite,
+        \Magento\Framework\App\ResourceConnection $resourceConnection
     ) {
         $this->sharding = $sharding;
         $this->elementFactory = $elementFactory;
         $this->booleanUtils = $booleanUtils;
         $this->validationComposite = $validationComposite;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -304,7 +312,9 @@ class SchemaBuilder
                 $constraintData['column'] = $table->getColumnByName($constraintData['column']);
                 $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
                 //If we are referenced to the same table we need to specify it
-                $referenceTable = $referenceTableData['name'] === $table->getName() ?
+                //Get table name from resource connection regarding prefix settings
+                $refTableName = $this->resourceConnection->getTableName($referenceTableData['name']);
+                $referenceTable = $refTableName === $table->getName() ?
                     $table :
                     $this->processTable($schema, $referenceTableData);
 
