@@ -249,25 +249,4 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->collection->addViewsCount();
     }
-
-    /**
-     * Get mock for abstract class with methods.
-     *
-     * @param string $className
-     * @param array $methods
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createPartialMockForAbstractClass($className, $methods)
-    {
-        return $this->getMockForAbstractClass(
-            $className,
-            [],
-            '',
-            true,
-            true,
-            true,
-            $methods
-        );
-    }
 }

@@ -23,7 +23,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event;
 use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\TestFramework;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -84,7 +83,7 @@ class CollectionTest extends TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = new TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->selectMock = $this->createMock(DB\Select::class);
         $this->connectionMock = $this->createMock(DB\Adapter\AdapterInterface::class);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
