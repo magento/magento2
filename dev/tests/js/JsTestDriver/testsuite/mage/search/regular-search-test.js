@@ -7,7 +7,7 @@
 //Code to be tested for /app/code/Magento/Search/view/frontend/form-mini.js (_onSubmit)
 function regularSearch() {
     if (this.document.getElementById('search').value === this.document.getElementById('search').placeholder || this.document.getElementById('search').value === '') {
-        this.document.getElementById('search').placeholder = 'Please specify at least one search term';
+        this.document.getElementById('search').placeholder = 'Enter a search term and try again.';
         this.document.getElementById('search').value = this.document.getElementById('search').placeholder;
     }
 }
@@ -42,5 +42,5 @@ RegularSearchTest.prototype.testRegularSearch = function(){
     regularSearch();
     //after
     inputValue = document.getElementById('search');
-    assertEquals("Please specify at least one search term", inputValue.value);
+    assertEquals("Enter a search term and try again.", inputValue.value);
 };

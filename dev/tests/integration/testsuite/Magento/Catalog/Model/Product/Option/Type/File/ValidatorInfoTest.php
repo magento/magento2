@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 /**
@@ -175,7 +176,7 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
         $filePath = $tmpDirectory->getAbsolutePath($file);
 
         return [
-            'title'      => 'test.jpg',
+            'title' => 'test.jpg',
             'quote_path' => $file,
             'order_path' => $file,
             'secret_key' => substr(md5(file_get_contents($filePath)), 0, 20),

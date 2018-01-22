@@ -259,7 +259,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cycle found. Query filtered_query already used in request hierarchy
+     * @expectedExceptionMessage A cycle was found. The "filtered_query" query is already used in the request hierarchy.
      */
     public function testCleanQueryCycle()
     {

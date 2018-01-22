@@ -54,7 +54,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Data type "NonExistentType" is not declared.
+     * @expectedExceptionMessage The "NonExistentType" data type isn't declared. Verify the type and try again.
      */
     public function testGetTypeDataInvalidArgumentException()
     {
@@ -159,7 +159,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter type "\Magento\TestModule3\V1\Parameter[]".
+     * @expectedExceptionMessage The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.
      */
     public function testTranslateTypeNameInvalidArgumentException()
     {
@@ -212,7 +212,9 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcessSimpleTypeException($value, $type)
     {
         $this->expectException(
-            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+            SerializationException::class,
+            'The "'
+            . $value . '" value\'s type is invalid. The "' . $type . '" type was expected. Verify and try again.'
         );
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }
@@ -227,7 +229,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
+     * @expectedExceptionMessage The "integer" value's type is invalid. The "int[]" type was expected. Verify and try again.
      */
     public function testProcessSimpleTypeInvalidType()
     {

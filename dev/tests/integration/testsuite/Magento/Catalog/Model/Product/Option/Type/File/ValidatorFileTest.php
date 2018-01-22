@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 /**
@@ -215,7 +216,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
-            'The file is empty. Please choose another one'
+            'The file is empty. Select another file and try again.'
         );
 
         $httpAdapterMock = $this->createPartialMock(\Zend_File_Transfer_Adapter_Http::class, ['isValid']);

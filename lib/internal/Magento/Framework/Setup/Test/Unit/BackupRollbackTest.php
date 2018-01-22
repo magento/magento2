@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Backup\Factory;
@@ -138,7 +139,7 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The rollback file does not exist.
+     * @expectedExceptionMessage The rollback file doesn't exist. Verify the file and try again.
      */
     public function testCodeRollbackWithInvalidFilePath()
     {
@@ -150,7 +151,7 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid rollback file.
+     * @expectedExceptionMessage The rollback file is invalid. Verify the file and try again.
      */
     public function testCodeRollbackWithInvalidFileType()
     {
