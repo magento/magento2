@@ -7,7 +7,7 @@
 <div class="admin__field-complex" data-bind="css: $data.additionalClasses, attr: {'data-index': index}">
 
     <div class="admin__field-complex-content">
-        <div data-bind="foreach: { data: getStocksQtyInfo($data.source.data), as: '$stockQtyInfo'}">
+        <div data-bind="foreach: { data: getStocksQtyInfo(), as: '$stockQtyInfo'}">
             <div>
                 <strong data-bind="text: $stockQtyInfo.stock_name"></strong>
                 :

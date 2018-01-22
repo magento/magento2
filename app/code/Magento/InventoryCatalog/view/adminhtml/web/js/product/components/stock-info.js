@@ -14,15 +14,14 @@ define([
 
     return Abstract.extend({
         defaults: {
-            template: 'Magento_InventoryCatalog/product/stock-info'
+            template: 'Magento_InventoryCatalog/product/stock-info',
+            imports: {
+                stocks: '${ $.provider }:data.stocks'
+            }
         },
 
-        getStocksQtyInfo: function (dataSource) {
-            var result,
-                stocks = dataSource.stocks;
-
-            result = stocks ? stocks : [];
-            return result;
+        getStocksQtyInfo: function () {
+            return this.stocks || [];
         }
     });
 });
