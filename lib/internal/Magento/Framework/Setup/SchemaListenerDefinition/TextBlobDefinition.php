@@ -53,6 +53,7 @@ class TextBlobDefinition implements DefinitionConverterInterface
      * @param string $ddlType
      * @param int $length
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getCTypeByLength($ddlType, $length)
     {

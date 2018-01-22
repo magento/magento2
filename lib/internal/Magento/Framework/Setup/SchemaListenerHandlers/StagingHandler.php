@@ -13,6 +13,7 @@ class StagingHandler implements SchemaListenerHandlerInterface
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function handle($moduleName, $tables, array $params, $definition)
     {
