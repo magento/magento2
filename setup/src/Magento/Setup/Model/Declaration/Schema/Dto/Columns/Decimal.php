@@ -56,6 +56,8 @@ class Decimal extends Column implements
      * @param float $default
      * @param string|null $comment
      * @param string|null $onCreate
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,

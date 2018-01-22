@@ -315,7 +315,7 @@ class Installer
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        $script[] = ['Installing data...', 'installDataFixtures', [$request]];
+        $script[] = ['Installing data...', 'installDataFixtures', []];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
@@ -782,23 +782,22 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
-        $this->handleDBSchemaData($setup, 'schema', $request);
+        $this->handleDBSchemaData($setup, 'schema');
     }
 
     /**
      * Installs data fixtures
      *
-     * @param array $request
      * @return void
      */
-    public function installDataFixtures(array $request)
+    public function installDataFixtures()
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->handleDBSchemaData($setup, 'data', $request);
+        $this->handleDBSchemaData($setup, 'data');
     }
 
     /**
@@ -834,13 +833,12 @@ class Installer
      *
      * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
      * @param string $type
-     * @param array $request
      * @return void
      * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function handleDBSchemaData($setup, $type, array $request)
+    private function handleDBSchemaData($setup, $type)
     {
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");

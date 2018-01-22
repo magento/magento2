@@ -81,7 +81,7 @@ class Statement
      *
      * @param callable $trigger
      */
-    public function addTrigger(Callable $trigger)
+    public function addTrigger(callable $trigger)
     {
         $this->triggers[] = $trigger;
     }

@@ -63,10 +63,7 @@ class StagingHandler implements SchemaListenerHandlerInterface
                 }
             }
 
-            if ($definition['type'] === 'integer') {
-                $definition['type'] = 'int';
-            }
-
+            $definition = $this->preprocessType($definition);
             $tables[$moduleName][$tableName]['columns'][strtolower($oldColumn)] = [
                 'xsi:type' => $definition['type'],
                 'name' => $oldColumn,
@@ -75,6 +72,21 @@ class StagingHandler implements SchemaListenerHandlerInterface
         }
 
         return $tables;
+    }
+
+    /**
+     * Preprocess types
+     *
+     * @param array $definition
+     * @return array
+     */
+    private function preprocessType(array  $definition)
+    {
+        if ($definition['type'] === 'integer') {
+            $definition['type'] = 'int';
+        }
+
+        return $definition;
     }
 
     /**
@@ -87,7 +99,7 @@ class StagingHandler implements SchemaListenerHandlerInterface
      */
     private function generateKey($key, $newColumn, $oldColumn)
     {
-        if (strpos($key, strtoupper($oldColumn))) {
+        if (strpos($key, strtoupper($oldColumn)) !== false) {
             return str_replace(strtoupper($oldColumn), strtoupper($newColumn), $key);
         }
 

@@ -24,6 +24,8 @@ use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
  * For instance, 2 columns between each other
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiffManager
 {

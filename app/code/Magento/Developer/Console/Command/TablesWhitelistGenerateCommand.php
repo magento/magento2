@@ -115,7 +115,7 @@ class TablesWhitelistGenerateCommand extends Command
 
         try {
             if ($moduleName === FileResolverByModule::ALL_MODULES) {
-                foreach ($this->componentRegistrar->getPaths('module') as $moduleName => $path) {
+                foreach (array_keys($this->componentRegistrar->getPaths('module')) as $moduleName) {
                     $this->persistModule($moduleName);
                 }
             } else {
@@ -145,7 +145,7 @@ class TablesWhitelistGenerateCommand extends Command
             foreach ($types as $type) {
                 if (isset($tableContent[$type])) {
                     //Add elements to whitelist
-                    foreach ($tableContent[$type] as $elementName => $elementData) {
+                    foreach (array_keys($tableContent[$type]) as $elementName) {
                         //Depends on flag column will be whitelisted or not
                         $names[$tableName][$type][$elementName] = true;
                     }

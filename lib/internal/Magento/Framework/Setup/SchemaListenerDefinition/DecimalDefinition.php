@@ -43,7 +43,8 @@ class DecimalDefinition implements DefinitionConverterInterface
             'precission' => $definition['precision'] ?? self::$shapeByType[$definition['type']]['precision'],
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
-            'default' => isset($definition['default']) && $definition['default'] !== false ? (int) $definition['default'] : null,
+            'default' => isset($definition['default']) && $definition['default'] !== false ?
+                (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }

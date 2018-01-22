@@ -95,7 +95,7 @@ class CreateTable implements OperationInterface
                 $table->getResource(),
                 $definition,
                 ['engine' => $table->getEngine(), 'comment' => $table->getComment()]
-        );
+            );
 
         //Setup triggers for all column for table
         foreach ($table->getColumns() as $column) {

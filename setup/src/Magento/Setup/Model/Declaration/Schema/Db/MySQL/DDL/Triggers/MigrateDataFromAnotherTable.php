@@ -50,7 +50,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     public function getCallback(ElementInterface $column)
     {
         preg_match(self::MATCH_PATTERN, $column->getOnCreate(), $matches);
-        return function() use ($column, $matches) {
+        return function () use ($column, $matches) {
             $tableName = $column->getTable()->getName();
             $tableMigrateFrom = $matches[1];
             $columnMigrateFrom = $matches[2];

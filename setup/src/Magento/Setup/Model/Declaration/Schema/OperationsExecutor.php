@@ -115,7 +115,7 @@ class OperationsExecutor
         $this->startSetupForAllConnections();
         $tableHistories = $diff->getAll();
 
-        foreach ($tableHistories as $tableName => $tableHistory) {
+        foreach ($tableHistories as $tableHistory) {
             $statementAggregator = $this->statementAggregatorFactory->create();
 
             foreach ($this->operations as $operation) {

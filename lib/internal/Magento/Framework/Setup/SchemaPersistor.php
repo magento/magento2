@@ -34,8 +34,8 @@ class SchemaPersistor
         return new \SimpleXMLElement(
             '<schema 
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                    xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd"></schema>
-                ');
+                    xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd"></schema>'
+        );
     }
 
     /**
@@ -110,7 +110,7 @@ class SchemaPersistor
     private function processColumns(array $tableData, \SimpleXMLElement $table)
     {
         if (isset($tableData['columns'])) {
-            foreach ($tableData['columns'] as $columnName => $columnData) {
+            foreach ($tableData['columns'] as $columnData) {
                 $columnData = $this->handleDefinition($columnData);
                 $domColumn = $table->addChild('column');
                 $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');

@@ -39,6 +39,5 @@ class RecurringData implements InstallDataInterface
     {
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
-
     }
 }

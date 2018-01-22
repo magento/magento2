@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
+
 use Magento\Framework\DB\Ddl\Table;
 
 /**

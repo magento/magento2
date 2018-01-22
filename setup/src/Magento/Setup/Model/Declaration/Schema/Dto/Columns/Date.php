@@ -15,8 +15,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  * Doesnt have any additional params
  * Is represented like: YY:MM:DD
  */
-class Date extends Column
-    implements ElementDiffAwareInterface,
+class Date extends Column implements
+        ElementDiffAwareInterface,
         ColumnNullableAwareInterface
 {
     /**

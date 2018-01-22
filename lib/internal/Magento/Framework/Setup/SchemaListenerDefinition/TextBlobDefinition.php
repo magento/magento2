@@ -48,12 +48,14 @@ class TextBlobDefinition implements DefinitionConverterInterface
     }
 
     /**
-     * @inheritdoc
+     * Retrieve type of column by it length
+     *
+     * @param string $ddlType
+     * @param int $length
+     * @return string
      */
-    public function convertToDefinition(array $definition)
+    private function getCTypeByLength($ddlType, $length)
     {
-        $length = $this->parseTextSize($definition['length'] ?? 0);
-        $ddlType = $definition['type'];
         if ($length > 0 && $length <= 255) {
             $cType = $ddlType == Table::TYPE_TEXT ? 'varchar' : 'varbinary';
         } elseif ($length > 255 && $length <= 65536) {
@@ -63,6 +65,18 @@ class TextBlobDefinition implements DefinitionConverterInterface
         } else {
             $cType = $ddlType == Table::TYPE_TEXT ? 'longtext' : 'longblob';
         }
+
+        return $cType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function convertToDefinition(array $definition)
+    {
+        $length = $this->parseTextSize($definition['length'] ?? 0);
+        $ddlType = $definition['type'];
+        $cType = $this->getCTypeByLength($ddlType, $length);
 
         $newDefinition = [
             'xsi:type' => $cType,

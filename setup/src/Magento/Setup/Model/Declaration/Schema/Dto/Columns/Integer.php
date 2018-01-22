@@ -55,6 +55,8 @@ class Integer extends Column implements
      * @param float|int $default
      * @param string|null $comment
      * @param string|null $onCreate
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,

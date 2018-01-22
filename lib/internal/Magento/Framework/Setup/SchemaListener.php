@@ -170,7 +170,8 @@ class SchemaListener
         $moduleName = $this->getModuleName();
 
         if (isset($this->tables[$moduleName][strtolower($oldTableName)])) {
-            $this->tables[$moduleName][strtolower($newTableName)] = $this->tables[$moduleName][strtolower($oldTableName)];
+            $this->tables[$moduleName][strtolower($newTableName)] =
+                $this->tables[$moduleName][strtolower($oldTableName)];
             unset($this->tables[$moduleName][strtolower($oldTableName)]);
         }
     }
@@ -505,16 +506,6 @@ class SchemaListener
     public function setResource(string $resource)
     {
         $this->resource = $resource;
-    }
-
-    /**
-     * Check whether staging fk keys installer is enabled
-     *
-     * @return int
-     */
-    private function isStagingFkKeysEnabled()
-    {
-        return ($this->ignore & self::STAGING_FK_KEYS) === self::STAGING_FK_KEYS;
     }
 
     /**

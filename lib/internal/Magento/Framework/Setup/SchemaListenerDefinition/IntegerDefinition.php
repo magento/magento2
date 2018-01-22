@@ -64,7 +64,8 @@ class IntegerDefinition implements DefinitionConverterInterface
             'unsigned' => $unsigned,
             'nullable' => $definition['nullable'] ?? true,
             'identity' => $definition['identity'] ?? false,
-            'default' => isset($definition['default']) && $definition['default'] !== false ? (int) $definition['default'] : null,
+            'default' => isset($definition['default']) && $definition['default'] !== false ?
+                (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }
