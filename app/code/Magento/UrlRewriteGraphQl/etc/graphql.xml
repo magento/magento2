@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="Query">
+        <field xsi:type="ObjectOutputField" name="urlResolver" type="EntityUrl" resolver="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite">
+            <argument xsi:type="ScalarArgument" name="url" type="String" required="true"/>
+         </field>
+    </type>
+    <type xsi:type="OutputType" name="EntityUrl">
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="canonical_url" type="String"/>
+        <field xsi:type="ObjectOutputField" name="type" type="UrlRewriteEntityTypeEnum"/>
+    </type>
+    <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum"/>
+</config>

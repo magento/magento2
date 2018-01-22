@@ -44,10 +44,8 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
                 }
             }
             sku
-            status
             type_id
             updated_at
-            visibility
             weight
         }
     }
