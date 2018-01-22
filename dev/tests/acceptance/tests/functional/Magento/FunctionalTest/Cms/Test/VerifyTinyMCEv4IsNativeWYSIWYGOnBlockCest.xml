@@ -17,7 +17,6 @@
             <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84184 "/>
-            <group value="skip" />
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
