@@ -87,7 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Specify select columns which are used for load arrtibute values
+     * Specify select columns which are used for load attribute values
      *
      * @return $this
      */
