@@ -101,7 +101,7 @@ class SaveHandler
      * @param array $links
      * @return bool
      */
-    private function hasPosition($links)
+    private function hasPosition(array $links)
     {
         foreach ($links as $link) {
             if (!array_key_exists('position', $link->getData())) {
