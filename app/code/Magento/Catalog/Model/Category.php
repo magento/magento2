@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Convert\ConvertArray;
@@ -69,23 +70,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
-    /**#@+
-     * Constants
-     */
-    const KEY_PARENT_ID = 'parent_id';
-    const KEY_NAME = 'name';
-    const KEY_IS_ACTIVE = 'is_active';
-    const KEY_POSITION = 'position';
-    const KEY_LEVEL = 'level';
-    const KEY_UPDATED_AT = 'updated_at';
-    const KEY_CREATED_AT = 'created_at';
-    const KEY_PATH = 'path';
-    const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
-    const KEY_INCLUDE_IN_MENU = 'include_in_menu';
-    const KEY_PRODUCT_COUNT = 'product_count';
-    const KEY_CHILDREN_DATA = 'children_data';
-    /**#@-*/
-
     /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
@@ -119,6 +103,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $_urlRewrite;
 
     /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
+
+    /**
      * Use flat resource model flag
      *
      * @var bool
@@ -142,21 +131,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Attributes are that part of interface
      *
+     * @deprecated
+     * @see CategoryInterface::ATTRIBUTES
      * @var array
      */
-    protected $interfaceAttributes = [
-        'id',
-        self::KEY_PARENT_ID,
-        self::KEY_NAME,
-        self::KEY_IS_ACTIVE,
-        self::KEY_POSITION,
-        self::KEY_LEVEL,
-        self::KEY_UPDATED_AT,
-        self::KEY_CREATED_AT,
-        self::KEY_AVAILABLE_SORT_BY,
-        self::KEY_INCLUDE_IN_MENU,
-        self::KEY_CHILDREN_DATA,
-    ];
+    protected $interfaceAttributes = CategoryInterface::ATTRIBUTES;
 
     /**
      * Category tree model
@@ -226,6 +205,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * @deprecated not used anymore, related functionality has been moved to resource model
      * @var \Magento\Framework\Api\MetadataServiceInterface
      */
     protected $metadataService;
@@ -323,11 +303,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
-        }
-        return $this->customAttributesCodes;
+        return $this->_resource->getCustomAttributesCodes();
     }
 
     /**

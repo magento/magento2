@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 use Magento\Catalog\Model\Indexer;
 use Magento\Catalog\Model\Category;
 
@@ -106,11 +107,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     private $indexerRegistry;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataServiceMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeValueFactory;
@@ -155,9 +151,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
         $this->indexerRegistry = $this->createPartialMock(\Magento\Framework\Indexer\IndexerRegistry::class, ['get']);
 
-        $this->metadataServiceMock = $this->createMock(
-            \Magento\Catalog\Api\CategoryAttributeRepositoryInterface::class
-        );
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -307,7 +300,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 'urlFinder' => $this->urlFinder,
                 'resource' => $this->resource,
                 'indexerRegistry' => $this->indexerRegistry,
-                'metadataService' => $this->metadataServiceMock,
+                'metadataService' => $this->createMock(CategoryAttributeRepositoryInterface::class),
                 'customAttributeFactory' => $this->attributeValueFactory,
             ]
         );
@@ -431,43 +424,39 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $nameAttributeCode = 'name';
-        $descriptionAttributeCode = 'description';
-        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($nameAttributeCode);
-        $descriptionAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $descriptionAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($descriptionAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $descriptionAttribute];
+        $interfaceAttributeCode = 'name';
+        $customAttributeCode = 'description';
 
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->willReturn($customAttributesMetadata);
-        $this->category->setData($nameAttributeCode, "sub");
+        $this->resource
+            ->method('getCustomAttributesCodes')
+            ->willReturn([$customAttributeCode]);
+        $this->category->setData($interfaceAttributeCode, "sub");
 
-        //The color attribute is not set, expect empty custom attribute array
+        //The description attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->category->getCustomAttributes());
 
-        //Set the color attribute;
-        $this->category->setData($descriptionAttributeCode, "description");
+        //Set the description attribute;
+        $initialCustomAttributeValue = "initial description";
+        $this->category->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
-        $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $newCustomAttributeValue = "new description";
+        $this->category->setData($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
-            "new description",
-            $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
+            $newCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
     }
 

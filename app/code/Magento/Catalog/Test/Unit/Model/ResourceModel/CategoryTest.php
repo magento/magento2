@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
+use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -14,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Context;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
 use Magento\Framework\DB\Select;
@@ -50,6 +52,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
+
+    /**
+     * @var CategoryAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataService;
 
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
@@ -97,11 +104,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
-        $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
         $this->connectionMock = $this->getMockBuilder(Adapter::class)->getMockForAbstractClass();
-        $this->connectionMock->expects($this->once())->method('select')->willReturn($this->selectMock);
+        $this->connectionMock->method('select')->willReturn($this->selectMock);
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('getTableName')->willReturn('TableName');
@@ -124,6 +128,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
 
+        $this->metadataService = $this->createMock(CategoryAttributeRepositoryInterface::class);
+        $entityTypeMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['getEntityModel']);
+        $entityTypeMock->method('getEntityModel')->willReturn(\Magento\Catalog\Model\Category::class);
+        $this->eavConfigMock->method('getEntityType')->willReturn($entityTypeMock);
+
         $this->category = new Category(
             $this->contextMock,
             $this->storeManagerMock,
@@ -132,7 +141,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->treeFactoryMock,
             $this->collectionFactoryMock,
             [],
-            $this->serializerMock
+            $this->serializerMock,
+            $this->metadataService
         );
     }
 
@@ -145,6 +155,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $expectedValue = 123;
         $attribute = $this->getMockBuilder(Attribute::class)->disableOriginalConstructor()->getMock();
         $backendModel = $this->getMockBuilder(AbstractBackend::class)->disableOriginalConstructor()->getMock();
+
+        $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
 
         $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
         $this->connectionMock->expects($this->once())->method('fetchCol')->willReturn(['result']);
@@ -160,5 +174,26 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);
         $this->assertEquals(['result'], $result);
+    }
+
+    public function testGetCustomAttributes()
+    {
+        $interfaceAttributeCode = 'name';
+        $customAttributeCode = 'description';
+        $interfaceAttribute = $this->createMock(MetadataObjectInterface::class);
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($interfaceAttributeCode);
+        $customAttribute = $this->createMock(MetadataObjectInterface::class);
+        $customAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $customAttribute];
+
+        $this->metadataService->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+
+        $this->assertEquals([$customAttributeCode], $this->category->getCustomAttributesCodes());
     }
 }

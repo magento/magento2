@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
@@ -83,6 +86,16 @@ class Category extends AbstractResource
     protected $aggregateCount;
 
     /**
+     * @var CategoryAttributeRepositoryInterface
+     */
+    protected $metadataService;
+
+    /**
+     * @var string[]
+     */
+    private $customAttributesCodes;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -92,6 +105,7 @@ class Category extends AbstractResource
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param CategoryAttributeRepositoryInterface|null $metaDataService
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -101,7 +115,8 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        CategoryAttributeRepositoryInterface $metaDataService = null
     ) {
         parent::__construct(
             $context,
@@ -113,8 +128,21 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->metadataService = $metaDataService ?? ObjectManager::getInstance()
+            ->get(CategoryAttributeRepositoryInterface::class);
+    }
+
+    public function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_values(
+                array_diff($this->customAttributesCodes, CategoryInterface::ATTRIBUTES)
+            );
+        }
+        return $this->customAttributesCodes;
     }
 
     /**
@@ -1060,7 +1088,7 @@ class Category extends AbstractResource
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
-            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->entityManager = ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\EntityManager::class);
         }
         return $this->entityManager;
@@ -1072,7 +1100,7 @@ class Category extends AbstractResource
     private function getAggregateCount()
     {
         if (null === $this->aggregateCount) {
-            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->aggregateCount = ObjectManager::getInstance()
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;

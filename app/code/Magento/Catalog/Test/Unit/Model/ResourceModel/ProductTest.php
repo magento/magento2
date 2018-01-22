@@ -13,7 +13,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $metadataService;
+
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
@@ -94,22 +98,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $priceCode = 'price';
-        $colorAttributeCode = 'color';
+        $interfaceAttributeCode = 'price';
+        $customAttributeCode = 'color';
         $interfaceAttribute = $this->createMock(MetadataObjectInterface::class);
         $interfaceAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($priceCode);
-        $colorAttribute = $this->createMock(MetadataObjectInterface::class);
-        $colorAttribute->expects($this->once())
+            ->willReturn($interfaceAttributeCode);
+        $customAttribute = $this->createMock(MetadataObjectInterface::class);
+        $customAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($colorAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $customAttribute];
 
         $this->metadataService->expects($this->once())
             ->method('getCustomAttributesMetadata')
             ->willReturn($customAttributesMetadata);
 
-        $this->assertEquals([$colorAttributeCode], $this->model->getCustomAttributesCodes());
+        $this->assertEquals([$customAttributeCode], $this->model->getCustomAttributesCodes());
     }
 }
