@@ -49,7 +49,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */
