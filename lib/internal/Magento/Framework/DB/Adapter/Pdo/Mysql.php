@@ -25,7 +25,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Setup\Model\SchemaListener;
+use Magento\Framework\Setup\SchemaListener;
 
 // @codingStandardsIgnoreStart
 
@@ -218,18 +218,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $serializer;
 
     /**
-     * @var SchemaListener
-     */
-    private $schemaListener;
-
-    /**
      * Constructor
      *
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param SelectFactory $selectFactory
-     * @param SchemaListener $schemaListener
      * @param array $config
      * @param SerializerInterface|null $serializer
      */
@@ -917,17 +911,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             }
         }
         return false;
-    }
-
-    /**
-     * Set schema listener that is used in adapter
-     *
-     * @param SchemaListener $schemaListener
-     * @return void
-     */
-    public function setSchemaListener(SchemaListener $schemaListener)
-    {
-        //$this->schemaListener = $schemaListener;
     }
 
     /**
@@ -2806,14 +2789,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $result = $this->rawQuery($query);
         $this->resetDdlCache($tableName);
         return $result;
-    }
-
-    /**
-     * @return SchemaListener
-     */
-    public function getSchemaListener()
-    {
-        return;//$this->schemaListener;
     }
 
     /**

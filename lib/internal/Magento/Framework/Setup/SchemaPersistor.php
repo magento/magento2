@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Shell;

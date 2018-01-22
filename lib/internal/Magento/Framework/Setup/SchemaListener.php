@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Setup\Model\SchemaListenerDefinition\DefinitionConverterInterface;
-use Magento\Setup\Model\SchemaListenerHandlers\SchemaListenerHandlerInterface;
+use Magento\Framework\Setup\SchemaListenerDefinition\DefinitionConverterInterface;
+use Magento\Framework\Setup\SchemaListenerHandlers\SchemaListenerHandlerInterface;
 
 /**
  * Listen for all changes and record them in order to reuse later

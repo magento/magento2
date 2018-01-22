@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\SchemaListenerDefinition;
+namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
  * The main responsibility of this class is formatting definition

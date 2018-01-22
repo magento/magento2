@@ -223,16 +223,6 @@ class Installer
     private $phpReadinessCheck;
 
     /**
-     * @var SchemaListener
-     */
-    private $schemaListener;
-
-    /**
-     * @var SchemaPersistor
-     */
-    private $schemaPersistor;
-
-    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -295,8 +285,6 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
-        //$this->schemaListener = $objectManagerProvider->get()->get(SchemaListener::class);
-        //$this->schemaPersistor = $objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
@@ -351,7 +339,6 @@ class Installer
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
-        //$this->schemaPersistor->persist($this->schemaListener);
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
             'Magento Admin URI: /'
@@ -858,8 +845,6 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
-//        $setup->getConnection()
-//            ->setSchemaListener($this->schemaListener);
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
@@ -867,8 +852,6 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
-//                $this->schemaListener->setModuleName($moduleName);
-//                $this->schemaListener->setResource('default');
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -913,19 +896,6 @@ class Installer
             $this->logProgress();
         }
 
-        $stagingModules = [
-            'Magento_Bundle' => 'Magento_BundleStaging',
-            'Magento_Catalog' => 'Magento_CatalogStaging',
-            'Magento_CatalogUrlRewrite' => 'Magento_CatalogUrlRewriteStaging',
-            'Magento_CatalogInventory' => 'Magento_CatalogInventoryStaging',
-            'Magento_ConfigurableProduct' => 'Magento_ConfigurableProductStaging',
-            'Magento_ProductAlert' => 'Magento_CatalogStaging',
-            'Magento_Reports' => 'Magento_CatalogStaging',
-            'Magento_Weee' => 'Magento_WeeeStaging',
-            'Magento_Wishlist' => 'Magento_CatalogStaging',
-        ];
-
-        //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
@@ -934,19 +904,6 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
-            $schemaListenerModuleName = $stagingModules[$moduleName] ?? $moduleName;
-            $moduleEnabled = $this->deploymentConfig->get('modules/' . $schemaListenerModuleName);
-
-            if (!$moduleEnabled) {
-                $schemaListenerModuleName = $moduleName;
-            }
-
-            //$this->schemaListener->setModuleName($schemaListenerModuleName);
-            //$this->schemaListener->toogleIgnore(
-            //    SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS
-            //);
-            //$this->schemaListener->setResource('default');
-
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
@@ -954,9 +911,7 @@ class Installer
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
-            //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         }
-        //$this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
     }
 
     /**

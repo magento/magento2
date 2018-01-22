@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\SchemaListenerHandlers;
+namespace Magento\Framework\Setup\SchemaListenerHandlers;
 
 /**
  * Here we will put schema listener handlers
