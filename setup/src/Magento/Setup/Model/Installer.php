@@ -866,38 +866,22 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
-        if ($type !== 'schema') {
-            foreach ($moduleNames as $moduleName) {
+        foreach ($moduleNames as $moduleName) {
 //                $this->schemaListener->setModuleName($moduleName);
 //                $this->schemaListener->setResource('default');
-                $this->log->log("Module '{$moduleName}':");
-                $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
-                $currentVersion = $moduleContextList[$moduleName]->getVersion();
-                // Schema/Data is installed
-                if ($currentVersion !== '') {
-                    $status = version_compare($configVer, $currentVersion);
-                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
-                        $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
-                        if ($upgrader) {
-                            $this->log->logInline("Upgrading $type.. ");
-                            $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                        }
-                        if ($type === 'schema') {
-                            $resource->setDbVersion($moduleName, $configVer);
-                        } elseif ($type === 'data') {
-                            $resource->setDataVersion($moduleName, $configVer);
-                        }
-                    }
-                } elseif ($configVer) {
-                    $installer = $this->getSchemaDataHandler($moduleName, $installType);
-                    if ($installer) {
-                        $this->log->logInline("Installing $type... ");
-                        $installer->install($setup, $moduleContextList[$moduleName]);
-                    }
+            $this->log->log("Module '{$moduleName}':");
+            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+            $currentVersion = $moduleContextList[$moduleName]->getVersion();
+            // Schema/Data is installed
+            if ($currentVersion !== '') {
+                $status = version_compare($configVer, $currentVersion);
+                if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $this->log->logInline("Upgrading $type... ");
-                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                        $this->log->logInline("Upgrading $type.. ");
+                        if ($type !== 'schema') {
+                            $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                        }
                     }
                     if ($type === 'schema') {
                         $resource->setDbVersion($moduleName, $configVer);
@@ -905,9 +889,30 @@ class Installer
                         $resource->setDataVersion($moduleName, $configVer);
                     }
                 }
-                $this->logProgress();
+            } elseif ($configVer) {
+                $installer = $this->getSchemaDataHandler($moduleName, $installType);
+                if ($installer) {
+                    $this->log->logInline("Installing $type... ");
+                    if ($type !== 'schema') {
+                        $installer->install($setup, $moduleContextList[$moduleName]);
+                    }
+                }
+                $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
+                if ($upgrader) {
+                    $this->log->logInline("Upgrading $type... ");
+                    if ($type !== 'schema') {
+                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                    }
+                }
+                if ($type === 'schema') {
+                    $resource->setDbVersion($moduleName, $configVer);
+                } elseif ($type === 'data') {
+                    $resource->setDataVersion($moduleName, $configVer);
+                }
             }
+            $this->logProgress();
         }
+
         $stagingModules = [
             'Magento_Bundle' => 'Magento_BundleStaging',
             'Magento_Catalog' => 'Magento_CatalogStaging',
