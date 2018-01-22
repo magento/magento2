@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -378,7 +379,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw new EmailNotConfirmedException(
-                __('This account is not confirmed.')
+                __("This account isn't confirmed. Verify and try again.")
             );
         }
         if (!$this->validatePassword($password)) {
@@ -748,7 +749,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
         if (!isset($types[$type])) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the transactional account email type.')
+                __('The transactional account email type is incorrect. Verify and try again.')
             );
         }
 
@@ -1230,7 +1231,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new AuthenticationException(
-                __('Please enter a valid password reset token.')
+                __('A valid password reset token is missing. Enter and try again.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -367,7 +368,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $sizes
             );
         } catch (\Exception $e) {
-            throw new LocalizedException(__('The file options format is not valid.'));
+            throw new LocalizedException(__('The file options format is invalid. Use a correct format and try again.'));
         }
     }
 

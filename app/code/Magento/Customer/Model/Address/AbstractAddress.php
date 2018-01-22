@@ -578,36 +578,36 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         
         $errors = [];
         if (!\Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'firstname']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']);
         }
 
         if (!\Zend_Validate::is($this->getLastname(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'lastname']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']);
         }
 
         if (!\Zend_Validate::is($this->getStreetLine(1), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'street']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']);
         }
 
         if (!\Zend_Validate::is($this->getCity(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
         }
 
         if ($this->isTelephoneRequired()) {
             if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
+                $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']);
             }
         }
 
         if ($this->isFaxRequired()) {
             if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
+                $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'fax']);
             }
         }
 
         if ($this->isCompanyRequired()) {
             if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
-                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
+                $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'company']);
             }
         }
 
@@ -620,11 +620,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             'NotEmpty'
         )
         ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'postcode']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']);
         }
 
         if (!\Zend_Validate::is($this->getCountryId(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'countryId']);
         }
 
         if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
@@ -634,7 +634,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $this->getCountryId()
         )
         ) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);
         }
 
         if (empty($errors)) {

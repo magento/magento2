@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -108,7 +109,9 @@ class Processor
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique.', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 
@@ -139,13 +142,15 @@ class Processor
     ) {
         $file = $this->mediaDirectory->getRelativePath($file);
         if (!$this->mediaDirectory->isFile($file)) {
-            throw new LocalizedException(__('The image does not exist.'));
+            throw new LocalizedException(__("The image doesn't exist."));
         }
 
         $pathinfo = pathinfo($file);
         $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new LocalizedException(__('Please correct the image file type.'));
+            throw new LocalizedException(
+                __('The image type for the file is invalid. Enter the correct image type and try again.')
+            );
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
@@ -170,7 +175,7 @@ class Processor
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
+            throw new LocalizedException(__('The "%1" file couldn\'t be moved.', $e->getMessage()));
         }
 
         $fileName = str_replace('\\', '/', $fileName);

@@ -40,7 +40,7 @@ class PriceModifier
         $prices = $product->getData('tier_price');
         // verify if price exist
         if ($prices === null) {
-            throw new NoSuchEntityException(__('This product doesn\'t have tier price'));
+            throw new NoSuchEntityException(__('Tier price is unavailable for this product.'));
         }
         $tierPricesQty = count($prices);
 
@@ -69,7 +69,7 @@ class PriceModifier
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('Invalid data provided for tier_price'));
+            throw new CouldNotSaveException(__('The tier_price data is invalid. Verify the data and try again.'));
         }
     }
 }

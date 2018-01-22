@@ -51,7 +51,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $value = $object->getData($attrCode);
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('The value of attribute "%1" must be set', $attrCode)
+                __('The "%1" attribute value is empty. Set the attribute and try again.', $attrCode)
             );
         }
 
