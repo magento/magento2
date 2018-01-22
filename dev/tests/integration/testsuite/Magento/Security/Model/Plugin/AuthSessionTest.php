@@ -132,7 +132,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
         $sessionId = $this->authSession->getSessionId();
-        $prolongsDiff = log($this->securityConfig->getAdminSessionLifetime()) + 2; // X from comment above
+        $prolongsDiff = 4 * log($this->securityConfig->getAdminSessionLifetime()) + 2; // X from comment above
         $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
         $this->adminSessionsManager->getCurrentSession()
             ->setData(
