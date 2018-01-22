@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
@@ -38,7 +37,7 @@ class SourceItemIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
+        $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(SourceItemIndexer::class);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
             ->get(GetProductQuantityInStockInterface::class);
