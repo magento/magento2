@@ -17,12 +17,20 @@ use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
+
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductInterfaceFactory $productFactory */
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
+
+/** @var IndexerInterface $indexer */
+$indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
+$indexer->load(InventoryIndexer::INDEXER_ID);
+$indexer->reindexAll();
 
 $stockData = [
     'SKU-1' => [
