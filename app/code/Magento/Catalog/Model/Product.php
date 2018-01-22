@@ -118,6 +118,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_urlModel = null;
 
     /**
+     * @var ResourceModel\Product
+     */
+    protected $_resource;
+
+    /**
      * @var string
      */
     protected static $_url;
@@ -269,6 +274,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $imageCacheFactory;
 
     /**
+     * @deprecated not used anymore, related functionality has been moved to resource model
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     protected $metadataService;
@@ -468,11 +474,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
-        }
-        return $this->customAttributesCodes;
+        return $this->_resource->getCustomAttributesCodes();
     }
 
     /**

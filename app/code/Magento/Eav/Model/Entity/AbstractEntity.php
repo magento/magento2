@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -1957,5 +1958,26 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->getAttribute($attrCode);
             }
         }
+    }
+
+    /**
+     * Receive a list of EAV attributes using provided metadata service.
+     *
+     * @param MetadataServiceInterface $metadataService
+     * @return string[]
+     */
+    protected function getEavAttributesCodes(MetadataServiceInterface $metadataService)
+    {
+        $attributeCodes = [];
+        $customAttributesMetadata = $metadataService->getCustomAttributesMetadata(
+            $this->getEntityType()->getEntityModel()
+        );
+        if (is_array($customAttributesMetadata)) {
+            /** @var $attribute \Magento\Framework\Api\MetadataObjectInterface */
+            foreach ($customAttributesMetadata as $attribute) {
+                $attributeCodes[] = $attribute->getAttributeCode();
+            }
+        }
+        return $attributeCodes;
     }
 }

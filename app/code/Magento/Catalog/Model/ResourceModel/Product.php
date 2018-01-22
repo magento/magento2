@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 
@@ -84,6 +86,16 @@ class Product extends AbstractResource
     private $productCategoryLink;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    protected $metadataService;
+
+    /**
+     * @var string[]
+     */
+    private $customAttributesCodes;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -94,6 +106,7 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
+     * @param ProductAttributeRepositoryInterface|null $metadataService
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -107,7 +120,8 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        $data = []
+        $data = [],
+        ProductAttributeRepositoryInterface $metadataService = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -115,6 +129,9 @@ class Product extends AbstractResource
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
         $this->defaultAttributes = $defaultAttributes;
+        $this->metadataService = $metadataService ?? ObjectManager::getInstance(
+            ProductAttributeRepositoryInterface::class
+        );
         parent::__construct(
             $context,
             $storeManager,
@@ -230,6 +247,14 @@ class Product extends AbstractResource
     {
         $result = $this->getProductCategoryLink()->getCategoryLinks($product);
         return array_column($result, 'category_id');
+    }
+
+    public function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+        }
     }
 
     /**
