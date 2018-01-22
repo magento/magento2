@@ -151,6 +151,13 @@ class Loader
             }
         }
 
+        foreach ($expanded as $key => $pair) {
+            if (preg_match('/SampleData$/', $pair['name'])) {
+                unset($expanded[$key]);
+                $expanded[] = $pair;
+            }
+        }
+
         $result = [];
         foreach ($expanded as $pair) {
             $result[$pair['name']] = $origList[$pair['name']];
