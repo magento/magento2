@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\S
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
+use Magento\InventoryCatalog\Model\GetStockIdForWebsiteByCode;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
 use Magento\Store\Model\Website;
 
@@ -18,6 +19,11 @@ use Magento\Store\Model\Website;
  */
 class AdaptAddStockStatusToSelectToMultiStocks
 {
+    /**
+     * @var GetStockIdForWebsiteByCode
+     */
+    private $getStockIdForWebsiteByCode;
+
     /**
      * @var GetStockIdForCurrentWebsite
      */
@@ -30,13 +36,16 @@ class AdaptAddStockStatusToSelectToMultiStocks
 
     /**
      * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
+     * @param GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
      */
     public function __construct(
         GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
+        GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode,
         AddStockStatusToSelect $adaptedAddStockStatusToSelect
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
+        $this->getStockIdForWebsiteByCode = $getStockIdForWebsiteByCode;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
     }
 
@@ -55,7 +64,12 @@ class AdaptAddStockStatusToSelectToMultiStocks
         Select $select,
         Website $website
     ) {
-        $stockId = $this->stockIdForCurrentWebsite->execute();
+        $websiteCode = $website->getCode();
+
+        $stockId = $websiteCode === null
+            ? $this->stockIdForCurrentWebsite->execute()
+            : $this->getStockIdForWebsiteByCode->execute($websiteCode);
+
         $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
 
         return $stockStatus;

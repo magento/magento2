@@ -40,8 +40,12 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     *
+     * @param string $websiteCode
+     *
+     * @dataProvider addStockStatusToSelectDataProvider
      */
-    public function testAddStockStatusToSelect()
+    public function testAddStockStatusToSelect(string $websiteCode)
     {
         $actualIsSalableCount = $actualNotSalableCount = 0;
         $expectedIsSalableCount = 2;
@@ -50,7 +54,7 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
 
-        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
+        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website->load($websiteCode));
 
         foreach ($collection as $item) {
             $item->getIsSalable() === true ? $actualIsSalableCount++ : $actualNotSalableCount++;
@@ -59,5 +63,16 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
         self::assertEquals($expectedIsSalableCount, $actualIsSalableCount);
         self::assertEquals($expectedNotSalableCount, $actualNotSalableCount);
         self::assertEquals($expectedNotSalableCount + $expectedIsSalableCount, $collection->getSize());
+    }
+
+    /**
+     * @return array
+     */
+    public function addStockStatusToSelectDataProvider(): array
+    {
+        return [
+            ['fakeCode'],
+            ['base'],
+        ];
     }
 }

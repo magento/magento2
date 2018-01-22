@@ -35,9 +35,9 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
     private $storeManager;
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $storeCodeBefore = null;
+    private $storeCodeBefore;
 
     /**
      * @inheritdoc
@@ -46,7 +46,7 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->website = Bootstrap::getObjectManager()->create(Website::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
@@ -60,15 +60,70 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
-     * @param string $store
+     * @param string $websiteCode
      * @param int $expectedIsSalableCount
      * @param int $expectedNotSalableCount
      *
      * @dataProvider addStockStatusToSelectDataProvider
      */
-    public function testAddStockStatusToSelect(string $store, int $expectedIsSalableCount, int $expectedNotSalableCount)
+    public function testAddStockStatusToSelect(
+        string $websiteCode,
+        int $expectedIsSalableCount,
+        int $expectedNotSalableCount
+    ) {
+        $actualIsSalableCount = $actualNotSalableCount = 0;
+
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->stockStatus->addStockStatusToSelect(
+            $collection->getSelect(),
+            $this->website->load($websiteCode, 'code')
+        );
+
+        foreach ($collection as $item) {
+            $item->getIsSalable() == 1 ? $actualIsSalableCount++ : $actualNotSalableCount++;
+        }
+
+        self::assertEquals($expectedIsSalableCount, $actualIsSalableCount);
+        self::assertEquals($expectedNotSalableCount, $actualNotSalableCount);
+        self::assertEquals($expectedNotSalableCount + $expectedIsSalableCount, $collection->getSize());
+    }
+
+    /**
+     * @return array
+     */
+    public function addStockStatusToSelectDataProvider(): array
     {
+        return [
+            ['eu_website', 1, 2],
+            ['us_website', 1, 2],
+            ['global_website', 2, 1],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @param string $store
+     * @param int $expectedIsSalableCount
+     * @param int $expectedNotSalableCount
+     *
+     * @dataProvider addStockStatusToSelectWithSwitchStoreDataProvider
+     */
+    public function testAddStockStatusToSelectWithSwitchStore(
+        string $store,
+        int $expectedIsSalableCount,
+        int $expectedNotSalableCount
+    ) {
         $this->storeManager->setCurrentStore($store);
 
         $actualIsSalableCount = $actualNotSalableCount = 0;
@@ -87,16 +142,24 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
     }
 
     /**
-     * Data provider for testAddStockStatusToSelect().
-     *
      * @return array
      */
-    public function addStockStatusToSelectDataProvider(): array
+    public function addStockStatusToSelectWithSwitchStoreDataProvider(): array
     {
         return [
             ['store_for_eu_website', 1, 2],
             ['store_for_us_website', 1, 2],
             ['store_for_global_website', 2, 1],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->storeManager->setCurrentStore($this->storeCodeBefore);
     }
 }

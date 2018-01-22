@@ -9,13 +9,12 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
-use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test catalog search with different stocks on second website.
+ * Test catalog search with different stocks on not default website.
  */
 class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
 {
@@ -30,9 +29,9 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
     private $storeManager;
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $storeCodeBefore = null;
+    private $storeCodeBefore;
 
     /**
      * @inheritdoc
@@ -55,6 +54,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $store
      * @param int $expectedSize

@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Service for get stock id by code for current website.
+ * Service for get stock id for current website.
  */
 class GetStockIdForCurrentWebsite
 {
@@ -27,15 +26,23 @@ class GetStockIdForCurrentWebsite
     private $stockResolver;
 
     /**
+     * @var GetStockIdForWebsiteByCode
+     */
+    private $getStockIdForWebsiteByCode;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
+     * @param GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        StockResolverInterface $stockResolver
+        StockResolverInterface $stockResolver,
+        GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode
     ) {
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
+        $this->getStockIdForWebsiteByCode = $getStockIdForWebsiteByCode;
     }
 
     /**
@@ -44,9 +51,7 @@ class GetStockIdForCurrentWebsite
     public function execute(): int
     {
         $websiteCode = $this->storeManager->getWebsite()->getCode();
-
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
-        $stockId = (int)$stock->getStockId();
+        $stockId = $this->getStockIdForWebsiteByCode->execute($websiteCode);
 
         return $stockId;
     }
