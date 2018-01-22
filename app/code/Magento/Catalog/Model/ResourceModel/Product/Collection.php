@@ -1670,7 +1670,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
             return $this;
         } elseif ($attribute == 'is_saleable') {
-            $this->getSelect()->order("is_saleable " . $dir);
+            $this->getSelect()->order("is_salable " . $dir);
             return $this;
         }
 
