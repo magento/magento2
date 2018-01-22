@@ -33,7 +33,6 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        return;
         $setup->startSetup();
 
         $binds = $this->messageQueueConfig->getBinds();
