@@ -173,7 +173,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->moveController->execute());
     }
 
-    public function testExecuteWithLocaliedException()
+    public function testExecuteWithLocalizedException()
     {
         $exceptionMessage = 'Sorry, but we can\'t find the new category you selected.';
         $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
@@ -246,7 +246,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->moveController->execute());
     }
 
-    public function testSuccessfullCategorySave()
+    public function testSuccessfulCategorySave()
     {
         $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
             ->disableOriginalConstructor()
