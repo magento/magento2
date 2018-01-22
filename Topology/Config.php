@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\MessageQueue\Topology;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -50,7 +51,7 @@ class Config implements ConfigInterface
         if (!$topology) {
             throw new LocalizedException(
                 new Phrase(
-                    "Exchange '%exchange' is not declared for connection '%connection'.",
+                    'The "%exchange" exchange is not declared for the "%connection" connection. Verify and try again.',
                     [
                         'exchange' => $name,
                         'connection' => $connection

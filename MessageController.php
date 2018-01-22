@@ -63,7 +63,7 @@ class MessageController
         $code = md5($code);
         $this->reader->read($lock, $code);
         if ($lock->getId()) {
-            throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
+            throw new MessageLockException(new Phrase('The "%1" message code was already processed.', [$code]));
         }
         $this->writer->saveLock($lock);
         return $lock;
