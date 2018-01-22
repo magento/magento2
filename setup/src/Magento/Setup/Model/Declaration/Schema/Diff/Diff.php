@@ -62,22 +62,38 @@ class Diff implements DiffInterface
     private $elementHistoryFactory;
 
     /**
-     * @param ComponentRegistrar    $componentRegistrar
+     * This indexes is needed to ensure that sort order in which table operations
+     * will be executed is correct
+     *
+     * @var array
+     */
+    private $tableIndexes;
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
      * @param ElementHistoryFactory $elementHistoryFactory
+     * @param array $tableIndexes
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
-        ElementHistoryFactory $elementHistoryFactory
+        ElementHistoryFactory $elementHistoryFactory,
+        array $tableIndexes
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->elementHistoryFactory = $elementHistoryFactory;
+        $this->tableIndexes = $tableIndexes;
     }
 
     /**
+     * We return all sorted changes
+     *
+     * All changes are sorted because there are dependencies between tables, like foreign keys
+     *
      * @inheritdoc
      */
     public function getAll()
     {
+        ksort($this->changes);
         return $this->changes;
     }
 
@@ -90,7 +106,8 @@ class Diff implements DiffInterface
      */
     public function getChange($table, $operation)
     {
-        return $this->changes[$table][$operation] ?? [];
+        $tableIndex = $this->tableIndexes[$table];
+        return $this->changes[$tableIndex][$operation] ?? [];
     }
 
     /**
@@ -167,7 +184,8 @@ class Diff implements DiffInterface
         $history = $this->elementHistoryFactory->create($historyData);
         $dtoObjectName = $dtoObject instanceof TableElementInterface ?
             $dtoObject->getTable()->getName() : $dtoObject->getName();
-        $tableKey = $tableKey === null ? $dtoObjectName : $tableKey;
+        //We use not real tables but table indexes in order to be sure that order of table is correct
+        $tableKey = $tableKey === null ? $this->tableIndexes[$dtoObjectName] : $this->tableIndexes[$tableKey];
         //dtoObjects can have 4 types: column, constraint, index, table
         $this->changes[$tableKey][$operation][] = $history;
         $this->debugChanges[$operation][] = $history;

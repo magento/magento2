@@ -7,16 +7,11 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
-use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
-use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
-use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
  * As table can have different types of elements inside itself
@@ -106,8 +101,8 @@ class TableDiff
                          * As between drop and create operations we have operation of modification
                          * we will drop key, modify column, add key
                          */
-                        $diff = $this->diffManager->registerReferenceDrop($reference, $diff);
-                        $diff->register($reference, AddComplexElement::OPERATION_NAME);
+                        $diff = $this->diffManager->registerRemoval($diff, [$reference]);
+                        $diff = $this->diffManager->registerCreation($diff, $reference);
                     }
                 }
             }
@@ -149,8 +144,7 @@ class TableDiff
                 } elseif ($this->diffManager->shouldBeModified(
                     $element,
                     $generatedElements[$elementName]
-                )
-                ) {
+                )) {
                     $diff = $this->diffManager
                         ->registerModification($diff, $element, $generatedElements[$elementName]);
                 }
@@ -161,7 +155,7 @@ class TableDiff
 
             //Elements that should be removed
             if ($this->diffManager->shouldBeRemoved($generatedElements)) {
-                $diff = $this->diffManager->registerRemoval($diff, $generatedElements, $declaredElements);
+                $diff = $this->diffManager->registerRemoval($diff, $generatedElements);
             }
         }
 

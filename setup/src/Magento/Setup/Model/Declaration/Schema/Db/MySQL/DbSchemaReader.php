@@ -70,7 +70,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
                     'type' => 'DATA_TYPE',
                     'nullable' => new Expression('IF(IS_NULLABLE="YES", true, false)'),
                     'definition' => 'COLUMN_TYPE',
-                    'extra' => 'EXTRA'
+                    'extra' => 'EXTRA',
+                    'comment' => new Expression('IF(COLUMN_COMMENT="", NULL, COLUMN_COMMENT)')
                 ]
             )
             ->where('TABLE_SCHEMA = ?', $dbName)

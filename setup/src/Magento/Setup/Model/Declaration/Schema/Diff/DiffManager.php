@@ -18,7 +18,6 @@ use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropReference;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
-use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
@@ -77,12 +76,13 @@ class DiffManager
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
-        $operation = $element instanceof Column ? ModifyColumn::OPERATION_NAME : ModifyElement::OPERATION_NAME;
-        $diff->register(
-            $element,
-            $operation,
-            $generatedElement
-        );
+        if ($element instanceof Column) {
+            $diff->register($element, ModifyColumn::OPERATION_NAME, $generatedElement);
+        } else {
+            $diff = $this->registerRemoval($diff, [$generatedElement]);
+            $diff = $this->registerCreation($diff, $element);
+        }
+
         return $diff;
     }
 
@@ -90,15 +90,13 @@ class DiffManager
      * If elements really dont exists in declaration - we will remove them
      * If some mistake happens (and element is just not preprocessed), we will throw exception
      *
-     * @param  DiffInterface      $diff
+     * @param  Diff      $diff
      * @param  ElementInterface[] $generatedElements
-     * @param  ElementInterface[] $elements
      * @return DiffInterface
      */
     public function registerRemoval(
         Diff $diff,
-        array $generatedElements,
-        array $elements
+        array $generatedElements
     ) {
         foreach ($generatedElements as $generatedElement) {
             if ($generatedElement instanceof Reference) {
@@ -107,20 +105,7 @@ class DiffManager
             }
 
             $operation = $generatedElement instanceof Table ? DropTable::OPERATION_NAME : DropElement::OPERATION_NAME;
-            if (isset($elements[$generatedElement->getName()])) {
-                throw new \LogicException(
-                    sprintf(
-                        "Cannot find difference for element with name %s",
-                        $generatedElement->getName()
-                    )
-                );
-            }
-
-            $diff->register(
-                $generatedElement,
-                $operation,
-                $generatedElement
-            );
+            $diff->register($generatedElement, $operation, $generatedElement);
         }
 
         return $diff;
@@ -141,10 +126,7 @@ class DiffManager
             $operation = AddComplexElement::OPERATION_NAME;
         }
 
-        $diff->register(
-            $element,
-            $operation
-        );
+        $diff->register($element, $operation);
 
         return $diff;
     }

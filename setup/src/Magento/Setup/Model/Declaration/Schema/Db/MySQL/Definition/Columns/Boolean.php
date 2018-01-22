@@ -98,7 +98,7 @@ class Boolean implements DbDefinitionProcessorInterface
     {
         if ($data['type'] === self::INTEGER_TYPE && $data['padding'] === self::INTEGER_PADDING) {
             $data['type'] = strtolower(self::TYPE);
-            $data['default'] = (bool) $data['default'];
+            $data['default'] = $data['default'] === null ? null : (bool) $data['default'];
             $data['unsigned'] = false; //For boolean we always do not want to have unsigned
         }
 

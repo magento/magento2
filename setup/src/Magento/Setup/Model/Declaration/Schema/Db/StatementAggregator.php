@@ -20,7 +20,6 @@ class StatementAggregator
      */
     private $statementsBank = [];
 
-
     /**
      * Before we will do merge, we need to ensure that we can do it
      *

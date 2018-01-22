@@ -19,18 +19,19 @@ class Schema
     private $resourceConnection;
 
     /**
+     * @var Table[]
+     */
+    private $tables;
+
+    /**
      * Schema constructor.
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
     {
         $this->resourceConnection = $resourceConnection;
+        $this->tables = [];
     }
-
-    /**
-     * @var Table[]
-     */
-    private $tables = [];
 
     /**
      * Retrieve all tables, that presents in schema

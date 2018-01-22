@@ -58,11 +58,11 @@ class MigrateDataFrom implements DDLTriggerInterface
             );
             $adapter
                 ->update(
-                $this->resourceConnection->getTableName($tableName),
-                [
-                    $column->getName() => new Expression($matches[1])
-                ]
-            );
+                    $this->resourceConnection->getTableName($tableName),
+                    [
+                        $column->getName() => new Expression($matches[1])
+                    ]
+                );
         };
     }
 }

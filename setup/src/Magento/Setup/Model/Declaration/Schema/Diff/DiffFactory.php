@@ -29,10 +29,11 @@ class DiffFactory
     }
 
     /**
+     * @param array $data
      * @return Diff
      */
-    public function create()
+    public function create(array $data)
     {
-        return $this->objectManager->create(Diff::class);
+        return $this->objectManager->create(Diff::class, $data);
     }
 }

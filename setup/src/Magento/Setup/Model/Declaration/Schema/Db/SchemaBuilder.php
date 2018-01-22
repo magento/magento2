@@ -81,7 +81,8 @@ class SchemaBuilder
                     [
                         'name' => $tableName,
                         'resource' => $resource,
-                        'engine' => strtolower($tableOptions['Engine'])
+                        'engine' => strtolower($tableOptions['Engine']),
+                        'comment' => $tableOptions['Comment'] === '' ? null : $tableOptions['Comment']
                     ]
                 );
 

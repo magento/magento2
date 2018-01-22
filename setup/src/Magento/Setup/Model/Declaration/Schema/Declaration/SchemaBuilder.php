@@ -219,11 +219,11 @@ class SchemaBuilder
             $table = $this->elementFactory->create('table', $tableParams);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
-            $schema->addTable($table);
             //Add indexes to table
             $table->addIndexes($this->processIndexes($tableData, $resource, $table));
             //Add internal and reference constraints
             $table->addConstraints($this->processConstraints($tableData, $resource, $schema, $table));
+            $schema->addTable($table);
         }
 
         return $schema->getTableByName($tableData['name']);

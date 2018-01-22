@@ -8,7 +8,6 @@ namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
-use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
