@@ -129,7 +129,7 @@ class Product extends AbstractResource
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
         $this->defaultAttributes = $defaultAttributes;
-        $this->metadataService = $metadataService ?? ObjectManager::getInstance(
+        $this->metadataService = $metadataService ?? ObjectManager::getInstance()->get(
             ProductAttributeRepositoryInterface::class
         );
         parent::__construct(
@@ -253,8 +253,11 @@ class Product extends AbstractResource
     {
         if ($this->customAttributesCodes === null) {
             $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES);
+            $this->customAttributesCodes = array_values(
+                array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES)
+            );
         }
+        return $this->customAttributesCodes;
     }
 
     /**

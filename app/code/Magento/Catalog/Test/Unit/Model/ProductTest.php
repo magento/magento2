@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -143,11 +144,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataServiceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $attributeValueFactory;
 
     /**
@@ -274,9 +270,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $optionFactory->expects($this->any())->method('create')->willReturn($this->optionInstanceMock);
 
-        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
 
         $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
@@ -328,7 +322,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -391,7 +384,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'catalogProduct' => $this->_catalogProduct,
                 'imageCacheFactory' => $this->imageCacheFactory,
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
-                'metadataService' => $this->metadataServiceMock,
+                'metadataService' => $this->createMock(ProductAttributeRepositoryInterface::class),
                 'customAttributeFactory' => $this->attributeValueFactory,
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
@@ -1269,19 +1262,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $priceCode = 'price';
         $colorAttributeCode = 'color';
-        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($priceCode);
-        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $colorAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($colorAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
 
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->willReturn($customAttributesMetadata);
+        $this->resource
+            ->method('getCustomAttributesCodes')
+            ->willReturn([$colorAttributeCode]);
         $this->model->setData($priceCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
