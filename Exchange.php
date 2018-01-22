@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Amqp;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -119,7 +120,8 @@ class Exchange implements ExchangeInterface
                 } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
                     throw new LocalizedException(
                         new \Magento\Framework\Phrase(
-                            "RPC call failed, connection timed out after %time_out.",
+                            "The RPC (Remote Procedure Call) failed. The connection timed out after %time_out. "
+                            . "Please try again later.",
                             ['time_out' => $this->rpcConnectionTimeout]
                         )
                     );
