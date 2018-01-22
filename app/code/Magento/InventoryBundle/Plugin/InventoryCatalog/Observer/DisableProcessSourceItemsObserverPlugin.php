@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 namespace Magento\InventoryBundle\Plugin\InventoryCatalog\Observer;
+
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\InventoryCatalog\Observer\ProcessSourceItemsObserver;
@@ -16,6 +17,14 @@ use Magento\Framework\Event\Observer;
  */
 class DisableProcessSourceItemsObserverPlugin
 {
+    /**
+     * @param ProcessSourceItemsObserver $subject
+     * @param callable $proceed
+     * @param Observer $observer
+     * @return void
+     * @see ProcessSourceItemsObserver::execute
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function aroundExecute(
         ProcessSourceItemsObserver $subject,
         callable $proceed,

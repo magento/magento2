@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Api\Bundle;
+namespace Magento\InventoryBundle\Test\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
