@@ -42,5 +42,7 @@
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollectionToMultiStocks"/>
         <plugin name="adapt_add_stock_status_to_select_to_multi_stocks"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockStatusToSelectToMultiStocks"/>
+        <plugin name="adapt_add_is_in_stock_filter_to_collection_to_multi_stocks"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollectionToMultiStocks"/>
     </type>
 </config>
