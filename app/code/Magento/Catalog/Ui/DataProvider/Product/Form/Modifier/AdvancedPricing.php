@@ -24,7 +24,7 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\CatalogInventory\Services\GetProductStockIsQtyDecimalService;
+use Magento\CatalogInventory\Helper\ProductStockIsQtyDecimal;
 
 /**
  * Class AdvancedPricing
@@ -102,7 +102,7 @@ class AdvancedPricing extends AbstractModifier
     private $customerGroupSource;
 
     /**
-     * @var GetProductStockIsQtyDecimalService
+     * @var ProductStockIsQtyDecimal
      */
     protected $isProductQtyDecimal;
 
@@ -117,7 +117,7 @@ class AdvancedPricing extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
-     * @param GetProductStockIsQtyDecimalService $isProductQtyDecimal
+     * @param ProductStockIsQtyDecimal $isProductQtyDecimal
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,7 +131,7 @@ class AdvancedPricing extends AbstractModifier
         ArrayManager $arrayManager,
         $scopeName = '',
         GroupSourceInterface $customerGroupSource = null,
-        GetProductStockIsQtyDecimalService $isProductQtyDecimal
+        ProductStockIsQtyDecimal $isProductQtyDecimal
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;

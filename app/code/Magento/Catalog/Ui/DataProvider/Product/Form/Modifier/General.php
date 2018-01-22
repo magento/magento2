@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\CatalogInventory\Services\GetProductStockIsQtyDecimalService;
+use Magento\CatalogInventory\Helper\ProductStockIsQtyDecimal;
 
 /**
  * Data provider for main panel of product page
@@ -41,11 +41,14 @@ class General extends AbstractModifier
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param ProductStockIsQtyDecimal $isProductQtyDecimal
+     *
+     * @return void
      */
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        GetProductStockIsQtyDecimalService $isProductQtyDecimal
+        ProductStockIsQtyDecimal $isProductQtyDecimal
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;

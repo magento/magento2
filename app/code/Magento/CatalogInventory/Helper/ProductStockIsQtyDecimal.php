@@ -1,13 +1,13 @@
 <?php
 
-namespace Magento\CatalogInventory\Services;
+namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 
 /**
  * Class GetProductIsQtyDecimalService
  */
-class GetProductStockIsQtyDecimalService
+class ProductStockIsQtyDecimal
 {
     /**
      * @var StockItemRepositoryInterface
