@@ -25,18 +25,18 @@ class ReindexAfterSourceItemsSavePlugin
     private $getSourceItemId;
 
     /**
-     * @var IndexerInterfaceFactory
+     * @var SourceItemIndexer
      */
-    private $indexerFactory;
+    private $sourceItemIndexer;
 
     /**
      * @param GetSourceItemId $getSourceItemId
-     * @param IndexerInterfaceFactory $indexerFactory
+     * @param SourceItemIndexer $sourceItemIndexer
      */
-    public function __construct(GetSourceItemId $getSourceItemId, IndexerInterfaceFactory $indexerFactory)
+    public function __construct(GetSourceItemId $getSourceItemId, SourceItemIndexer $sourceItemIndexer)
     {
         $this->getSourceItemId = $getSourceItemId;
-        $this->indexerFactory = $indexerFactory;
+        $this->sourceItemIndexer = $sourceItemIndexer;
     }
 
     /**
@@ -59,10 +59,7 @@ class ReindexAfterSourceItemsSavePlugin
         }
 
         if (count($sourceItemIds)) {
-            /** @var IndexerInterface $indexer */
-            $indexer = $this->indexerFactory->create();
-            $indexer->load(SourceItemIndexer::INDEXER_ID);
-            $indexer->reindexList($sourceItemIds);
+            $this->sourceItemIndexer->executeList($sourceItemIds);
         }
     }
 }

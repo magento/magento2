@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Indexer\Stock\Mview;
+namespace Magento\InventoryIndexer\Indexer\Mview;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Mview\ActionInterface;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * Execute materialization on entity ids
@@ -44,7 +44,7 @@ class Action implements ActionInterface
     {
         /** @var IndexerInterface $indexer */
         $indexer = $this->indexerFactory->create();
-        $indexer->load(StockIndexer::INDEXER_ID);
+        $indexer->load(InventoryIndexer::INDEXER_ID);
         $indexer->reindexList($ids);
     }
 }
