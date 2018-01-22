@@ -5,20 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
-use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
 use Magento\Store\Model\Website;
 
 /**
- * Adapt Resource Model Stock Status for Multi-Source Inventory.
+ * Adapt adding stock status to select for multi stocks.
  */
-class AdaptResourceModelStockStatusToMultiStocks
+class AdaptAddStockStatusToSelectToMultiStocks
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -31,33 +29,24 @@ class AdaptResourceModelStockStatusToMultiStocks
     private $adaptedAddStockStatusToSelect;
 
     /**
-     * @var AddStockDataToCollection
-     */
-    private $adaptedAddStockDataToCollection;
-
-    /**
      * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
-     * @param AddStockDataToCollection $adaptedAddStockDataToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
-        AddStockStatusToSelect $adaptedAddStockStatusToSelect,
-        AddStockDataToCollection $adaptedAddStockDataToCollection
+        AddStockStatusToSelect $adaptedAddStockStatusToSelect
     ) {
         $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
-        $this->adaptedAddStockDataToCollection = $adaptedAddStockDataToCollection;
     }
 
     /**
-     * Adapt AddStockStatusToSelect method.
-     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Select $select
      * @param Website $website
      * @return Status
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddStockStatusToSelect(
@@ -70,27 +59,5 @@ class AdaptResourceModelStockStatusToMultiStocks
         $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
 
         return $stockStatus;
-    }
-
-    /**
-     * Adapt AddStockDataToCollection method.
-     *
-     * @param Status $stockStatus
-     * @param callable $proceed
-     * @param Collection $collection
-     * @param bool $isFilterInStock
-     * @return Collection $collection
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function aroundAddStockDataToCollection(
-        Status $stockStatus,
-        callable $proceed,
-        $collection,
-        $isFilterInStock
-    ) {
-        $stockId = $this->stockIdForCurrentWebsite->execute();
-        $this->adaptedAddStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
-
-        return $collection;
     }
 }
