@@ -184,4 +184,7 @@
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
+        <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
+    </type>
 </config>

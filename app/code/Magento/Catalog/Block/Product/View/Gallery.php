@@ -116,7 +116,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption' => $image->getLabel(),
+                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
                 'type' => str_replace('external-', '', $image->getMediaType()),
