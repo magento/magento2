@@ -152,7 +152,7 @@ class AttributePersistor
                     $table,
                     $data['columns'],
                     $data['data'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::REPLACE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 );
             }
         }

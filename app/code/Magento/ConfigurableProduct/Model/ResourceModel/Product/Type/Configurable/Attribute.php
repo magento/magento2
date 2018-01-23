@@ -93,22 +93,17 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($valueId) {
             $data['store_id'] = (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId();
-            $connection->update(
-                $this->_labelTable,
-                $data,
-                ['value_id = ?', $valueId]
-            );
         } else {
             // if attribute label not exists, always store on default store (0)
             $data['store_id'] = Store::DEFAULT_STORE_ID;
-            // Use insertArray due to insert method do not has ability to add "IGNORE" statement
-            $connection->insertArray(
-                $this->_labelTable,
-                array_keys($data),
-                [array_values($data)],
-                AdapterInterface::INSERT_IGNORE
-            );
         }
+
+        $connection->insertArray(
+            $this->_labelTable,
+            array_keys($data),
+            [array_values($data)],
+            AdapterInterface::REPLACE
+        );
 
         return $this;
     }

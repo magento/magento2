@@ -199,7 +199,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($insertData) {
             foreach ($insertData as $table => $values) {
-                $connection->insertArray($table, $insertColumns, $values, AdapterInterface::INSERT_IGNORE);
+                $connection->insertArray($table, $insertColumns, $values, AdapterInterface::REPLACE);
             }
         }
         if ($deleteConditions) {

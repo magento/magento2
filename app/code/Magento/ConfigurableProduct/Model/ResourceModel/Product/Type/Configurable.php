@@ -122,7 +122,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getMainTable(),
                 $insertColumns,
                 $insertData,
-                AdapterInterface::INSERT_IGNORE
+                AdapterInterface::REPLACE
             );
         }
 
