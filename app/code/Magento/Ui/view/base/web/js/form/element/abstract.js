@@ -118,8 +118,8 @@ define([
 
             this._super();
 
-            scope = this.dataScope;
-            name = scope.split('.').slice(1);
+            scope = this.dataScope.split('.');
+            name = scope.length > 1 ? scope.slice(1) : scope;
 
             valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
