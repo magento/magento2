@@ -65,9 +65,9 @@ class Recent extends \Magento\Framework\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
         $this->_isScopePrivate = true;
-        parent::__construct($context, $data);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManagerInterface::class);
+        parent::__construct($context, $data);
     }
 
     /**
