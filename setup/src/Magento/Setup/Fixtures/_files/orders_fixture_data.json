@@ -512,7 +512,7 @@
     "sku": "'%sku%'",
     "name": "'%name%'",
     "description": "NULL",
-    "applied_rule_ids": "'%ruleId%",
+    "applied_rule_ids": "'%ruleId%'",
     "additional_data": "NULL",
     "is_qty_decimal": "0",
     "no_discount": "0",
