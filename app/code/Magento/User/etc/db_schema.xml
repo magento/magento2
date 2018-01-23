@@ -51,7 +51,7 @@
                 comment="User Id"/>
         <column xsi:type="varchar" name="password_hash" nullable="true" length="100" comment="Password Hash"/>
         <column xsi:type="int" name="expires" padding="10" unsigned="true" nullable="false" identity="false" default="0"
-                comment="Expires"/>
+                comment="Deprecated"/>
         <column xsi:type="int" name="last_updated" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Last Updated"/>
         <constraint xsi:type="primary" name="PRIMARY">

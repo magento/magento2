@@ -103,7 +103,7 @@
                 comment="Theme id"/>
         <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Layout Update Id"/>
-        <column xsi:type="boolean" name="is_temporary" nullable="false"
+        <column xsi:type="boolean" name="is_temporary" nullable="false" default="false"
                 comment="Defines whether Layout Update is Temporary"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="layout_link_id"/>

@@ -96,7 +96,7 @@
     <table name="catalogrule_product_price" resource="default" engine="innodb" comment="CatalogRule Product Price">
         <column xsi:type="int" name="rule_product_price_id" padding="10" unsigned="true" nullable="false"
                 identity="true" comment="Rule Product PriceId"/>
-        <column xsi:type="date" name="rule_date" comment="Rule Date"/>
+        <column xsi:type="date" name="rule_date" nullable="false" comment="Rule Date"/>
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product Id"/>
@@ -244,7 +244,7 @@
            comment="CatalogRule Product Price">
         <column xsi:type="int" name="rule_product_price_id" padding="10" unsigned="true" nullable="false"
                 identity="true" comment="Rule Product PriceId"/>
-        <column xsi:type="date" name="rule_date" comment="Rule Date"/>
+        <column xsi:type="date" name="rule_date" nullable="false" comment="Rule Date"/>
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product Id"/>

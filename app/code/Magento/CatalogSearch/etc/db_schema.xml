@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_eav_attribute" resource="default" comment="Catalog EAV Attribute Table">
-        <column xsi:type="float" name="search_weight" scale="0" precission="10" unsigned="true" nullable="false"
+        <column xsi:type="float" name="search_weight" scale="0" precission="0" unsigned="false" nullable="false"
                 default="1" comment="Search Weight"/>
     </table>
     <table name="catalogsearch_fulltext_scope1" resource="default" engine="innodb"
