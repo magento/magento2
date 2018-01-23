@@ -1289,7 +1289,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Retrieve oreder quote shipping address
+     * Retrieve order quote shipping address
      *
      * @return \Magento\Quote\Model\Quote\Address
      */
@@ -1415,7 +1415,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Set shipping anddress to be same as billing
+     * Set shipping address to be same as billing
      *
      * @param bool $flag If true - don't save in address book and actually copy data across billing and shipping
      *                   addresses
@@ -1858,7 +1858,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Prepare item otions
+     * Prepare item options
      *
      * @return $this
      */

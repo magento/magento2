@@ -41,7 +41,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     protected $storeManagerMock;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storetMock;
+    protected $storeMock;
 
     /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
@@ -111,7 +111,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->storetMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -212,7 +212,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateVars')
-            ->with(['user' => $this->model, 'store' => $this->storetMock, 'changes' => $changes])
+            ->with(['user' => $this->model, 'store' => $this->storeMock, 'changes' => $changes])
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->exactly(2))
             ->method('addTo')
@@ -239,7 +239,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->exactly(2))
             ->method('getStore')
             ->with($storeId)
-            ->willReturn($this->storetMock);
+            ->willReturn($this->storeMock);
 
         $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->sendNotificationEmailsIfRequired());
     }
@@ -275,7 +275,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
-            ->with(['user' => $this->model, 'store' => $this->storetMock])
+            ->with(['user' => $this->model, 'store' => $this->storeMock])
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('addTo')
@@ -297,7 +297,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->with($storeId)
-            ->willReturn($this->storetMock);
+            ->willReturn($this->storeMock);
 
         $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->sendPasswordResetConfirmationEmail());
     }
