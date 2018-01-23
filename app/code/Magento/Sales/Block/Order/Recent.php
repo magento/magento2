@@ -50,8 +50,8 @@ class Recent extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -65,9 +65,9 @@ class Recent extends \Magento\Framework\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
         $this->_isScopePrivate = true;
+        parent::__construct($context, $data);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManagerInterface::class);
-        parent::__construct($context, $data);
     }
 
     /**
