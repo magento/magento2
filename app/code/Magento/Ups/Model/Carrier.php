@@ -825,32 +825,43 @@ XMLRequest;
                     if (in_array($code, $allowedMethods)) {
                         //The location of tax information is in a different place depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
-                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/TaxCharges");
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/NetSummaryCharges/TotalChargesWithTaxes");
                             $includeTaxesActive = $this->getConfigFlag(
                                     'include_taxes'
                                 ) && !empty($includeTaxesArr);
-                            $cost = (double)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
                             if ($includeTaxesActive) {
-                                $taxes = (double)$shipElement->NegotiatedRates->TaxCharges->MonetaryValue;
-                                $cost += $taxes;
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            }
+                            else {
+                                $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;                            
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->CurrencyCode
+                                );
                             }
                         } else {
-                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TaxCharges");
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TotalChargesWithTaxes");
                             $includeTaxesActive = $this->getConfigFlag(
                                     'include_taxes'
                                 ) && !empty($includeTaxesArr);                              
-                            $cost = (double)$shipElement->TotalCharges->MonetaryValue;
                             if ($includeTaxesActive) {
-                                $taxes = (double)$shipElement->TaxCharges->MonetaryValue;
-                                $cost += $taxes;
+                                $cost = $shipElement->TotalChargesWithTaxes->MonetaryValue;
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalChargesWithTaxes->CurrencyCode
+                                );
+                            }
+                            else {
+                                $cost = $shipElement->TotalCharges->MonetaryValue;                            
+                                $responseCurrencyCode = $this->mapCurrencyCode(
+                                    (string)$shipElement->TotalCharges->CurrencyCode
+                                );
                             }
                         }
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = $this->mapCurrencyCode(
-                            (string)$shipElement->TotalCharges->CurrencyCode
-                        );
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
