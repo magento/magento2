@@ -95,6 +95,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $_customerSession;
 
     /**
+     * Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -131,6 +137,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
@@ -147,6 +154,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
@@ -159,6 +167,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
+        $this->dateTime = $dateTime;
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -811,5 +820,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $name = $this->getFirstname() . ' ' . $this->getLastname();
         }
         return $name;
+    }
+
+    /**
+     * Set date of last changed status
+     *
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        parent::beforeSave();
+        if ($this->dataHasChangedFor('subscriber_status')) {
+            $this->setChangeStatusAt($this->dateTime->gmtDate());
+        }
+        return $this;
     }
 }
