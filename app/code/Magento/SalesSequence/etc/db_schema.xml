@@ -22,7 +22,7 @@
                 comment="MaxValue for sequence"/>
         <column xsi:type="int" name="warning_value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="WarningValue for sequence"/>
-        <column xsi:type="boolean" name="is_active" nullable="false" comment="isActive flag"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="false" comment="isActive flag"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="profile_id"/>
         </constraint>

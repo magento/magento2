@@ -15,7 +15,7 @@
         <column xsi:type="varchar" name="theme_path" nullable="true" length="255" comment="Theme Path"/>
         <column xsi:type="varchar" name="theme_title" nullable="false" length="255" comment="Theme Title"/>
         <column xsi:type="varchar" name="preview_image" nullable="true" length="255" comment="Preview Image"/>
-        <column xsi:type="boolean" name="is_featured" nullable="false" comment="Is Theme Featured"/>
+        <column xsi:type="boolean" name="is_featured" nullable="false" default="false" comment="Is Theme Featured"/>
         <column xsi:type="varchar" name="area" nullable="false" length="255" comment="Theme Area"/>
         <column xsi:type="smallint" name="type" padding="6" unsigned="false" nullable="false" identity="false"
                 comment="Theme type: 0:physical, 1:virtual, 2:staging"/>
@@ -34,7 +34,7 @@
         <column xsi:type="longtext" name="content" nullable="false" comment="File Content"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
-        <column xsi:type="boolean" name="is_temporary" nullable="false" comment="Is Temporary File"/>
+        <column xsi:type="boolean" name="is_temporary" nullable="false" default="false" comment="Is Temporary File"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="theme_files_id"/>
         </constraint>
