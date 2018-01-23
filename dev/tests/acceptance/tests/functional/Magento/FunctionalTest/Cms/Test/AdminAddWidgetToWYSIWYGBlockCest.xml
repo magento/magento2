@@ -73,7 +73,6 @@
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
-            <!--<deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage" />-->
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
