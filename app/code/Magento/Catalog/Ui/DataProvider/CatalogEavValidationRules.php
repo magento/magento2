@@ -32,6 +32,9 @@ class CatalogEavValidationRules
         if ($attribute->getFrontendInput() === 'price') {
             $rules['validate-zero-or-greater'] = true;
         }
+        if ($data['code'] == 'sku') {
+            $rules['pattern'] = '^(?!0$).*';
+        }
 
         $validationClasses = explode(' ', $attribute->getFrontendClass());
 

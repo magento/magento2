@@ -556,6 +556,9 @@ class Product extends AbstractResource
         if ($attributeSet->getEntityTypeId() != $entityType->getId()) {
             return ['attribute_set' => 'Invalid attribute set entity type'];
         }
+        if ($object->getSku() === "0") {
+            return ['sku' => 'Invalid sku'];
+        }
 
         return parent::validate($object);
     }

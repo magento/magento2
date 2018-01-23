@@ -127,8 +127,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $resource->getAttribute('special_from_date')->setMaxValue($product->getSpecialToDate());
             $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
-
-            $this->productValidator->validate($product, $this->getRequest(), $response);
+            $validationResult = $this->productValidator->validate($product, $this->getRequest(), $response);
+            if (true !== $validationResult) {
+                $response->setError(true);
+                $response->setMessages($validationResult);
+            }
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
