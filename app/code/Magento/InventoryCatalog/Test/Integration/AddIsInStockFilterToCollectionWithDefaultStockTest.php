@@ -29,7 +29,7 @@ class AddIsInStockFilterToCollectionWithDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
     }
 
     /**

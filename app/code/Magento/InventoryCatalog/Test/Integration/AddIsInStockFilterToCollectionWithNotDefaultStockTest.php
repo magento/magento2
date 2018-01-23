@@ -35,7 +35,7 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
 
@@ -47,6 +47,7 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $store
      * @param int $expectedSize
