@@ -258,10 +258,10 @@ class ValidateTest extends AttributeTest
                     ],
                     'delete' => [
                         "option_0" => "",
-                        "option_2" => "",
-                        "option_1" => "1",
+                        "option_1" => "",
+                        "option_2" => "1",
                     ]
-                ], true
+                ], false
             ],
         ];
     }
