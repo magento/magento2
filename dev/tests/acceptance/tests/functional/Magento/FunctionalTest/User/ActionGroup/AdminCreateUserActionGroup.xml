@@ -12,12 +12,12 @@
         </arguments>
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/user/new" stepKey="navigateToNewUser"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
-        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{admin.username}}" stepKey="enterUserName" />
-        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{admin.firstName}}" stepKey="enterFirstName" />
-        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{admin.lastName}}" stepKey="enterLastName" />
-        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{admin.username}}@magento.com" stepKey="enterEmail" />
-        <fillField selector="{{AdminEditUserSection.passwordTextField}}" userInput="{{admin.password}}" stepKey="enterPassword" />
-        <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{admin.password}}" stepKey="confirmPassword" />
+        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{admin2.username}}" stepKey="enterUserName" />
+        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{admin2.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{admin2.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{admin2.username}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{AdminEditUserSection.passwordTextField}}" userInput="{{admin2.password}}" stepKey="enterPassword" />
+        <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{admin2.password}}" stepKey="confirmPassword" />
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
         <scrollToTopOfPage stepKey="scrollToTopOfPage" />
         <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRole" />

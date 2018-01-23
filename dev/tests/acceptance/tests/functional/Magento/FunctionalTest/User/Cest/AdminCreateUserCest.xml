@@ -8,8 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <cest name="AdminCreateUserCest">
         <annotations>
-            <features value="Create a user in admin"/>
-            <stories value="Create a user in admin"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <group value="user"/>
@@ -30,10 +28,10 @@
             </actionGroup>
             <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToRoleGrid" />
             <waitForPageLoad stepKey="waitForPageLoad1" />
-            <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{admin.username}}" stepKey="filterByUserName" />
+            <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{admin2.username}}" stepKey="filterByUserName" />
             <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
             <waitForPageLoad stepKey="waitForPageLoad2" />
-            <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{admin.username}}" stepKey="seeNewRole" />
+            <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{admin2.username}}" stepKey="seeNewRole" />
         </test>
     </cest>
 </config>
