@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 /**
  * Catalog product link resource model
  *
@@ -151,6 +153,14 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $links = $connection->fetchPairs($select, $bind);
 
+        $insertColumns = [
+            'product_link_attribute_id',
+            'link_id',
+            'value',
+        ];
+        $insertData = [];
+        $deleteConditions = [];
+
         foreach ($data as $linkedProductId => $linkInfo) {
             $linkId = null;
             if (isset($links[$linkedProductId])) {
@@ -174,19 +184,33 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                             $attributeInfo['type'],
                             $linkInfo[$attributeInfo['code']]
                         );
-                        $bind = [
-                            'product_link_attribute_id' => $attributeInfo['id'],
-                            'link_id' => $linkId,
-                            'value' => $value,
+                        $insertData[$attributeTable][] = [
+                            $attributeInfo['id'],
+                            $linkId,
+                            $value,
                         ];
-                        $connection->insertOnDuplicate($attributeTable, $bind, ['value']);
                     } else {
-                        $connection->delete(
-                            $attributeTable,
-                            ['link_id = ?' => $linkId, 'product_link_attribute_id = ?' => $attributeInfo['id']]
-                        );
+                        $deleteConditions[$attributeTable]['link_id'][] = $linkId;
+                        $deleteConditions[$attributeTable]['product_link_attribute_id'][] = $attributeInfo['id'];
                     }
                 }
+            }
+        }
+
+        if ($insertData) {
+            foreach ($insertData as $table => $values) {
+                $connection->insertArray($table, $insertColumns, $values, AdapterInterface::INSERT_IGNORE);
+            }
+        }
+        if ($deleteConditions) {
+            foreach ($deleteConditions as $table => $deleteCondition) {
+                $connection->delete(
+                    $table,
+                    [
+                        'link_id = ?' => $deleteCondition['link_id'],
+                        'product_link_attribute_id = ?' => $deleteCondition['product_link_attribute_id']
+                    ]
+                );
             }
         }
 

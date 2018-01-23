@@ -17,6 +17,7 @@ use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -110,16 +111,18 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $productId = $mainProduct->getData($this->optionProvider->getProductEntityLinkField());
 
-        $data = [];
+        $insertData = [];
         foreach ($productIds as $id) {
-            $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
+            $insertData[] = [(int) $id, (int) $productId];
         }
 
-        if (!empty($data)) {
-            $this->getConnection()->insertOnDuplicate(
+        $insertColumns = ['product_id', 'parent_id'];
+        if (!empty($insertData)) {
+            $this->getConnection()->insertArray(
                 $this->getMainTable(),
-                $data,
-                ['product_id', 'parent_id']
+                $insertColumns,
+                $insertData,
+                AdapterInterface::INSERT_IGNORE
             );
         }
 

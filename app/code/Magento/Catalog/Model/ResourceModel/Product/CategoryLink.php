@@ -141,8 +141,6 @@ class CategoryLink
             return [];
         }
 
-        $connection = $this->resourceConnection->getConnection();
-
         $data = [];
         foreach ($insertLinks as $categoryLink) {
             $data[] = [
@@ -153,10 +151,12 @@ class CategoryLink
         }
 
         if ($data) {
-            $connection->insertOnDuplicate(
+            $connection = $this->resourceConnection->getConnection();
+            $connection->insertArray(
                 $this->getCategoryLinkMetadata()->getEntityTable(),
+                array_keys($data[0]),
                 $data,
-                ['position']
+                \Magento\Framework\DB\Adapter\AdapterInterface::REPLACE
             );
         }
 

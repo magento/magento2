@@ -8,8 +8,8 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -85,22 +85,30 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
         ];
         $valueId = $connection->fetchOne($select, $bind);
+        $data = [
+            'product_super_attribute_id' => (int)$attribute->getId(),
+            'use_default' => (int)$attribute->getUseDefault(),
+            'value' => $attribute->getLabel(),
+        ];
+
         if ($valueId) {
-            $storeId = (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId();
+            $data['store_id'] = (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId();
+            $connection->update(
+                $this->_labelTable,
+                $data,
+                ['value_id = ?', $valueId]
+            );
         } else {
             // if attribute label not exists, always store on default store (0)
-            $storeId = Store::DEFAULT_STORE_ID;
+            $data['store_id'] = Store::DEFAULT_STORE_ID;
+            // Use insertArray due to insert method do not has ability to add "IGNORE" statement
+            $connection->insertArray(
+                $this->_labelTable,
+                array_keys($data),
+                [array_values($data)],
+                AdapterInterface::INSERT_IGNORE
+            );
         }
-        $connection->insertOnDuplicate(
-            $this->_labelTable,
-            [
-                'product_super_attribute_id' => (int)$attribute->getId(),
-                'use_default' => (int)$attribute->getUseDefault(),
-                'store_id' => $storeId,
-                'value' => $attribute->getLabel(),
-            ],
-            ['value', 'use_default']
-        );
 
         return $this;
     }
