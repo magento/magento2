@@ -40,7 +40,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();

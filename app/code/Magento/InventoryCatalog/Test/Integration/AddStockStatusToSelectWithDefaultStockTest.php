@@ -33,8 +33,8 @@ class AddStockStatusToSelectWithDefaultStockTest extends TestCase
      */
     protected function setUp()
     {
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
-        $this->website = Bootstrap::getObjectManager()->create(Website::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
+        $this->website = Bootstrap::getObjectManager()->get(Website::class);
     }
 
     /**
