@@ -23,6 +23,8 @@ use \Magento\Backend\Helper\Data as BackendData;
 
 /**
  * Class Product
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
