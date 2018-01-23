@@ -102,7 +102,7 @@
     "weight": 2.0000,
     "customer_dob": "NULL",
     "increment_id": "'%orderNumber%'",
-    "applied_rule_ids": "%rule_id%",
+    "applied_rule_ids": "%ruleId%",
     "base_currency_code": "'USD'",
     "customer_email": "'%email%'",
     "customer_firstname": "NULL",
