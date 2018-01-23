@@ -32,7 +32,6 @@ class AddStockStatusToSelect
     /**
      * @param Select $select
      * @param int $stockId
-     *
      * @return void
      */
     public function addStockStatusToSelect(Select $select, int $stockId)

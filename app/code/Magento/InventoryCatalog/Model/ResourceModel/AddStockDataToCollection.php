@@ -33,7 +33,6 @@ class AddStockDataToCollection
      * @param Collection $collection
      * @param bool $isFilterInStock
      * @param int $stockId
-     *
      * @return void
      */
     public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
