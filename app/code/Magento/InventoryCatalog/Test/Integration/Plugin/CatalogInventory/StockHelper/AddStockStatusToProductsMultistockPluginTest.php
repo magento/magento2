@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogInventory\Helper\Stock as Helper;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -46,6 +45,25 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
     private $productCollection;
 
     /**
+     * @var string
+     */
+    private $storeCodeBefore;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $this->helper = Bootstrap::getObjectManager()->get(Helper::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->productCollection = Bootstrap::getObjectManager()->create(ProductCollection::class);
+        $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
+
+        parent::setUp();
+    }
+
+    /**
      * Tests AddStockStatusToProductsMultistockPlugin::aroundAddStockStatusToProducts for single stock.
      *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
@@ -66,9 +84,8 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stores.php
      * @dataProvider addStockStatusToProductsMultiSourceDataProvider
      * @param string $storeCode
      * @param array $productsData
@@ -132,7 +149,7 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
     {
         return [
             [
-                'eu_store',
+                'store_for_eu_website',
                 [
                     ['sku' => 'SKU-1', 'expected' => 1],
                     ['sku' => 'SKU-2', 'expected' => 0],
@@ -140,7 +157,7 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
                 ],
             ],
             [
-                'us_store',
+                'store_for_us_website',
                 [
                     ['sku' => 'SKU-1', 'expected' => 0],
                     ['sku' => 'SKU-2', 'expected' => 1],
@@ -148,10 +165,10 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
                 ],
             ],
             [
-                'global_store',
+                'store_for_global_website',
                 [
-                    ['sku' => 'SKU-1', 'expected' => 0],
-                    ['sku' => 'SKU-2', 'expected' => 0],
+                    ['sku' => 'SKU-1', 'expected' => 1],
+                    ['sku' => 'SKU-2', 'expected' => 1],
                     ['sku' => 'SKU-3', 'expected' => 0],
                 ],
             ],
@@ -161,11 +178,12 @@ class AddStockStatusToProductsMultistockPluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function tearDown()
     {
-        $this->helper = Bootstrap::getObjectManager()->get(Helper::class);
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->productCollection = Bootstrap::getObjectManager()->create(ProductCollection::class);
+        if (null !== $this->storeCodeBefore) {
+            $this->storeManager->setCurrentStore($this->storeCodeBefore);
+        }
+
+        parent::tearDown();
     }
 }
