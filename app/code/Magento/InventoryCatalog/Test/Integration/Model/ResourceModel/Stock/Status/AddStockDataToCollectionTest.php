@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
@@ -14,9 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test catalog search with different stocks on not default website.
+ * Test catalog search with different stocks
  */
-class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
+class AddStockDataToCollectionTest extends TestCase
 {
     /**
      * @var StockStatus
@@ -94,8 +94,8 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
         $this->storeManager->setCurrentStore($this->storeCodeBefore);
+
+        parent::tearDown();
     }
 }
