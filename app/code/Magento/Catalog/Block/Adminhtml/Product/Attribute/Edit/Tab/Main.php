@@ -35,15 +35,15 @@ class Main extends AbstractMain
         $form = $this->getForm();
         /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
         $fieldset = $form->getElement('base_fieldset');
-        $fiedsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
+        $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
 
         foreach ($fieldset->getElements() as $element) {
             /** @var \Magento\Framework\Data\Form\AbstractForm $element  */
             if (substr($element->getId(), 0, strlen('default_value')) == 'default_value') {
-                $fiedsToRemove[] = $element->getId();
+                $fieldsToRemove[] = $element->getId();
             }
         }
-        foreach ($fiedsToRemove as $id) {
+        foreach ($fieldsToRemove as $id) {
             $fieldset->removeField($id);
         }
 

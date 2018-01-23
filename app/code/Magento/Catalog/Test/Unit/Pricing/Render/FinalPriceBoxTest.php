@@ -359,7 +359,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     {
         $minimalPrice = 5.0;
         $finalPrice = 10.0;
-        $displayMininmalPrice = true;
+        $displayMinimalPrice = true;
 
         $this->minimalPriceCalculator->expects($this->once())->method('getValue')->with($this->product)
             ->willReturn($minimalPrice);
@@ -379,7 +379,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->with(FinalPrice::PRICE_CODE)
             ->willReturn($finalPriceType);
 
-        $this->object->setDisplayMinimalPrice($displayMininmalPrice);
+        $this->object->setDisplayMinimalPrice($displayMinimalPrice);
         $this->assertTrue($this->object->showMinimalPrice());
     }
 
