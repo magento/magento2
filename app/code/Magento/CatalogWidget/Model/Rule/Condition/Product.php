@@ -12,14 +12,6 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use \Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use \Magento\Store\Model\StoreManagerInterface;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Framework\Locale\FormatInterface;
-use \Magento\Catalog\Model\ResourceModel\Category;
-use \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
-use \Magento\Catalog\Model\ProductFactory;
-use \Magento\Eav\Model\Config;
-use \Magento\Rule\Model\Condition\Context;
-use \Magento\Backend\Helper\Data as BackendData;
 
 /**
  * Class Product
@@ -46,31 +38,31 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $storeManager;
 
     /**
-     * @param Context $context
-     * @param BackendData $backendData
-     * @param Config $config
-     * @param ProductFactory $productFactory
-     * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Rule\Model\Condition\Context $context
+     * @param \Magento\Backend\Helper\Data $backendData
+     * @param \Magento\Eav\Model\Config $config
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param AttributeSetCollection $attrSetCollection
-     * @param FormatInterface $localeFormat
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param StoreManagerInterface $storeManager
      * @param array $data
-     * @param Category $category
+     * @param \Magento\Catalog\Model\ResourceModel\Category $category
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
-        BackendData $backendData,
-        Config $config,
-        ProductFactory $productFactory,
-        ProductRepositoryInterface $productRepository,
+        \Magento\Rule\Model\Condition\Context $context,
+        \Magento\Backend\Helper\Data $backendData,
+        \Magento\Eav\Model\Config $config,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        AttributeSetCollection $attrSetCollection,
-        FormatInterface $localeFormat,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         StoreManagerInterface $storeManager,
         array $data = [],
-        Category $category = null
+        \Magento\Catalog\Model\ResourceModel\Category $category = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(
