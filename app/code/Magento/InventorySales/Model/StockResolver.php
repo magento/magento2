@@ -48,7 +48,7 @@ class StockResolver implements StockResolverInterface
         $stockId = $this->stockIdResolver->resolve($type, $code);
 
         if (null === $stockId) {
-            throw new NoSuchEntityException(__('No linked stock found!'));
+            throw new NoSuchEntityException(__('No linked stock found'));
         }
         return $this->stockRepository->get($stockId);
     }
