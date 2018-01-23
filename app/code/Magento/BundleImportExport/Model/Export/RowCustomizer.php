@@ -427,10 +427,10 @@ class RowCustomizer implements RowCustomizerInterface
      *  - 'name=All store views name' for all store views
      *  - 'name_specific_store=Specific store name' for store view with 'specific_store' store code
      *
-     * @param \Magento\Catalog\Model\Product $product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
-    private function getBundleOptionTitles($product): array
+    private function getBundleOptionTitles(\Magento\Catalog\Model\Product $product): array
     {
         $optionCollections = $this->getProductOptionCollections($product);
         $optionsTitles = [];
@@ -460,7 +460,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Set given store id to the product if it was defined (default store id will be set if was not).
      *
      * @param \Magento\Catalog\Model\Product $product $product
-     * @param integer $storeId
+     * @param int $storeId
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     private function getProductOptionCollections(
@@ -483,7 +483,7 @@ class RowCustomizer implements RowCustomizerInterface
      *
      * Collect store id in $storeIdToCode[] private variable if it was not initialized earlier.
      *
-     * @param $storeId
+     * @param int $storeId
      * @return string
      */
     private function getStoreCodeById($storeId): string
