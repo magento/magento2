@@ -6,10 +6,10 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="CmsNewBlock" url="admin/cms/block/new" module="Magento_Cms">
+    <page name="CmsNewBlock" url="admin/cms/block/new" area="admin" module="Magento_Cms">
         <section name="CmsNewBlockBlockActionsSection"/>
         <section name="CmsNewBlockBlockBasicFieldsSection"/>
     </page>
-</config>
+</pages>
