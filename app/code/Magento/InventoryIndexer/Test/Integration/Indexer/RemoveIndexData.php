@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 class RemoveIndexData
 {
@@ -44,7 +45,7 @@ class RemoveIndexData
     {
         foreach ($stockIds as $stockId) {
             $indexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();

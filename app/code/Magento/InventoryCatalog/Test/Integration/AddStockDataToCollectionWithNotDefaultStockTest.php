@@ -29,9 +29,9 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
     private $storeManager;
 
     /**
-     * @var null|string
+     * @var string
      */
-    private $storeCodeBefore = null;
+    private $storeCodeBefore;
 
     /**
      * @inheritdoc
@@ -40,7 +40,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->create(StockStatus::class);
+        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
 
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
@@ -54,6 +54,7 @@ class AddStockDataToCollectionWithNotDefaultStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $store
      * @param int $expectedSize

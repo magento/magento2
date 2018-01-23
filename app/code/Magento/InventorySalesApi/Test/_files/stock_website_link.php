@@ -5,9 +5,7 @@
  */
 declare(strict_types=1);
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -37,7 +35,3 @@ foreach ($salesChannelData as $storeId => $websiteCode) {
     $extensionAttributes->setSalesChannels($salesChannels);
     $stockRepository->save($stock);
 }
-
-$indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-$indexer->load(SourceIndexer::INDEXER_ID);
-$indexer->reindexAll();
