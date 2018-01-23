@@ -441,6 +441,7 @@ class Application
     /**
      * Install an application
      *
+     * @param bool $cleanup
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
