@@ -9,9 +9,10 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\S
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Framework\DB\Select;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
-use Magento\InventoryCatalog\Model\GetStockIdForWebsiteByCode;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\Website;
 
 /**
@@ -20,14 +21,9 @@ use Magento\Store\Model\Website;
 class AdaptAddStockStatusToSelectToMultiStocks
 {
     /**
-     * @var GetStockIdForWebsiteByCode
+     * @var StockResolverInterface
      */
-    private $getStockIdForWebsiteByCode;
-
-    /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $stockIdForCurrentWebsite;
+    private $stockResolver;
 
     /**
      * @var AddStockStatusToSelect
@@ -35,17 +31,14 @@ class AdaptAddStockStatusToSelectToMultiStocks
     private $adaptedAddStockStatusToSelect;
 
     /**
-     * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
-     * @param GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode
+     * @param StockResolverInterface $stockResolver
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
      */
     public function __construct(
-        GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
-        GetStockIdForWebsiteByCode $getStockIdForWebsiteByCode,
+        StockResolverInterface $stockResolver,
         AddStockStatusToSelect $adaptedAddStockStatusToSelect
     ) {
-        $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
-        $this->getStockIdForWebsiteByCode = $getStockIdForWebsiteByCode;
+        $this->stockResolver = $stockResolver;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
     }
 
@@ -55,7 +48,7 @@ class AdaptAddStockStatusToSelectToMultiStocks
      * @param Select $select
      * @param Website $website
      * @return Status
-     *
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddStockStatusToSelect(
@@ -65,10 +58,12 @@ class AdaptAddStockStatusToSelectToMultiStocks
         Website $website
     ) {
         $websiteCode = $website->getCode();
+        if (null === $websiteCode) {
+            throw new LocalizedException(__('Website code is empty'));
+        }
 
-        $stockId = $websiteCode === null
-            ? $this->stockIdForCurrentWebsite->execute()
-            : $this->getStockIdForWebsiteByCode->execute($websiteCode);
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stockId = (int)$stock->getStockId();
 
         $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
 

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
@@ -15,9 +15,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test add stock status to select on not default website.
+ * Test add stock status to select
  */
-class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
+class AddStockStatusToSelectTest extends TestCase
 {
     /**
      * @var StockStatus
@@ -30,16 +30,6 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
     private $website;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var string
-     */
-    private $storeCodeBefore;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -48,8 +38,6 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
 
         $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->website = Bootstrap::getObjectManager()->create(Website::class);
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
     }
 
     /**
@@ -77,10 +65,8 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stockStatus->addStockStatusToSelect(
-            $collection->getSelect(),
-            $this->website->load($websiteCode, 'code')
-        );
+        $this->website->setCode($websiteCode);
+        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
 
         foreach ($collection as $item) {
             $item->getIsSalable() == 1 ? $actualIsSalableCount++ : $actualNotSalableCount++;
@@ -104,62 +90,25 @@ class AddStockStatusToSelectWithNotDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     *
-     * @param string $store
-     * @param int $expectedIsSalableCount
-     * @param int $expectedNotSalableCount
-     *
-     * @dataProvider addStockStatusToSelectWithSwitchStoreDataProvider
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Website code is empty
      */
-    public function testAddStockStatusToSelectWithSwitchStore(
-        string $store,
-        int $expectedIsSalableCount,
-        int $expectedNotSalableCount
-    ) {
-        $this->storeManager->setCurrentStore($store);
-
-        $actualIsSalableCount = $actualNotSalableCount = 0;
-
+    public function testAddStockStatusToSelectWithEmptyWebsiteCode()
+    {
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
-
-        foreach ($collection as $item) {
-            $item->getIsSalable() == 1 ? $actualIsSalableCount++ : $actualNotSalableCount++;
-        }
-
-        self::assertEquals($expectedIsSalableCount, $actualIsSalableCount);
-        self::assertEquals($expectedNotSalableCount, $actualNotSalableCount);
-        self::assertEquals($expectedNotSalableCount + $expectedIsSalableCount, $collection->getSize());
     }
 
     /**
-     * @return array
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No linked stock found
      */
-    public function addStockStatusToSelectWithSwitchStoreDataProvider(): array
+    public function testAddStockStatusToSelectWithNotExistedWebsiteCode()
     {
-        return [
-            ['store_for_eu_website', 1, 2],
-            ['store_for_us_website', 1, 2],
-            ['store_for_global_website', 2, 1],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->storeManager->setCurrentStore($this->storeCodeBefore);
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->website->setCode('not_existed_code');
+        $this->stockStatus->addStockStatusToSelect($collection->getSelect(), $this->website);
     }
 }
