@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateUserRoleCest">
+        <annotations>
+            <features value="Create a user role in admin"/>
+            <stories value="Create a user role in admin"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <group value="userRole"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+        </before>
+        <test name="AdminCreateUserRoleTest">
+            <annotations>
+                <title value="Create a user role in admin"/>
+                <description value="Create a user role in admin"/>
+            </annotations>
+            <actionGroup ref="AdminCreateUserRoleActionGroup" stepKey="createUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToRoleGrid" />
+            <waitForPageLoad stepKey="waitForPageLoad1" />
+            <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{adminRole.name}}" stepKey="enterRoleName" />
+            <click selector="{{AdminRoleGridSection.searchButton}}" stepKey="clickSearch" />
+            <waitForPageLoad stepKey="waitForPageLoad2" />
+            <see selector="{{AdminRoleGridSection.roleNameInFirstRow}}" userInput="{{adminRole.name}}" stepKey="seeNewRole" />
+        </test>
+    </cest>
+</config>

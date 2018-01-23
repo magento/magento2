@@ -8,11 +8,9 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="admin" type="user">
-        <data key="username" unique="suffix">admin</data>
-        <data key="firstName">John</data>
-        <data key="lastName">Smith</data>
-        <data key="email">admin@magento.com</data>
-        <data key="password">admin123</data>
+    <entity name="adminRole" type="role">
+        <data key="name" unique="suffix">adminRole</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
     </entity>
 </config>
