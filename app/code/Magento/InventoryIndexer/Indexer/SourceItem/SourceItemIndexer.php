@@ -8,26 +8,20 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
  * Source Item indexer
- * Extension point for indexation
  *
  * @api
  */
-class SourceItemIndexer implements ActionInterface
+class SourceItemIndexer
 {
-    /**
-     * Indexer ID in configuration
-     */
-    const INDEXER_ID = 'inventory_source_item';
-
     /**
      * @var GetSkuListInStock
      */
@@ -112,7 +106,7 @@ class SourceItemIndexer implements ActionInterface
             $skuList = $skuListInStock->getSkuList();
 
             $mainIndexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();

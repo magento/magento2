@@ -13,6 +13,7 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 use Magento\Inventory\Model\GetStockItemQuantityInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * @inheritdoc
@@ -55,7 +56,7 @@ class GetStockItemQuantity implements GetStockItemQuantityInterface
     public function execute(string $sku, int $stockId): float
     {
         $indexName = $this->indexNameBuilder
-            ->setIndexId('inventory_stock')
+            ->setIndexId(InventoryIndexer::INDEXER_ID)
             ->addDimension('stock_', (string)$stockId)
             ->setAlias(Alias::ALIAS_MAIN)
             ->build();

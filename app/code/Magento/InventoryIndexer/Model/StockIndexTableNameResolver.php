@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameResolver;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * @inheritdoc
@@ -57,12 +57,12 @@ class StockIndexTableNameResolver implements StockIndexTableNameResolverInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(int $stockId): string
     {
         $indexName = $this->indexNameBuilder
-            ->setIndexId(StockIndexer::INDEXER_ID)
+            ->setIndexId(InventoryIndexer::INDEXER_ID)
             ->addDimension($this->dimensionName, (string)$stockId)
             ->setAlias(Alias::ALIAS_MAIN)
             ->build();

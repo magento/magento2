@@ -7,22 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Indexer\Source;
 
-use Magento\Framework\Indexer\ActionInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
  * Source indexer
- * Extension point for indexation
  *
  * @api
  */
-class SourceIndexer implements ActionInterface
+class SourceIndexer
 {
-    /**
-     * Indexer ID in configuration
-     */
-    const INDEXER_ID = 'inventory_source';
-
     /**
      * @var GetAssignedStockIds
      */

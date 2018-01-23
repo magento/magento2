@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
@@ -45,6 +45,7 @@ class AdaptAddStockDataToCollectionToMultiStocks
      * @param Collection $collection
      * @param bool $isFilterInStock
      * @return Collection $collection
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddStockDataToCollection(

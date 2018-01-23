@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
@@ -17,9 +16,9 @@ use PHPUnit\Framework\TestCase;
 class SourceItemIndexerTest extends TestCase
 {
     /**
-     * @var IndexerInterface
+     * @var SourceItemIndexer
      */
-    private $indexer;
+    private $sourceItemIndexer;
 
     /**
      * @var GetProductQuantityInStockInterface
@@ -38,8 +37,7 @@ class SourceItemIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceItemIndexer::INDEXER_ID);
+        $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(SourceItemIndexer::class);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
             ->get(GetProductQuantityInStockInterface::class);
@@ -67,7 +65,7 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testReindexRow()
     {
-        $this->indexer->reindexRow($this->getSourceItemId->execute('SKU-1', 'eu-1'));
+        $this->sourceItemIndexer->executeRow($this->getSourceItemId->execute('SKU-1', 'eu-1'));
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -82,7 +80,7 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testReindexList()
     {
-        $this->indexer->reindexList([
+        $this->sourceItemIndexer->executeList([
             $this->getSourceItemId->execute('SKU-1', 'eu-1'),
             $this->getSourceItemId->execute('SKU-2', 'us-1'),
         ]);
@@ -103,7 +101,7 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testReindexAll()
     {
-        $this->indexer->reindexAll();
+        $this->sourceItemIndexer->executeFull();
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -121,7 +119,7 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testStockItemsHasZeroQuantityIfSourceItemsAreOutOfStock()
     {
-        $this->indexer->reindexAll();
+        $this->sourceItemIndexer->executeFull();
 
         self::assertEquals(0, $this->getProductQuantityInStock->execute('SKU-3', 10));
     }
