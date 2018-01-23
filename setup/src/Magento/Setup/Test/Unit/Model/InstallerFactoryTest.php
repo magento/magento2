@@ -6,15 +6,38 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\App\ObjectManager;
 use \Magento\Setup\Model\InstallerFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerProviderMock;
+
     public function testCreate()
     {
+        $this->objectManagerProviderMock = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Setup\Model\DeclarationInstaller::class)
+            ->willReturn($this->createMock(\Magento\Setup\Model\DeclarationInstaller::class));
+        $this->objectManagerProviderMock->expects($this->any())
+            ->method('get')
+            ->willReturn($objectManagerMock);
         $serviceLocatorMock = $this->getMockForAbstractClass(
             \Zend\ServiceManager\ServiceLocatorInterface::class,
             ['get']
@@ -81,7 +104,7 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 \Magento\Setup\Model\ObjectManagerProvider::class,
-                $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class),
+                $this->objectManagerProviderMock
             ],
             [
                 \Magento\Framework\Model\ResourceModel\Db\TransactionManager::class,
