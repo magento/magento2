@@ -87,7 +87,7 @@
         <element name="WidgetType" type="button" selector="#select_widget_type"/>
         <element name="WidgetTemplate" type="button" selector="select[name='parameters[template]']"/>
         <element name="BtnChooser" type="button" selector=".btn-chooser"/>
-        <element name="CMSPage" type="text" selector="//td[contains(text(),'Home page')]"/>
+        <element name="CMSPage" type="text" selector="//td[contains(text(),'Home Page')]"/>
         <element name="BlockPage" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="PreCreateCategory" type="text" selector=" //span[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="PreCreateProduct" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>

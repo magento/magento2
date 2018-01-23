@@ -71,7 +71,7 @@
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
-        <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
+        <see userInput="Home Page" stepKey="seeHomePageCMSPage"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
