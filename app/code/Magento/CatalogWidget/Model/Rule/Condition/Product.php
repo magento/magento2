@@ -4,16 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * CatalogWidget Rule Product Condition data model
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use \Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use \Magento\Store\Model\StoreManagerInterface;
+use \Magento\Catalog\Api\ProductRepositoryInterface;
+use \Magento\Framework\Locale\FormatInterface;
+use \Magento\Catalog\Model\ResourceModel\Category;
+use \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as AttributeSetCollection;
+use \Magento\Catalog\Model\ProductFactory;
+use \Magento\Eav\Model\Config;
+use \Magento\Rule\Model\Condition\Context;
+use \Magento\Backend\Helper\Data as BackendData;
+
 /**
  * Class Product
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -30,36 +39,36 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param Context $context
+     * @param BackendData $backendData
+     * @param Config $config
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param AttributeSetCollection $attrSetCollection
+     * @param FormatInterface $localeFormat
+     * @param StoreManagerInterface $storeManager
      * @param array $data
-     * @param \Magento\Catalog\Model\ResourceModel\Category $category
+     * @param Category $category
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Eav\Model\Config $config,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        Context $context,
+        BackendData $backendData,
+        Config $config,
+        ProductFactory $productFactory,
+        ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        AttributeSetCollection $attrSetCollection,
+        FormatInterface $localeFormat,
+        StoreManagerInterface $storeManager,
         array $data = [],
-        \Magento\Catalog\Model\ResourceModel\Category $category = null
+        Category $category = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(
@@ -111,7 +120,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Add condition to collection
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param ProductCollection $collection
      * @return $this
      */
     public function addToCollection($collection)
@@ -142,14 +151,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param EavAttribute $attribute
+     * @param ProductCollection $collection
      * @return $this
      */
-    protected function addGlobalAttribute(
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-    ) {
+    protected function addGlobalAttribute(EavAttribute $attribute, ProductCollection $collection)
+    {
         $storeId =  $this->storeManager->getStore()->getId();
 
         switch ($attribute->getBackendType()) {
@@ -175,14 +182,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param EavAttribute $attribute
+     * @param ProductCollection $collection
      * @return $this
      */
-    protected function addNotGlobalAttribute(
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
-    ) {
+    protected function addNotGlobalAttribute(EavAttribute $attribute, ProductCollection $collection)
+    {
         $storeId =  $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];

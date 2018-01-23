@@ -102,8 +102,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Catalog\Model\ResourceModel\Category|null $category
      * @param array $data
+     * @param \Magento\Catalog\Model\ResourceModel\Category|null $category
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -752,18 +752,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     private function getCategoryIds($productId)
     {
         if (!isset($this->categoryIdList[$productId])) {
-            $unionSelect = new UnionExpression(
-                [
-                    $this->getCategorySelect($productId, $this->category->getCategoryProductTable()),
-                    $this->getCategorySelect(
-                        $productId,
-                        $this->_productResource->getTable(AbstractAction::MAIN_INDEX_TABLE)
-                    )
-                ],
-                Select::SQL_UNION_ALL
+            $this->categoryIdList[$productId] = $this->_productResource->getConnection()->fetchCol(
+                $this->getCategorySelect($productId, $this->category->getCategoryProductTable())
             );
-
-            $this->categoryIdList[$productId] = $this->_productResource->getConnection()->fetchCol($unionSelect);
         }
 
         return $this->categoryIdList[$productId];

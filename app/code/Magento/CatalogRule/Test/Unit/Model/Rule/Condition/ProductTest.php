@@ -39,22 +39,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
-        $this->productModel = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            [
-                '__wakeup',
-                'hasData',
-                'getData',
-                'getId',
-                'getStoreId',
-                'getResource',
-                'addAttributeToSelect',
-            ],
-            [],
-            '',
-            false
-        );
+        $this->config = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMock();
+        $this->productModel = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->category = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,23 +60,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'where'])
             ->getMock();
-
-        $this->eavAttributeResource = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
-            [
-                '__wakeup',
-                'isAllowedForRuleCondition',
-                'getDataUsingMethod',
-                'getAttributeCode',
-                'getFrontendLabel',
-                'isScopeGlobal',
-                'getBackendType',
-                'getFrontendInput'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->eavAttributeResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')
             ->will($this->returnSelf());
@@ -102,7 +79,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(
-            'Magento\CatalogRule\Model\Rule\Condition\Product',
+            \Magento\CatalogRule\Model\Rule\Condition\Product::class,
             [
                 'config' => $this->config,
                 'product' => $this->productModel,
