@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Setup\Model\DeclarationInstaller;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
@@ -137,6 +138,11 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     private $phpReadinessCheck;
 
     /**
+     * @var \Magento\Setup\Model\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $declarationInstallerMock;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -190,6 +196,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar =
             $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
+        $this->declarationInstallerMock = $this->createMock(DeclarationInstaller::class);
         $this->object = $this->createObject();
     }
 
@@ -233,7 +240,8 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             $this->dataSetupFactory,
             $this->sampleDataState,
             $this->componentRegistrar,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->declarationInstallerMock
         );
     }
 
@@ -257,6 +265,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
 
+        $this->declarationInstallerMock->expects($this->once())->method('installSchema');
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
         $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);

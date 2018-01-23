@@ -65,6 +65,26 @@ class DbVersionInfo
     }
 
     /**
+     * Check if DB schema is up to date, version info if it is not.
+     *
+     * @param string $moduleName
+     * @return string[] Contains current and needed version strings
+     */
+    private function getSchemaInfo($moduleName)
+    {
+        $dbVer = $this->moduleResource->getDbVersion($moduleName); // version saved in DB
+        $module = $this->moduleList->getOne($moduleName);
+        $configVer = $module['setup_version'];
+        $dbVer = $dbVer ?: 'none';
+        return [
+            self::KEY_CURRENT => $dbVer,
+            self::KEY_REQUIRED => $configVer,
+            self::KEY_MODULE => $moduleName,
+            self::KEY_TYPE => 'schema'
+        ];
+    }
+
+    /**
      * Get array of errors if DB is out of date, return [] if DB is current
      *
      * @return string[] Array of errors, each error contains module name, current version, required version,
@@ -74,6 +94,9 @@ class DbVersionInfo
     {
         $errors = [];
         foreach ($this->moduleList->getNames() as $moduleName) {
+            if (!$this->isSchemaUpToDate($moduleName)) {
+                $errors[] = $this->getSchemaInfo($moduleName);
+            }
             if (!$this->isDataUpToDate($moduleName)) {
                 $errors[] = $this->getDataInfo($moduleName);
             }

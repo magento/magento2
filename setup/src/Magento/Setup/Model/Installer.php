@@ -223,6 +223,11 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var DeclarationInstaller
+     */
+    private $declarationInstaller;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -247,6 +252,7 @@ class Installer
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
      *
+     * @param DeclarationInstaller|null $declarationInstaller
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -270,7 +276,8 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        DeclarationInstaller $declarationInstaller = null
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -294,6 +301,9 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->declarationInstaller = $declarationInstaller ?: $this->objectManagerProvider->get()->get(
+            DeclarationInstaller::class
+        );
     }
 
     /**
@@ -759,12 +769,11 @@ class Installer
      * Install Magento if declaration mode was enabled
      *
      * @param array $request
+     * @return void
      */
     public function declarativeInstallSchema(array $request)
     {
-        /** @var DeclarationInstaller $declarativeInstaller */
-        $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
-        $declarativeInstaller->installSchema($request);
+        $this->declarationInstaller->installSchema($request);
     }
 
     /**
