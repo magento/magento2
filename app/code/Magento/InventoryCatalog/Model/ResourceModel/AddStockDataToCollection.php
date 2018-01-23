@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\InventoryCatalog\Model\InStockConditionResolver;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
@@ -23,20 +22,11 @@ class AddStockDataToCollection
     private $stockIndexTableNameResolver;
 
     /**
-     * @var InStockConditionResolver
-     */
-    private $inStockConditionResolver;
-
-    /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
-     * @param InStockConditionResolver $inStockConditionResolver
      */
-    public function __construct(
-        StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
-        InStockConditionResolver $inStockConditionResolver
-    ) {
+    public function __construct(StockIndexTableNameResolverInterface $stockIndexTableNameResolver)
+    {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->inStockConditionResolver = $inStockConditionResolver;
     }
 
     /**
@@ -50,7 +40,7 @@ class AddStockDataToCollection
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $isSalableExpression = $collection->getConnection()
-            ->getCheckSql($this->inStockConditionResolver->execute('stock_status_index'), 1, 0);
+            ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);
 
         $resource = $collection->getResource();
         $collection->getSelect()->joinInner(
@@ -66,7 +56,7 @@ class AddStockDataToCollection
 
         if ($isFilterInStock) {
             $collection->getSelect()->where(
-                $this->inStockConditionResolver->execute('stock_status_index')
+                'stock_status_index.' . IndexStructure::QUANTITY . ' > 0'
             );
         }
     }

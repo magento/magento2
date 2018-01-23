@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
-use Magento\InventoryCatalog\Model\InStockConditionResolver;
+use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
 /**
@@ -21,20 +21,12 @@ class AddIsInStockFilterToCollection
     private $stockIndexTableProvider;
 
     /**
-     * @var InStockConditionResolver
-     */
-    private $inStockConditionResolver;
-
-    /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableProvider
-     * @param InStockConditionResolver $inStockConditionResolver
      */
     public function __construct(
-        StockIndexTableNameResolverInterface $stockIndexTableProvider,
-        InStockConditionResolver $inStockConditionResolver
+        StockIndexTableNameResolverInterface $stockIndexTableProvider
     ) {
         $this->stockIndexTableProvider = $stockIndexTableProvider;
-        $this->inStockConditionResolver = $inStockConditionResolver;
     }
 
     /**
@@ -50,6 +42,6 @@ class AddIsInStockFilterToCollection
             ['stock_status_index' => $tableName],
             'e.sku = stock_status_index.sku',
             []
-        )->where($this->inStockConditionResolver->execute('stock_status_index'));
+        )->where('stock_status_index.' . IndexStructure::QUANTITY . ' > 0');
     }
 }

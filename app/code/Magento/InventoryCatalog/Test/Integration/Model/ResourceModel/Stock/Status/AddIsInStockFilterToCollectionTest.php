@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test add in in stock filter to collection with different stocks on different websites.
  */
-class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
+class AddIsInStockFilterToCollectionTest extends TestCase
 {
     /**
      * @var StockStatus
@@ -29,6 +29,11 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
     private $storeManager;
 
     /**
+     * @var string
+     */
+    private $storeCodeBefore;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -37,6 +42,8 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
 
         $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+
+        $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
     }
 
     /**
@@ -76,5 +83,15 @@ class AddIsInStockFilterToCollectionWithNotDefaultStockTest extends TestCase
             ['store_for_us_website', 1, true],
             ['store_for_global_website', 2, true],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->storeManager->setCurrentStore($this->storeCodeBefore);
+
+        parent::tearDown();
     }
 }
