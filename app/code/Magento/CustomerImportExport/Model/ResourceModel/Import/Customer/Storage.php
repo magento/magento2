@@ -5,12 +5,20 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class Storage
 {
     /**
      * Flag to not load collection more than one time
      *
      * @var bool
+     * @deprecated Collection is not used anymore.
      */
     protected $_isCollectionLoaded = false;
 
@@ -18,6 +26,7 @@ class Storage
      * Customer collection
      *
      * @var \Magento\Customer\Model\ResourceModel\Customer\Collection
+     * @deprecated
      */
     protected $_customerCollection;
 
@@ -39,6 +48,7 @@ class Storage
      * Number of items to fetch from db in one query
      *
      * @var int
+     * @deprecated
      */
     protected $_pageSize;
 
@@ -46,18 +56,26 @@ class Storage
      * Collection by pages iterator
      *
      * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
+     * @deprecated
      */
     protected $_byPagesIterator;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
 
     /**
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory,
-        array $data = []
+        array $data = [],
+        CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->_customerCollection = isset(
             $data['customer_collection']
@@ -66,12 +84,16 @@ class Storage
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
         ) ? $data['collection_by_pages_iterator'] : $colIteratorFactory->create();
+        $this->customerRepository = $customerRepository
+            ?: ObjectManager::getInstance()
+                ->get(CustomerRepositoryInterface::class);
     }
 
     /**
      * Load needed data from customer collection
      *
      * @return void
+     * @deprecated This method of loading customers is not used anymore.
      */
     public function load()
     {
@@ -94,10 +116,10 @@ class Storage
     /**
      * Add customer to array
      *
-     * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
+     * @param DataObject|Customer|CustomerInterface $customer
      * @return $this
      */
-    public function addCustomer(\Magento\Framework\DataObject $customer)
+    public function addCustomer(DataObject $customer)
     {
         $email = strtolower(trim($customer->getEmail()));
         if (!isset($this->_customerIds[$email])) {
@@ -117,8 +139,18 @@ class Storage
      */
     public function getCustomerId($email, $websiteId)
     {
-        // lazy loading
-        $this->load();
+        //Trying to load the customer.
+        if (!array_key_exists($email, $this->_customerIds)
+            || !array_key_exists($websiteId, $this->_customerIds[$email])
+        ) {
+            try {
+                $this->addCustomer(
+                    $this->customerRepository->get($email, $websiteId)
+                );
+            } catch (NoSuchEntityException $exception) {
+                $this->_customerIds[$email][$websiteId] = null;
+            }
+        }
 
         if (isset($this->_customerIds[$email][$websiteId])) {
             return $this->_customerIds[$email][$websiteId];
