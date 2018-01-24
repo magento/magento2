@@ -5,13 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateUserActionGroup">
         <arguments>
             <argument name="role"/>
             <argument name="User" defaultValue="admin2"/>
         </arguments>
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/user/new" stepKey="navigateToNewUser"/>
+        <amOnPage url="{{AdminEditUserPage.url}}" stepKey="navigateToNewUser"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{admin2.username}}" stepKey="enterUserName" />
         <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{admin2.firstName}}" stepKey="enterFirstName" />
@@ -30,4 +31,4 @@
         <waitForPageLoad stepKey="waitForPageLoad2" />
         <see userInput="You saved the user." stepKey="seeSuccessMessage" />
     </actionGroup>
-</config>
+</actionGroups>

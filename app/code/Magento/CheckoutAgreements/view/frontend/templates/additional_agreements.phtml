@@ -13,11 +13,11 @@ if (!$block->getAgreements()) {
     return;
 }
 
-/** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $argeementsCollection */
-$argeementsCollection = $block->getAgreements();
+/** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $agreementsCollection */
+$agreementsCollection = $block->getAgreements();
 $agreementMappedArray = [];
 /** @var \Magento\CheckoutAgreements\Model\Agreement $agreement */
-foreach ($argeementsCollection as $agreement) {
+foreach ($agreementsCollection as $agreement) {
     if ($agreement->getIsActive()) {
         $agreementMappedArray[] = [
             'mode' => $agreement->getMode(),

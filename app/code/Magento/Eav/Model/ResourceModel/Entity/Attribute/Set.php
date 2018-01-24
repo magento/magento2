@@ -183,7 +183,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrurn default attribute group id for attribute set id
+     * Return default attribute group id for attribute set id
      *
      * @param int $setId
      * @return int|null

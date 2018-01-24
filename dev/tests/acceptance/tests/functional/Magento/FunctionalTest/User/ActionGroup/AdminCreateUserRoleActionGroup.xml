@@ -5,13 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateUserRoleActionGroup">
         <arguments>
             <argument name="role" />
             <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
         </arguments>
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/user_role/editrole" stepKey="navigateToNewRole"/>
+        <amOnPage url="{{AdminEditRolePage.url}}" stepKey="navigateToNewRole"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{role.name}}" stepKey="fillRoleName" />
         <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword" />
@@ -24,4 +25,4 @@
         <waitForPageLoad stepKey="waitForPageLoad2" />
         <see userInput="You saved the role." stepKey="seeSuccessMessage" />
     </actionGroup>
-</config>
+</actionGroups>

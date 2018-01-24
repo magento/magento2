@@ -271,7 +271,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
     }
 
-    public function testupdateQuoteCustomerShippingAddress()
+    public function testUpdateQuoteCustomerShippingAddress()
     {
         $addressId = 42;
         $customerAddressId = 42;
@@ -290,7 +290,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please check shipping address information.
      */
-    public function testupdateQuoteCustomerShippingAddressForAddressLeak()
+    public function testUpdateQuoteCustomerShippingAddressForAddressLeak()
     {
         $addressId = 43;
         $customerAddressId = 42;
