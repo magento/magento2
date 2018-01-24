@@ -1,27 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright :copyright: Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
+namespace Magento\InventoryCatalog\Test\Integration;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test add in in stock filter to collection with different stocks on different websites.
- */
-class AddIsInStockFilterToCollectionTest extends TestCase
+class StockConditionJoinerTest extends TestCase
 {
     /**
-     * @var StockStatus
+     * @var StockConditionJoiner
      */
-    private $stockStatus;
+    private $stockConditionJoiner;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
 
     /**
      * @var StoreManagerInterface
@@ -38,12 +40,12 @@ class AddIsInStockFilterToCollectionTest extends TestCase
      */
     protected function setUp()
     {
-        parent::setUp();
-
-        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
+        $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $this->stockConditionJoiner = Bootstrap::getObjectManager()->get(StockConditionJoiner::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
+
+        parent::setUp();
     }
 
     /**
@@ -58,25 +60,30 @@ class AddIsInStockFilterToCollectionTest extends TestCase
      *
      * @param string $store
      * @param int $expectedSize
-     * @return void
      *
-     * @dataProvider addIsInStockFilterToCollectionDataProvider
+     * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testAddIsInStockFilterToCollection(string $store, int $expectedSize)
+    public function testExecute(string $store, int $expectedSize)
     {
         $this->storeManager->setCurrentStore($store);
 
-        /** @var Collection $collection */
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stockStatus->addIsInStockFilterToCollection($collection);
+        $connection = $this->resource->getConnection();
+        $select = $connection->select();
+        $select->from(
+            ['main_table' => $this->resource->getTableName('catalog_product_index_eav')],
+            ['main_table.entity_id', 'main_table.value']
+        )->distinct();
 
-        self::assertEquals($expectedSize, $collection->getSize());
+        $this->stockConditionJoiner->execute($select);
+
+        self::assertEquals($expectedSize, count($select->query()->fetchAll()));
     }
 
     /**
      * @return array
      */
-    public function addIsInStockFilterToCollectionDataProvider(): array
+    public function executeDataProvider(): array
     {
         return [
             ['store_for_eu_website', 1],
@@ -93,6 +100,7 @@ class AddIsInStockFilterToCollectionTest extends TestCase
         if (null !== $this->storeCodeBefore) {
             $this->storeManager->setCurrentStore($this->storeCodeBefore);
         }
+
         parent::tearDown();
     }
 }
