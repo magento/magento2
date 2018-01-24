@@ -6,8 +6,6 @@
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;

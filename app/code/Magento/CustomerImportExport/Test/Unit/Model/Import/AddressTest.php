@@ -7,6 +7,7 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\CustomerImportExport\Model\Import\Address;
 
@@ -252,41 +253,26 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createCustomerStorageMock()
     {
-        $customerStorage = $this->getMock(
-            'Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage',
-            ['load'],
-            [],
-            '',
-            false
-        );
-        $resourceMock = $this->getMock(
-            'Magento\Customer\Model\ResourceModel\Customer',
-            ['getIdFieldName'],
-            [],
-            '',
-            false
-        );
-        $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
-        foreach ($this->_customers as $customerData) {
-            $data = [
-                'resource' => $resourceMock,
-                'data' => $customerData,
-                $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false),
-                $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
-                $this->getMock(
-                    'Magento\Customer\Model\ResourceModel\Address\CollectionFactory',
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-                $this->getMock('Magento\Customer\Model\GroupFactory', [], [], '', false),
-                $this->getMock('Magento\Customer\Model\AttributeFactory', [], [], '', false),
-            ];
-            /** @var $customer \Magento\Customer\Model\Customer */
-            $customer = $this->_objectManagerMock->getObject('Magento\Customer\Model\Customer', $data);
-            $customerStorage->addCustomer($customer);
-        }
+        /** @var $customerStorage Storage|\PHPUnit_Framework_MockObject_MockObject */
+        $customerStorage = $this->getMockBuilder(Storage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerStorage->expects($this->any())
+            ->method('getCustomerId')
+            ->willReturnCallback(
+                function ($email, $websiteId) {
+                    foreach ($this->_customers as $customerData) {
+                        if ($customerData['email'] == $email
+                            && $customerData['website_id'] == $websiteId
+                        ) {
+                            return $customerData['id'];
+                        }
+                    }
+
+                    return false;
+                }
+            );
+
         return $customerStorage;
     }
 
