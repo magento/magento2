@@ -29,9 +29,6 @@ use Magento\Webapi\Controller\Rest\RequestProcessorPool;
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
-    /** Path for accessing REST API schema */
-    const SCHEMA_PATH = '/schema';
-
     /**
      * @var Router
      * @deprecated 100.1.0

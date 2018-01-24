@@ -17,8 +17,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const SYNC_PATH = "/V1/";
-
     /**
      * @var RestResponse
      */

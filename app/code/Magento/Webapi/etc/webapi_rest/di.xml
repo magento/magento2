@@ -75,8 +75,8 @@
     <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
         <arguments>
             <argument name="requestProcessors" xsi:type="array">
-                    <item name="scheme" xsi:type="string">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
-                    <item name="V1" xsi:type="string">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
+                <item name="schema" xsi:type="string">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
+                <item name="V1" xsi:type="string">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
             </argument>
         </arguments>
     </type>
