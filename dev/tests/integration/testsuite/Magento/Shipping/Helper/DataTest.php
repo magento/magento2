@@ -5,16 +5,18 @@
  */
 namespace Magento\Shipping\Helper;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Helper\Data
      */
-    protected $_helper = null;
+    private $helper;
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Shipping\Helper\Data::class
         );
     }
@@ -31,33 +33,77 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $constructArgs = [];
-        if (\Magento\Sales\Model\Order\Shipment::class == $modelName) {
-            $orderRepository = $this->_getMockOrderRepository($code);
+        if (\Magento\Sales\Model\Order\Shipment::class === $modelName) {
+            $orderRepository = $this->getMockOrderRepository($code);
             $constructArgs['orderRepository'] = $orderRepository;
-        } elseif (\Magento\Sales\Model\Order\Shipment\Track::class == $modelName) {
-            $shipmentRepository = $this->_getMockShipmentRepository($code);
+        } elseif (\Magento\Sales\Model\Order\Shipment\Track::class === $modelName) {
+            $shipmentRepository = $this->getMockShipmentRepository($code);
             $constructArgs['shipmentRepository'] = $shipmentRepository;
         }
 
         $model = $objectManager->create($modelName, $constructArgs);
         $model->{$getIdMethod}($entityId);
 
-        if (\Magento\Sales\Model\Order::class == $modelName) {
+        if (\Magento\Sales\Model\Order::class === $modelName) {
             $model->setProtectCode($code);
         }
-        if (\Magento\Sales\Model\Order\Shipment\Track::class == $modelName) {
+        if (\Magento\Sales\Model\Order\Shipment\Track::class === $modelName) {
             $model->setParentId(1);
         }
 
-        $actual = $this->_helper->getTrackingPopupUrlBySalesModel($model);
+        $actual = $this->helper->getTrackingPopupUrlBySalesModel($model);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * From the admin panel with custom URL we should have generated frontend URL
+     *
+     * @param string $modelName
+     * @param string $getIdMethod
+     * @param int $entityId
+     * @param string $code
+     * @param string $expected
+     * @magentoAppArea adminhtml
+     * @magentoConfigFixture admin_store web/unsecure/base_link_url http://admin.localhost/
+     * @dataProvider getTrackingPopupUrlBySalesModelDataProvider
+     */
+    public function testGetTrackingPopupUrlBySalesModelFromAdmin($modelName, $getIdMethod, $entityId, $code, $expected)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $objectManager->create(StoreManagerInterface::class);
+        $storeManager->reinitStores();
+
+        $constructArgs = [];
+        if (\Magento\Sales\Model\Order\Shipment::class === $modelName) {
+            $orderRepository = $this->getMockOrderRepository($code);
+            $constructArgs['orderRepository'] = $orderRepository;
+        } elseif (\Magento\Sales\Model\Order\Shipment\Track::class === $modelName) {
+            $shipmentRepository = $this->getMockShipmentRepository($code);
+            $constructArgs['shipmentRepository'] = $shipmentRepository;
+        }
+
+        $model = $objectManager->create($modelName, $constructArgs);
+        $model->{$getIdMethod}($entityId);
+
+        if (\Magento\Sales\Model\Order::class === $modelName) {
+            $model->setProtectCode($code);
+        }
+        if (\Magento\Sales\Model\Order\Shipment\Track::class === $modelName) {
+            $model->setParentId(1);
+        }
+
+        //Frontend URL should be used there
+        $actual = $this->helper->getTrackingPopupUrlBySalesModel($model);
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @param $code
-     * @return \Magento\Sales\Api\OrderRepositoryInterface
+     * @return \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getMockOrderRepository($code)
+    private function getMockOrderRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
@@ -71,10 +117,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param $code
      * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getMockShipmentRepository($code)
+    private function getMockShipmentRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $orderRepository = $this->_getMockOrderRepository($code);
+        $orderRepository = $this->getMockOrderRepository($code);
         $shipmentArgs = ['orderRepository' => $orderRepository];
 
         $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class, $shipmentArgs);
