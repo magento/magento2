@@ -12,7 +12,7 @@ use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Collect shipping rates for customer address without packaging estiamtion.
+ * Collect shipping rates for customer address without packaging estimation.
  */
 class ShippingRateFinder
 {

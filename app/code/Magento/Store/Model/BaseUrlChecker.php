@@ -54,7 +54,7 @@ class BaseUrlChecker
     }
 
     /**
-     * Cheks whether frontend is completely secure or not.
+     * Checks whether frontend is completely secure or not.
      *
      * @return bool
      */

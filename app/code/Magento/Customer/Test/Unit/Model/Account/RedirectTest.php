@@ -295,10 +295,10 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
          * Redirect to Dashboard flag
          */
         return [
-            // Loggend In, Redirect by Referer
+            // Logged In, Redirect by Referer
             [1, 2, 'referer', 'base', '', '', 'account', '', '', '', true, false],
             [1, 2, 'http://referer.com/', 'http://base.com/', '', '', 'account', '', '', 'dashboard', true, false],
-            // Loggend In, Redirect by AfterAuthUrl
+            // Logged In, Redirect by AfterAuthUrl
             [1, 2, 'referer', 'base', '', 'defined', 'account', '', '', '', true, true],
             // Not logged In, Redirect by LoginUrl
             [1, 2, 'referer', 'base', '', '', 'account', 'login', '', '', false, true],
