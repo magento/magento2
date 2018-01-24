@@ -64,7 +64,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException(__("The consumer isn't authorized to access %resources.", 'resourceN'));
+        throw new AuthorizationException(__("The consumer isn't authorized to access %1.", 'resourceN'));
     }
 
     /**

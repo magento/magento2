@@ -125,7 +125,6 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify product's required option(s).
      * @return void
      */
     public function testException()
@@ -141,6 +140,10 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         $this->model->validate(
             $this->objectManager->create(\Magento\Framework\DataObject::class),
             $this->getProductOption()
+        );
+
+        $this->expectExceptionMessage(
+            "The product's required option(s) weren't entered. Make sure the options are entered and try again."
         );
     }
 

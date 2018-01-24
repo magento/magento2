@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -338,7 +339,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Search\Request\EmptyRequestDataException
-     * @expectedExceptionMessage Request query and filters are not set
+     * @expectedExceptionMessage The request query and filters aren't set. Verify the query and filters and try again.
      */
     public function testCleanEmptyQueryAndFilter()
     {
