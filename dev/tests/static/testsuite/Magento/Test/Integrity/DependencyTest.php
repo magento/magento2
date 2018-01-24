@@ -11,6 +11,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Dependency\DbRule;
+use Magento\TestFramework\Dependency\DeclarativeSchemaRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
@@ -53,6 +54,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $_listConfigXml = [];
+
+    /**
+     * List of db_schema.xml files by modules
+     *
+     * Format: array(
+     *  '{Module_Name}' => '{Filename}'
+     * )
+     *
+     * @var array
+     */
+    protected static $_listDbSchemaXml = [];
 
     /**
      * List of routes.xml files by modules
@@ -161,6 +173,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
+        self::_prepareListDbSchemaXml();
         self::_prepareListRoutesXml();
 
         self::_prepareMapRouters();
@@ -216,6 +229,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
+            new DeclarativeSchemaRule($dbRuleTables),
             new PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
             new DbRule($dbRuleTables),
             new LayoutRule(
@@ -246,6 +260,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'layout':
             case 'config':
+            case 'db_schema':
                 //Removing xml comments
                 $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
                 break;
@@ -489,6 +504,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $this->_prepareFiles('config', Files::init()->getConfigFiles())
         );
 
+        // Get all configuration files
+        $files = array_merge(
+            $files,
+            $this->_prepareFiles('db_schema', Files::init()->getDbSchemaFiles())
+        );
+
         //Get all layout updates files
         $files = array_merge(
             $files,
@@ -517,6 +538,21 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             }
         }
     }
+
+    /**
+     * Prepare list of db_schema.xml files (by modules)
+     */
+    protected static function _prepareListDbSchemaXml()
+    {
+        $files = Files::init()->getDbSchemaFiles('db_schema.xml', [], false);
+        foreach ($files as $file) {
+            if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
+                $module = $matches['namespace'] . '\\' . $matches['module'];
+                self::$_listDbSchemaXml[$module] = $file;
+            }
+        }
+    }
+
 
     /**
      * Prepare list of routes.xml files (by modules)
