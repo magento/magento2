@@ -105,10 +105,6 @@
                 nullable="false" default="0" comment="Selection Price Value"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Product Id"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="selection_id"/>
-            <column name="website_id"/>
-        </constraint>
         <constraint xsi:type="primary" name="PK_CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE">
             <column name="selection_id"/>
             <column name="parent_product_id"/>
@@ -121,7 +117,6 @@
                     table="catalog_product_bundle_selection_price" column="selection_id"
                     referenceTable="catalog_product_bundle_selection" referenceColumn="selection_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="DCF37523AA05D770A70AA4ED7C2616E4" disabled="1"/>
         <index name="CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>

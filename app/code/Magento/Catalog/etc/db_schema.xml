@@ -25,9 +25,6 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CAT_PRD_ENTT_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID"
-                    table="catalog_product_entity" column="attribute_set_id" referenceTable="eav_attribute_set"
-                    referenceColumn="attribute_set_id" onDelete="CASCADE" disabled="1"/>
         <index name="CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID" indexType="btree">
             <column name="attribute_set_id"/>
         </index>
@@ -786,8 +783,6 @@
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" disabled="true"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <column xsi:type="varchar" name="media_type" nullable="false" length="32" default="image"
                 comment="Media entry type"/>
@@ -802,7 +797,6 @@
         <index name="CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index name="CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID" disabled="1"/>
     </table>
     <table name="catalog_product_entity_media_gallery_value" resource="default" engine="innodb"
            comment="Catalog Product Media Gallery Attribute Value Table">
@@ -1087,12 +1081,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-            <column name="value"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1122,11 +1110,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_DEC_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1169,15 +1152,6 @@
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
-                    table="catalog_product_index_price" column="customer_group_id" referenceTable="customer_group"
-                    referenceColumn="customer_group_id" onDelete="CASCADE" disabled="1"/>
-        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
-                    table="catalog_product_index_price" column="entity_id" referenceTable="catalog_product_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE" disabled="1"/>
-        <constraint xsi:type="foreign" name="CATALOG_PRODUCT_INDEX_PRICE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
-                    table="catalog_product_index_price" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="CASCADE" disabled="1"/>
         <index name="CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
@@ -1472,12 +1446,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-            <column name="value"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1507,12 +1475,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-            <column name="value"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1542,12 +1504,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-            <column name="value"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_DEC_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1577,11 +1533,6 @@
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Original entity Id for attribute value"/>
-        <constraint xsi:type="primary" name="PRIMARY" disabled="1">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-        </constraint>
         <constraint xsi:type="primary" name="CAT_PRD_IDX_EAV_DEC_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
