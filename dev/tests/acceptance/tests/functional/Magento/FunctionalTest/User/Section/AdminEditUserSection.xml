@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminEditUserSection">
         <element name="usernameTextField" type="input" selector="#user_username"/>
         <element name="currentPasswordField" type="input" selector="#user_current_password"/>
@@ -17,4 +17,4 @@
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
         <element name="saveButton" type="button" selector="#save"/>
     </section>
-</config>
+</sections>

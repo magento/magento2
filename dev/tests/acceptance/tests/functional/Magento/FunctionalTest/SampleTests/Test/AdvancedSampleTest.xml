@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdvancedSampleTest">
+        <annotations>
+            <title value=""/>
+            <description value=""/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="#"/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData entity="SamplePerson" stepKey="beforeData"/>
+        </before>
+        <after>
+
+        </after>
+
+        <!-- Create an entity that depends on another entity -->
+        <createData entity="_defaultCategory" stepKey="createCategory"/>
+        <createData entity="_defaultProduct" stepKey="createProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+
+        <!-- Parameterized url -->
+        <amOnPage url="{{SamplePage.url('foo', SamplePerson.bar)}}" stepKey="amOnPage"/>
+
+        <!-- Parameterized selector -->
+        <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" stepKey="grabTextFrom"/>
+
+        <!-- Element with a timeout -->
+        <click selector="{{SampleSection.timeoutElement}}" stepKey="click"/>
+
+        <!-- ActionGroup -->
+        <actionGroup ref="SampleActionGroup" stepKey="actionGroup">
+            <argument name="person" value="OverrideDefaultPerson"/>
+        </actionGroup>
+
+        <actionGroup ref="ValidateSlideOutPanelField" stepKey="seeAppearanceMinHeightProperty">
+            <argument name="property" value="AppearanceMinHeightProperty"/>
+        </actionGroup>
+    </test>
+</tests>
