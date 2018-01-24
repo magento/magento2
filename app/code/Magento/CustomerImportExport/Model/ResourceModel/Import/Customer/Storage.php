@@ -116,7 +116,7 @@ class Storage
     /**
      * Add customer to array
      *
-     * @param DataObject|Customer|CustomerInterface $customer
+     * @param DataObject $customer
      * @return $this
      */
     public function addCustomer(DataObject $customer)
@@ -144,12 +144,20 @@ class Storage
             || !array_key_exists($websiteId, $this->_customerIds[$email])
         ) {
             try {
-                $this->addCustomer(
-                    $this->customerRepository->get($email, $websiteId)
-                );
+                $customer = $this->customerRepository->get($email, $websiteId);
+                $customerData = new DataObject([
+                    'id' => $customer->getId(),
+                    'email' => $customer->getEmail(),
+                    'website_id' => $customer->getWebsiteId()
+                ]);
             } catch (NoSuchEntityException $exception) {
-                $this->_customerIds[$email][$websiteId] = null;
+                $customerData = new DataObject([
+                    'id' => null,
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ]);
             }
+            $this->addCustomer($customerData);
         }
 
         if (isset($this->_customerIds[$email][$websiteId])) {
