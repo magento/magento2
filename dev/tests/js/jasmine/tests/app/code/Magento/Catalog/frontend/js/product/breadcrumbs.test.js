@@ -19,6 +19,7 @@ define([
         },
         defaultContext = require.s.contexts._,
         menuItem = $('<li class="level0"><a href="http://localhost.com/cat1.html" id="ui-id-3">Cat1</a></li>')[0],
+
         /**
          * Create context object.
          *

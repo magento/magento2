@@ -35,7 +35,9 @@ define([
 
             this._decorate(crumbs);
 
-            html = template({'breadcrumbs': crumbs});
+            html = template({
+                'breadcrumbs': crumbs
+            });
 
             if (html.length) {
                 $(this.element).html(html);
