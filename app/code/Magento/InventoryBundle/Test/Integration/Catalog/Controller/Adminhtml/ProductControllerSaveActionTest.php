@@ -31,6 +31,12 @@ class ProductControllerSaveActionTest extends AbstractBackendController
         $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
     }
 
+    protected function tearDown()
+    {
+        $this->productRepository->deleteById(self::BUNDLE_PRODUCT_SKU);
+        parent::tearDown();
+    }
+
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      */
