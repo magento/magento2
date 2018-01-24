@@ -14,7 +14,7 @@
             <stories value="Widgets in WYSIWYG"/>
             <group value="CMSStaticBlock"/>
             <title value="Create CMS Page With Widget Type:CMS Static Block"/>
-            <description value="Create CMS Page With Widget Type:CMS Static Blocl"/>
+            <description value="Create CMS Page With Widget Type:CMS Static Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83787"/>
         </annotations>
