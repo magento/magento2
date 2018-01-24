@@ -16,7 +16,7 @@ use Magento\Bundle\Api\Data\LinkInterface;
 /**
  * @magentoAppArea adminhtml
  */
-class ProductControllerSaveAction extends AbstractBackendController
+class ProductControllerSaveActionTest extends AbstractBackendController
 {
     const BUNDLE_PRODUCT_SKU = 'SKU-1-test-product-bundle';
 
