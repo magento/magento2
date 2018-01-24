@@ -144,18 +144,19 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ],
             'referenceContainer' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"/>',
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" htmlAttributes="attribute" label="Add"/>',
                     'referenceContainer'
                 ),
                 'containerName' => 'reference',
                 'structureElement' => [],
                 'expectedData' => [
                     'attributes' => [
-                        Container::CONTAINER_OPT_HTML_TAG   => 'span',
-                        Container::CONTAINER_OPT_HTML_ID    => 'id_add',
-                        Container::CONTAINER_OPT_HTML_CLASS => 'new',
-                        Container::CONTAINER_OPT_LABEL      => 'Add',
-                        Container::CONTAINER_OPT_DISPLAY    => null,
+                        Container::CONTAINER_OPT_HTML_TAG           => 'span',
+                        Container::CONTAINER_OPT_HTML_ID            => 'id_add',
+                        Container::CONTAINER_OPT_HTML_CLASS         => 'new',
+                        Container::CONTAINER_OPT_HTML_ATTRIBUTES    => 'attribute',
+                        Container::CONTAINER_OPT_LABEL              => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY            => null,
                     ],
                 ],
                 'getStructureCondition' => $this->once(),
@@ -171,11 +172,12 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                 'structureElement' => [],
                 'expectedData' => [
                     'attributes' => [
-                        Container::CONTAINER_OPT_HTML_TAG   => null,
-                        Container::CONTAINER_OPT_HTML_ID    => null,
-                        Container::CONTAINER_OPT_HTML_CLASS => null,
-                        Container::CONTAINER_OPT_LABEL      => null,
-                        Container::CONTAINER_OPT_DISPLAY    => null,
+                        Container::CONTAINER_OPT_HTML_TAG           => null,
+                        Container::CONTAINER_OPT_HTML_ID            => null,
+                        Container::CONTAINER_OPT_HTML_CLASS         => null,
+                        Container::CONTAINER_OPT_HTML_ATTRIBUTES    => null,
+                        Container::CONTAINER_OPT_LABEL              => null,
+                        Container::CONTAINER_OPT_DISPLAY            => null,
                     ],
                 ],
                 'getStructureCondition' => $this->once(),
@@ -208,7 +210,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ],
             'referenceContainerDisplayFalse' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"'
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" htmlAttributes="attribute" label="Add"'
                     . ' display="true"/>',
                     'referenceContainer'
                 ),
@@ -216,11 +218,12 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                 'structureElement' => [],
                 'expectedData' => [
                     'attributes' => [
-                        Container::CONTAINER_OPT_HTML_TAG   => 'span',
-                        Container::CONTAINER_OPT_HTML_ID    => 'id_add',
-                        Container::CONTAINER_OPT_HTML_CLASS => 'new',
-                        Container::CONTAINER_OPT_LABEL      => 'Add',
-                        Container::CONTAINER_OPT_DISPLAY    => 'true',
+                        Container::CONTAINER_OPT_HTML_TAG           => 'span',
+                        Container::CONTAINER_OPT_HTML_ID            => 'id_add',
+                        Container::CONTAINER_OPT_HTML_CLASS         => 'new',
+                        Container::CONTAINER_OPT_HTML_ATTRIBUTES    => 'attribute',
+                        Container::CONTAINER_OPT_LABEL              => 'Add',
+                        Container::CONTAINER_OPT_DISPLAY            => 'true',
                     ],
                 ],
                 'getStructureCondition' => $this->once(),
