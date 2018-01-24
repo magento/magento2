@@ -109,10 +109,10 @@ define([
             }
 
             if (wysiwyg && disabled) {
-                wysiwyg.setEditorStatus(false);
+                wysiwyg.setEnabledStatus(false);
                 wysiwyg.getPluginButtons().prop('disabled', 'disabled');
             } else if (wysiwyg) {
-                wysiwyg.setEditorStatus(true);
+                wysiwyg.setEnabledStatus(true);
                 wysiwyg.getPluginButtons().removeProp('disabled');
             }
         }

@@ -287,7 +287,7 @@ define([
          *
          * @param {Boolean} enabled
          */
-        setEditorStatus: function (enabled) {
+        setEnabledStatus: function (enabled) {
             if (this.activeEditor()) {
                 this.activeEditor().getBody().setAttribute('contenteditable', enabled);
                 this.activeEditor().readonly = !enabled;
