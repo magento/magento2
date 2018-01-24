@@ -25,6 +25,7 @@ class DownloadableOptions implements FormatterInterface
         if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
             $extensionAttributes = $product->getExtensionAttributes();
             $productData['downloadable_product_samples'] = $extensionAttributes->getDownloadableProductSamples();
+            $productData['downloadable_product_links'] = $extensionAttributes->getDownloadableProductLinks();
         }
 
         return $productData;

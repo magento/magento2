@@ -7,6 +7,9 @@
     <type xsi:type="OutputType" name="DownloadableProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <field xsi:type="ObjectArrayOutputField" name="downloadable_product_samples" itemType="DownloadableProductSamples"/>
+        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_links" itemType="DownloadableProductLinks"/>
+        <field xsi:type="ObjectOutputField" name="links_purchased_separately" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="links_title" type="String"/>
         <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
         <field xsi:type="ObjectOutputField" name="color" type="Int"/>
         <field xsi:type="ObjectOutputField" name="size" type="String"/>
@@ -16,6 +19,18 @@
         <field xsi:type="ObjectOutputField" name="id" type="Int"/>
         <field xsi:type="ObjectOutputField" name="title" type="String"/>
         <field xsi:type="ObjectOutputField" name="sort_order" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="sample_type" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sample_file" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sample_url" type="String"/>
+    </type>
+    <type xsi:type="OutputType" name="DownloadableProductLinks">
+        <field xsi:type="ObjectOutputField" name="id" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="title" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sort_order" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="is_shareable" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="price" type="Float"/>
+        <field xsi:type="ObjectOutputField" name="number_of_downloads" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="link_type" type="String"/>
         <field xsi:type="ObjectOutputField" name="sample_type" type="String"/>
         <field xsi:type="ObjectOutputField" name="sample_file" type="String"/>
         <field xsi:type="ObjectOutputField" name="sample_url" type="String"/>

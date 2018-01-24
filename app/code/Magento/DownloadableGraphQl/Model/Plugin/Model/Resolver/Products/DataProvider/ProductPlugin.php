@@ -10,6 +10,7 @@ use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
+use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
 
 class ProductPlugin
 {
@@ -18,13 +19,19 @@ class ProductPlugin
      */
     private $sampleCollection;
 
+    /**
+     * @var LinkCollection
+     */
+    private $linkCollection;
 
     /**
      * @param SampleCollection $sampleCollection
+     * @param LinkCollection $linkCollection
      */
-    public function __construct(SampleCollection $sampleCollection)
+    public function __construct(SampleCollection $sampleCollection, LinkCollection $linkCollection)
     {
         $this->sampleCollection = $sampleCollection;
+        $this->linkCollection = $linkCollection;
     }
 
     /**
@@ -40,8 +47,13 @@ class ProductPlugin
         foreach ($result->getItems() as $product) {
             if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
                 $extensionAttributes = $product->getExtensionAttributes();
-                $samples = $this->sampleCollection->addTitleToResult()->addProductToFilter($product->getId());
+                $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
+                    ->addProductToFilter($product->getId());
+                $links = $this->linkCollection->addTitleToResult($product->getStoreId())
+                    ->addPriceToResult($product->getStore()->getWebsiteId())
+                    ->addProductToFilter($product->getId());
                 $extensionAttributes->setDownloadableProductSamples($samples);
+                $extensionAttributes->setDownloadableProductLinks($links);
                 $product->setExtensionAttributes($extensionAttributes);
             }
         }
