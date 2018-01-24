@@ -73,7 +73,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             $serviceInfo,
             [],
             WebapiException::HTTP_UNAUTHORIZED,
-            "The consumer isn't authorized to access %resources.",
+            "The consumer isn't authorized to access %1.",
             ['resourceN']
         );
     }
