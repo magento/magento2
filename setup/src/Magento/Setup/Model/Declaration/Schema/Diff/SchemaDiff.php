@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
+use Magento\Setup\Model\Declaration\Schema\OperationsExecutor;
 
 /**
  * Agregation root of all diffs
@@ -34,18 +35,26 @@ class SchemaDiff
     private $diffFactory;
 
     /**
+     * @var OperationsExecutor
+     */
+    private $operationsExecutor;
+
+    /**
      * @param DiffManager $diffManager
-     * @param TableDiff   $tableDiff
+     * @param TableDiff $tableDiff
      * @param DiffFactory $diffFactory
+     * @param OperationsExecutor $operationsExecutor
      */
     public function __construct(
         DiffManager $diffManager,
         TableDiff $tableDiff,
-        DiffFactory $diffFactory
+        DiffFactory $diffFactory,
+        OperationsExecutor $operationsExecutor
     ) {
         $this->tableDiff = $tableDiff;
         $this->diffManager = $diffManager;
         $this->diffFactory = $diffFactory;
+        $this->operationsExecutor = $operationsExecutor;
     }
 
     /**
@@ -60,7 +69,8 @@ class SchemaDiff
         $generatedTables = $generatedSchema->getTables();
         $diff = $this->diffFactory->create(
             [
-                'tableIndexes' => array_flip(array_keys($schema->getTables()))
+                'tableIndexes' => array_flip(array_keys($schema->getTables())),
+                'destructiveOperations' => $this->operationsExecutor->getDestructiveOperations()
             ]
         );
 

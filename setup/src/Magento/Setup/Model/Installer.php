@@ -592,7 +592,8 @@ class Installer
     private function setupSessionTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    ) {
+    )
+    {
         if (!$connection->isTableExists($setup->getTable('session'))) {
             $table = $connection->newTable(
                 $setup->getTable('session')
@@ -631,7 +632,8 @@ class Installer
     private function setupCacheTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    ) {
+    )
+    {
         if (!$connection->isTableExists($setup->getTable('cache'))) {
             $table = $connection->newTable(
                 $setup->getTable('cache')
@@ -685,7 +687,8 @@ class Installer
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    ) {
+    )
+    {
         if (!$connection->isTableExists($setup->getTable('cache_tag'))) {
             $table = $connection->newTable(
                 $setup->getTable('cache_tag')
@@ -721,7 +724,8 @@ class Installer
     private function setupFlagTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    ) {
+    )
+    {
         if (!$connection->isTableExists($setup->getTable('flag'))) {
             $table = $connection->newTable(
                 $setup->getTable('flag')
@@ -869,9 +873,7 @@ class Installer
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
-                        if ($type !== 'schema') {
-                            $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                        }
+                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
                     if ($type === 'schema') {
                         $resource->setDbVersion($moduleName, $configVer);
@@ -883,16 +885,12 @@ class Installer
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
                     $this->log->logInline("Installing $type... ");
-                    if ($type !== 'schema') {
-                        $installer->install($setup, $moduleContextList[$moduleName]);
-                    }
+                    $installer->install($setup, $moduleContextList[$moduleName]);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
                     $this->log->logInline("Upgrading $type... ");
-                    if ($type !== 'schema') {
-                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                    }
+                    $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
@@ -1032,7 +1030,7 @@ class Installer
      */
     public function installAdminUser($data)
     {
-        $adminUserModuleIsInstalled = (bool) $this->deploymentConfig->get('modules/Magento_User');
+        $adminUserModuleIsInstalled = (bool)$this->deploymentConfig->get('modules/Magento_User');
         //Admin user data is not system data, so we need to install it only if schema for admin user was installed
         if ($adminUserModuleIsInstalled) {
             $this->assertDbConfigExists();

@@ -73,6 +73,26 @@ class OperationsExecutor
     }
 
     /**
+     * Retrieve only destructive operation names
+     *
+     * For example, drop_table, recreate_table, etc
+     *
+     * @return array
+     */
+    public function getDestructiveOperations()
+    {
+        $operations = [];
+
+        foreach ($this->operations as $operation) {
+            if ($operation->isOperationDestructive()) {
+                $operations[$operation->getOperationName()] = $operation->getOperationName();
+            }
+        }
+
+        return $operations;
+    }
+
+    /**
      * In order to successfully run all operations we need to start setup for all
      * connections first
      *

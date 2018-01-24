@@ -33,6 +33,16 @@ class DropReference implements OperationInterface
     }
 
     /**
+     * We can drop references and this will not cause any issues
+     *
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getOperationName()
