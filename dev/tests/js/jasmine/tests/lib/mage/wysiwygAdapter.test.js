@@ -13,9 +13,11 @@ define([
             '___directive/e3ttZWRpYSB1cmw9Ind5c2l3eWcvYmFuYW5hLmpwZyJ9fQ%2C%2C" alt="" width="612" height="459">' +
             '</p>';
 
+    wysiwyg.config = {'directives_url': 'http://magento2.vagrant154/admin/cms/wysiwyg/directive/'};
+
     describe('wysiwygAdapter', function () {
         it('encodes directives properly', function () {
-            wysiwyg.encodeDirectives(decodedHtml).toEqual(encodedHtml);
+            expect(wysiwyg.encodeDirectives(decodedHtml)).toEqual(encodedHtml);
         });
 
         it('decodes directives properly', function () {
