@@ -101,8 +101,10 @@ define([
          * @param {Boolean} disabled
          */
         setDisabled: function (disabled) {
-            if (this.$wysiwygEditorButton) {
-                this.$wysiwygEditorButton.attr('disabled', disabled);
+            if (this.$wysiwygEditorButton && disabled) {
+                this.$wysiwygEditorButton.prop('disabled', 'disabled');
+            } else if (this.$wysiwygEditorButton) {
+                this.$wysiwygEditorButton.removeProp('disabled');
             }
 
             if (wysiwyg && disabled) {
