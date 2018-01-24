@@ -13,7 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Cron operation is responsible for deleting all product prices on WEBSITE level
- * in case 'Catalog Price Scope' configuratoin parameter is set to GLOBAL.
+ * in case 'Catalog Price Scope' configuration parameter is set to GLOBAL.
  */
 class DeleteOutdatedPriceValues
 {

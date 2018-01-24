@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -18,6 +19,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @var \Magento\TestFramework\TestCase\GraphQl\Client
      */
     private $graphQlClient;
+
+    /**
+     * @var \Magento\Framework\App\Cache
+     */
+    private $appCache;
 
     /**
      * Perform GraphQL call to the system under test.
@@ -41,6 +47,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $this->composeHeaders($headers)
         );
     }
+
     /**
      * @return string[]
      */
@@ -51,6 +58,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $headersArray[] = sprintf('%s: %s', $key, $value);
         }
         return $headersArray;
+    }
+
+    /**
+     * Clear cache so integration test can alter cached GraphQL schema
+     *
+     * @return bool
+     */
+    protected function cleanCache()
+    {
+        return $this->getAppCache()->clean(\Magento\Framework\App\Config::CACHE_TAG);
+    }
+
+    /**
+     * Return app cache setup.
+     *
+     * @return \Magento\Framework\App\Cache
+     */
+    private function getAppCache()
+    {
+        if (null === $this->appCache) {
+            $this->appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
+        }
+        return $this->appCache;
     }
 
     /**

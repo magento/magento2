@@ -1,0 +1,410 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="Query">
+        <field xsi:type="ObjectOutputField" name="products" type="Products" resolver="Magento\CatalogGraphQl\Model\Resolver\Products">
+            <argument xsi:type="ScalarArgument" name="search" type="String"/>
+            <argument xsi:type="ObjectArgument" name="filter" type="ProductFilterInput"/>
+            <argument xsi:type="ScalarArgument" name="pageSize" type="Int"/>
+            <argument xsi:type="ScalarArgument" name="currentPage" type="Int"/>
+            <argument xsi:type="ObjectArgument" name="sort" type="ProductSortInput"/>
+        </field>
+    </type>
+    <type xsi:type="Enum" name="CurrencyEnum">
+        <item name="afn">AFN</item>
+        <item name="all">ALL</item>
+        <item name="azn">AZN</item>
+        <item name="dzd">DZD</item>
+        <item name="aoa">AOA</item>
+        <item name="ars">ARS</item>
+        <item name="amd">AMD</item>
+        <item name="awg">AWG</item>
+        <item name="aud">AUD</item>
+        <item name="bsd">BSD</item>
+        <item name="bhd">BHD</item>
+        <item name="bdt">BDT</item>
+        <item name="bbd">BBD</item>
+        <item name="byr">BYR</item>
+        <item name="bzd">BZD</item>
+        <item name="bmd">BMD</item>
+        <item name="btn">BTN</item>
+        <item name="bob">BOB</item>
+        <item name="bam">BAM</item>
+        <item name="bwp">BWP</item>
+        <item name="brl">BRL</item>
+        <item name="gbp">GBP</item>
+        <item name="bnd">BND</item>
+        <item name="bgn">BGN</item>
+        <item name="buk">BUK</item>
+        <item name="bif">BIF</item>
+        <item name="khr">KHR</item>
+        <item name="cad">CAD</item>
+        <item name="cve">CVE</item>
+        <item name="czk">CZK</item>
+        <item name="kyd">KYD</item>
+        <item name="gqe">GQE</item>
+        <item name="clp">CLP</item>
+        <item name="cny">CNY</item>
+        <item name="cop">COP</item>
+        <item name="kmf">KMF</item>
+        <item name="cdf">CDF</item>
+        <item name="crc">CRC</item>
+        <item name="hrk">HRK</item>
+        <item name="cup">CUP</item>
+        <item name="dkk">DKK</item>
+        <item name="djf">DJF</item>
+        <item name="dop">DOP</item>
+        <item name="xcd">XCD</item>
+        <item name="egp">EGP</item>
+        <item name="svc">SVC</item>
+        <item name="ern">ERN</item>
+        <item name="eek">EEK</item>
+        <item name="etb">ETB</item>
+        <item name="eur">EUR</item>
+        <item name="fkp">FKP</item>
+        <item name="fjd">FJD</item>
+        <item name="gmd">GMD</item>
+        <item name="gek">GEK</item>
+        <item name="gel">GEL</item>
+        <item name="ghs">GHS</item>
+        <item name="gip">GIP</item>
+        <item name="gtq">GTQ</item>
+        <item name="gnf">GNF</item>
+        <item name="gyd">GYD</item>
+        <item name="htg">HTG</item>
+        <item name="hnl">HNL</item>
+        <item name="hkd">HKD</item>
+        <item name="huf">HUF</item>
+        <item name="isk">ISK</item>
+        <item name="inr">INR</item>
+        <item name="idr">IDR</item>
+        <item name="irr">IRR</item>
+        <item name="iqd">IQD</item>
+        <item name="ils">ILS</item>
+        <item name="jmd">JMD</item>
+        <item name="jpy">JPY</item>
+        <item name="jod">JOD</item>
+        <item name="kzt">KZT</item>
+        <item name="kes">KES</item>
+        <item name="kwd">KWD</item>
+        <item name="kgs">KGS</item>
+        <item name="lak">LAK</item>
+        <item name="lvl">LVL</item>
+        <item name="lbp">LBP</item>
+        <item name="lsl">LSL</item>
+        <item name="lrd">LRD</item>
+        <item name="lyd">LYD</item>
+        <item name="ltl">LTL</item>
+        <item name="mop">MOP</item>
+        <item name="mkd">MKD</item>
+        <item name="mga">MGA</item>
+        <item name="mwk">MWK</item>
+        <item name="myr">MYR</item>
+        <item name="mvr">MVR</item>
+        <item name="lsm">LSM</item>
+        <item name="mro">MRO</item>
+        <item name="mur">MUR</item>
+        <item name="mxn">MXN</item>
+        <item name="mdl">MDL</item>
+        <item name="mnt">MNT</item>
+        <item name="mad">MAD</item>
+        <item name="mzn">MZN</item>
+        <item name="mmk">MMK</item>
+        <item name="nad">NAD</item>
+        <item name="npr">NPR</item>
+        <item name="ang">ANG</item>
+        <item name="ytl">YTL</item>
+        <item name="nzd">NZD</item>
+        <item name="nic">NIC</item>
+        <item name="ngn">NGN</item>
+        <item name="kpw">KPW</item>
+        <item name="nok">NOK</item>
+        <item name="omr">OMR</item>
+        <item name="pkr">PKR</item>
+        <item name="pab">PAB</item>
+        <item name="pgk">PGK</item>
+        <item name="pyg">PYG</item>
+        <item name="pen">PEN</item>
+        <item name="php">PHP</item>
+        <item name="pln">PLN</item>
+        <item name="qar">QAR</item>
+        <item name="rhd">RHD</item>
+        <item name="ron">RON</item>
+        <item name="rub">RUB</item>
+        <item name="rwf">RWF</item>
+        <item name="shp">SHP</item>
+        <item name="std">STD</item>
+        <item name="sar">SAR</item>
+        <item name="rsd">RSD</item>
+        <item name="scr">SCR</item>
+        <item name="sll">SLL</item>
+        <item name="sgd">SGD</item>
+        <item name="skk">SKK</item>
+        <item name="sbd">SBD</item>
+        <item name="sos">SOS</item>
+        <item name="zar">ZAR</item>
+        <item name="krw">KRW</item>
+        <item name="lkr">LKR</item>
+        <item name="sdg">SDG</item>
+        <item name="srd">SRD</item>
+        <item name="szl">SZL</item>
+        <item name="sek">SEK</item>
+        <item name="chf">CHF</item>
+        <item name="syp">SYP</item>
+        <item name="twd">TWD</item>
+        <item name="tjs">TJS</item>
+        <item name="tzs">TZS</item>
+        <item name="thb">THB</item>
+        <item name="top">TOP</item>
+        <item name="ttd">TTD</item>
+        <item name="tnd">TND</item>
+        <item name="tmm">TMM</item>
+        <item name="usd">USD</item>
+        <item name="ugx">UGX</item>
+        <item name="uah">UAH</item>
+        <item name="aed">AED</item>
+        <item name="uyu">UYU</item>
+        <item name="uzs">UZS</item>
+        <item name="vuv">VUV</item>
+        <item name="veb">VEB</item>
+        <item name="vef">VEF</item>
+        <item name="vnd">VND</item>
+        <item name="che">CHE</item>
+        <item name="chw">CHW</item>
+        <item name="xof">XOF</item>
+        <item name="wst">WST</item>
+        <item name="yer">YER</item>
+        <item name="zmk">ZMK</item>
+        <item name="zwd">ZWD</item>
+        <item name="try">TRY</item>
+        <item name="azm">AZM</item>
+        <item name="rol">ROL</item>
+        <item name="trl">TRL</item>
+        <item name="xpf">XPF</item>
+    </type>
+    <type xsi:type="Enum" name="PriceAdjustmentCodesEnum"/>
+    <type xsi:type="Enum" name="PriceAdjustmentDescriptionEnum">
+        <item name="included">INCLUDED</item>
+        <item name="excluded">EXCLUDED</item>
+    </type>
+    <type xsi:type="OutputType" name="Money">
+        <field xsi:type="ScalarOutputField" name="value" type="Float"/>
+        <field xsi:type="ObjectOutputField" name="currency" type="CurrencyEnum"/>
+    </type>
+    <type xsi:type="OutputType" name="Price">
+        <field xsi:type="ObjectOutputField" name="amount" type="Money"/>
+        <field xsi:type="ObjectArrayOutputField" name="adjustments" itemType="PriceAdjustment"/>
+    </type>
+    <type xsi:type="OutputType" name="PriceAdjustment">
+        <field xsi:type="ObjectOutputField" name="amount" type="Money"/>
+        <field xsi:type="ObjectOutputField" name="code" type="PriceAdjustmentCodesEnum"/>
+        <field xsi:type="ObjectOutputField" name="description" type="PriceAdjustmentDescriptionEnum"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductPrices">
+        <field xsi:type="ObjectOutputField" name="minimalPrice" type="Price"/>
+        <field xsi:type="ObjectOutputField" name="maximalPrice" type="Price"/>
+        <field xsi:type="ObjectOutputField" name="regularPrice" type="Price"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductCategoryLinks">
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="category_id" type="String"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductLinks">
+        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="link_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="linked_product_sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="linked_product_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductOptionsValues">
+        <field xsi:type="ScalarOutputField" name="title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="option_type_id" type="Int"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductOptions">
+        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="is_require" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="file_extension" type="String"/>
+        <field xsi:type="ScalarOutputField" name="max_characters" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="image_size_x" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="image_size_y" type="Int"/>
+        <field xsi:type="ObjectArrayOutputField" name="values" itemType="ProductOptionsValues"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductTierPrices">
+        <field xsi:type="ScalarOutputField" name="customer_group_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="value" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="percentage_value" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="website_id" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="customer_group_id" type="String"/>
+    </type>
+    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="name" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
+        <field xsi:type="ScalarOutputField" name="description" type="String"/>
+        <field xsi:type="ScalarOutputField" name="short_description" type="String"/>
+        <field xsi:type="ScalarOutputField" name="special_price" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="special_from_date" type="String"/>
+        <field xsi:type="ScalarOutputField" name="special_to_date" type="String"/>
+        <field xsi:type="ScalarOutputField" name="attribute_set_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="meta_title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="meta_keyword" type="String"/>
+        <field xsi:type="ScalarOutputField" name="meta_description" type="String"/>
+        <field xsi:type="ScalarOutputField" name="image" type="String"/>
+        <field xsi:type="ScalarOutputField" name="small_image" type="String"/>
+        <field xsi:type="ScalarOutputField" name="thumbnail" type="String"/>
+        <field xsi:type="ScalarOutputField" name="new_from_date" type="String"/>
+        <field xsi:type="ScalarOutputField" name="new_to_date" type="String"/>
+        <field xsi:type="ScalarOutputField" name="tier_price" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="custom_design" type="String"/>
+        <field xsi:type="ScalarOutputField" name="custom_design_from" type="String"/>
+        <field xsi:type="ScalarOutputField" name="custom_design_to" type="String"/>
+        <field xsi:type="ScalarOutputField" name="custom_layout_update" type="String"/>
+        <field xsi:type="ScalarOutputField" name="custom_layout" type="String"/>
+        <field xsi:type="ScalarOutputField" name="page_layout" type="String"/>
+        <field xsi:type="ScalarArrayOutputField" name="category_ids" itemType="Int"/>
+        <field xsi:type="ScalarOutputField" name="options_container" type="String"/>
+        <field xsi:type="ScalarOutputField" name="image_label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="small_image_label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="thumbnail_label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="created_at" type="String"/>
+        <field xsi:type="ScalarOutputField" name="updated_at" type="String"/>
+        <field xsi:type="ScalarOutputField" name="country_of_manufacture" type="String"/>
+        <field xsi:type="ScalarOutputField" name="type_id" type="String"/>
+        <field xsi:type="ScalarOutputField" name="weight" type="Float"/>
+        <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int"/>
+        <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks"/>
+        <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinks"/>
+        <field xsi:type="ObjectArrayOutputField" name="options" itemType="ProductOptions"/>
+        <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry"/>
+        <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices"/>
+        <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
+        <field xsi:type="ScalarOutputField" name="gift_message_available" type="String"/>
+    </type>
+    <type xsi:type="OutputType" name="SimpleProduct">
+        <implements interface="ProductInterface" copyFields="true"/>
+    </type>
+    <type xsi:type="InputType" name="ProductFilterInput">
+        <field xsi:type="ObjectInputField" name="name" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="sku" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="description" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="short_description" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="price" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="special_price" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="special_from_date" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="special_to_date" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="weight" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="manufacturer" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="meta_title" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="meta_keyword" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="meta_description" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="image" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="small_image" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="thumbnail" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="tier_price" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="color" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="news_from_date" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="news_to_date" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="custom_design" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="custom_design_from" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="custom_design_to" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="custom_layout_update" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="page_layout" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="category_ids" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="options_container" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="required_options" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="has_options" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="image_label" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="small_image_label" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="thumbnail_label" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="created_at" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="updated_at" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="country_of_manufacture" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="custom_layout" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="gift_message_available" type="FilterTypeInput"/>
+        <field xsi:type="ObjectInputField" name="or" type="ProductFilterInput"/>
+    </type>
+    <type xsi:type="InputType" name="ProductSortInput">
+        <field xsi:type="ObjectInputField" name="name" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="sku" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="description" type="SortEnum"/>
+        <field xsi:type="ObjectInputField"  name="short_description" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="price" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="special_price" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="special_from_date" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="special_to_date" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="weight" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="manufacturer" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="meta_title" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="meta_keyword" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="meta_description" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="image" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="small_image" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="thumbnail" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="tier_price" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="color" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="news_from_date" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="news_to_date" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="custom_design" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="custom_design_from" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="custom_design_to" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="custom_layout_update" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="page_layout" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="category_ids" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="options_container" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="required_options" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="has_options" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="image_label" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="small_image_label" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="thumbnail_label" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="created_at" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="updated_at" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="country_of_manufacture" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="custom_layout" type="SortEnum"/>
+        <field xsi:type="ObjectInputField" name="gift_message_available" type="SortEnum"/>
+    </type>
+    <type xsi:type="OutputType" name="Products">
+        <field xsi:type="ObjectArrayOutputField" name="items" itemType="ProductInterface"/>
+        <field xsi:type="ObjectOutputField" name="page_info" type="SearchResultPageInfo"/>
+        <field xsi:type="ScalarOutputField" name="total_count" type="Int"/>
+    </type>
+    <type xsi:type="OutputType" name="MediaGalleryEntry">
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="media_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="disabled" type="Boolean"/>
+        <field xsi:type="ScalarArrayOutputField" name="types" itemType="String"/>
+        <field xsi:type="ScalarOutputField" name="file" type="String"/>
+        <field xsi:type="ObjectOutputField" name="content" type="ProductMediaGalleryEntriesContent"/>
+        <field xsi:type="ObjectOutputField" name="video_content" type="ProductMediaGalleryEntriesVideoContent"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductMediaGalleryEntriesContent">
+        <field xsi:type="ScalarOutputField" name="base64_encoded_data" type="String"/>
+        <field xsi:type="ScalarOutputField" name="type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="name" type="String"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductMediaGalleryEntriesVideoContent">
+        <field xsi:type="ScalarOutputField" name="media_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="video_provider" type="String"/>
+        <field xsi:type="ScalarOutputField" name="video_url" type="String"/>
+        <field xsi:type="ScalarOutputField" name="video_title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="video_description" type="String"/>
+        <field xsi:type="ScalarOutputField" name="video_metadata" type="String"/>
+    </type>
+</config>
