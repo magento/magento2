@@ -295,9 +295,9 @@ define([
             }
 
             if (enabled) {
-                this.getTextArea().removeAttr('disabled');
+                this.getTextArea().removeProp('disabled');
             } else {
-                this.getTextArea().attr('disabled', 'disabled');
+                this.getTextArea().prop('disabled', 'disabled');
             }
         },
 

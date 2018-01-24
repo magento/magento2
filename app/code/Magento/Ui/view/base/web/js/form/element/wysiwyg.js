@@ -107,10 +107,10 @@ define([
 
             if (wysiwyg && disabled) {
                 wysiwyg.setEditorStatus(false);
-                wysiwyg.getPluginButtons().attr('disabled', 'disabled');
+                wysiwyg.getPluginButtons().prop('disabled', 'disabled');
             } else if (wysiwyg) {
                 wysiwyg.setEditorStatus(true);
-                wysiwyg.getPluginButtons().removeAttr('disabled');
+                wysiwyg.getPluginButtons().removeProp('disabled');
             }
         }
     });
