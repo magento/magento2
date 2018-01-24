@@ -25,6 +25,7 @@ class Container implements Layout\ReaderInterface
     const CONTAINER_OPT_HTML_TAG = 'htmlTag';
     const CONTAINER_OPT_HTML_CLASS = 'htmlClass';
     const CONTAINER_OPT_HTML_ID = 'htmlId';
+    const CONTAINER_OPT_HTML_ATTRIBUTES = 'htmlAttributes';
     const CONTAINER_OPT_LABEL = 'label';
     const CONTAINER_OPT_DISPLAY = 'display';
     /**#@-*/
@@ -113,11 +114,12 @@ class Container implements Layout\ReaderInterface
             }
         } else {
             $elementData['attributes'] = [
-                self::CONTAINER_OPT_HTML_TAG   => (string)$currentElement[self::CONTAINER_OPT_HTML_TAG],
-                self::CONTAINER_OPT_HTML_ID    => (string)$currentElement[self::CONTAINER_OPT_HTML_ID],
-                self::CONTAINER_OPT_HTML_CLASS => (string)$currentElement[self::CONTAINER_OPT_HTML_CLASS],
-                self::CONTAINER_OPT_LABEL      => (string)$currentElement[self::CONTAINER_OPT_LABEL],
-                self::CONTAINER_OPT_DISPLAY    => (string)$currentElement[self::CONTAINER_OPT_DISPLAY],
+                self::CONTAINER_OPT_HTML_TAG        => (string)$currentElement[self::CONTAINER_OPT_HTML_TAG],
+                self::CONTAINER_OPT_HTML_ID         => (string)$currentElement[self::CONTAINER_OPT_HTML_ID],
+                self::CONTAINER_OPT_HTML_CLASS      => (string)$currentElement[self::CONTAINER_OPT_HTML_CLASS],
+                self::CONTAINER_OPT_HTML_ATTRIBUTES => (string)$currentElement[self::CONTAINER_OPT_HTML_ATTRIBUTES],
+                self::CONTAINER_OPT_LABEL           => (string)$currentElement[self::CONTAINER_OPT_LABEL],
+                self::CONTAINER_OPT_DISPLAY         => (string)$currentElement[self::CONTAINER_OPT_DISPLAY],
             ];
         }
         $scheduledStructure->setStructureElementData($containerName, $elementData);
