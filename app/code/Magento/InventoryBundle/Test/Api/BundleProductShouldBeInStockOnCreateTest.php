@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryBundle\Test\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Type;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Bundle\Api\Data\LinkInterface;
 
@@ -62,11 +63,10 @@ class BundleProductShouldBeInStockOnCreateTest extends WebapiAbstract
                 ],
             ],
         ];
-
         $product = [
             "sku" => self::BUNDLE_PRODUCT_SKU,
             "name" => 'bundle product',
-            "type_id" => "bundle",
+            "type_id" => Type::TYPE_BUNDLE,
             "price" => 50,
             'attribute_set_id' => 4,
             "custom_attributes" => [
