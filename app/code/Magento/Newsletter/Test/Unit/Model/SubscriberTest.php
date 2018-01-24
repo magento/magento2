@@ -187,6 +187,12 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
 
+        $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMock();
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
+
         $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
     }
 
