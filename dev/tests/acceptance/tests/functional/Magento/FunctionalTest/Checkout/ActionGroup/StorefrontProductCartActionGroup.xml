@@ -16,7 +16,7 @@
         </arguments>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart" />
-        <!-- @TODO: Use general message selector after MQE-676 is fixed -->
+        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart(product.name)}}" time="30" stepKey="assertMessage"/>
         <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.ProductCount}}" time="30" stepKey="assertProductCount"/>
     </actionGroup>
@@ -28,28 +28,27 @@
             <argument name="productCount"/>
         </arguments>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
-        <!-- @TODO: Use general message selector after MQE-676 is fixed -->
+        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart(product.name)}}" time="30" stepKey="assertMessage"/>
         <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.ProductCount}}" time="30" stepKey="assertProductCount"/>
     </actionGroup>
 
-    <!-- Open the product from Minicart -->
-    <actionGroup name="StorefrontOpenMinicartProductActionGroup">
+    <!-- Open the Minicart and check Simple Product -->
+    <actionGroup name="StorefrontOpenMinicartAndCheckSimpleProductActionGroup">
         <arguments>
             <argument name="product"/>
         </arguments>
         <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName(product.name)}}" stepKey="waitForMinicartProduct" />
         <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="clickShowMinicart" />
-        <click selector="{{StorefrontMinicartSection.ProductLinkByName(product.name)}}" stepKey="clickMinicartProduct" />
+        <see userInput="${{product.price}}.00" selector="{{StorefrontMinicartSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
     </actionGroup>
 
-    <!-- Check Product in the Cart -->
-    <actionGroup name="StorefrontCheckCartProductActionGroup">
+    <!-- Check Simple Product in the Cart -->
+    <actionGroup name="StorefrontCheckCartSimpleProductActionGroup">
         <arguments>
             <argument name="product"/>
             <argument name="productQuantity"/>
         </arguments>
-        <!-- @TODO: MAGETWO-75411 Add Product Image Check -->
         <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{CheckoutCartProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
         <seeInField userInput="{{productQuantity}}" selector="{{CheckoutCartProductSection.ProductQuantityByName(product.name)}}" stepKey="assertProductQuantity"/>

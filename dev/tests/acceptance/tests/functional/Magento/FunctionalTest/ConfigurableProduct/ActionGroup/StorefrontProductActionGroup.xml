@@ -8,10 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <!-- Check the simple product on the product page -->
-    <actionGroup name="StorefrontCheckSimpleProduct">
+    <!-- Check the configurable product on the product page -->
+    <actionGroup name="StorefrontCheckConfigurableProduct">
         <arguments>
             <argument name="product"/>
+            <argument name="optionProduct"/>
         </arguments>
         <!-- @TODO: Change to product.custom_attributes[url_key] after MQE-654 is fixed -->
         <!-- @TODO: Change to {{StorefrontProductPage.url(category.custom_attributes[4][value])}} after MQE-693 is fixed -->
@@ -19,7 +20,7 @@
         <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
-        <see userInput="${{product.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart" />
         <!-- @TODO: Change to product.custom_attributes[desciption] after MQE-654 is fixed -->
