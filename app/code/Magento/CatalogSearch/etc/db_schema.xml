@@ -11,19 +11,4 @@
         <column xsi:type="float" name="search_weight" scale="0" precission="0" unsigned="false" nullable="false"
                 default="1" comment="Search Weight"/>
     </table>
-    <table name="catalogsearch_fulltext_scope1" resource="default" engine="innodb"
-           comment="catalogsearch_fulltext_scope1_tmp">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Entity ID"/>
-        <column xsi:type="int" name="attribute_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Attribute_id"/>
-        <column xsi:type="longtext" name="data_index" nullable="true" comment="Data index"/>
-        <constraint xsi:type="primary" name="IDX_PRIMARY">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="FTI_FULLTEXT_DATA_INDEX" indexType="fulltext">
-            <column name="data_index"/>
-        </index>
-    </table>
 </schema>

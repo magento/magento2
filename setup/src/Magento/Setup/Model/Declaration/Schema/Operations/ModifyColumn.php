@@ -57,7 +57,7 @@ class ModifyColumn implements OperationInterface
      */
     public function isOperationDestructive()
     {
-        return true;
+        return false;
     }
 
     /**
