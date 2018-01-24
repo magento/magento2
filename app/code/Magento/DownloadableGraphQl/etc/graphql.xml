@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="DownloadableProduct">
+        <implements interface="ProductInterface" copyFields="true"/>
+        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_samples" itemType="DownloadableProductSamples"/>
+        <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
+        <field xsi:type="ObjectOutputField" name="color" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="size" type="String"/>
+        <field xsi:type="ObjectOutputField" name="manufacturer" type="Int"/>
+    </type>
+    <type xsi:type="OutputType" name="DownloadableProductSamples">
+        <field xsi:type="ObjectOutputField" name="id" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="title" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sort_order" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="sample_type" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sample_file" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sample_url" type="String"/>
+    </type>
+</config>
