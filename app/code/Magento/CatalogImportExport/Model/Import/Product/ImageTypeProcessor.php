@@ -19,8 +19,7 @@ class ImageTypeProcessor
      */
     public function __construct(
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
-    )
-    {
+    ) {
         $this->resourceFactory = $resourceFactory;
     }
 
