@@ -16,7 +16,6 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -29,6 +28,7 @@
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
@@ -69,7 +69,7 @@
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload.height}}" stepKey="fillImageHeight1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn1" />
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="scrollToTinyMCE4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
         <waitForPageLoad stepKey="waitForPageLoad4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse2" />
@@ -99,6 +99,7 @@
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading13" />
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>

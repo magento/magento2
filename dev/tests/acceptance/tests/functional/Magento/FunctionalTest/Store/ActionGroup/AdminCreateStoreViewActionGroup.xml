@@ -6,12 +6,13 @@
   */
 -->
 <!-- Test XML Example -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateStoreViewActionGroup">
         <arguments>
             <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
         </arguments>
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_store/newStore" stepKey="navigateToNewStoreView"/>
+        <amOnPage url="{{AdminSystemStoreViewPage.url}}" stepKey="navigateToNewStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <!--Create Store View-->
         <selectOption selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{StoreGroup.name}}" stepKey="selectStore" />
@@ -25,4 +26,4 @@
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>
-</config>
+</actionGroups>

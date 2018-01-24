@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultCatalogRule" type="catalogRule">
         <data key="name" unique="suffix">CatalogPriceRule</data>
@@ -21,4 +21,4 @@
         <data key="simple_action">by_percent</data>
         <data key="discount_amount">10</data>
     </entity>
-</config>
+</entities>

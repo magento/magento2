@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SimpleSalesRule" type="SalesRule">
         <data key="name" unique="suffix">SimpleSalesRule</data>
@@ -21,4 +21,4 @@
             <item>1</item>
         </array>
     </entity>
-</config>
+</entities>

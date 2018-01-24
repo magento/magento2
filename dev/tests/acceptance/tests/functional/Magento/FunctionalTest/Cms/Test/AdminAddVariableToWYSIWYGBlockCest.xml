@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Variable to WYSIWYG Block"/>
             <stories value="Add Variable to WYSIWYG MAGETWO-42158"/>
-            <group value="variableBLock"/>
+            <group value="variableBlock"/>
             <title value="You should be able to add variable to WYSIWYG Editor of Block"/>
             <description value="You should be able to add variable to WYSIWYG Editor Block"/>
             <testCaseId value="MAGETWO-84378"/>
@@ -38,9 +38,9 @@
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
-        <click selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
         <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
         <!--see Insert Variable button disabled-->
@@ -56,8 +56,9 @@
         <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
         <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
-        <waitForPageLoad stepKey="waitForPageLoad10" />
-        <click selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+        <scrollTo selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" stepKey="scrollToBlockTitle" />
+        <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideoutCloses" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <!--see custom variable-->
         <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
@@ -73,21 +74,23 @@
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
         <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
-        <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{BlockWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
-        <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
+        <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
         <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
         <waitForPageLoad stepKey="waitForPageLoad8" />
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-        <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <waitForPageLoad stepKey="waitForPageLoad9" />
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
@@ -116,6 +119,7 @@
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

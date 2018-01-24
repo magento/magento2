@@ -7,7 +7,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="createCatalogRule" dataType="catalogRule"
                type="create" auth="adminFormKey" url="/catalog_rule/promo_catalog/save/" method="POST">
@@ -24,4 +24,4 @@
         <field key="simple_action">string</field>
         <field key="discount_amount">string</field>
     </operation>
-</config>
+</operations>
