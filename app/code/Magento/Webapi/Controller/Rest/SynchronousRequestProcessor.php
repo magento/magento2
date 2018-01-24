@@ -1,6 +1,8 @@
 <?php
-
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
@@ -10,6 +12,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * REST request processor for general synchronous requests
+ */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
     const SYNC_PATH = "/V1/";
@@ -58,13 +63,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         $this->_objectManager = $objectManager;
     }
 
-    /**
-     *  {@inheritdoc}
-     */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
-    {
-        return strpos($request->getPathInfo(),  self::SYNC_PATH) === 0;
-    }
+
 
     /**
      *  {@inheritdoc}
@@ -94,5 +93,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         }
         $this->_response->prepareResponse($outputData);
     }
+
+
 
 }

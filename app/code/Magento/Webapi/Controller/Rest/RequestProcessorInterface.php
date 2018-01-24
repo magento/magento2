@@ -1,21 +1,16 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pavel
- * Date: 16.01.18
- * Time: 14:48
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Controller\Rest;
 
-
+/**
+ *  Request processor interface
+ */
 interface RequestProcessorInterface
 {
-    /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
-     * @return bool
-     */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request);
 
     /**
      * @param \Magento\Framework\Webapi\Rest\Request $request

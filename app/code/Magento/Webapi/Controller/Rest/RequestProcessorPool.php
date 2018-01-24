@@ -1,13 +1,23 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Webapi\Controller\Rest;
 
-
-class RequestProcessorPool
+/**
+ *  Request Processor Pool
+ */
+class RequestProcessorPool implements RequestProcessorInterface
 {
-    const REQUEST_PROCESSORS_ARRAY_OBJECT_KEY = 'object';
 
-    /** @var \Magento\Webapi\Controller\Rest\RequestProcessorInterface[]  */
+    /** @var array  */
     private $requestProcessors;
+
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    private $objectManager;
 
 
     /**
@@ -16,38 +26,29 @@ class RequestProcessorPool
      */
     public function __construct($requestProcessors = [])
     {
-        $this->requestProcessors = $this->_getSortedRequestProcessors($requestProcessors);
+        $this->requestProcessors = $requestProcessors;
+        $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**
-     * @param array $requestProcessors
-     * @return array
-     */
-    protected function _getSortedRequestProcessors($requestProcessors) {
-        if (count($requestProcessors)) {
-            uasort($requestProcessors, function($proc1, $proc2){
-                $proc1["sortOrder"] = isset($proc1["sortOrder"]) ? (int) $proc1["sortOrder"] : 0;
-                $proc2["sortOrder"] = isset($proc2["sortOrder"]) ? (int) $proc2["sortOrder"] : 0;
-                return ($proc1["sortOrder"] <  $proc2["sortOrder"]) ? -1 : 1;
-            });
-            return array_column($requestProcessors, self::REQUEST_PROCESSORS_ARRAY_OBJECT_KEY);
-        }
-        return [];
-    }
-
-    /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
-     * @return \Magento\Webapi\Controller\Rest\RequestProcessorInterface
+     * {@inheritdoc}
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function getRequestProcessor(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        foreach ($this->requestProcessors as $requestProcessor) {
-            if ($requestProcessor->canProcess($request)) {
-                return $requestProcessor;
+        $processed = false;
+        foreach ($this->requestProcessors as $path => $name) {
+            if (strpos(ltrim($request->getPathInfo(), '/'), $path) === 0) {
+                /**@var RequestProcessorInterface $processor */
+                $processor = $this->objectManager->get($name);
+                $processor->process($request);
+                $processed = true;
+                break;
             }
         }
-        throw new \Magento\Framework\Exception\NotFoundException(__('Specified request does not match any route.'));
+        if (!$processed) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Specified request cannot be processed.'));
+        }
     }
 
 }

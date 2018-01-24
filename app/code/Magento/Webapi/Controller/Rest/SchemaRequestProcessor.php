@@ -1,22 +1,22 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Webapi\Controller\Rest;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
 
+/**
+ * REST request processor for "schema" requests
+ */
 class SchemaRequestProcessor implements RequestProcessorInterface
 {
-    /** Path for accessing REST API schema */
-    const SCHEMA_PATH = '/schema';
-    /**
-     *  {@inheritdoc}
-     */
-
-    /**
+     /**
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
      */
-    protected $swaggerGenerator;
+    private $swaggerGenerator;
 
 
     /**
@@ -31,11 +31,6 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     {
         $this->swaggerGenerator = $swaggerGenerator;
         $this->_response = $response;
-    }
-
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
-    {
-       return $request->getPathInfo() === self::SCHEMA_PATH;
     }
 
     /**

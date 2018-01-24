@@ -13,17 +13,13 @@ use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
-use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Webapi\Controller\Rest\RequestProcessorPool;
-
 
 /**
  * Front controller for WebAPI REST area.
@@ -95,10 +91,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      */
     protected $areaList;
 
-    /**
-     * @var \Magento\Framework\Webapi\Rest\Response\FieldsFilter
-     */
-    protected $fieldsFilter;
 
     /**
      * @var \Magento\Framework\Session\Generic
@@ -111,15 +103,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      */
     protected $paramsOverrider;
 
-    /**
-     * @var \Magento\Framework\Webapi\ServiceOutputProcessor
-     */
-    protected $serviceOutputProcessor;
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
+     * @var RequestProcessorPool
      */
-    protected $swaggerGenerator;
+    protected $requestProcessorPool;
 
     /**
      * @var StoreManagerInterface
@@ -127,20 +115,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      */
     private $storeManager;
 
-    /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var Rest\InputParamsResolver
-     */
-    private $inputParamsResolver;
-
-    /**
-     * @var RequestProcessorPool
-     */
-    protected $requestProcessorPool;
 
     /**
      * Initialize dependencies
@@ -155,11 +129,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
-     * @param FieldsFilter $fieldsFilter
      * @param ParamsOverrider $paramsOverrider
-     * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param Generator $swaggerGenerator ,
      * @param StoreManagerInterface $storeManager
+     * @param RequestProcessorPool $requestProcessorPool
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -175,10 +147,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
-        FieldsFilter $fieldsFilter,
         ParamsOverrider $paramsOverrider,
-        ServiceOutputProcessor $serviceOutputProcessor,
-        Generator $swaggerGenerator,
         StoreManagerInterface $storeManager,
         RequestProcessorPool $requestProcessorPool
     ) {
@@ -192,39 +161,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
-        $this->fieldsFilter = $fieldsFilter;
         $this->paramsOverrider = $paramsOverrider;
-        $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
-        $this->requestProcessorPool = $requestProcessorPool;
+        $this->requestProcessorPool = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get('Magento\Webapi\Controller\Rest\RequestProcessorInterface');
     }
 
-    /**
-     * Get deployment config
-     *
-     * @return DeploymentConfig
-     */
-    private function getDeploymentConfig()
-    {
-        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
-            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\App\DeploymentConfig::class);
-        }
-        return $this->deploymentConfig;
-    }
 
-    /**
-     * Set deployment config
-     *
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @return void
-     * @deprecated 100.1.0
-     */
-    public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
-    {
-        $this->deploymentConfig = $deploymentConfig;
-    }
 
     /**
      * Handle REST request
@@ -241,10 +184,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
-
         try {
-            $requestProcessor = $this->requestProcessorPool->getRequestProcessor($this->_request);
-            $requestProcessor->process($this->_request);
+            $this->requestProcessorPool->process($this->_request);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
@@ -296,59 +237,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         }
     }
 
-    /**
-     * Execute schema request
-     *
-     * @return void
-     */
-    protected function processSchemaRequest()
-    {
-        $requestedServices = $this->_request->getRequestedServices('all');
-        $requestedServices = $requestedServices == Request::ALL_SERVICES
-            ? $this->swaggerGenerator->getListOfServices()
-            : $requestedServices;
-        $responseBody = $this->swaggerGenerator->generate(
-            $requestedServices,
-            $this->_request->getScheme(),
-            $this->_request->getHttpHost(false),
-            $this->_request->getRequestUri()
-        );
-        $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
-    }
 
-    /**
-     * Execute API request
-     *
-     * @return void
-     * @throws AuthorizationException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Webapi\Exception
-     */
-    protected function processApiRequest()
-    {
-        $inputParams = $this->getInputParamsResolver()->resolve();
-
-        $route = $this->getInputParamsResolver()->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-
-        $service = $this->_objectManager->get($serviceClassName);
-        /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
-        $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-        $outputData = $this->serviceOutputProcessor->process(
-            $outputData,
-            $serviceClassName,
-            $serviceMethodName
-        );
-        if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
-            $outputData = $this->fieldsFilter->filter($outputData);
-        }
-        $header = $this->getDeploymentConfig()->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT);
-        if ($header) {
-            $this->_response->setHeader('X-Frame-Options', $header);
-        }
-        $this->_response->prepareResponse($outputData);
-    }
 
     /**
      * Validate request
@@ -372,19 +261,5 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         }
     }
 
-    /**
-     * The getter function to get InputParamsResolver object
-     *
-     * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
-     *
-     * @deprecated 100.1.0
-     */
-    private function getInputParamsResolver()
-    {
-        if ($this->inputParamsResolver === null) {
-            $this->inputParamsResolver = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Webapi\Controller\Rest\InputParamsResolver::class);
-        }
-        return $this->inputParamsResolver;
-    }
+
 }

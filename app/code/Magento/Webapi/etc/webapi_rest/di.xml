@@ -70,19 +70,14 @@
     </type>
     <!-- End of configuration to check that permissions are checked on fields -->
 
+    <preference for="Magento\Webapi\Controller\Rest\RequestProcessorInterface" type="Magento\Webapi\Controller\Rest\RequestProcessorPool" />
+
     <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
         <arguments>
             <argument name="requestProcessors" xsi:type="array">
-                <item name="schemaRequestProcessor" xsi:type="array">
-                    <item name="object" xsi:type="object">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
-                </item>
-                <item name="synchronousRequestProcessor" xsi:type="array">
-                    <item name="object" xsi:type="object">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
-                    <item name="sortOrder" xsi:type="string">20</item>
-                </item>
+                    <item name="scheme" xsi:type="string">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
+                    <item name="V1" xsi:type="string">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
             </argument>
         </arguments>
     </type>
-
 </config>
