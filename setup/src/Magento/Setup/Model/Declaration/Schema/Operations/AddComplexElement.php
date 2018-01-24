@@ -56,6 +56,14 @@ class AddComplexElement implements OperationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return false;
+    }
+
+    /**
      * @inheritdoc
      */
     public function doOperation(ElementHistory $elementHistory)

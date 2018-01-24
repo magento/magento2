@@ -70,18 +70,29 @@ class Diff implements DiffInterface
     private $tableIndexes;
 
     /**
+     * List of operations that are destructive from the point of declarative setup
+     * and can make system unstable, for example DropTable
+     *
+     * @var string[]
+     */
+    private $destructiveOperations;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
      * @param ElementHistoryFactory $elementHistoryFactory
      * @param array $tableIndexes
+     * @param array $destructiveOperations
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
         ElementHistoryFactory $elementHistoryFactory,
-        array $tableIndexes
+        array $tableIndexes,
+        array $destructiveOperations
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->elementHistoryFactory = $elementHistoryFactory;
         $this->tableIndexes = $tableIndexes;
+        $this->destructiveOperations = $destructiveOperations;
     }
 
     /**
@@ -143,10 +154,15 @@ class Diff implements DiffInterface
      * be registered due to backward incompatability
      *
      * @param  ElementInterface | Table $object
+     * @param string $operation
      * @return bool
      */
-    private function canBeRegistered(ElementInterface $object)
+    private function canBeRegistered(ElementInterface $object, $operation)
     {
+        if (!isset($this->destructiveOperations[$operation])) {
+            return true;
+        }
+
         $whiteList = $this->getWhiteListTables();
         $type = $object->getElementType();
 
@@ -176,7 +192,7 @@ class Diff implements DiffInterface
         ElementInterface $oldDtoObject = null,
         $tableKey = null
     ) {
-        if (!$this->canBeRegistered($dtoObject)) {
+        if (!$this->canBeRegistered($dtoObject, $operation)) {
             return $this;
         }
 

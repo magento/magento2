@@ -47,6 +47,14 @@ class ModifyTable implements OperationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return false;
+    }
+
+    /**
      * Modify table column
      *
      * @inheritdoc

@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Statement;
-
 /**
  * With help of this interface you can go through all element types
  * and apply difference, that is persisted in ChangeRegistry
@@ -22,6 +20,16 @@ interface OperationInterface
      * @return string
      */
     public function getOperationName();
+
+    /**
+     * Destructive operations can make system unstable
+     *
+     * For example, if operation is destructive it can remove table or column created not with
+     * declarative schema (for example with old migration script)
+     *
+     * @return bool
+     */
+    public function isOperationDestructive();
 
     /**
      * Apply change of any type

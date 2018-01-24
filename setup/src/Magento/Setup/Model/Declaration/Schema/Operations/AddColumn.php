@@ -124,6 +124,14 @@ class AddColumn implements OperationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return false;
+    }
+
+    /**
      * Check whether column is auto increment or not
      *
      * @param Column $column

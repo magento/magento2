@@ -57,6 +57,14 @@ class DropElement implements OperationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public function doOperation(ElementHistory $elementHistory)

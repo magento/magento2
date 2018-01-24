@@ -40,6 +40,14 @@ class ReCreateTable implements OperationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isOperationDestructive()
+    {
+        return true;
+    }
+
+    /**
      * @inheritdoc
      */
     public function getOperationName()

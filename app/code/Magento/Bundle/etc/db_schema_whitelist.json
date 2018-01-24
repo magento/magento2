@@ -50,7 +50,8 @@
     "constraint": {
       "PRIMARY": true,
       "CAT_PRD_BNDL_SELECTION_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID": true,
-      "CAT_PRD_BNDL_SELECTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+      "CAT_PRD_BNDL_SELECTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
+      "CAT_PRD_BNDL_SELECTION_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
     }
   },
   "catalog_product_bundle_selection_price": {
@@ -88,7 +89,8 @@
       "PRIMARY": true,
       "CAT_PRD_BNDL_PRICE_IDX_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID": true,
       "CAT_PRD_BNDL_PRICE_IDX_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
-      "CAT_PRD_BNDL_PRICE_IDX_WS_ID_STORE_WS_WS_ID": true
+      "CAT_PRD_BNDL_PRICE_IDX_WS_ID_STORE_WS_WS_ID": true,
+      "CAT_PRD_BNDL_PRICE_IDX_ENTT_ID_SEQUENCE_PRD_SEQUENCE_VAL": true
     }
   },
   "catalog_product_bundle_stock_index": {

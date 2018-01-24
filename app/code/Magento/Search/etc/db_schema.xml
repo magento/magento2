@@ -16,7 +16,6 @@
         <column xsi:type="int" name="popularity" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Popularity"/>
         <column xsi:type="varchar" name="redirect" nullable="true" length="255" comment="Redirect"/>
-        <column xsi:type="varchar" name="synonym_for" nullable="true" length="255" disabled="true"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="smallint" name="display_in_terms" padding="6" unsigned="false" nullable="false"
@@ -47,7 +46,6 @@
         <index name="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
-        <index name="SEARCH_QUERY_SYNONYM_FOR" disabled="1"/>
     </table>
     <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
         <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"
