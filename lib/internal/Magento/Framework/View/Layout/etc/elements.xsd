@@ -116,6 +116,12 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="htmlAttributesType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z\d\-_]*(\s[a-z][a-z\d\-_]*)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="htmlTagType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="aside"/>
@@ -165,6 +171,7 @@
         <xs:attribute type="htmlTagType" name="htmlTag"/>
         <xs:attribute type="htmlClassType" name="htmlClass"/>
         <xs:attribute type="htmlIdentifierType" name="htmlId"/>
+        <xs:attribute type="htmlAttributesType" name="htmlAttributes"/>
     </xs:complexType>
 
     <xs:complexType name="blockType" mixed="true">
@@ -329,6 +336,7 @@
         <xs:attribute type="htmlTagType" name="htmlTag"/>
         <xs:attribute type="htmlClassType" name="htmlClass"/>
         <xs:attribute type="htmlIdentifierType" name="htmlId"/>
+        <xs:attribute type="htmlAttributesType" name="htmlAttributes"/>
         <xs:attribute type="xs:string" name="label"/>
         <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
         <xs:attribute type="xs:boolean" name="remove" use="optional"/>

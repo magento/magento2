@@ -54,6 +54,8 @@ class Element extends \Magento\Framework\Simplexml\Element
 
     const CONTAINER_OPT_HTML_ID = 'htmlId';
 
+    const CONTAINER_OPT_HTML_ATTRIBUTES = 'htmlAttributes';
+
     const CONTAINER_OPT_LABEL = 'label';
 
     /**#@-*/

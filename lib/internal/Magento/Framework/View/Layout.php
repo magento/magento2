@@ -598,9 +598,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             $htmlClass = ' class="' . $htmlClass . '"';
         }
 
+        $htmlAttributes = $this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_ATTRIBUTES);
+
         $htmlTag = $this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG);
 
-        $html = sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $html);
+        $html = sprintf('<%1$s%2$s%3$s%4$s>%5$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $htmlAttributes, $html);
 
         return $html;
     }
