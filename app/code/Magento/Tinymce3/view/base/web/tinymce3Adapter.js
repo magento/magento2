@@ -249,7 +249,7 @@ define([
         },
 
         /**
-         * @return {string|null}
+         * @return {String|null}
          */
         getId: function () {
             return this.id || (this.activeEditor() ? this.activeEditor().id : null) || tinyMceEditors.values()[0].id;
