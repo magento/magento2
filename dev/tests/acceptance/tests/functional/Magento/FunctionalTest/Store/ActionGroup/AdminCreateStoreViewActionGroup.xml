@@ -19,9 +19,9 @@
         <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{customStore.code}}" stepKey="enterStoreViewCode" />
         <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="setStatus" />
         <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
-        <waitForElementVisible selector="//*[@id='html-body']/div[4]/aside[2]/div[2]/footer/button[2]" stepKey="waitForModal" />
+        <waitForElementVisible selector=".action-primary.action-accept" stepKey="waitForModal" />
         <seeInSource html="'Warning message'" stepKey="seeWarning" />
-        <click selector="//*[@id='html-body']/div[4]/aside[2]/div[2]/footer/button[2]" stepKey="dismissModal" />
+        <click selector=".action-primary.action-accept" stepKey="dismissModal" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>

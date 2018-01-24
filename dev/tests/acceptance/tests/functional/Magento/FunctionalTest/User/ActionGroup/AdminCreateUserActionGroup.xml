@@ -9,6 +9,7 @@
     <actionGroup name="AdminCreateUserActionGroup">
         <arguments>
             <argument name="role"/>
+            <argument name="User" defaultValue="admin2"/>
         </arguments>
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/user/new" stepKey="navigateToNewUser"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />

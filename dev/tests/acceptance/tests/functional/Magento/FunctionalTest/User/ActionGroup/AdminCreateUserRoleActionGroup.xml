@@ -9,13 +9,16 @@
     <actionGroup name="AdminCreateUserRoleActionGroup">
         <arguments>
             <argument name="role" />
+            <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
         </arguments>
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/user_role/editrole" stepKey="navigateToNewRole"/>
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{role.name}}" stepKey="fillRoleName" />
         <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword" />
         <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
-        <selectOption selector="{{AdminEditRoleResourcesSection.roleScopes}}" userInput="{{role.scope}}" stepKey="selectScope" />
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.roleScopes}}"  stepKey="waitForScopeSelection" />
+        <selectOption selector="{{AdminEditRoleResourcesSection.roleScopes}}" userInput="Custom" stepKey="selectScope" />
+        <click selector="{{AdminEditRoleResourcesSection.storeName(StoreGroup.name)}}" stepKey="selectCreatedStoreGroup" />
         <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="{{role.access}}" stepKey="selectAccess" />
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
         <waitForPageLoad stepKey="waitForPageLoad2" />
