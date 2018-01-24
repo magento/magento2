@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\ViewModel\Product;
 
 use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\ViewModel\Product\Breadcrumbs;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
