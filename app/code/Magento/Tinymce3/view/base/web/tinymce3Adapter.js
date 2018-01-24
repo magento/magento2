@@ -392,9 +392,7 @@ define([
 
             tinyMCE3.execCommand('mceAddControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.hide();
-            });
+            this.getPluginButtons().hide();
 
             return this;
         },
@@ -407,9 +405,7 @@ define([
 
             tinyMCE3.execCommand('mceRemoveControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.show();
-            });
+            this.getPluginButtons().show();
 
             return this;
         },
