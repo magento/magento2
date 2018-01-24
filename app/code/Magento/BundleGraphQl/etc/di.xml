@@ -7,12 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
-        <plugin name="add_configurable_data" type="Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\ProductPlugin"/>
+        <plugin name="add_bundle_data" type="Magento\BundleGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\ProductPlugin"/>
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter">
         <arguments>
             <argument name="postProcessors" xsi:type="array">
-                <item name="configurable_processor" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Resolver\Products\Query\ConfigurableProductPostProcessor</item>
+                <item name="bundle_processor" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\Query\BundleProductPostProcessor</item>
             </argument>
         </arguments>
     </type>

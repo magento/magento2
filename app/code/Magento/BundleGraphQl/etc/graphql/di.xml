@@ -9,14 +9,14 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
+                <item name="add_bundle_data" xsi:type="object">Magento\BundleGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\BundleOptions</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="configurable_product_type_resolver" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\ConcreteTypeResolver</item>
+                <item name="bundle_product_type_resolver" xsi:type="object">Magento\BundleGraphQl\Model\ConcreteTypeResolver</item>
             </argument>
         </arguments>
     </type>

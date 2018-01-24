@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="BundleProduct">
+        <implements interface="ProductInterface" copyFields="true"/>
+        <field xsi:type="ObjectOutputField" name="price_view" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="price_type" type="Boolean"/>
+        <field xsi:type="ObjectOutputField" name="sku_type" type="Boolean"/>
+        <field xsi:type="ObjectOutputField" name="shipment_type" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="weight_type" type="Int"/>
+        <field xsi:type="ObjectArrayOutputField" name="bundle_product_options" itemType="BundleProductOptions"/>
+        <field xsi:type="ObjectArrayOutputField" name="bundle_product_links" itemType="SimpleProduct"/>
+        <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
+        <field xsi:type="ObjectOutputField" name="color" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="size" type="String"/>
+        <field xsi:type="ObjectOutputField" name="manufacturer" type="Int"/>
+    </type>
+    <type xsi:type="OutputType" name="BundleProductOptions">
+        <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="required" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
+        <field xsi:type="ObjectArrayOutputField" name="values" itemType="BundleProductOptionsProductLinks"/>
+    </type>
+    <type xsi:type="OutputType" name="BundleProductOptionsProductLinks">
+        <!-- is product_id same with entity_id and id ?? -->
+        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="product_id" type="Int"/>
+        <!--<field xsi:type="ScalarOutputField" name="sku" type="String"/>-->
+        <!--<field xsi:type="ScalarOutputField" name="option_id" type="Int"/>-->
+        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="is_default" type="Boolean"/>
+        <!-- price type and price don't get populated is it something about fixed price ? -->
+        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
+        <field xsi:type="ScalarOutputField" name="selection_can_change_quantity" type="Boolean"/>
+    </type>
+</config>

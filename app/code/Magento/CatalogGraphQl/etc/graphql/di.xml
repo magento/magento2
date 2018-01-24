@@ -40,7 +40,7 @@
     <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="simpleProducttypeResolver" xsi:type="object">\Magento\CatalogGraphQl\Model\ConcreteTypeResolver</item>
+                <item name="simple_product_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\ConcreteTypeResolver</item>
             </argument>
         </arguments>
     </type>
