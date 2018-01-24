@@ -160,9 +160,25 @@ define([
              * @private
              */
             _resolveCategoryMenuItem: function () {
-                var categoryUrl,
-                    menu,
+                var categoryUrl = this._resolveCategoryUrl(),
+                    menu = $(this.options.menuContainer),
                     categoryMenuItem = null;
+
+                if (categoryUrl && menu.length) {
+                    categoryMenuItem = menu.find('a[href="' + categoryUrl + '"]');
+                }
+
+                return categoryMenuItem;
+            },
+
+            /**
+             * Returns category url.
+             *
+             * @return {String}
+             * @private
+             */
+            _resolveCategoryUrl: function () {
+                var categoryUrl;
 
                 if (this.options.useCategoryPathInUrl) {
                     // In case category path is used in product url - resolve category url from current url.
@@ -174,14 +190,10 @@ define([
                     categoryUrl = document.referrer;
                 }
 
-                menu = $(this.options.menuContainer);
-
-                if (categoryUrl && menu.length) {
-                    categoryMenuItem = menu.find('a[href="' + categoryUrl + '"]');
-                }
-
-                return categoryMenuItem;
+                return categoryUrl;
             }
         });
+
+        return $.mage.breadcrumbs;
     };
 });

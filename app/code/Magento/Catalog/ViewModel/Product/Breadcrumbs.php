@@ -68,12 +68,14 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     }
 
     /**
-     * Returns product.
+     * Returns product name.
      *
-     * @return \Magento\Catalog\Model\Product|null
+     * @return string
      */
-    public function getProduct()
+    public function getProductName()
     {
-        return $this->catalogData->getProduct();
+        return $this->catalogData->getProduct() !== null
+            ? $this->catalogData->getProduct()->getName()
+            : '';
     }
 }

@@ -14,13 +14,11 @@ define([
      * @return {Object}
      */
     var homeCrumb = function () {
-        var baseUrl = window.location.protocol + '//' + window.location.host + '/';
-
         return {
             name: 'home',
             label: $.mage.__('Home'),
             title: $.mage.__('Go to Home Page'),
-            link: baseUrl
+            link: BASE_URL || ''
         };
     };
 
