@@ -34,6 +34,8 @@ class DeclarativeSchemaRule implements \Magento\TestFramework\Dependency\RuleInt
      * @param string $file
      * @param string $contents
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
