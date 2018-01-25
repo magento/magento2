@@ -104,12 +104,6 @@ require([
         }
     })($);
 
-    $('#meta_description').on('change keyup paste', function () {
-        var maxLength = $(this).data('maxLength') || 255;
-        if ($(this).val().length >= maxLength) {
-            $(this).val($(this).val().substr(0, maxLength));
-        }
-    });
     $form.mage('form', {
         handlersData: {
             save: {},
