@@ -86,6 +86,7 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testApplyDataIfCanSubtractOptionIsEnabled()
@@ -125,6 +126,7 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testApplyDataIfCanSubtractOptionIsEnabledAndProductBecameOutOfStock()
@@ -164,6 +166,7 @@ class ApplyDataToLegacyStockStatusAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 0
      */
     public function testApplyDataIfCanSubtractOptionIsDisabled()

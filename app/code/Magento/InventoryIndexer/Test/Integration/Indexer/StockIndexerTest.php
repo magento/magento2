@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -16,9 +15,9 @@ use PHPUnit\Framework\TestCase;
 class StockIndexerTest extends TestCase
 {
     /**
-     * @var IndexerInterface
+     * @var StockIndexer
      */
-    private $indexer;
+    private $stockIndexer;
 
     /**
      * @var GetProductQuantityInStockInterface
@@ -32,8 +31,7 @@ class StockIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(StockIndexer::INDEXER_ID);
+        $this->stockIndexer = Bootstrap::getObjectManager()->get(StockIndexer::class);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
             ->get(GetProductQuantityInStockInterface::class);
@@ -55,11 +53,11 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexRow()
     {
-        $this->indexer->reindexRow(10);
+        $this->stockIndexer->executeRow(10);
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
     }
@@ -69,11 +67,11 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexList()
     {
-        $this->indexer->reindexList([10, 20]);
+        $this->stockIndexer->executeList([10, 20]);
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(5, $this->getProductQuantityInStock->execute('SKU-2', 20));
@@ -84,11 +82,11 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexAll()
     {
-        $this->indexer->reindexAll();
+        $this->stockIndexer->executeFull();
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
