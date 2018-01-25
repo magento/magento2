@@ -9,9 +9,9 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <!--Types-->
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/name.xsd" />
-    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/decimal.xsd" />
-    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/float.xsd" />
-    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/double.xsd" />
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/real/decimal.xsd" />
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/real/float.xsd" />
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/real/double.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/integers/integer.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/integers/biginteger.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/integers/smallinteger.xsd" />

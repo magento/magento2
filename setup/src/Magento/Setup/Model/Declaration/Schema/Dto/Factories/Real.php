@@ -9,11 +9,21 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * This type is equal to SQL DECIMAL(SCALE,PRECISION) type. Usually it is used for accurate operations
- * with decimal numbers. For example, for price
- * Usually decimal is concatinated from 2 integers, so it has not round problems
+ * with real numbers. For example, for price
+ * Usually real is concatenated from 2 integers, so it has not round problems
  */
-class FloatFactory implements FactoryInterface
+class Real implements FactoryInterface
 {
+    /**
+     * Default SQL precision
+     */
+    const DEFAULT_PRECISION = "10";
+
+    /**
+     * Default SQL scale
+     */
+    const DEFAULT_SCALE = "0";
+
     /**
      * @var ObjectManagerInterface
      */
@@ -30,7 +40,7 @@ class FloatFactory implements FactoryInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal::class
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real::class
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
@@ -45,12 +55,12 @@ class FloatFactory implements FactoryInterface
      */
     public function create(array $data)
     {
-        if (!isset($data['precission'])) {
-            $data['precission'] = 0;
+        if (!isset($data['precision'])) {
+            $data['precision'] = self::DEFAULT_PRECISION;
         }
 
         if (!isset($data['scale'])) {
-            $data['scale'] = 0;
+            $data['scale'] = self::DEFAULT_SCALE;
         }
 
         if (isset($data['default'])) {

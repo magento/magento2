@@ -17,7 +17,7 @@
         <!--Columns-->
         <column xsi:type="smallint" name="smallint" default="0" padding="6" nullable="true" unsigned="false"/>
         <column xsi:type="bigint" name="bigint" default="1" padding="20" nullable="true" unsigned="false"/>
-        <column xsi:type="float" name="float" default="0" precission="10" scale="0"/>
+        <column xsi:type="float" name="float" default="0" precision="10" scale="0"/>
         <column xsi:type="date" name="date"/>
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true"/>
         <column xsi:type="mediumtext" name="mediumtext"/>

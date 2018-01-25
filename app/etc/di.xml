@@ -1354,9 +1354,9 @@
         <arguments>
             <argument name="typeFactories" xsi:type="array">
                 <item name="table" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Table</item>
-                <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
-                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\FloatFactory</item>
-                <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
+                <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Real</item>
+                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Real</item>
+                <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Real</item>
                 <item name="smallint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="tinyint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="bigint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
@@ -1388,9 +1388,9 @@
                 <item name="smallint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
                 <item name="tinyint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
                 <item name="bigint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
-                <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
-                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
-                <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
+                <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Real</item>
+                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Real</item>
+                <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Real</item>
                 <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
                 <item name="blob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
                 <item name="mediumblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
@@ -1469,9 +1469,9 @@
                 <item name="smallint" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\IntegerDefinition</item>
                 <item name="mediumint" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\IntegerDefinition</item>
                 <item name="bigint" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\IntegerDefinition</item>
-                <item name="decimal" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DecimalDefinition</item>
-                <item name="float" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DecimalDefinition</item>
-                <item name="numeric" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DecimalDefinition</item>
+                <item name="decimal" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\RealDefinition</item>
+                <item name="float" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\RealDefinition</item>
+                <item name="numeric" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\RealDefinition</item>
                 <item name="text" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="mediumtext" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="longtext" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>

@@ -10,11 +10,11 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Decimal column
+ * Real column
  * Declared in SQL, like FLOAT(S, P) or DECIMAL(S, P)
- * Where S - is scale, P - is precission
+ * Where S - is scale, P - is precision
  */
-class Decimal extends Column implements
+class Real extends Column implements
     ElementDiffAwareInterface,
     ColumnUnsignedAwareInterface,
     ColumnNullableAwareInterface,
@@ -23,7 +23,7 @@ class Decimal extends Column implements
     /**
      * @var int
      */
-    private $precission;
+    private $precision;
 
     /**
      * @var int
@@ -49,7 +49,7 @@ class Decimal extends Column implements
      * @param string $name
      * @param string $type
      * @param Table $table
-     * @param int $precission
+     * @param int $precision
      * @param int $scale
      * @param bool $nullable
      * @param bool $unsigned
@@ -63,7 +63,7 @@ class Decimal extends Column implements
         string $name,
         string $type,
         Table $table,
-        int $precission,
+        int $precision,
         int $scale,
         bool $nullable = true,
         bool $unsigned = false,
@@ -72,7 +72,7 @@ class Decimal extends Column implements
         string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
-        $this->precission = $precission;
+        $this->precision = $precision;
         $this->scale = $scale;
         $this->nullable = $nullable;
         $this->default = $default;
@@ -80,13 +80,13 @@ class Decimal extends Column implements
     }
 
     /**
-     * Column precission
+     * Column precision
      *
      * @return int
      */
-    public function getPrecission()
+    public function getPrecision()
     {
-        return $this->precission;
+        return $this->precision;
     }
 
     /**
@@ -138,7 +138,7 @@ class Decimal extends Column implements
         return [
             'type' => $this->getType(),
             'nullable' => $this->isNullable(),
-            'precission' => $this->getPrecission(),
+            'precision' => $this->getPrecision(),
             'scale' => $this->getScale(),
             'unsigned' => $this->isUnsigned(),
             'default' => $this->getDefault(),

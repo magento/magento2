@@ -7,9 +7,9 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * Convert definition for all decimal types: decimal, float, double
+ * Convert definition for all real types: decimal, float, double
  */
-class DecimalDefinition implements DefinitionConverterInterface
+class RealDefinition implements DefinitionConverterInterface
 {
     /**
      * Decimal and float has different default values
@@ -22,6 +22,10 @@ class DecimalDefinition implements DefinitionConverterInterface
             'scale' => '0'
         ],
         'decimal' => [
+            'precision' => '10',
+            'scale' => '0'
+        ],
+        'double' => [
             'precision' => '10',
             'scale' => '0'
         ]
@@ -40,7 +44,7 @@ class DecimalDefinition implements DefinitionConverterInterface
             'name' => $definition['name'],
             //In previos adapter this 2 fields were switched, so we need to switch again
             'scale' => $definition['scale'] ?? self::$shapeByType[$definition['type']]['scale'],
-            'precission' => $definition['precision'] ?? self::$shapeByType[$definition['type']]['precision'],
+            'precision' => $definition['precision'] ?? self::$shapeByType[$definition['type']]['precision'],
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
             'default' => isset($definition['default']) && $definition['default'] !== false ?

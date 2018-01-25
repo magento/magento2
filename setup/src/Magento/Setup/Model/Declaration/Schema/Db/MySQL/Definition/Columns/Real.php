@@ -11,11 +11,11 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process decimal type and separate it into type, scale and precission
+ * Process real types and separate them into type, scale and precision
  *
  * @inheritdoc
  */
-class Decimal implements DbDefinitionProcessorInterface
+class Real implements DbDefinitionProcessorInterface
 {
     /**
      * @var Nullable
@@ -56,15 +56,15 @@ class Decimal implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal $column
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real $column
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $column)
     {
-        if ($column->getPrecission() === 0 && $column->getScale() === 0) {
+        if ($column->getPrecision() === 0 && $column->getScale() === 0) {
             $type = $column->getType();
         } else {
-            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getPrecission(), $column->getScale());
+            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getPrecision(), $column->getScale());
         }
 
         return sprintf(
@@ -91,7 +91,7 @@ class Decimal implements DbDefinitionProcessorInterface
              * match[2] - precision
              * match[3] - scale
              */
-            $data['precission'] = $matches[2];
+            $data['precision'] = $matches[2];
             $data['scale'] = $matches[3];
             $data = $this->nullable->fromDefinition($data);
             $data = $this->unsigned->fromDefinition($data);

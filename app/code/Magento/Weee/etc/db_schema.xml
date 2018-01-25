@@ -15,7 +15,7 @@
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Id"/>
         <column xsi:type="varchar" name="country" nullable="true" length="2" comment="Country"/>
-        <column xsi:type="decimal" name="value" scale="4" precission="12" unsigned="false" nullable="false" default="0"
+        <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Value"/>
         <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="false" identity="false" default="0"
                 comment="State"/>
@@ -50,78 +50,78 @@
     </table>
     <table name="quote_item" resource="quote" comment="Sales Flat Quote Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
-        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Row Amount"/>
-        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Row Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Row Amnt"/>
-        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Row Disposition"/>
     </table>
     <table name="sales_order_item" resource="sales" comment="Sales Flat Order Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
-        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Row Amount"/>
-        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Row Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Row Amnt"/>
-        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Row Disposition"/>
     </table>
     <table name="sales_invoice_item" resource="sales" comment="Sales Flat Invoice Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
-        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Row Amount"/>
-        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Row Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Row Amnt"/>
-        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Row Disposition"/>
     </table>
     <table name="sales_creditmemo_item" resource="sales" comment="Sales Flat Creditmemo Item">
         <column xsi:type="text" name="weee_tax_applied" nullable="true" comment="Weee Tax Applied"/>
-        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_applied_row_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Applied Row Amount"/>
-        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Weee Tax Row Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Amount"/>
-        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_applied_row_amnt" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Applied Row Amnt"/>
-        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Disposition"/>
-        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precission="12" unsigned="false"
+        <column xsi:type="decimal" name="base_weee_tax_row_disposition" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Weee Tax Row Disposition"/>
     </table>
 </schema>

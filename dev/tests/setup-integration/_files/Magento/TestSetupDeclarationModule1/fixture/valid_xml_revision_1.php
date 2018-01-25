@@ -70,7 +70,7 @@ return [
                     'name' => 'decimal',
                     'default' => '0',
                     'scale' => '15',
-                    'precission' => '4',
+                    'precision' => '4',
                 ],
                 'date' => [
                     'type' => 'date',

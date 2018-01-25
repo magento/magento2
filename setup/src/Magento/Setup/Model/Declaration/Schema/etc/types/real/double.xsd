@@ -6,18 +6,18 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/decimal.xsd"/>
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/real/float.xsd"/>
 
-    <xs:complexType name="float">
+    <xs:complexType name="double">
         <xs:annotation>
             <xs:documentation>
-                Float is used for binary digits. It is not so accurate as decimal and has rounding issues.
-                For price please use decimals
+                A double precision floating point binary number, has same rounding issues as float.
+                For business oriented math like price or qty storages please use decimal type.
             </xs:documentation>
         </xs:annotation>
 
         <xs:complexContent>
-            <xs:extension base="decimal" />
+            <xs:extension base="xs:float" />
         </xs:complexContent>
     </xs:complexType>
 </xs:schema>
