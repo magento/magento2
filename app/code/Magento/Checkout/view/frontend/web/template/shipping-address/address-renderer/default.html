@@ -16,7 +16,18 @@
     <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
         <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
             <!-- ko if: (typeof element[attribute] === "object") -->
-                <!-- ko text: element[attribute].value --><!-- /ko -->
+                <!-- ko if: (element[attribute].allowed_types) -->
+                    <!-- ko foreach: { data: element[attribute].allowed_types, as: 'allowtype' } -->
+                        <!-- ko foreach: { data: allowtype, as: 'formtype' } -->
+                            <!-- ko if: formtype.form_code == 'checkout_saved_address' -->
+                                <!-- ko text: element[attribute].value --><!-- /ko -->    
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    <!-- /ko -->    
+                <!-- /ko -->
+                <!-- ko ifnot: element[attribute].allowed_types -->
+                    <!-- ko text: element[attribute].value --><!-- /ko -->
+                <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: (typeof element[attribute] === "string") -->
                 <!-- ko text: element[attribute] --><!-- /ko -->
