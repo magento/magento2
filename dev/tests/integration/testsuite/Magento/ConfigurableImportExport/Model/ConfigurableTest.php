@@ -103,4 +103,14 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         }
         return $data;
     }
+
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/455');
+    }
+
+    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/455');
+    }
 }

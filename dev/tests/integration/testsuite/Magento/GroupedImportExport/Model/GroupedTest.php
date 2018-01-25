@@ -48,4 +48,14 @@ class GroupedTest extends AbstractProductExportImportTestCase
 
         $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
     }
+
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/454');
+    }
+
+    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/454');
+    }
 }
