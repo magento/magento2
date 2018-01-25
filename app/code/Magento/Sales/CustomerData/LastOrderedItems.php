@@ -66,7 +66,8 @@ class LastOrderedItems implements SectionSourceInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param ProductRepositoryInterface $productRepository
+     * @param ProductRepositoryInterface $productRepository|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
