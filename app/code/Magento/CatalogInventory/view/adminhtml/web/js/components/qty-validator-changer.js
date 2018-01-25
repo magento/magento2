@@ -32,7 +32,9 @@ define([
             var isEnableQtyIncrements = value === 1;
 
             if (!isEnableQtyIncrements) {
-                this.value(parseInt(this.value()));
+                if (this.value().length) {
+                    this.value(parseInt(this.value()));
+                }
             }
         }
     });

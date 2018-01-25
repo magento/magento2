@@ -22,7 +22,6 @@ define([
          * @inheritdoc
          */
         onUpdate: function () {
-            this.validation['validate-number'] = this.isInteger;
             this.validation['validate-digits'] = this.isInteger;
             this._super();
         },
@@ -43,7 +42,6 @@ define([
          */
         validateDigits: function(value) {
             this.isInteger = value;
-            this.validation['validate-number'] = this.isInteger;
             this.validation['validate-digits'] = this.isInteger;
         }
 

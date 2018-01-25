@@ -403,6 +403,13 @@ class General extends AbstractModifier
         return $value;
     }
 
+    /**
+     * Make price qty even int or decimal
+     *
+     * @param $priceQty
+     *
+     * @return int
+     */
     protected function formatPriceQty($priceQty)
     {
         $productId = $this->locator->getProduct()->getId();

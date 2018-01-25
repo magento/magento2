@@ -30,6 +30,7 @@ class BundleDataProvider extends ProductDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param StockItemRepositoryInterface $stockItemRepository
      * @param Data $dataHelper
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
