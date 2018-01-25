@@ -345,47 +345,5 @@
       "PRIMARY": true,
       "CUSTOMER_LOG_CUSTOMER_ID": true
     }
-  },
-  "customer_grid_flat": {
-    "column": {
-      "entity_id": true,
-      "name": true,
-      "email": true,
-      "group_id": true,
-      "created_at": true,
-      "website_id": true,
-      "confirmation": true,
-      "created_in": true,
-      "dob": true,
-      "gender": true,
-      "taxvat": true,
-      "lock_expires": true,
-      "shipping_full": true,
-      "billing_full": true,
-      "billing_firstname": true,
-      "billing_lastname": true,
-      "billing_telephone": true,
-      "billing_postcode": true,
-      "billing_country_id": true,
-      "billing_region": true,
-      "billing_street": true,
-      "billing_city": true,
-      "billing_fax": true,
-      "billing_vat_id": true,
-      "billing_company": true
-    },
-    "index": {
-      "CUSTOMER_GRID_FLAT_GROUP_ID": true,
-      "CUSTOMER_GRID_FLAT_CREATED_AT": true,
-      "CUSTOMER_GRID_FLAT_WEBSITE_ID": true,
-      "CUSTOMER_GRID_FLAT_CONFIRMATION": true,
-      "CUSTOMER_GRID_FLAT_DOB": true,
-      "CUSTOMER_GRID_FLAT_GENDER": true,
-      "CUSTOMER_GRID_FLAT_BILLING_COUNTRY_ID": true,
-      "FTI_8746F705702DD5F6D45B8C7CE7FE9F2F": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
   }
 }
