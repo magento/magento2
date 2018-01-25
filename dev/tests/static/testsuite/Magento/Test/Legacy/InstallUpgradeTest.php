@@ -22,6 +22,7 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $scriptPattern[] = $moduleDir . '/sql';
             $scriptPattern[] = $moduleDir . '/data';
+            $scriptPattern[] = $moduleDir . '/Setup';
         }
         $invoker = new AggregateInvoker($this);
         $invoker(
@@ -32,7 +33,14 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                 $this->assertStringStartsNotWith(
                     'install-',
                     basename($file),
-                    'Install scripts are obsolete. Please create class InstallSchema in module\'s Setup folder'
+                    'Install scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'InstallSchema',
+                    basename($file),
+                    'InstallSchema objects are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
                 );
                 $this->assertStringStartsNotWith(
                     'data-install-',
@@ -42,7 +50,14 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                 $this->assertStringStartsNotWith(
                     'upgrade-',
                     basename($file),
-                    'Upgrade scripts are obsolete. Please create class UpgradeSchema in module\'s Setup folder'
+                    'Upgrade scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
+                );
+                $this->assertStringStartsNotWith(
+                    'UpgradeSchema',
+                    basename($file),
+                    'UpgradeSchema scripts are obsolete. '
+                    . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
                 );
                 $this->assertStringStartsNotWith(
                     'data-upgrade-',
@@ -54,9 +69,13 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                     basename($file),
                     'Recurring scripts are obsolete. Please create class Recurring in module\'s Setup folder'
                 );
-                $this->fail(
-                    'Invalid directory. Please convert data/sql scripts to a class within module\'s Setup folder'
-                );
+                if (preg_match('/.*\/(sql|data)/i', dirname($file))) {
+                    $this->fail(
+                        "Invalid directory:\n"
+                        . "- Create an UpgradeData class within module's Setup folder for data upgrades.\n"
+                        . "- Use declarative schema approach in module's etc/db_schema.xml file for schema changes."
+                    );
+                }
             },
             $this->convertArray(
                 Files::init()->getFiles($scriptPattern, '*.php')
