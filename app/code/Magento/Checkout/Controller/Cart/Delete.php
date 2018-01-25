@@ -24,7 +24,7 @@ class Delete extends \Magento\Checkout\Controller\Cart
             try {
                 $this->cart->removeItem($id)->save();
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t remove the item.'));
+                $this->messageManager->addErrorMessage(__('We can\'t remove the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
         }

@@ -35,13 +35,13 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
                 $taxData = $this->_taxRateConverter->populateTaxRateData($ratePost);
                 $this->_taxRateRepository->save($taxData);
 
-                $this->messageManager->addSuccess(__('You saved the tax rate.'));
+                $this->messageManager->addSuccessMessage(__('You saved the tax rate.'));
                 return $resultRedirect->setPath('*/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($ratePost);
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
             return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
