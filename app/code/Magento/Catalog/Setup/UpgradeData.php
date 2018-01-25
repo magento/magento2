@@ -392,6 +392,10 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeWebsiteAttributes->upgrade($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.5') < 0) {
+            $this->changeMetaDescriptionLength($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -435,5 +439,53 @@ class UpgradeData implements UpgradeDataInterface
                 );
             }
         }
+    }
+
+    /**
+     * Move the Product 'Meta Description' attribute to catalog_product_entity_text table to allow length
+     * above 255 characters.
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function changeMetaDescriptionLength(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'meta_description');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('eav_attribute'),
+                [
+                    'backend_type' => 'text',
+                    'note' => 'Meta Description length should optimally be less or equal to 320 characters.'
+                ],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
+
+        $select = $setup->getConnection()
+            ->select()->from(
+                $setup->getTable('catalog_product_entity_varchar'),
+                ['attribute_id', 'store_id', 'entity_id', 'value']
+            )->where(
+                'attribute_id = ?', $attribute['attribute_id']
+            );
+
+        $setup->getConnection()->query(
+            $setup->getConnection()->insertFromSelect(
+                $select,
+                $setup->getTable('catalog_product_entity_text'),
+                ['attribute_id', 'store_id', 'entity_id', 'value']
+            )
+        );
+
+        $setup->getConnection()->query(
+            $setup->getConnection()->deleteFromSelect(
+                $select,
+                $setup->getTable('catalog_product_entity_varchar')
+            )
+        );
     }
 }
