@@ -104,11 +104,31 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         return $data;
     }
 
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
     {
         $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/455');
     }
 
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     */
     public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
     {
         $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/455');
