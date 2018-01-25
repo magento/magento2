@@ -6,11 +6,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="BundleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
-        <field xsi:type="ObjectOutputField" name="price_view" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="price_type" type="Boolean"/>
-        <field xsi:type="ObjectOutputField" name="sku_type" type="Boolean"/>
-        <field xsi:type="ObjectOutputField" name="shipment_type" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="weight_type" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum"/>
+        <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean"/>
+        <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum"/>
+        <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean"/>
         <field xsi:type="ObjectArrayOutputField" name="bundle_product_options" itemType="BundleProductOptions"/>
         <field xsi:type="ObjectArrayOutputField" name="bundle_product_links" itemType="SimpleProduct"/>
         <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
@@ -38,7 +38,15 @@
         <field xsi:type="ScalarOutputField" name="is_default" type="Boolean"/>
         <!-- price type and price don't get populated is it something about fixed price ? -->
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
-        <field xsi:type="ScalarOutputField" name="selection_can_change_quantity" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="price_type" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean"/>
+    </type>
+    <type xsi:type="Enum" name="ShipBundleItemsEnum">
+        <item name="0">TOGETHER</item>
+        <item name="1">SEPARATELY</item>
+    </type>
+    <type xsi:type="Enum" name="PriceViewEnum">
+        <item name="0">PRICE_RANGE</item>
+        <item name="1">AS_LOW_AS</item>
     </type>
 </config>

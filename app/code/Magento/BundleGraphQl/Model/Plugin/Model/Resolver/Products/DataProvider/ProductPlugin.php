@@ -38,19 +38,9 @@ class ProductPlugin
     {
         foreach ($result->getItems() as $product) {
             if ($product->getTypeId() === Bundle::TYPE_CODE) {
-                $bundleProductOptions = [];
                 $extensionAttributes = $product->getExtensionAttributes();
                 $options = $this->productOptionList->getItems($product);
-                foreach ($options as $optionIndex => $option) {
-                    $bundleProductOptions[$optionIndex]
-                        = $option->getData();
-                    foreach ($bundleProductOptions[$optionIndex]['product_links'] as
-                             $linkKey => $productLink) {
-                        $bundleProductOptions[$optionIndex]['values'][$linkKey]
-                            = $productLink->getData();
-                    }
-                }
-                $extensionAttributes->setBundleProductOptions($bundleProductOptions);
+                $extensionAttributes->setBundleProductOptions($options);
                 $product->setExtensionAttributes($extensionAttributes);
             }
         }

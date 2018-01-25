@@ -10,6 +10,10 @@ use Magento\Bundle\Model\Product\Type as Bundle;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
+use Magento\Bundle\Model\Link;
+use Magento\Bundle\Model\Option;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\GraphQl\Config\ConfigInterface;
 
 /**
  * Retrieves simple product data for child products, and formats configurable data
@@ -27,7 +31,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
     private $productDataProvider;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var ProductResource
      */
     private $productResource;
 
@@ -37,21 +41,29 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
     private $formatter;
 
     /**
+     * @var ConfigInterface
+     */
+    private $typeConfig;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Product $productDataProvider
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param ProductResource $productResource
      * @param FormatterInterface $formatter
+     * @param ConfigInterface $typeConfig
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Product $productDataProvider,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        FormatterInterface $formatter
+        ProductResource $productResource,
+        FormatterInterface $formatter,
+        ConfigInterface $typeConfig
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productDataProvider = $productDataProvider;
         $this->productResource = $productResource;
         $this->formatter = $formatter;
+        $this->typeConfig = $typeConfig;
     }
 
     /**
@@ -65,15 +77,17 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $childrenIds = [];
         foreach ($resultData as $productKey => $product) {
             if ($product['type_id'] === Bundle::TYPE_CODE) {
+                $resultData[$productKey] = $this->formatBundleAttributes($product);
                 if (isset($product['bundle_product_options'])) {
                     foreach ($product['bundle_product_options'] as $optionKey => $option) {
                         $formattedChildIds = [];
+                        $resultData[$productKey]['bundle_product_options'][$optionKey]
+                            = $this->formatProductOptions($option);
                         foreach ($option['product_links'] as $linkKey => $link) {
                             $childrenIds[] = (int)$link['entity_id'];
                             $formattedChildIds[$link['entity_id']] = null;
-                            // reformat entity id to product id
-                            $resultData[$productKey]['bundle_product_options'][$optionKey]['values']
-                            [$linkKey]['product_id'] = $link['entity_id'];
+                            $resultData[$productKey]['bundle_product_options'][$optionKey]['values'][$linkKey]
+                                = $this->formatProductOptionLinks($link);
                         }
                         $resultData[$productKey]['bundle_product_links'] = $formattedChildIds;
                     }
@@ -102,5 +116,62 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         }
 
         return $resultData;
+    }
+
+    /**
+     * Format bundle specific top level attributes from product
+     *
+     * @param array $product
+     * @return array
+     */
+    private function formatBundleAttributes(array $product)
+    {
+        $product['price_view'] = $this->convertToEnumValue($product['price_view'], 'PriceViewEnum');
+        $product['ship_bundle_items'] = $this->convertToEnumValue($product['shipment_type'], 'ShipBundleItemsEnum');
+        $product['dynamic_price'] =!(bool)$product['price_type'];
+        $product['dynamic_sku'] =!(bool)$product['sku_type'];
+        $product['dynamic_weight'] =!(bool)$product['weight_type'];
+        return $product;
+    }
+
+    /**
+     * Format bundle option product links
+     *
+     * @param Link $link
+     * @return array
+     */
+    private function formatProductOptionLinks(Link $link)
+    {
+        $returnData = $link->getData();
+        $returnData['product_id'] = $link->getEntityId();
+        $returnData['can_change_quantity'] = $link->getCanChangeQuantity();
+        return $returnData;
+    }
+
+    /**
+     * Format bundle option
+     *
+     * @param Option $option
+     * @return array
+     */
+    private function formatProductOptions(Option $option)
+    {
+        return $option->getData();
+    }
+
+    /**
+     * Convert entity value to enum value
+     *
+     * @param mixed $value
+     * @return array
+     */
+    private function convertToEnumValue($value, $enumType)
+    {
+        $priceViewEnum = $this->typeConfig->getTypeStructure($enumType);
+        foreach ($priceViewEnum->getValues() as $enumItem) {
+            if ($enumItem->getName() === $value) {
+                return $enumItem->getValue();
+            }
+        }
     }
 }
