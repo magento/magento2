@@ -85,7 +85,7 @@ class Decimal implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/', $data['definition'], $matches)) {
+        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/', $data['definition'], $matches) !== false) {
             /**
              * match[1] - type
              * match[2] - precision
