@@ -45,23 +45,5 @@
       "PRIMARY": true,
       "DESIGN_CHANGE_STORE_ID_STORE_STORE_ID": true
     }
-  },
-  "design_config_grid_flat": {
-    "column": {
-      "entity_id": true,
-      "store_website_id": true,
-      "store_group_id": true,
-      "store_id": true,
-      "theme_theme_id": true
-    },
-    "index": {
-      "DESIGN_CONFIG_GRID_FLAT_STORE_WEBSITE_ID": true,
-      "DESIGN_CONFIG_GRID_FLAT_STORE_GROUP_ID": true,
-      "DESIGN_CONFIG_GRID_FLAT_STORE_ID": true,
-      "DESIGN_CONFIG_GRID_FLAT_THEME_THEME_ID": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
   }
 }

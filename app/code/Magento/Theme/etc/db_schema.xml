@@ -58,30 +58,4 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="design_config_grid_flat" resource="default" engine="innodb" comment="design_config_grid_flat">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Entity ID"/>
-        <column xsi:type="int" name="store_website_id" padding="11" unsigned="false" nullable="true" identity="false"
-                comment="Store_website_id"/>
-        <column xsi:type="int" name="store_group_id" padding="11" unsigned="false" nullable="true" identity="false"
-                comment="Store_group_id"/>
-        <column xsi:type="int" name="store_id" padding="11" unsigned="false" nullable="true" identity="false"
-                comment="Store_id"/>
-        <column xsi:type="varchar" name="theme_theme_id" nullable="true" length="255" comment="Theme_theme_id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="entity_id"/>
-        </constraint>
-        <index name="DESIGN_CONFIG_GRID_FLAT_STORE_WEBSITE_ID" indexType="btree">
-            <column name="store_website_id"/>
-        </index>
-        <index name="DESIGN_CONFIG_GRID_FLAT_STORE_GROUP_ID" indexType="btree">
-            <column name="store_group_id"/>
-        </index>
-        <index name="DESIGN_CONFIG_GRID_FLAT_STORE_ID" indexType="btree">
-            <column name="store_id"/>
-        </index>
-        <index name="DESIGN_CONFIG_GRID_FLAT_THEME_THEME_ID" indexType="fulltext">
-            <column name="theme_theme_id"/>
-        </index>
-    </table>
 </schema>
