@@ -79,7 +79,6 @@ class Grid extends GridWidget
             DataCollection::SORT_ORDER_ASC
         );
 
-
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
