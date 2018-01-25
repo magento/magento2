@@ -7,6 +7,7 @@ namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Zend\Stdlib\ArrayObject;
 
 /**
  * Import entity customer combined model
@@ -293,32 +294,18 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     public function validateData()
     {
-        //Pre-loading customers for existing customers checks.
         $source = $this->getSource();
-        $customersPresent = [];
-        foreach ($source as $rowData) {
-            $customersPresent[] = [
-                'email' => $rowData[Customer::COLUMN_EMAIL],
-                'website_id' => $this->_customerEntity->getWebsiteId(
-                    $rowData[Customer::COLUMN_WEBSITE]
-                )
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL],
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE]
             ];
         }
-        $this->_customerEntity->getCustomerStorage()
-            ->prepareCustomers($customersPresent);
-        //Copying customers to address' storage.
-        foreach ($customersPresent as $customerPresent) {
-            $email = $customerPresent['email'];
-            $websiteId = $customerPresent['website_id'];
-            $idFound = $this->_customerEntity->getCustomerStorage()
-                ->getCustomerId($email, $websiteId);
-            $this->_addressEntity->getCustomerStorage()
-                ->addCustomer(new DataObject([
-                        'email' => $email,
-                        'website_id' => $websiteId,
-                        'id' => $idFound ?: null
-                ]));
-        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData(new ArrayObject($rows));
 
         return parent::validateData();
     }

@@ -223,7 +223,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             ['getCustomerId', 'prepareCustomers', 'addCustomer']
         );
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
-        $customerEntity = $this->_getCustomerEntityMock(['validateRow']);
+        $customerEntity = $this->_getCustomerEntityMock();
         $customerEntity->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $customerEntity->expects(
             $this->any()
@@ -236,7 +236,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getValidColumnNames')
             ->willReturn(['cols']);
 
-        $addressEntity = $this->_getAddressEntityMock(['validateRow']);
+        $addressEntity = $this->_getAddressEntityMock();
         $addressEntity->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $addressEntity->expects(
             $this->any()
@@ -292,10 +292,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $mockedMethods
      * @return Customer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getCustomerEntityMock(array $mockedMethods = null)
+    protected function _getCustomerEntityMock()
     {
         $customerEntity = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -318,10 +317,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $mockedMethods
      * @return Address|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getAddressEntityMock(array $mockedMethods = null)
+    protected function _getAddressEntityMock()
     {
         $addressEntity = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()

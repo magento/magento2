@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\Store;
 use Magento\ImportExport\Model\Import;
+use Zend\Stdlib\ArrayObject;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -354,7 +355,7 @@ class Address extends AbstractCustomer
         );
 
         $this->_initAttributes();
-        $this->_initAddresses()->_initCountryRegions();
+        $this->_initCountryRegions();
     }
 
     /**
@@ -455,6 +456,8 @@ class Address extends AbstractCustomer
      * Initialize existent addresses data
      *
      * @return $this
+     * @deprecated
+     * @see prepareC
      */
     protected function _initAddresses()
     {
@@ -470,6 +473,43 @@ class Address extends AbstractCustomer
             }
         }
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Also loading existing addresses for requested customers.
+     */
+    public function prepareCustomerData(\Traversable $rows)
+    {
+        parent::prepareCustomerData($rows);
+        $ids = [];
+        foreach ($rows as $customerData) {
+            $id = $this->getCustomerStorage()
+                ->getCustomerId(
+                    $customerData[static::COLUMN_EMAIL],
+                    $this->getWebsiteId($customerData[static::COLUMN_WEBSITE])
+                );
+            if ($id) {
+                $ids[] = $id;
+            }
+        }
+
+        $this->_addressCollection->addFieldToFilter(
+            'parent_id',
+            ['in' => $ids]
+        );
+        /** @var $address \Magento\Customer\Model\Address */
+        foreach ($this->_addressCollection as $address) {
+            $customerId = $address->getParentId();
+            if (!isset($this->_addresses[$customerId])) {
+                $this->_addresses[$customerId] = [];
+            }
+            $addressId = $address->getId();
+            if (!in_array($addressId, $this->_addresses[$customerId])) {
+                $this->_addresses[$customerId][] = $addressId;
+            }
+        }
     }
 
     /**
@@ -500,6 +540,28 @@ class Address extends AbstractCustomer
      */
     protected function _importData()
     {
+        $rows = [];
+        $customersData = [];
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $rows = array_merge($rows, $bunch);
+            $customersData = array_merge(
+                $customersData,
+                array_map(
+                    function ($row) {
+                        return [
+                            'email' => $row[self::COLUMN_EMAIL],
+                            'website_id' => $this->getWebsiteId(
+                                self::COLUMN_WEBSITE
+                            )
+                        ];
+                    },
+                    $bunch
+                )
+            );
+        }
+        $this->prepareCustomerData(new ArrayObject($rows));
+        unset($bunch, $rows);
+        $this->_dataSourceModel->getIterator()->rewind();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $newRows = [];
             $updateRows = [];
@@ -799,6 +861,7 @@ class Address extends AbstractCustomer
 
         return true;
     }
+
 
     /**
      * Validate row for add/update action
