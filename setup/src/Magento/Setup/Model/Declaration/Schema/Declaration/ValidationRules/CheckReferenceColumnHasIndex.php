@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules;
 use Magento\Setup\Model\Declaration\Schema\Declaration\ValidationInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
@@ -26,7 +27,7 @@ class CheckReferenceColumnHasIndex implements ValidationInterface
     /**
      * error message, that will be shown
      */
-    const ERROR_MESSAGE = 'Reference column %s should be unique in foreign key %s';
+    const ERROR_MESSAGE = 'Reference column %s in reference table %s do not have index';
 
     /**
      * @inheritdoc
@@ -35,27 +36,28 @@ class CheckReferenceColumnHasIndex implements ValidationInterface
     {
         $errors = [];
         foreach ($schema->getTables() as $table) {
-            foreach ($table->getConstraints() as $constraint) {
-                if ($constraint instanceof Reference) {
-                    $referenceColumnName = $constraint->getReferenceColumn()->getName();
-
-                    foreach ($constraint->getReferenceTable()->getConstraints() as $referenceConstraints) {
-                        if ($referenceConstraints instanceof Internal) {
-                            if (in_array($referenceColumnName, $referenceConstraints->getColumnNames())) {
-                                continue 2;
-                            }
+            foreach ($table->getReferenceConstraints() as $constraint) {
+                $referenceColumnName = $constraint->getReferenceColumn()->getName();
+                $indexesAndConstraints = array_merge(
+                    $constraint->getReferenceTable()->getConstraints(),
+                    $constraint->getReferenceTable()->getIndexes()
+                );
+                foreach ($indexesAndConstraints as $key) {
+                    if ($key instanceof Internal || $key instanceof Index) {
+                        if (in_array($referenceColumnName, $key->getColumnNames())) {
+                            continue 2;
                         }
                     }
-
-                    $errors[] = [
-                        'column' => $referenceColumnName,
-                        'message' => sprintf(
-                            self::ERROR_MESSAGE,
-                            $constraint->getReferenceTable()->getName() . '.' . $referenceColumnName,
-                            $constraint->getName()
-                        )
-                    ];
                 }
+
+                $errors[] = [
+                    'column' => $referenceColumnName,
+                    'message' => sprintf(
+                        self::ERROR_MESSAGE,
+                        $referenceColumnName,
+                        $constraint->getReferenceTable()->getName()
+                    )
+                ];
             }
         }
 
