@@ -64,7 +64,7 @@ class Real implements DbDefinitionProcessorInterface
         if ($column->getPrecision() === 0 && $column->getScale() === 0) {
             $type = $column->getType();
         } else {
-            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getPrecision(), $column->getScale());
+            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getScale(), $column->getPrecision());
         }
 
         return sprintf(
@@ -85,7 +85,7 @@ class Real implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/', $data['definition'], $matches) !== false) {
+        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/i', $data['definition'], $matches) !== false) {
             /**
              * match[1] - type
              * match[2] - precision

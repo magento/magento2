@@ -64,7 +64,7 @@
         <column xsi:type="varchar" name="currency_from" nullable="false" length="3"
                 comment="Currency Code Convert From"/>
         <column xsi:type="varchar" name="currency_to" nullable="false" length="3" comment="Currency Code Convert To"/>
-        <column xsi:type="decimal" name="rate" scale="12" precision="24" unsigned="false" nullable="false" default="0"
+        <column xsi:type="decimal" name="rate" scale="24" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Currency Conversion Rate"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="currency_from"/>

@@ -45,7 +45,7 @@
         <column xsi:type="smallint" name="smallint" padding="3" nullable="true"/>
         <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
         <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false"/>
-        <column xsi:type="float" name="float" default="0" scale="12"/>
+        <column xsi:type="float" name="float" default="0" scale="12" precision="4"/>
         <column xsi:type="smallint" name="smallint_main" padding="254" default="0" nullable="false" unsigned="false"/>
         <column xsi:type="double" name="double" default="11111111.111111" scale="245"/>
         <column xsi:type="decimal" name="decimal" default="0" scale="15" precision="4"/>

@@ -40,7 +40,7 @@
                 comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true" comment="Add date and time"/>
         <column xsi:type="text" name="description" nullable="true" comment="Short description of wish list item"/>
-        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="qty" scale="12" precision="4" unsigned="false" nullable="false"
                 comment="Qty"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="wishlist_item_id"/>

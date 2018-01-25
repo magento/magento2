@@ -1425,7 +1425,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite">
+    <type name="Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="xml" xsi:type="object">Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader</item>
@@ -1447,21 +1447,22 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Setup\Model\Declaration\Schema\Sharding">
+    <type name="Magento\Setup\Model\Declaration\Schema\Sharding">
         <arguments>
             <argument name="resources" xsi:type="array">
                 <item name="default" xsi:type="string">default</item>
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite">
+    <type name="Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite">
         <arguments>
             <argument name="rules" xsi:type="array">
                 <item name="check_references" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex</item>
+                <item name="real_types" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\RealTypes</item>
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Framework\Setup\SchemaListener">
+    <type name="Magento\Framework\Setup\SchemaListener">
         <arguments>
             <argument name="definitionMappers" xsi:type="array">
                 <item name="integer" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\IntegerDefinition</item>

@@ -26,7 +26,7 @@ class CheckReferenceColumnHasIndex implements ValidationInterface
     /**
      * error message, that will be shown
      */
-    const ERROR_MESSAGE = 'Reference column should be unique';
+    const ERROR_MESSAGE = 'Reference column %s should be unique in foreign key %s';
 
     /**
      * @inheritdoc
@@ -49,12 +49,16 @@ class CheckReferenceColumnHasIndex implements ValidationInterface
 
                     $errors[] = [
                         'column' => $referenceColumnName,
-                        'message' => self::ERROR_MESSAGE
+                        'message' => sprintf(
+                            self::ERROR_MESSAGE,
+                            $constraint->getReferenceTable()->getName() . '.' . $referenceColumnName,
+                            $constraint->getName()
+                        )
                     ];
                 }
             }
         }
 
-        return [];
+        return $errors;
     }
 }

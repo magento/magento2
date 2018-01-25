@@ -92,12 +92,12 @@
                 comment="Transaction Completion Date"/>
         <column xsi:type="varchar" name="transaction_debit_or_credit" nullable="false" length="2" default="CR"
                 comment="Transaction Debit Or Credit"/>
-        <column xsi:type="decimal" name="gross_transaction_amount" scale="6" precision="20" unsigned="false"
+        <column xsi:type="decimal" name="gross_transaction_amount" scale="20" precision="6" unsigned="false"
                 nullable="false" default="0" comment="Gross Transaction Amount"/>
         <column xsi:type="varchar" name="gross_transaction_currency" nullable="true" length="3"
                 comment="Gross Transaction Currency"/>
         <column xsi:type="varchar" name="fee_debit_or_credit" nullable="true" length="2" comment="Fee Debit Or Credit"/>
-        <column xsi:type="decimal" name="fee_amount" scale="6" precision="20" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="fee_amount" scale="20" precision="6" unsigned="false" nullable="false"
                 default="0" comment="Fee Amount"/>
         <column xsi:type="varchar" name="fee_currency" nullable="true" length="3" comment="Fee Currency"/>
         <column xsi:type="varchar" name="custom_field" nullable="true" length="255" comment="Custom Field"/>

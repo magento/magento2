@@ -18,7 +18,7 @@
         </xs:annotation>
 
         <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="default" type="xs:double" />
+        <xs:attribute name="default" type="xs:float" />
         <!--Note that scale must not be more than precision-->
         <xs:attribute name="precision">
             <xs:simpleType>

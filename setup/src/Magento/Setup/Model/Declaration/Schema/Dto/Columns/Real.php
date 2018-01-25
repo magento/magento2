@@ -10,8 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Real column
- * Declared in SQL, like FLOAT(S, P) or DECIMAL(S, P)
+ * Real data column.
+ * Declared in SQL, like FLOAT(S, P), DOUBLE(S, P) or DECIMAL(S, P)
  * Where S - is scale, P - is precision
  */
 class Real extends Column implements
@@ -86,7 +86,7 @@ class Real extends Column implements
      */
     public function getPrecision()
     {
-        return $this->precision;
+        return (int)$this->precision;
     }
 
     /**
@@ -96,7 +96,7 @@ class Real extends Column implements
      */
     public function getScale()
     {
-        return $this->scale;
+        return (int)$this->scale;
     }
 
     /**
@@ -106,7 +106,7 @@ class Real extends Column implements
      */
     public function isNullable()
     {
-        return $this->nullable;
+        return (bool)$this->nullable;
     }
 
     /**
@@ -127,7 +127,7 @@ class Real extends Column implements
      */
     public function isUnsigned()
     {
-        return $this->unsigned;
+        return (bool)$this->unsigned;
     }
 
     /**
