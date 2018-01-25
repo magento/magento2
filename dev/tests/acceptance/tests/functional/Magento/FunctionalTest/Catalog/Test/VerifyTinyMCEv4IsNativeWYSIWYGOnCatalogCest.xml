@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="DefaultTinyMCEv4onCatalogPage">
         <annotations>
-            <features value="TinyMCEv4"/>
-            <stories value="Apply new WYSIWYG on Categories Page-MAGETWO-72137"/>
-            <group value="WYSIWYG"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-72137-Apply new WYSIWYG on Categories Page"/>
+            <group value="Catalog"/>
             <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Catalog Page"/>
             <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Catalog Page"/>
             <severity value="CRITICAL"/>

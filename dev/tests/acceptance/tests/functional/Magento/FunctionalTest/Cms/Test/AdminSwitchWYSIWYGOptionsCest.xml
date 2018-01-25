@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminSwitchWYSIWYGOptionsCest">
         <annotations>
-            <features value="TinyMCEv4"/>
-            <stories value="Admin are able to switch between TinyMCE versions MAGETWO-51829"/>
-            <group value="switcher"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-51829-Extensible list of WYSIWYG editors available in Magento"/>
+            <group value="Cms"/>
             <title value="Admin are able to switch between versions of TinyMCE."/>
             <description value="Admin are able to switch between versions of TinyMCE."/>
             <severity value="CRITICAL"/>

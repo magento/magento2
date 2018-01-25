@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddImageToWYSIWYGEditorBlock">
         <annotations>
-            <features value="Add Image to WYSIWYG Block"/>
-            <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
-            <group value="addImageBlock"/>
-            <title value="You should be able to add image to WYSIWYG EditorBlock"/>
-            <description value="You should be able to add image to WYSIWYG Editor Block"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42041-Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to add image to WYSIWYG content of Block"/>
+            <description value="Admin should be able to add image to WYSIWYG content of Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84376"/>
         </annotations>

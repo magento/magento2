@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToNewsletter">
         <annotations>
-            <features value="Add Widget to WYSIWYG of Newsletter"/>
-            <stories value="Apply new WYSIWYG in Newsletter-MAGETWO-47309"/>
-            <group value="newsletter"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
+            <group value="Newsletter"/>
             <title value="You should be able to add widget to WYSIWYG Editor of Newsletter"/>
             <description value="You should be able to add widget to WYSIWYG Editor Newsletter"/>
             <severity value="CRITICAL"/>

@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToWYSIWYGWithTypeOfCatalogCategoryLink">
         <annotations>
-            <features value="Add Widget to WYSIWYG"/>
-            <stories value="Widgets in WYSIWYG"/>
-            <group value="categoryLink"/>
-            <title value="Insert default Magento widget into content of WYSIWYG on CMS Pages"/>
-            <description value="Insert default Magento widget into content of WYSIWYG on CMS Pages"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
+            <group value="Cms"/>
+            <title value="Create CMS Page With Widget Type: Catalog category link"/>
+            <description value="Create CMS Page With Widget Type: Catalog category link"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83611"/>
         </annotations>

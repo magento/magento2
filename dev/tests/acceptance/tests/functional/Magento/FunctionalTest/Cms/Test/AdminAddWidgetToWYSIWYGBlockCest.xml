@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToBlock">
         <annotations>
-            <features value="Add Widget to WYSIWYG of Block"/>
-            <stories value="Apply new WYSIWYG in Block-MAGETWO-47309"/>
-            <group value="widgetBlock"/>
-            <title value="You should be able to add widget to WYSIWYG Editor of Block"/>
-            <description value="You should be able to add widget to WYSIWYG Editor Block"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Apply new WYSIWYG in Block"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to add widget to WYSIWYG content of Block"/>
+            <description value="Admin should be able to add widget to WYSIWYG content Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84654"/>
         </annotations>

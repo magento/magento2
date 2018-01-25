@@ -31,8 +31,8 @@
             <module name="Catalog" />
         </include>
         <exclude>
-            <cest name="AdminCreateCategoryCest"/>
-            <cest name="AdminCreateSimpleProductCest"/>
+            <test name="AdminCreateCategoryCest"/>
+            <test name="AdminCreateSimpleProductCest"/>
         </exclude>
     </suite>
     <suite name="Cms">
@@ -40,7 +40,7 @@
             <module name="Cms" />
         </include>
         <exclude>
-            <cest name="AdminCreateCmsPageCest"/>
+            <test name="AdminCreateCmsPageCest"/>
         </exclude>
     </suite>
     <suite name="Newsletter">
@@ -55,9 +55,9 @@
            <module name="Newsletter" />
         </include>
         <exclude>
-            <cest name="AdminCreateCmsPageCest"/>
-            <cest name="AdminCreateCategoryCest"/>
-            <cest name="AdminCreateSimpleProductCest"/>
+            <test name="AdminCreateCmsPageCest"/>
+            <test name="AdminCreateCategoryCest"/>
+            <test name="AdminCreateSimpleProductCest"/>
         </exclude>
     </suite>
 </suites>
