@@ -47,5 +47,6 @@
     </type>
     <type name="Magento\CatalogInventory\Helper\Stock">
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
+        <plugin name="adapt_assign_status_to_product" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAssignStatusToProductPlugin"/>
     </type>
 </config>
