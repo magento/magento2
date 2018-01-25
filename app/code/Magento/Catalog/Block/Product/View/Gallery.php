@@ -132,7 +132,7 @@ class Gallery extends AbstractView
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption'  => $image->getData('label'),
+                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
                 'type' => str_replace('external-', '', $image->getMediaType()),
