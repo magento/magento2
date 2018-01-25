@@ -49,7 +49,7 @@
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
         <waitForPageLoad stepKey="waitForPageLoad9"/>
-        <see userInput="Home Page" stepKey="seeHomePageCMSPage"/>
+        <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <closeTab stepKey="closeTab"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
