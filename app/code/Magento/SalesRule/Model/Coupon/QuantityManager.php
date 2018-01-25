@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Plugin;
+namespace Magento\SalesRule\Model\Coupon;
 
 use Magento\Sales\Model\Order;
 use Magento\SalesRule\Model\Coupon;
@@ -13,9 +13,9 @@ use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
 
 /**
- * Abstract class for plugins that are accounting the coupon uses.
+ * Calculates the coupon usages.
  */
-abstract class AbstractCouponUses
+class QuantityManager
 {
     /**
      * @var RuleFactory
@@ -56,13 +56,13 @@ abstract class AbstractCouponUses
     }
 
     /**
-     * Updates coupon uses.
+     * Updates coupon usages.
      *
      * @param Order $subject
      * @param bool $increment
      * @return Order
      */
-    protected function updateCouponUses(Order $subject, bool $increment)
+    public function updateCouponUsages(Order $subject, bool $increment)
     {
         if (!$subject || !$subject->getAppliedRuleIds()) {
             return $subject;

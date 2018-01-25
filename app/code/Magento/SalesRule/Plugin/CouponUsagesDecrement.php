@@ -7,11 +7,23 @@
 namespace Magento\SalesRule\Plugin;
 
 use Magento\Sales\Model\Order;
+use Magento\SalesRule\Model\Coupon\QuantityManager;
 
-class CouponUsesDecrement extends AbstractCouponUses
+class CouponUsagesDecrement
 {
     /**
-     * Decrements number of coupon uses after cancelling order.
+     * @var QuantityManager
+     */
+    private $quantityManager;
+
+    public function __construct(
+        QuantityManager $quantityManager
+    ) {
+        $this->quantityManager = $quantityManager;
+    }
+
+    /**
+     * Decrements number of coupon usages after cancelling order.
      *
      * @param Order $subject
      * @param callable $proceed
@@ -22,7 +34,7 @@ class CouponUsesDecrement extends AbstractCouponUses
         $canCancel = $subject->canCancel();
         $returnValue = $proceed();
         if ($canCancel) {
-            $returnValue = $this->updateCouponUses($returnValue, false);
+            $returnValue = $this->quantityManager->updateCouponUsages($returnValue, false);
         }
 
         return $returnValue;

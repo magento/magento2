@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CouponUsesTest extends \PHPUnit\Framework\TestCase
+class CouponUsagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
