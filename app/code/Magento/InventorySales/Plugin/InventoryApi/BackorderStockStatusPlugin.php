@@ -73,8 +73,7 @@ class BackorderStockStatusPlugin
 
         /** @var StockItemInterface $legacyStockItem */
         $legacyStockItem = current($stockItemsCollection->getItems());
-
-        if ($legacyStockItem->getBackorders() > 0) {
+        if (false !== $legacyStockItem && $legacyStockItem->getBackorders() > 0) {
             return true;
         }
         return $proceed($sku, $stockId);
