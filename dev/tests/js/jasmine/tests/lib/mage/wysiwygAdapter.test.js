@@ -7,6 +7,8 @@ define([
     'wysiwygAdapter'
 ], function (wysiwyg) {
     'use strict';
+
+
     var decodedHtml = '<p><img src="{{media url=&quot;wysiwyg/banana.jpg&quot;}}" alt="" width="612" height="459"></p>',
         encodedHtml = '<p>' +
             '<img src="http://magento2.vagrant154/admin/cms/wysiwyg/directive/' +
