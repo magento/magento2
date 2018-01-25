@@ -12,21 +12,21 @@ namespace Magento\Framework\Setup\SchemaListenerDefinition;
 class RealDefinition implements DefinitionConverterInterface
 {
     /**
-     * Decimal and float has different default values
+     * Decimal, double and float have different default values
      *
      * @var array
      */
     private static $shapeByType = [
         'float' => [
-            'precision' => '10',
+            'precision' => '0',
             'scale' => '0'
         ],
         'decimal' => [
-            'precision' => '10',
-            'scale' => '0'
+            'precision' => '0',
+            'scale' => '10'
         ],
         'double' => [
-            'precision' => '10',
+            'precision' => '0',
             'scale' => '0'
         ]
     ];
