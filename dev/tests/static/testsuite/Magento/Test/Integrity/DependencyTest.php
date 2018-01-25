@@ -553,7 +553,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-
     /**
      * Prepare list of routes.xml files (by modules)
      */
