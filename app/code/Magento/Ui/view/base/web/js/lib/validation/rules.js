@@ -244,7 +244,7 @@ define([
         ],
         'stripped-min-length': [
             function (value, param) {
-                return $(value).text().length >= param;
+                return _.isUndefined(value) || value.length === 0 || utils.stripHtml(value).length >= param;
             },
             $.mage.__('Please enter at least {0} characters')
         ],
