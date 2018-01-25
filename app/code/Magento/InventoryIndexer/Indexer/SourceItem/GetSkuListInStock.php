@@ -75,15 +75,15 @@ class GetSkuListInStock
                         sprintf("GROUP_CONCAT(DISTINCT %s SEPARATOR ',')", 'source_item.' . SourceItemInterface::SKU)
                 ]
             )->joinInner(
-                ['stock_source_link' => $sourceStockLinkTable],
+                ['stock_source_links' => $sourceStockLinkTable],
                 sprintf(
-                    'source_item.%s = stock_source_link.%s',
+                    'source_item.%s = stock_source_links.%s',
                     SourceItemInterface::SOURCE_CODE,
                     StockSourceLink::SOURCE_CODE
                 ),
                 [StockSourceLink::STOCK_ID]
             )->where('source_item.source_item_id IN (?)', $sourceItemIds)
-            ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);
+            ->group(['stock_source_links.' . StockSourceLink::STOCK_ID]);
 
         $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
         $items = $connection->fetchAll($select);

@@ -71,16 +71,16 @@ class SelectBuilder
                 ]
             )
             ->joinLeft(
-                ['stock_source_link' => $sourceStockLinkTable],
+                ['stock_source_links' => $sourceStockLinkTable],
                 sprintf(
-                    'source_item.%s = stock_source_link.%s',
+                    'source_item.%s = stock_source_links.%s',
                     SourceItemInterface::SOURCE_CODE,
                     StockSourceLink::SOURCE_CODE
                 ),
                 []
             )
-            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
+            ->where('stock_source_links.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
+            ->where('stock_source_links.' . StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
             ->group([SourceItemInterface::SKU]);
         return $select;
     }
