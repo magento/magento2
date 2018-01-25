@@ -194,27 +194,26 @@ class Storage
     public function prepareCustomers(array $customersToFind)
     {
         $customersData = [];
+        $filters = [];
         foreach ($customersToFind as $customerToFind) {
             $email = $customerToFind['email'];
             $websiteId = $customerToFind['website_id'];
             if (!array_key_exists($email, $this->_customerIds)
                 || !array_key_exists($websiteId, $this->_customerIds[$email])
             ) {
+                //Only looking for customers we don't already have ID for.
                 $customersData[] = $customerToFind;
+                $filters[] = $this->filterBuilder
+                    ->setField('email')
+                    ->setValue($customerToFind['email'])
+                    ->setConditionType('eq')
+                    ->create();
             }
         }
         if (!$customersData) {
             return;
         }
 
-        $filters = [];
-        foreach ($customersData as $customerData) {
-            $filters[] = $this->filterBuilder
-                ->setField('email')
-                ->setValue($customerData['email'])
-                ->setConditionType('eq')
-                ->create();
-        }
         $this->searchCriteriaBuilder->addFilters($filters);
 
         //Adding customers that we found.

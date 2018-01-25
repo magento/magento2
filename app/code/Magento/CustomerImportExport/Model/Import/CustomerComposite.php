@@ -308,14 +308,16 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             ->prepareCustomers($customersPresent);
         //Copying customers to address' storage.
         foreach ($customersPresent as $customerPresent) {
+            $email = $customerPresent['email'];
+            $websiteId = $customerPresent['website_id'];
+            $idFound = $this->_customerEntity->getCustomerStorage()
+                ->getCustomerId($email, $websiteId);
             $this->_addressEntity->getCustomerStorage()
-                ->addCustomer(
-                    new DataObject([
-                        'email' => $customerPresent['email'],
-                        'website_id' => $customerPresent['website_id'],
-                        'id' => $this->_customerEntity->getCustomerStorage()->getCustomerId($customerPresent['email'], $customerPresent['website_id']) ?: null
-                    ])
-                );
+                ->addCustomer(new DataObject([
+                        'email' => $email,
+                        'website_id' => $websiteId,
+                        'id' => $idFound ?: null
+                ]));
         }
 
         return parent::validateData();
