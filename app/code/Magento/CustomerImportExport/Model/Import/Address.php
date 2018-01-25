@@ -862,7 +862,6 @@ class Address extends AbstractCustomer
         return true;
     }
 
-
     /**
      * Validate row for add/update action
      *

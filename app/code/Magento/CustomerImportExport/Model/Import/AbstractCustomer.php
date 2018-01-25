@@ -177,6 +177,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Pre-loading customers for existing customers checks.
      *
      * @param \Traversable $rows
+     * @return void
      */
     public function prepareCustomerData(\Traversable $rows)
     {
