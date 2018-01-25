@@ -51,7 +51,6 @@ class DeclarativeSchemaRule implements \Magento\TestFramework\Dependency\RuleInt
         $tables = $dom->getElementsByTagName('table');
         $constraints = $dom->getElementsByTagName('constraint');
 
-
         $tableNames = [];
         $foreignKeyTables = [];
         $foreignKeyReferenceTables = [];
