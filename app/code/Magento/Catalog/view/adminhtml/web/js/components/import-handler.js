@@ -4,7 +4,7 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract',
+    'Magento_Ui/js/form/element/textarea',
     'underscore',
     'uiRegistry'
 ], function (Abstract, _, registry) {
@@ -61,7 +61,6 @@ define([
             if (placeholder) {
                 this.values[placeholder] = component.getPreview() || '';
             }
-
             if (!this.allowImport) {
                 return;
             }
@@ -99,7 +98,6 @@ define([
          *  and disallow/allow import value
          */
         userChanges: function () {
-
             /**
              *  As userChanges is called before updateValue,
              *  we forced to get value from component by reference
