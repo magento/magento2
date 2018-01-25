@@ -38,7 +38,7 @@
         <field xsi:type="ScalarOutputField" name="is_default" type="Boolean"/>
         <!-- price type and price don't get populated is it something about fixed price ? -->
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="price_type" type="Boolean"/>
+        <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean"/>
     </type>
     <type xsi:type="Enum" name="ShipBundleItemsEnum">
@@ -48,5 +48,9 @@
     <type xsi:type="Enum" name="PriceViewEnum">
         <item name="0">PRICE_RANGE</item>
         <item name="1">AS_LOW_AS</item>
+    </type>
+    <type xsi:type="Enum" name="PriceTypeEnum">
+        <item name="0">FIXED</item>
+        <item name="1">PERCENT</item>
     </type>
 </config>

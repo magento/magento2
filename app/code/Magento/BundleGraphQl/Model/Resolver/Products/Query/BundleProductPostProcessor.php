@@ -145,6 +145,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $returnData = $link->getData();
         $returnData['product_id'] = $link->getEntityId();
         $returnData['can_change_quantity'] = $link->getCanChangeQuantity();
+        $returnData['price_type'] = $this->convertToEnumValue($link->getPriceType(), 'PriceTypeEnum');
         return $returnData;
     }
 
@@ -163,13 +164,13 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      * Convert entity value to enum value
      *
      * @param mixed $value
-     * @return array
+     * @return mixed
      */
     private function convertToEnumValue($value, $enumType)
     {
         $priceViewEnum = $this->typeConfig->getTypeStructure($enumType);
         foreach ($priceViewEnum->getValues() as $enumItem) {
-            if ($enumItem->getName() === $value) {
+            if ($enumItem->getName() == $value) {
                 return $enumItem->getValue();
             }
         }
