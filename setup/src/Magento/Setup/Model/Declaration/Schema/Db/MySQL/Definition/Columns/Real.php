@@ -85,7 +85,7 @@ class Real implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/i', $data['definition'], $matches) !== false) {
+        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/i', $data['definition'], $matches)) {
             /**
              * match[1] - type
              * match[2] - precision

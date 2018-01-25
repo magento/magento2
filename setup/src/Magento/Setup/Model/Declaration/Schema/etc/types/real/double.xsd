@@ -16,8 +16,8 @@
             </xs:documentation>
         </xs:annotation>
 
-        <xs:complexContent>
+        <xs:simpleContent>
             <xs:extension base="xs:float" />
-        </xs:complexContent>
+        </xs:simpleContent>
     </xs:complexType>
 </xs:schema>

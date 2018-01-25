@@ -37,5 +37,6 @@
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="nullable" type="xs:boolean" />
+        <xs:attribute name="unsigned" type="xs:boolean" />
     </xs:complexType>
 </xs:schema>
