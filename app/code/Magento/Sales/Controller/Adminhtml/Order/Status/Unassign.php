@@ -18,17 +18,17 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
         if ($status) {
             try {
                 $status->unassignState($state);
-                $this->messageManager->addSuccessMessage(__('You have unassigned the order status.'));
+                $this->messageManager->addSuccess(__('You have unassigned the order status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage(
+                $this->messageManager->addException(
                     $e,
                     __('Something went wrong while unassigning the order.')
                 );
             }
         } else {
-            $this->messageManager->addErrorMessage(__('We can\'t find this order status.'));
+            $this->messageManager->addError(__('We can\'t find this order status.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

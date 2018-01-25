@@ -44,7 +44,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
                     $item->delete();
                     $productName = $this->_objectManager->get(\Magento\Framework\Escaper::class)
                         ->escapeHtml($product->getName());
-                    $this->messageManager->addSuccessMessage(
+                    $this->messageManager->addSuccess(
                         __('You removed product %1 from the comparison list.', $productName)
                     );
                     $this->_eventManager->dispatch(

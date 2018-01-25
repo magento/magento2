@@ -119,7 +119,7 @@ class PostDataProcessor
         foreach ($data as $field => $value) {
             if (in_array($field, array_keys($requiredFields)) && $value == '') {
                 $errorNo = false;
-                $this->messageManager->addErrorMessage(
+                $this->messageManager->addError(
                     __('To apply changes you should fill in hidden required "%1" field', $requiredFields[$field])
                 );
             }

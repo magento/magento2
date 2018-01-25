@@ -23,7 +23,7 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
     {
         $ids = $this->getRequest()->getParam('notification');
         if (!is_array($ids)) {
-            $this->messageManager->addErrorMessage(__('Please select messages.'));
+            $this->messageManager->addError(__('Please select messages.'));
         } else {
             try {
                 foreach ($ids as $id) {
@@ -32,11 +32,11 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
                         $model->setIsRemove(1)->save();
                     }
                 }
-                $this->messageManager->addSuccessMessage(__('Total of %1 record(s) have been removed.', count($ids)));
+                $this->messageManager->addSuccess(__('Total of %1 record(s) have been removed.', count($ids)));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __("We couldn't remove the messages because of an error."));
+                $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

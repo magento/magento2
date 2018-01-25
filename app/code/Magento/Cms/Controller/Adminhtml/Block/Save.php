@@ -57,7 +57,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             /** @var \Magento\Cms\Model\Block $model */
             $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class)->load($id);
             if (!$model->getId() && $id) {
-                $this->messageManager->addErrorMessage(__('This block no longer exists.'));
+                $this->messageManager->addError(__('This block no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
 
@@ -65,7 +65,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
 
             try {
                 $model->save();
-                $this->messageManager->addSuccessMessage(__('You saved the block.'));
+                $this->messageManager->addSuccess(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
 
                 if ($this->getRequest()->getParam('back')) {
@@ -73,9 +73,9 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the block.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving the block.'));
             }
 
             $this->dataPersistor->set('cms_block', $data);

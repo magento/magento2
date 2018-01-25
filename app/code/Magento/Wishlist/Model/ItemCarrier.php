@@ -182,7 +182,7 @@ class ItemCarrier
 
         if ($messages) {
             foreach ($messages as $message) {
-                $this->messageManager->addErrorMessage($message);
+                $this->messageManager->addError($message);
             }
             $redirectUrl = $indexUrl;
         }
@@ -192,7 +192,7 @@ class ItemCarrier
             try {
                 $wishlist->save();
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(__('We can\'t update the Wish List right now.'));
+                $this->messageManager->addError(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }
 
@@ -202,7 +202,7 @@ class ItemCarrier
                 $products[] = '"' . $product->getName() . '"';
             }
 
-            $this->messageManager->addSuccessMessage(
+            $this->messageManager->addSuccess(
                 __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
             );
 

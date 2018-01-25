@@ -34,11 +34,11 @@ class VoidAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             )->addObject(
                 $invoice->getOrder()
             )->save();
-            $this->messageManager->addSuccessMessage(__('The invoice has been voided.'));
+            $this->messageManager->addSuccess(__('The invoice has been voided.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Invoice voiding error'));
+            $this->messageManager->addError(__('Invoice voiding error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

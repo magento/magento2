@@ -37,18 +37,18 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
             $errors = $importModel->getMessages();
             if (sizeof($errors) > 0) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addWarningMessage($error);
+                    $this->messageManager->addWarning($error);
                 }
-                $this->messageManager->addWarningMessage(
+                $this->messageManager->addWarning(
                     __('Click "Save" to apply the rates we found.')
                 );
             } else {
-                $this->messageManager->addSuccessMessage(__('Click "Save" to apply the rates we found.'));
+                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
             }
 
             $backendSession->setRates($rates);
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

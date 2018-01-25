@@ -59,12 +59,12 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->messageManager->addSuccessMessage(__("%1 cache type(s) enabled.", $updatedTypes));
+                $this->messageManager->addSuccess(__("%1 cache type(s) enabled.", $updatedTypes));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('An error occurred while enabling cache.'));
+            $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
     }
 

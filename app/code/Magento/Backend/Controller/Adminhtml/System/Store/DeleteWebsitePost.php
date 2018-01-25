@@ -23,11 +23,11 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$model) {
-            $this->messageManager->addErrorMessage(__('Something went wrong. Please try again.'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
-            $this->messageManager->addErrorMessage(__('This website cannot be deleted.'));
+            $this->messageManager->addError(__('This website cannot be deleted.'));
             return $redirectResult->setPath('adminhtml/*/editWebsite', ['website_id' => $model->getId()]);
         }
 
@@ -37,12 +37,12 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
 
         try {
             $model->delete();
-            $this->messageManager->addSuccessMessage(__('You deleted the website.'));
+            $this->messageManager->addSuccess(__('You deleted the website.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Unable to delete the website. Please try again later.'));
+            $this->messageManager->addException($e, __('Unable to delete the website. Please try again later.'));
         }
         return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }

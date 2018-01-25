@@ -105,7 +105,7 @@ class AddToCart implements ObserverInterface
             $this->checkoutSession->setWishlistPendingUrls($urls);
             $this->checkoutSession->setWishlistPendingMessages($messages);
 
-            $this->messageManager->addErrorMessage($message);
+            $this->messageManager->addError($message);
 
             $observer->getEvent()->getResponse()->setRedirect($url);
             $this->checkoutSession->setNoCartRedirect(true);

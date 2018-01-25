@@ -20,11 +20,11 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber
         if ($id && $code) {
             try {
                 $this->_subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
-                $this->messageManager->addSuccessMessage(__('You unsubscribed.'));
+                $this->messageManager->addSuccess(__('You unsubscribed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e, $e->getMessage());
+                $this->messageManager->addException($e, $e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while unsubscribing you.'));
+                $this->messageManager->addException($e, __('Something went wrong while unsubscribing you.'));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());

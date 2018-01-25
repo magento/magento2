@@ -30,7 +30,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $validator->setPaths($helper->getValidPaths());
             if (!$validator->isValid($path)) {
                 foreach ($validator->getMessages() as $message) {
-                    $this->messageManager->addErrorMessage($message);
+                    $this->messageManager->addError($message);
                 }
                 // save data in session
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
@@ -83,13 +83,13 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             // save the data
             $model->save();
             // display success message
-            $this->messageManager->addSuccessMessage(__('You saved the sitemap.'));
+            $this->messageManager->addSuccess(__('You saved the sitemap.'));
             // clear previously saved data from session
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
             return $model->getId();
         } catch (\Exception $e) {
             // display error message
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             // save data in session
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
         }

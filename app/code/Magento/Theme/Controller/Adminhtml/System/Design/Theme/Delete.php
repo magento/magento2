@@ -37,12 +37,12 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     );
                 }
                 $theme->delete();
-                $this->messageManager->addSuccessMessage(__('You deleted the theme.'));
+                $this->messageManager->addSuccess(__('You deleted the theme.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('We cannot delete the theme.'));
+            $this->messageManager->addException($e, __('We cannot delete the theme.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

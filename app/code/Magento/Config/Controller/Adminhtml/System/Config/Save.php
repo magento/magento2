@@ -160,14 +160,14 @@ class Save extends AbstractConfig
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
 
-            $this->messageManager->addSuccessMessage(__('You saved the configuration.'));
+            $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addErrorMessage($message);
+                $this->messageManager->addError($message);
             }
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage(
+            $this->messageManager->addException(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()
             );

@@ -326,7 +326,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccessMessage(
+                $this->messageManager->addSuccess(
                     __(
                         'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                         $email
@@ -337,7 +337,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage());
+                $this->messageManager->addSuccess($this->getSuccessMessage());
                 $requestedRedirect = $this->accountRedirect->getRedirectCookie();
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
@@ -361,16 +361,16 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 $url
             );
             // @codingStandardsIgnoreEnd
-            $this->messageManager->addErrorMessage($message);
+            $this->messageManager->addError($message);
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
+                $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
+            $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());

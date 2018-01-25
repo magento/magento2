@@ -57,10 +57,10 @@ class Save extends RatingController
                     }
                 }
 
-                $this->messageManager->addSuccessMessage(__('You saved the rating.'));
+                $this->messageManager->addSuccess(__('You saved the rating.'));
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRatingData(false);
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)
                     ->setRatingData($this->getRequest()->getPostValue());
                 $resultRedirect->setPath('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);

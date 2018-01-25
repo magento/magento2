@@ -17,7 +17,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
     {
         $indexerIds = $this->getRequest()->getParam('indexer_ids');
         if (!is_array($indexerIds)) {
-            $this->messageManager->addErrorMessage(__('Please select indexers.'));
+            $this->messageManager->addError(__('Please select indexers.'));
         } else {
             try {
                 foreach ($indexerIds as $indexerId) {
@@ -27,13 +27,13 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
                     )->get($indexerId);
                     $model->setScheduled(true);
                 }
-                $this->messageManager->addSuccessMessage(
+                $this->messageManager->addSuccess(
                     __('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage(
+                $this->messageManager->addException(
                     $e,
                     __("We couldn't change indexer(s)' mode because of an error.")
                 );

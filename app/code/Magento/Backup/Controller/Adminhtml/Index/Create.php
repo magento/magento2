@@ -82,7 +82,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
 
             $backupManager->create();
 
-            $this->messageManager->addSuccessMessage($successMessage);
+            $this->messageManager->addSuccess($successMessage);
 
             $response->setRedirectUrl($this->getUrl('*/*/index'));
         } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {

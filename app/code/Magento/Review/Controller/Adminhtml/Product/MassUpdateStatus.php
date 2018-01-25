@@ -18,7 +18,7 @@ class MassUpdateStatus extends ProductController
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
-            $this->messageManager->addErrorMessage(__('Please select review(s).'));
+            $this->messageManager->addError(__('Please select review(s).'));
         } else {
             try {
                 $status = $this->getRequest()->getParam('status');
@@ -26,13 +26,13 @@ class MassUpdateStatus extends ProductController
                     $model = $this->reviewFactory->create()->load($reviewId);
                     $model->setStatusId($status)->save()->aggregate();
                 }
-                $this->messageManager->addSuccessMessage(
+                $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
             } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage(
+                $this->messageManager->addException(
                     $e,
                     __('Something went wrong while updating these review(s).')
                 );

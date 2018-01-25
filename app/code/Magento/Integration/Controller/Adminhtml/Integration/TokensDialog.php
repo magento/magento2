@@ -27,7 +27,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
             "The integration '%1' has been activated.",
             $integrationName
         );
-        $this->messageManager->addSuccessMessage($successMsg);
+        $this->messageManager->addSuccess($successMsg);
     }
 
     /**
@@ -50,12 +50,12 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
                 $this->_integrationService->get($integrationId)->getData()
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return;
         }

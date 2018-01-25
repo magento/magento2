@@ -36,10 +36,10 @@ class AddressesPost extends \Magento\Multishipping\Controller\Checkout
                 $this->_getCheckout()->setShippingItemsInformation($shipToInfo);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/addresses');
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Data saving problem'));
+            $this->messageManager->addException($e, __('Data saving problem'));
             $this->_redirect('*/*/addresses');
         }
     }

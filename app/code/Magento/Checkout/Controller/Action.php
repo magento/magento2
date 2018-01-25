@@ -70,7 +70,7 @@ abstract class Action extends \Magento\Framework\App\Action\Action
             if (!$validationResult->isValid()) {
                 if ($addErrors) {
                     foreach ($validationResult->getMessages() as $error) {
-                        $this->messageManager->addErrorMessage($error);
+                        $this->messageManager->addError($error);
                     }
                 }
                 if ($redirect) {

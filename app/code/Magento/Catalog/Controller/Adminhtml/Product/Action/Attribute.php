@@ -56,7 +56,7 @@ abstract class Attribute extends Action
         }
 
         if ($error) {
-            $this->messageManager->addErrorMessage($error);
+            $this->messageManager->addError($error);
         }
 
         return !$error;

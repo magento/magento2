@@ -21,11 +21,11 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!($model = $this->_objectManager->create(\Magento\Store\Model\Group::class)->load($itemId))) {
-            $this->messageManager->addErrorMessage(__('Something went wrong. Please try again.'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
-            $this->messageManager->addErrorMessage(__('This store cannot be deleted.'));
+            $this->messageManager->addError(__('This store cannot be deleted.'));
             return $redirectResult->setPath('adminhtml/*/editGroup', ['group_id' => $model->getId()]);
         }
 
@@ -35,12 +35,12 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         try {
             $model->delete();
-            $this->messageManager->addSuccessMessage(__('You deleted the store.'));
+            $this->messageManager->addSuccess(__('You deleted the store.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Unable to delete the store. Please try again later.'));
+            $this->messageManager->addException($e, __('Unable to delete the store. Please try again later.'));
         }
         return $redirectResult->setPath('adminhtml/*/editGroup', ['group_id' => $itemId]);
     }

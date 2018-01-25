@@ -80,13 +80,13 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
             $queue->save();
 
-            $this->messageManager->addSuccessMessage(__('You saved the newsletter queue.'));
+            $this->messageManager->addSuccess(__('You saved the newsletter queue.'));
             $this->_getSession()->setFormData(false);
             $this->_getSession()->unsPreviewData();
 
             $this->_redirect('*/*');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $id = $this->getRequest()->getParam('id');
             if ($id) {
                 $this->_redirect('*/*/edit', ['id' => $id]);

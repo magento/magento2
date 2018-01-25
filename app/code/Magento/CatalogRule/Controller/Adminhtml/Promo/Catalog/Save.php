@@ -68,7 +68,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $this->messageManager->addErrorMessage($errorMessage);
+                        $this->messageManager->addError($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
                     $this->dataPersistor->set('catalog_rule', $data);
@@ -88,7 +88,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 
                 $ruleRepository->save($model);
 
-                $this->messageManager->addSuccessMessage(__('You saved the rule.'));
+                $this->messageManager->addSuccess(__('You saved the rule.'));
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData(false);
                 $this->dataPersistor->clear('catalog_rule');
 
@@ -111,9 +111,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 }
                 return;
             } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(
+                $this->messageManager->addError(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

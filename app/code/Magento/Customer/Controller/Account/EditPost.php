@@ -162,27 +162,27 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $isPasswordChanged
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
-                $this->messageManager->addSuccessMessage(__('You saved the account information.'));
+                $this->messageManager->addSuccess(__('You saved the account information.'));
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
                     'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->session->logout();
                 $this->session->start();
-                $this->messageManager->addErrorMessage($message);
+                $this->messageManager->addError($message);
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 foreach ($e->getErrors() as $error) {
-                    $this->messageManager->addErrorMessage($error->getMessage());
+                    $this->messageManager->addError($error->getMessage());
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
+                $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());

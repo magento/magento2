@@ -58,7 +58,7 @@ class Unlock extends \Magento\Backend\App\Action
                 $this->getMessageManager()->addSuccess(__('Customer has been unlocked successfully.'));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

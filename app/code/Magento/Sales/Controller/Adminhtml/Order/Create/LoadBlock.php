@@ -55,10 +55,10 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_reloadQuote();
-            $this->messageManager->addExceptionMessage($e, $e->getMessage());
+            $this->messageManager->addException($e, $e->getMessage());
         }
 
         $asJson = $request->getParam('json');

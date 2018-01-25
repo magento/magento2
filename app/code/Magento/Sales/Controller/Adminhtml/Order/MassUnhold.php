@@ -52,15 +52,15 @@ class MassUnhold extends AbstractMassAction
         $countNonUnHoldOrder = $collection->count() - $countUnHoldOrder;
 
         if ($countNonUnHoldOrder && $countUnHoldOrder) {
-            $this->messageManager->addErrorMessage(
+            $this->messageManager->addError(
                 __('%1 order(s) were not released from on hold status.', $countNonUnHoldOrder)
             );
         } elseif ($countNonUnHoldOrder) {
-            $this->messageManager->addErrorMessage(__('No order(s) were released from on hold status.'));
+            $this->messageManager->addError(__('No order(s) were released from on hold status.'));
         }
 
         if ($countUnHoldOrder) {
-            $this->messageManager->addSuccessMessage(
+            $this->messageManager->addSuccess(
                 __('%1 order(s) have been released from on hold status.', $countUnHoldOrder)
             );
         }

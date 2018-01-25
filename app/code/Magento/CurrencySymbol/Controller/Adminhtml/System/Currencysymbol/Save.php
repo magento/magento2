@@ -27,9 +27,9 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
         try {
             $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
                 ->setCurrencySymbolsData($symbolsDataArray);
-            $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
+            $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
