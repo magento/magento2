@@ -592,8 +592,7 @@ class Installer
     private function setupSessionTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    )
-    {
+    ) {
         if (!$connection->isTableExists($setup->getTable('session'))) {
             $table = $connection->newTable(
                 $setup->getTable('session')
@@ -632,8 +631,7 @@ class Installer
     private function setupCacheTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    )
-    {
+    ) {
         if (!$connection->isTableExists($setup->getTable('cache'))) {
             $table = $connection->newTable(
                 $setup->getTable('cache')
@@ -687,8 +685,7 @@ class Installer
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    )
-    {
+    ) {
         if (!$connection->isTableExists($setup->getTable('cache_tag'))) {
             $table = $connection->newTable(
                 $setup->getTable('cache_tag')
@@ -724,8 +721,7 @@ class Installer
     private function setupFlagTable(
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
-    )
-    {
+    ) {
         if (!$connection->isTableExists($setup->getTable('flag'))) {
             $table = $connection->newTable(
                 $setup->getTable('flag')
