@@ -148,6 +148,7 @@ class AdvancedInventory extends AbstractModifier
 
         $result[StockItemInterface::MANAGE_STOCK] = (int)$stockItem->getManageStock();
         $result[StockItemInterface::QTY] = (float)$stockItem->getQty();
+        $result[StockItemInterface::ORIGINAL_INVENTORY_QTY] = (float)$stockItem->getQty();
         $result[StockItemInterface::MIN_QTY] = (float)$stockItem->getMinQty();
         $result[StockItemInterface::MIN_SALE_QTY] = (float)$stockItem->getMinSaleQty();
         $result[StockItemInterface::MAX_SALE_QTY] = (float)$stockItem->getMaxSaleQty();
