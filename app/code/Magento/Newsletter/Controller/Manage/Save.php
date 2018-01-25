@@ -68,7 +68,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
 
         $customerId = $this->_customerSession->getCustomerId();
         if ($customerId === null) {
-            $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
         } else {
             try {
                 $customer = $this->customerRepository->getById($customerId);
@@ -77,13 +77,13 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $this->customerRepository->save($customer);
                 if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
                     $this->subscriberFactory->create()->subscribeCustomerById($customerId);
-                    $this->messageManager->addSuccess(__('We saved the subscription.'));
+                    $this->messageManager->addSuccessMessage(__('We saved the subscription.'));
                 } else {
                     $this->subscriberFactory->create()->unsubscribeCustomerById($customerId);
-                    $this->messageManager->addSuccess(__('We removed the subscription.'));
+                    $this->messageManager->addSuccessMessage(__('We removed the subscription.'));
                 }
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
             }
         }
         $this->_redirect('customer/account/');

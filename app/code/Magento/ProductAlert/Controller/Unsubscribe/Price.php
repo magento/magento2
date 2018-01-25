@@ -66,13 +66,13 @@ class Price extends UnsubscribeController
                 $model->delete();
             }
 
-            $this->messageManager->addSuccess(__('You deleted the alert subscription.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('We can\'t find the product.'));
+            $this->messageManager->addErrorMessage(__('We can\'t find the product.'));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;

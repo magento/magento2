@@ -57,7 +57,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         if ($model->getId() || $this->_coreRegistry->registry('store_action') == 'add') {
             $this->_coreRegistry->register('store_data', $model);
             if ($this->_coreRegistry->registry('store_action') == 'edit' && $codeBase && !$model->isReadOnly()) {
-                $this->messageManager->addNotice($codeBase);
+                $this->messageManager->addNoticeMessage($codeBase);
             }
             $resultPage = $this->createPage();
             if ($this->_coreRegistry->registry('store_action') == 'add') {
@@ -71,7 +71,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
             ));
             return $resultPage;
         } else {
-            $this->messageManager->addError($notExists);
+            $this->messageManager->addErrorMessage($notExists);
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('adminhtml/*/');

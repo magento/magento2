@@ -50,7 +50,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         /** @var $model \Magento\User\Model\User */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
-            $this->messageManager->addError(__('This user no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This user no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
         }
@@ -86,7 +86,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
 
             $model->sendNotificationEmailsIfRequired();
 
-            $this->messageManager->addSuccess(__('You saved the user.'));
+            $this->messageManager->addSuccessMessage(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
         } catch (UserLockedException $e) {
@@ -96,7 +96,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             );
             $this->_redirect('adminhtml/*/');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->messageManager->addErrorMessage(__('You have entered an invalid password for current user.'));
             $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();
@@ -104,7 +104,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
             $this->redirectToEdit($model, $data);
         }
