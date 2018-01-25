@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -285,6 +286,39 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function getEntityTypeCode()
     {
         return 'customer_composite';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Pre-loading customers for existing customers checks.
+        $source = $this->getSource();
+        $customersPresent = [];
+        foreach ($source as $rowData) {
+            $customersPresent[] = [
+                'email' => $rowData[Customer::COLUMN_EMAIL],
+                'website_id' => $this->_customerEntity->getWebsiteId(
+                    $rowData[Customer::COLUMN_WEBSITE]
+                )
+            ];
+        }
+        $this->_customerEntity->getCustomerStorage()
+            ->prepareCustomers($customersPresent);
+        //Copying customers to address' storage.
+        foreach ($customersPresent as $customerPresent) {
+            $this->_addressEntity->getCustomerStorage()
+                ->addCustomer(
+                    new DataObject([
+                        'email' => $customerPresent['email'],
+                        'website_id' => $customerPresent['website_id'],
+                        'id' => $this->_customerEntity->getCustomerStorage()->getCustomerId($customerPresent['email'], $customerPresent['website_id']) ?: null
+                    ])
+                );
+        }
+
+        return parent::validateData();
     }
 
     /**

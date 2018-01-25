@@ -6,9 +6,11 @@
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Api\FilterBuilder;
 
 class Storage
 {
@@ -64,16 +66,30 @@ class Storage
     private $customerRepository;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param array $data
      * @param CustomerRepositoryInterface|null $customerRepository
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param FilterBuilder|null $filterBuilder
      */
     public function __construct(
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = [],
-        CustomerRepositoryInterface $customerRepository = null
+        CustomerRepositoryInterface $customerRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        FilterBuilder $filterBuilder = null
     ) {
         $this->_customerCollection = isset(
             $data['customer_collection']
@@ -85,6 +101,10 @@ class Storage
         $this->customerRepository = $customerRepository
             ?: ObjectManager::getInstance()
                 ->get(CustomerRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder
+            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $this->filterBuilder = $filterBuilder
+            ?: ObjectManager::getInstance()->get(FilterBuilder::class);
     }
 
     /**
@@ -163,5 +183,60 @@ class Storage
         }
 
         return false;
+    }
+
+    /**
+     * Pre-load customers for future checks.
+     *
+     * @param array[] $customersToFind With keys: email, website_id.
+     * @return void
+     */
+    public function prepareCustomers(array $customersToFind)
+    {
+        $customersData = [];
+        foreach ($customersToFind as $customerToFind) {
+            $email = $customerToFind['email'];
+            $websiteId = $customerToFind['website_id'];
+            if (!array_key_exists($email, $this->_customerIds)
+                || !array_key_exists($websiteId, $this->_customerIds[$email])
+            ) {
+                $customersData[] = $customerToFind;
+            }
+        }
+        if (!$customersData) {
+            return;
+        }
+
+        $filters = [];
+        foreach ($customersData as $customerData) {
+            $filters[] = $this->filterBuilder
+                ->setField('email')
+                ->setValue($customerData['email'])
+                ->setConditionType('eq')
+                ->create();
+        }
+        $this->searchCriteriaBuilder->addFilters($filters);
+
+        //Adding customers that we found.
+        $found = $this->customerRepository->getList(
+            $this->searchCriteriaBuilder->create()
+        );
+        foreach ($found->getItems() as $customer) {
+            $this->addCustomer(new DataObject([
+                'id' => $customer->getId(),
+                'email' => $customer->getEmail(),
+                'website_id' => $customer->getWebsiteId()
+            ]));
+        }
+        //Adding customers that don't exist.
+        foreach ($customersData as $customerData) {
+            $email = $customerData['email'];
+            $websiteId = $customerData['website_id'];
+            if (!array_key_exists($email, $this->_customerIds)
+                || !array_key_exists($websiteId, $this->_customerIds[$email])
+            ) {
+                $this->_customerIds[$email][$websiteId] = null;
+            }
+        }
     }
 }

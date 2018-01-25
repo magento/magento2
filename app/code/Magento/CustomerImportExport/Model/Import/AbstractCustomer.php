@@ -175,6 +175,26 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     }
 
     /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Pre-loading customers for existing customers checks.
+        $source = $this->getSource();
+        $customersPresent = [];
+        foreach ($source as $rowData) {
+            $customersPresent[] = [
+                'email' => $rowData[Customer::COLUMN_EMAIL],
+                'website_id' => $this->getWebsiteId(
+                    $rowData[Customer::COLUMN_WEBSITE]
+                )
+            ];
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
+
+        return parent::validateData();
+    }
+    /**
      * Validate data row
      *
      * @param array $rowData
