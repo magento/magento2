@@ -1130,6 +1130,37 @@ class Files
     }
 
     /**
+     * Returns list of db_schema files, used by Magento application
+     *
+     * @param string $fileNamePattern
+     * @param array $excludedFileNames
+     * @param bool $asDataSet
+     * @return array
+     * @codingStandardsIgnoreStart
+     */
+    public function getDbSchemaFiles(
+        $fileNamePattern = 'db_schema.xml',
+        $excludedFileNames = [],
+        $asDataSet = true
+    ) {
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
+            $files = array_filter(
+                $files,
+                function ($file) use ($excludedFileNames) {
+                    return !in_array(basename($file), $excludedFileNames);
+                }
+            );
+            self::$_cache[$cacheKey] = $files;
+        }
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
+    }
+
+    /**
      * Collect templates from themes
      *
      * @param bool $withMetaInfo

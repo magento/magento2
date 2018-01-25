@@ -253,7 +253,7 @@
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="attribute_set_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Attriute Set ID"/>
+                identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Parent Category ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
