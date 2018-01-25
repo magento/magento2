@@ -30,6 +30,14 @@ use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
     /**
+     * Path for accessing REST API schema
+     * @todo need to change logic in \Magento\Webapi\Model\Rest\Swagger\Generator::generateSchema()
+     *        $swagger->setBasePath(strstr($endpointUrl, Rest::SCHEMA_PATH, true));
+     *       to using by di.xml config
+     */
+    const SCHEMA_PATH = '/schema';
+
+    /**
      * @var Router
      * @deprecated 100.1.0
      */
