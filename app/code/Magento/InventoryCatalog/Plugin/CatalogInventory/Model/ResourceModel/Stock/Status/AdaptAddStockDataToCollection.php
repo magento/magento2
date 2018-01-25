@@ -15,12 +15,12 @@ use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 /**
  * Adapt adding stock data to collection for multi stocks.
  */
-class AdaptAddStockDataToCollectionToMultiStocks
+class AdaptAddStockDataToCollection
 {
     /**
      * @var GetStockIdForCurrentWebsite
      */
-    private $stockIdForCurrentWebsite;
+    private $getStockIdForCurrentWebsite;
 
     /**
      * @var AddStockDataToCollection
@@ -28,14 +28,14 @@ class AdaptAddStockDataToCollectionToMultiStocks
     private $addStockDataToCollection;
 
     /**
-     * @param GetStockIdForCurrentWebsite $stockIdForCurrentWebsite
+     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param AddStockDataToCollection $addStockDataToCollection
      */
     public function __construct(
-        GetStockIdForCurrentWebsite $stockIdForCurrentWebsite,
+        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         AddStockDataToCollection $addStockDataToCollection
     ) {
-        $this->stockIdForCurrentWebsite = $stockIdForCurrentWebsite;
+        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->addStockDataToCollection = $addStockDataToCollection;
     }
 
@@ -54,7 +54,7 @@ class AdaptAddStockDataToCollectionToMultiStocks
         $collection,
         $isFilterInStock
     ) {
-        $stockId = $this->stockIdForCurrentWebsite->execute();
+        $stockId = $this->getStockIdForCurrentWebsite->execute();
         $this->addStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;

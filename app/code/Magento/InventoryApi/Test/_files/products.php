@@ -27,11 +27,6 @@ $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
 
-/** @var IndexerInterface $indexer */
-$indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-$indexer->load(InventoryIndexer::INDEXER_ID);
-$indexer->reindexAll();
-
 $stockData = [
     'SKU-1' => [
         'qty' => 8.5,

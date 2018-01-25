@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
+namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test add in in stock filter to collection on default website.
  */
-class AddIsInStockFilterToCollectionWithDefaultStockTest extends TestCase
+class AddIsInStockFilterToCollectionOnDefaultStockTest extends TestCase
 {
     /**
      * @var StockStatus

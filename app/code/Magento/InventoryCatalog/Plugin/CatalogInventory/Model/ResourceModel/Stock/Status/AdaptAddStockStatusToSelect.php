@@ -18,12 +18,12 @@ use Magento\Store\Model\Website;
 /**
  * Adapt adding stock status to select for multi stocks.
  */
-class AdaptAddStockStatusToSelectToMultiStocks
+class AdaptAddStockStatusToSelect
 {
     /**
      * @var StockResolverInterface
      */
-    private $stockResolver;
+    private $getStockIdForCurrentWebsite;
 
     /**
      * @var AddStockStatusToSelect
@@ -31,14 +31,14 @@ class AdaptAddStockStatusToSelectToMultiStocks
     private $adaptedAddStockStatusToSelect;
 
     /**
-     * @param StockResolverInterface $stockResolver
+     * @param StockResolverInterface $getStockIdForCurrentWebsite
      * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
      */
     public function __construct(
-        StockResolverInterface $stockResolver,
+        StockResolverInterface $getStockIdForCurrentWebsite,
         AddStockStatusToSelect $adaptedAddStockStatusToSelect
     ) {
-        $this->stockResolver = $stockResolver;
+        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
     }
 
@@ -62,7 +62,7 @@ class AdaptAddStockStatusToSelectToMultiStocks
             throw new LocalizedException(__('Website code is empty'));
         }
 
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stock = $this->getStockIdForCurrentWebsite->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
 
         $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
