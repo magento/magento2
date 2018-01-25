@@ -173,6 +173,7 @@
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
+    <preference for="Magento\Framework\Config\DesignResolverInterface" type="\Magento\Framework\Config\View\DesignResolver" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
@@ -1145,7 +1146,7 @@
             <argument name="fileName" xsi:type="string">view.xml</argument>
             <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
-            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\View\DesignResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\DB\SelectFactory">
