@@ -24,6 +24,7 @@
         <seeInSource html="'Warning message'" stepKey="seeWarning" />
         <click selector=".action-primary.action-accept" stepKey="dismissModal" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReolad"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>
 </actionGroups>
