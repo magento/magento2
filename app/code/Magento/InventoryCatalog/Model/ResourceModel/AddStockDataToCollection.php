@@ -48,7 +48,7 @@ class AddStockDataToCollection
         $collection->getSelect()->join(
             ['stock_status_index' => $tableName],
             'product.sku = stock_status_index.' . IndexStructure::SKU,
-            ['is_salable' => 'stock_status_index.' . IndexStructure::IS_SALABLE . ' = 1']
+            [IndexStructure::IS_SALABLE]
         );
 
         if ($isFilterInStock) {
