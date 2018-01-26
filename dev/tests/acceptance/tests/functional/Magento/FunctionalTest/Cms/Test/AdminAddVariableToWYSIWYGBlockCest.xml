@@ -101,6 +101,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSaveCmsPage" />
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad11" />
