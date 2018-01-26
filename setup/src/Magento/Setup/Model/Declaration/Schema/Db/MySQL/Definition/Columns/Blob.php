@@ -11,7 +11,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process blob and text types
+ * Process blob and text types.
  *
  * @inheritdoc
  */
@@ -49,7 +49,6 @@ class Blob implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob $column
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $column)
@@ -69,8 +68,8 @@ class Blob implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(tiny|medium|long)(text|blob)\s(\d+)/', $data['definition'], $matches)) {
-            $data['length'] = $matches[2];
+        if (preg_match('/^text\s*\((\d+)\)/', $data['definition'], $matches) && isset($matches[1])) {
+            $data['length'] = $matches[1];
         }
 
         return $data;

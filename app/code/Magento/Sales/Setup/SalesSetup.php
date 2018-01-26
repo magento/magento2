@@ -304,7 +304,7 @@ class SalesSetup extends EavSetup
 
     public function getConnection()
     {
-        return $this->getSetup()->getConnection();
+        return $this->getSetup()->getConnection(self::$connectionName);
     }
 
     /**

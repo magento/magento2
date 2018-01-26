@@ -14,7 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Varchar implements DbDefinitionProcessorInterface
+class StringBinary implements DbDefinitionProcessorInterface
 {
     /**
      * @var Nullable
@@ -44,7 +44,7 @@ class Varchar implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar   $column
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\StringBinary $column
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $column)
@@ -72,7 +72,7 @@ class Varchar implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(char|varchar|varbinary)\((\d+)\)/', $data['definition'], $matches)) {
+        if (preg_match('/^(char|binary|varchar|varbinary)\s*\((\d+)\)/', $data['definition'], $matches)) {
             $data['length'] = $matches[2];
         }
 
