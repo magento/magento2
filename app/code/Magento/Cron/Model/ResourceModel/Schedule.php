@@ -81,8 +81,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['status' => new \Zend_Db_Expr($connection->quote($newStatus))]
             )
             ->where('current.schedule_id = ?', $scheduleId)
-            ->where('current.status = ?', $currentStatus)
-            ->where('existing.schedule_id IS NULL');
+            ->where('current.status = ?', $currentStatus);
 
         $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
         $result = $connection->query($update)->rowCount();
