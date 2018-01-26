@@ -12,6 +12,7 @@
             <features value="Add Image to WYSIWYG of Newsletter"/>
             <stories value="Apply new WYSIWYG in Newsletter-MAGETWO-47309"/>
             <group value="newsletter"/>
+            <group value="skip"/>
             <title value="You should be able to add image to WYSIWYG Editor of Newsletter"/>
             <description value="You should be able to add image to WYSIWYG Editor Newsletter"/>
             <severity value="CRITICAL"/>
