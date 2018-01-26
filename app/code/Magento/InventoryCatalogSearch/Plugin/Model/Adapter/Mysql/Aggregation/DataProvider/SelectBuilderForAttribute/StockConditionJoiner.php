@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner as LegacyStockConditionJoiner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
@@ -49,13 +50,13 @@ class StockConditionJoiner
     }
 
     /**
-     * @param $stockConditionJoiner
+     * @param LegacyStockConditionJoiner $stockConditionJoiner
      * @param callable $proceed
      * @param Select $select
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        $stockConditionJoiner,
+        LegacyStockConditionJoiner $stockConditionJoiner,
         callable $proceed,
         Select $select
     ) {

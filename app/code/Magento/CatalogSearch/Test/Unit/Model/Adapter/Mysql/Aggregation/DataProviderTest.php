@@ -116,7 +116,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $scopeMock->expects($this->atLeastOnce())->method('getId')->willReturn($storeId);
         $dimensionMock = $this->createMock(Dimension::class);
         $dimensionMock->expects($this->atLeastOnce())->method('getValue')->willReturn($storeId);
-        $this->scopeResolverMock->expects($this->atLeastOnce())->method('getScope')->with($storeId)->willReturn($scopeMock);
+        $this->scopeResolverMock->expects($this->atLeastOnce())->method('getScope')->with($storeId)
+            ->willReturn($scopeMock);
 
         $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
