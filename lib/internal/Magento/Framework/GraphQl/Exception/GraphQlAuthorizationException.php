@@ -6,15 +6,15 @@
 
 namespace Magento\Framework\GraphQl\Exception;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * Exception for GraphQL to be thrown when user supplies invalid input
+ * Class GraphQlAuthorizationException
  */
-class GraphQlInputException extends InputException implements \GraphQL\Error\ClientAware
+class GraphQlAuthorizationException extends AuthorizationException implements \GraphQL\Error\ClientAware
 {
-    const EXCEPTION_CATEGORY = 'graphql-input';
+    const EXCEPTION_CATEGORY = 'graphql-authorization';
 
     /**
      * @var boolean

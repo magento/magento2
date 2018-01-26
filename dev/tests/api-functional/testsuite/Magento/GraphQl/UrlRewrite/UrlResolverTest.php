@@ -8,6 +8,8 @@ namespace Magento\GraphQl\UrlRewrite;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -158,6 +160,42 @@ QUERY;
         $this->assertEquals($categoryId, $response['urlResolver']['id']);
         $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     */
+    public function testCMSPageUrlResolver()
+    {
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
+        $page->load('page100');
+        $cmsPageId = $page->getId();
+        $requestPath = $page->getIdentifier();
+
+        /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
+        $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
+
+        /** @param \Magento\Cms\Api\Data\PageInterface $page */
+        $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
+        $expectedEntityType = CmsPageUrlRewriteGenerator::ENTITY_TYPE;
+
+        $query
+            = <<<QUERY
+{
+  urlResolver(url:"{$requestPath}")
+  { 
+   id
+   canonical_url
+   type
+  }
+    
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
+        $this->assertEquals($targetPath, $response['urlResolver']['canonical_url']);
+        $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
     }
 
     /**
