@@ -186,12 +186,16 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         $customersPresent = [];
         foreach ($rows as $rowData) {
-            $customersPresent[] = [
-                'email' => $rowData[static::COLUMN_EMAIL],
-                'website_id' => $this->getWebsiteId(
-                    $rowData[static::COLUMN_WEBSITE]
-                )
-            ];
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
         }
         $this->getCustomerStorage()->prepareCustomers($customersPresent);
     }

@@ -272,6 +272,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                     return false;
                 }
             );
+        $customerStorage->expects($this->any())->method('prepareCustomers');
 
         return $customerStorage;
     }
@@ -366,7 +367,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '_saveCustomerDefaults',
                 '_deleteAddressEntities',
                 '_mergeEntityAttributes',
-                'getErrorAggregator'
+                'getErrorAggregator',
+                'getCustomerStorage',
+                'prepareCustomerData'
             ],
             [],
             '',
@@ -382,13 +385,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // mock to imitate data source model
         $dataSourceMock = $this->getMock(
             'Magento\ImportExport\Model\ResourceModel\Import\Data',
-            ['getNextBunch', '__wakeup'],
+            ['getNextBunch', '__wakeup', 'getIterator'],
             [],
             '',
             false
         );
         $dataSourceMock->expects($this->at(0))->method('getNextBunch')->will($this->returnValue($customBehaviorRows));
         $dataSourceMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+        $dataSourceMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn($this->getMockForAbstractClass(\Iterator::class));
 
         $dataSourceModel = new \ReflectionProperty(
             'Magento\CustomerImportExport\Model\Import\Address',
@@ -426,7 +432,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
 
         $modelMock->expects($this->any())->method('_mergeEntityAttributes')->will($this->returnValue([]));
-
+        $modelMock->expects($this->any())
+            ->method('getCustomerStorage')
+            ->willReturn($this->_createCustomerStorageMock());
         return $modelMock;
     }
 

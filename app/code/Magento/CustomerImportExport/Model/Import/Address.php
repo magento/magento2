@@ -484,13 +484,17 @@ class Address extends AbstractCustomer
         parent::prepareCustomerData($rows);
         $ids = [];
         foreach ($rows as $customerData) {
-            $id = $this->getCustomerStorage()
-                ->getCustomerId(
-                    $customerData[static::COLUMN_EMAIL],
-                    $this->getWebsiteId($customerData[static::COLUMN_WEBSITE])
-                );
-            if ($id) {
-                $ids[] = $id;
+            $email = isset($customerData[static::COLUMN_EMAIL])
+                ? $customerData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($customerData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($customerData[static::COLUMN_WEBSITE])
+                : false;
+            if ($email && $websiteId !== false) {
+                $id = $this->getCustomerStorage()
+                    ->getCustomerId($email, $websiteId);
+                if ($id) {
+                    $ids[] = $id;
+                }
             }
         }
 
@@ -955,7 +959,9 @@ class Address extends AbstractCustomer
             } else {
                 if (!strlen($addressId)) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
-                } elseif (!in_array($addressId, $this->_addresses[$customerId])) {
+                } elseif (!in_array($customerId, $this->_addresses)
+                    || !in_array($addressId, $this->_addresses[$customerId])
+                ) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
                 }
             }
