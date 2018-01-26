@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttributeTypePrice;
-use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -19,9 +18,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class DataProvider implements DataProviderInterface
 {
     /**
@@ -30,21 +26,9 @@ class DataProvider implements DataProviderInterface
     private $eavConfig;
 
     /**
-     * @var Resource
-     * @deprecated
-     */
-    private $resource;
-
-    /**
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
-
-    /**
-     * @var Session
-     * @deprecated
-     */
-    private $customerSession;
 
     /**
      * @var AdapterInterface
@@ -65,7 +49,6 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param Session $customerSession
      * @param SelectBuilderForAttributeTypePrice|null $selectBuilderForAttributeTypePrice
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
      */
@@ -73,15 +56,12 @@ class DataProvider implements DataProviderInterface
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession,
         SelectBuilderForAttributeTypePrice $selectBuilderForAttributeTypePrice = null,
         SelectBuilderForAttribute $selectBuilderForAttribute = null
     ) {
         $this->eavConfig = $eavConfig;
-        $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
-        $this->customerSession = $customerSession;
         $this->selectBuilderForAttributeTypePrice = $selectBuilderForAttributeTypePrice
             ?: ObjectManager::getInstance()->get(SelectBuilderForAttributeTypePrice::class);
         $this->selectBuilderForAttribute = $selectBuilderForAttribute

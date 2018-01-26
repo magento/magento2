@@ -11,6 +11,6 @@
     </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner">
         <plugin name="adapt_data_provider_stock_condition_joiner"
-                type="Magento\InventoryCatalogSearch\Plugin\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner"/>
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner"/>
     </type>
 </config>

@@ -34,7 +34,7 @@ class StockConditionJoiner
      */
     public function execute(Select $select)
     {
-        $select->joinLeft(
+        $select->joinInner(
             ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
             'main_table.source_id = stock_index.product_id',
             []

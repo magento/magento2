@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\InventoryCatalogSearch\Plugin\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
+namespace Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
-
 
 /**
  * Adapt stock condition joiner to multi stocks.
@@ -66,7 +66,7 @@ class StockConditionJoiner
             'main_table.source_id = product.entity_id',
             []
         );
-        $select->joinLeft(
+        $select->joinInner(
             ['stock_index' => $tableName],
             'product.sku = stock_index.sku',
             []
