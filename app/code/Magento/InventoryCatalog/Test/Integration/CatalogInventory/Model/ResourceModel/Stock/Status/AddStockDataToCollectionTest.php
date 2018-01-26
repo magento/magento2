@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\Model\ResourceModel\Stock\Status;
+namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
@@ -14,9 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test add in in stock filter to collection with different stocks on different websites.
+ * Test catalog search with different stocks
  */
-class AddIsInStockFilterToCollectionTest extends TestCase
+class AddStockDataToCollectionTest extends TestCase
 {
     /**
      * @var StockStatus
@@ -47,28 +47,29 @@ class AddIsInStockFilterToCollectionTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $store
      * @param int $expectedSize
+     * @param bool $isFilterInStock
      * @return void
      *
-     * @dataProvider addIsInStockFilterToCollectionDataProvider
+     * @dataProvider addStockDataToCollectionDataProvider
      */
-    public function testAddIsInStockFilterToCollection(string $store, int $expectedSize)
+    public function testAddStockDataToCollection(string $store, int $expectedSize, bool $isFilterInStock)
     {
         $this->storeManager->setCurrentStore($store);
 
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stockStatus->addIsInStockFilterToCollection($collection);
+        $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
 
         self::assertEquals($expectedSize, $collection->getSize());
     }
@@ -76,12 +77,15 @@ class AddIsInStockFilterToCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addIsInStockFilterToCollectionDataProvider(): array
+    public function addStockDataToCollectionDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 1],
-            ['store_for_us_website', 1],
-            ['store_for_global_website', 2],
+            ['store_for_eu_website', 1, true],
+            ['store_for_us_website', 1, true],
+            ['store_for_global_website', 2, true],
+            ['store_for_eu_website', 2, false],
+            ['store_for_us_website', 1, false],
+            ['store_for_global_website', 3, false],
         ];
     }
 
