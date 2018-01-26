@@ -16,6 +16,7 @@
             <description value="You should be able to add variable to WYSIWYG content Block"/>
             <testCaseId value="MAGETWO-84378"/>
             <group value="skip" />
+            <!--Bug link MAGETWO-86383-->
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
