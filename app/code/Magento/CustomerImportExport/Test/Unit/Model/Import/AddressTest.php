@@ -355,7 +355,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'attributes' => [],
             'defaults' => [],
         ];
-
         // entity adapter mock
         $modelMock = $this->getMock(
             'Magento\CustomerImportExport\Model\Import\Address',
@@ -377,11 +376,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             true,
             true
         );
-
+        //Adding behaviours
         $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
         $availableBehaviors->setAccessible(true);
         $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
-
         // mock to imitate data source model
         $dataSourceMock = $this->getMock(
             'Magento\ImportExport\Model\ResourceModel\Import\Data',
@@ -402,15 +400,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
         $dataSourceModel->setAccessible(true);
         $dataSourceModel->setValue($modelMock, $dataSourceMock);
-
         // mock expects for entity adapter
         $modelMock->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $modelMock->expects($this->any())
             ->method('getErrorAggregator')
             ->will($this->returnValue($this->errorAggregator));
-
         $modelMock->expects($this->any())->method('_prepareDataForUpdate')->will($this->returnValue($updateResult));
-
         $modelMock->expects(
             $this->any()
         )->method(
@@ -418,11 +413,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnCallback([$this, 'validateSaveAddressEntities'])
         );
-
         $modelMock->expects($this->any())->method('_saveAddressAttributes')->will($this->returnValue($modelMock));
-
         $modelMock->expects($this->any())->method('_saveCustomerDefaults')->will($this->returnValue($modelMock));
-
         $modelMock->expects(
             $this->any()
         )->method(
@@ -430,11 +422,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnCallback([$this, 'validateDeleteAddressEntities'])
         );
-
         $modelMock->expects($this->any())->method('_mergeEntityAttributes')->will($this->returnValue([]));
         $modelMock->expects($this->any())
             ->method('getCustomerStorage')
             ->willReturn($this->_createCustomerStorageMock());
+
         return $modelMock;
     }
 

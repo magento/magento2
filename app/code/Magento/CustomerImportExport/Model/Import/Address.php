@@ -484,12 +484,15 @@ class Address extends AbstractCustomer
         parent::prepareCustomerData($rows);
         $ids = [];
         foreach ($rows as $customerData) {
-            $email = isset($customerData[static::COLUMN_EMAIL])
-                ? $customerData[static::COLUMN_EMAIL] : null;
-            $websiteId = isset($customerData[static::COLUMN_WEBSITE])
-                ? $this->getWebsiteId($customerData[static::COLUMN_WEBSITE])
-                : false;
-            if ($email && $websiteId !== false) {
+            if (isset($customerData[static::COLUMN_EMAIL])
+                && $email = $customerData[static::COLUMN_EMAIL]
+                && isset($customerData[static::COLUMN_WEBSITE])
+                && (
+                    $websiteId = $this->getWebsiteId(
+                        $customerData[static::COLUMN_WEBSITE]
+                    )
+                ) !== false
+            ) {
                 $id = $this->getCustomerStorage()
                     ->getCustomerId($email, $websiteId);
                 if ($id) {
