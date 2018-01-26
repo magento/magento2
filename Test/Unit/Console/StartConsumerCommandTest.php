@@ -77,13 +77,23 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for execute method.
      *
-     * @param $pidFilePath
-     * @param $savePidExpects
+     * @param string|null $pidFilePath
+     * @param int $savePidExpects
+     * @param int $isRunExpects
+     * @param bool $isRun
+     * @param int $runProcessExpects
+     * @param int $expectedReturn
      * @return void
      * @dataProvider executeDataProvider
      */
-    public function testExecute($pidFilePath, $savePidExpects)
-    {
+    public function testExecute(
+        $pidFilePath,
+        $savePidExpects,
+        $isRunExpects,
+        $isRun,
+        $runProcessExpects,
+        $expectedReturn
+    ) {
         $areaCode = 'area_code';
         $numberOfMessages = 10;
         $batchSize = null;
@@ -107,19 +117,24 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 $areaCode,
                 $pidFilePath
             );
-        $this->appState->expects($this->once())->method('setAreaCode')->with($areaCode);
+        $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->consumerFactory->expects($this->once())
+        $this->consumerFactory->expects($this->exactly($runProcessExpects))
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
-        $consumer->expects($this->once())->method('process')->with($numberOfMessages);
+        $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
+
+        $this->pidConsumerManagerMock->expects($this->exactly($isRunExpects))
+            ->method('isRun')
+            ->with($pidFilePath)
+            ->willReturn($isRun);
 
         $this->pidConsumerManagerMock->expects($this->exactly($savePidExpects))
             ->method('savePid')
             ->with($pidFilePath);
 
         $this->assertEquals(
-            \Magento\Framework\Console\Cli::RETURN_SUCCESS,
+            $expectedReturn,
             $this->command->run($input, $output)
         );
     }
@@ -130,8 +145,30 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     public function executeDataProvider()
     {
         return [
-            ['pidFilePath' => null, 'savePidExpects' => 0],
-            ['pidFilePath' => '/var/consumer.pid', 'savePidExpects' => 1],
+            [
+                'pidFilePath' => null,
+                'savePidExpects' => 0,
+                'isRunExpects' => 0,
+                'isRun' => false,
+                'runProcessExpects' => 1,
+                'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
+            ],
+            [
+                'pidFilePath' => '/var/consumer.pid',
+                'savePidExpects' => 1,
+                'isRunExpects' => 1,
+                'isRun' => false,
+                'runProcessExpects' => 1,
+                'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
+            ],
+            [
+                'pidFilePath' => '/var/consumer.pid',
+                'savePidExpects' => 0,
+                'isRunExpects' => 1,
+                'isRun' => true,
+                'runProcessExpects' => 0,
+                'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_FAILURE,
+            ],
         ];
     }
 

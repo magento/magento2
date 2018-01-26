@@ -73,6 +73,11 @@ class StartConsumerCommand extends Command
         $areaCode = $input->getOption(self::OPTION_AREACODE);
         $pidFilePath = $input->getOption(self::PID_FILE_PATH);
 
+        if ($pidFilePath && $this->pidConsumerManager->isRun($pidFilePath)) {
+            $output->writeln('<error>Consumer with the same PID is running</error>');
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+
         if ($pidFilePath) {
             $this->pidConsumerManager->savePid($pidFilePath);
         }

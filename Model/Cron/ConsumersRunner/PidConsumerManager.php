@@ -7,9 +7,9 @@ namespace Magento\MessageQueue\Model\Cron\ConsumersRunner;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * The class for checking status of process by PID
@@ -18,6 +18,8 @@ class PidConsumerManager
 {
     /**
      * Extension of PID file
+     * @deprecated Moved to the correct responsibility area
+     * @see \Magento\MessageQueue\Model\Cron\ConsumersRunner::PID_FILE_EXT
      */
     const PID_FILE_EXT = '.pid';
 
@@ -29,43 +31,23 @@ class PidConsumerManager
     private $filesystem;
 
     /**
-     * The factory of Write class which creates and writes to file
-     *
-     * @var WriteFactory
-     */
-    private $writeFactory;
-
-    /**
-     * The Magento application specific list of directories
-     *
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
      * @param Filesystem $filesystem The class for working with FS
-     * @param WriteFactory $writeFactory The factory of Write class which creates and writes to file
-     * @param DirectoryList $directoryList The Magento application specific list of directories
      */
-    public function __construct(
-        Filesystem $filesystem,
-        WriteFactory $writeFactory,
-        DirectoryList $directoryList
-    ) {
+    public function __construct(Filesystem $filesystem)
+    {
         $this->filesystem = $filesystem;
-        $this->writeFactory = $writeFactory;
-        $this->directoryList = $directoryList;
     }
 
     /**
-     * Checks if consumer process is run by consumers name
+     * Checks if consumer process is run by pid from pidFile
      *
-     * @param string $consumerName The consumers name
+     * @param string $pidFilePath The path to file with PID
      * @return bool Returns true if consumer process is run
+     * @throws FileSystemException
      */
-    public function isRun($consumerName)
+    public function isRun($pidFilePath)
     {
-        $pid = $this->getPid($consumerName);
+        $pid = $this->getPid($pidFilePath);
         if ($pid) {
             if (function_exists('posix_getpgid')) {
                 return (bool) posix_getpgid($pid);
@@ -112,44 +94,34 @@ class PidConsumerManager
     }
 
     /**
-     * Returns pid by consumer name
+     * Returns pid by pidFile path
      *
-     * @param string $consumerName The consumers name
-     * @return int|bool Returns pid if pid file exists for consumer else returns false
+     * @param string $pidFilePath The path to file with PID
+     * @return int Returns pid if pid file exists for consumer else returns 0
+     * @throws FileSystemException
      */
-    public function getPid($consumerName)
+    public function getPid($pidFilePath)
     {
-        $pidFile = $consumerName . static::PID_FILE_EXT;
-        /** @var WriteInterface $directory */
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        /** @var ReadInterface $directory */
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
 
-        if ($directory->isExist($pidFile)) {
-            return (int) $directory->readFile($pidFile);
+        if ($directory->isExist($pidFilePath)) {
+            return (int) $directory->readFile($pidFilePath);
         }
 
-        return false;
-    }
-
-    /**
-     * Returns path to file with PID by consumers name
-     *
-     * @param string $consumerName The consumers name
-     * @return string The path to file with PID
-     */
-    public function getPidFilePath($consumerName)
-    {
-        return $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . $consumerName . static::PID_FILE_EXT;
+        return 0;
     }
 
     /**
      * Saves pid of current process to file
      *
      * @param string $pidFilePath The path to file with pid
+     * @throws FileSystemException
      */
     public function savePid($pidFilePath)
     {
-        $file = $this->writeFactory->create($pidFilePath, DriverPool::FILE, 'w');
-        $file->write(function_exists('posix_getpid') ? posix_getpid() : getmypid());
-        $file->close();
+        /** @var WriteInterface $directory */
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory->writeFile($pidFilePath, function_exists('posix_getpid') ? posix_getpid() : getmypid(), 'w');
     }
 }

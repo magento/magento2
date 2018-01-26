@@ -17,6 +17,11 @@ use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 class ConsumersRunner
 {
     /**
+     * Extension of PID file
+     */
+    const PID_FILE_EXT = '.pid';
+
+    /**
      * Shell command line wrapper for executing command in background
      *
      * @var ShellInterface
@@ -97,7 +102,7 @@ class ConsumersRunner
 
             $arguments = [
                 $consumerName,
-                '--pid-file-path=' . $this->pidConsumerManager->getPidFilePath($consumerName),
+                '--pid-file-path=' . $this->getPidFilePath($consumerName),
             ];
 
             if ($maxMessages) {
@@ -123,6 +128,17 @@ class ConsumersRunner
     {
         $allowed = empty($allowedConsumers) ?: in_array($consumerName, $allowedConsumers);
 
-        return $allowed && !$this->pidConsumerManager->isRun($consumerName);
+        return $allowed && !$this->pidConsumerManager->isRun($this->getPidFilePath($consumerName));
+    }
+
+    /**
+     * Returns default path to file with PID by consumers name
+     *
+     * @param string $consumerName The consumers name
+     * @return string The path to file with PID
+     */
+    private function getPidFilePath($consumerName)
+    {
+        return $consumerName . static::PID_FILE_EXT;
     }
 }
