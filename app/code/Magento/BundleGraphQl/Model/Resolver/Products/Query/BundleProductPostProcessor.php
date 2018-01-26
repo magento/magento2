@@ -13,7 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 use Magento\Bundle\Model\Link;
 use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Framework\GraphQl\Config\ConfigInterface;
+use Magento\Framework\GraphQl\Query\EnumLookup;
 
 /**
  * Retrieves simple product data for child products, and formats configurable data
@@ -41,29 +41,29 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
     private $formatter;
 
     /**
-     * @var ConfigInterface
+     * @var EnumLookup
      */
-    private $typeConfig;
+    private $enumLookup;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Product $productDataProvider
      * @param ProductResource $productResource
      * @param FormatterInterface $formatter
-     * @param ConfigInterface $typeConfig
+     * @param EnumLookup $enumLookup
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Product $productDataProvider,
         ProductResource $productResource,
         FormatterInterface $formatter,
-        ConfigInterface $typeConfig
+        EnumLookup $enumLookup
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productDataProvider = $productDataProvider;
         $this->productResource = $productResource;
         $this->formatter = $formatter;
-        $this->typeConfig = $typeConfig;
+        $this->enumLookup = $enumLookup;
     }
 
     /**
@@ -126,8 +126,10 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      */
     private function formatBundleAttributes(array $product)
     {
-        $product['price_view'] = $this->convertToEnumValue($product['price_view'], 'PriceViewEnum');
-        $product['ship_bundle_items'] = $this->convertToEnumValue($product['shipment_type'], 'ShipBundleItemsEnum');
+        $product['price_view']
+            = $this->enumLookup->getEnumValue($product['price_view'], 'PriceViewEnum');
+        $product['ship_bundle_items']
+            = $this->enumLookup->getEnumValue($product['shipment_type'], 'ShipBundleItemsEnum');
         $product['dynamic_price'] =!(bool)$product['price_type'];
         $product['dynamic_sku'] =!(bool)$product['sku_type'];
         $product['dynamic_weight'] =!(bool)$product['weight_type'];
@@ -145,7 +147,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $returnData = $link->getData();
         $returnData['product_id'] = $link->getEntityId();
         $returnData['can_change_quantity'] = $link->getCanChangeQuantity();
-        $returnData['price_type'] = $this->convertToEnumValue($link->getPriceType(), 'PriceTypeEnum');
+        $returnData['price_type'] = $this->enumLookup->getEnumValue($link->getPriceType(), 'PriceTypeEnum');
         return $returnData;
     }
 
@@ -158,21 +160,5 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
     private function formatProductOptions(Option $option)
     {
         return $option->getData();
-    }
-
-    /**
-     * Convert entity value to enum value
-     *
-     * @param mixed $value
-     * @return mixed
-     */
-    private function convertToEnumValue($value, $enumType)
-    {
-        $priceViewEnum = $this->typeConfig->getTypeStructure($enumType);
-        foreach ($priceViewEnum->getValues() as $enumItem) {
-            if ($enumItem->getName() == $value) {
-                return $enumItem->getValue();
-            }
-        }
     }
 }
