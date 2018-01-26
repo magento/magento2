@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\Store;
 use Magento\ImportExport\Model\Import;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -100,6 +101,8 @@ class Address extends AbstractCustomer
      * )
      *
      * @var array
+     * @deprected
+     * @see $addressStorage
      */
     protected $_addresses = [];
 
@@ -257,6 +260,11 @@ class Address extends AbstractCustomer
     private $optionsByWebsite = [];
 
     /**
+     * @var AddressStorage
+     */
+    private $addressStorage;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -276,6 +284,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
      * @param Sources\CountryWithWebsites|null $countryWithWebsites
+     * @param AddressStorage|null $addressStorage
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -299,7 +308,8 @@ class Address extends AbstractCustomer
         DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = [],
-        Sources\CountryWithWebsites $countryWithWebsites = null
+        Sources\CountryWithWebsites $countryWithWebsites = null,
+        AddressStorage $addressStorage = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -352,6 +362,8 @@ class Address extends AbstractCustomer
             self::ERROR_DUPLICATE_PK,
             __('We found another row with this email, website and address ID combination.')
         );
+        $this->addressStorage = $addressStorage
+            ?: ObjectManager::getInstance()->get(AddressStorage::class);
 
         $this->_initAttributes();
         $this->_initCountryRegions();
@@ -482,10 +494,11 @@ class Address extends AbstractCustomer
     public function prepareCustomerData(\Traversable $rows)
     {
         parent::prepareCustomerData($rows);
+
         $ids = [];
         foreach ($rows as $customerData) {
             if (isset($customerData[static::COLUMN_EMAIL])
-                && $email = $customerData[static::COLUMN_EMAIL]
+                && ($email = $customerData[static::COLUMN_EMAIL])
                 && isset($customerData[static::COLUMN_WEBSITE])
                 && (
                     $websiteId = $this->getWebsiteId(
@@ -501,21 +514,7 @@ class Address extends AbstractCustomer
             }
         }
 
-        $this->_addressCollection->addFieldToFilter(
-            'parent_id',
-            ['in' => $ids]
-        );
-        /** @var $address \Magento\Customer\Model\Address */
-        foreach ($this->_addressCollection as $address) {
-            $customerId = $address->getParentId();
-            if (!isset($this->_addresses[$customerId])) {
-                $this->_addresses[$customerId] = [];
-            }
-            $addressId = $address->getId();
-            if (!in_array($addressId, $this->_addresses[$customerId])) {
-                $this->_addresses[$customerId][] = $addressId;
-            }
-        }
+        $this->addressStorage->prepareAddresses($ids);
     }
 
     /**
@@ -644,9 +643,10 @@ class Address extends AbstractCustomer
         $defaults = [];
         $newAddress = true;
         // get address id
-        if (isset($this->_addresses[$customerId])
-            && in_array($rowData[self::COLUMN_ADDRESS_ID], $this->_addresses[$customerId])
-        ) {
+        if ($this->addressStorage->doesExist(
+            $rowData[self::COLUMN_ADDRESS_ID],
+            $customerId
+        )) {
             $newAddress = false;
             $addressId = $rowData[self::COLUMN_ADDRESS_ID];
         } else {
@@ -901,12 +901,11 @@ class Address extends AbstractCustomer
                                 $rowNumber,
                                 $multiSeparator
                             );
-                        } elseif ($attributeParams['is_required'] && (!isset(
-                            $this->_addresses[$customerId]
-                        ) || !in_array(
-                            $addressId,
-                            $this->_addresses[$customerId]
-                        ))
+                        } elseif ($attributeParams['is_required']
+                            && !$this->addressStorage->doesExist(
+                                $addressId,
+                                $customerId
+                            )
                         ) {
                             $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                         }
@@ -962,9 +961,10 @@ class Address extends AbstractCustomer
             } else {
                 if (!strlen($addressId)) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
-                } elseif (!in_array($customerId, $this->_addresses)
-                    || !in_array($addressId, $this->_addresses[$customerId])
-                ) {
+                } elseif (!$this->addressStorage->doesExist(
+                    $addressId,
+                    $customerId
+                )) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
                 }
             }
@@ -980,7 +980,7 @@ class Address extends AbstractCustomer
      */
     protected function _checkRowDuplicate($customerId, $addressId)
     {
-        if (isset($this->_addresses[$customerId]) && in_array($addressId, $this->_addresses[$customerId])) {
+        if ($this->addressStorage->doesExist($addressId, $customerId)) {
             if (!isset($this->_importedRowPks[$customerId][$addressId])) {
                 $this->_importedRowPks[$customerId][$addressId] = true;
                 return false;
