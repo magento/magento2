@@ -9,6 +9,30 @@ define([
     'jquery/jstree/jquery.jstree'
 ], function ($) {
     'use strict';
+    var decodeEntities = (function () {
+        //create a new html document (doesn't execute script tags in child elements)
+        var doc = document.implementation.createHTMLDocument("");
+        var element = doc.createElement('div');
+
+        function getText(str) {
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+            return str;
+        }
+
+        function decodeHTMLEntities(str) {
+            if (str && typeof str === 'string') {
+                var x = getText(str);
+                while (str !== x) {
+                    str = x;
+                    x = getText(x);
+                }
+                return x;
+            }
+        }
+        return decodeHTMLEntities;
+    })();
 
     $.widget('mage.categoryTree', {
         options: {
@@ -88,9 +112,10 @@ define([
             if (!node) {
                 return result;
             }
+
             result = {
                 data: {
-                    title: node.name + ' (' + node['product_count'] + ')'
+                    title: decodeEntities(node.name) + ' (' + node['product_count'] + ')'
                 },
                 attr: {
                     'class': node.cls + (!!node.disabled ? ' disabled' : '') //eslint-disable-line no-extra-boolean-cast
