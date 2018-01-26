@@ -14,7 +14,6 @@
         </constraint>
     </table>
     <table name="test_table" resource="default">
-        <!--Columns-->
         <column xsi:type="smallint" name="smallint" default="0" padding="6" nullable="true" unsigned="false"/>
         <column xsi:type="bigint" name="bigint" default="1" padding="20" nullable="true" unsigned="false"/>
         <column xsi:type="float" name="float" default="0" precision="4" scale="10"/>
@@ -23,14 +22,12 @@
         <column xsi:type="mediumtext" name="mediumtext"/>
         <column xsi:type="varchar" name="varchar" length="254" nullable="true"/>
         <column xsi:type="boolean" name="boolean"/>
-        <!--Constraints-->
         <constraint xsi:type="unique" name="some_unique_key">
             <column name="smallint"/>
             <column name="bigint"/>
         </constraint>
         <constraint xsi:type="foreign" name="some_foreign_key" column="smallint" table="test_table"
                     referenceTable="reference_table" referenceColumn="smallint_ref" onDelete="CASCADE"/>
-        <!--Indexes-->
         <index name="speedup_index" indexType="btree">
             <column name="bigint"/>
         </index>

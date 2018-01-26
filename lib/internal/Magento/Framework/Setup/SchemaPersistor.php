@@ -47,6 +47,10 @@ class SchemaPersistor
     {
         foreach ($schemaListener->getTables() as $moduleName => $tablesData) {
             $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            if (empty($path)) {
+                /** Empty path means that module doesn`t exists */
+                continue;
+            }
             $schemaPatch = sprintf('%s/etc/db_schema.xml', $path);
             if (file_exists($schemaPatch)) {
                 $dom = new \SimpleXMLElement(file_get_contents($schemaPatch));
@@ -219,19 +223,17 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        if (strpos($path, 'magento2#e') !== false) {
-            $dom = new \DOMDocument('1.0');
-            $dom->preserveWhiteSpace = false;
-            $dom->formatOutput = true;
-            $dom->loadXML($simpleXmlElementDom->asXML());
-            file_put_contents(
-                $path,
-                str_replace(
-                    ' xmlns:xsi="xsi"', //replace xmlns, as we do not need it for xsi namespace
-                    '',
-                    $dom->saveXML()
-                )
-            );
-        }
+        $dom = new \DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($simpleXmlElementDom->asXML());
+        file_put_contents(
+            $path,
+            str_replace(
+                ' xmlns:xsi="xsi"', //replace xmlns, as we do not need it for xsi namespace
+                '',
+                $dom->saveXML()
+            )
+        );
     }
 }

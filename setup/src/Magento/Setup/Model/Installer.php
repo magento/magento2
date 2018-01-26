@@ -16,6 +16,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -26,6 +27,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
@@ -228,6 +230,11 @@ class Installer
     private $declarationInstaller;
 
     /**
+     * @var SchemaPersistor
+     */
+    private $schemaPersistor;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -304,6 +311,7 @@ class Installer
         $this->declarationInstaller = $declarationInstaller ?: $this->objectManagerProvider->get()->get(
             DeclarationInstaller::class
         );
+        $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
     /**
@@ -792,6 +800,25 @@ class Installer
         $this->log->log('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema');
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
+
+        if ($this->convertationOfOldScriptsIsAllowed($request)) {
+            $this->schemaPersistor->persist($schemaListener);
+        }
+    }
+
+    /**
+     * Check whether all scripts will converted or not
+     *
+     * @param array $request
+     * @return bool
+     */
+    private function convertationOfOldScriptsIsAllowed(array $request)
+    {
+        return isset($request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY]) &&
+            $request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY];
     }
 
     /**
@@ -858,7 +885,11 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
         foreach ($moduleNames as $moduleName) {
+            $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
