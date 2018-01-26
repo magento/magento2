@@ -70,9 +70,9 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
             $resultData[$linkKey]['price'] = $link->getPrice();
             $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
             $resultData[$linkKey]['link_type']
-                = $this->enumLookup->getEnumValue($link->getLinkType(), 'DownloadableFileTypeEnum');
+                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $link->getLinkType());
             $resultData[$linkKey]['sample_type']
-                = $this->enumLookup->getEnumValue($link->getSampleType(), 'DownloadableFileTypeEnum');
+                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $link->getSampleType());
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
             $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
         }
@@ -94,7 +94,7 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
             $resultData[$sampleKey]['title'] = $sample->getTitle();
             $resultData[$sampleKey]['sort_order'] = $sample->getSortOrder();
             $resultData[$sampleKey]['sample_type']
-                = $this->enumLookup->getEnumValue($sample->getSampleType(), 'DownloadableFileTypeEnum');
+                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sample->getSampleType());
             $resultData[$sampleKey]['sample_file'] = $sample->getSampleFile();
             $resultData[$sampleKey]['sample_url'] = $sample->getSampleUrl();
         }

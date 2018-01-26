@@ -20,4 +20,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="DownloadableFileTypeEnum" xsi:type="array">
+                    <item name="file" xsi:type="string">file</item>
+                    <item name="url" xsi:type="string">url</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
