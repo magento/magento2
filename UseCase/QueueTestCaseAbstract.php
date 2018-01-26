@@ -41,9 +41,6 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped(
-            "These tests are unstable on php56. Skipped until fixed in reliable manner MAGETWO-60476"
-        );
         $this->objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\OsInfo $osInfo */
         $osInfo = $this->objectManager->get(\Magento\Framework\OsInfo::class);
