@@ -20,6 +20,9 @@ define([
             }
         },
 
+        /**
+         * @returns Array
+         */
         getStocksQtyInfo: function () {
             return this.stocks || [];
         }

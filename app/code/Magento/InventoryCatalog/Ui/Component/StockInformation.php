@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\Component;
 
@@ -58,7 +63,7 @@ class StockInformation extends Container
         $stockInfo = [];
         if ($salesChannelToStockIds) {
             foreach ($salesChannelToStockIds as $stock) {
-                $stockId = $stock['stock_id'];
+                $stockId = (int) $stock['stock_id'];
                 if ($stockId) {
                     $currentStock = [];
                     $stockData = $this->stockRepository->get($stockId);
