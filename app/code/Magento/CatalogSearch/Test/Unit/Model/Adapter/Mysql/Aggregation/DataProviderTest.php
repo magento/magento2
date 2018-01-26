@@ -40,11 +40,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $sessionMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $resourceConnectionMock;
 
     /**
@@ -72,7 +67,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
-        $this->sessionMock = $this->createMock(Session::class);
         $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->selectBuilderForAttributeTypePrice = $this->createMock(SelectBuilderForAttributeTypePrice::class);
@@ -81,7 +75,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             $this->eavConfigMock,
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
-            $this->sessionMock,
             $this->selectBuilderForAttributeTypePrice,
             $this->selectBuilderForAttribute
         );
