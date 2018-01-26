@@ -7,7 +7,6 @@ namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Zend\Stdlib\ArrayObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -429,7 +428,7 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $this->prepareCustomerData(new ArrayObject($bunch));
+            $this->prepareCustomerData(new \ArrayObject($bunch));
             $entitiesToCreate = [];
             $entitiesToUpdate = [];
             $entitiesToDelete = [];

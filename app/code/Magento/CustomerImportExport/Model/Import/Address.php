@@ -12,7 +12,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\Store;
 use Magento\ImportExport\Model\Import;
-use Zend\Stdlib\ArrayObject;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -457,7 +456,7 @@ class Address extends AbstractCustomer
      *
      * @return $this
      * @deprecated
-     * @see prepareC
+     * @see prepareCustomerData
      */
     protected function _initAddresses()
     {
@@ -540,28 +539,16 @@ class Address extends AbstractCustomer
      */
     protected function _importData()
     {
+        //Preparing data for mass validation/import.
         $rows = [];
-        $customersData = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $rows = array_merge($rows, $bunch);
-            $customersData = array_merge(
-                $customersData,
-                array_map(
-                    function ($row) {
-                        return [
-                            'email' => $row[self::COLUMN_EMAIL],
-                            'website_id' => $this->getWebsiteId(
-                                self::COLUMN_WEBSITE
-                            )
-                        ];
-                    },
-                    $bunch
-                )
-            );
         }
-        $this->prepareCustomerData(new ArrayObject($rows));
+        $this->prepareCustomerData(new \ArrayObject($rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
+
+        //Importing
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $newRows = [];
             $updateRows = [];

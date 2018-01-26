@@ -143,13 +143,14 @@ class Storage
         if (!isset($this->_customerIds[$email])) {
             $this->_customerIds[$email] = [];
         }
-        $this->_customerIds[$email][$customer->getWebsiteId()] = $customer->getId();
+        $this->_customerIds[$email][$customer->getWebsiteId()]
+            = $customer->getId();
 
         return $this;
     }
 
     /**
-     * Get customer id
+     * Find customer ID for unique pair of email and website ID.
      *
      * @param string $email
      * @param int $websiteId
@@ -157,6 +158,7 @@ class Storage
      */
     public function getCustomerId($email, $websiteId)
     {
+        $email = mb_strtolower($email);
         //Trying to load the customer.
         if (!array_key_exists($email, $this->_customerIds)
             || !array_key_exists($websiteId, $this->_customerIds[$email])
@@ -196,16 +198,19 @@ class Storage
         $customersData = [];
         $filters = [];
         foreach ($customersToFind as $customerToFind) {
-            $email = $customerToFind['email'];
+            $email = mb_strtolower($customerToFind['email']);
             $websiteId = $customerToFind['website_id'];
             if (!array_key_exists($email, $this->_customerIds)
                 || !array_key_exists($websiteId, $this->_customerIds[$email])
             ) {
                 //Only looking for customers we don't already have ID for.
-                $customersData[] = $customerToFind;
+                $customersData[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
                 $filters[] = $this->filterBuilder
                     ->setField('email')
-                    ->setValue($customerToFind['email'])
+                    ->setValue($email)
                     ->setConditionType('eq')
                     ->create();
             }

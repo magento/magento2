@@ -5,9 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Zend\Stdlib\ArrayObject;
 
 /**
  * Import entity customer combined model
@@ -294,6 +292,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     public function validateData()
     {
+        //Preparing both customer and address imports for mass validation.
         $source = $this->getSource();
         $this->_customerEntity->prepareCustomerData($source);
         $source->rewind();
@@ -305,7 +304,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             ];
         }
         $source->rewind();
-        $this->_addressEntity->prepareCustomerData(new ArrayObject($rows));
+        $this->_addressEntity->prepareCustomerData(new \ArrayObject($rows));
 
         return parent::validateData();
     }

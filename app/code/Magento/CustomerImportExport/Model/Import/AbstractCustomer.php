@@ -174,9 +174,12 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     }
 
     /**
-     * Pre-loading customers for existing customers checks.
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
      *
-     * @param \Traversable $rows
+     * @param \Traversable $rows Each row must contain data from columns email
+     * and website code.
+     *
      * @return void
      */
     public function prepareCustomerData(\Traversable $rows)
