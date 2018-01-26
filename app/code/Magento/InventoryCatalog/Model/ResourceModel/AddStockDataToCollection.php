@@ -39,9 +39,6 @@ class AddStockDataToCollection
     {
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 
-        $isSalableExpression = $collection->getConnection()
-            ->getCheckSql('stock_status_index.' . IndexStructure::QUANTITY . ' > 0', 1, 0);
-
         $resource = $collection->getResource();
         $collection->getSelect()->joinInner(
             ['product' => $resource->getTable('catalog_product_entity')],
@@ -51,12 +48,12 @@ class AddStockDataToCollection
         $collection->getSelect()->join(
             ['stock_status_index' => $tableName],
             'product.sku = stock_status_index.' . IndexStructure::SKU,
-            ['is_salable' => $isSalableExpression]
+            ['is_salable' => 'stock_status_index.' . IndexStructure::IS_SALABLE . ' = 1']
         );
 
         if ($isFilterInStock) {
             $collection->getSelect()->where(
-                'stock_status_index.' . IndexStructure::QUANTITY . ' > 0'
+                'stock_status_index.' . IndexStructure::IS_SALABLE . ' = 1'
             );
         }
     }

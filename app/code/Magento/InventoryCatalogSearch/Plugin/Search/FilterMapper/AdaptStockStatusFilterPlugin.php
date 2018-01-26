@@ -144,7 +144,7 @@ class AdaptStockStatusFilterPlugin
             []
         );
         if ($showOutOfStockFlag === false) {
-            $select->where($this->conditionManager->generateCondition('stock_index.quantity', '>', 0));
+            $select->where($this->conditionManager->generateCondition('stock_index.is_salable', '=', 1));
         }
     }
 
