@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3546529b85b537be76f5b4a60087830",
+    "content-hash": "9fdbe66ce2163bd0434f0a6803351bd2",
     "packages": [
         {
             "name": "allure-framework/allure-codeception",
@@ -1641,11 +1641,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.0.1",
+            "version": "dev-2.0.2-develop",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "234972f966e96746035ad60fd92bc7f6978627b9"
+                "reference": "08c1ded3c2115b5e3d9c445c7aab651d06e06692"
             },
             "require": {
                 "codeception/codeception": "~2.3.4",
@@ -1698,7 +1698,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-01-17T12:02:50+00:00"
+            "time": "2018-01-26T14:18:34+00:00"
         },
         {
             "name": "moontoast/math",
@@ -4420,7 +4420,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "allure-framework/allure-codeception": 20
+        "allure-framework/allure-codeception": 20,
+        "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
