@@ -79,23 +79,39 @@ class StockSourceLinkProcessor
         $this->validateStockSourceData($stockSourceLinksData);
 
         $assignedLinks = $this->getAssignedLinks($stockId);
-        $sourceCodesForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE));
-        $sourceCodesForDelete = [];
+        $sourceCodesToSave = $this->getSourceCodes($stockSourceLinksData);
+
+        $linksToDelete = [];
+        $assignedSourceCodes = [];
 
         foreach ($assignedLinks as $assignedLink) {
-            if (array_key_exists($assignedLink->getSourceCode(), $sourceCodesForSave)) {
-                unset($sourceCodesForSave[$assignedLink->getSourceCode()]);
-            } else {
-                $sourceCodesForDelete[] = $assignedLink->getSourceCode();
+            $assignedSourceCodes[] = $assignedLink->getSourceCode();
+            if (in_array($assignedLink->getSourceCode(), $sourceCodesToSave)) {
+                continue;
             }
+            $linksToDelete[] = $assignedLink;
         }
 
-        if (count($sourceCodesForSave) > 0) {
-            $this->stockSourceLinksSave->execute($this->getStockSourceLinks(array_keys($sourceCodesForSave), $stockId));
+        if (count($linksToDelete) > 0) {
+            $this->stockSourceLinksDelete->execute($linksToDelete);
         }
 
-        if (count($sourceCodesForDelete) > 0) {
-            $this->stockSourceLinksDelete->execute($this->getStockSourceLinks($sourceCodesForDelete, $stockId));
+        $linksToSave = [];
+
+        foreach ($sourceCodesToSave as $sourceCodeToSave) {
+            if (in_array($sourceCodeToSave, $assignedSourceCodes)) {
+                continue;
+            }
+            $linksToSave[] = $this->stockSourceLinkFactory->create([
+                'data' => [
+                    'source_code' => $sourceCodeToSave,
+                    'stock_id' => $stockId,
+                ]
+            ]);
+        }
+
+        if (count($linksToSave) > 0) {
+            $this->stockSourceLinksSave->execute($linksToSave);
         }
     }
 
@@ -114,34 +130,10 @@ class StockSourceLinkProcessor
     }
 
     /**
-     * Map link information to StockSourceLinkInterface multiply
-     *
-     * @param array $sourceCodeList
-     * @param int $stockId
-     * @return StockSourceLinkInterface[]
-     */
-    private function getStockSourceLinks(array $sourceCodeList, $stockId): array
-    {
-        $linkList = [];
-
-        foreach ($sourceCodeList as $sourceCode) {
-            /** @var StockSourceLinkInterface $linkData */
-            $linkData = $this->stockSourceLinkFactory->create();
-
-            $linkData->setSourceCode($sourceCode);
-            $linkData->setStockId($stockId);
-
-            $linkList[] = $linkData;
-        }
-
-        return $linkList;
-    }
-
-    /**
      * Retrieves links that are assigned to $stockId
      *
      * @param int $stockId
-     * @return array
+     * @return StockSourceLinkInterface[]
      */
     private function getAssignedLinks(int $stockId):array
     {
@@ -152,5 +144,15 @@ class StockSourceLinkProcessor
         $searchResult = $this->getSourceLinks->execute($searchCriteria);
 
         return $searchResult->getItems();
+    }
+
+    /**
+     * @param array $stockSourceLinksData
+     *
+     * @return array
+     */
+    private function getSourceCodes($stockSourceLinksData)
+    {
+        return array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE);
     }
 }
