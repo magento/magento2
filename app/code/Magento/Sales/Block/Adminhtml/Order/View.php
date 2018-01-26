@@ -231,9 +231,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($this->_isAllowedAction(
-                'Magento_Sales::ship'
-            ) && $order->canShip() && !$order->getForcedShipmentWithInvoice()
+        if ($this->_isAllowedAction('Magento_Sales::ship')
+            && !$order->getForcedShipmentWithInvoice()
+            && $order->canShip()
         ) {
             $this->addButton(
                 'order_ship',
@@ -245,11 +245,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($this->_isAllowedAction(
-                'Magento_Sales::reorder'
-            ) && $this->_reorderHelper->isAllowed(
-                $order->getStore()
-            ) && $order->canReorderIgnoreSalable()
+        if ($order->canReorderIgnoreSalable()
+            && $this->_reorderHelper->isAllowed($order->getStore())
+            && $this->_isAllowedAction('Magento_Sales::reorder')
         ) {
             $this->addButton(
                 'order_reorder',
