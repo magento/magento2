@@ -19,7 +19,7 @@
         <field xsi:type="ObjectOutputField" name="id" type="Int"/>
         <field xsi:type="ObjectOutputField" name="title" type="String"/>
         <field xsi:type="ObjectOutputField" name="sort_order" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="sample_type" type="String"/>
+        <field xsi:type="ObjectOutputField" name="sample_type" type="DownloadableFileTypeEnum"/>
         <field xsi:type="ObjectOutputField" name="sample_file" type="String"/>
         <field xsi:type="ObjectOutputField" name="sample_url" type="String"/>
     </type>
@@ -27,12 +27,16 @@
         <field xsi:type="ObjectOutputField" name="id" type="Int"/>
         <field xsi:type="ObjectOutputField" name="title" type="String"/>
         <field xsi:type="ObjectOutputField" name="sort_order" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="is_shareable" type="Int"/>
+        <field xsi:type="ObjectOutputField" name="is_shareable" type="Boolean"/>
         <field xsi:type="ObjectOutputField" name="price" type="Float"/>
         <field xsi:type="ObjectOutputField" name="number_of_downloads" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="link_type" type="String"/>
-        <field xsi:type="ObjectOutputField" name="sample_type" type="String"/>
+        <field xsi:type="ObjectOutputField" name="link_type" type="DownloadableFileTypeEnum"/>
+        <field xsi:type="ObjectOutputField" name="sample_type" type="DownloadableFileTypeEnum"/>
         <field xsi:type="ObjectOutputField" name="sample_file" type="String"/>
         <field xsi:type="ObjectOutputField" name="sample_url" type="String"/>
+    </type>
+    <type xsi:type="Enum" name="DownloadableFileTypeEnum">
+        <item name="file">FILE</item>
+        <item name="url">URL</item>
     </type>
 </config>

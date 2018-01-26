@@ -8,12 +8,26 @@ namespace Magento\DownloadableGraphQl\Model\Resolver\Products\Query;
 
 use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\GraphQl\Query\EnumLookup;
 
 /**
  * Retrieves simple product data for child products, and formats configurable data
  */
 class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
 {
+    /**
+     * @var EnumLookup
+     */
+    private $enumLookup;
+
+    /**
+     * @param EnumLookup $enumLookup
+     */
+    public function __construct(EnumLookup $enumLookup)
+    {
+        $this->enumLookup = $enumLookup;
+    }
+
     /**
      * Process all downloadable product data, including adding simple product data and formatting relevant attributes.
      *
@@ -55,8 +69,10 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
             $resultData[$linkKey]['is_shareable'] = $link->getIsShareable();
             $resultData[$linkKey]['price'] = $link->getPrice();
             $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
-            $resultData[$linkKey]['link_type'] = $link->getLinkType();
-            $resultData[$linkKey]['sample_type'] = $link->getSampleType();
+            $resultData[$linkKey]['link_type']
+                = $this->enumLookup->getEnumValue($link->getLinkType(), 'DownloadableFileTypeEnum');
+            $resultData[$linkKey]['sample_type']
+                = $this->enumLookup->getEnumValue($link->getSampleType(), 'DownloadableFileTypeEnum');
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
             $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
         }
@@ -74,18 +90,13 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
         $resultData = [];
         foreach ($samples as $sampleKey => $sample) {
             /** @var \Magento\Downloadable\Model\Sample $sample */
-            $resultData[$sampleKey]['id']
-                = $sample->getId();
-            $resultData[$sampleKey]['title']
-                = $sample->getTitle();
-            $resultData[$sampleKey]['sort_order']
-                = $sample->getSortOrder();
+            $resultData[$sampleKey]['id'] = $sample->getId();
+            $resultData[$sampleKey]['title'] = $sample->getTitle();
+            $resultData[$sampleKey]['sort_order'] = $sample->getSortOrder();
             $resultData[$sampleKey]['sample_type']
-                = $sample->getSampleType();
-            $resultData[$sampleKey]['sample_file']
-                = $sample->getSampleFile();
-            $resultData[$sampleKey]['sample_url']
-                = $sample->getSampleUrl();
+                = $this->enumLookup->getEnumValue($sample->getSampleType(), 'DownloadableFileTypeEnum');
+            $resultData[$sampleKey]['sample_file'] = $sample->getSampleFile();
+            $resultData[$sampleKey]['sample_url'] = $sample->getSampleUrl();
         }
         return $resultData;
     }
