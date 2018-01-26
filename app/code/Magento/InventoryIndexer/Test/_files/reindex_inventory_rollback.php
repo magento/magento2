@@ -5,7 +5,9 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Module\Manager;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Test\Integration\Indexer\RemoveIndexData;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -16,6 +18,16 @@ $removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
 
 $stockIds = [];
 foreach ($stockRepository->getList()->getItems() as $stock) {
-    $stockIds[] = $stock->getStockId();
+    $stockIds[$stock->getStockId()] = $stock->getStockId();
 }
-$removeIndexData->execute($stockIds);
+
+/** @var Manager $moduleManager */
+$moduleManager = Bootstrap::getObjectManager()->get(Manager::class);
+// soft dependency in tests because we don't have possibility replace fixture from different modules
+if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
+    /** @var DefaultStockProviderInterface $defaultStockProvider */
+    $defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
+    unset($stockIds[$defaultStockProvider->getId()]);
+}
+
+$removeIndexData->execute(array_values($stockIds));

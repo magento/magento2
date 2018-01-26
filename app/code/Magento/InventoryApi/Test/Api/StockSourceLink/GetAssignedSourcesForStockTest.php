@@ -24,7 +24,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testGetAssignedSourcesForStock()
     {
@@ -51,7 +51,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testGetAssignedSourcesWithNotNumericStockId()
     {
