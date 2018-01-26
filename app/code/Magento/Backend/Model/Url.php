@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class \Magento\Backend\Model\UrlInterface
@@ -179,10 +179,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
         if (isset($data['_nosecret'])) {
-            $this->setNoSecret(true);
+            $this->turnOffSecretKey();
             unset($data['_nosecret']);
         } else {
-            $this->setNoSecret(false);
+            $this->turnOnSecretKey();
         }
         unset($data['_scope_to_url']);
         return parent::_setRouteParams($data, $unsetOldParams);
@@ -202,33 +202,35 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         }
 
         $cacheSecretKey = false;
-        if (is_array($routeParams) && isset($routeParams['_cache_secret_key'])) {
+        $routeParams = is_array($routeParams) ? $routeParams : [];
+
+        if (isset($routeParams['_cache_secret_key'])) {
             unset($routeParams['_cache_secret_key']);
             $cacheSecretKey = true;
         }
-        $result = parent::getUrl($routePath, $routeParams);
-        if (!$this->useSecretKey()) {
-            return $result;
-        }
+
         $this->_setRoutePath($routePath);
         $routeName = $this->_getRouteName('*');
         $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
         $actionName = $this->_getActionName(self::DEFAULT_ACTION_NAME);
-        if ($cacheSecretKey) {
-            $secret = [self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$"];
-        } else {
-            $secret = [
-                self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName),
-            ];
+
+        if ($this->useSecretKey()) {
+            if ($cacheSecretKey) {
+                $secret = [self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$"];
+            } else {
+                $secret = [
+                    self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName),
+                ];
+            }
+
+            $routeParams = array_merge($routeParams, $secret);
         }
-        if (is_array($routeParams)) {
-            $routeParams = array_merge($secret, $routeParams);
-        } else {
-            $routeParams = $secret;
+
+        $routePathParams = $this->_getRouteParams();
+        if (is_array($routePathParams)) {
+            $routeParams = array_merge($routePathParams, $routeParams);
         }
-        if (is_array($this->_getRouteParams())) {
-            $routeParams = array_merge($this->_getRouteParams(), $routeParams);
-        }
+
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
     }
 
