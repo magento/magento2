@@ -314,7 +314,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getUrl($params = '', $params2 = [])
     {
-        if ('index' === $params2['action'] && isset($params2['action'])) {
+        if (isset($params2['action']) && 'index' === $params2['action']) {
             return parent::getUrl($params, $params2);
         } else {
             $params2['order_id'] = $this->getOrderId();
