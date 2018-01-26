@@ -132,6 +132,10 @@ define([
 
                     ed.onInit.add(self.onEditorInit.bind(self));
 
+                    ed.onInit.add(function (editor) {
+                        varienGlobalEvents.fireEvent('wysiwygEditorInitialized', editor);
+                    });
+
                     ed.onSubmit.add(function (edi, e) {
                         varienGlobalEvents.fireEvent('tinymceSubmit', e);
                     });
@@ -245,6 +249,13 @@ define([
         },
 
         /**
+         * @return {String|null}
+         */
+        getId: function () {
+            return this.id || (this.activeEditor() ? this.activeEditor().id : null) || tinyMceEditors.values()[0].id;
+        },
+
+        /**
          * @return {Object}
          */
         activeEditor: function () {
@@ -259,6 +270,35 @@ define([
          */
         insertContent: function (content, ui) {
             this.activeEditor().execCommand('mceInsertContent', typeof ui !== 'undefined' ? ui : false, content);
+        },
+
+        /**
+         * Set the status of the toolbar to disabled or enabled (true for enabled, false for disabled)
+         * @param {Boolean} enabled
+         */
+        setToolbarStatus: function (enabled) {
+            _.each(this.activeEditor().controlManager.controls, function (property, index, controls) {
+                controls[property.id].setDisabled(!enabled);
+            });
+        },
+
+        /**
+         * Set the status of the editor and toolbar
+         *
+         * @param {Boolean} enabled
+         */
+        setEnabledStatus: function (enabled) {
+            if (this.activeEditor()) {
+                this.activeEditor().getBody().setAttribute('contenteditable', enabled);
+                this.activeEditor().readonly = !enabled;
+                this.setToolbarStatus(enabled);
+            }
+
+            if (enabled) {
+                this.getTextArea().removeProp('disabled');
+            } else {
+                this.getTextArea().prop('disabled', 'disabled');
+            }
         },
 
         /**
@@ -279,7 +319,7 @@ define([
                 storeId = this.config['store_id'] !== null ? this.config['store_id'] : 0,
                 frameDialog = jQuery(o.win.frameElement).parents('[role="dialog"]'),
                 wUrl = this.config['files_browser_window_url'] +
-                    'target_element_id/' + this.id + '/' +
+                    'target_element_id/' + this.getId() + '/' +
                     'store/' + storeId + '/';
 
             this.mediaBrowserOpener = o.win;
@@ -331,14 +371,14 @@ define([
          * @return {jQuery|*|HTMLElement}
          */
         getToggleButton: function () {
-            return $('toggle' + this.id);
+            return $('toggle' + this.getId());
         },
 
         /**
          * Get plugins button.
          */
         getPluginButtons: function () {
-            return $$('#buttons' + this.id + ' > button.plugin');
+            return jQuery('#buttons' + this.getId() + ' > button.plugin');
         },
 
         /**
@@ -350,11 +390,9 @@ define([
 
             this.setup(mode);
 
-            tinyMCE3.execCommand('mceAddControl', false, this.id);
+            tinyMCE3.execCommand('mceAddControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.hide();
-            });
+            this.getPluginButtons().hide();
 
             return this;
         },
@@ -365,11 +403,9 @@ define([
         turnOff: function () {
             this.closePopups();
 
-            tinyMCE3.execCommand('mceRemoveControl', false, this.id);
+            tinyMCE3.execCommand('mceRemoveControl', false, this.getId());
 
-            this.getPluginButtons().each(function (e) {
-                e.show();
-            });
+            this.getPluginButtons().show();
 
             return this;
         },
@@ -380,8 +416,8 @@ define([
         closePopups: function () {
             if (typeof closeEditorPopup == 'function') {
                 // close all popups to avoid problems with updating parent content area
-                closeEditorPopup('widget_window' + this.id);
-                closeEditorPopup('browser_window' + this.id);
+                closeEditorPopup('widget_window' + this.getId());
+                closeEditorPopup('browser_window' + this.getId());
             }
         },
 
@@ -389,7 +425,7 @@ define([
          * @return {Boolean}
          */
         toggle: function () {
-            if (!tinyMCE3.get(this.id)) {
+            if (!tinyMCE3.get(this.getId())) {
                 this.turnOn();
 
                 return true;
@@ -415,8 +451,8 @@ define([
          * On form validation.
          */
         onFormValidation: function () {
-            if (tinyMCE3.get(this.id)) {
-                $(this.id).value = tinyMCE3.get(this.id).getContent();
+            if (tinyMCE3.get(this.getId())) {
+                $(this.getId()).value = tinyMCE3.get(this.getId()).getContent();
             }
         },
 
@@ -552,7 +588,7 @@ define([
          * Update text area.
          */
         updateTextArea: function () {
-            var editor = tinyMCE3.get(this.id),
+            var editor = tinyMCE3.get(this.getId()),
                 content;
 
             if (!editor) {
@@ -562,7 +598,14 @@ define([
             content = editor.getContent();
             content = this.decodeContent(content);
 
-            jQuery('#' + this.id).val(content).trigger('change');
+            this.getTextArea().val(content).trigger('change');
+        },
+
+        /**
+         * @return {Object} jQuery textarea element
+         */
+        getTextArea: function () {
+            return jQuery('#' + this.getId());
         },
 
         /**

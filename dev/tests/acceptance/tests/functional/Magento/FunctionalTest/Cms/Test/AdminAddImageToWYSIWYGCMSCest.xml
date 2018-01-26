@@ -15,7 +15,7 @@
             <title value="Admin should be able to add image to WYSIWYG content of CMS Page"/>
             <description value="Admin should be able to add image to WYSIWYG content of CMS Page"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-85825 "/>
+            <testCaseId value="MAGETWO-85825"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
