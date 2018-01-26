@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App\View\Deployment;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,15 +36,23 @@ class Version
     private $logger;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param \Magento\Framework\App\State $appState
      * @param Version\StorageInterface $versionStorage
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->appState = $appState;
         $this->versionStorage = $versionStorage;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -68,7 +78,9 @@ class Version
     {
         $result = $this->versionStorage->load();
         if (!$result) {
-            if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
+            if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION
+                && !$this->deploymentConfig->getConfigData('static_content_on_demand_in_production')
+            ) {
                 $this->getLogger()->critical('Can not load static content version.');
                 throw new \UnexpectedValueException(
                     "Unable to retrieve deployment version of static files from the file system."

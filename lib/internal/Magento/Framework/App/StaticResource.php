@@ -63,6 +63,11 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $filesystem;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -76,6 +81,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigLoaderInterface $configLoader
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         State $state,
@@ -85,7 +91,8 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ConfigLoaderInterface $configLoader
+        ConfigLoaderInterface $configLoader,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->state = $state;
         $this->response = $response;
@@ -95,6 +102,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         $this->moduleList = $moduleList;
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -108,7 +116,9 @@ class StaticResource implements \Magento\Framework\AppInterface
         // disabling profiling when retrieving static resource
         \Magento\Framework\Profiler::reset();
         $appMode = $this->state->getMode();
-        if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
+        if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION
+            && !$this->deploymentConfig->getConfigData('static_content_on_demand_in_production')
+        ) {
             $this->response->setHttpResponseCode(404);
         } else {
             $path = $this->request->get('resource');
