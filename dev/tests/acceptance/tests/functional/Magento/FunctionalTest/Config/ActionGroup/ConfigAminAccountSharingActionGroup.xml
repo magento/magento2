@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
 <actionGroup name="ConfigAminAccountSharingActionGroup">
-    <amOnPage url="admin/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage" />
+    <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage" />
     <waitForPageLoad stepKey="wait1"/>
     <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" />
     <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown" />
