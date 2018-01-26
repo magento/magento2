@@ -105,15 +105,47 @@ class Validator
     {
         $filename = str_replace('\\', '/', $filename);
         if (!isset($this->_templatesValidationResults[$filename])) {
-            $this->_templatesValidationResults[$filename] =
-                ($this->isPathInDirectories($filename, $this->_compiledDir)
-                    || $this->isPathInDirectories($filename, $this->moduleDirs)
-                    || $this->isPathInDirectories($filename, $this->_themesDir)
-                    || $this->_isAllowSymlinks)
-                && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
+            /**
+             * Whether the file is out of Magento and Symlinks is allowed.
+             * Fix for issue 13375.
+             *
+             * @author Tiago Sampaio <tiago@tiagosampaio.com>
+             */
+            if ($this->_isAllowSymlinks && $this->isOutsourceFile($filename)) {
+                $result = true;
+
+                if (!file_exists($filename) || !is_readable($filename)) {
+                    $result = false;
+                }
+
+                $this->_templatesValidationResults[$filename] = $result;
+            } else {
+                $this->_templatesValidationResults[$filename] =
+                    ($this->isPathInDirectories($filename, $this->_compiledDir)
+                        || $this->isPathInDirectories($filename, $this->moduleDirs)
+                        || $this->isPathInDirectories($filename, $this->_themesDir)
+                        || $this->_isAllowSymlinks)
+                    && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
+            }
         }
+
         return $this->_templatesValidationResults[$filename];
     }
+
+
+    /**
+     * Checks if the filename is out of Magento's root installation.
+     *
+     * @param string $filename
+     *
+     * @return bool
+     */
+    protected function isOutsourceFile($filename)
+    {
+        $isOutsourceFile = strpos($filename, $this->getRootDirectory()->getAbsolutePath());
+        return !($isOutsourceFile === 0);
+    }
+
 
     /**
      * Checks whether path related to the directory
