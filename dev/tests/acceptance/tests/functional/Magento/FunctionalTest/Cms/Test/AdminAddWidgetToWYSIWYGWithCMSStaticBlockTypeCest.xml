@@ -47,6 +47,7 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <waitForLoadingMaskToDisappear stepKey="wait3"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="waitForSlideoutOpens" />
         <scrollTo selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}"  stepKey="scrollToBlockIdentifier" />
         <click selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />

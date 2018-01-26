@@ -12,8 +12,9 @@ define([
     'underscore',
     'ko',
     './abstract',
+    'mage/adminhtml/events',
     'Magento_Variable/variables'
-], function (wysiwyg, $, _, ko, Abstract) {
+], function (wysiwyg, $, _, ko, Abstract, varienGlobalEvents) {
     'use strict';
 
     return Abstract.extend({
@@ -47,6 +48,13 @@ define([
                 selector: 'button'
             }, function (element) {
                 this.$wysiwygEditorButton = $(element);
+            }.bind(this));
+
+            // disable editor completely after initialization is field is disabled
+            varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
+                if (this.disabled()) {
+                    this.setDisabled(true);
+                }
             }.bind(this));
 
             return this;
@@ -89,25 +97,22 @@ define([
         /**
          * Set disabled property to wysiwyg component
          *
-         * @param {Boolean} status
+         * @param {Boolean} disabled
          */
-        setDisabled: function (status) {
-            if (this.$wysiwygEditorButton) {
-                this.$wysiwygEditorButton.attr('disabled', status);
+        setDisabled: function (disabled) {
+            if (this.$wysiwygEditorButton && disabled) {
+                this.$wysiwygEditorButton.prop('disabled', 'disabled');
+            } else if (this.$wysiwygEditorButton) {
+                this.$wysiwygEditorButton.removeProp('disabled');
             }
 
-            /* eslint-disable no-undef */
-            if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
-
-                if (typeof wysiwyg.activeEditor().controlManager !== 'undefined') {
-                    _.each(wysiwyg.activeEditor().controlManager.controls, function (property, index, controls) {
-                        controls[property.id].setDisabled(status);
-                    });
-                }
-
-                wysiwyg.activeEditor().getBody().setAttribute('contenteditable', !status);
+            if (wysiwyg && disabled) {
+                wysiwyg.setEnabledStatus(false);
+                wysiwyg.getPluginButtons().prop('disabled', 'disabled');
+            } else if (wysiwyg) {
+                wysiwyg.setEnabledStatus(true);
+                wysiwyg.getPluginButtons().removeProp('disabled');
             }
-            /* eslint-enable  no-undef*/
         }
     });
 });

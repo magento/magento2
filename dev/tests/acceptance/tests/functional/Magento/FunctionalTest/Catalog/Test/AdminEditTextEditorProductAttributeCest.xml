@@ -65,6 +65,7 @@
         <waitForPageLoad stepKey="waitForPageLoad8"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGrid" />
         <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>

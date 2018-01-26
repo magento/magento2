@@ -16,8 +16,6 @@
             <description value="Insert default Magento variable into content of WYSIWYG on CMS Pages"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83504"/>
-            <group value="skip" />
-            <!--Bug link MAGETWO-86383-->
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

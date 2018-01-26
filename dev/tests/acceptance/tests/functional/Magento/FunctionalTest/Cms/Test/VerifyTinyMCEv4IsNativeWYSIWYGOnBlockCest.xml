@@ -16,7 +16,7 @@
             <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Block"/>
             <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Block"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-84184 "/>
+            <testCaseId value="MAGETWO-84184"/>
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
@@ -45,6 +45,7 @@
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createPreReqCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
         <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickSelect" />
@@ -63,6 +64,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearAfterClickingBtnChooser" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
         <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockCode" />
         <scrollTo selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}"  stepKey="scrollToBlockIdentifier" />
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
