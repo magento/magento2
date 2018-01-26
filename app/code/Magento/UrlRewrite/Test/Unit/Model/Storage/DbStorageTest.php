@@ -434,6 +434,9 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testReplace()
     {
         $urlFirst = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);

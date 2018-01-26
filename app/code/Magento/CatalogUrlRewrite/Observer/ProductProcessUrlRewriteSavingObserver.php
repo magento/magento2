@@ -50,7 +50,6 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             || $product->getIsChangedWebsites()
             || $product->dataHasChangedFor('visibility')
         ) {
-
             if ($product->isVisibleInSiteVisibility()) {
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }

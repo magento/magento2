@@ -85,25 +85,30 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
         ];
         $valueId = $connection->fetchOne($select, $bind);
-        $data = [
-            'product_super_attribute_id' => (int)$attribute->getId(),
-            'use_default' => (int)$attribute->getUseDefault(),
-            'value' => $attribute->getLabel(),
-        ];
 
         if ($valueId) {
-            $data['store_id'] = (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId();
+            $connection->insertOnDuplicate(
+                $this->_labelTable,
+                [
+                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'store_id' => (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId(),
+                    'use_default' => (int)$attribute->getUseDefault(),
+                    'value' => $attribute->getLabel(),
+                ],
+                ['value', 'use_default']
+            );
         } else {
             // if attribute label not exists, always store on default store (0)
-            $data['store_id'] = Store::DEFAULT_STORE_ID;
+            $connection->insert(
+                $this->_labelTable,
+                [
+                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'store_id' => Store::DEFAULT_STORE_ID,
+                    'use_default' => (int)$attribute->getUseDefault(),
+                    'value' => $attribute->getLabel(),
+                ]
+            );
         }
-
-        $connection->insertArray(
-            $this->_labelTable,
-            array_keys($data),
-            [array_values($data)],
-            AdapterInterface::REPLACE
-        );
 
         return $this;
     }

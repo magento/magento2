@@ -138,7 +138,6 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $data = [];
         }
 
-        $attributes = $this->getAttributesByType($typeId);
         $connection = $this->getConnection();
 
         $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
@@ -153,53 +152,27 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $links = $connection->fetchPairs($select, $bind);
 
-        $insertColumns = [
-            'product_link_attribute_id',
-            'link_id',
-            'value',
-        ];
-        $insertData = [];
-        $deleteConditions = [];
-
-        foreach ($data as $linkedProductId => $linkInfo) {
-            $linkId = null;
-            if (isset($links[$linkedProductId])) {
-                $linkId = $links[$linkedProductId];
-                unset($links[$linkedProductId]);
-            } else {
-                $bind = [
-                    'product_id' => $parentId,
-                    'linked_product_id' => $linkedProductId,
-                    'link_type_id' => $typeId,
-                ];
-                $connection->insert($this->getMainTable(), $bind);
-                $linkId = $connection->lastInsertId($this->getMainTable());
-            }
-
-            foreach ($attributes as $attributeInfo) {
-                $attributeTable = $this->getAttributeTypeTable($attributeInfo['type']);
-                if ($attributeTable) {
-                    if (isset($linkInfo[$attributeInfo['code']])) {
-                        $value = $this->_prepareAttributeValue(
-                            $attributeInfo['type'],
-                            $linkInfo[$attributeInfo['code']]
-                        );
-                        $insertData[$attributeTable][] = [
-                            $attributeInfo['id'],
-                            $linkId,
-                            $value,
-                        ];
-                    } else {
-                        $deleteConditions[$attributeTable]['link_id'][] = $linkId;
-                        $deleteConditions[$attributeTable]['product_link_attribute_id'][] = $attributeInfo['id'];
-                    }
-                }
-            }
-        }
+        list($insertData, $updateData, $deleteConditions) = $this->prepareProductLinksData(
+            $parentId,
+            $data,
+            $typeId,
+            $links
+        );
 
         if ($insertData) {
+            $insertColumns = [
+                'product_link_attribute_id',
+                'link_id',
+                'value',
+            ];
             foreach ($insertData as $table => $values) {
-                $connection->insertArray($table, $insertColumns, $values, AdapterInterface::REPLACE);
+                $connection->insertArray($table, $insertColumns, $values, AdapterInterface::INSERT_IGNORE);
+            }
+        }
+        if ($updateData) {
+            // for mass update product links with constraint by unique key use insert on duplicate statement
+            foreach ($updateData as $table => $values) {
+                $connection->insertOnDuplicate($table, $values, ['value']);
             }
         }
         if ($deleteConditions) {
@@ -325,5 +298,70 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $parentIds;
+    }
+
+    /**
+     * Prepare data for insert, update or delete product link attributes
+     *
+     * @param int $parentId
+     * @param array $data
+     * @param int $typeId
+     * @param array $links
+     * @return array
+     */
+    private function prepareProductLinksData($parentId, $data, $typeId, $links)
+    {
+        $connection =  $this->getConnection();
+        $attributes = $this->getAttributesByType($typeId);
+
+        $insertData = [];
+        $updateData = [];
+        $deleteConditions = [];
+
+        foreach ($data as $linkedProductId => $linkInfo) {
+            $linkId = null;
+            if (isset($links[$linkedProductId])) {
+                $linkId = $links[$linkedProductId];
+            } else {
+                $bind = [
+                    'product_id' => $parentId,
+                    'linked_product_id' => $linkedProductId,
+                    'link_type_id' => $typeId,
+                ];
+                $connection->insert($this->getMainTable(), $bind);
+                $linkId = $connection->lastInsertId($this->getMainTable());
+            }
+
+            foreach ($attributes as $attributeInfo) {
+                $attributeTable = $this->getAttributeTypeTable($attributeInfo['type']);
+                if (!$attributeTable) {
+                    continue;
+                }
+                if (isset($linkInfo[$attributeInfo['code']])) {
+                    $value = $this->_prepareAttributeValue(
+                        $attributeInfo['type'],
+                        $linkInfo[$attributeInfo['code']]
+                    );
+                    if (isset($links[$linkedProductId])) {
+                        $updateData[$attributeTable][] = [
+                            'product_link_attribute_id' => $attributeInfo['id'],
+                            'link_id' => $linkId,
+                            'value' => $value,
+                        ];
+                    } else {
+                        $insertData[$attributeTable][] = [
+                            'product_link_attribute_id' => $attributeInfo['id'],
+                            'link_id' => $linkId,
+                            'value' => $value,
+                        ];
+                    }
+                } else {
+                    $deleteConditions[$attributeTable]['link_id'][] = $linkId;
+                    $deleteConditions[$attributeTable]['product_link_attribute_id'][] = $attributeInfo['id'];
+                }
+            }
+        }
+
+        return [$insertData, $updateData, $deleteConditions];
     }
 }
