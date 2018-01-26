@@ -96,7 +96,7 @@ class SchemaListener
      */
     public function __construct(
         array $definitionMappers,
-        array $handlers
+        array $handlers = []
     ) {
         $this->definitionMappers = $definitionMappers;
         $this->handlers = $handlers;

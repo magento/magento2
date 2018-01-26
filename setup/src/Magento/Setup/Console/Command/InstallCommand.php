@@ -49,9 +49,10 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
 
     /**
-     * This mode allows to install Magento in declarative way
+     * If this flag is enabled, than all your old scripts with format:
+     * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format
      */
-    const DECLARATION_MODE_KEY = 'declaration_mode';
+    const CONVERT_OLD_SCRIPTS_KEY = 'convert_old_scripts';
 
     /**
      * Regex for sales_order_increment_prefix validation.
@@ -149,10 +150,11 @@ class InstallCommand extends AbstractSetupCommand
                 Avaiable magic param "all".'
             ),
             new InputOption(
-                self::DECLARATION_MODE_KEY,
+                self::CONVERT_OLD_SCRIPTS_KEY,
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'This mode allows to install Magento in declarative way'
+                'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                false
             )
         ]);
         $this->setName('setup:install')
