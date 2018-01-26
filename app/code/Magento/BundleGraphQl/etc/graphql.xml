@@ -42,15 +42,15 @@
         <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean"/>
     </type>
     <type xsi:type="Enum" name="ShipBundleItemsEnum">
-        <item name="0">TOGETHER</item>
-        <item name="1">SEPARATELY</item>
+        <item name="together">TOGETHER</item>
+        <item name="separately">SEPARATELY</item>
     </type>
     <type xsi:type="Enum" name="PriceViewEnum">
-        <item name="0">PRICE_RANGE</item>
-        <item name="1">AS_LOW_AS</item>
+        <item name="price_range">PRICE_RANGE</item>
+        <item name="as_low_as">AS_LOW_AS</item>
     </type>
     <type xsi:type="Enum" name="PriceTypeEnum">
-        <item name="0">FIXED</item>
-        <item name="1">PERCENT</item>
+        <item name="fixed">FIXED</item>
+        <item name="percent">PERCENT</item>
     </type>
 </config>

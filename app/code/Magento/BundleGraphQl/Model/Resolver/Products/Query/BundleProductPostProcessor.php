@@ -127,9 +127,9 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
     private function formatBundleAttributes(array $product)
     {
         $product['price_view']
-            = $this->enumLookup->getEnumValue($product['price_view'], 'PriceViewEnum');
+            = $this->enumLookup->getEnumValueFromField('PriceViewEnum', $product['price_view']);
         $product['ship_bundle_items']
-            = $this->enumLookup->getEnumValue($product['shipment_type'], 'ShipBundleItemsEnum');
+            = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
         $product['dynamic_price'] =!(bool)$product['price_type'];
         $product['dynamic_sku'] =!(bool)$product['sku_type'];
         $product['dynamic_weight'] =!(bool)$product['weight_type'];
@@ -147,7 +147,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $returnData = $link->getData();
         $returnData['product_id'] = $link->getEntityId();
         $returnData['can_change_quantity'] = $link->getCanChangeQuantity();
-        $returnData['price_type'] = $this->enumLookup->getEnumValue($link->getPriceType(), 'PriceTypeEnum');
+        $returnData['price_type'] = $this->enumLookup->getEnumValueFromField('PriceTypeEnum', $link->getPriceType());
         return $returnData;
     }
 
