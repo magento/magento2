@@ -7,19 +7,19 @@
 namespace Magento\SalesRule\Plugin;
 
 use Magento\Sales\Model\Order;
-use Magento\SalesRule\Model\Coupon\QuantityManager;
+use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 class CouponUsagesDecrement
 {
     /**
-     * @var QuantityManager
+     * @var UpdateCouponUsages
      */
-    private $quantityManager;
+    private $updateCouponUsages;
 
     public function __construct(
-        QuantityManager $quantityManager
+        UpdateCouponUsages $updateCouponUsages
     ) {
-        $this->quantityManager = $quantityManager;
+        $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**
@@ -34,7 +34,7 @@ class CouponUsagesDecrement
         $canCancel = $subject->canCancel();
         $returnValue = $proceed();
         if ($canCancel) {
-            $returnValue = $this->quantityManager->updateCouponUsages($returnValue, false);
+            $returnValue = $this->updateCouponUsages->execute($returnValue, false);
         }
 
         return $returnValue;

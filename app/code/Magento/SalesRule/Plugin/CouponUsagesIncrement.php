@@ -7,19 +7,19 @@
 namespace Magento\SalesRule\Plugin;
 
 use Magento\Sales\Model\Order;
-use Magento\SalesRule\Model\Coupon\QuantityManager;
+use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 class CouponUsagesIncrement
 {
     /**
-     * @var QuantityManager
+     * @var UpdateCouponUsages
      */
-    private $quantityManager;
+    private $updateCouponUsages;
 
     public function __construct(
-        QuantityManager $quantityManager
+        UpdateCouponUsages $updateCouponUsages
     ) {
-        $this->quantityManager = $quantityManager;
+        $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**
@@ -32,7 +32,7 @@ class CouponUsagesIncrement
      */
     public function afterPlace(Order $subject, Order $result)
     {
-        $this->quantityManager->updateCouponUsages($subject, true);
+        $this->updateCouponUsages->execute($subject, true);
 
         return $subject;
     }

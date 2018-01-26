@@ -13,9 +13,9 @@ use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
 
 /**
- * Calculates the coupon usages.
+ * Updates the coupon usages.
  */
-class QuantityManager
+class UpdateCouponUsages
 {
     /**
      * @var RuleFactory
@@ -56,13 +56,13 @@ class QuantityManager
     }
 
     /**
-     * Updates coupon usages.
+     * Executes the current command.
      *
      * @param Order $subject
      * @param bool $increment
      * @return Order
      */
-    public function updateCouponUsages(Order $subject, bool $increment)
+    public function execute(Order $subject, bool $increment)
     {
         if (!$subject || !$subject->getAppliedRuleIds()) {
             return $subject;
