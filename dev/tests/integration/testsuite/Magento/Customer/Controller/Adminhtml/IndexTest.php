@@ -287,6 +287,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
+        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /** Check that success message is set */
@@ -323,7 +324,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
         $this->assertEquals(1, $subscriber->getStatus());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -351,6 +353,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
+        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
@@ -368,7 +371,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -408,13 +411,14 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
+        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /**
          * Check that no errors were generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -477,6 +481,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             ],
         ];
         $this->getRequest()->setPostValue($post);
+        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
         /*
          * Check that error message is set
@@ -489,7 +494,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $post,
             Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerFormData()
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/'));
     }
 
     /**
