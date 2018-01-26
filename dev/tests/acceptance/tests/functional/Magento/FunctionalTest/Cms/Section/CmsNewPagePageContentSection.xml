@@ -107,6 +107,5 @@
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>
         <element name="ClearCompare" type="button" selector="#compare-clear-all"/>
         <element name="AcceptClear" type="button" selector=".action-primary.action-accept" />
-
     </section>
 </sections>
