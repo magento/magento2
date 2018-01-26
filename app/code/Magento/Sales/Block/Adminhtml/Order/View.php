@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Block\Adminhtml\Order;
 
 /**
@@ -231,8 +232,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction(
-            'Magento_Sales::ship'
-        ) && $order->canShip() && !$order->getForcedShipmentWithInvoice()
+                'Magento_Sales::ship'
+            ) && $order->canShip() && !$order->getForcedShipmentWithInvoice()
         ) {
             $this->addButton(
                 'order_ship',
@@ -245,10 +246,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction(
-            'Magento_Sales::reorder'
-        ) && $this->_reorderHelper->isAllowed(
-            $order->getStore()
-        ) && $order->canReorderIgnoreSalable()
+                'Magento_Sales::reorder'
+            ) && $this->_reorderHelper->isAllowed(
+                $order->getStore()
+            ) && $order->canReorderIgnoreSalable()
         ) {
             $this->addButton(
                 'order_reorder',
@@ -315,7 +316,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getUrl($params = '', $params2 = [])
     {
-        $params2['order_id'] = $this->getOrderId();
+        if ('index' === $params2['action'] && isset($params2['action'])) {
+            return parent::getUrl($params, $params2);
+        } else {
+            $params2['order_id'] = $this->getOrderId();
+        }
         return parent::getUrl($params, $params2);
     }
 
@@ -451,7 +456,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             return $this->getOrder()->getBackUrl();
         }
 
-        return $this->getUrl('sales/*/');
+        return $this->getUrl('sales/*/', ['action' => 'index']);
     }
 
     /**
