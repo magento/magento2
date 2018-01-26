@@ -11,6 +11,6 @@
     <section name="CmsNewBlockBlockBasicFieldsSection">
         <element name="title" type="input" selector="input[name=title]"/>
         <element name="identifier" type="input" selector="input[name=identifier]"/>
-        <element name="wysiwyg_hr_element" type="input" selector="#cms_block_form_content_hr"/>
+        <element name="content_textarea" type="input" selector="#cms_block_form_content"/>
     </section>
 </sections>
