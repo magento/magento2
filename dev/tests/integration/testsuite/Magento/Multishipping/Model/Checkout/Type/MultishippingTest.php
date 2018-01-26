@@ -25,6 +25,7 @@ use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MultishippingTest extends \PHPUnit\Framework\TestCase
 {

@@ -5,14 +5,15 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Address as OrderAddress;
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Theme\Block\Html\Title;
 
 /**
  * Multi-shipping checkout results information
@@ -177,6 +178,7 @@ class Results extends Success
      */
     protected function _prepareLayout(): Success
     {
+        /** @var Title $pageTitle */
         $pageTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageTitle) {
             $title = $this->getOrderIds() ? $pageTitle->getPartlySuccessTitle() : $pageTitle->getFailedTitle();
