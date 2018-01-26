@@ -72,6 +72,7 @@
         <waitForPageLoad stepKey="wait4" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
+        <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
