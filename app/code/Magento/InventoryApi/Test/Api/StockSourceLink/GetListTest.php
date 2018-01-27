@@ -59,10 +59,12 @@ class GetListTest extends WebapiAbstract
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
         ];
 
