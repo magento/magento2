@@ -10,8 +10,8 @@ namespace Magento\InventoryCatalog\Ui\Component;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySalesApi\Api\Data\GetSalesChannelToStockDataInterface;
 use Magento\Ui\Component\Container;
+use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
 
 class StockInformation extends Container
 {
@@ -26,52 +26,48 @@ class StockInformation extends Container
     private $getProductQuantityInStock;
 
     /**
-     * @var GetSalesChannelToStockDataInterface
+     * @var GetAssignedStockIdsBySku
      */
-    private $salesChannelToStockData;
+    private $getAssignedStockIdsBySku;
 
     /**
      * @param ContextInterface $context
      * @param StockRepositoryInterface $stockRepository
-     * @param GetSalesChannelToStockDataInterface $salesChannelToStockData
      * @param GetProductQuantityInStockInterface $getProductQuantityInStock
+     * @param GetAssignedStockIdsBySku $getAssignedStockIdsBySku
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         StockRepositoryInterface $stockRepository,
-        GetSalesChannelToStockDataInterface $salesChannelToStockData,
         GetProductQuantityInStockInterface $getProductQuantityInStock,
+        GetAssignedStockIdsBySku $getAssignedStockIdsBySku,
         $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->stockRepository = $stockRepository;
-        $this->salesChannelToStockData = $salesChannelToStockData;
         $this->getProductQuantityInStock = $getProductQuantityInStock;
+        $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
     }
 
     /**
-     * @param $productSku string
+     * @param string $productSku
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getActiveStocksQtyInfo($productSku): array
+    private function getActiveStocksQtyInfo(string $productSku): array
     {
-        $salesChannelToStockIds = $this->salesChannelToStockData->execute();
+        $stockIds = $this->getAssignedStockIdsBySku->execute($productSku);
         $stockInfo = [];
-        if ($salesChannelToStockIds) {
-            foreach ($salesChannelToStockIds as $stock) {
-                $stockId = (int) $stock['stock_id'];
-                if ($stockId) {
-                    $currentStock = [];
-                    $stockData = $this->stockRepository->get($stockId);
-                    $currentStock['stock_name'] = $stockData->getName();
-                    $currentStock['qty'] = $this->getProductQuantityInStock->execute($productSku, $stockId);
-                    $stockInfo[] = $currentStock;
-                    unset($currentStock);
-                }
+        if (count($stockIds)) {
+            foreach ($stockIds as $stockId) {
+                $stockId = (int)$stockId;
+                $stock = $this->stockRepository->get($stockId);
+                $stockInfo[] = [
+                    'stock_name' => $stock->getName(),
+                    'qty' => $this->getProductQuantityInStock->execute($productSku, $stockId),
+                ];
             }
         }
         return $stockInfo;
@@ -80,20 +76,15 @@ class StockInformation extends Container
     /**
      * @param array $dataSource
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource): array
     {
-        $productSku = $dataSource['data']['product']['sku'];
-        if (!$productSku) {
+        if (!isset($dataSource['data']['product']['sku']) || empty($dataSource['data']['product']['sku'])) {
             return $dataSource;
         }
-        $activeStocksInfo = $this->getActiveStocksQtyInfo($productSku);
-        if ($activeStocksInfo) {
-            foreach ($activeStocksInfo as $stockData) {
-                $dataSource['data']['stocks'][] = $stockData;
-            }
-        }
+        $productSku = $dataSource['data']['product']['sku'];
+        $stocksData = $this->getActiveStocksQtyInfo($productSku);
+        $dataSource['data']['stocks'] = $stocksData;
         return $dataSource;
     }
 }
