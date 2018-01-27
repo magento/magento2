@@ -6,15 +6,15 @@
 
 namespace Magento\Framework\GraphQl\Exception;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
- * Exception for GraphQL to be thrown when user supplies invalid input
+ * Class GraphQlNoSuchEntityException
  */
-class GraphQlInputException extends InputException implements \GraphQL\Error\ClientAware
+class GraphQlNoSuchEntityException extends NoSuchEntityException implements \GraphQL\Error\ClientAware
 {
-    const EXCEPTION_CATEGORY = 'graphql-input';
+    const EXCEPTION_CATEGORY = 'graphql-no-such-entity';
 
     /**
      * @var boolean

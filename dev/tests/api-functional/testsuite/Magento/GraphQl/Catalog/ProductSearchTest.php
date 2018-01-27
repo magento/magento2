@@ -625,6 +625,39 @@ QUERY;
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryWithNoSearchOrFilterArgumentException()
+    {
+        $query
+            = <<<QUERY
+{
+  products(pageSize:1)
+  {
+       items{
+           id
+           attribute_set_id    
+           created_at
+           name
+           sku
+           type_id        
+           updated_at
+           weight          
+           category_ids                
+           
+       }
+   }
+  
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: One' .' ' .
+            'of \'search\' or \'filter\' input arguments needs to be specified in products request.');
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Asserts the different fields of items returned after search query is executed
      *
      * @param Product[] $filteredProducts
