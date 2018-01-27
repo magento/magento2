@@ -8,24 +8,22 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api;
 
 /**
- * Assign Sources to Stock
+ * Service method for stock source links save multiple
+ * Performance efficient API
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-interface AssignSourcesToStockInterface
+interface StockSourceLinksSaveInterface
 {
     /**
-     * Assign Sources to Stock
+     * Save StockSourceLink list data
      *
-     * If one of the Sources or Stock with given id don't exist then exception will be throw
-     *
-     * @param string[] $sourceCodes
-     * @param int $stockId
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $sourceCodes, int $stockId);
+    public function execute(array $links);
 }
