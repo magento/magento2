@@ -51,4 +51,7 @@
     <event name="store_add">
         <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" />
     </event>
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="sales_quote_to_order_observer" instance="Magento\Sales\Observer\SalesEventQuoteSubmitBeforeObserver"/>
+    </event>
 </config>
