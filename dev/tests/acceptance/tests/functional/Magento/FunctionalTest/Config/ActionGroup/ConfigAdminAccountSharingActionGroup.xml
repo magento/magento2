@@ -13,6 +13,7 @@
     <waitForPageLoad stepKey="wait1"/>
     <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" />
     <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown" />
+    <uncheckOption selector="{{AdminSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
     <selectOption selector="{{AdminSection.AdminAccountSharing}}" userInput="Yes" stepKey="selectYes"/>
     <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab" />
     <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
