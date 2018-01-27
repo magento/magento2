@@ -27,11 +27,20 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\AssignDefaultSourceToStocksValidator</item>
+                <item name="default_stock" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\AssignSourcesToDefaultStockValidator</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Inventory\Model\Source\Command\Save">
         <arguments>
             <argument name="sourceValidator" xsi:type="object">Magento\Inventory\Model\Source\Validator\ValidatorChain</argument>
         </arguments>
     </type>
+    <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemsSaveInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave"/>
