@@ -144,7 +144,8 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ],
             'referenceContainer' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" htmlAttributes="attribute" label="Add"/>',
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" 
+                            htmlAttributes="attribute" label="Add"/>',
                     'referenceContainer'
                 ),
                 'containerName' => 'reference',
@@ -210,8 +211,8 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ],
             'referenceContainerDisplayFalse' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" htmlAttributes="attribute" label="Add"'
-                    . ' display="true"/>',
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new"'
+                    . ' htmlAttributes="attribute" label="Add" display="true"/>',
                     'referenceContainer'
                 ),
                 'containerName' => 'reference',
