@@ -9,10 +9,10 @@ namespace Magento\InventoryIndexer\Plugin\InventoryApi\AssignSourcesToStock;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
- * Invalidate StockIndexer
+ * Invalidate InventoryIndexer
  */
 class ReindexAfterAssignSourcesToStockPlugin
 {
@@ -36,7 +36,7 @@ class ReindexAfterAssignSourcesToStockPlugin
      */
     public function afterExecute(StockSourceLinksSaveInterface $subject)
     {
-        $indexer = $this->indexerRegistry->get(StockIndexer::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
         if ($indexer->isValid()) {
             $indexer->invalidate();
         }

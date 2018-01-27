@@ -24,7 +24,7 @@ class SalesChannelManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      */
     public function testCreateStockWithSalesChannels()
     {
@@ -57,7 +57,7 @@ class SalesChannelManagementTest extends WebapiAbstract
 
     /**
      * @param array $salesChannels
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      * @dataProvider updateStockWithSalesChannelsReplacingDataProvider
      */

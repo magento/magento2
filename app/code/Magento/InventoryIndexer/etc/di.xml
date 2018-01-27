@@ -44,4 +44,10 @@
     </type>
     <!-- Stock -->
     <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\InventoryIndexer\Model\GetStockItemQuantity"/>
+    <preference for="Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface" type="Magento\InventoryIndexer\Model\StockIndexTableNameResolver"/>
+    <type name="Magento\InventoryIndexer\Model\StockIndexTableNameResolver">
+        <arguments>
+            <argument name="dimensionName" xsi:type="string">stock_</argument>
+        </arguments>
+    </type>
 </config>

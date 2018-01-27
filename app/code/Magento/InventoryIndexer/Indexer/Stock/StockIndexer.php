@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Indexer\Stock;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
 /**
  * Stock indexer
@@ -21,13 +21,8 @@ use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface;
  *
  * @api
  */
-class StockIndexer implements ActionInterface
+class StockIndexer
 {
-    /**
-     * Indexer ID in configuration
-     */
-    const INDEXER_ID = 'inventory_stock';
-
     /**
      * @var GetAllAssignedStockIds
      */
@@ -108,13 +103,13 @@ class StockIndexer implements ActionInterface
     {
         foreach ($stockIds as $stockId) {
             $replicaIndexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
                 ->build();
 
             $mainIndexName = $this->indexNameBuilder
-                ->setIndexId('inventory_stock')
+                ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();

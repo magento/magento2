@@ -16,9 +16,9 @@ use PHPUnit\Framework\TestCase;
 class SourceIndexerTest extends TestCase
 {
     /**
-     * @var IndexerInterface
+     * @var SourceIndexer
      */
-    private $indexer;
+    private $sourceIndexer;
 
     /**
      * @var GetProductQuantityInStockInterface
@@ -32,8 +32,7 @@ class SourceIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(SourceIndexer::INDEXER_ID);
+        $this->sourceIndexer = Bootstrap::getObjectManager()->get(SourceIndexer::class);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
             ->get(GetProductQuantityInStockInterface::class);
@@ -55,11 +54,11 @@ class SourceIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexRow()
     {
-        $this->indexer->reindexRow('eu-1');
+        $this->sourceIndexer->executeRow('eu-1');
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -70,11 +69,11 @@ class SourceIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexList()
     {
-        $this->indexer->reindexList(['eu-1', 'us-1']);
+        $this->sourceIndexer->executeList(['eu-1', 'us-1']);
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -88,11 +87,11 @@ class SourceIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testReindexAll()
     {
-        $this->indexer->reindexAll();
+        $this->sourceIndexer->executeFull();
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));

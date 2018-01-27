@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Plugin\InventoryApi\SourceItemsDelete;
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
@@ -25,18 +23,18 @@ class ReindexAfterSourceItemsDeletePlugin
     private $getSourceItemId;
 
     /**
-     * @var IndexerInterfaceFactory
+     * @var SourceIndexer
      */
-    private $indexerFactory;
+    private $sourceIndexer;
 
     /**
      * @param GetSourceItemId $getSourceItemId
-     * @param IndexerInterfaceFactory $indexerFactory
+     * @param SourceIndexer $sourceIndexer
      */
-    public function __construct(GetSourceItemId $getSourceItemId, IndexerInterfaceFactory $indexerFactory)
+    public function __construct(GetSourceItemId $getSourceItemId, SourceIndexer $sourceIndexer)
     {
         $this->getSourceItemId = $getSourceItemId;
-        $this->indexerFactory = $indexerFactory;
+        $this->sourceIndexer = $sourceIndexer;
     }
 
     /**
@@ -59,10 +57,7 @@ class ReindexAfterSourceItemsDeletePlugin
         $proceed($sourceItems);
 
         if (count($sourceCodes)) {
-            /** @var IndexerInterface $indexer */
-            $indexer = $this->indexerFactory->create();
-            $indexer->load(SourceIndexer::INDEXER_ID);
-            $indexer->reindexList($sourceCodes);
+            $this->sourceIndexer->executeList($sourceCodes);
         }
     }
 }

@@ -9,10 +9,11 @@ namespace Magento\InventoryIndexer\Plugin\InventoryApi\UnassignSourceFromStock;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
+
 
 /**
- * Invalidate StockIndexer
+ * Invalidate InventoryIndexer
  */
 class ReindexAfterUnassignSourcesFromStockPlugin
 {
@@ -36,7 +37,7 @@ class ReindexAfterUnassignSourcesFromStockPlugin
      */
     public function afterExecute(StockSourceLinksDeleteInterface $subject)
     {
-        $indexer = $this->indexerRegistry->get(StockIndexer::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
         if ($indexer->isValid()) {
             $indexer->invalidate();
         }
