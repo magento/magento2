@@ -28,9 +28,6 @@ class Client
     /** @var JsonSerializer */
     private $json;
 
-    /** @var  TestCase */
-    private $testCase;
-
     /**
      * CurlClient constructor.
      *
