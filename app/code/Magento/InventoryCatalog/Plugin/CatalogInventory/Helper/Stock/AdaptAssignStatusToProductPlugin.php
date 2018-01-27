@@ -53,7 +53,10 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
-        if (null === $status && null !== $product->getSku()) {
+        if (null === $product->getSku()) {
+            return;
+        }
+        if (null === $status) {
             $stockId = $this->getStockIdForCurrentWebsite->execute();
             $status = (int)$this->isProductInStock->execute($product->getSku(), $stockId);
         }
