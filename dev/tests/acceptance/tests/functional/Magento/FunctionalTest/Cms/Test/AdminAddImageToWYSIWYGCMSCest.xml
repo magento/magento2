@@ -15,7 +15,7 @@
             <title value="You should be able to add image to WYSIWYG Editor CMS"/>
             <description value="You should be able to add image to WYSIWYG Editor CMS"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-85825 "/>
+            <testCaseId value="MAGETWO-85825"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
