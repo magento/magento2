@@ -13,23 +13,34 @@ define([
     var decodeEntities;
     decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
-        var doc = document.implementation.createHTMLDocument("");
-        var element = doc.createElement('div');
+        var doc = document.implementation.createHTMLDocument(''),
+            element = doc.createElement('div');
 
+        /**
+         * @param string
+         * @return string
+         */
         function getText(str) {
             element.innerHTML = str;
             str = element.textContent;
             element.textContent = '';
+
             return str;
         }
 
+        /**
+         * @param string
+         * @return string
+         */
         function decodeHTMLEntities(str) {
             if (str && typeof str === 'string') {
                 var x = getText(str);
+
                 while (str !== x) {
                     str = x;
                     x = getText(x);
                 }
+
                 return x;
             }
         }
