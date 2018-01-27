@@ -79,14 +79,14 @@ class StockSourceLinkProcessor
         $this->validateStockSourceData($stockSourceLinksData);
 
         $assignedLinks = $this->getAssignedLinks($stockId);
-        $sourceCodesToSave = $this->getSourceCodes($stockSourceLinksData);
+        $linksDataToSave = $this->processStockSourceLinksData($stockSourceLinksData);
 
         $linksToDelete = [];
         $assignedSourceCodes = [];
 
         foreach ($assignedLinks as $assignedLink) {
             $assignedSourceCodes[] = $assignedLink->getSourceCode();
-            if (in_array($assignedLink->getSourceCode(), $sourceCodesToSave)) {
+            if (array_key_exists($assignedLink->getSourceCode(), $linksDataToSave)) {
                 continue;
             }
             $linksToDelete[] = $assignedLink;
@@ -98,14 +98,15 @@ class StockSourceLinkProcessor
 
         $linksToSave = [];
 
-        foreach ($sourceCodesToSave as $sourceCodeToSave) {
+        foreach ($linksDataToSave as $sourceCodeToSave => $linkDataToSave) {
             if (in_array($sourceCodeToSave, $assignedSourceCodes)) {
                 continue;
             }
             $linksToSave[] = $this->stockSourceLinkFactory->create([
                 'data' => [
-                    'source_code' => $sourceCodeToSave,
-                    'stock_id' => $stockId,
+                    StockSourceLink::SOURCE_CODE => $sourceCodeToSave,
+                    StockSourceLink::STOCK_ID => $stockId,
+                    StockSourceLink::PRIORITY => $linkDataToSave[StockSourceLink::PRIORITY],
                 ]
             ]);
         }
@@ -135,7 +136,7 @@ class StockSourceLinkProcessor
      * @param int $stockId
      * @return StockSourceLinkInterface[]
      */
-    private function getAssignedLinks(int $stockId):array
+    private function getAssignedLinks(int $stockId): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
@@ -151,8 +152,16 @@ class StockSourceLinkProcessor
      *
      * @return array
      */
-    private function getSourceCodes($stockSourceLinksData)
+    private function processStockSourceLinksData($stockSourceLinksData): array
     {
-        return array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE);
+        $result = [];
+
+        foreach ($stockSourceLinksData as $stockSourceLinkData) {
+            $sourceCode = $stockSourceLinkData[StockSourceLinkInterface::SOURCE_CODE];
+
+            $result[$sourceCode] = $stockSourceLinkData;
+        }
+
+        return $result;
     }
 }

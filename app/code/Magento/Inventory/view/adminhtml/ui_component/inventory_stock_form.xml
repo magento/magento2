@@ -146,7 +146,16 @@
                         <label translate="true">Name</label>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="30">
+                <field name="priority" formElement="input" sortOrder="30">
+                    <settings>
+                        <elementTmpl>ui/form/element/input</elementTmpl>
+                        <dataType>number</dataType>
+                        <dataScope>priority</dataScope>
+                        <label translate="true">Priority</label>
+                    </settings>
+                </field>
+
+                <field name="actionDelete" formElement="actionDelete" sortOrder="40">
                     <settings>
                         <label translate="true">Unassign</label>
                     </settings>
