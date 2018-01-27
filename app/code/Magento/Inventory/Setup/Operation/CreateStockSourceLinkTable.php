@@ -72,6 +72,15 @@ class CreateStockSourceLinkTable
                 Table::OPTION_NULLABLE => false,
             ],
             'Source Code'
+        )->addColumn(
+            StockSourceLink::PRIORITY,
+            Table::TYPE_SMALLINT,
+            null,
+            [
+                Table::OPTION_NULLABLE => true,
+                Table::OPTION_UNSIGNED => true,
+            ],
+            'Priority'
         )->addForeignKey(
             $setup->getFkName(
                 $stockSourceLinkTable,
