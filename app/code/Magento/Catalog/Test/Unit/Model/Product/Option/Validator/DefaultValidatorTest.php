@@ -84,7 +84,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
         $valueMock->expects($this->any())->method('getType')->will($this->returnValue($type));
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
+        $valueMock->expects($this->never())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
         $this->assertEquals($result, $this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
@@ -129,7 +129,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * Data provider for testValidationNegativePrice
      * @return array
      */
-    public function validationNegativePriceDataProvider()
+    public function negativePriceIsValidDataProvider()
     {
         return [
             ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 1])],
@@ -143,22 +143,22 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $priceType
      * @param $price
      * @param $product
-     * @dataProvider validationNegativePriceDataProvider
+     * @dataProvider negativePriceIsValidDataProvider
      */
-    public function testValidationNegativePrice($title, $type, $priceType, $price, $product)
+    public function testNegativePriceIsValid($title, $type, $priceType, $price, $product)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
         $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
         $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
         $valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue($type));
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
+        $valueMock->expects($this->never())->method('getPrice')->will($this->returnValue($price));
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $messages = [
             'option values' => 'Invalid option value',
         ];
-        $this->assertFalse($this->validator->isValid($valueMock));
-        $this->assertEquals($messages, $this->validator->getMessages());
+        $this->assertTrue($this->validator->isValid($valueMock));
+        $this->assertNotEquals($messages, $this->validator->getMessages());
     }
 }
