@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Validator;
 
-
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Inventory\Model\StockSourceLink;
 

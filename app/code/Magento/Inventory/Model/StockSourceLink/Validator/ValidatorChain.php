@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Validator;
 
-
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
@@ -38,8 +37,7 @@ class ValidatorChain implements StockSourceLinkValidatorInterface
     public function __construct(
         ValidationResultFactory $validationResultFactory,
         array $validators = []
-    )
-    {
+    ) {
         $this->validationResultFactory = $validationResultFactory;
 
         foreach ($validators as $validator) {
