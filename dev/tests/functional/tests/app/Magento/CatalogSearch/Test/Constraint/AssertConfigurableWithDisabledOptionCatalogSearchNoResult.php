@@ -19,7 +19,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 /**
  * Assert search has no results after disabling configurable children.
  */
-class AssertConfigurableWithDisabledOtpionCatalogSearchNoResult extends AbstractConstraint
+class AssertConfigurableWithDisabledOptionCatalogSearchNoResult extends AbstractConstraint
 {
     /**
      * Assert search has no results and product list in absent after disabling configurable children.
