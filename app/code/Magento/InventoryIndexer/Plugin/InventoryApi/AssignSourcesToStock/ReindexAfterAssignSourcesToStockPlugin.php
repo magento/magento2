@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Plugin\InventoryApi\AssignSourcesToStock;
 
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 
 /**
- * Invalidate StockIndexer
+ * Invalidate InventoryIndexer
  */
 class ReindexAfterAssignSourcesToStockPlugin
 {
@@ -30,11 +30,11 @@ class ReindexAfterAssignSourcesToStockPlugin
     }
 
     /**
-     * @param AssignSourcesToStockInterface $subject
+     * @param StockSourceLinksSaveInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(AssignSourcesToStockInterface $subject)
+    public function afterExecute(StockSourceLinksSaveInterface $subject)
     {
         $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
         if ($indexer->isValid()) {
