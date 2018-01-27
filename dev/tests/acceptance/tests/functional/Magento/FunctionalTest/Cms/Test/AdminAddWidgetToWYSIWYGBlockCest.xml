@@ -9,11 +9,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToBlock">
         <annotations>
-            <features value="Add Widget to WYSIWYG of Block"/>
-            <stories value="Apply new WYSIWYG in Block-MAGETWO-47309"/>
-            <group value="widgetBlock"/>
-            <title value="You should be able to add widget to WYSIWYG Editor of Block"/>
-            <description value="You should be able to add widget to WYSIWYG Editor Block"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Apply new WYSIWYG in Block"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to add widget to WYSIWYG content of Block"/>
+            <description value="Admin should be able to add widget to WYSIWYG content Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84654"/>
             <group value="skip" />
@@ -29,8 +29,8 @@
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <click selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
         <wait time="10" stepKey="waitForPageLoad2" />
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />
@@ -47,6 +47,10 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
@@ -54,9 +58,9 @@
         <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
         <waitForPageLoad stepKey="waitForPageLoad4" />
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-        <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon2" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon2" />
         <waitForPageLoad stepKey="waitForPageLoad5" />
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
@@ -76,6 +80,7 @@
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
