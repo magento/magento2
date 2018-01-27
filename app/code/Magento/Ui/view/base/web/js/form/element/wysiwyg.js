@@ -106,12 +106,16 @@ define([
                 this.$wysiwygEditorButton.removeProp('disabled');
             }
 
-            if (wysiwyg && disabled) {
-                wysiwyg.setEnabledStatus(false);
-                wysiwyg.getPluginButtons().prop('disabled', 'disabled');
-            } else if (wysiwyg) {
-                wysiwyg.setEnabledStatus(true);
-                wysiwyg.getPluginButtons().removeProp('disabled');
+            /* eslint-disable no-undef */
+            if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
+
+                if (wysiwyg && disabled) {
+                    wysiwyg.setEnabledStatus(false);
+                    wysiwyg.getPluginButtons().prop('disabled', 'disabled');
+                } else if (wysiwyg) {
+                    wysiwyg.setEnabledStatus(true);
+                    wysiwyg.getPluginButtons().removeProp('disabled');
+                }
             }
         }
     });

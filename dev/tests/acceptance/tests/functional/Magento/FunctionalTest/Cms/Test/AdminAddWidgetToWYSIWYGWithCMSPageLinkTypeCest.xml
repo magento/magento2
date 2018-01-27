@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToWYSIWYGWithTypeOfCMSPageLink">
         <annotations>
-            <features value="Add Widget to WYSIWYG"/>
-            <stories value="Widgets in WYSIWYG"/>
-            <group value="CMSPageLink"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
+            <group value="Cms"/>
             <title value="Create CMS Page With Widget Type:CMS page link"/>
             <description value="Create CMS Page With Widget Type:CMS page link"/>
             <severity value="CRITICAL"/>
@@ -28,10 +28,10 @@
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-        <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <waitForPageLoad stepKey="wait2"/>
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
@@ -46,6 +46,7 @@
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <!--<waitForLoadingMaskToDisappear stepKey="wait3"/>-->
         <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
+        <scrollTo selector="{{WidgetSection.CMSPage}}" stepKey="scrollToCMSName" />
         <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
