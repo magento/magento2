@@ -10,7 +10,8 @@ define([
 ], function ($) {
     'use strict';
 
-    var decodeEntities = (function () {
+    var decodeEntities;
+    decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
         var doc = document.implementation.createHTMLDocument("");
         var element = doc.createElement('div');
@@ -32,6 +33,7 @@ define([
                 return x;
             }
         }
+
         return decodeHTMLEntities;
     })();
 
