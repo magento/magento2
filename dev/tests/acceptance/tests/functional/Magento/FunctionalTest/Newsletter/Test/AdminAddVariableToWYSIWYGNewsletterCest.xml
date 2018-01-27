@@ -15,7 +15,6 @@
             <title value="You should be able to add variable to WYSIWYG Editor of Newsletter"/>
             <description value="You should be able to add variable to WYSIWYG Editor Newsletter"/>
             <testCaseId value="MAGETWO-84379"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

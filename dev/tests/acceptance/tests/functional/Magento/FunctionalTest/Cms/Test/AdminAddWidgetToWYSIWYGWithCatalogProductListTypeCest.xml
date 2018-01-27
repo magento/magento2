@@ -15,7 +15,7 @@
             <title value="Create CMS Page With Widget Type: Catalog product list"/>
             <description value="Create CMS Page With Widget Type: Catalog product list"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-"/>
+            <testCaseId value=""/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
