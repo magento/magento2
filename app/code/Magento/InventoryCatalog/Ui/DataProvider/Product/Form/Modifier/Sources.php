@@ -15,6 +15,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 
 /**
  * Product form modifier. Add to form source data
@@ -97,6 +98,20 @@ class Sources extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $product = $this->locator->getProduct();
+
+        if ($product->getTypeId() === GroupedProductType::TYPE_CODE) {
+            $meta['sources'] = [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'visible' => 0
+                        ]
+                    ]
+                ]
+            ];
+        }
+
         return $meta;
     }
 }

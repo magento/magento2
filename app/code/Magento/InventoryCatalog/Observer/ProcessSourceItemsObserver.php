@@ -15,6 +15,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 
 /**
  * Save source product relations during product persistence via controller
@@ -73,21 +74,24 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        /** @var Save $controller */
-        $controller = $observer->getEvent()->getController();
 
-        $sources = $controller->getRequest()->getParam('sources', []);
-        $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
-            ? $sources['assigned_sources'] : [];
+        if ($product->getTypeId() !== GroupedProductType::TYPE_CODE) {
+            /** @var Save $controller */
+            $controller = $observer->getEvent()->getController();
 
-        $this->sourceItemsProcessor->process(
-            $product->getSku(),
-            $assignedSources
-        );
+            $sources = $controller->getRequest()->getParam('sources', []);
+            $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
+                ? $sources['assigned_sources'] : [];
 
-        $productParams = $controller->getRequest()->getParam('product');
-        if (is_array($productParams)) {
-            $this->updateDefaultSourceQty($productParams);
+            $this->sourceItemsProcessor->process(
+                $product->getSku(),
+                $assignedSources
+            );
+
+            $productParams = $controller->getRequest()->getParam('product');
+            if (is_array($productParams)) {
+                $this->updateDefaultSourceQty($productParams);
+            }
         }
     }
 
