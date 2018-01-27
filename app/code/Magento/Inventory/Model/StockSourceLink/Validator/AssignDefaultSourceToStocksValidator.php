@@ -12,6 +12,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
+use Magento\Inventory\Model\StockSourceLink;
 
 class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorInterface
 {
@@ -29,16 +30,16 @@ class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorIn
     }
 
     /**
-     * @param array $sourceCodes
-     * @param int $stockId
+     * @param StockSourceLink[] $links
      * @return ValidationResult
      */
-    public function validate(array $sourceCodes, int $stockId): ValidationResult
+    public function validate(array $links): ValidationResult
     {
         $errors = [];
-
-        if (in_array('default', $sourceCodes) && $stockId !== 1) {
-            $errors[] = __('Default Source can\'t be assigned to stock!');
+        foreach ($links as $link) {
+            if ($link->getSourceCode() === 'default' && $link->getStockId() !== 1) {
+                $errors[] = __('Default Source can\'t be assigned to stock!');
+            }
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);

@@ -11,6 +11,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Validator;
 
 
 use Magento\Framework\Validation\ValidationResult;
+use Magento\Inventory\Model\StockSourceLink;
 
 /**
  * Responsible for StockSourceLink validation
@@ -21,9 +22,8 @@ use Magento\Framework\Validation\ValidationResult;
 interface StockSourceLinkValidatorInterface
 {
     /**
-     * @param array $sourceCodes
-     * @param int $stockId
+     * @param StockSourceLink[] $links
      * @return ValidationResult
      */
-    public function validate(array $sourceCodes, int $stockId): ValidationResult;
+    public function validate(array $links): ValidationResult;
 }

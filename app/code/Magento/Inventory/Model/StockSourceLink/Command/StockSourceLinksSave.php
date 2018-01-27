@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
+use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Magento\Framework\Validation\ValidationException;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class AssignSourcesToStock implements AssignSourcesToStockInterface
+class StockSourceLinksSave implements StockSourceLinksSaveInterface
 {
     /**
      * @var SaveMultiple
@@ -52,22 +54,27 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
     }
 
     /**
-     * @inheritdoc
+     * @param StockSourceLink[] $links
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws ValidationException
      */
-    public function execute(array $sourceCodes, int $stockId)
+    public function execute(array $links)
     {
-        if (empty($sourceCodes)) {
-            throw new InputException(__('Input data is invalid'));
+        if (empty($links)) {
+            throw new InputException(__('Input data is empty'));
         }
-        $validationResult = $this->stockSourceLinkValidator->validate($sourceCodes, $stockId);
+
+        $validationResult = $this->stockSourceLinkValidator->validate($links);
         if (!$validationResult->isValid()) {
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
+
         try {
-            $this->saveMultiple->execute($sourceCodes, $stockId);
-        } catch (\Exception $e) {
+            $this->saveMultiple->execute($links);
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not assign Sources to Stock'), $e);
+            throw new CouldNotSaveException(__('Could not save StockSourceLinks'), $e);
         }
     }
 }

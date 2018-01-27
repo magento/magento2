@@ -86,13 +86,18 @@
     </type>
     <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemQuantity"/>
     <!-- StockSourceLink -->
-    <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
+    <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
+    <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
+    <preference for="Magento\InventoryApi\Api\GetSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinks"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
+    <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>
     <preference for="Magento\Inventory\Model\CleanupReservationsInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations"/>
     <type name="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
         <arguments>
