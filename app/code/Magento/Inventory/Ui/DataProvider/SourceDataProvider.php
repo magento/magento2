@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
  * @api
