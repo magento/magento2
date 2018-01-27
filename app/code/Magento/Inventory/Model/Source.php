@@ -286,22 +286,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function getPriority()
-    {
-        return $this->getData(self::PRIORITY);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPriority($priority)
-    {
-        $this->setData(self::PRIORITY, $priority);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function isUseDefaultCarrierConfig()
     {
         return $this->getData(self::USE_DEFAULT_CARRIER_CONFIG);
