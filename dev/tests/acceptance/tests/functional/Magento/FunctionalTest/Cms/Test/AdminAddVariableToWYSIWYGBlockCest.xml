@@ -15,7 +15,6 @@
             <title value="You should be able to add variable to WYSIWYG Editor of Block"/>
             <description value="You should be able to add variable to WYSIWYG Editor Block"/>
             <testCaseId value="MAGETWO-84378"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
@@ -78,8 +77,8 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
-        <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
         <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
@@ -93,13 +92,17 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearAfterClickingBtnChooser" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
         <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="waitForSaveButtonVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSaveCmsPage" />
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad11" />
