@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-66464"/>
             <group value="analytics"/>
+            <group value="skip"/>
+            <!--random failure on Jenkins MAGETWO-87216-->
         </annotations>
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>

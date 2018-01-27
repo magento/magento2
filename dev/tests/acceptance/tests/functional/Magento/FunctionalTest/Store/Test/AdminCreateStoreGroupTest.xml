@@ -26,6 +26,7 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <amOnPage stepKey="s9" url="{{AdminSystemStorePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
 
         <click stepKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="s15" time="10"/>

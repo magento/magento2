@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EditTextEditorProductAttributeCest">
         <annotations>
-            <features value="TinyMCEv4"/>
-            <stories value="Input type configuration for custom Product Attributes-MAGETWO-51484"/>
-            <group value="editProductAttribute"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
+            <group value="Catalog"/>
             <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Product Page"/>
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
@@ -46,6 +46,7 @@
         <dontSeeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="dontSeeTinyMCE4" />
         <fillField selector="{{ProductAttributeWYSIWYGSection.TextArea($$myProductAttributeCreation.attribute_code$$)}}" userInput="Text Area" stepKey="fillContentTextarea" />
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
@@ -64,10 +65,12 @@
         <waitForPageLoad stepKey="waitForPageLoad8"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGrid" />
         <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>
         <after>
+            <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
