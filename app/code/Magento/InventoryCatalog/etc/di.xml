@@ -46,6 +46,7 @@
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollection"/>
     </type>
     <type name="Magento\CatalogInventory\Helper\Stock">
+        <plugin name="adapt_in_stock_filter_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\StockHelper"/>
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
     </type>
 </config>
