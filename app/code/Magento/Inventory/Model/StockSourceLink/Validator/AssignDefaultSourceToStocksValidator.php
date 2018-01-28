@@ -54,8 +54,7 @@ class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorIn
     {
         $errors = [];
         foreach ($links as $link) {
-            if (
-                $link->getSourceCode() === $this->defaultSourceProvider->getCode() &&
+            if ($link->getSourceCode() === $this->defaultSourceProvider->getCode() &&
                 $link->getStockId() !== $this->defaultStockProvider->getId()
             ) {
                 $errors[] = __('Default Source can be assigned just to Default stock');
