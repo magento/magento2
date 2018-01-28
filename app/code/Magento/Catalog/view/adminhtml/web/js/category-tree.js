@@ -12,10 +12,12 @@ define([
 
     var decodeEntities,
         doc,
-        element;
+        element,
+        x;
 
     decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
+
         doc = document.implementation.createHTMLDocument('');
         element = doc.createElement('div');
 
@@ -39,7 +41,7 @@ define([
          */
         function decodeHTMLEntities(str) {
             if (str && typeof str === 'string') {
-                var x = getText(str);
+                x = getText(str);
 
                 while (str !== x) {
                     str = x;
