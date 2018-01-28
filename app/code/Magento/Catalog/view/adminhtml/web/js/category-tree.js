@@ -15,7 +15,8 @@ define([
         element,
         x;
 
-    decodeEntities = (function () {
+    // noinspection JSUnusedAssignment
+    decodeEntities = function () {
         //create a new html document (doesn't execute script tags in child elements)
 
         doc = document.implementation.createHTMLDocument('');
@@ -25,6 +26,7 @@ define([
          * Get Text Content
          * @param {*} str
          * @return {*}
+         * @public
          */
         function getText(str) {
             element.innerHTML = str;
@@ -38,6 +40,7 @@ define([
          * Get HTML decoded Entities
          * @param {*} str
          * @return {*}
+         * @public
          */
         function decodeHTMLEntities(str) {
             if (str && typeof str === 'string') {
@@ -53,7 +56,7 @@ define([
         }
 
         return decodeHTMLEntities;
-    })();
+    }(decodeEntities || {});
 
     $.widget('mage.categoryTree', {
         options: {
