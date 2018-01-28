@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Stepan Furman
- * Date: 27.01.18
- * Time: 15:33
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -12,6 +10,8 @@ namespace Magento\Inventory\Model\StockSourceLink\Validator;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\StockSourceLink;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 class AssignSourcesToDefaultStockValidator implements StockSourceLinkValidatorInterface
 {
@@ -21,11 +21,29 @@ class AssignSourcesToDefaultStockValidator implements StockSourceLinkValidatorIn
     private $validationResultFactory;
 
     /**
-     * @param ValidationResultFactory $validationResultFactory
+     * @var DefaultSourceProviderInterface
      */
-    public function __construct(ValidationResultFactory $validationResultFactory)
-    {
+    private $defaultSourceProvider;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
+     * AssignSourcesToDefaultStockValidator constructor.
+     * @param ValidationResultFactory $validationResultFactory
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     */
+    public function __construct(
+        ValidationResultFactory $validationResultFactory,
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        DefaultStockProviderInterface $defaultStockProvider
+    ) {
         $this->validationResultFactory = $validationResultFactory;
+        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -36,8 +54,11 @@ class AssignSourcesToDefaultStockValidator implements StockSourceLinkValidatorIn
     {
         $errors = [];
         foreach ($links as $link) {
-            if ($link->getStockId() === 1 && $link->getSourceCode() !== 'default') {
-                $errors[] = __('Sources can\'t be assigned to Default stock!');
+            if (
+                $link->getStockId() === $this->defaultStockProvider->getId() &&
+                $link->getSourceCode() !== $this->defaultSourceProvider->getCode()
+            ) {
+                $errors[] = __('Just Default Source can be assigned to Default stock');
             }
         }
 

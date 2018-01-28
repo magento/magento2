@@ -1,8 +1,7 @@
 <?php
 /**
- * User: Stepan Furman
- * Date: 27.01.18
- * Time: 15:35
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 declare(strict_types=1);

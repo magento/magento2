@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Stepan Furman
- * Date: 27.01.18
- * Time: 15:31
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -43,7 +41,7 @@ class ValidatorChain implements StockSourceLinkValidatorInterface
         foreach ($validators as $validator) {
             if (!$validator instanceof StockSourceLinkValidatorInterface) {
                 throw new LocalizedException(
-                    __('Source Validator must implement StockSourceLinkValidatorInterface.')
+                    __('Validator must implement StockSourceLinkValidatorInterface.')
                 );
             }
         }
