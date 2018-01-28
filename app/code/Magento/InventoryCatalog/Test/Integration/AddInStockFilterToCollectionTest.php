@@ -10,7 +10,6 @@ namespace Magento\InventoryCatalog\Test\Integration;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Link;
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -22,11 +21,6 @@ class AddInStockFilterToCollectionTest extends TestCase
      * @var Stock
      */
     private $stockHelper;
-
-    /**
-     * @var StockIndexer
-     */
-    private $stockIndexer;
 
     /**
      * @var Link
@@ -42,7 +36,6 @@ class AddInStockFilterToCollectionTest extends TestCase
      * @var StoreManagerInterface
      */
     private $storeManager;
-
 
     protected function setUp()
     {
@@ -71,7 +64,6 @@ class AddInStockFilterToCollectionTest extends TestCase
      */
     public function testAddInStockFilterToCollectionMangeStock($storeCode, $productsData)
     {
-
         $this->storeManager->setCurrentStore($storeCode);
 
         $product = $this->productRepository->get('SKU-1');
