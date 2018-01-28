@@ -10,15 +10,19 @@ define([
 ], function ($) {
     'use strict';
 
-    var decodeEntities;
+    var decodeEntities,
+        doc,
+        element;
+
     decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
-        var doc = document.implementation.createHTMLDocument(''),
-            element = doc.createElement('div');
+        doc = document.implementation.createHTMLDocument('');
+        element = doc.createElement('div');
 
         /**
-         * @param string
-         * @return string
+         * Get Text Content
+         * @param {string} str
+         * @return {*}
          */
         function getText(str) {
             element.innerHTML = str;
@@ -29,8 +33,9 @@ define([
         }
 
         /**
-         * @param string
-         * @return string
+         * Get HTML decoded Entities
+         * @param {string} str
+         * @return {*}
          */
         function decodeHTMLEntities(str) {
             if (str && typeof str === 'string') {
