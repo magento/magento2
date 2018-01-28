@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="Verifydefaultcontrolsonproductdescription">
         <annotations>
-            <features value="Default WYSIWYG toolbar configuration in Magento"/>
-            <stories value="Default toolbar configuration in Magento-MAGETWO-70412"/>
-            <group value="WYSIWYG"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-70412-Default toolbar configuration in Magento"/>
+            <group value="Catalog"/>
             <title value="You should be able to see default toolbar display on Description content area"/>
             <description value="You should be able to see default toolbar display on Description content area"/>
             <severity value="CRITICAL"/>
@@ -25,6 +25,7 @@
         </before>
         <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible1"/>
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
@@ -63,6 +64,7 @@
         </before>
         <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />

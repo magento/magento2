@@ -7,7 +7,7 @@
     <type xsi:type="OutputType" name="Query" />
     <type xsi:type="InputType" name="FilterTypeInput">
         <field xsi:type="ScalarInputField" name="eq" type="String"/>
-        <field xsi:type="ObjectArrayInputField" name="finset" itemType="AttributeInput"/>
+        <field xsi:type="ScalarArrayInputField" name="finset" itemType="String"/>
         <field xsi:type="ScalarInputField" name="from" type="String"/>
         <field xsi:type="ScalarInputField" name="gt" type="String"/>
         <field xsi:type="ScalarInputField" name="gteq" type="String"/>
