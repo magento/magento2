@@ -16,7 +16,7 @@ define([
         x;
 
     // noinspection JSUnusedAssignment
-    decodeEntities = function () {
+    decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
 
         doc = document.implementation.createHTMLDocument('');
@@ -56,7 +56,7 @@ define([
         }
 
         return decodeHTMLEntities;
-    }(decodeEntities || {});
+    }(decodeEntities || {}));
 
     $.widget('mage.categoryTree', {
         options: {
