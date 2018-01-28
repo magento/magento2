@@ -9,32 +9,54 @@ define([
     'jquery/jstree/jquery.jstree'
 ], function ($) {
     'use strict';
-    var decodeEntities;
+
+    var decodeEntities,
+        doc,
+        element,
+        x;
+
+    // noinspection JSUnusedAssignment
     decodeEntities = (function () {
         //create a new html document (doesn't execute script tags in child elements)
-        var doc = document.implementation.createHTMLDocument("");
-        var element = doc.createElement('div');
 
+        doc = document.implementation.createHTMLDocument('');
+        element = doc.createElement('div');
+
+        /**
+         * Get Text Content
+         * @param {*} str
+         * @return {*}
+         * @public
+         */
         function getText(str) {
             element.innerHTML = str;
             str = element.textContent;
             element.textContent = '';
+
             return str;
         }
 
+        /**
+         * Get HTML decoded Entities
+         * @param {*} str
+         * @return {*}
+         * @public
+         */
         function decodeHTMLEntities(str) {
             if (str && typeof str === 'string') {
-                var x = getText(str);
+                x = getText(str);
+
                 while (str !== x) {
                     str = x;
                     x = getText(x);
                 }
+
                 return x;
             }
         }
 
         return decodeHTMLEntities;
-    })();
+    }(decodeEntities || {}));
 
     $.widget('mage.categoryTree', {
         options: {
