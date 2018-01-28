@@ -21,7 +21,7 @@ define([
 
         /**
          * Get Text Content
-         * @param {string} str
+         * @param {*} str
          * @return {*}
          */
         function getText(str) {
@@ -34,7 +34,7 @@ define([
 
         /**
          * Get HTML decoded Entities
-         * @param {string} str
+         * @param {*} str
          * @return {*}
          */
         function decodeHTMLEntities(str) {
