@@ -13,7 +13,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\OnUpdate;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean as BooleanColumn;
 
-class DateTest extends \PHPUnit\Framework\TestCase
+class TimestampTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
