@@ -938,7 +938,7 @@ class Files
                     $themePath . "/*_*/web/i18n/{$locale}"
                 ];
                 $this->_accumulateFilesByPatterns($paths, $filePattern, $files);
-                $regex = '#^' . $themePath .
+                $regex = '#^' . preg_quote($themePath, '#') .
                     '/((?P<module>[a-z\d]+_[a-z\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
                 foreach ($files as $file) {
                     if (preg_match($regex, $file, $matches)) {
