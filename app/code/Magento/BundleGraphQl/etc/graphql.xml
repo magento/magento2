@@ -6,6 +6,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="BundleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <implements interface="PhysicalProductInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum"/>
         <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean"/>
         <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean"/>
@@ -13,10 +14,6 @@
         <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean"/>
         <field xsi:type="ObjectArrayOutputField" name="bundle_product_options" itemType="BundleProductOptions"/>
         <field xsi:type="ObjectArrayOutputField" name="bundle_product_links" itemType="SimpleProduct"/>
-        <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
-        <field xsi:type="ObjectOutputField" name="color" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="size" type="String"/>
-        <field xsi:type="ObjectOutputField" name="manufacturer" type="Int"/>
     </type>
     <type xsi:type="OutputType" name="BundleProductOptions">
         <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>

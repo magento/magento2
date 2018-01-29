@@ -10,10 +10,6 @@
         <field xsi:type="ObjectArrayOutputField" name="downloadable_product_links" itemType="DownloadableProductLinks"/>
         <field xsi:type="ObjectOutputField" name="links_purchased_separately" type="Int"/>
         <field xsi:type="ObjectOutputField" name="links_title" type="String"/>
-        <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
-        <field xsi:type="ObjectOutputField" name="color" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="size" type="String"/>
-        <field xsi:type="ObjectOutputField" name="manufacturer" type="Int"/>
     </type>
     <type xsi:type="OutputType" name="DownloadableProductSamples">
         <field xsi:type="ObjectOutputField" name="id" type="Int"/>

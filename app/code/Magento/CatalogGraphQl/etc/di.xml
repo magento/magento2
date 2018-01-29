@@ -33,6 +33,9 @@
                     <item name="product" xsi:type="string">ProductInterface</item>
                     <item name="simple" xsi:type="string">SimpleProduct</item>
                     <item name="configurable" xsi:type="string">ConfigurableProduct</item>
+                    <item name="bundle" xsi:type="string">BundleProduct</item>
+                    <item name="downloadable" xsi:type="string">DownloadableProduct</item>
+                    <item name="virtual" xsi:type="string">VirtualProduct</item>
                 </item>
             </argument>
         </arguments>

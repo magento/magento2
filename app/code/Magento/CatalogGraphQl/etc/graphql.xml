@@ -286,7 +286,6 @@
         <field xsi:type="ScalarOutputField" name="updated_at" type="String"/>
         <field xsi:type="ScalarOutputField" name="country_of_manufacture" type="String"/>
         <field xsi:type="ScalarOutputField" name="type_id" type="String"/>
-        <field xsi:type="ScalarOutputField" name="weight" type="Float"/>
         <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int"/>
         <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks"/>
         <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinks"/>
@@ -296,8 +295,15 @@
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
         <field xsi:type="ScalarOutputField" name="gift_message_available" type="String"/>
     </type>
+    <type xsi:type="OutputInterface" name="PhysicalProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+        <field xsi:type="ScalarOutputField" name="weight" type="Float"/>
+    </type>
+    <type xsi:type="OutputType" name="VirtualProduct">
+        <implements interface="ProductInterface" copyFields="true"/>
+    </type>
     <type xsi:type="OutputType" name="SimpleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <implements interface="PhysicalProductInterface" copyFields="true"/>
     </type>
     <type xsi:type="InputType" name="ProductFilterInput">
         <field xsi:type="ObjectInputField" name="name" type="FilterTypeInput"/>

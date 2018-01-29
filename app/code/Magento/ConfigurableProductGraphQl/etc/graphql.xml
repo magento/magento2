@@ -6,6 +6,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="ConfigurableProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <implements interface="PhysicalProductInterface" copyFields="true"/>
         <field xsi:type="ObjectArrayOutputField" name="configurable_product_links" itemType="SimpleProduct"/>
         <field xsi:type="ObjectArrayOutputField" name="configurable_product_options" itemType="ConfigurableProductOptions"/>
     </type>
