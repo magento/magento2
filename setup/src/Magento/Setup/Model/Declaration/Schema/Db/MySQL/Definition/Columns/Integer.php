@@ -97,7 +97,7 @@ class Integer implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(big|small|tiny)?int\((\d+)\)/', $data['definition'], $matches)) {
+        if (preg_match('/^(big|small|tiny|medium)?int\((\d+)\)/', $data['definition'], $matches)) {
             /**
              * match[1] - prefix
              * match[2] - padding, like 5 or 11

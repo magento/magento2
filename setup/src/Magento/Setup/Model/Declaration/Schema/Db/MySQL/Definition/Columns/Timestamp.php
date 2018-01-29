@@ -11,14 +11,14 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process timestamp and find out it on_update and default values
+ * Process timestamp/datetime and find out it on_update and default values
  *
  * @inheritdoc
  */
 class Timestamp implements DbDefinitionProcessorInterface
 {
     /**
-     * This timestamp can be used, when const value as DEFAULT 0 was passed
+     * This date and time can be used, when const value as DEFAULT 0 was passed
      */
     const CONST_DEFAULT_TIMESTAMP = '0000-00-00 00:00:00';
 
@@ -67,8 +67,9 @@ class Timestamp implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         $nullable = $this->nullable->toDefinition($column);
-        $default  = $column->getDefault() === 'NULL' ?
-            '' : sprintf('DEFAULT %s', $column->getDefault());
+        $default  = $column->getDefault() === null
+            ? ($column->getDefault() === 'NULL' ? 'DEFAULT NULL' : '')
+            : sprintf('DEFAULT %s', $column->getDefault());
 
         return sprintf(
             '%s %s %s %s %s %s',
