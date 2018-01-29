@@ -6,6 +6,9 @@
 namespace Magento\SalesRule\Model;
 
 use Magento\Quote\Model\Quote\Address;
+use Magento\SalesRule\Model\QuoteItemChildrenValidationLocator;
+use Magento\Framework\App\ObjectManager;
+
 
 /**
  * Class RulesApplier
@@ -26,18 +29,27 @@ class RulesApplier
     protected $validatorUtility;
 
     /**
+     * @var QuoteItemChildrenValidationLocator
+     */
+    private $quoteItemChildrenValidationLocator;
+
+    /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Utility $utility
+     * @param QuoteItemChildrenValidationLocator $quoteItemChildrenValidationLocator
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\SalesRule\Model\Utility $utility
+        \Magento\SalesRule\Model\Utility $utility,
+        QuoteItemChildrenValidationLocator $quoteItemChildrenValidationLocator = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
+        $this->quoteItemChildrenValidationLocator = $quoteItemChildrenValidationLocator
+             ?: ObjectManager::getInstance()->get(QuoteItemChildrenValidationLocator::class);
     }
 
     /**
@@ -61,6 +73,9 @@ class RulesApplier
             }
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
+                if (!$this->quoteItemChildrenValidationLocator->getNeedToValidateChildren($item)) {
+                     continue;
+                }
                 $childItems = $item->getChildren();
                 $isContinue = true;
                 if (!empty($childItems)) {
