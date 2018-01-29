@@ -1400,8 +1400,10 @@
                 <item name="datetime" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Timestamp</item>
                 <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Date</item>
                 <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Timestamp</item>
-                <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Varchar</item>
-                <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Varchar</item>
+                <item name="char" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
+                <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
+                <item name="binary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
+                <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
                 <item name="index" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Index</item>
                 <item name="unique" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
                 <item name="primary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>

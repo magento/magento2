@@ -33,7 +33,7 @@ class Varchar implements FactoryInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar::class
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\StringBinary::class
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;

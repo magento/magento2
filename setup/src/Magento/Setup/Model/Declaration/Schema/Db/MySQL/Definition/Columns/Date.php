@@ -61,6 +61,7 @@ class Date implements DbDefinitionProcessorInterface
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     public function fromDefinition(array $data)
     {

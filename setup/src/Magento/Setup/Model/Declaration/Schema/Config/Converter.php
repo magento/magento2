@@ -18,7 +18,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Config;
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * Convert config from XML to array
+     * Convert config from XML to array.
      *
      * @param  \DOMDocument $source
      * @return array
@@ -30,9 +30,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * We exaclty know, that our schema is consists from tables
-     * So we do not need root elements in result, only table names
-     * So proposed to select only tables from all DomDOCUMENT
+     * We exactly know, that our schema is consists from tables.
+     * So we do not need root elements in result, only table names.
+     * So proposed to select only tables from all DOMDocument.
      *
      * @param  \DOMDocument $element
      * @return \DOMNodeList

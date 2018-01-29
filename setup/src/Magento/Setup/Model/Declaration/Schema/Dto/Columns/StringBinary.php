@@ -10,11 +10,11 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Varchar column
- * Declared in SQL, like VARCHAR(L),
+ * String or Binary column
+ * Declared in SQL, like VARCHAR(L), BINARY(L)
  * where L - length
  */
-class Varchar extends Column implements
+class StringBinary extends Column implements
     ElementDiffAwareInterface,
     ColumnNullableAwareInterface,
     ColumnDefaultAwareInterface

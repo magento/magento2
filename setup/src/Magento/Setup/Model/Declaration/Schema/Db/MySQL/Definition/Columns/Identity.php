@@ -18,7 +18,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Identity implements DbDefinitionProcessorInterface
 {
     /**
-     * MyMySQL flag, that says that we need to increment field, each time when we add new row
+     * MySQL flag, that says that we need to increment field, each time when we add new row
      */
     const IDENTITY_FLAG = 'auto_increment';
 
@@ -36,7 +36,7 @@ class Identity implements DbDefinitionProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        if (!empty($data['extra']) && strpos(self::IDENTITY_FLAG, $data['extra']) !== false) {
+        if (!empty($data['extra']) && stripos($data['extra'], self::IDENTITY_FLAG) !== false) {
             $data['identity'] = true;
         }
 

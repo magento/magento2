@@ -81,7 +81,7 @@ class Column extends GenericElement implements
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getComment()
     {

@@ -7,7 +7,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -56,18 +55,15 @@ class Boolean implements DbDefinitionProcessorInterface
 
     /**
      * @param Nullable $nullable
-     * @param BooleanUtils $booleanUtils
      * @param ResourceConnection $resourceConnection
      * @param Comment $comment
      */
     public function __construct(
         Nullable $nullable,
-        BooleanUtils $booleanUtils,
         ResourceConnection $resourceConnection,
         Comment $comment
     ) {
         $this->nullable = $nullable;
-        $this->booleanUtils = $booleanUtils;
         $this->resourceConnection = $resourceConnection;
         $this->comment = $comment;
     }
@@ -98,8 +94,11 @@ class Boolean implements DbDefinitionProcessorInterface
     {
         if ($data['type'] === self::INTEGER_TYPE && $data['padding'] === self::INTEGER_PADDING) {
             $data['type'] = strtolower(self::TYPE);
-            $data['default'] = $data['default'] === null ? null : (bool) $data['default'];
+            if (isset($data['default'])) {
+                $data['default'] = $data['default'] === null ? null : (bool) $data['default'];
+            }
             $data['unsigned'] = false; //For boolean we always do not want to have unsigned
+            unset($data['padding']);
         }
 
         return $data;
