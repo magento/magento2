@@ -5,7 +5,10 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -16,7 +19,11 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 {
+    private $indexerCommand;
+
     private $fixtureModelMock;
+
+    /** @var  ObjectManagerInterface */
     private $objectManager;
     /**
      * @var GenerateFixturesCommand
@@ -50,9 +57,22 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->setIncrement(3);
+        $objectFactoryMock = $this->getMockBuilder(ObjectManagerFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectFactoryMock
+            ->method('create')
+            ->willReturn($this->objectManager);
+
+        $this->indexerCommand = new CommandTester($this->objectManager->create(
+            IndexerReindexCommand::class,
+            ['objectManagerFactory' => $objectFactoryMock]
+        ));
 
         $this->commandTester = new CommandTester($this->command);
+
+        $this->setIncrement(3);
 
         parent::setUp();
     }
@@ -66,15 +86,27 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testExecute()
     {
         $this->commandTester->execute(
-            [GenerateFixturesCommand::PROFILE_ARGUMENT => BP . '/setup/performance-toolkit/profiles/ce/small.xml']
+            [
+                GenerateFixturesCommand::PROFILE_ARGUMENT => BP . '/setup/performance-toolkit/profiles/ce/small.xml',
+                '--' . GenerateFixturesCommand::SKIP_REINDEX_OPTION => true
+            ]
+        );
+        $this->indexerCommand->execute([]);
+
+        static::assertEquals(
+            Cli::RETURN_SUCCESS,
+            $this->indexerCommand->getStatusCode(),
+            $this->indexerCommand->getDisplay(true)
         );
 
-        static::assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode(), $this->commandTester->getDisplay());
+        static::assertEquals(Cli::RETURN_SUCCESS,
+            $this->commandTester->getStatusCode(),
+            $this->commandTester->getDisplay(true)
+        );
     }
 
     /**
@@ -82,22 +114,12 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function setIncrement($value)
     {
-        $db = Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();
-        /** @var \Magento\TestFramework\Db\Adapter\Mysql $connection */
-        $connection = Bootstrap::getObjectManager()->create(
-            \Magento\TestFramework\Db\Adapter\Mysql::class,
-            [
-                'config' => [
-                    'type' => 'pdo_mysql',
-                    'host' => $db->getHost(),
-                    'username' => $db->getUser(),
-                    'password' => $db->getPassword(),
-                    'dbname' => $db->getSchema(),
-                    'active' => true,
-                ]
-            ]
+        /** @var ResourceConnection $connection */
+        $connection = Bootstrap::getObjectManager()->get(
+            ResourceConnection::class
         );
-        $connection->query("SET GLOBAL auto_increment_increment=$value");
-        $connection->query("SET GLOBAL auto_increment_offset=$value");
+        $db = $connection->getConnection();
+        $db->query("SET @@session.auto_increment_increment=$value");
+        $db->query("SET @@session.auto_increment_offset=$value");
     }
 }
