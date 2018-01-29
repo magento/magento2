@@ -12,19 +12,19 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class TypeResolverComposite implements TypeResolverInterface
+class LinkTypeResolverComposite implements TypeResolverInterface
 {
     /**
      * TypeResolverInterface[]
      */
-    private $productTypeNameResolvers = [];
+    private $productLinksTypeNameResolvers = [];
 
     /**
-     * @param TypeResolverInterface[] $productTypeNameResolvers
+     * @param TypeResolverInterface[] $productLinksTypeNameResolvers
      */
-    public function __construct(array $productTypeNameResolvers = [])
+    public function __construct(array $productLinksTypeNameResolvers = [])
     {
-        $this->productTypeNameResolvers = $productTypeNameResolvers;
+        $this->productLinksTypeNameResolvers = $productLinksTypeNameResolvers;
     }
 
     /**
@@ -34,13 +34,14 @@ class TypeResolverComposite implements TypeResolverInterface
     {
         $resolvedType = null;
 
-        foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
-            if (!isset($data['type_id'])) {
+        foreach ($this->productLinksTypeNameResolvers as $productLinksTypeNameResolvers) {
+            $linkType = $data['link_type'];
+            if (!isset($linkType)) {
                 throw new InputException(
-                    __('%1 key doesn\'t exist in product data', ['type_id'])
+                    __('%1 key doesn\'t exist in product data', ['link_type'])
                 );
             }
-            $resolvedType = $productTypeNameResolver->resolveType($data);
+            $resolvedType = $productLinksTypeNameResolvers->resolveType($data);
             if ($resolvedType) {
                 return $resolvedType;
             }
@@ -48,7 +49,7 @@ class TypeResolverComposite implements TypeResolverInterface
 
         if (!$resolvedType) {
             throw new InputException(
-                __('Concrete type for %1 not implemented', 'ProductInterface')
+                __('Concrete type for %1 not implemented', 'ProductLinksInterface')
             );
         }
     }

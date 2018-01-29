@@ -19,11 +19,6 @@ class ConcreteTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        if (!isset($data['type_id'])) {
-            throw new InputException(
-                __('%1 key doesn\'t exist in product data', 'type_id')
-            );
-        }
         if ($data['type_id'] == 'configurable') {
             return 'ConfigurableProduct';
         }

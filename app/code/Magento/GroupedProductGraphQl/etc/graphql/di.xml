@@ -9,7 +9,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_grouped_data" xsi:type="object">Magento\GroupedProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\GroupedProductLinks</item>
+                <item name="add_grouped_data" xsi:type="object">Magento\GroupedProductGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
             </argument>
         </arguments>
     </type>
@@ -17,6 +17,13 @@
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
                 <item name="grouped_product_type_resolver" xsi:type="object">Magento\GroupedProductGraphQl\Model\ConcreteTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\LinkTypeResolverComposite">
+        <arguments>
+            <argument name="productLinksTypeNameResolvers" xsi:type="array">
+                <item name="grouped_product_link__type_resolver" xsi:type="object">\Magento\GroupedProductGraphQl\Model\LinkConcreteTypeResolver</item>
             </argument>
         </arguments>
     </type>

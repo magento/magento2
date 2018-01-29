@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
+namespace Magento\GroupedProductGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\Link;
@@ -18,7 +18,7 @@ class ProductLinks implements FormatterInterface
     /**
      * @var string[]
      */
-    private $linkTypes = ['related', 'upsell', 'crosssell'];
+    private $linkType = 'associated';
 
     /**
      * Format product links data to conform to GraphQL schema
@@ -31,8 +31,10 @@ class ProductLinks implements FormatterInterface
         if ($productLinks) {
             /** @var Link $productLink */
             foreach ($productLinks as $productLinkKey => $productLink) {
-                if (in_array($productLink->getLinkType(), $this->linkTypes)) {
-                    $productData['product_links'][$productLinkKey] = $productLink->getData();
+                if ($productLink->getLinkType() === $this->linkType) {
+                    $data = $productLink->getData();
+                    $data['qty'] = $productLink->getExtensionAttributes()->getQty();
+                    $productData['product_links'][$productLinkKey] = $data;
                 }
             }
         } else {

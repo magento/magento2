@@ -45,4 +45,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\LinkTypeResolverComposite">
+        <arguments>
+            <argument name="productLinksTypeNameResolvers" xsi:type="array">
+                <item name="catalog_product_link_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\LinkConcreteTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
