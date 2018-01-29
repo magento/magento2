@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Aggregation;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttributeTypePrice;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
@@ -40,6 +39,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $sessionMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $resourceConnectionMock;
 
     /**
@@ -53,11 +57,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SelectBuilderForAttributeTypePrice
-     */
-    private $selectBuilderForAttributeTypePrice;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|SelectBuilderForAttribute
      */
     private $selectBuilderForAttribute;
@@ -67,15 +66,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->sessionMock = $this->createMock(Session::class);
         $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
-        $this->selectBuilderForAttributeTypePrice = $this->createMock(SelectBuilderForAttributeTypePrice::class);
         $this->selectBuilderForAttribute = $this->createMock(SelectBuilderForAttribute::class);
         $this->model = new DataProvider(
             $this->eavConfigMock,
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
-            $this->selectBuilderForAttributeTypePrice,
+            $this->sessionMock,
             $this->selectBuilderForAttribute
         );
     }
@@ -94,14 +93,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavConfigMock->expects($this->once())
             ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
             ->willReturn($attributeMock);
 
         $selectMock = $this->createMock(Select::class);
         $this->adapterMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
-        $this->selectBuilderForAttributeTypePrice->expects($this->once())->method('execute')->willReturn($selectMock);
         $tableMock = $this->createMock(Table::class);
 
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
@@ -122,7 +119,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavConfigMock->expects($this->once())
             ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
             ->willReturn($attributeMock);

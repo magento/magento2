@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttributeTypePrice;
+use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -36,11 +36,6 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
-     * @var SelectBuilderForAttributeTypePrice
-     */
-    private $selectBuilderForAttributeTypePrice;
-
-    /**
      * @var SelectBuilderForAttribute
      */
     private $selectBuilderForAttribute;
@@ -49,21 +44,19 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param SelectBuilderForAttributeTypePrice|null $selectBuilderForAttributeTypePrice
+     * @param Session $customerSession
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        SelectBuilderForAttributeTypePrice $selectBuilderForAttributeTypePrice = null,
+        Session $customerSession,
         SelectBuilderForAttribute $selectBuilderForAttribute = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
-        $this->selectBuilderForAttributeTypePrice = $selectBuilderForAttributeTypePrice
-            ?: ObjectManager::getInstance()->get(SelectBuilderForAttributeTypePrice::class);
         $this->selectBuilderForAttribute = $selectBuilderForAttribute
             ?: ObjectManager::getInstance()->get(SelectBuilderForAttribute::class);
     }
@@ -85,12 +78,7 @@ class DataProvider implements DataProviderInterface
             'main_table.entity_id  = entities.entity_id',
             []
         );
-
-        if ($attribute->getAttributeCode() === 'price') {
-            $this->selectBuilderForAttributeTypePrice->execute($select, $currentScope);
-        } else {
-            $select = $this->selectBuilderForAttribute->execute($select, $attribute, $currentScope);
-        }
+        $select = $this->selectBuilderForAttribute->execute($select, $attribute, $currentScope);
 
         return $select;
     }
