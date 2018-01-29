@@ -15,13 +15,6 @@
             <array key="store_labels">
                 <value>SalesRuleLabel</value>
             </array>
-            <field key="description" required="true">string</field>
-            <array key="website_ids" required="true">
-                <value>integer</value>
-            </array>
-            <array key="customer_group_ids" required="true">
-                <value>integer</value>
-            </array>
             <field key="from_date">string</field>
             <field key="to_date">string</field>
             <field key="uses_per_customer" required="true">integer</field>
@@ -45,6 +38,12 @@
             <field key="uses_per_coupon" required="true">integer</field>
             <field key="simple_free_shipping" required="true">string</field>
             <field key="extension_attributes">empty_extension_attribute</field>
+            <array key="customer_group_ids">
+                <value>integer</value>
+            </array>
+            <array key="website_ids">
+                <value>integer</value>
+            </array>
         </object>
     </operation>
 

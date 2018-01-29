@@ -9,6 +9,7 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\TestFramework\TestCase\HttpClient\CurlClient;
 use Magento\TestFramework\Helper\JsonSerializer;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Curl client for GraphQL
@@ -73,7 +74,12 @@ class Client
                     if (isset($error['message'])) {
                         $errorMessage .= $error['message'] . PHP_EOL;
                     }
+                    if (isset($error['trace'])) {
+                        $traceString = $error['trace'];
+                        TestCase::assertNotEmpty($traceString, "trace is empty");
+                    }
                 }
+
                 throw new \Exception('GraphQL response contains errors: ' . $errorMessage);
             }
             throw new \Exception('GraphQL responded with an unknown error: ' . $responseBody);
