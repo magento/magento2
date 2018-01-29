@@ -126,14 +126,50 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for testValidationNegativePrice
+     * Data provider for testValidPriceTypeIsValid
      * @return array
      */
-    public function negativePriceIsValidDataProvider()
+    public function validPriceTypeIsValidDataProvider()
     {
         return [
-            ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 1])],
-            ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 0])],
+            ['option_title', 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 1])],
+            ['option_title', 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 0])],
+        ];
+    }
+
+    /**
+     *
+     *
+     * @param $title
+     * @param $type
+     * @param $priceType
+     * @param $product
+     * @dataProvider validPriceTypeIsValidDataProvider
+     */
+    public function testValidPriceTypeIsValid($title, $type, $priceType, $product)
+    {
+        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
+        $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
+        $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
+        $valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue($type));
+        $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
+        $valueMock->expects($this->never())->method('getPrice');
+        $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+
+        $messages = [];
+        $this->assertTrue($this->validator->isValid($valueMock));
+        $this->assertEquals($messages, $this->validator->getMessages());
+    }
+
+    /**
+     * Data provider for testInvalidPriceTypeIsFail
+     * @return array
+     */
+    public function invalidPriceTypeIsFailDataProvider()
+    {
+        return [
+            ['option_title', 'name 1.1', 'notexisting', new \Magento\Framework\DataObject(['store_id' => 1])],
+            ['option_title', 'name 1.1', 'wrongtype', new \Magento\Framework\DataObject(['store_id' => 0])],
         ];
     }
 
@@ -141,11 +177,10 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $title
      * @param $type
      * @param $priceType
-     * @param $price
      * @param $product
-     * @dataProvider negativePriceIsValidDataProvider
+     * @dataProvider invalidPriceTypeIsFailDataProvider
      */
-    public function testNegativePriceIsValid($title, $type, $priceType, $price, $product)
+    public function testInvalidPriceTypeIsFail($title, $type, $priceType, $product)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
         $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
@@ -156,9 +191,10 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $messages = [
-            'option values' => 'Invalid option value',
+            'option values' => 'Invalid option value'
         ];
-        $this->assertTrue($this->validator->isValid($valueMock));
-        $this->assertNotEquals($messages, $this->validator->getMessages());
+        $this->assertFalse($this->validator->isValid($valueMock));
+        $this->assertEquals($messages, $this->validator->getMessages());
     }
+
 }
