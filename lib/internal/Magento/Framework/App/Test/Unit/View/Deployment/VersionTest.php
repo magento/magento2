@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -109,7 +110,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(State::MODE_PRODUCTION);
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
-            ->with('static_content_on_demand_in_production')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
             ->willReturn(0);
         $this->loggerMock->expects($this->once())
             ->method('critical')
@@ -142,7 +143,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(State::MODE_PRODUCTION);
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
-            ->with('static_content_on_demand_in_production')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
             ->willReturn(1);
         $this->versionStorageMock->expects($this->once())
             ->method('save');

@@ -17,6 +17,7 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\StaticResource;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -152,7 +153,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->deploymentConfigMock->expects($this->exactly($getConfigDataExpects))
             ->method('getConfigData')
-            ->with('static_content_on_demand_in_production')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
             ->willReturn($staticContentOmDemandInProduction);
         $this->stateMock->expects($this->once())
             ->method('getMode')

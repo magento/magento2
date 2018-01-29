@@ -8,6 +8,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -117,7 +118,9 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\Profiler::reset();
         $appMode = $this->state->getMode();
         if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION
-            && !$this->deploymentConfig->getConfigData('static_content_on_demand_in_production')
+            && !$this->deploymentConfig->getConfigData(
+                ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION
+            )
         ) {
             $this->response->setHttpResponseCode(404);
         } else {
