@@ -49,4 +49,9 @@
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
         <plugin name="adapt_assign_status_to_product" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAssignStatusToProductPlugin"/>
     </type>
+    <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
+        <plugin name="process_check_admin_part"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockResolver\ProcessCheckAdminPartPlugin"/>
+    </type>
+
 </config>
