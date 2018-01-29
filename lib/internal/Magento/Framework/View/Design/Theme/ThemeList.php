@@ -234,7 +234,7 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
         $media = $themeConfig->getMedia();
 
         $parentPathPieces = $themeConfig->getParentTheme();
-        if (count($parentPathPieces) == 1) {
+        if (is_array($parentPathPieces) && count($parentPathPieces) == 1) {
             $pathPieces = $pathData['theme_path_pieces'];
             array_pop($pathPieces);
             $parentPathPieces = array_merge($pathPieces, $parentPathPieces);

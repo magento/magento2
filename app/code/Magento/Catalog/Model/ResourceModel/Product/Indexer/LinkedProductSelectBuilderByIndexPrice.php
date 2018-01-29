@@ -87,6 +87,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->order('t.min_price ' . Select::SQL_ASC)
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
