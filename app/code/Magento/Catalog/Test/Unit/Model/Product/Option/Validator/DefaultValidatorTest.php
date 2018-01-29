@@ -84,7 +84,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
         $valueMock->expects($this->any())->method('getType')->will($this->returnValue($type));
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->never())->method('getPrice')->will($this->returnValue($price));
+        $valueMock->expects($this->never())->method('getPrice');
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
         $this->assertEquals($result, $this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
@@ -152,7 +152,7 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
         $valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue($type));
         $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->never())->method('getPrice')->will($this->returnValue($price));
+        $valueMock->expects($this->never())->method('getPrice');
         $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $messages = [
