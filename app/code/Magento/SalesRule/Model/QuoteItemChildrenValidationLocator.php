@@ -38,7 +38,7 @@ class QuoteItemChildrenValidationLocator
      * @param QuoteItem $item
      * @return bool
      */
-    public function getNeedToValidateChildren(QuoteItem $item)
+    public function isNeedToValidateChildren(QuoteItem $item)
     {
         $type = $item->getProduct()->getTypeId();
         if (isset($this->productTypeChildrenValidationMap[$type])) {

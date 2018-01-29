@@ -9,7 +9,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Model\QuoteItemChildrenValidationLocator;
 use Magento\Framework\App\ObjectManager;
 
-
 /**
  * Class RulesApplier
  * @package Magento\SalesRule\Model\Validator
@@ -73,7 +72,7 @@ class RulesApplier
             }
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
-                if (!$this->quoteItemChildrenValidationLocator->getNeedToValidateChildren($item)) {
+                if (!$this->quoteItemChildrenValidationLocator->isNeedToValidateChildren($item)) {
                      continue;
                 }
                 $childItems = $item->getChildren();
