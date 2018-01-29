@@ -1994,7 +1994,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         switch ($strategy) {
-            case self::REPLACE;
+            case self::REPLACE:
                 $query = $this->_getReplaceSqlQuery($table, $columns, $values);
                 break;
             default:
