@@ -10,14 +10,13 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminSwitchWYSIWYGOptionsCest">
         <annotations>
-            <features value="TinyMCEv4"/>
-            <stories value="Admin are able to switch between TinyMCE versions MAGETWO-51829"/>
-            <group value="switcher"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-51829-Extensible list of WYSIWYG editors available in Magento"/>
+            <group value="Cms"/>
             <title value="Admin are able to switch between versions of TinyMCE."/>
             <description value="Admin are able to switch between versions of TinyMCE."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82936"/>
-            <group value="skip" />
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
@@ -35,8 +34,8 @@
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle1"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-        <seeElement selector="{{CmsWYSIWYGSection.TinyMCE4}}"  stepKey="seeTinyMCE4" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE4}}"  stepKey="seeTinyMCE4" />
         <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE4!');" stepKey="executeJSFillContent1"/>
         <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab1" />
@@ -49,7 +48,7 @@
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
-        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="expandWYSIWYGOptions2" />
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
         <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2" />
@@ -60,8 +59,8 @@
         <waitForPageLoad stepKey="wait2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
-        <seeElement selector="{{CmsWYSIWYGSection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
         <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE3!');" stepKey="executeJSFillContent2"/>
         <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab2" />
@@ -73,6 +72,7 @@
         <waitForPageLoad stepKey="wait4" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
+        <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
