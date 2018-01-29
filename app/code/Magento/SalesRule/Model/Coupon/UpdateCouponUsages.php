@@ -20,22 +20,22 @@ class UpdateCouponUsages
     /**
      * @var RuleFactory
      */
-    protected $ruleFactory;
+    private $ruleFactory;
 
     /**
      * @var RuleFactory
      */
-    protected $ruleCustomerFactory;
+    private $ruleCustomerFactory;
 
     /**
      * @var Coupon
      */
-    protected $coupon;
+    private $coupon;
 
     /**
      * @var Usage
      */
-    protected $couponUsage;
+    private $couponUsage;
 
     /**
      * @param RuleFactory $ruleFactory
