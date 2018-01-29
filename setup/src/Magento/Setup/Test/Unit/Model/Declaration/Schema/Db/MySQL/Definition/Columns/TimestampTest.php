@@ -121,7 +121,6 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
         }
         $this->assertEquals(
             $expectedStatement,
-//            '`col` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT "Comment"',
             $this->timestamp->toDefinition($column)
         );
     }
@@ -130,19 +129,19 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'default' => 'NULL',
-                'nullable' => true,
-                'onUpdate' => 'CURRENT_TIMESTAMP',
-                'expectedStatement' => '`col` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT "Comment"',
-            ],
-            [
-                'default' => null,
+                'default' => 'NULL', // xsd replaced for no default value set in xml
                 'nullable' => true,
                 'onUpdate' => 'CURRENT_TIMESTAMP',
                 'expectedStatement' => '`col` DATETIME NULL  ON UPDATE CURRENT_TIMESTAMP COMMENT "Comment"',
             ],
             [
-                'default' => null,
+                'default' => 'NULL', // xsd replaced for no default value set in xml
+                'nullable' => true,
+                'onUpdate' => 'CURRENT_TIMESTAMP',
+                'expectedStatement' => '`col` DATETIME NULL  ON UPDATE CURRENT_TIMESTAMP COMMENT "Comment"',
+            ],
+            [
+                'default' => 'NULL', // xsd replaced for no default value set in xml
                 'nullable' => false,
                 'onUpdate' => 'CURRENT_TIMESTAMP',
                 'expectedStatement' => '`col` DATETIME NOT NULL  ON UPDATE CURRENT_TIMESTAMP COMMENT "Comment"',

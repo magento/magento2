@@ -67,8 +67,8 @@ class Timestamp implements DbDefinitionProcessorInterface
     public function toDefinition(ElementInterface $column)
     {
         $nullable = $this->nullable->toDefinition($column);
-        $default  = $column->getDefault() === null
-            ? ($column->getDefault() === 'NULL' ? 'DEFAULT NULL' : '')
+        $default  = $column->getDefault() === 'NULL'
+            ? ''
             : sprintf('DEFAULT %s', $column->getDefault());
 
         return sprintf(
