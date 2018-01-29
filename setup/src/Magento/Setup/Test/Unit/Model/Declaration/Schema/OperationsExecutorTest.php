@@ -90,10 +90,6 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetDestructiveOperations()
-    {
-    }
-
     /**
      * @return Table
      */
