@@ -127,17 +127,20 @@ class Form extends Block
      */
     private function getTabUrl($tabName)
     {
-        $baseUrl = $this->baseUrl;
         $suffix = '';
-
         if (strpos($this->baseUrl, '/key/') !== false) {
             $urlParts = explode('/key/', $this->baseUrl);
-            $baseUrl = reset($urlParts);
             $suffix = '/key/' . end($urlParts);
         }
 
-        $urlParts = explode('/system_config', $baseUrl);
-        return reset($urlParts) . '/system_config/edit/section/' . $tabName . $suffix;
+        $urlParts = parse_url($this->baseUrl);
+        $scheme = $urlParts['scheme'];
+        $host = $urlParts['host'];
+        $path = $urlParts['path'];
+        $pathParts = explode('/', trim($path, '/'));
+        $route = reset($pathParts);
+
+        return "$scheme://$host/$route/admin/system_config/index/section/{$tabName}{$suffix}";
     }
 
     /**
