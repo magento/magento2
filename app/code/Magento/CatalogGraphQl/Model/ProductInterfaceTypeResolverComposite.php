@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class TypeResolverComposite implements TypeResolverInterface
+class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
 {
     /**
      * TypeResolverInterface[]
@@ -35,6 +35,11 @@ class TypeResolverComposite implements TypeResolverInterface
         $resolvedType = null;
 
         foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
+            if (!isset($data['type_id'])) {
+                throw new InputException(
+                    __('%1 key doesn\'t exist in product data', ['type_id'])
+                );
+            }
             $resolvedType = $productTypeNameResolver->resolveType($data);
             if ($resolvedType) {
                 return $resolvedType;

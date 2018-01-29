@@ -13,10 +13,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="bundle_product_type_resolver" xsi:type="object">Magento\BundleGraphQl\Model\ConcreteTypeResolver</item>
+                <item name="bundle_product_type_resolver" xsi:type="object">Magento\BundleGraphQl\Model\BundleProductTypeResolver</item>
             </argument>
         </arguments>
     </type>

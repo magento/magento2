@@ -12,18 +12,13 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class ConcreteTypeResolver implements TypeResolverInterface
+class DownloadableProductTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data)
     {
-        if (!isset($data['type_id'])) {
-            throw new InputException(
-                __('%1 key doesn\'t exist in product data', 'type_id')
-            );
-        }
         if ($data['type_id'] == 'downloadable') {
             return 'DownloadableProduct';
         }

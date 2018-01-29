@@ -212,13 +212,15 @@
         <field xsi:type="ScalarOutputField" name="position" type="Int"/>
         <field xsi:type="ScalarOutputField" name="category_id" type="String"/>
     </type>
-    <type xsi:type="OutputType" name="ProductLinks">
+    <type xsi:type="OutputInterface" name="ProductLinksInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="link_type" type="String"/>
         <field xsi:type="ScalarOutputField" name="linked_product_sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="linked_product_type" type="String"/>
         <field xsi:type="ScalarOutputField" name="position" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+    </type>
+    <type xsi:type="OutputType" name="ProductLinks">
+        <implements interface="ProductLinksInterface" copyFields="true"/>
     </type>
     <type xsi:type="OutputType" name="ProductOptionsValues">
         <field xsi:type="ScalarOutputField" name="title" type="String"/>
@@ -252,7 +254,7 @@
         <field xsi:type="ScalarOutputField" name="website_id" type="Float"/>
         <field xsi:type="ScalarOutputField" name="customer_group_id" type="String"/>
     </type>
-    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="name" type="String"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
@@ -288,7 +290,7 @@
         <field xsi:type="ScalarOutputField" name="type_id" type="String"/>
         <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int"/>
         <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks"/>
-        <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinks"/>
+        <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinksInterface"/>
         <field xsi:type="ObjectArrayOutputField" name="options" itemType="ProductOptions"/>
         <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry"/>
         <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices"/>
