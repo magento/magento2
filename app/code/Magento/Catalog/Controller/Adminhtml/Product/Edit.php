@@ -52,12 +52,12 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         if (($productId && !$product->getEntityId())) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('This product doesn\'t exist.'));
+            $this->messageManager->addErrorMessage(__('This product doesn\'t exist.'));
             return $resultRedirect->setPath('catalog/*/');
         } elseif ($productId === 0) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $this->messageManager->addError(__('Invalid product id. Should be numeric value greater than 0'));
+            $this->messageManager->addErrorMessage(__('Invalid product id. Should be numeric value greater than 0'));
             return $resultRedirect->setPath('catalog/*/');
         }
 
