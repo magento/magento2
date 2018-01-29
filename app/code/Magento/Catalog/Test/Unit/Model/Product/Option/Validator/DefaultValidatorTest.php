@@ -60,10 +60,10 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $mess = ['option required fields' => 'Missed values for option required fields'];
         return [
-            ['option_title', 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
-            ['option_title', 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 0]), [], true],
-            [null, 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
-            [null, 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 0]), $mess, false],
+            ['option_title', 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
+            ['option_title', 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 0]), [], true],
+            [null, 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
+            [null, 'name 1.1', 'fixed', new \Magento\Framework\DataObject(['store_id' => 0]), $mess, false],
         ];
     }
 
@@ -71,13 +71,12 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $title
      * @param $type
      * @param $priceType
-     * @param $price
      * @param $product
      * @param $messages
      * @param $result
      * @dataProvider isValidTitleDataProvider
      */
-    public function testIsValidTitle($title, $type, $priceType, $price, $product, $messages, $result)
+    public function testIsValidTitle($title, $type, $priceType, $product, $messages, $result)
     {
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
         $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
