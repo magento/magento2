@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedProductGraphQl\Model;
+namespace Magento\DownloadableGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\Exception\InputException;
@@ -12,15 +12,15 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class ConcreteTypeResolver implements TypeResolverInterface
+class DownloadableProductTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'grouped') {
-            return 'GroupedProduct';
+        if ($data['type_id'] == 'downloadable') {
+            return 'DownloadableProduct';
         }
 
         return null;

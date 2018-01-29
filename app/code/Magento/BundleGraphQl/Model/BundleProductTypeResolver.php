@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedProductGraphQl\Model;
+namespace Magento\BundleGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\Exception\InputException;
@@ -12,21 +12,15 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class LinkConcreteTypeResolver implements TypeResolverInterface
+class BundleProductTypeResolver implements TypeResolverInterface
 {
-    /**
-     * @var string[]
-     */
-    private $linkTypes = ['associated'];
-
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data)
     {
-        $linkType = $data['link_type'];
-        if (in_array($linkType, $this->linkTypes)) {
-            return 'GroupedProductLinks';
+        if ($data['type_id'] == 'bundle') {
+            return 'BundleProduct';
         }
 
         return null;

@@ -38,17 +38,17 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="simple_product_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\ConcreteTypeResolver</item>
+                <item name="simple_product_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\SimpleProductTypeResolver</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogGraphQl\Model\LinkTypeResolverComposite">
+    <type name="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <arguments>
             <argument name="productLinksTypeNameResolvers" xsi:type="array">
-                <item name="catalog_product_link_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\LinkConcreteTypeResolver</item>
+                <item name="catalog_product_link_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\ProductLinksTypeResolver</item>
             </argument>
         </arguments>
     </type>

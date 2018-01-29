@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProductGraphQl\Model;
+namespace Magento\GroupedProductGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\Exception\InputException;
@@ -12,15 +12,21 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class ConcreteTypeResolver implements TypeResolverInterface
+class GroupedProductLinksTypeResolver implements TypeResolverInterface
 {
+    /**
+     * @var string[]
+     */
+    private $linkTypes = ['associated'];
+
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'configurable') {
-            return 'ConfigurableProduct';
+        $linkType = $data['link_type'];
+        if (in_array($linkType, $this->linkTypes)) {
+            return 'GroupedProductLinks';
         }
 
         return null;

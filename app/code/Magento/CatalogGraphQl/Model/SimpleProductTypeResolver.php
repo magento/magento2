@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\BundleGraphQl\Model;
+namespace Magento\CatalogGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\Exception\InputException;
@@ -12,15 +12,15 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class ConcreteTypeResolver implements TypeResolverInterface
+class SimpleProductTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'bundle') {
-            return 'BundleProduct';
+        if ($data['type_id'] == 'simple') {
+            return 'SimpleProduct';
         }
 
         return null;

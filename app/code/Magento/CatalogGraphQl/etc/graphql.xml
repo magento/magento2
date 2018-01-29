@@ -212,7 +212,7 @@
         <field xsi:type="ScalarOutputField" name="position" type="Int"/>
         <field xsi:type="ScalarOutputField" name="category_id" type="String"/>
     </type>
-    <type xsi:type="OutputInterface" name="ProductLinksInterface" typeResolver="Magento\CatalogGraphQl\Model\LinkTypeResolverComposite">
+    <type xsi:type="OutputInterface" name="ProductLinksInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="link_type" type="String"/>
         <field xsi:type="ScalarOutputField" name="linked_product_sku" type="String"/>
@@ -254,7 +254,7 @@
         <field xsi:type="ScalarOutputField" name="website_id" type="Float"/>
         <field xsi:type="ScalarOutputField" name="customer_group_id" type="String"/>
     </type>
-    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="name" type="String"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>

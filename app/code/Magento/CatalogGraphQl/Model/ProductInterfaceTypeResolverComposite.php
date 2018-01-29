@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class TypeResolverComposite implements TypeResolverInterface
+class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
 {
     /**
      * TypeResolverInterface[]

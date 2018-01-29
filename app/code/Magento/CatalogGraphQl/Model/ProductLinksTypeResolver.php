@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class LinkConcreteTypeResolver implements TypeResolverInterface
+class ProductLinksTypeResolver implements TypeResolverInterface
 {
     /**
      * @var string[]
