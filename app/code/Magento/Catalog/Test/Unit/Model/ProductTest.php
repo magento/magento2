@@ -201,6 +201,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $extensionAttributes;
 
     /**
+     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheInterfaceMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -246,8 +251,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Model\ActionValidator\RemoveAction::class
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-
+        $this->cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
@@ -258,7 +262,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->eventManagerMock));
         $contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->will($this->returnValue($this->cacheInterfaceMock));
         $contextMock->expects($this->any())
             ->method('getActionValidator')
             ->will($this->returnValue($actionValidatorMock));
@@ -1433,5 +1437,41 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetOptionByIdForProductWithoutOptions()
     {
         $this->assertNull($this->model->getOptionById(100));
+    }
+
+    /**
+     * @dataProvider cleanCacheDataProvider
+     */
+    public function testCleanCache($id, $method)
+    {
+        $this->model->setId($id);
+        $this->cacheInterfaceMock
+            ->expects($this->$method())
+            ->method('clean');
+        $this->model->cleanCache();
+    }
+
+    /**
+     * @return array
+     */
+    public function cleanCacheDataProvider()
+    {
+        return [
+            [null, 'never'],
+            ['1', 'once'],
+        ];
+    }
+
+    public function testGetCacheTags()
+    {
+        //If entity is identified getCacheTags has to return the same values
+        //as getIdentities
+        $this->model->setId(null);
+        $this->assertEquals([Product::CACHE_TAG], $this->model->getCacheTags());
+        $this->model->setId(1);
+        $this->assertEquals(
+            $this->model->getIdentities(),
+            $this->model->getCacheTags()
+        );
     }
 }
