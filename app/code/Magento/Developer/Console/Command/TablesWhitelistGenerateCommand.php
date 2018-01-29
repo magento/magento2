@@ -8,6 +8,7 @@ namespace Magento\Developer\Console\Command;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Setup\JsonPersistor;
 use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,18 +42,26 @@ class TablesWhitelistGenerateCommand extends Command
     private $readerComposite;
 
     /**
+     * @var JsonPersistor
+     */
+    private $jsonPersistor;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
      * @param ReaderComposite $readerComposite
+     * @param JsonPersistor $jsonPersistor
      * @param null $name
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
         ReaderComposite $readerComposite,
+        JsonPersistor $jsonPersistor,
         $name = null
     ) {
         parent::__construct($name);
         $this->componentRegistrar = $componentRegistrar;
         $this->readerComposite = $readerComposite;
+        $this->jsonPersistor = $jsonPersistor;
     }
 
     /**
@@ -103,7 +112,7 @@ class TablesWhitelistGenerateCommand extends Command
             $content,
             $this->selectNamesFromContent($newContent)
         );
-        file_put_contents($whiteListFileName, json_encode($content));
+        $this->jsonPersistor->persist($content, $whiteListFileName);
     }
 
     /**

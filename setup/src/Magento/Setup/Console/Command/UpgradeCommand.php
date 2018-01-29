@@ -73,6 +73,13 @@ class UpgradeCommand extends AbstractSetupCommand
                 'Prevents generated files from being deleted. ' . PHP_EOL .
                 'We discourage using this option except when deploying to production. ' . PHP_EOL .
                 'Consult your system integrator or administrator for more information.'
+            ),
+            new InputOption(
+                InstallCommand::CONVERT_OLD_SCRIPTS_KEY,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                false
             )
         ];
         $this->setName('setup:upgrade')

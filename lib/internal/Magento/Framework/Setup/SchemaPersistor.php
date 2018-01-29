@@ -19,11 +19,18 @@ class SchemaPersistor
     private $componentRegistrar;
 
     /**
-     * @param ComponentRegistrar $componentRegistrar
+     * @var XmlPersistor
      */
-    public function __construct(ComponentRegistrar $componentRegistrar)
+    private $xmlPersistor;
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param XmlPersistor $xmlPersistor
+     */
+    public function __construct(ComponentRegistrar $componentRegistrar, XmlPersistor $xmlPersistor)
     {
         $this->componentRegistrar = $componentRegistrar;
+        $this->xmlPersistor = $xmlPersistor;
     }
 
     /**
@@ -223,17 +230,6 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        $dom = new \DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($simpleXmlElementDom->asXML());
-        file_put_contents(
-            $path,
-            str_replace(
-                ' xmlns:xsi="xsi"', //replace xmlns, as we do not need it for xsi namespace
-                '',
-                $dom->saveXML()
-            )
-        );
+        $this->xmlPersistor->persist($simpleXmlElementDom, $path);
     }
 }
