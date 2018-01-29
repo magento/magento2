@@ -195,5 +195,4 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
     }
-
 }
