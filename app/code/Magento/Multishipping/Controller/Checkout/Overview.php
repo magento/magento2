@@ -38,11 +38,11 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            $this->messageManager->addException($e, __('We cannot open the overview page.'));
+            $this->messageManager->addExceptionMessage($e, __('We cannot open the overview page.'));
             $this->_redirect('*/*/billing');
         }
     }

@@ -68,7 +68,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );
