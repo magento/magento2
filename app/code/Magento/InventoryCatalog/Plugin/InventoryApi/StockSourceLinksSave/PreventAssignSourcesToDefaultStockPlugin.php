@@ -43,7 +43,7 @@ class PreventAssignSourcesToDefaultStockPlugin
     /**
      * @param StockSourceLinksSaveInterface $subject
      * @param StockSourceLinkInterface[] $links
-     * @return array
+     * @return void
      * @throws InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -57,6 +57,5 @@ class PreventAssignSourcesToDefaultStockPlugin
                 }
             }
         }
-        return $links;
     }
 }

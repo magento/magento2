@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class SaveTest extends WebapiAbstract
+class StockSourceLinksDeleteTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
@@ -27,49 +27,27 @@ class SaveTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExecute()
     {
-        $links = [
-            [
-                StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
-                StockSourceLinkInterface::STOCK_ID => 10,
-                StockSourceLinkInterface::PRIORITY => 1,
-            ],
-            [
-                StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
-                StockSourceLinkInterface::STOCK_ID => 10,
-                StockSourceLinkInterface::PRIORITY => 1,
-            ],
-        ];
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME_SAVE,
-                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
-            ],
-        ];
-        $this->_webApiCall($serviceInfo, ['links' => $links]);
-
-        $actualData = $this->getStockSourceLinks();
-
-        self::assertEquals(2, $actualData['total_count']);
-        AssertArrayContains::assert($links, $actualData['items']);
-    }
-
-    protected function tearDown()
-    {
-        $links = [
+        $linksForDelete = [
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
+                StockSourceLinkInterface::STOCK_ID => 10,
+            ],
+        ];
+        $expectedLinksAfterDeleting = [
+            [
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-3',
+                StockSourceLinkInterface::STOCK_ID => 10,
+            ],
+            [
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-disabled',
                 StockSourceLinkInterface::STOCK_ID => 10,
             ],
         ];
@@ -77,7 +55,7 @@ class SaveTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
-                    . http_build_query(['links' => $links]),
+                    . http_build_query(['links' => $linksForDelete]),
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
@@ -85,13 +63,16 @@ class SaveTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
-
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['links' => $links]);
+            : $this->_webApiCall($serviceInfo, ['links' => $linksForDelete]);
 
-        parent::tearDown();
+        $actualData = $this->getStockSourceLinks();
+
+        self::assertEquals(2, $actualData['total_count']);
+        AssertArrayContains::assert($expectedLinksAfterDeleting, $actualData['items']);
     }
+
 
     /**
      * @return array

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Plugin\InventoryApi\StockSourceLinksSave;
+namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;

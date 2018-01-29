@@ -39,10 +39,10 @@ $linksData = [
     30 => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled', 'us-1']
 ];
 
-$priority = 1;
+
 
 $links = [];
-
+$priority = 0;
 foreach ($linksData as $stockID => $sourceCodes) {
     foreach ($sourceCodes as $sourceCode) {
         /** @var StockSourceLinkInterface $link */
@@ -50,7 +50,7 @@ foreach ($linksData as $stockID => $sourceCodes) {
 
         $link->setStockId($stockID);
         $link->setSourceCode($sourceCode);
-        $link->setPriority($priority);
+        $link->setPriority(++$priority);
 
         $links[] = $link;
     }

@@ -31,17 +31,17 @@
         </arguments>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
-        <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\SourceItemsSave\ReindexAfterSourceItemsSavePlugin"/>
+        <plugin name="reindex_after_source_items_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
-        <plugin name="reindex_after_source_items_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\SourceItemsDelete\ReindexAfterSourceItemsDeletePlugin"/>
+        <plugin name="reindex_after_source_items_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterSourceItemsDeletePlugin"/>
     </type>
     <!-- StockSourceLink -->
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
-        <plugin name="reindex_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\StockSourceLinksSave\ReindexAfterStockSourceLinksSavePlugin"/>
+        <plugin name="reindex_after_stock_source_links_save" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
-        <plugin name="reindex_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\StockSourceLinksDelete\ReindexAfterStockSourceLinksDeletePlugin"/>
+        <plugin name="reindex_after_stock_source_links_delete" type="Magento\InventoryIndexer\Plugin\InventoryApi\ReindexAfterStockSourceLinksDeletePlugin"/>
     </type>
     <!-- Stock -->
     <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\InventoryIndexer\Model\GetStockItemQuantity"/>
