@@ -85,14 +85,14 @@ class Visual extends AbstractSwatch
      *
      * @codeCoverageIgnore
      * @param null $swatchStoreValue
-     * @return string
+     * @return array
      */
     protected function reformatSwatchLabels($swatchStoreValue = null)
     {
         if ($swatchStoreValue === null) {
             return;
         }
-        $newSwatch = '';
+        $newSwatch = [];
         foreach ($swatchStoreValue as $key => $value) {
             if ($value[0] == '#') {
                 $newSwatch[$key] = 'background: '.$value;
