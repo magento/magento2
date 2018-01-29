@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Setup\Fixtures\FixtureModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,20 +20,19 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var  CommandTester */
     private $indexerCommand;
 
+    /** @var  FixtureModel */
     private $fixtureModelMock;
 
     /** @var  ObjectManagerInterface */
     private $objectManager;
-    /**
-     * @var GenerateFixturesCommand
-     */
+
+    /** @var  GenerateFixturesCommand */
     private $command;
 
-    /**
-     * @var CommandTester
-     */
+    /** @var  CommandTester */
     private $commandTester;
 
     /**
@@ -42,7 +42,7 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
+        $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->setMethods(['getObjectManager'])
             ->setConstructorArgs([$this->objectManager->get(IndexerReindexCommand::class)])
             ->getMock();
@@ -77,6 +77,9 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
+    /**
+     * teardown
+     */
     public function tearDown()
     {
         $this->setIncrement(1);
@@ -103,7 +106,8 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
             $this->indexerCommand->getDisplay(true)
         );
 
-        static::assertEquals(Cli::RETURN_SUCCESS,
+        static::assertEquals(
+            Cli::RETURN_SUCCESS,
             $this->commandTester->getStatusCode(),
             $this->commandTester->getDisplay(true)
         );
@@ -114,11 +118,8 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function setIncrement($value)
     {
-        /** @var ResourceConnection $connection */
-        $connection = Bootstrap::getObjectManager()->get(
-            ResourceConnection::class
-        );
-        $db = $connection->getConnection();
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $db */
+        $db = Bootstrap::getObjectManager()->get(ResourceConnection::class)->getConnection();
         $db->query("SET @@session.auto_increment_increment=$value");
         $db->query("SET @@session.auto_increment_offset=$value");
     }
