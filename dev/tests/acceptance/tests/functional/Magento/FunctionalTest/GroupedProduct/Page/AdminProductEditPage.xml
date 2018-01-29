@@ -9,11 +9,7 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminProductEditPage" url="catalog/product/new/set/4/type/{{type}}/" area="admin" module="Magento_Catalog" parameterized="true">
-        <section name="AdminProductFormSection"/>
-        <section name="AdminProductFormActionSection"/>
-        <section name="AdminProductSEOSection"/>
-        <section name="AdminProductImagesSection"/>
-        <section name="AdminAddProductsToOptionPanel"/>
-        <section name="AdminProductMessagesSection"/>
+        <section name="AdminProductFormGroupedProductsSection"/>
+        <section name="AdminAddProductsToGroupPanel"/>
     </page>
 </pages>
