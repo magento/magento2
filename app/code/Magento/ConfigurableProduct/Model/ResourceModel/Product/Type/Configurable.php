@@ -111,18 +111,16 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $productId = $mainProduct->getData($this->optionProvider->getProductEntityLinkField());
 
-        $insertData = [];
+        $data = [];
         foreach ($productIds as $id) {
-            $insertData[] = [(int) $id, (int) $productId];
+            $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
         }
 
-        $insertColumns = ['product_id', 'parent_id'];
-        if (!empty($insertData)) {
-            $this->getConnection()->insertArray(
+        if (!empty($data)) {
+            $this->getConnection()->insertOnDuplicate(
                 $this->getMainTable(),
-                $insertColumns,
-                $insertData,
-                AdapterInterface::REPLACE
+                $data,
+                ['product_id', 'parent_id']
             );
         }
 
