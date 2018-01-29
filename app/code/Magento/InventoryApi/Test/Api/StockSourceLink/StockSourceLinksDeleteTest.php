@@ -73,7 +73,6 @@ class StockSourceLinksDeleteTest extends WebapiAbstract
         AssertArrayContains::assert($expectedLinksAfterDeleting, $actualData['items']);
     }
 
-
     /**
      * @return array
      */
