@@ -171,20 +171,23 @@
             </insertListing>
         </modal>
     </fieldset>
-
     <fieldset name="stocks_information" sortOrder="55">
         <settings>
             <label translate="true">Stocks Information</label>
             <collapsible>true</collapsible>
             <opened>false</opened>
         </settings>
-        <container name="stocks_information_container" class="Magento\InventoryCatalog\Ui\Component\StockInformation" component="Magento_InventoryCatalog/js/product/components/stock-info">
+        <container name="stocks_information_container" class="Magento\InventoryCatalog\Ui\Component\StockInformation" template="Magento_InventoryCatalog/product/stock-info">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" xsi:type="string">container</item>
                     <item name="label" xsi:type="string"/>
                     <item name="dataScope" xsi:type="string"/>
                     <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="stocks" xsi:type="string">${ $.provider }:data.stocks</item>
+                    </item>
                 </item>
             </argument>
         </container>

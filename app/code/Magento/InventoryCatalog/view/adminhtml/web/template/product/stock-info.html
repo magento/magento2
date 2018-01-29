@@ -4,18 +4,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field-complex" data-bind="css: $data.additionalClasses, attr: {'data-index': index}">
-
+<div class="admin__field-complex" css="$data.additionalClasses" visible="visible" attr="'data-index': index">
     <div class="admin__field-complex-content">
-        <div data-bind="foreach: { data: getStocksQtyInfo(), as: '$stockQtyInfo'}">
+        <div repeat="foreach: $data.stocks || [] , item: '$stockQtyInfo'">
             <div>
-                <strong data-bind="text: $stockQtyInfo.stock_name"></strong>
+                <strong text="$stockQtyInfo().stock_name" />
                 :
-                <span data-bind="text: $stockQtyInfo.qty"></span>
+                <span text="$stockQtyInfo().qty" />
             </div>
         </div>
     </div>
-
 </div>
-
-
