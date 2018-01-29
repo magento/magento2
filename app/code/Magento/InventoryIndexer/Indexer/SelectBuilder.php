@@ -73,7 +73,7 @@ class SelectBuilder
         }
 
         $select = $connection->select();
-        $quantityExpression = $select->getConnection()->getCheckSql(
+        $quantityExpression = (string)$select->getConnection()->getCheckSql(
             'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
             0,
             SourceItemInterface::QUANTITY
@@ -82,9 +82,9 @@ class SelectBuilder
         $isSalableString = sprintf(
             '((legacy_stock_item.use_config_manage_stock = 1 AND 0 = %1$d)'
             . ' OR (legacy_stock_item.use_config_manage_stock = 0 AND legacy_stock_item.manage_stock = 0))'
-            . ' OR ((legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression->__toString() . ' > %2$d)'
+            . ' OR ((legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression . ' > %2$d)'
             . ' OR (legacy_stock_item.use_config_min_qty = 0 AND'
-            . ' ' . $quantityExpression->__toString() . ' > legacy_stock_item.min_qty))',
+            . ' ' . $quantityExpression . ' > legacy_stock_item.min_qty))',
             $globalManageStock,
             $globalMinQty
         );

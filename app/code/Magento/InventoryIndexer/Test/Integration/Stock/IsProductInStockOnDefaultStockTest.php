@@ -11,7 +11,7 @@ use Magento\InventoryCatalog\Model\DefaultStockProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductInStockTestOnDefaultStock extends TestCase
+class IsProductInStockOnDefaultStockTest extends TestCase
 {
     /**
      * @var GetIsSalable
