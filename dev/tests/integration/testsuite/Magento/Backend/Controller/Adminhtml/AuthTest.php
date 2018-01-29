@@ -91,7 +91,6 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\UrlInterface::class
         );
-        $backendUrlModel->turnOffSecretKey();
         $url = $backendUrlModel->getStartupPageUrl();
         $expected = $backendUrlModel->getUrl($url);
         $this->assertRedirect($this->stringStartsWith($expected));
@@ -138,11 +137,6 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_login();
         $this->dispatch('backend/admin/auth/logout');
-        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
-        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\UrlInterface::class
-        );
-        $backendUrlModel->turnOffSecretKey();
         $this->assertRedirect(
             $this->equalTo(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -162,11 +156,6 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_login();
         $this->dispatch('backend/admin/auth/deniedJson');
-        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
-        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\UrlInterface::class
-        );
-        $backendUrlModel->turnOffSecretKey();
         $data = [
             'ajaxExpired' => 1,
             'ajaxRedirect' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -187,11 +176,6 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_login();
         $this->dispatch('backend/admin/auth/deniedIframe');
-        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
-        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\UrlInterface::class
-        );
-        $backendUrlModel->turnOffSecretKey();
         $homeUrl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Helper\Data::class
         )->getHomePageUrl();

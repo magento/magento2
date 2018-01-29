@@ -13,11 +13,6 @@ namespace Magento\TestFramework\TestCase;
 abstract class AbstractBackendController extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @var \Magento\Backend\Model\UrlInterface
-     */
-    protected $_urlBuilder;
-
-    /**
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_session;
@@ -45,7 +40,8 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     {
         parent::setUp();
 
-        $this->_urlBuilder = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
+
         $this->_auth = $this->_objectManager->get(\Magento\Backend\Model\Auth::class);
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();

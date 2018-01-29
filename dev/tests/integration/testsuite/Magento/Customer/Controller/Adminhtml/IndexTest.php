@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -121,15 +122,15 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $post = [
             'customer' => [
-                'middlename' => 'test middlename',
-                'group_id' => 1,
-                'website_id' => 0,
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'email' => 'example@domain.com',
+                'middlename'      => 'test middlename',
+                'group_id'        => 1,
+                'website_id'      => 0,
+                'firstname'       => 'test firstname',
+                'lastname'        => 'test lastname',
+                'email'           => 'example@domain.com',
                 'default_billing' => '_item1',
             ],
-            'address' => ['_item1' => []],
+            'address'  => ['_item1' => []],
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/customer/index/save');
@@ -157,25 +158,25 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $post = [
             'customer' => [
-                'middlename' => 'test middlename',
-                'group_id' => 1,
-                'website_id' => 0,
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'email' => 'example@domain.com',
+                'middlename'      => 'test middlename',
+                'group_id'        => 1,
+                'website_id'      => 0,
+                'firstname'       => 'test firstname',
+                'lastname'        => 'test lastname',
+                'email'           => 'example@domain.com',
                 'default_billing' => '_item1',
-                'password' => 'password',
+                'password'        => 'password',
             ],
-            'address' => [
+            'address'  => [
                 '_item1' => [
-                    'firstname' => 'test firstname',
-                    'lastname' => 'test lastname',
-                    'street' => ['test street'],
-                    'city' => 'test city',
-                    'region_id' => 10,
-                    'country_id' => 'US',
-                    'postcode' => '01001',
-                    'telephone' => '+7000000001',
+                    'firstname'       => 'test firstname',
+                    'lastname'        => 'test lastname',
+                    'street'          => ['test street'],
+                    'city'            => 'test city',
+                    'region_id'       => 10,
+                    'country_id'      => 'US',
+                    'postcode'        => '01001',
+                    'telephone'       => '+7000000001',
                     'default_billing' => 'true',
                 ],
             ],
@@ -234,60 +235,59 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testSaveActionExistingCustomerAndExistingAddressData()
     {
         $post = [
-            'customer' => [
-                'entity_id' => '1',
-                'middlename' => 'test middlename',
-                'group_id' => 1,
-                'website_id' => 1,
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'email' => 'customer@example.com',
-                'new_password' => 'auto',
+            'customer'     => [
+                'entity_id'          => '1',
+                'middlename'         => 'test middlename',
+                'group_id'           => 1,
+                'website_id'         => 1,
+                'firstname'          => 'test firstname',
+                'lastname'           => 'test lastname',
+                'email'              => 'customer@example.com',
+                'new_password'       => 'auto',
                 'sendemail_store_id' => '1',
-                'sendemail' => '1',
-                'created_at' => '2000-01-01 00:00:00',
-                'default_shipping' => '_item1',
-                'default_billing' => 1,
+                'sendemail'          => '1',
+                'created_at'         => '2000-01-01 00:00:00',
+                'default_shipping'   => '_item1',
+                'default_billing'    => 1,
             ],
-            'address' => [
-                '1' => [
-                    'firstname' => 'update firstname',
-                    'lastname' => 'update lastname',
-                    'street' => ['update street'],
-                    'city' => 'update city',
-                    'region_id' => 10,
-                    'country_id' => 'US',
-                    'postcode' => '01001',
-                    'telephone' => '+7000000001',
+            'address'      => [
+                '1'          => [
+                    'firstname'       => 'update firstname',
+                    'lastname'        => 'update lastname',
+                    'street'          => ['update street'],
+                    'city'            => 'update city',
+                    'region_id'       => 10,
+                    'country_id'      => 'US',
+                    'postcode'        => '01001',
+                    'telephone'       => '+7000000001',
                     'default_billing' => 'true',
                 ],
-                '_item1' => [
-                    'firstname' => 'new firstname',
-                    'lastname' => 'new lastname',
-                    'street' => ['new street'],
-                    'city' => 'new city',
-                    'region_id' => 10,
-                    'country_id' => 'US',
-                    'postcode' => '01001',
-                    'telephone' => '+7000000001',
+                '_item1'     => [
+                    'firstname'        => 'new firstname',
+                    'lastname'         => 'new lastname',
+                    'street'           => ['new street'],
+                    'city'             => 'new city',
+                    'region_id'        => 10,
+                    'country_id'       => 'US',
+                    'postcode'         => '01001',
+                    'telephone'        => '+7000000001',
                     'default_shipping' => 'true',
                 ],
                 '_template_' => [
-                    'firstname' => '',
-                    'lastname' => '',
-                    'street' => [],
-                    'city' => '',
-                    'region_id' => 10,
+                    'firstname'  => '',
+                    'lastname'   => '',
+                    'street'     => [],
+                    'city'       => '',
+                    'region_id'  => 10,
                     'country_id' => 'US',
-                    'postcode' => '',
-                    'telephone' => '',
+                    'postcode'   => '',
+                    'telephone'  => '',
                 ],
             ],
             'subscription' => '',
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
-        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /** Check that success message is set */
@@ -325,7 +325,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
         $this->assertEquals(1, $subscriber->getStatus());
-
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
@@ -344,18 +343,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(1, $subscriber->getStatus());
 
         $post = [
-            'customer' => [
-                'entity_id' => $customerId,
-                'email' => 'customer@example.com',
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'sendemail_store_id' => 1
+            'customer'     => [
+                'entity_id'          => $customerId,
+                'email'              => 'customer@example.com',
+                'firstname'          => 'test firstname',
+                'lastname'           => 'test lastname',
+                'sendemail_store_id' => 1,
             ],
-            'subscription' => '0'
+            'subscription' => '0',
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
-        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
@@ -396,24 +394,24 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
-            'customer' => ['entity_id' => $customerId,
-                'middlename' => 'test middlename',
-                'group_id' => 1,
-                'website_id' => 1,
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'email' => $newEmail,
-                'new_password' => 'auto',
+            'customer' => [
+                'entity_id'          => $customerId,
+                'middlename'         => 'test middlename',
+                'group_id'           => 1,
+                'website_id'         => 1,
+                'firstname'          => 'test firstname',
+                'lastname'           => 'test lastname',
+                'email'              => $newEmail,
+                'new_password'       => 'auto',
                 'sendemail_store_id' => '1',
-                'sendemail' => '1',
-                'created_at' => '2000-01-01 00:00:00',
-                'default_shipping' => '_item1',
-                'default_billing' => 1,
-            ]
+                'sendemail'          => '1',
+                'created_at'         => '2000-01-01 00:00:00',
+                'default_shipping'   => '_item1',
+                'default_billing'    => 1,
+            ],
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
-        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
 
         /**
@@ -446,14 +444,14 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             'items' => [
                 $customerId => [
                     'middlename' => 'test middlename',
-                    'group_id' => 1,
+                    'group_id'   => 1,
                     'website_id' => 1,
-                    'firstname' => 'test firstname',
-                    'lastname' => 'test lastname',
-                    'email' => $newEmail,
-                    'password' => 'password',
+                    'firstname'  => 'test firstname',
+                    'lastname'   => 'test lastname',
+                    'email'      => $newEmail,
+                    'password'   => 'password',
                 ],
-            ]
+            ],
         ];
         $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
         $this->getRequest()->setPostValue($post);
@@ -474,16 +472,15 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $post = [
             'customer' => [
                 'middlename' => 'test middlename',
-                'group_id' => 1,
+                'group_id'   => 1,
                 'website_id' => 1,
-                'firstname' => 'test firstname',
-                'lastname' => 'test lastname',
-                'email' => 'customer@example.com',
-                'password' => 'password',
+                'firstname'  => 'test firstname',
+                'lastname'   => 'test lastname',
+                'email'      => 'customer@example.com',
+                'password'   => 'password',
             ],
         ];
         $this->getRequest()->setPostValue($post);
-        $this->_urlBuilder->turnOffSecretKey();
         $this->dispatch('backend/customer/index/save');
         /*
          * Check that error message is set
@@ -528,15 +525,15 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $customerData = [
             'customer_id' => 0,
-            'customer' => [
-                'created_in' => false,
+            'customer'    => [
+                'created_in'                => false,
                 'disable_auto_group_change' => false,
-                'email' => false,
-                'firstname' => false,
-                'group_id' => false,
-                'lastname' => false,
-                'website_id' => false,
-                'customer_address' => [],
+                'email'                     => false,
+                'firstname'                 => false,
+                'group_id'                  => false,
+                'lastname'                  => false,
+                'website_id'                => false,
+                'customer_address'          => [],
             ],
         ];
         $context = Bootstrap::getObjectManager()->get(\Magento\Backend\Block\Template\Context::class);
@@ -610,37 +607,37 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $customerData = [
             'customer' => [
-                'entity_id' => '1',
-                'middlename' => 'new middlename',
-                'group_id' => 1,
-                'website_id' => 1,
-                'firstname' => 'new firstname',
-                'lastname' => 'new lastname',
-                'email' => 'example@domain.com',
-                'default_shipping' => '_item1',
-                'new_password' => 'auto',
+                'entity_id'          => '1',
+                'middlename'         => 'new middlename',
+                'group_id'           => 1,
+                'website_id'         => 1,
+                'firstname'          => 'new firstname',
+                'lastname'           => 'new lastname',
+                'email'              => 'example@domain.com',
+                'default_shipping'   => '_item1',
+                'new_password'       => 'auto',
                 'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail'          => '1',
             ],
-            'address' => [
-                '_item1' => [
-                    'firstname' => 'update firstname',
-                    'lastname' => 'update lastname',
-                    'street' => ['update street'],
-                    'city' => 'update city',
+            'address'  => [
+                '_item1'     => [
+                    'firstname'  => 'update firstname',
+                    'lastname'   => 'update lastname',
+                    'street'     => ['update street'],
+                    'city'       => 'update city',
                     'country_id' => 'US',
-                    'region_id' => 10,
-                    'postcode' => '01001',
-                    'telephone' => '+7000000001',
+                    'region_id'  => 10,
+                    'postcode'   => '01001',
+                    'telephone'  => '+7000000001',
                 ],
                 '_template_' => [
-                    'firstname' => '',
-                    'lastname' => '',
-                    'street' => [],
-                    'city' => '',
+                    'firstname'  => '',
+                    'lastname'   => '',
+                    'street'     => [],
+                    'city'       => '',
                     'country_id' => 'US',
-                    'postcode' => '',
-                    'telephone' => '',
+                    'postcode'   => '',
+                    'telephone'  => '',
                 ],
             ],
         ];
@@ -667,34 +664,34 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $customerData = [
             'customer' => [
-                'entity_id' => '1',
-                'middlename' => 'new middlename',
-                'group_id' => 1,
-                'website_id' => 1,
-                'firstname' => '',
-                'lastname' => '',
-                'email' => '*',
-                'default_shipping' => '_item1',
-                'new_password' => 'auto',
+                'entity_id'          => '1',
+                'middlename'         => 'new middlename',
+                'group_id'           => 1,
+                'website_id'         => 1,
+                'firstname'          => '',
+                'lastname'           => '',
+                'email'              => '*',
+                'default_shipping'   => '_item1',
+                'new_password'       => 'auto',
                 'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail'          => '1',
             ],
-            'address' => [
-                '1' => [
+            'address'  => [
+                '1'          => [
                     'firstname' => '',
-                    'lastname' => '',
-                    'street' => ['update street'],
-                    'city' => 'update city',
-                    'postcode' => '01001',
+                    'lastname'  => '',
+                    'street'    => ['update street'],
+                    'city'      => 'update city',
+                    'postcode'  => '01001',
                     'telephone' => '',
                 ],
                 '_template_' => [
-                    'lastname' => '',
-                    'street' => [],
-                    'city' => '',
+                    'lastname'   => '',
+                    'street'     => [],
+                    'city'       => '',
                     'country_id' => 'US',
-                    'postcode' => '',
-                    'telephone' => '',
+                    'postcode'   => '',
+                    'telephone'  => '',
                 ],
             ],
         ];
@@ -768,41 +765,35 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $storeId = $customer->getStoreId();
         $name = $this->customerViewHelper->getCustomerName($customer);
 
-        $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->setMethods(['sendMessage'])
-            ->getMockForAbstractClass();
-        $transportMock->expects($this->exactly($occurrenceNumber))
-            ->method('sendMessage');
-        $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'addTo',
-                    'setFrom',
-                    'setTemplateIdentifier',
-                    'setTemplateVars',
-                    'setTemplateOptions',
-                    'getTransport'
-                ]
-            )
-            ->getMock();
-        $transportBuilderMock->method('setTemplateIdentifier')
-            ->with($templateId)
-            ->willReturnSelf();
+        $transportMock =
+            $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+                ->setMethods(['sendMessage'])
+                ->getMockForAbstractClass();
+        $transportMock->expects($this->exactly($occurrenceNumber))->method('sendMessage');
+        $transportBuilderMock =
+            $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)->disableOriginalConstructor(
+                )->setMethods(
+                    [
+                        'addTo',
+                        'setFrom',
+                        'setTemplateIdentifier',
+                        'setTemplateVars',
+                        'setTemplateOptions',
+                        'getTransport',
+                    ]
+                )->getMock();
+        $transportBuilderMock->method('setTemplateIdentifier')->with($templateId)->willReturnSelf();
         $transportBuilderMock->method('setTemplateOptions')
             ->with(['area' => $area, 'store' => $storeId])
             ->willReturnSelf();
-        $transportBuilderMock->method('setTemplateVars')
-            ->willReturnSelf();
-        $transportBuilderMock->method('setFrom')
-            ->with($sender)
-            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateVars')->willReturnSelf();
+        $transportBuilderMock->method('setFrom')->with($sender)->willReturnSelf();
         $transportBuilderMock->method('addTo')
             ->with($this->logicalOr($customer->getEmail(), $newEmail), $name)
             ->willReturnSelf();
-        $transportBuilderMock->expects($this->exactly($occurrenceNumber))
-            ->method('getTransport')
-            ->willReturn($transportMock);
+        $transportBuilderMock->expects($this->exactly($occurrenceNumber))->method('getTransport')->willReturn(
+                $transportMock
+            );
 
         return $transportBuilderMock;
     }

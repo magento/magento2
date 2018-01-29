@@ -174,16 +174,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @param array $data
      * @param bool $unsetOldParams
-     * @return $this
+     * @return \Magento\Framework\UrlInterface
      */
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
-        if (isset($data['_nosecret'])) {
-            $this->turnOffSecretKey();
-            unset($data['_nosecret']);
-        } else {
-            $this->turnOnSecretKey();
-        }
         unset($data['_scope_to_url']);
         return parent::_setRouteParams($data, $unsetOldParams);
     }
@@ -214,7 +208,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
         $actionName = $this->_getActionName(self::DEFAULT_ACTION_NAME);
 
-        if ($this->useSecretKey()) {
+        if (!isset($routeParams['_nosecret']) && $this->useSecretKey()) {
             if ($cacheSecretKey) {
                 $secret = [self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$"];
             } else {
