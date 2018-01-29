@@ -117,6 +117,18 @@ class CreateStockSourceLinkTable
                 StockSourceLink::SOURCE_CODE,
             ],
             ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+        )->addIndex(
+            $setup->getIdxName(
+                $stockSourceLinkTable,
+                [
+                    StockSourceLink::STOCK_ID,
+                    StockSourceLink::PRIORITY,
+                ]
+            ),
+            [
+                StockSourceLink::STOCK_ID,
+                StockSourceLink::PRIORITY,
+            ]
         );
     }
 }

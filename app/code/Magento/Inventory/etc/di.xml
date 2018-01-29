@@ -79,11 +79,10 @@
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
-    <preference for="Magento\InventoryApi\Api\GetSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinks"/>
+    <preference for="Magento\InventoryApi\Api\GetStockSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetStockSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
-    <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>

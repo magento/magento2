@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Plugin\InventoryApi\AssignSourcesToStock;
+namespace Magento\InventoryIndexer\Plugin\InventoryApi\StockSourceLinksSave;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
@@ -14,7 +14,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAfterAssignSourcesToStockPlugin
+class ReindexAfterStockSourceLinksSavePlugin
 {
     /**
      * @var IndexerRegistry

@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\GetSourceLinksInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -32,9 +32,9 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     private $sourceRepository;
 
     /**
-     * @var GetSourceLinksInterface
+     * @var GetStockSourceLinksInterface
      */
-    private $getSourceLinks;
+    private $getStockSourceLinks;
 
     /**
      * @var LoggerInterface
@@ -44,18 +44,18 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
-     * @param GetSourceLinksInterface $getSourceLinks
+     * @param GetStockSourceLinksInterface $getStockSourceLinks
      * @param LoggerInterface $logger
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
-        GetSourceLinksInterface $getSourceLinks,
+        GetStockSourceLinksInterface $getStockSourceLinks,
         LoggerInterface $logger
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
-        $this->getSourceLinks = $getSourceLinks;
+        $this->getStockSourceLinks = $getStockSourceLinks;
         $this->logger = $logger;
     }
 
@@ -91,7 +91,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
             ->create();
-        $searchResult = $this->getSourceLinks->execute($searchCriteria);
+        $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
         $links = $searchResult->getItems();
         if (!$links) {
             return [];

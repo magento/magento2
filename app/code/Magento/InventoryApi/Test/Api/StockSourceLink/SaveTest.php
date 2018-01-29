@@ -21,7 +21,7 @@ class SaveTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
     const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
     const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
-    const SERVICE_NAME_GET_LIST = 'inventoryApiGetSourceLinksV1';
+    const SERVICE_NAME_GET_LIST = 'inventoryApiGetStockSourceLinksV1';
     /**#@-*/
 
     /**

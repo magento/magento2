@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLinkFactory;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\GetSourceLinksInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 
@@ -43,76 +44,74 @@ class StockSourceLinkProcessor
     private $stockSourceLinksDelete;
 
     /**
-     * @var GetSourceLinksInterface
+     * @var GetStockSourceLinksInterface
      */
-    private $getSourceLinks;
+    private $getStockSourceLinks;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StockSourceLinkFactory $stockSourceLinkFactory
      * @param StockSourceLinksSaveInterface $stockSourceLinksSave
      * @param StockSourceLinksDeleteInterface $stockSourceLinksDelete
-     * @param GetSourceLinksInterface $getSourceLinks
+     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StockSourceLinkFactory $stockSourceLinkFactory,
         StockSourceLinksSaveInterface $stockSourceLinksSave,
         StockSourceLinksDeleteInterface $stockSourceLinksDelete,
-        GetSourceLinksInterface $getSourceLinks
+        GetStockSourceLinksInterface $getStockSourceLinks,
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
         $this->stockSourceLinksSave = $stockSourceLinksSave;
         $this->stockSourceLinksDelete = $stockSourceLinksDelete;
-        $this->getSourceLinks = $getSourceLinks;
+        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
      * @param int $stockId
-     * @param array $stockSourceLinksData
+     * @param array $linksData
      * @return void
      * @throws InputException
      */
-    public function process(int $stockId, array $stockSourceLinksData)
+    public function process(int $stockId, array $linksData)
     {
-        $this->validateStockSourceData($stockSourceLinksData);
+        $this->validateStockSourceData($linksData);
 
-        $assignedLinks = $this->getAssignedLinks($stockId);
-        $linksDataToSave = $this->processStockSourceLinksData($stockSourceLinksData);
+        $linksForDelete = $this->getAssignedLinks($stockId);
+        $linksForSave = [];
 
-        $linksToDelete = [];
-        $assignedSourceCodes = [];
+        foreach ($linksData as $linkData) {
+            $stockId = $linkData[StockSourceLink::STOCK_ID];
 
-        foreach ($assignedLinks as $assignedLink) {
-            $assignedSourceCodes[] = $assignedLink->getSourceCode();
-            if (array_key_exists($assignedLink->getSourceCode(), $linksDataToSave)) {
-                continue;
+            if (isset($linksForDelete[$stockId])) {
+                $link = $linksForDelete[$stockId];
+            } else {
+                /** @var StockSourceLinkInterface $link */
+                $link = $this->stockSourceLinkFactory->create();
             }
-            $linksToDelete[] = $assignedLink;
+
+            $linkData[StockSourceLink::STOCK_ID] = $stockId;
+            $this->dataObjectHelper->populateWithArray($link, $linkData, StockSourceLinkInterface::class);
+
+            $linksForSave[] = $link;
+            unset($linksForDelete[$linkData[StockSourceLink::STOCK_ID]]);
         }
 
-        if (count($linksToDelete) > 0) {
-            $this->stockSourceLinksDelete->execute($linksToDelete);
+        if (count($linksForSave) > 0) {
+            $this->stockSourceLinksSave->execute($linksForSave);
         }
-
-        $linksToSave = [];
-
-        foreach ($linksDataToSave as $sourceCodeToSave => $linkDataToSave) {
-            if (in_array($sourceCodeToSave, $assignedSourceCodes)) {
-                continue;
-            }
-            $linksToSave[] = $this->stockSourceLinkFactory->create([
-                'data' => [
-                    StockSourceLink::SOURCE_CODE => $sourceCodeToSave,
-                    StockSourceLink::STOCK_ID => $stockId,
-                    StockSourceLink::PRIORITY => $linkDataToSave[StockSourceLink::PRIORITY],
-                ]
-            ]);
-        }
-
-        if (count($linksToSave) > 0) {
-            $this->stockSourceLinksSave->execute($linksToSave);
+        if (count($linksForDelete) > 0) {
+            $this->stockSourceLinksDelete->execute($linksForDelete);
         }
     }
 
@@ -142,26 +141,10 @@ class StockSourceLinkProcessor
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
             ->create();
 
-        $searchResult = $this->getSourceLinks->execute($searchCriteria);
-
-        return $searchResult->getItems();
-    }
-
-    /**
-     * @param array $stockSourceLinksData
-     *
-     * @return array
-     */
-    private function processStockSourceLinksData($stockSourceLinksData): array
-    {
         $result = [];
-
-        foreach ($stockSourceLinksData as $stockSourceLinkData) {
-            $sourceCode = $stockSourceLinkData[StockSourceLinkInterface::SOURCE_CODE];
-
-            $result[$sourceCode] = $stockSourceLinkData;
+        foreach ($this->getStockSourceLinks->execute($searchCriteria)->getItems() as $link) {
+            $result[$link->getStockId()] = $link;
         }
-
         return $result;
     }
 }

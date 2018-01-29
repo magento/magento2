@@ -21,7 +21,7 @@ class GetListTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
-    const SERVICE_NAME = 'inventoryApiGetSourceLinksV1';
+    const SERVICE_NAME = 'inventoryApiGetStockSourceLinksV1';
     /**#@-*/
 
     /**

@@ -17,7 +17,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
  *
  * @api
  */
-interface GetSourceLinksInterface
+interface GetStockSourceLinksInterface
 {
     /**
      * Find StockSourceLink list by given SearchCriteria

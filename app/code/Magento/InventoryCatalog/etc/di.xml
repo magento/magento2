@@ -16,7 +16,7 @@
     </type>
     <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
         <plugin name="prevent_assign_sources_to_default_stock"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStockPlugin"/>
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksSave\PreventAssignSourcesToDefaultStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"

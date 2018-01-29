@@ -154,7 +154,6 @@
                         <label translate="true">Priority</label>
                     </settings>
                 </field>
-
                 <field name="actionDelete" formElement="actionDelete" sortOrder="40">
                     <settings>
                         <label translate="true">Unassign</label>

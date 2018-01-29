@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock;
+namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockSourceLinksSave;
 
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
@@ -13,6 +13,9 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
+/**
+ * Prevent assign sources to Default Stock
+ */
 class PreventAssignSourcesToDefaultStockPlugin
 {
     /**
@@ -25,6 +28,10 @@ class PreventAssignSourcesToDefaultStockPlugin
      */
     private $defaultStockProvider;
 
+    /**
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         DefaultStockProviderInterface $defaultStockProvider
@@ -42,17 +49,14 @@ class PreventAssignSourcesToDefaultStockPlugin
      */
     public function beforeExecute(StockSourceLinksSaveInterface $subject, array $links)
     {
-        if (0 == count($links)) {
-            return [$links];
-        }
-
-        foreach ($links as $link) {
-            if ($this->defaultStockProvider->getId() == $link->getStockId() &&
-                $this->defaultSourceProvider->getCode() != $link->getSourceCode()) {
-                throw new InputException(__('You can only assign Default Source to Default Stock'));
+        if (0 !== count($links)) {
+            foreach ($links as $link) {
+                if ($this->defaultStockProvider->getId() == $link->getStockId() &&
+                    $this->defaultSourceProvider->getCode() != $link->getSourceCode()) {
+                    throw new InputException(__('You can only assign Default Source to Default Stock'));
+                }
             }
         }
-
-        return [$links];
+        return $links;
     }
 }
