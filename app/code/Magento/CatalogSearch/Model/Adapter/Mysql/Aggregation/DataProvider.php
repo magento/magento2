@@ -46,6 +46,8 @@ class DataProvider implements DataProviderInterface
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $eavConfig,
