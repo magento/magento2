@@ -5,15 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Validator;
+namespace Magento\InventoryCatalog\Model\StockSourceLink\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\StockSourceLink;
+use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
-class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorInterface
+class AssignNonDefaultSourceToDefaultStockValidator implements StockSourceLinkValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -31,7 +32,7 @@ class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorIn
     private $defaultStockProvider;
 
     /**
-     * AssignDefaultSourceToStocksValidator constructor.
+     * AssignNonDefaultSourceToDefaultStockValidator constructor.
      * @param ValidationResultFactory $validationResultFactory
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param DefaultStockProviderInterface $defaultStockProvider
@@ -54,10 +55,10 @@ class AssignDefaultSourceToStocksValidator implements StockSourceLinkValidatorIn
     {
         $errors = [];
         foreach ($links as $link) {
-            if ($link->getSourceCode() === $this->defaultSourceProvider->getCode() &&
-                $link->getStockId() !== $this->defaultStockProvider->getId()
+            if ($link->getStockId() === $this->defaultStockProvider->getId() &&
+                $link->getSourceCode() !== $this->defaultSourceProvider->getCode()
             ) {
-                $errors[] = __('Default Source can be assigned just to Default stock');
+                $errors[] = __('Only Default Source can be assigned to Default Stock');
             }
         }
 

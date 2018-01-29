@@ -44,4 +44,12 @@
     <type name="Magento\CatalogInventory\Helper\Stock">
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
     </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignDefaultSourceToNonDefaultStockValidator</item>
+                <item name="default_stock" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignNonDefaultSourceToDefaultStockValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
