@@ -140,10 +140,10 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->willReturn('float');
         $column->expects($this->any())
             ->method('getPrecision')
-            ->willReturn(4);
+            ->willReturn(10);
         $column->expects($this->any())
             ->method('getScale')
-            ->willReturn(10);
+            ->willReturn(4);
         $column->expects($this->any())
             ->method('getDefault')
             ->willReturn(0);
@@ -190,10 +190,10 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->willReturn('float');
         $column->expects($this->any())
             ->method('getPrecision')
-            ->willReturn(4);
+            ->willReturn(10);
         $column->expects($this->any())
             ->method('getScale')
-            ->willReturn(10);
+            ->willReturn(4);
         $column->expects($this->any())
             ->method('getDefault')
             ->willReturn(null);
@@ -227,17 +227,17 @@ class RealTest extends \PHPUnit\Framework\TestCase
      * Test from definition conversion.
      *
      * @param array $definition
-     * @param bool $expectedScale
+     * @param bool $expectedPrecision
      * @dataProvider definitionDataProvider()
      */
-    public function testFromDefinition($definition, $expectedScale = false, $expectedPrecision = false)
+    public function testFromDefinition($definition, $expectedPrecision = false, $expectedScale = false)
     {
         $expectedData = [
             'definition' => $definition,
         ];
-        if ($expectedScale) {
-            $expectedData['scale'] = $expectedScale;
+        if ($expectedPrecision) {
             $expectedData['precision'] = $expectedPrecision;
+            $expectedData['scale'] = $expectedScale;
         }
         $this->unsignedMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
         $this->nullableMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);

@@ -11,9 +11,9 @@
     <xs:complexType name="decimal">
         <xs:annotation>
             <xs:documentation>
-                A fixed point decimal fraction equal to SQL DECIMAL(SCALE,PRECISION) type, where
-                 - SCALE is a whole size of number including fractional part,
-                 - PRECISION is a size of fractional part of decimal fraction.
+                A fixed point decimal fraction equal to SQL DECIMAL(PRECISION,SCALE) type, where
+                 - SCALE is a size of number in fractional part,
+                 - PRECISION is a whole size of decimal fraction.
                 Please use this type for business oriented math like price or qty storages.
             </xs:documentation>
         </xs:annotation>

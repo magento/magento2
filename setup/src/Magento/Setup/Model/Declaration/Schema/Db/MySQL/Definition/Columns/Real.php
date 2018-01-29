@@ -11,7 +11,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process real types and separate them into type, scale and precision
+ * Process real types and separate them into type, scale and precision.
+ * See https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
  *
  * @inheritdoc
  */
@@ -64,7 +65,7 @@ class Real implements DbDefinitionProcessorInterface
         if ($column->getPrecision() === 0 && $column->getScale() === 0) {
             $type = $column->getType();
         } else {
-            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getScale(), $column->getPrecision());
+            $type = sprintf('%s(%s, %s)', $column->getType(), $column->getPrecision(), $column->getScale());
         }
 
         return sprintf(
@@ -91,13 +92,13 @@ class Real implements DbDefinitionProcessorInterface
              * match[2] - precision
              * match[3] - scale
              */
-            $data['scale'] = $matches[2];
-            $data['precision'] = $matches[3];
+            $data['precision'] = $matches[2];
+            $data['scale'] = $matches[3];
             $data = $this->nullable->fromDefinition($data);
             $data = $this->unsigned->fromDefinition($data);
         } elseif (preg_match('/^decimal\s*\(\s*(\d+)\s*\)/i', $data['definition'], $matches)) {
-            $data['scale'] = $matches[1];
-            $data['precision'] = 0;
+            $data['precision'] = $matches[1];
+            $data['scale'] = 0;
         }
 
         return $data;

@@ -11,8 +11,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Real data column.
- * Declared in SQL, like FLOAT(S, P), DOUBLE(S, P) or DECIMAL(S, P)
+ * Declared in SQL, like FLOAT(P, S), DOUBLE(P, S) or DECIMAL(P, S)
  * Where S - is scale, P - is precision
+ * https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
  */
 class Real extends Column implements
     ElementDiffAwareInterface,

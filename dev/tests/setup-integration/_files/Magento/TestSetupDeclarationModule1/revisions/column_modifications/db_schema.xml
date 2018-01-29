@@ -38,9 +38,9 @@
         <column xsi:type="smallint" identity="true" name="smallint" padding="3" nullable="true"/>
         <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
         <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false"/>
-        <column xsi:type="float" name="float" default="0" precision="10" scale="12"/>
+        <column xsi:type="float" name="float" default="0" precision="12" scale="10"/>
         <column xsi:type="double" name="double" scale="245"/>
-        <column xsi:type="decimal" name="decimal" default="0" scale="15" precision="4"/>
+        <column xsi:type="decimal" name="decimal" default="0" scale="4" precision="15"/>
         <column xsi:type="date" name="date"/>
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="false"/>
         <column xsi:type="datetime" name="datetime" default="0"/>

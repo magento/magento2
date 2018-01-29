@@ -8,7 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * This type is equal to SQL TYPE(SCALE,PRECISION) type.
+ * This type is equal to SQL TYPE(PRECISION,SCALE) type.
  * Used for real numbers storage like decimal, float or double.
  * Decimal type is highly recommended for business math.
  */
@@ -17,12 +17,12 @@ class Real implements FactoryInterface
     /**
      * Default SQL precision
      */
-    const DEFAULT_PRECISION = "0";
+    const DEFAULT_PRECISION = "10";
 
     /**
      * Default SQL scale
      */
-    const DEFAULT_SCALE = "10";
+    const DEFAULT_SCALE = "0";
 
     /**
      * @var ObjectManagerInterface
