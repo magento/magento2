@@ -34,6 +34,7 @@
                 <item name="price" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
                 <item name="tierPrices" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
                 <item name="newFromTo" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\NewFromTo</item>
+                <item name="productLinks" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
             </argument>
         </arguments>
     </type>

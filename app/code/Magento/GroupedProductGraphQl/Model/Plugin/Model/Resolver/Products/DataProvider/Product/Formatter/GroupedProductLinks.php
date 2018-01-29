@@ -24,7 +24,10 @@ class GroupedProductLinks implements FormatterInterface
     public function format(Product $product, array $productData = [])
     {
         if ($product->getTypeId() === GroupedProduct::TYPE_CODE) {
-            $productData['product_links'] = $product->getProductLinks();
+            $productData['product_links'] = array_merge(
+                isset($productData['product_links']) ? $productData['product_links'] : [],
+                $product->getProductLinks()
+            );
         }
 
         return $productData;

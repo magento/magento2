@@ -26,8 +26,10 @@ class GroupedProductPostProcessor implements \Magento\Framework\GraphQl\Query\Po
             if ($product['type_id'] === GroupedProduct::TYPE_CODE) {
                 if (isset($product['product_links'])) {
                     foreach ($product['product_links'] as $productLinkKey => $productlink) {
-                        $resultData[$productKey]['product_links'][$productLinkKey]
-                            = $this->formatProductLinks($productlink);
+                        if ($productlink instanceof Link) {
+                            $resultData[$productKey]['product_links'][$productLinkKey]
+                                = $this->formatProductLinks($productlink);
+                        }
                     }
                 }
             }
