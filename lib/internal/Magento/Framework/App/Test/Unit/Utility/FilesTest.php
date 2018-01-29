@@ -47,6 +47,21 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testGetDbSchemaFiles()
+    {
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
+        $this->assertSame($expected, $actual);
+    }
+
     public function testGetLayoutConfigFiles()
     {
         $this->dirSearchMock->expects($this->once())

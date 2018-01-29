@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -51,7 +52,20 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:db-schema:upgrade')->setDescription('Installs and upgrades the DB schema');
+        $this
+            ->setName('setup:db-schema:upgrade')
+            ->setDefinition(
+                [
+                    new InputOption(
+                        InstallCommand::CONVERT_OLD_SCRIPTS_KEY,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                        false
+                    )
+                ]
+            )
+            ->setDescription('Installs and upgrades the DB schema');
         parent::configure();
     }
 
