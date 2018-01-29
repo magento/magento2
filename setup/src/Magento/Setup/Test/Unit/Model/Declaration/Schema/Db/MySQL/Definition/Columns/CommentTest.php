@@ -5,13 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
-use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
-class BooleanTest extends \PHPUnit\Framework\TestCase
+class CommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
