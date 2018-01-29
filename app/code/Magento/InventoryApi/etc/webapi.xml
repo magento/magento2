@@ -89,7 +89,7 @@
         </resources>
     </route>
     <route url="/V1/inventory/stock-source-link" method="GET">
-        <service class="Magento\InventoryApi\Api\GetSourceLinksInterface" method="execute"/>
+        <service class="Magento\InventoryApi\Api\GetStockSourceLinksInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>

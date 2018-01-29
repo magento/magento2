@@ -81,8 +81,17 @@ class StockSourceLinksDeleteTest extends WebapiAbstract
     {
         $requestData = [
             'searchCriteria' => [
-                SearchCriteria::FILTER_GROUPS => [],
-                SearchCriteria::PAGE_SIZE => 10
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => StockSourceLinkInterface::STOCK_ID,
+                                'value' => 10,
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
 

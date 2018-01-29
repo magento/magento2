@@ -68,6 +68,7 @@ class AssignDefaultSourceToDefaultStock
 
         $link->setStockId($this->defaultStockProvider->getId());
         $link->setSourceCode($this->defaultSourceProvider->getCode());
+        $link->setPriority(1);
 
         $this->stockSourceLinksSave->execute([$link]);
     }
