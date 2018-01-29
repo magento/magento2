@@ -80,11 +80,13 @@ class SelectBuilder
         );
 
         $isSalableString = sprintf(
-            '((legacy_stock_item.use_config_manage_stock = 1 AND 0 = %1$d)'
+            '(((legacy_stock_item.use_config_manage_stock = 1 AND 0 = %1$d)'
             . ' OR (legacy_stock_item.use_config_manage_stock = 0 AND legacy_stock_item.manage_stock = 0))'
             . ' OR ((legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression . ' > %2$d)'
             . ' OR (legacy_stock_item.use_config_min_qty = 0 AND'
-            . ' ' . $quantityExpression . ' > legacy_stock_item.min_qty))',
+            . ' ' . $quantityExpression . ' > legacy_stock_item.min_qty))'
+            //todo this is temporary solution to set is_salable for bundle.
+            . ' OR product_entity.type_id = \'bundle\')',
             $globalManageStock,
             $globalMinQty
         );
