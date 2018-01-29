@@ -7,7 +7,7 @@
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\TierPrice;
+use Magento\Catalog\Model\ProductLink\Link;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
@@ -24,7 +24,7 @@ class ProductLinks implements FormatterInterface
     {
         $productLinks = $product->getProductLinks();
         if ($productLinks) {
-            /** @var TierPrice $tierPrice */
+            /** @var Link $productLink */
             foreach ($productLinks as $productLink) {
                 $productData['product_links'][] = $productLink->getData();
             }
