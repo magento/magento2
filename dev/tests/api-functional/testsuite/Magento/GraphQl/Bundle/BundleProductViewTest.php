@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Bundle;
 
 use Magento\Bundle\Model\Product\OptionList;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\TestFramework\ObjectManager;
@@ -79,6 +80,16 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
+        if ((bool)$bundleProduct->getShipmentType()) {
+            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+        } else {
+            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+        }
+        if ((bool)$bundleProduct->getPriceView()) {
+            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+        } else {
+            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+        }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
         $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
@@ -88,6 +99,10 @@ QUERY;
         );
     }
 
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
     private function assertBundleBaseFields($product, $actualResponse)
     {
         $assertionMap = [
@@ -110,7 +125,7 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle_product_options' must not be empty"
+            "Precondition failed: 'bundle_product_items' must not be empty"
         );
         /** @var OptionList $optionList */
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);
@@ -138,7 +153,7 @@ QUERY;
                 'qty' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
-                'price' => (int)$bundleProductLink->getPrice(),
+                'price' =>  $bundleProductLink->getPrice(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
