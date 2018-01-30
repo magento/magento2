@@ -99,6 +99,7 @@ Submit,Submit
 "Password cannot be the same as email address.","Password cannot be the same as email address."
 "Please fix this field.","Please fix this field."
 "Please enter a valid email address.","Please enter a valid email address."
+"Please remove invalid characters: {0}.", "Please remove invalid characters: {0}."
 "Please enter a valid URL.","Please enter a valid URL."
 "Please enter a valid date (ISO).","Please enter a valid date (ISO)."
 "Please enter only digits.","Please enter only digits."
