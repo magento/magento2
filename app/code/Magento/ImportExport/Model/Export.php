@@ -70,7 +70,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * @var array
      */
-    public static $backendTypeToFilterMapper = [
+    protected static $backendTypeToFilterMapper = [
         'datetime' => self::FILTER_TYPE_DATE,
         'decimal' => self::FILTER_TYPE_NUMBER,
         'int' => self::FILTER_TYPE_NUMBER,
