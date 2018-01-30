@@ -35,7 +35,7 @@ class RealTypes implements ValidationInterface
         foreach ($schema->getTables() as $table) {
             foreach ($table->getColumns() as $column) {
                 if ($column instanceof Real) {
-                    if ($column->getScale() < $column->getPrecision()) {
+                    if ($column->getScale() > $column->getPrecision()) {
                         $errors[] = [
                             'column' => $table->getName() . '.' . $column->getName(),
                             'message' => sprintf(
