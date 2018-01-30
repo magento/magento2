@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Create text with different params
  */
-class Varchar implements FactoryInterface
+class StringBinary implements FactoryInterface
 {
     /**
      * Default small integer padding
