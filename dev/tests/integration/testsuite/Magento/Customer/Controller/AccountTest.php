@@ -681,8 +681,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testLoginPostRedirect($redirectDashboard, string $redirectUrl)
     {
         if (isset($redirectDashboard)) {
-            $this->_objectManager->get(ScopeConfigInterface::class)->setValue('customer/startup/redirect_dashboard',
-                $redirectDashboard);
+            $this->_objectManager->get(ScopeConfigInterface::class)->setValue(
+                'customer/startup/redirect_dashboard',
+                $redirectDashboard
+            );
         }
         $this->_objectManager->get(Redirect::class)->setRedirectCookie('test');
         $configValue = $this->_objectManager->create(Value::class);
