@@ -15,7 +15,7 @@ use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 /**
  * Adapt adding stock data to collection for multi stocks.
  */
-class AdaptAddStockDataToCollection
+class AdaptAddStockDataToCollectionPlugin
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -55,7 +55,7 @@ class AdaptAddStockDataToCollection
         $isFilterInStock
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->addStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
+        $this->addStockDataToCollection->execute($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;
     }
