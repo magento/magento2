@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -33,6 +34,7 @@ class DownloadableProductViewTest extends GraphQlAbstract
            sku
            type_id        
            updated_at
+           weight
         price{
         regularPrice{
           amount{
@@ -83,6 +85,16 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $downloadableProduct = $productRepository->get($productSku, false, null, true);
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            1
+        );
+
+        $this->assertNull($downloadableProduct->getWeight());
         $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
         $linksTitle = $downloadableProduct->getLinksTitle();
         $this->assertEquals(
@@ -107,18 +119,19 @@ QUERY;
         /** @var LinkInterface $downloadableProductLinks */
         $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
         $downloadableProductLink = $downloadableProductLinks[0];
+
         $this->assertResponseFields(
             $actualResponse['downloadable_product_links'][0],
             [
                 'id' => $downloadableProductLink->getId(),
                 'sample_url' => $downloadableProductLink->getSampleUrl(),
                 'sample_type' => strtoupper($downloadableProductLink->getSampleType()),
-                'sample_file' => $downloadableProductLink->getSampleFile(),
-                'is_shareable' => $downloadableProductLink->getIsShareable(),
+              //'sample_file' => $downloadableProductLink->getSampleFile(),
+                'is_shareable' => false,
                 'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),
                 'title' => $downloadableProductLink->getTitle(),
-                'link_type' => $downloadableProductLink->getLinkType(),
+                'link_type' => strtoupper($downloadableProductLink->getLinkType()),
                 'price' => $downloadableProductLink->getPrice()
             ]
         );
@@ -143,7 +156,7 @@ QUERY;
                 'title' => $downloadableProductSample->getTitle(),
                 'sort_order' =>$downloadableProductSample->getSortOrder(),
                // 'sample_url' => $downloadableProductSample->getSampleUrl(),
-                'sample_type' => $downloadableProductSample->getSampleType(),
+                'sample_type' => strtoupper($downloadableProductSample->getSampleType()),
                 'sample_file' => $downloadableProductSample->getSampleFile()
             ]
         );
