@@ -87,9 +87,6 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
         parent::tearDown();
     }
 
-    /**
-     * @magentoDbIsolation enabled
-     */
     public function testExecute()
     {
         $this->commandTester->execute(
