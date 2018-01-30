@@ -15,7 +15,7 @@
         </arguments>
         <!-- @TODO: Change to product.custom_attributes[url_key] after MQE-654 is fixed -->
         <!-- @TODO: Change to {{StorefrontProductPage.url(category.custom_attributes[4][value])}} after MQE-693 is fixed -->
-        <seeInCurrentUrl url="/{{product.custom_attributes[9][value]}}.html" stepKey="checkUrl"/>
+        <seeInCurrentUrl url="/{{product.custom_attributes[11][value]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
