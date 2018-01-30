@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-inventory-low-stock-configuration-api",
+    "name": "magento/module-inventory-low-stock-notification-api",
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",

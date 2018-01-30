@@ -17,7 +17,8 @@ namespace Magento\InventoryLowStockNotificationApi\Api;
 interface SourceItemConfigurationsSaveInterface
 {
     /**
-     * @param \Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInterface[] $sourceItemConfigurations
+     * @param \Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInterface[]
+     *      $sourceItemConfigurations
      * @return void
      */
     public function execute(array $sourceItemConfigurations);

@@ -82,7 +82,8 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Set an extension attributes object
      *
-     * @param \Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationExtensionInterface $extensionAttributes
+     * @param \Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationExtensionInterface
+     *      $extensionAttributes
      * @return void
      */
     public function setExtensionAttributes(SourceItemConfigurationExtensionInterface $extensionAttributes);
