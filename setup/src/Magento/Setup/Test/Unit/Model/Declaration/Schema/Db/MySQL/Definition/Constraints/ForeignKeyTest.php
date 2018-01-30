@@ -78,13 +78,16 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
         $refColumnMock->expects($this->any())->method('getName')->willReturn('ref_col_name');
         $constraint->expects($this->any())->method('getName')->willReturn('fk_name');
         $constraint->expects($this->any())->method('getOnDelete')->willReturn('CASCADE');
-        $tableMock->expects($this->any())->method('getResource')->willReturn($adapterMock);
+        $tableMock->expects($this->any())->method('getResource')->willReturn('default');
         $constraint->expects($this->any())->method('getTable')->willReturn($tableMock);
         $refTableMock->expects($this->any())->method('getName')->willReturn('ref_table');
         $constraint->expects($this->any())->method('getReferenceTable')->willReturn($refTableMock);
         $constraint->expects($this->any())->method('getColumn')->willReturn($columnMock);
         $constraint->expects($this->any())->method('getReferenceColumn')->willReturn($refColumnMock);
-        $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->with('default')
+            ->willReturn($adapterMock);
         $this->resourceConnectionMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $adapterMock->expects($this->any())
