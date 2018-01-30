@@ -3650,9 +3650,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $columns   = array_map([$this, 'quoteIdentifier'], $columns);
         $columns   = implode(',', $columns);
         $values    = implode(', ', $values);
-        $strategy = $strategy === self::INSERT_IGNORE ? ' IGNORE' : '';
+        $strategy = $strategy === self::INSERT_IGNORE ? 'IGNORE' : '';
 
-        $insertSql = sprintf('INSERT%s INTO %s (%s) VALUES %s', $strategy, $tableName, $columns, $values);
+        $insertSql = sprintf('INSERT %s INTO %s (%s) VALUES %s', $strategy, $tableName, $columns, $values);
 
         return $insertSql;
     }

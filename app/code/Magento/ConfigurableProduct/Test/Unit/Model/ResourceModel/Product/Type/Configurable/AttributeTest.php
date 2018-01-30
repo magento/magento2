@@ -82,9 +82,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->getMockBuilder(AttributeModel::class)->setMethods(
             ['getId', 'getUseDefault', 'getLabel']
         )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->any())->method('getId')->willReturn($attributeId);
-        $attributeMock->expects($this->any())->method('getUseDefault')->willReturn(0);
-        $attributeMock->expects($this->any())->method('getLabel')->willReturn('test');
+        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
+        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
+        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 
@@ -117,10 +117,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->getMockBuilder(AttributeModel::class)->setMethods(
             ['getId', 'getUseDefault', 'getLabel', 'getStoreId']
         )->disableOriginalConstructor()->getMock();
-        $attributeMock->expects($this->any())->method('getId')->willReturn($attributeId);
-        $attributeMock->expects($this->any())->method('getStoreId')->willReturn(1);
-        $attributeMock->expects($this->any())->method('getUseDefault')->willReturn(0);
-        $attributeMock->expects($this->any())->method('getLabel')->willReturn('test');
+        $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
+        $attributeMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
+        $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
+        $attributeMock->expects($this->atLeastOnce())->method('getLabel')->willReturn('test');
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 }
