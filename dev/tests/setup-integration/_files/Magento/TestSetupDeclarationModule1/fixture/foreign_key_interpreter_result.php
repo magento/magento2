@@ -8,7 +8,7 @@ return [
         'reference_table' => [
             'column' => [
                 'tinyint_ref' => [
-                    'type' => 'tinyinteger',
+                    'type' => 'tinyint',
                     'name' => 'tinyint_ref',
                     'default' => '0',
                     'padding' => '7',
@@ -22,7 +22,7 @@ return [
         'test_table' => [
             'column' => [
                 'tinyint' => [
-                    'type' => 'tinyinteger',
+                    'type' => 'tinyint',
                     'name' => 'tinyint',
                     'default' => '0',
                     'padding' => '7',

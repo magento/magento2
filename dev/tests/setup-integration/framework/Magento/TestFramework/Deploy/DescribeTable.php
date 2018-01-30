@@ -20,6 +20,13 @@ class DescribeTable
     private $dbSchemaReader;
 
     /**
+     * This registry is used to ignore some tables, during comparison
+     *
+     * @var array
+     */
+    private static $ignoredSystemTables = ['cache', 'cache_tag', 'flag', 'session', 'setup_module'];
+
+    /**
      * Constructor.
      *
      * @param DbSchemaReader $dbSchemaReader
@@ -41,6 +48,10 @@ class DescribeTable
         $tables = $this->dbSchemaReader->readTables($shardName);
 
         foreach ($tables as $table) {
+            if (in_array($table, self::$ignoredSystemTables)) {
+                continue;
+            }
+
             $data[$table] = $this->dbSchemaReader->getCreateTableSql($table, $shardName)['Create Table'];
         }
 

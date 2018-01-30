@@ -41,16 +41,14 @@ class SplitDbTest extends SetupTestCase
     public function testSplitDbInstallation()
     {
         $this->cliCommand->install(
-            ['Magento_ScalableCheckout', 'Magento_ScalableOms'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_ScalableCheckout', 'Magento_ScalableOms']
         );
 
         $this->cliCommand->splitQuote();
         $this->cliCommand->splitSales();
 
         $this->cliCommand->install(
-            ['Magento_TestSetupDeclarationModule2'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule2']
         );
 
         $default = $this->describeTable->describeShard('default');
@@ -66,16 +64,14 @@ class SplitDbTest extends SetupTestCase
     public function testUpgradeWithSplitDb()
     {
         $this->cliCommand->install(
-            ['Magento_TestSetupDeclarationModule2', 'Magento_ScalableCheckout', 'Magento_ScalableOms'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule2', 'Magento_ScalableCheckout', 'Magento_ScalableOms']
         );
 
         $this->cliCommand->splitQuote();
         $this->cliCommand->splitSales();
 
         $this->cliCommand->install(
-            ['Magento_TestSetupDeclarationModule2'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule2']
         );
 
         $default = $this->describeTable->describeShard('default');

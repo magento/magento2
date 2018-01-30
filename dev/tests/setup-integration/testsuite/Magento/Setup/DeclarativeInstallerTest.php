@@ -100,7 +100,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        //@TODO: change this to upgrade in future
+
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1']
         );
@@ -115,6 +115,29 @@ class DeclarativeInstallerTest extends SetupTestCase
     }
 
     /**
+     * Updates revision for db_schema and db_schema_whitelist files
+     *
+     * @param string $revisionName
+     */
+    private function updateDbSchemaRevision($revisionName)
+    {
+        //Move InstallSchema file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            $revisionName,
+            'db_schema.xml',
+            'etc'
+        );
+        //Move InstallSchema file and tried to install
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            $revisionName,
+            'db_schema_whitelist.json',
+            'etc'
+        );
+    }
+
+    /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/column_removal.php
      */
@@ -123,16 +146,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1']
         );
-
-        //Move InstallSchema file and tried to install
-        $this->moduleManager->updateRevision(
-            'Magento_TestSetupDeclarationModule1',
-            'column_removals',
-            'db_schema.xml',
-            'etc'
-        );
-
-        //@TODO: change this to upgrade in future
+        $this->updateDbSchemaRevision('column_removals');
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1']
         );
@@ -171,15 +185,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1']
         );
-
-        //Move InstallSchema file and tried to install
-        $this->moduleManager->updateRevision(
-            'Magento_TestSetupDeclarationModule1',
-            'constraint_modifications',
-            'db_schema.xml',
-            'etc'
-        );
-
+        $this->updateDbSchemaRevision('constraint_modifications');
         //@TODO: change this to upgrade in future
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1']
