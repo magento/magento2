@@ -81,12 +81,12 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
                 if (isset($product['bundle_product_options'])) {
                     foreach ($product['bundle_product_options'] as $optionKey => $option) {
                         $formattedChildIds = [];
-                        $resultData[$productKey]['bundle_product_options'][$optionKey]
+                        $resultData[$productKey]['items'][$optionKey]
                             = $this->formatProductOptions($option);
                         foreach ($option['product_links'] as $linkKey => $link) {
                             $childrenIds[] = (int)$link['entity_id'];
                             $formattedChildIds[$link['entity_id']] = null;
-                            $resultData[$productKey]['bundle_product_options'][$optionKey]['values'][$linkKey]
+                            $resultData[$productKey]['items'][$optionKey]['options'][$linkKey]
                                 = $this->formatProductOptionLinks($link);
                         }
                         $resultData[$productKey]['bundle_product_links'] = $formattedChildIds;

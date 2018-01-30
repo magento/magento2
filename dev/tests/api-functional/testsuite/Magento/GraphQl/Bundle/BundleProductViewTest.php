@@ -44,14 +44,14 @@ class BundleProductViewTest extends GraphQlAbstract
             dynamic_weight
             price_view
             ship_bundle_items
-             bundle_product_options {
+             items {
                option_id
                title
                required
                type
                position
                sku
-               values {
+               options {
                  id
                  product_id
                  qty
@@ -109,7 +109,7 @@ QUERY;
     private function assertBundleProductOptions($product, $actualResponse)
     {
         $this->assertNotEmpty(
-            $actualResponse['bundle_product_options'],
+            $actualResponse['items'],
             "Precondition failed: 'bundle_product_options' must not be empty"
         );
         /** @var OptionList $optionList */
@@ -120,7 +120,7 @@ QUERY;
         $bundleProductLink = $bundleProductLinks[0];
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
-            $actualResponse['bundle_product_options'][0],
+            $actualResponse['items'][0],
             [
                 'option_id' => $option->getOptionId(),
                 'title' => $option->getTitle(),
@@ -131,7 +131,7 @@ QUERY;
             ]
         );
         $this->assertResponseFields(
-            $actualResponse['bundle_product_options'][0]['values'][0],
+            $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
                 'product_id' => $bundleProductLink->getEntityId(),
