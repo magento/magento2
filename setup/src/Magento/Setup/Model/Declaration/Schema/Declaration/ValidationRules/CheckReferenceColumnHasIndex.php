@@ -7,7 +7,6 @@ namespace Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules;
 
 use Magento\Setup\Model\Declaration\Schema\Declaration\ValidationInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
