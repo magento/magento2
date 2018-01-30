@@ -50,16 +50,6 @@
             <opened>true</opened>
             <dataScope>general</dataScope>
         </settings>
-        <field name="disable_source_code" formElement="hidden">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-            <settings>
-                <dataType>boolean</dataType>
-            </settings>
-        </field>
         <field name="source_code" formElement="input" sortOrder="20">
             <settings>
                 <validation>
@@ -68,7 +58,7 @@
                 <dataType>text</dataType>
                 <label translate="true">Code</label>
                 <imports>
-                    <link name="disabled">${ $.provider }:${ $.parentScope }.disable_source_code</link>
+                    <link name="disabled">${ $.provider }:data.general.disable_source_code</link>
                 </imports>
             </settings>
         </field>
