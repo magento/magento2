@@ -54,7 +54,9 @@ class ProductSearchTest extends GraphQlAbstract
             }
          }
          name
-         weight
+         ... on PhysicalProductInterface {
+            weight
+         }
          type_id
          attribute_set_id
        }    
@@ -129,7 +131,9 @@ QUERY;
             }
            }
            name
-           weight           
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -201,7 +205,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -217,7 +223,8 @@ QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
             'specified in the currentPage attribute is greater than the number of pages available (1).');
-        $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query);
+        $response = $response;
     }
 
     /**
@@ -265,7 +272,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -333,7 +342,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -407,7 +418,9 @@ QUERY;
         }
         name
         type_id
-           weight           
+        ... on PhysicalProductInterface {
+            weight
+           }
            attribute_set_id
          }    
         total_count
@@ -474,7 +487,9 @@ QUERY;
             }
         }
         name
-        weight
+        ... on PhysicalProductInterface {
+            weight
+        }
         type_id
         attribute_set_id       
       }           
@@ -549,7 +564,9 @@ products(
             }
        }
        name
-       weight
+       ... on PhysicalProductInterface {
+        weight
+       }
        type_id
        attribute_set_id
      }    
@@ -604,7 +621,9 @@ QUERY;
         }
         name
         type_id
+        ... on PhysicalProductInterface {
            weight
+         }
            attribute_set_id
          }
         total_count
@@ -642,7 +661,9 @@ QUERY;
            sku
            type_id        
            updated_at
-           weight          
+           ... on PhysicalProductInterface {
+               weight
+           }
            category_ids                
            
        }

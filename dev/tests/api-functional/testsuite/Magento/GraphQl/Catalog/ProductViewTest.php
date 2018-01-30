@@ -164,7 +164,6 @@ class ProductViewTest extends GraphQlAbstract
                 linked_product_sku
                 linked_product_type
                 position
-                qty
                 sku
             }
             short_description
@@ -192,7 +191,9 @@ class ProductViewTest extends GraphQlAbstract
             url_key
             url_path
             website_ids
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }
@@ -391,7 +392,9 @@ QUERY;
             url_key
             url_path
             website_ids
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }

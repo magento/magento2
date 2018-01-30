@@ -33,7 +33,6 @@ class DownloadableProductViewTest extends GraphQlAbstract
            sku
            type_id        
            updated_at
-           weight
         price{
         regularPrice{
           amount{
@@ -84,10 +83,12 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $downloadableProduct = $productRepository->get($productSku, false, null, true);
-        $this->assertNull($downloadableProduct->getWeight());
         $IsLinksPurchasedSeparately = $downloadableProduct->getLinksPurchasedSeparately();
         $linksTitle = $downloadableProduct->getLinksTitle();
-        $this->assertEquals($IsLinksPurchasedSeparately, $response['products']['items'][0]['links_purchased_separately']);
+        $this->assertEquals(
+            $IsLinksPurchasedSeparately,
+            $response['products']['items'][0]['links_purchased_separately']
+        );
         $this->assertEquals($linksTitle, $response['products']['items'][0]['links_title']);
         $this->assertDownloadableProductLinks($downloadableProduct, $response['products']['items'][0]);
         $this->assertDownloadableProductSamples($downloadableProduct, $response['products']['items'][0]);
@@ -111,8 +112,8 @@ QUERY;
             [
                 'id' => $downloadableProductLink->getId(),
                 'sample_url' => $downloadableProductLink->getSampleUrl(),
-                'sample_type' => $downloadableProductLink->getSampleType(),
-              //  'sample_file' => $downloadableProductLink->getSampleFile(),
+                'sample_type' => strtoupper($downloadableProductLink->getSampleType()),
+                'sample_file' => $downloadableProductLink->getSampleFile(),
                 'is_shareable' => $downloadableProductLink->getIsShareable(),
                 'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),

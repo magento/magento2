@@ -33,7 +33,9 @@ class BundleProductViewTest extends GraphQlAbstract
            sku
            type_id
            updated_at
-           weight          
+           ... on PhysicalProductInterface {
+             weight
+           }
            category_ids                
            ... on BundleProduct {
            dynamic_sku
@@ -119,9 +121,9 @@ QUERY;
                 'product_id' => $bundleProductLink->getEntityId(),
                 'qty' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
-                'is_default' => $bundleProductLink->getIsDefault(),
+                'is_default' => $bundleProductLink->getIsDefault() === 0 ? true : false,
                 'price' => (int)$bundleProductLink->getPrice(),
-                'price_type' => $bundleProductLink->getPriceType(),
+                'price_type' => $this->mapPriceType($bundleProductLink->getPriceType()),
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
         );
@@ -150,5 +152,20 @@ QUERY;
                 . var_export($expectedValue, true)
             );
         }
+    }
+
+    private function mapPriceType(int $priceTypeValue)
+    {
+        switch ($priceTypeValue) {
+            case 0:
+                $priceType = 'FIXED';
+                break;
+            case 1:
+                $priceType = 'PERCENT';
+                break;
+            default:
+                $priceType = '';
+        }
+        return $priceType;
     }
 }

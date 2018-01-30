@@ -297,7 +297,7 @@
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
         <field xsi:type="ScalarOutputField" name="gift_message_available" type="String"/>
     </type>
-    <type xsi:type="OutputInterface" name="PhysicalProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type xsi:type="OutputInterface" name="PhysicalProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="weight" type="Float"/>
     </type>
     <type xsi:type="OutputType" name="VirtualProduct">

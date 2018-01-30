@@ -130,9 +130,9 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
             = $this->enumLookup->getEnumValueFromField('PriceViewEnum', $product['price_view']);
         $product['ship_bundle_items']
             = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
-        $product['dynamic_price'] =!(bool)$product['price_type'];
-        $product['dynamic_sku'] =!(bool)$product['sku_type'];
-        $product['dynamic_weight'] =!(bool)$product['weight_type'];
+        $product['dynamic_price'] = !(bool)$product['price_type'];
+        $product['dynamic_sku'] = !(bool)$product['sku_type'];
+        $product['dynamic_weight'] = !(bool)$product['weight_type'];
         return $product;
     }
 

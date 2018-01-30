@@ -34,7 +34,9 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             sku
             type_id
             updated_at
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
             price {
               minimalPrice {
                 amount {
@@ -87,7 +89,9 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                     name
                     sku
                     attribute_set_id
-                    weight
+                    ... on PhysicalProductInterface {
+                        weight
+                    }
                     created_at
                     updated_at
                     price {
