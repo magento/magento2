@@ -7,8 +7,6 @@
  */
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
-
 class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -133,7 +131,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
         $this->productMock->expects($this->once())->method('getBundleOptionsData')->willReturn(['option_1' => ['delete' => 1]]);
-        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
