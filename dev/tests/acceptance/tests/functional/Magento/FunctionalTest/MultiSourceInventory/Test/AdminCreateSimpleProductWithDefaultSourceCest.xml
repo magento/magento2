@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductWithDefaultSourceTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Assign Default Source to New Product"/>
+            <title value="Simple Product created with Default Source assigned by Admin user"/>
+            <description value="You should be able to create a New Product, via the Admin, and assign the Default Source to it."/>
+            <testCaseId value="1408726"/>
+            <group value="msi"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+            <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+            <fillField userInput="{{SimpleMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+            <fillField userInput="{{SimpleMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+            <fillField userInput="{{SimpleMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]" requiredAction="true" stepKey="searchAndSelectCategory"/>
+            <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+            <fillField userInput="{{SimpleMsiProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+        </after>
+
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSource"/>
+
+        <click selector="{{AdminProductSourcesSidebarSection.defaultSourceCheckbox}}" stepKey="clickOnDefaultSource"/>
+        <click selector="{{AdminProductSourcesSidebarSection.done}}" stepKey="clickOnDone"/>
+
+        <fillField selector="{{AdminProductSourcesGrid.rowQty}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillQtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity}}" userInput="{{SimpleMsiProduct.notifyQuantity}}" stepKey="fillNotifyQtyField"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowId}}" userInput="{{_defaultSource.id}}" stepKey="seeDefaultAsId"/>
+        <see selector="{{AdminProductSourcesGrid.rowName}}" userInput="{{_defaultSource.name}}" stepKey="seeDefaultSourceAsName"/>
+        <seeOptionIsSelected selector="{{AdminProductSourcesGrid.rowStatus}}" userInput="{{SimpleMsiProduct.stockStatus}}" stepKey="seeInStock"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeQtyInField"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity}}" userInput="{{SimpleMsiProduct.notifyQuantity}}" stepKey="seeNotifyQtyInField"/>
+
+        <!-- Go to storefront category page, assert product visibility -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createPreReqCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <see userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductPresent"/>
+        <see userInput="{{SimpleMsiProduct.price}}" stepKey="assertProductPricePresent"/>
+
+        <!-- Go to storefront product page, assert product visibility -->
+        <amOnPage url="{{SimpleMsiProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <seeInTitle userInput="{{SimpleMsiProduct.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{SimpleMsiProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{SimpleMsiProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{SimpleMsiProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see userInput="{{SimpleMsiProduct.stockStatus}}" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertProductStockStatus"/>
+    </test>
+</tests>

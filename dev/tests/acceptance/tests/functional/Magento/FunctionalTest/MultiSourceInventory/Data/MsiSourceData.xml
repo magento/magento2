@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultSource" type="Source">
+        <data key="name">Default Source</data>
+        <data key="id">default</data>
+        <data key="isEnabled">true</data>
+        <data key="description">Default Source</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">0</data>
+    </entity>
+    <entity name="TestSource" type="Source">
+        <data key="name">Test Source 1</data>
+        <data key="code" unique="suffix">test_source_</data>
+        <data key="isEnabled">true</data>
+        <data key="description">Test Source 1</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">0</data>
+
+        <data key="contactName">First Last</data>
+        <data key="email" unique="prefix">test@test.com</data>
+        <data key="phone">123-456-7890</data>
+        <data key="fax">123-456-7890</data>
+
+        <data key="country">United States</data>
+        <data key="stateProvince">California</data>
+        <data key="city">Culver City</data>
+        <data key="street">6161 West Centinela Avenue</data>
+        <data key="postcode">90230</data>
+
+        <data key="useGlobalShippingConfiguration">true</data>
+    </entity>
+</entities>

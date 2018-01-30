@@ -15,13 +15,13 @@
         <element name="rowByIndex" type="input" selector="div[data-index='sources'] .data-row[data-repeat-index='{{arg1}}']" parameterized="true"/>
         <element name="firstRow" type="input" selector="div[data-index='sources'] .data-row[data-repeat-index='0']"/>
 
-        <element name="rowId" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] span[data-index='source_code']"/>
-        <element name="rowName" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] span[data-index='name']"/>
-        <element name="rowStatus" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] select[name='sources[assigned_sources][0][status]']"/>
-        <element name="rowQty" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][quantity]']"/>
-        <element name="rowNotifyQuantity" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][notify_stock_qty]']"/>
-        <element name="rowUnAssign" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] button[data-action='remove_row']"/>
-        <element name="rowNotifyQuantityUseDefault" type="button" selector="div[data-index='sources'] .data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][notify_stock_qty_use_default]']"/>
+        <element name="rowId" type="button" selector=".data-row[data-repeat-index='0'] span[data-index='source_code']"/>
+        <element name="rowName" type="button" selector=".data-row[data-repeat-index='0'] span[data-index='name']"/>
+        <element name="rowStatus" type="button" selector=".data-row[data-repeat-index='0'] select[name='sources[assigned_sources][0][status]']"/>
+        <element name="rowQty" type="button" selector=".data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][quantity]']"/>
+        <element name="rowNotifyQuantity" type="button" selector=".data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][notify_stock_qty]']"/>
+        <element name="rowUnAssign" type="button" selector=".data-row[data-repeat-index='0'] button[data-action='remove_row']"/>
+        <element name="rowNotifyQuantityUseDefault" type="button" selector=".data-row[data-repeat-index='0'] input[name='sources[assigned_sources][0][notify_stock_qty_use_default]']"/>
     </section>
     <section name="AdminProductSourcesSidebarSection">
         <element name="done" type="button" selector=".product_form_product_form_sources_assign_sources_modal button.action-primary" timeout="30"/>
