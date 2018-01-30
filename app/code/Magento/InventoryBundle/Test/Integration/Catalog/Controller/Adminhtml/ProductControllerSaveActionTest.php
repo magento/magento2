@@ -56,6 +56,7 @@ class ProductControllerSaveActionTest extends AbstractBackendController
      */
     public function testBundleProductShouldBeInStockOnCreateButShouldNotProcessSourceItems()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/370');
         $this->getRequest()->setPostValue($this->prepareFormData());
 
         $this->dispatch('backend/catalog/product/save');
