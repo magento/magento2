@@ -24,7 +24,7 @@ class RealTypes implements ValidationInterface
     /**
      * Error message, that will be shown.
      */
-    const ERROR_MESSAGE = 'Real type "scale" must be greater or equal to "precision". %s(%s,%s) is invalid in %s.';
+    const ERROR_MESSAGE = 'Real type "precision" must be greater or equal to "scale". %s(%s,%s) is invalid in %s.';
 
     /**
      * @inheritdoc
@@ -41,8 +41,8 @@ class RealTypes implements ValidationInterface
                             'message' => sprintf(
                                 self::ERROR_MESSAGE,
                                 $column->getType(),
-                                $column->getScale(),
                                 $column->getPrecision(),
+                                $column->getScale(),
                                 $table->getName() . '.' . $column->getName()
                             )
                         ];

@@ -62,7 +62,6 @@ class Timestamp extends Column implements
 
     /**
      * Return default value
-     * Note: default value should be float
      *
      * @return int | null
      */

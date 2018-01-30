@@ -77,11 +77,11 @@ class Internal implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         return [
-                'name' => $data['Key_name'],
-                'column' => [
-                    $data['Column_name'] => $data['Column_name']
-                ],
-                'type' => $data['Key_name'] === self::PRIMARY_NAME ? 'primary' : 'unique'
+            'name' => $data['Key_name'],
+            'column' => [
+                $data['Column_name'] => $data['Column_name']
+            ],
+            'type' => $data['Key_name'] === self::PRIMARY_NAME ? 'primary' : 'unique'
         ];
     }
 }

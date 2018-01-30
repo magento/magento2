@@ -37,7 +37,7 @@ class Unsigned implements DbDefinitionProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        $data['unsigned'] = strpos($data['definition'], self::UNSIGNED_FLAG) !== false;
+        $data['unsigned'] = stripos($data['definition'], self::UNSIGNED_FLAG) !== false;
         return $data;
     }
 }
