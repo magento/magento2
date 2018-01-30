@@ -77,6 +77,17 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
+    private function getEdition()
+    {
+        if (file_exists(BP . '/setup/performance-toolkit/profiles/b2b/small.xml')) {
+            return 'b2b';
+        } elseif (file_exists(BP . '/setup/performance-toolkit/profiles/ee/small.xml')) {
+            return 'ee';
+        } else {
+            return 'ce';
+        }
+    }
+
     /**
      * teardown
      */
@@ -89,9 +100,10 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
+        $profile = BP . "/setup/performance-toolkit/profiles/{$this->getEdition()}/small.xml";
         $this->commandTester->execute(
             [
-                GenerateFixturesCommand::PROFILE_ARGUMENT => BP . '/setup/performance-toolkit/profiles/ce/small.xml',
+                GenerateFixturesCommand::PROFILE_ARGUMENT => $profile,
                 '--' . GenerateFixturesCommand::SKIP_REINDEX_OPTION => true
             ]
         );
