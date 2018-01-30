@@ -184,4 +184,102 @@ QUERY;
             );
         }
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     */
+    public function testAndMaxMinPriceBundleProduct()
+    {
+        $productSku = 'bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           id           
+           type_id
+           ... on PhysicalProductInterface {
+             weight
+           }
+           category_ids 
+           price {
+             minimalPrice {
+               amount {
+                 value
+                 currency
+               }
+               adjustments {
+                 amount {
+                   value
+                   currency
+                 }
+                 code
+                 description
+               }
+             }
+             maximalPrice {
+               amount {
+                 value
+                 currency
+               }
+               adjustments {
+                 amount {
+                   value
+                   currency
+                 }
+                 code
+                 description
+               }
+             }
+             regularPrice {
+               amount {
+                 value
+                 currency
+               }
+               adjustments {
+                 amount {
+                   value
+                   currency
+                 }
+                 code
+                 description
+               }
+             }
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items             
+             bundle_product_links {
+               id
+               name
+               sku
+             }
+           }
+       }
+   }   
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $bundleProduct = $productRepository->get($productSku, false, null, true);
+        /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
+        $priceInfo = $bundleProduct->getPriceInfo();
+        $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
+        $minimalPrice = $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue();
+        $maximalPrice = $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue();
+        $this->assertEquals(
+            $minimalPrice,
+            $response['products']['items'][0]['price']['minimalPrice']['amount']['value']
+        );
+        $this->assertEquals(
+            $maximalPrice,
+            $response['products']['items'][0]['price']['minimalPrice']['amount']['value']
+        );
+    }
 }
