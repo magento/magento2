@@ -7,6 +7,8 @@
  */
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+
 class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -57,7 +59,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             'setOptions',
             'setCanSaveBundleSelections',
             '__wakeup',
-            'getOptionsReadonly'
+            'getOptionsReadonly',
+            'getBundleOptionsData',
+            'getExtensionAttributes',
+            'setExtensionAttributes',
         ];
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
@@ -127,6 +132,15 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         );
         $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
+        $this->productMock->expects($this->once())->method('getBundleOptionsData')->willReturn(['option_1' => ['delete' => 1]]);
+        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setBundleProductOptions'])
+            ->getMockForAbstractClass();
+        $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
+
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 
