@@ -1061,7 +1061,8 @@ class Installer
         //Admin user data is not system data, so we need to install it only if schema for admin user was installed
         if ($adminUserModuleIsInstalled) {
             $this->assertDbConfigExists();
-            $setup = $this->setupFactory->create($this->context->getResources());
+            $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
+        $setup = $this->setupFactory->create($this->context->getResources());
             $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
             $adminAccount->save();
         }

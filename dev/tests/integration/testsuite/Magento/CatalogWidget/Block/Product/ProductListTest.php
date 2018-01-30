@@ -68,7 +68,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
             . '`value`:[`' . implode(',', $multiselectAttributeOptionIds) . '`]^]^]';
         $this->block->setData('conditions_encoded', $encodedConditions);
 
-        // Load products collection filtered using specified conditions and perform assesrions
+        // Load products collection filtered using specified conditions and perform assertions
         $productCollection = $this->block->createCollection();
         $productCollection->load();
         $this->assertEquals(

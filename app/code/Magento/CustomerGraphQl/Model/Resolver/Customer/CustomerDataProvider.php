@@ -7,6 +7,7 @@
 namespace Magento\CustomerGraphQl\Model\Resolver\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
@@ -51,6 +52,7 @@ class CustomerDataProvider
      *
      * @param int $customerId
      * @return array|null
+     * @throws NoSuchEntityException|LocalizedException
      */
     public function getCustomerById(int $customerId)
     {
