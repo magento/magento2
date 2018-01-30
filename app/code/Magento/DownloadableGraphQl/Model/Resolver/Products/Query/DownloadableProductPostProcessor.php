@@ -9,6 +9,7 @@ namespace Magento\DownloadableGraphQl\Model\Resolver\Products\Query;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Downloadable\Helper\Data as DownloadableHelper;
 
 /**
  * Retrieves simple product data for child products, and formats configurable data
@@ -21,11 +22,17 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
     private $enumLookup;
 
     /**
+     * @var DownloadableHelper
+     */
+    private $downloadableHelper;
+
+    /**
      * @param EnumLookup $enumLookup
      */
-    public function __construct(EnumLookup $enumLookup)
+    public function __construct(EnumLookup $enumLookup, DownloadableHelper $downloadableHelper)
     {
         $this->enumLookup = $enumLookup;
+        $this->downloadableHelper = $downloadableHelper;
     }
 
     /**
@@ -66,7 +73,7 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
             $resultData[$linkKey]['id'] = $link->getId();
             $resultData[$linkKey]['title'] = $link->getTitle();
             $resultData[$linkKey]['sort_order'] = $link->getSortOrder();
-            $resultData[$linkKey]['is_shareable'] = $link->getIsShareable();
+            $resultData[$linkKey]['is_shareable'] = $this->downloadableHelper->getIsShareable($link);
             $resultData[$linkKey]['price'] = $link->getPrice();
             $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
             $resultData[$linkKey]['link_type']
