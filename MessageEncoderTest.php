@@ -116,10 +116,12 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Property "NotExistingField" does not have corresponding setter
      */
     public function testDecodeInvalidMessage()
     {
+        $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
+            . '"Magento\Customer\Api\Data\CustomerInterface".';
+        $this->expectExceptionMessage($message);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }
 
