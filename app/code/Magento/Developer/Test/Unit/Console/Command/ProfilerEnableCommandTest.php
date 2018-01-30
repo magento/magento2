@@ -8,7 +8,6 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\ProfilerEnableCommand;
 use Magento\Framework\Filesystem\Io\File;
-use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -48,12 +47,7 @@ class ProfilerEnableCommandTest extends TestCase
             ->with(BP . '/' . ProfilerEnableCommand::PROFILER_FLAG_FILE)
             ->willReturn($fileExists);
         /** @var ProfilerEnableCommand $command */
-        $command = Bootstrap::getObjectManager()->create(
-            ProfilerEnableCommand::class,
-            [
-                'filesystem' => $this->filesystemMock,
-            ]
-        );
+        $command = new ProfilerEnableCommand($this->filesystemMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute(['type' => $inputType]);
 
