@@ -57,7 +57,9 @@ class Email extends \Magento\Backend\App\Action
                 $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
                     ->notify($shipment);
                 $shipment->save();
-                $this->messageManager->addSuccessMessage(__('You sent the shipment.'));
+                $this->messageManager->addSuccessMessage(
+                    __('An email confirming the order is underway has been sent to the customer.')
+                );
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
