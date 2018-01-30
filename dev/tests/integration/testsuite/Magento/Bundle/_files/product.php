@@ -30,6 +30,8 @@ $product->setTypeId('bundle')
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setPriceView(1)
     ->setPriceType(1)
+    ->setSkuType(1)
+    ->setWeightType(1)
     ->setShipmentType(1)
     ->setPrice(10.0)
     ->setBundleOptionsData(
@@ -47,9 +49,11 @@ $product->setTypeId('bundle')
             [
                 [
                     'product_id' => $sampleProduct->getId(),
+                    'selection_price_value' => (float)2,
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
+
                 ],
             ],
         ]
@@ -90,4 +94,5 @@ if ($product->getBundleOptionsData()) {
     $extension->setBundleProductOptions($options);
     $product->setExtensionAttributes($extension);
 }
-$product->save();
+//$product->save();
+$productRepository->save($product, true);

@@ -8,12 +8,13 @@ namespace Magento\GraphQl\Bundle;
 
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class BundleProductViewTest extends GraphQlAbstract
 {
-
+    const KEY_PRICE_TYPE_FIXED = 'FIXED';
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product.php
      */
@@ -76,12 +77,27 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
-        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
         $this->assertNotEmpty(
             $response['products']['items'][0]['bundle_product_links'],
             "Precondition failed: 'bundle_product_links' must not be empty"
         );
+    }
+
+    private function assertBundleBaseFields($product, $actualResponse)
+    {
+        $assertionMap = [
+            ['response_field' => 'sku', 'expected_value' => $product->getSku()],
+            ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
+            ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
+            ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
+            ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]
+        ];
+
+        $this->assertResponseFields($actualResponse, $assertionMap);
     }
 
     /**
@@ -119,9 +135,9 @@ QUERY;
                 'product_id' => $bundleProductLink->getEntityId(),
                 'qty' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
-                'is_default' => $bundleProductLink->getIsDefault(),
+                'is_default' => (bool)$bundleProductLink->getIsDefault(),
                 'price' => (int)$bundleProductLink->getPrice(),
-                'price_type' => $bundleProductLink->getPriceType(),
+                 'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
         );
