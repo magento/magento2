@@ -55,7 +55,7 @@ class AdaptAddStockDataToCollectionPlugin
         $isFilterInStock
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->addStockDataToCollection->addStockDataToCollection($collection, (bool)$isFilterInStock, $stockId);
+        $this->addStockDataToCollection->execute($collection, (bool)$isFilterInStock, $stockId);
 
         return $collection;
     }

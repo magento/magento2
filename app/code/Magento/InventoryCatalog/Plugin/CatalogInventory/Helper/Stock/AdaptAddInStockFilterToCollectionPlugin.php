@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
-use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
+use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFieldToCollection;
 
 /**
  * Adapt addInStockFilterToCollection for multi stocks.
@@ -23,20 +23,20 @@ class AdaptAddInStockFilterToCollectionPlugin
     private $getStockIdForCurrentWebsite;
 
     /**
-     * @var AddIsInStockFilterToCollection
+     * @var AddIsInStockFieldToCollection
      */
-    private $addIsInStockFilterToCollection;
+    private $addIsInStockFieldToCollection;
 
     /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
-     * @param AddIsInStockFilterToCollection $addIsInStockFilterToCollection
+     * @param AddIsInStockFieldToCollection $addIsInStockFieldToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        AddIsInStockFilterToCollection $addIsInStockFilterToCollection
+        AddIsInStockFieldToCollection $addIsInStockFieldToCollection
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->addIsInStockFilterToCollection = $addIsInStockFilterToCollection;
+        $this->addIsInStockFieldToCollection = $addIsInStockFieldToCollection;
     }
 
     /**
@@ -50,6 +50,6 @@ class AdaptAddInStockFilterToCollectionPlugin
     public function aroundAddInStockFilterToCollection(Stock $subject, callable $proceed, $collection)
     {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->addIsInStockFilterToCollection->addIsInStockFilterToCollection($collection, $stockId);
+        $this->addIsInStockFieldToCollection->execute($collection, $stockId);
     }
 }

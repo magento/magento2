@@ -52,7 +52,7 @@ class AdaptAddIsInStockFilterToCollectionPlugin
         $collection
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->addIsInStockFilterToCollection->addIsInStockFilterToCollection($collection, $stockId);
+        $this->addIsInStockFilterToCollection->execute($collection, $stockId);
 
         return $stockStatus;
     }

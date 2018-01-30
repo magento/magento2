@@ -65,7 +65,7 @@ class AdaptAddStockStatusToSelectPlugin
         $stock = $this->getStockIdForCurrentWebsite->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
 
-        $this->addStockStatusToSelect->addStockStatusToSelect($select, $stockId);
+        $this->addStockStatusToSelect->execute($select, $stockId);
 
         return $stockStatus;
     }

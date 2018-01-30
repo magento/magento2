@@ -12,9 +12,9 @@ use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
 /**
- * Adapt adding is in stock filter to collection for Multi Stocks.
+ * Adapt adding and applying is in stock field to collection for Multi Stocks.
  */
-class AddIsInStockFilterToCollection
+class AddIsInStockFieldToCollection
 {
     /**
      * @var StockIndexTableNameResolverInterface
@@ -40,9 +40,9 @@ class AddIsInStockFilterToCollection
         $tableName = $this->stockIndexTableProvider->execute($stockId);
 
         $collection->getSelect()->join(
-            ['stock_status_index' => $tableName],
-            'e.sku = stock_status_index.sku',
+            ['inventory_in_stock' => $tableName],
+            'e.sku = inventory_in_stock.sku',
             []
-        )->where('stock_status_index.' . IndexStructure::QUANTITY . ' > 0');
+        )->where('inventory_in_stock.' . IndexStructure::QUANTITY . ' > 0');
     }
 }
