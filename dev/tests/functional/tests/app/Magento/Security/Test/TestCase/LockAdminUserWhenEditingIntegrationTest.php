@@ -85,7 +85,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
     /**
      * Run Lock user when creating new integration test.
      *
-     * @param Integration $initintegration
+     * @param Integration $initIntegration
      * @param Integration $integration
      * @param int $attempts
      * @param User $customAdmin
@@ -93,7 +93,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
      * @return void
      */
     public function test(
-        Integration $initintegration,
+        Integration $initIntegration,
         Integration $integration,
         $attempts,
         User $customAdmin,
@@ -107,7 +107,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
             ['configData' => $this->configData]
         )->run();
         $customAdmin->persist();
-        $initintegration->persist();
+        $initIntegration->persist();
 
         // login to backend with new user
         $this->adminAuthLogin->open();
@@ -115,7 +115,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
         $this->adminAuthLogin->getLoginBlock()->submit();
 
         // Steps
-        $filter = ['name' => $initintegration->getName()];
+        $filter = ['name' => $initIntegration->getName()];
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getIntegrationGrid()->searchAndOpen($filter);
         for ($i = 0; $i < $attempts; $i++) {

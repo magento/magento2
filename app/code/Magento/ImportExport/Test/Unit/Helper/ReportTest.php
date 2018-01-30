@@ -45,11 +45,20 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     protected $report;
 
     /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestMock;
+
+    /**
      * Set up
      */
     protected function setUp()
     {
         $this->context = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->timezone = $this->createPartialMock(
             \Magento\Framework\Stdlib\DateTime\Timezone::class,
             ['date', 'getConfigTimezone', 'diff', 'format']
@@ -158,5 +167,21 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->report->getReportSize('file');
         $this->assertNull($result);
+    }
+
+    /**
+     * Test getDelimiter() take into consideration request param '_import_field_separator'.
+     */
+    public function testGetDelimiter()
+    {
+        $testDelimiter = 'some delimiter';
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with($this->identicalTo(\Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR))
+            ->willReturn($testDelimiter);
+        $this->assertEquals(
+            $testDelimiter,
+            $this->report->getDelimiter()
+        );
     }
 }
