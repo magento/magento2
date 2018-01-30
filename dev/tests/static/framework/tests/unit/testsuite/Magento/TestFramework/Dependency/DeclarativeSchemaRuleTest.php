@@ -7,7 +7,7 @@ namespace Magento\TestFramework\Dependency;
 
 /**
  * Test for declarative schema integrity rule.
- * 
+ *
  * @package Magento\TestFramework\Dependency
  */
 class DeclarativeSchemaRuleTest extends \PHPUnit\Framework\TestCase
