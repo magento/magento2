@@ -6,9 +6,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="GroupedProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <field xsi:type="ObjectArrayOutputField" name="items" itemType="GroupedProductItem"/>
     </type>
     <type xsi:type="OutputType" name="GroupedProductItem">
-        <implements interface="ProductLinksInterface" copyFields="true"/>
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface"/>
     </type>
 </config>

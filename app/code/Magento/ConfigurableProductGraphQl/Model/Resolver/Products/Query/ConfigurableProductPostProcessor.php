@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 /**
  * Retrieves simple product data for child products, and formats configurable data
  */
-class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
+class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
 {
     /**
      * @var SearchCriteriaBuilder
