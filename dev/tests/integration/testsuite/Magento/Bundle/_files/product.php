@@ -32,8 +32,6 @@ $product->setTypeId('bundle')
     ->setSkuType(1)
     ->setWeightType(1)
     ->setPriceType(1)
-    ->setSkuType(1)
-    ->setWeightType(1)
     ->setShipmentType(0)
     ->setPrice(10.0)
     ->setBundleOptionsData(
