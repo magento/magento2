@@ -14,11 +14,11 @@ use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
- * into DTO`s format, with aggregation root: Schema
+ * into DTO`s format, with aggregation root: Schema.
  *
  * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
- * In order to convert build only 1 structural element use directly it factory
+ * In order to convert build only 1 structural element use directly it factory.
  *
  * @see        Schema
  * @inheritdoc
@@ -41,6 +41,8 @@ class SchemaBuilder
     private $sharding;
 
     /**
+     * Constructor.
+     *
      * @param ElementFactory          $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding                $sharding
@@ -121,9 +123,7 @@ class SchemaBuilder
     }
 
     /**
-     * Process references for all tables
-     * This needs to validate schema. And find out invalid references, for example
-     * for tables that do not exists already
+     * Process references for all tables. Schema validation required.
      *
      * @param  Table[] $tables
      * @return Table[]
@@ -154,7 +154,7 @@ class SchemaBuilder
     }
 
     /**
-     * Retrieve column objects from names
+     * Retrieve column objects from names.
      *
      * @param  Column[] $columns
      * @param  array    $data
@@ -169,10 +169,10 @@ class SchemaBuilder
         $referenceColumns = [];
         foreach ($data['column'] as $columnName) {
             if (!isset($columns[$columnName])) {
-                //Depends on business logic, we can either ignore non-existing column
-                //Or throw exception if db is not consistence and there is no column
+                //todo: add extension point to change the current behavior
+                //Depends on business logic, can either ignore non-existing column
+                //or throw exception if db is not consistent and there is no column
                 //that was specified for key
-                //Right now we prefer to ignore such columns
             } else {
                 $referenceColumns[] = $columns[$columnName];
             }

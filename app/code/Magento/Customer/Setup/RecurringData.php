@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Customer\Model\Customer;
 
 /**
- * Upgrade registered themes
+ * Upgrade registered themes.
  */
 class RecurringData implements InstallDataInterface
 {

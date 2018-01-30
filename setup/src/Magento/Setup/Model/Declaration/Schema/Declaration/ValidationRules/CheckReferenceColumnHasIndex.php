@@ -12,19 +12,19 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
  * Go through all tables in schema and see if reference columns in foreign keys
- * has unique or primary key constraints
+ * has unique or primary key constraints.
  *
  * @inheritdoc
  */
 class CheckReferenceColumnHasIndex implements ValidationInterface
 {
     /**
-     * error code
+     * Error code.
      */
     const ERROR_TYPE = 'reference_column_without_unique_index';
 
     /**
-     * error message, that will be shown
+     * Error message, that will be shown.
      */
     const ERROR_MESSAGE = 'Reference column %s in reference table %s do not have index';
 

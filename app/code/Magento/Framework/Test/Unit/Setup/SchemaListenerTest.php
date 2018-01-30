@@ -13,13 +13,22 @@ use Magento\Framework\Setup\SchemaListenerDefinition\RealDefinition;
 use Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Unit test for schema listener.
+ *
+ * @package Magento\Framework\Test\Unit\Setup
+ */
 class SchemaListenerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Setup\SchemaListener */
-    protected $model;
+    /**
+     * @var \Magento\Framework\Setup\SchemaListener
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
     protected function setUp()
     {
@@ -64,7 +73,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '25,12',
             ['unsigned' => false, 'nullable' => false],
-            'Decial'
+            'Decimal'
         )
         ->addIndex(
             'INDEX_KEY',

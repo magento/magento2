@@ -7,21 +7,22 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
- * Not each statement can be concatanated with others
- * So we need to decide what statement should goes separately and what can be added in single statement
+ * Statement aggregator.
+ *
+ * Statements are concatenated conditionally, decides which statements go separately and which may be concatenated.
  */
 class StatementAggregator
 {
     /**
-     * Here we have statements batches
-     * In each batch we have statements that can be merged with each other
+     * Statements batch.
+     * Statements that can be merged with each other are ain each bunch.
      *
      * @var array
      */
     private $statementsBank = [];
 
     /**
-     * Before we will do merge, we need to ensure that we can do it
+     * Verify that statements can be merged.
      *
      * @param Statement $bankStatement
      * @param Statement $statement
@@ -29,17 +30,18 @@ class StatementAggregator
      */
     private function canDoMerge(Statement $bankStatement, Statement $statement)
     {
-        /** We can modify reference only in 2 different requests */
+        /** Modify reference only for 2 different requests */
         if ($statement instanceof ReferenceStatement && $statement->getName() === $bankStatement->getName()) {
             return false;
         }
 
         /**
          * If we add trigger after some specific statement, than we say that statement is final
-         * and can`t be updated anymore. Otherwise trigger can fails
-         * For example, when we want to migrate data from one column to another
-         * and another column should be removed, we need to ensure that we create new column
-         * finalize statement, do insert and only after insert do all other statements like DROP old column
+         * and can`t be updated anymore. Otherwise trigger can fail.
+         *
+         * Example: while migrating data from one column to another and another column should be removed,
+         * we need to ensure that we create new column, finalize statement, do insert and only after insert
+         * do all other statements like DROP old column.
          */
         return empty($bankStatement->getTriggers()) &&
             $statement->getType() === $bankStatement->getType() &&
@@ -48,10 +50,10 @@ class StatementAggregator
     }
 
     /**
-     * Add one or few statements and divide them if they can`t be executed in one query
+     * Add one or few statements and divide them if they can`t be executed in one query.
      *
-     * For example, foreign key modification can`t be done in one query
-     * First we need to drop existing foreign key and only then create new one
+     * For example, foreign key modification can`t be done in one query.
+     * First existing foreign key should be dropped and only then new one can be created.
      *
      * @param Statement[] $statements
      */
@@ -75,7 +77,7 @@ class StatementAggregator
     }
 
     /**
-     * Return all statements separated in batches
+     * Return all statements separated in batches.
      *
      * @return Statement[]
      */

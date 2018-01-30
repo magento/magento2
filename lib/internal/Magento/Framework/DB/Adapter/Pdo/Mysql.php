@@ -3945,9 +3945,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Get schema Listener
+     * Get schema Listener.
      *
-     * It needs to listen all DDL changes done by 3-rd party modules with old Install/UpgradeSchema scripts
+     * Required to listen all DDL changes done by 3-rd party modules with old Install/UpgradeSchema scripts.
      *
      * @return SchemaListener
      */

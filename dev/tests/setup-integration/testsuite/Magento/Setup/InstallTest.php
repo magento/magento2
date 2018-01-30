@@ -9,7 +9,7 @@ namespace Magento\Setup;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * The purpose of this test is verifying initial InstallSchema, InstallData scripts
+ * The purpose of this test is verifying initial InstallSchema, InstallData scripts.
  */
 class InstallTest extends \PHPUnit\Framework\TestCase
 {
@@ -166,7 +166,7 @@ class InstallTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Return array of table names in format 'initial table name' => 'table name with prefix'
+     * Return array of table names in format 'initial table name' => 'table name with prefix'.
      *
      * @return array
      */

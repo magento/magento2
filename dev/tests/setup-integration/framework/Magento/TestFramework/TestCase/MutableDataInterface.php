@@ -6,13 +6,13 @@
 namespace Magento\TestFramework\TestCase;
 
 /**
- * This interface allows to add data to test case dynamicly, for example from startTest listeners
- * in order to reuse it later
+ * This interface allows to add data to test case dynamically, for example from startTest listeners
+ * in order to reuse it later.
  */
 interface MutableDataInterface
 {
     /**
-     * Set dataproviders data
+     * Set data providers data.
      *
      * @param  array $data
      * @return void
@@ -20,14 +20,14 @@ interface MutableDataInterface
     public function setData(array $data);
 
     /**
-     * Retrieve data injected dynamicly in test case
+     * Retrieve data injected dynamically in test case.
      *
      * @return array
      */
     public function getData();
 
     /**
-     * Revert data to default dataProviders data
+     * Revert data to default dataProviders data.
      *
      * @return void
      */

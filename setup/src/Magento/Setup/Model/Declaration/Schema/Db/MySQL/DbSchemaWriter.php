@@ -23,7 +23,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 class DbSchemaWriter implements DbSchemaWriterInterface
 {
     /**
-     * Statement directives with which we will decide what to do with tables
+     * Statement directives with which we will decide what to do with tables.
      *
      * @var array
      */
@@ -44,6 +44,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private $statementFactory;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
      */
@@ -77,7 +79,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Drop table from MySQL database
+     * Drop table from MySQL database.
      *
      * @inheritdoc
      */
@@ -93,9 +95,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * For Primary key we do not need to specify name
+     * No names specified for Primary Keys.
      *
-     * As MySQL do not have DROP CONSTRAINT syntax, we need different DROP statements for different operations
+     * As MySQL do not have DROP CONSTRAINT syntax, different DROP statements for different operations are required.
      *
      * @param  string $type
      * @param  string $name
@@ -118,8 +120,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Add element to already existed table
-     * We can add three different elements: column, constraint or index
+     * Add element to existing table: column, constraint or index.
      *
      * @inheritdoc
      */
@@ -155,7 +156,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Modify column and change it definition
+     * Modify column and change its definition.
      *
      * @inheritdoc
      */

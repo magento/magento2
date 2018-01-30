@@ -13,13 +13,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Used to migrate data from one column to another in scope of one table
- * Also can add statement in case when data can`t be migrate easily
+ * Used to migrate data from one column to another in scope of one table.
+ * Also can add statement in case when data can`t be migrate easily.
  */
 class MigrateDataFrom implements DDLTriggerInterface
 {
     /**
-     * Pattern with which we can match whether we can apply and use this trigger or not
+     * Pattern with which we can match whether we can apply and use this trigger or not.
      */
     const MATCH_PATTERN = '/migrateDataFrom\(([^\)]+)\)/';
 
@@ -29,6 +29,8 @@ class MigrateDataFrom implements DDLTriggerInterface
     private $resourceConnection;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)

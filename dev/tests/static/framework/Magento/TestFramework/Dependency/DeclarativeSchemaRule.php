@@ -32,7 +32,7 @@ class DeclarativeSchemaRule implements RuleInterface
     }
 
     /**
-     * Gets external dependencies information for current module by analyzing db_schema.xml files contents
+     * Gets external dependencies information for current module by analyzing db_schema.xml files contents.
      *
      * @param string $currentModule
      * @param string $fileType

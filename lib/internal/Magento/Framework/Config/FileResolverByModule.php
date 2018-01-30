@@ -1,7 +1,5 @@
 <?php
 /**
- * Application config file resolver
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,12 +9,12 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Module\Dir;
 
 /**
- * Resolve all files or file for specific module
+ * Application config file resolver.
  */
 class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
 {
     /**
-     * This flag says, that we need to read from all modules
+     * This flag says, that we need to read from all modules.
      */
     const ALL_MODULES = 'all';
 
@@ -26,6 +24,8 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
     private $componentRegistrar;
 
     /**
+     * Constructor.
+     *
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\Filesystem $filesystem
      * @param FileIteratorFactory $iteratorFactory
@@ -42,7 +42,7 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
     }
 
     /**
-     * If scope is module
+     * If scope is module.
      *
      * @inheritdoc
      */

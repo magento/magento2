@@ -8,7 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
- * This validator holds different validations rules
+ * This validator holds different validations rules.
  *
  * @inheritdoc
  */
@@ -20,6 +20,8 @@ class ValidationComposite implements ValidationInterface
     private $rules;
 
     /**
+     * Constructor.
+     *
      * @param ValidationInterface[] $rules
      */
     public function __construct(array $rules)

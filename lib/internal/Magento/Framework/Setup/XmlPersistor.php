@@ -6,11 +6,13 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Persist listened schema to db_schema.xml file
+ * Persist listened schema to db_schema.xml file.
  */
 class XmlPersistor
 {
     /**
+     * Persist XML object to file.
+     *
      * @param \SimpleXMLElement $simpleXMLElement
      * @param $path
      */
@@ -23,7 +25,7 @@ class XmlPersistor
         file_put_contents(
             $path,
             str_replace(
-                ' xmlns:xsi="xsi"', //replace xmlns, as we do not need it for xsi namespace
+                ' xmlns:xsi="xsi"', //replace namespace, as we do not need it for xsi namespace
                 '',
                 $dom->saveXML()
             )

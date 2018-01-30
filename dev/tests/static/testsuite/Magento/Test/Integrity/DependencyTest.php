@@ -526,7 +526,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare list of config.xml files (by modules)
+     * Prepare list of config.xml files (by modules).
      */
     protected static function _prepareListConfigXml()
     {

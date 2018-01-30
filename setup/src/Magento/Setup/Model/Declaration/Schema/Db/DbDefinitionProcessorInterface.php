@@ -17,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 interface DbDefinitionProcessorInterface
 {
     /**
-     * Output always will be SQL definition
+     * Output always will be SQL definition.
      *
      * @param  ElementInterface $column
      * @return string

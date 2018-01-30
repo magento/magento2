@@ -7,28 +7,28 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
- * This class is responsible for read different schema
- * structural elements: indexes, constraints, talbe names and columns
+ * This class is responsible for read different schema structural elements: indexes, constraints,
+ * table names and columns.
  */
 interface DbSchemaWriterInterface
 {
     /**
-     * Type for all alter statements
+     * Type for all alter statements.
      */
     const ALTER_TYPE = 'alter';
 
     /**
-     * Type for all create statements
+     * Type for all create statements.
      */
     const CREATE_TYPE = 'create';
 
     /**
-     * Type for all drop statements
+     * Type for all drop statements.
      */
     const DROP_TYPE = 'drop';
 
     /**
-     * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc
+     * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc.
      *
      * @param $tableName
      * @param $resource
@@ -39,7 +39,7 @@ interface DbSchemaWriterInterface
     public function createTable($tableName, $resource, array $definition, array $options);
 
     /**
-     * Drop table from SQL database
+     * Drop table from SQL database.
      *
      * @param string $tableName
      * @param string $resource
@@ -48,9 +48,9 @@ interface DbSchemaWriterInterface
     public function dropTable($tableName, $resource);
 
     /**
-     * Add generic element to table (table must be specified in elementOptions)
+     * Add generic element to table (table must be specified in elementOptions).
      *
-     * Can be: column, constraint, index
+     * Can be: column, constraint, index.
      *
      * @param string $elementName
      * @param string $resource
@@ -62,7 +62,7 @@ interface DbSchemaWriterInterface
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType);
 
     /**
-     * Return statements which reset auto_increment to 1
+     * Return statements which reset auto_increment to 1.
      *
      * @param string $tableName
      * @param string $resource
@@ -71,9 +71,9 @@ interface DbSchemaWriterInterface
     public function resetAutoIncrement($tableName, $resource);
 
     /**
-     * Modify column and change it definition
+     * Modify column and change it definition.
      *
-     * Please note: that from all structural elements only column can be modified
+     * Note: only column can be modified.
      *
      * @param string $columnName
      * @param string $resource
@@ -95,7 +95,7 @@ interface DbSchemaWriterInterface
     public function modifyTableOption($tableName, $resource, $optionName, $optionValue);
 
     /**
-     * Drop any element (constraint, column, index) from index
+     * Drop any element (constraint, column, index) from index.
      *
      * @param string $resource
      * @param string $elementName
@@ -106,7 +106,7 @@ interface DbSchemaWriterInterface
     public function dropElement($resource, $elementName, $tableName, $type);
 
     /**
-     * Compile statements and make SQL request from them
+     * Compile statements and make SQL request from them.
      *
      * @param StatementAggregator $statementAggregator
      * @return void

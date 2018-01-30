@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
- * The purpose of this test is verifying initial InstallSchema, InstallData scripts
+ * The purpose of this test is validating schema reader operations.
  */
 class SchemaReaderTest extends SetupTestCase
 {

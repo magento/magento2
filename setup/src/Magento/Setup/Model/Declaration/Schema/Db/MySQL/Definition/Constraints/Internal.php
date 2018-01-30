@@ -12,24 +12,26 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Detect primary or unique constraints and map them to appropriate format
+ * Internal key (index) processor.
+ *
+ * Detect primary or unique constraints and map them to appropriate format.
  *
  * @inheritdoc
  */
 class Internal implements DbDefinitionProcessorInterface
 {
     /**
-     * Name of Primary Key
+     * Name of Primary Key.
      */
     const PRIMARY_NAME = 'PRIMARY';
 
     /**
-     * Primary key name, that is used in definition
+     * Primary key statement.
      */
     const PRIMARY_KEY_NAME = 'PRIMARY KEY';
 
     /**
-     * Uniqe key name, that is used in definition
+     * Unique key statement.
      */
     const UNIQUE_KEY_NAME = 'UNIQUE KEY';
 
@@ -39,6 +41,8 @@ class Internal implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)

@@ -1,22 +1,33 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Test\Unit\Annotation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Test for ReinstallInstance.
+ *
+ * @package Magento\TestFramework\Test\Unit\Annotation
+ */
 class ReinstallInstanceTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\TestFramework\Annotation\ReinstallInstance */
-    protected $model;
+    /**
+     * @var \Magento\TestFramework\Annotation\ReinstallInstance
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject */
-    protected $applicationMock;
+    /**
+     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $applicationMock;
 
     protected function setUp()
     {

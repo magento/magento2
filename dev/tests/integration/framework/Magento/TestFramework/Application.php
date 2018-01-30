@@ -13,7 +13,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * Encapsulates application installation, initialization and uninstall
+ * Encapsulates application installation, initialization and uninstall.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -21,110 +21,110 @@ use Magento\Framework\Filesystem\Glob;
 class Application
 {
     /**
-     * Default application area
+     * Default application area.
      */
     const DEFAULT_APP_AREA = 'global';
 
     /**
-     * DB vendor adapter instance
+     * DB vendor adapter instance.
      *
      * @var \Magento\TestFramework\Db\AbstractDb
      */
     protected $_db;
 
     /**
-     * Shell command executor
+     * Shell command executor.
      *
      * @var \Magento\Framework\Shell
      */
     protected $_shell;
 
     /**
-     * Configuration file that contains installation parameters
+     * Configuration file that contains installation parameters.
      *
      * @var string
      */
     private $installConfigFile;
 
     /**
-     * The loaded installation parameters
+     * The loaded installation parameters.
      *
      * @var array
      */
     protected $installConfig;
 
     /**
-     * Application *.xml configuration files
+     * Application *.xml configuration files.
      *
      * @var array
      */
     protected $_globalConfigDir;
 
     /**
-     * Installation destination directory
+     * Installation destination directory.
      *
      * @var string
      */
     protected $installDir;
 
     /**
-     * Installation destination directory with configuration files
+     * Installation destination directory with configuration files.
      *
      * @var string
      */
     protected $_configDir;
 
     /**
-     * Application initialization parameters
+     * Application initialization parameters.
      *
      * @var array
      */
     protected $_initParams = [];
 
     /**
-     * Mode to run application
+     * Mode to run application.
      *
      * @var string
      */
     protected $_appMode;
 
     /**
-     * Application area
+     * Application area.
      *
      * @var null
      */
     protected $_appArea = null;
 
     /**
-     * Primary DI Config
+     * Primary DI Config.
      *
      * @var array
      */
     protected $_primaryConfigData = [];
 
     /**
-     * Object manager factory
+     * Object manager factory.
      *
      * @var \Magento\TestFramework\ObjectManagerFactory
      */
     protected $_factory;
 
     /**
-     * Directory List
+     * Directory list.
      *
      * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     protected $dirList;
 
     /**
-     * Config file for integration tests
+     * Config file for integration tests.
      *
      * @var string
      */
     private $globalConfigFile;
 
     /**
-     * Defines whether load test extension attributes or not
+     * Defines whether load test extension attributes or not.
      *
      * @var bool
      */
@@ -146,7 +146,7 @@ class Application
     protected $canInstallSequence = true;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
@@ -196,7 +196,7 @@ class Application
     }
 
     /**
-     * Retrieve the database adapter instance
+     * Retrieve the database adapter instance.
      *
      * @return \Magento\TestFramework\Db\AbstractDb
      */
@@ -244,7 +244,7 @@ class Application
     }
 
     /**
-     * Gets installation parameters
+     * Gets installation parameters.
      *
      * @return array
      */
@@ -257,7 +257,7 @@ class Application
     }
 
     /**
-     * Gets deployment configuration path
+     * Gets deployment configuration path.
      *
      * @return string
      */
@@ -267,7 +267,7 @@ class Application
     }
 
     /**
-     * Get path to temporary directory
+     * Get path to temporary directory.
      *
      * @return string
      */
@@ -277,7 +277,7 @@ class Application
     }
 
     /**
-     * Retrieve application initialization parameters
+     * Retrieve application initialization parameters.
      *
      * @return array
      */
@@ -287,7 +287,7 @@ class Application
     }
 
     /**
-     * Weather the application is installed or not
+     * Weather the application is installed or not.
      *
      * @return bool
      */
@@ -297,7 +297,7 @@ class Application
     }
 
     /**
-     * Create logger instance and rewrite already exist one in ObjectManager
+     * Create logger instance and rewrite already exist one in ObjectManager.
      *
      * @return \Psr\Log\LoggerInterface
      */

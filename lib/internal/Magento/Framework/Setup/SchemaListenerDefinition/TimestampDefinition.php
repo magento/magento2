@@ -9,7 +9,7 @@ namespace Magento\Framework\Setup\SchemaListenerDefinition;
 use Magento\Framework\DB\Ddl\Table;
 
 /**
- * Convert definition for all text types: timestamp, datetime
+ * Convert definition for all text types: timestamp, datetime.
  */
 class TimestampDefinition implements DefinitionConverterInterface
 {

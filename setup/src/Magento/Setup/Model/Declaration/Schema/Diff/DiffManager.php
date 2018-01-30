@@ -23,7 +23,7 @@ use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
- * For instance, 2 columns between each other
+ * For instance, 2 columns between each other.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -35,6 +35,8 @@ class DiffManager
     private $comparator;
 
     /**
+     * Constructor.
+     *
      * @param Comparator $comparator
      */
     public function __construct(Comparator $comparator)
@@ -43,7 +45,7 @@ class DiffManager
     }
 
     /**
-     * Check whether this is element is new or not, by checking it in db schema
+     * Check whether this is element is new or not, by checking it in db schema.
      *
      * @param  ElementInterface[] $generatedElements
      * @param  ElementInterface   $element
@@ -55,7 +57,7 @@ class DiffManager
     }
 
     /**
-     * Check whether we have elements that should be removed from database
+     * Check whether we have elements that should be removed from database.
      *
      * @param  array $generatedElements
      * @return bool
@@ -66,7 +68,7 @@ class DiffManager
     }
 
     /**
-     * Register element, that should changes
+     * Register element, that should changes.
      *
      * @param  Diff    $diff
      * @param  ElementInterface $element
@@ -89,8 +91,8 @@ class DiffManager
     }
 
     /**
-     * If elements really dont exists in declaration - we will remove them
-     * If some mistake happens (and element is just not preprocessed), we will throw exception
+     * If elements really dont exists in declaration - we will remove them.
+     * If some mistake happens (and element is just not preprocessed), we will throw exception.
      *
      * @param  Diff      $diff
      * @param  ElementInterface[] $generatedElements
@@ -114,6 +116,8 @@ class DiffManager
     }
 
     /**
+     * Register creation.
+     *
      * @param DiffInterface    $diff
      * @param ElementInterface $element
      * @return DiffInterface
@@ -134,10 +138,10 @@ class DiffManager
     }
 
     /**
-     * We need to register drop of foreign key in scope of reference table
+     * We need to register drop of foreign key in scope of reference table.
      *
      * This done because reference table is goes first and starting from this table
-     * there should be no foreign key on modified column
+     * there should be no foreign key on modified column.
      *
      * @param Reference $reference
      * @param Diff $diff
@@ -155,10 +159,10 @@ class DiffManager
     }
 
     /**
-     * Depends on what should be changed we can re-create table or modify it
+     * Depends on what should be changed we can re-create table or modify it.
      *
-     * For example, we can modify table if we need to change comment or engine
-     * Or we can re-create table, when we need to change it shard
+     * For example, we can modify table if we need to change comment or engine.
+     * Or we can re-create table, when we need to change it shard.
      *
      * @param Table $declaredTable
      * @param Table $generatedTable
@@ -183,7 +187,7 @@ class DiffManager
     }
 
     /**
-     * Check whether element should be modified or not
+     * Check whether element should be modified or not.
      *
      * @param  ElementInterface $element
      * @param  ElementInterface $generatedElement

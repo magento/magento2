@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
- * The purpose of this test is verifying declarative installation works with different shard
+ * The purpose of this test is verifying declarative installation works with different shard.
  */
 class SplitDbTest extends SetupTestCase
 {

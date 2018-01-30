@@ -17,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
- * Holds information about all changes between 2 schemas: db and declaration XML
+ * Holds information about all changes between 2 schemas: db and declaration XML.
  * Holds 2 items:
  *  - new (Should be changed to)
  *  - old ()
@@ -30,7 +30,7 @@ class Diff implements DiffInterface
     private $changes;
 
     /**
-     * This changes created only for debug reasons
+     * This changes created only for debug reasons.
      *
      * @var array
      */
@@ -63,7 +63,7 @@ class Diff implements DiffInterface
 
     /**
      * This indexes is needed to ensure that sort order in which table operations
-     * will be executed is correct
+     * will be executed is correct.
      *
      * @var array
      */
@@ -71,13 +71,15 @@ class Diff implements DiffInterface
 
     /**
      * List of operations that are destructive from the point of declarative setup
-     * and can make system unstable, for example DropTable
+     * and can make system unstable, for example DropTable.
      *
      * @var string[]
      */
     private $destructiveOperations;
 
     /**
+     * Constructor.
+     *
      * @param ComponentRegistrar $componentRegistrar
      * @param ElementHistoryFactory $elementHistoryFactory
      * @param array $tableIndexes
@@ -96,20 +98,22 @@ class Diff implements DiffInterface
     }
 
     /**
-     * We return all sorted changes
+     * We return all sorted changes.
      *
-     * All changes are sorted because there are dependencies between tables, like foreign keys
+     * All changes are sorted because there are dependencies between tables, like foreign keys.
      *
      * @inheritdoc
      */
     public function getAll()
     {
-        ksort($this->changes);
+        if ($this->changes) {
+            ksort($this->changes);
+        }
         return $this->changes;
     }
 
     /**
-     * Retrieve all changes for specific table
+     * Retrieve all changes for specific table.
      *
      * @param string $table
      * @param string $operation
@@ -122,9 +126,9 @@ class Diff implements DiffInterface
     }
 
     /**
-     * Retrieve array of whitelisted tables
+     * Retrieve array of whitelisted tables.
      * Whitelist tables should have JSON format and should be added through
-     * CLI command: should be done in next story
+     * CLI command: should be done in next story.
      *
      * @return array
      */
@@ -148,10 +152,10 @@ class Diff implements DiffInterface
     }
 
     /**
-     * Check whether element can be registered
+     * Check whether element can be registered.
      *
      * For example, if element is not in db_schema_whitelist.json it cant
-     * be registered due to backward incompatability
+     * be registered due to backward incompatibility.
      *
      * @param  ElementInterface | Table $object
      * @param string $operation
@@ -174,6 +178,8 @@ class Diff implements DiffInterface
     }
 
     /**
+     * Register request for installation.
+     *
      * @param Request $request
      * @return void
      */
@@ -183,6 +189,8 @@ class Diff implements DiffInterface
     }
 
     /**
+     * Register DTO object.
+     *
      * @param TableElementInterface $dtoObject
      * @inheritdoc
      */
@@ -217,8 +225,8 @@ class Diff implements DiffInterface
     }
 
     /**
-     * Retrieve current schema
-     * This function needs for rollback functionality
+     * Retrieve current schema.
+     * This function needs for rollback functionality.
      *
      * @return Schema
      */
@@ -229,7 +237,7 @@ class Diff implements DiffInterface
 
     /**
      * Request holds some information from cli command or UI
-     * like: save mode or dry-run mode
+     * like: save mode or dry-run mode.
      *
      * @return Request
      */

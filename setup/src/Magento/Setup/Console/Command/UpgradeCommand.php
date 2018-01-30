@@ -17,17 +17,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for updating installed application after the code base has changed
+ * Command for updating installed application after the code base has changed.
  */
 class UpgradeCommand extends AbstractSetupCommand
 {
     /**
-     * Option to skip deletion of generated/code directory
+     * Option to skip deletion of generated/code directory.
      */
     const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
 
     /**
-     * Installer service factory
+     * Installer service factory.
      *
      * @var InstallerFactory
      */
@@ -44,7 +44,7 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig

@@ -12,6 +12,9 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
+ * Recurring setup for Store module.
+ *
+ * @package Magento\Store\Setup
  */
 class Recurring implements InstallSchemaInterface
 {
@@ -21,6 +24,8 @@ class Recurring implements InstallSchemaInterface
     private $defaultCategory;
 
     /**
+     * Get default category.
+     *
      * @deprecated 100.1.0
      * @return DefaultCategory
      */

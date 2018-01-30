@@ -7,7 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
- * This statement is used for foreign keys
+ * Foreign key statement.
  *
  * @inheritdoc
  */

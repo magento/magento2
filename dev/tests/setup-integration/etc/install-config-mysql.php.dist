@@ -9,7 +9,7 @@ return [
         'db-host' => 'localhost',
         'db-user' => 'root',
         'db-password' => '',
-        'db-name' => 'magento_integration_tests',
+        'db-name' => 'magento_setup_integration_tests',
         'db-prefix' => '',
         'backend-frontname' => 'admin',
         'admin-user' => 'admin',

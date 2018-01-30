@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process 3 different types: char, varchar, varbinary
+ * Processor for following types: char, varchar, varbinary, binary.
  *
  * @inheritdoc
  */

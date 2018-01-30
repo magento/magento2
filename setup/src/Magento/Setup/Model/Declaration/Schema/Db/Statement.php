@@ -7,9 +7,8 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
- * Statement object aggregates different SQL statements and run all of them for one table
- * All statements are independent with each other, but not each statement can be included with each other
- * in one alter query, for example
+ * Statement aggregator for SQL statements for one table.
+ * All statements are independent with each other, but neither statement can be included with other in one alter query.
  */
 class Statement
 {
@@ -19,8 +18,8 @@ class Statement
     private $statement;
 
     /**
-     * Type can be: ALTER, CREATE or DROP operations
-     * Depends on type different operations will be executed on compilation
+     * Type can be: ALTER, CREATE or DROP operations.
+     * Depends on type different operations will be executed on compilation.
      *
      * @var string
      */
@@ -47,6 +46,8 @@ class Statement
     private $name;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $tableName
      * @param string $type
@@ -68,6 +69,8 @@ class Statement
     }
 
     /**
+     * Get statement.
+     *
      * @return string
      */
     public function getStatement(): string
@@ -76,8 +79,8 @@ class Statement
     }
 
     /**
-     * Add trigger to current statement
-     * This means, that statement is final and can`t be modified any more
+     * Add trigger to current statement.
+     * This means, that statement is final and can`t be modified any more.
      *
      * @param callable $trigger
      */
@@ -87,6 +90,8 @@ class Statement
     }
 
     /**
+     * Get statement type.
+     *
      * @return string
      */
     public function getType(): string
@@ -95,6 +100,8 @@ class Statement
     }
 
     /**
+     * Get table name.
+     *
      * @return string
      */
     public function getTableName(): string
@@ -103,6 +110,8 @@ class Statement
     }
 
     /**
+     * Get resource name.
+     *
      * @return string
      */
     public function getResource(): string
@@ -111,6 +120,8 @@ class Statement
     }
 
     /**
+     * Get triggers array.
+     *
      * @return Callable[]
      */
     public function getTriggers(): array
@@ -119,6 +130,8 @@ class Statement
     }
 
     /**
+     * Get statement name.
+     *
      * @return string
      */
     public function getName(): string

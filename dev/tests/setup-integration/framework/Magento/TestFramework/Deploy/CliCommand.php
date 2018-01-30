@@ -10,7 +10,7 @@ use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Console\Command\InstallCommand;
 
 /**
- * The purpose of this class is enable/disable module and upgrade commands execution
+ * The purpose of this class is enable/disable module and upgrade commands execution.
  */
 class CliCommand
 {
@@ -33,7 +33,6 @@ class CliCommand
      * ShellCommand constructor.
      *
      * @param    TestModuleManager $testEnv
-     * @param    ParametersHolder  $paramatersHolder
      * @internal param Shell $shell
      */
     public function __construct(
@@ -45,7 +44,7 @@ class CliCommand
     }
 
     /**
-     * Copy Test module files and execute enable module command
+     * Copy Test module files and execute enable module command.
      *
      * @param  string $moduleName
      * @return string
@@ -57,7 +56,7 @@ class CliCommand
     }
 
     /**
-     * Execute enable module command
+     * Execute enable module command.
      *
      * @param  string $moduleName
      * @return string
@@ -71,7 +70,7 @@ class CliCommand
     }
 
     /**
-     * Execute upgrade magento command
+     * Execute upgrade magento command.
      *
      * @return string
      */
@@ -84,7 +83,7 @@ class CliCommand
     }
 
     /**
-     * Execute disable module command
+     * Execute disable module command.
      *
      * @param  string $moduleName
      * @return string
@@ -98,7 +97,7 @@ class CliCommand
     }
 
     /**
-     * Split quote db configuration
+     * Split quote db configuration.
      *
      * @return void
      */
@@ -117,7 +116,7 @@ class CliCommand
     }
 
     /**
-     * Split sales db configuration
+     * Split sales db configuration.
      *
      * @return void
      */
@@ -136,7 +135,7 @@ class CliCommand
     }
 
     /**
-     * Convert from raw params to CLI arguments, like --admin-username
+     * Convert from raw params to CLI arguments, like --admin-username.
      *
      * @param  array $params
      * @return array
@@ -155,6 +154,8 @@ class CliCommand
     }
 
     /**
+     * Execute install command.
+     *
      * @param array $modules
      * @param array $installParams
      * @return string

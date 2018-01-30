@@ -6,17 +6,17 @@
 namespace Magento\TestFramework\Deploy;
 
 /**
- * The purpose of this class is adding test modules files to Magento code base
+ * The purpose of this class is adding test modules files to Magento code base.
  */
 class TestModuleManager
 {
     /**
-     * Name of file of DB XML declaration
+     * Name of file of DB XML declaration.
      */
     const DECLARATIVE_FILE_NAME = "db_schema.xml";
 
     /**
-     * Add test module files to Magento code base
+     * Add test module files to Magento code base.
      *
      * @param  string $moduleName
      * @return void
@@ -61,6 +61,8 @@ class TestModuleManager
     }
 
     /**
+     * Update module version.
+     *
      * @param string $moduleName   Like Magento_TestSetupModule
      * @param string $revisionName Folder name, like reviisions/revision_1/db_schema.xml
      * @param string $fileName     For example db_schema.xml
@@ -83,7 +85,7 @@ class TestModuleManager
     }
 
     /**
-     * Remove test module files to Magento code base
+     * Remove test module files to Magento code base.
      *
      * @param  string $moduleName
      * @return void
@@ -100,7 +102,7 @@ class TestModuleManager
     }
 
     /**
-     * Update module files
+     * Update module files.
      *
      * @param  string $moduleName
      * @return void

@@ -10,7 +10,7 @@ use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class CommandList contains predefined list of commands for Setup
+ * Class CommandList contains predefined list of commands for Setup.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -78,7 +78,7 @@ class CommandList
     }
 
     /**
-     * Gets list of command instances
+     * Gets list of command instances.
      *
      * @return \Symfony\Component\Console\Command\Command[]
      * @throws \Exception

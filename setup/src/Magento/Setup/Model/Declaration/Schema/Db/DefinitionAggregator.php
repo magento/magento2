@@ -9,9 +9,9 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * This class holds different definitions and apply them depends on column, constraint, index types
+ * Holds different definitions and apply them depends on column, constraint, index types.
+ * Converts object to definition, and definition to array.
  *
- * It can convert object to definition, and definition to array
  * @inheritdoc
  */
 class DefinitionAggregator implements DbDefinitionProcessorInterface
@@ -22,6 +22,8 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     private $definitionProcessors;
 
     /**
+     * Constructor.
+     *
      * @param DbDefinitionProcessorInterface[] $definitionProcessors
      */
     public function __construct(array $definitionProcessors)

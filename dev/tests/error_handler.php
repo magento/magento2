@@ -5,7 +5,7 @@
  */
 
 /**
- * Set custom error handler
+ * Set custom error handler.
  */
 function setCustomErrorHandler()
 {

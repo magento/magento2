@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
  * This class is responsible for read different schema
- * structural elements: indexes, constraints, talbe names and columns
+ * structural elements: indexes, constraints, table names and columns.
  */
 interface DbSchemaReaderInterface
 {
     /**
-     * Read indexes, from Magento tables
+     * Read indexes from Magento tables.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -22,7 +22,7 @@ interface DbSchemaReaderInterface
     public function readIndexes($tableName, $resource);
 
     /**
-     * Read constraints, from Magento tables
+     * Read constraints from Magento tables.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -31,7 +31,7 @@ interface DbSchemaReaderInterface
     public function readConstraints($tableName, $resource);
 
     /**
-     * Read columns, from Magento tables
+     * Read columns from Magento tables.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -40,7 +40,7 @@ interface DbSchemaReaderInterface
     public function readColumns($tableName, $resource);
 
     /**
-     * Show table options, like engine, partitioning, etc
+     * Show table options like engine, partitioning, etc.
      *
      * @param string $tableName
      * @param string $resource
@@ -49,7 +49,7 @@ interface DbSchemaReaderInterface
     public function getTableOptions($tableName, $resource);
 
     /**
-     * Read references (foreign keys) from Magento tables
+     * Read references (foreign keys) from Magento tables.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -58,7 +58,7 @@ interface DbSchemaReaderInterface
     public function readReferences($tableName, $resource);
 
     /**
-     * Read table names, from Magento tables
+     * Read table names from Magento tables.
      *
      * @param  string $resource
      * @return array

@@ -7,7 +7,7 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * Find boolean type
+ * Boolean type definition.
  */
 class BooleanDefinition implements DefinitionConverterInterface
 {

@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * On update attribute is like trigger and can be used for many different columns
+ * On update statement processor.
  *
  * @inheritdoc
  */

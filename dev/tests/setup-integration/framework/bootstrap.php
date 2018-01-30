@@ -32,18 +32,16 @@ if (!defined('MAGENTO_MODULES_PATH')) {
 }
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
-if (!defined('TESTS_INSTALL_CONFIG_FILE')) {
+
+try {
+    setCustomErrorHandler();
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
     if (!file_exists($installConfigFile)) {
         $installConfigFile .= '.dist';
     }
-    define('TESTS_INSTALL_CONFIG_FILE', $installConfigFile);
-} else {
-    $installConfigFile = TESTS_INSTALL_CONFIG_FILE;
-}
-
-try {
-    setCustomErrorHandler();
+    if (!defined('TESTS_INSTALLATION_DB_CONFIG_FILE')) {
+        define('TESTS_INSTALLATION_DB_CONFIG_FILE', $installConfigFile);
+    }
     /* Bootstrap the application */
     $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
     $testFrameworkDir = __DIR__;

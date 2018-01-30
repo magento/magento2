@@ -28,6 +28,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     private $definitionAggregator;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      * @param DefinitionAggregator $definitionAggregator
      */
@@ -50,7 +52,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * Prepare and fetch query: Describe {table_name}
+     * Prepare and fetch query: Describe {table_name}.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -89,7 +91,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * Fetch all indexes from table
+     * Fetch all indexes from table.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -121,8 +123,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * As MySQL has bug and do not show foreign keys during
-     * DESCRIBE and other directives we need to take it from SHOW CREATE TABLE ...
+     * As MySQL has bug and do not show foreign keys during DESCRIBE and other directives required
+     * to take it from SHOW CREATE TABLE ...
      * command
      *
      * @inheritdoc
@@ -135,7 +137,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * Retrieve Create table SQL, from SHOW CREATE TABLE query
+     * Retrieve Create table SQL, from SHOW CREATE TABLE query.
      *
      * @param  string $tableName
      * @param  string $resource
@@ -150,9 +152,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * For MySQL reading of constraints is almost the same as indexes
-     * But we need to know, that we read 2 types of constraints:
-     * primary and unique keys and this keys are always non_unique=0
+     * Reading DB constraints.
+     * Primary and unique constraints are always non_unique=0.
      *
      * @inheritdoc
      */
@@ -182,9 +183,9 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
-     * Return names of all tables from shard
+     * Return names of all tables from shard.
      *
-     * @param  string $resource Shard name
+     * @param  string $resource Shard name.
      * @return array
      */
     public function readTables($resource)

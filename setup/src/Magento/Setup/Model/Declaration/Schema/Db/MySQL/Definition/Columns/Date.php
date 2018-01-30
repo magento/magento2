@@ -11,7 +11,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process timestamp and find out it on_update and default values
+ * Date type processor.
  *
  * @inheritdoc
  */
@@ -33,6 +33,8 @@ class Date implements DbDefinitionProcessorInterface
     private $nullable;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      * @param Nullable $nullable
      * @param Comment $comment

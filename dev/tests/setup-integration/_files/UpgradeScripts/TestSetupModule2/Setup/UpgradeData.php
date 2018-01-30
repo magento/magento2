@@ -17,8 +17,6 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

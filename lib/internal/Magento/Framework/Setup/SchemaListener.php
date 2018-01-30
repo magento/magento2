@@ -11,23 +11,22 @@ use Magento\Framework\Setup\SchemaListenerDefinition\DefinitionConverterInterfac
 use Magento\Framework\Setup\SchemaListenerHandlers\SchemaListenerHandlerInterface;
 
 /**
- * Listen for all changes and record them in order to reuse later
+ * Listen for all changes and record them in order to reuse later.
  */
 class SchemaListener
 {
     /**
-     * Ignore all ddl queries
+     * Ignore all ddl queries.
      */
     const IGNORE_ON = 0;
 
     /**
-     * Disable ignore mode
+     * Disable ignore mode.
      */
     const IGNORE_OFF = 1;
 
     /**
-     * Staging FK keys installer key
-     * This means, that all changes should be moved from ordinar module to staging module
+     * Staging FK keys installer key. Indicates that changes should be moved from ordinary module to staging module.
      */
     const STAGING_FK_KEYS = 2;
 
@@ -42,7 +41,7 @@ class SchemaListener
     private $resource;
 
     /**
-     * This flag allows us to ignore some DDL operations
+     * This flag allows to ignore some DDL operations.
      *
      * @var bool
      */
@@ -91,6 +90,8 @@ class SchemaListener
     private $handlers;
 
     /**
+     * Constructor.
+     *
      * @param array $definitionMappers
      * @param array $handlers
      */
@@ -103,6 +104,8 @@ class SchemaListener
     }
 
     /**
+     * Drop foreign key in table by name.
+     *
      * @param string $tableName
      * @param string $fkName
      */
@@ -115,6 +118,8 @@ class SchemaListener
     }
 
     /**
+     * Cast column definition.
+     *
      * @param array $definition
      * @param string $columnName
      * @return array
@@ -137,6 +142,8 @@ class SchemaListener
     }
 
     /**
+     * Add primary key if exists in definition.
+     *
      * @param string $tableName
      * @param string $columnName
      * @param array $definition
@@ -161,6 +168,8 @@ class SchemaListener
     }
 
     /**
+     * Rename table.
+     *
      * @param string $oldTableName
      * @param string $newTableName
      * @return void
@@ -177,7 +186,7 @@ class SchemaListener
     }
 
     /**
-     * Process definition to not specific format
+     * Process definition to not specific format.
      *
      * @param array $definition
      * @return array
@@ -199,6 +208,8 @@ class SchemaListener
     }
 
     /**
+     * Add column.
+     *
      * @param string $tableName
      * @param string $columnName
      * @param array $definition
@@ -215,6 +226,8 @@ class SchemaListener
     }
 
     /**
+     * Drop index.
+     *
      * @param string $tableName
      * @param string $keyName
      * @param string $indexType
@@ -235,7 +248,7 @@ class SchemaListener
     }
 
     /**
-     * Do drop column
+     * Do drop column.
      *
      * @param string $tableName
      * @param string $columnName
@@ -249,7 +262,7 @@ class SchemaListener
     }
 
     /**
-     * Change column is the same as rename
+     * Change column is the same as rename.
      *
      * @param string $tableName
      * @param string $oldColumnName
@@ -282,6 +295,8 @@ class SchemaListener
     }
 
     /**
+     * Modify column.
+     *
      * @param string $tableName
      * @param string $columnName
      * @param array $definition
@@ -292,7 +307,7 @@ class SchemaListener
     }
 
     /**
-     * Retrieved processed module name
+     * Retrieved processed module name.
      *
      * @return string
      */
@@ -302,7 +317,7 @@ class SchemaListener
     }
 
     /**
-     * Log any change, that was done
+     * Log any change done.
      *
      * @param string $tableName
      * @param array $dataToLog
@@ -327,6 +342,8 @@ class SchemaListener
     }
 
     /**
+     * Add foreign key constraint.
+     *
      * @param string $fkName
      * @param string $tableName
      * @param string $columnName
@@ -355,7 +372,7 @@ class SchemaListener
     }
 
     /**
-     * Strtolower all index columns
+     * Convert all index columns to lower case.
      *
      * @param array $indexColumns
      * @return array
@@ -376,6 +393,8 @@ class SchemaListener
     }
 
     /**
+     * Add index for table column(s).
+     *
      * @param string $tableName
      * @param string $indexName
      * @param array $fields
@@ -411,7 +430,7 @@ class SchemaListener
     }
 
     /**
-     * Prepare table columns to registration
+     * Prepare table columns to registration.
      *
      * @param string $tableName
      * @param array $tableColumns
@@ -424,7 +443,7 @@ class SchemaListener
     }
 
     /**
-     * Convert constraints from old format to new one
+     * Convert constraints from old format to new one.
      *
      * @param array $foreignKeys
      * @param array $indexes
@@ -456,7 +475,7 @@ class SchemaListener
     }
 
     /**
-     * Create table
+     * Create table.
      *
      * @param Table $table
      */
@@ -469,7 +488,7 @@ class SchemaListener
     }
 
     /**
-     * Flush all tables
+     * Flush all tables.
      *
      * @return void
      */
@@ -479,7 +498,7 @@ class SchemaListener
     }
 
     /**
-     * Turn on/off ignore mode
+     * Turn on/off ignore mode.
      *
      * @param bool $flag
      */
@@ -489,6 +508,8 @@ class SchemaListener
     }
 
     /**
+     * Drop table.
+     *
      * @param $tableName
      */
     public function dropTable($tableName)
@@ -501,6 +522,8 @@ class SchemaListener
     }
 
     /**
+     * Set resource.
+     *
      * @param string $resource
      */
     public function setResource(string $resource)
@@ -509,6 +532,8 @@ class SchemaListener
     }
 
     /**
+     * Set module name.
+     *
      * @param string $moduleName
      */
     public function setModuleName($moduleName)
@@ -517,6 +542,8 @@ class SchemaListener
     }
 
     /**
+     * Get tables.
+     *
      * @return array
      */
     public function getTables()

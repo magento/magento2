@@ -7,18 +7,19 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * Convert definition for all integer types: int, smallint, bigint, tinyint
+ * Convert definition for all integer types: int, smallint, bigint, tinyint, mediumint.
  */
 class IntegerDefinition implements DefinitionConverterInterface
 {
     /**
-     * If length is not specified we will use next numbers
+     * If length is not specified we will use next numbers.
      *
      * @var array
      */
     private static $lengthDefaults = [
         'tinyint' => 3,
         'smallint' => 6,
+        'mediumint' => 8,
         'int' => 11,
         'bigint' => 20
     ];
@@ -30,6 +31,7 @@ class IntegerDefinition implements DefinitionConverterInterface
 
     /**
      * IntegerDefinition constructor.
+     *
      * @param BooleanDefinition $booleanDefinition
      */
     public function __construct(BooleanDefinition $booleanDefinition)

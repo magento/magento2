@@ -6,16 +6,14 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * Constraint structural element
- * Used for creating additional rules on db tables
+ * Column structural element.
  */
 class Column extends GenericElement implements
     ElementInterface,
     TableElementInterface
 {
     /**
-     * In case if we will need to change this object: add, modify or drop, we will need
-     * to define it by its type
+     * Element type.
      */
     const TYPE = 'column';
 
@@ -35,6 +33,8 @@ class Column extends GenericElement implements
     private $comment;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -55,7 +55,7 @@ class Column extends GenericElement implements
     }
 
     /**
-     * Retrieve table name
+     * Retrieve table name.
      *
      * @return Table
      */
@@ -73,6 +73,8 @@ class Column extends GenericElement implements
     }
 
     /**
+     * Get On Create statement.
+     *
      * @return null|string
      */
     public function getOnCreate()

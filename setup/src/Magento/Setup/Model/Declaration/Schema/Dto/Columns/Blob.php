@@ -10,9 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * This column represent binary type
- * We can have few binary types: blob, mediumblob, largeblog
- * Declared in SQL, like blob
+ * This column represent binary type.
+ * We can have few binary types: blob, mediumblob, longblob.
+ * Declared in SQL, like blob.
  */
 class Blob extends Column implements
     ElementDiffAwareInterface,
@@ -24,6 +24,8 @@ class Blob extends Column implements
     private $nullable;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -44,7 +46,7 @@ class Blob extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */

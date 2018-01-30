@@ -29,6 +29,8 @@ class DiffFactory
     }
 
     /**
+     * Create Diff object.
+     *
      * @param array $data
      * @return Diff
      */

@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * A helper to gather specific kind of files in Magento application
+ * A helper to gather specific kind of files in Magento application.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1130,7 +1130,7 @@ class Files
     }
 
     /**
-     * Returns list of db_schema files, used by Magento application
+     * Returns list of db_schema files, used by Magento application.
      *
      * @param string $fileNamePattern
      * @param array $excludedFileNames

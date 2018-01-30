@@ -11,7 +11,7 @@ use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 
 /**
- * Handler for applying reinstallMagento annotation
+ * Handler for applying reinstallMagento annotation.
  */
 class CopyModules
 {
@@ -35,7 +35,7 @@ class CopyModules
     }
 
     /**
-     * Handler for 'startTest' event
+     * Handler for 'startTest' event.
      *
      * @param  \PHPUnit\Framework\TestCase $test
      * @throws \Magento\Framework\Exception\LocalizedException

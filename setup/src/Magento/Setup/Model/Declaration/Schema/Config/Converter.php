@@ -8,12 +8,12 @@
 namespace Magento\Setup\Model\Declaration\Schema\Config;
 
 /**
- * This converter serve needs of Declaration Filesystem reader:
+ * This converter is required for Declaration Filesystem reader:
  *
  * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
  *
- * It allows to convert declarative schema to raw array and add default values
- * for column types and for constraints
+ * Allows to convert declarative schema to raw array and add default values
+ * for column types and for constraints.
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -43,6 +43,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Convert elements.
+     *
      * @param \Traversable $source
      * @return array
      */
@@ -71,9 +73,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Check whether we have any attributes except name
-     * XSI:TYPE is in another namespace, so we need to do additio
-     * Note: name is mandatory attribute
+     * Check whether we have any attributes except name XSI:TYPE is in another namespace.
+     * Note: name is mandatory attribute.
      *
      * @param  \DOMElement $element
      * @return bool
@@ -84,8 +85,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Mix attributes that comes from XML schema with default ones
-     * So if you will not have some attribute in schema - it will be taken from default one
+     * Mix attributes that comes from XML schema with default ones.
+     * So if you will not have some attribute in schema - it will be taken from default one.
      *
      * @param  \DOMElement $domElement
      * @return mixed
@@ -103,7 +104,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert XML attributes into raw array with attributes
+     * Convert XML attributes into raw array with attributes.
      *
      * @param  \DOMElement $element
      * @return array

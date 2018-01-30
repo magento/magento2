@@ -9,7 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for statement aggregator
+ * Factory for statement aggregator.
  */
 class StatementAggregatorFactory
 {
@@ -24,6 +24,8 @@ class StatementAggregatorFactory
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string $className
      */
@@ -34,7 +36,7 @@ class StatementAggregatorFactory
     }
 
     /**
-     * Create statemtnt aggregator object
+     * Create statement aggregator object.
      *
      * @return StatementAggregator
      */

@@ -6,50 +6,69 @@
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
+use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\JsonPersistor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Unit test for whitelist generation command.
+ *
+ * @package Magento\Developer\Test\Unit\Console\Command
+ */
 class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Developer\Console\Command\TablesWhitelistGenerateCommand */
-    protected $model;
+    /**
+     * @var TablesWhitelistGenerateCommand
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $componentRegistrarMock;
+    /**
+     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrarMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite|\PHPUnit_Framework_MockObject_MockObject */
-    protected $readerCompositeMock;
+    /**
+     * @var ReaderComposite|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readerCompositeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    private $jsonPersistor;
+    /**
+     * @var JsonPersistor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonPersistorMock;
 
     protected function setUp()
     {
-        $this->componentRegistrarMock = $this->getMockBuilder(\Magento\Framework\Component\ComponentRegistrar::class)
+        $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readerCompositeMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite::class)
+        $this->readerCompositeMock = $this->getMockBuilder(ReaderComposite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonPersistor = $this->getMockBuilder(JsonPersistor::class)
+        $this->jsonPersistorMock = $this->getMockBuilder(JsonPersistor::class)
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Developer\Console\Command\TablesWhitelistGenerateCommand::class,
+            TablesWhitelistGenerateCommand::class,
             [
                 'componentRegistrar' => $this->componentRegistrarMock,
                 'readerComposite' => $this->readerCompositeMock,
-                'jsonPersistor' => $this->jsonPersistor
+                'jsonPersistor' => $this->jsonPersistorMock
             ]
         );
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function whitelistTableProvider()
     {
@@ -297,7 +316,7 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                 ->method('read')
                 ->withConsecutive(['SomeModule'], ['Module2'])
                 ->willReturnOnConsecutiveCalls($whiteListTables['SomeModule'], $whiteListTables['Module2']);
-            $this->jsonPersistor->expects(self::exactly(2))
+            $this->jsonPersistorMock->expects(self::exactly(2))
                 ->method('persist')
                 ->withConsecutive(
                     [
@@ -314,14 +333,13 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                 ->method('read')
                 ->with($moduleName)
                 ->willReturn($whiteListTables['SomeModule']);
-            $this->jsonPersistor->expects(self::once())
+            $this->jsonPersistorMock->expects(self::once())
                 ->method('persist')
                 ->with(
                     $expected['SomeModule'],
                     '/etc/db_schema_whitelist.json'
                 );
         }
-
 
         $commandTester->execute($options);
     }

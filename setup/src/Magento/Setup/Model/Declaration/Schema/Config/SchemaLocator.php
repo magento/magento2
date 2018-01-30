@@ -6,25 +6,27 @@
 namespace Magento\Setup\Model\Declaration\Schema\Config;
 
 /**
- * This is system class that provides .xsd file for validation XML schema
+ * This is system class that provides .xsd file for validation XML schema.
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
-     * Path to corresponding XSD file with validation rules for merged config
+     * Path to corresponding XSD file with validation rules for merged config.
      *
      * @var string
      */
     protected $_schema = null;
 
     /**
-     * Path to corresponding XSD file with validation rules for separate config files
+     * Path to corresponding XSD file with validation rules for separate config files.
      *
      * @var string
      */
     protected $_perFileSchema = null;
 
     /**
+     * Constructor.
+     *
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param string                                    $schemaUrn
      */
@@ -37,7 +39,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     }
 
     /**
-     * Get path to merged config schema
+     * Get path to merged config schema.
      *
      * @return string|null
      */
@@ -47,7 +49,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     }
 
     /**
-     * Get path to pre file validation schema
+     * Get path to pre file validation schema.
      *
      * @return string|null
      */

@@ -12,24 +12,24 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
  * As all MySQL aliases as BOOL or BOOLEAN are converted to TINYINT(1)
- * proposed to processed tinyint as boolean
+ * proposed to processed tinyint as boolean.
  *
  * @inheritdoc
  */
 class Boolean implements DbDefinitionProcessorInterface
 {
     /**
-     * Type with what we will persist column
+     * Type the column is persisted with.
      */
     const TYPE = 'BOOLEAN';
 
     /**
-     * Type of integer that will be used in MySQL for boolean
+     * Type of integer that is used in MySQL for boolean.
      */
     const INTEGER_TYPE = 'tinyint';
 
     /**
-     * Padding for integer described below
+     * Padding for integer described below.
      */
     const INTEGER_PADDING = '1';
 
@@ -37,11 +37,6 @@ class Boolean implements DbDefinitionProcessorInterface
      * @var Nullable
      */
     private $nullable;
-
-    /**
-     * @var BooleanUtils
-     */
-    private $booleanUtils;
 
     /**
      * @var ResourceConnection
@@ -54,6 +49,8 @@ class Boolean implements DbDefinitionProcessorInterface
     private $comment;
 
     /**
+     * Constructor.
+     *
      * @param Nullable $nullable
      * @param ResourceConnection $resourceConnection
      * @param Comment $comment
@@ -86,7 +83,7 @@ class Boolean implements DbDefinitionProcessorInterface
     }
 
     /**
-     * Boolean is presented as tinyint(1) so we need to detect that value
+     * Boolean is presented as tinyint(1).
      *
      * @inheritdoc
      */
@@ -97,7 +94,7 @@ class Boolean implements DbDefinitionProcessorInterface
             if (isset($data['default'])) {
                 $data['default'] = $data['default'] === null ? null : (bool) $data['default'];
             }
-            $data['unsigned'] = false; //For boolean we always do not want to have unsigned
+            $data['unsigned'] = false; //Not signed for boolean
             unset($data['padding']);
         }
 

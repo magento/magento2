@@ -6,9 +6,9 @@
 namespace Magento\TestFramework\Bootstrap;
 
 /**
- * Bootstrap of the custom DocBlock annotations
+ * Bootstrap of the custom DocBlock annotations.
  *
- * \Magento\TestFramework\Isolation\DeploymentConfig was excluded for setup/upgrade tests
+ * \Magento\TestFramework\Isolation\DeploymentConfig was excluded for setup/upgrade tests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

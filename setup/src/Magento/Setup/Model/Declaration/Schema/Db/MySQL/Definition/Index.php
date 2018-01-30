@@ -12,15 +12,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Look for all indexes that MySQL table has. Note, that we need to ignore
- * all unique indexes, as this indexes belongs to constraints, as they limit DML queries
+ * Index (key) processor.
  *
  * @inheritdoc
  */
 class Index implements DbDefinitionProcessorInterface
 {
     /**
-     * Key name that is used in requests, like DROP INDEX or ADD INDEX
+     * Index statement.
      */
     const INDEX_KEY_NAME = 'INDEX';
 
@@ -31,6 +30,7 @@ class Index implements DbDefinitionProcessorInterface
 
     /**
      * Index constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -48,7 +48,7 @@ class Index implements DbDefinitionProcessorInterface
         //There is no matter what connection to use -> so use default one
         $adapter = $this->resourceConnection->getConnection();
         $isFullText = $indexType === \Magento\Setup\Model\Declaration\Schema\Dto\Index::FULLTEXT_INDEX;
-        //as we used index types, that are similar to MySQL ones, we can just make it upper
+        //index types, that are similar to MySQL ones, can just be uppercased.
         //[FULLTEXT ]INDEX `name` [USING [BTREE|HASH]] (columns)
         return sprintf(
             '%sINDEX %s%s (%s)',

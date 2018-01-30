@@ -9,7 +9,7 @@ use Magento\Framework\App\DesignInterface;
 use Magento\Framework\View\DesignExceptions;
 
 /**
- * Instance of Setup test case. Used in order to twick dataProviders functionallity
+ * Instance of Setup test case. Used in order to tweak dataProviders functionality.
  */
 class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataInterface
 {

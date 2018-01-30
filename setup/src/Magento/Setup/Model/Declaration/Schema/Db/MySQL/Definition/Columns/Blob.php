@@ -32,7 +32,7 @@ class Blob implements DbDefinitionProcessorInterface
     private $comment;
 
     /**
-     * Text constructor.
+     * Blob constructor.
      *
      * @param Nullable $nullable
      * @param Comment $comment

@@ -9,13 +9,13 @@ namespace Magento\Framework\Setup\SchemaListenerDefinition;
 use Magento\Framework\DB\Ddl\Table;
 
 /**
- * Convert definition for all text types: text, mediumtext, longtext
+ * Convert definition for all text/blob types: tiny-, medium-, long- text(s) and blob(s).
  */
 class TextBlobDefinition implements DefinitionConverterInterface
 {
     /**
-     * Parse text size
-     * Returns max allowed size if value great it
+     * Parse text size.
+     * Returns max allowed size if value great it.
      *
      * @param string|int $size
      * @return int
@@ -48,7 +48,7 @@ class TextBlobDefinition implements DefinitionConverterInterface
     }
 
     /**
-     * Retrieve type of column by it length
+     * Retrieve type of column by it length.
      *
      * @param string $ddlType
      * @param int $length

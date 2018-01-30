@@ -9,9 +9,9 @@ namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
- * Read schema from different places: XML, csv, etc
- * You can add one more reader from di.xml
- * Note: that schema from your reader will not be validated through XSD
+ * Read schema from different places: XML, csv, etc.
+ * You can add one more reader from di.xml.
+ * Note: that schema from your reader will not be validated through XSD.
  */
 class ReaderComposite implements ReaderInterface
 {
@@ -21,6 +21,8 @@ class ReaderComposite implements ReaderInterface
     private $readers;
 
     /**
+     * Constructor.
+     *
      * @param ReaderInterface[] $readers
      */
     public function __construct(array $readers = [])

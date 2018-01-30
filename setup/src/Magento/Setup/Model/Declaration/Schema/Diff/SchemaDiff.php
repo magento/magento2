@@ -10,12 +10,12 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\OperationsExecutor;
 
 /**
- * Agregation root of all diffs
- * Loop through all tables and find difference between them
+ * Aggregation root of all diffs.
+ * Loop through all tables and find difference between them.
  *
- * If table exists only in XML -> then we need to create table
- * If table exists in both version -> then we need to go deeper and inspect each element
- * If table exists only in db -> then we need to remove this table
+ * If table exists only in XML -> then we need to create table.
+ * If table exists in both version -> then we need to go deeper and inspect each element.
+ * If table exists only in db -> then we need to remove this table.
  */
 class SchemaDiff
 {
@@ -40,6 +40,8 @@ class SchemaDiff
     private $operationsExecutor;
 
     /**
+     * Constructor.
+     *
      * @param DiffManager $diffManager
      * @param TableDiff $tableDiff
      * @param DiffFactory $diffFactory
@@ -58,6 +60,8 @@ class SchemaDiff
     }
 
     /**
+     * Create diff.
+     *
      * @param Schema $schema
      * @param Schema $generatedSchema
      * @return Diff

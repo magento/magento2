@@ -11,15 +11,15 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnUnsignedAwareInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Unsigned can be used for all numeric types
+ * Unsigned flag processor.
+ * Unsigned can be used for all numeric types.
  *
  * @inheritdoc
  */
 class Unsigned implements DbDefinitionProcessorInterface
 {
     /**
-     * MySQL flag, that says that we need to use unsigned numbers.
-     * Can be applicable only for number types
+     * Unsigned flag. Applicable only to numeric types.
      */
     const UNSIGNED_FLAG = 'unsigned';
 

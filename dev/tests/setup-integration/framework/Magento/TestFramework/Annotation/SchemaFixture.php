@@ -5,31 +5,33 @@
  */
 
 /**
- * Implementation of the @magentoSchemaFixture DocBlock annotation
+ * Implementation of the @magentoSchemaFixture DocBlock annotation.
  */
 namespace Magento\TestFramework\Annotation;
 
 /**
- * Represents
+ * Represents following construction handling:
  *
  * @magentoSchemaFixture {link_to_file.php}
  */
 class SchemaFixture
 {
     /**
+     * Fixtures base directory.
+     *
      * @var string
      */
-    protected $_fixtureBaseDir;
+    protected $fixtureBaseDir;
 
     /**
-     * Fixtures that have been applied
+     * Fixtures that have been applied.
      *
      * @var array
      */
-    private $_appliedFixtures = [];
+    private $appliedFixtures = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param  string $fixtureBaseDir
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -41,11 +43,11 @@ class SchemaFixture
                 new \Magento\Framework\Phrase("Fixture base directory '%1' does not exist.", [$fixtureBaseDir])
             );
         }
-        $this->_fixtureBaseDir = realpath($fixtureBaseDir);
+        $this->fixtureBaseDir = realpath($fixtureBaseDir);
     }
 
     /**
-     * Apply magento data fixture on
+     * Apply magento data fixture on.
      *
      * @param  \PHPUnit\Framework\TestCase $test
      * @return void
@@ -58,6 +60,8 @@ class SchemaFixture
     }
 
     /**
+     * Finish test execution.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
@@ -68,7 +72,7 @@ class SchemaFixture
     }
     
     /**
-     * Retrieve fixtures from annotation
+     * Retrieve fixtures from annotation.
      *
      * @param  \PHPUnit\Framework\TestCase $test
      * @param  string                      $scope
@@ -95,7 +99,7 @@ class SchemaFixture
                 if (is_callable($fixtureMethod)) {
                     $result[] = $fixtureMethod;
                 } else {
-                    $result[] = $this->_fixtureBaseDir . '/' . $fixture;
+                    $result[] = $this->fixtureBaseDir . '/' . $fixture;
                 }
             }
         }
@@ -103,6 +107,8 @@ class SchemaFixture
     }
 
     /**
+     * Get annotations for test.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
@@ -113,7 +119,7 @@ class SchemaFixture
     }
 
     /**
-     * Execute single fixture script
+     * Execute single fixture script.
      *
      * @param  string|array $fixture
      * @throws \Exception
@@ -136,7 +142,7 @@ class SchemaFixture
     }
 
     /**
-     * Execute fixture scripts if any
+     * Execute fixture scripts if any.
      *
      * @param  array $fixtures
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -146,20 +152,20 @@ class SchemaFixture
         /* Execute fixture scripts */
         foreach ($fixtures as $oneFixture) {
             /* Skip already applied fixtures */
-            if (in_array($oneFixture, $this->_appliedFixtures, true)) {
+            if (in_array($oneFixture, $this->appliedFixtures, true)) {
                 continue;
             }
             $this->_applyOneFixture($oneFixture);
-            $this->_appliedFixtures[] = $oneFixture;
+            $this->appliedFixtures[] = $oneFixture;
         }
     }
 
     /**
-     * Revert changes done by fixtures
+     * Revert changes done by fixtures.
      */
     protected function _revertFixtures()
     {
-        foreach ($this->_appliedFixtures as $fixture) {
+        foreach ($this->appliedFixtures as $fixture) {
             if (is_callable($fixture)) {
                 $fixture[1] .= 'Rollback';
                 if (is_callable($fixture)) {
@@ -177,6 +183,6 @@ class SchemaFixture
                 }
             }
         }
-        $this->_appliedFixtures = [];
+        $this->appliedFixtures = [];
     }
 }

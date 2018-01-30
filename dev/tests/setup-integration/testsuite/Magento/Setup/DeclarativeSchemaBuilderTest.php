@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
- * The purpose of this test is verifying initial InstallSchema, InstallData scripts
+ * The purpose of this test is verifying initial InstallSchema, InstallData scripts.
  */
 class DeclarativeSchemaBuilderTest extends SetupTestCase
 {
@@ -37,7 +37,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     }
 
     /**
-     * Tests primary key constraint convertion from XML and renamed functionality
+     * Tests primary key constraint convertion from XML and renamed functionality.
      *
      * @moduleName Magento_TestSetupDeclarationModule1
      */

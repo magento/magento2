@@ -11,7 +11,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process integer type and separate it on type and padding
+ * Integer type processor.
+ *
+ * Processes integer type and separate it on type and padding.
  *
  * @inheritdoc
  */
@@ -48,6 +50,8 @@ class Integer implements DbDefinitionProcessorInterface
     private $comment;
 
     /**
+     * Constructor.
+     *
      * @param Unsigned $unsigned
      * @param bool $boolean
      * @param Nullable $nullable

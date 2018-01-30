@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
- * This class is responsible for basic validation rules
+ * This class is responsible for basic validation rules.
  */
 interface ValidationInterface
 {
     /**
-     * Do different validations on readed db schema
+     * Do different validations on db schema.
      *
      * @param  Schema $schema
      * @return array Return array of errors. If everything is ok - retrieve empty array

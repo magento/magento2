@@ -14,13 +14,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *  - before/after element modification
  *  - before element removal
  *
- * Usually trigger is used to make changes in data not in schema
- * For example, migrate data from column of one table to column of another table
+ * Trigger is used to make changes in data not in schema, e.g migrate data from column of one table to
+ * column of another table.
  */
 interface DDLTriggerInterface
 {
     /**
-     * Check whether current trigger can be applied to current statement
+     * Check whether current trigger can be applied to current statement.
      *
      * @param string $statement
      * @return bool
@@ -28,7 +28,7 @@ interface DDLTriggerInterface
     public function isApplicable($statement);
 
     /**
-     * Setup callback to current statement, can generate new statements
+     * Setup callback to current statement, can generate new statements.
      *
      * @param ElementInterface $element
      * @return Callable

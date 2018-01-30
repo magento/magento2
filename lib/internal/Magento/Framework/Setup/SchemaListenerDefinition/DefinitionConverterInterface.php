@@ -7,12 +7,12 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * The main responsibility of this class is formatting definition
+ * Definition formatting interface.
  */
 interface DefinitionConverterInterface
 {
     /**
-     * Takes definition and convert to new format
+     * Takes definition and convert to new format.
      *
      * @param array $definition
      * @return array

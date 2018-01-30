@@ -16,18 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command that allows to generate whitelist, that will be used, when declaration data is installed
- * If whitelist already exists, new values will be added to existing whitelist
+ * Command that allows to generate whitelist, that will be used, when declaration data is installed.
+ * If whitelist already exists, new values will be added to existing whitelist.
  */
 class TablesWhitelistGenerateCommand extends Command
 {
     /**
-     * Whitelist file name
+     * Whitelist file name.
      */
     const GENERATED_FILE_NAME = 'db_schema_whitelist.json';
 
     /**
-     * Module name key, that will be used in whitelist generate command
+     * Module name key, that will be used in whitelist generate command.
      */
     const MODULE_NAME_KEY = 'module-name';
 
@@ -65,7 +65,7 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * Initialization of the command
+     * Initialization of the command.
      *
      * @return void
      */
@@ -73,7 +73,7 @@ class TablesWhitelistGenerateCommand extends Command
     {
         $this->setName('declaration:generate:whitelist')
             ->setDescription(
-                'Generate whitelist of tables and columns that are allowed to edit by declaration installer'
+                'Generate whitelist of tables and columns that are allowed to be edited by declaration installer'
             )
             ->setDefinition(
                 [
@@ -81,7 +81,7 @@ class TablesWhitelistGenerateCommand extends Command
                         self::MODULE_NAME_KEY,
                         null,
                         InputOption::VALUE_OPTIONAL,
-                        'Module Name, where whitelist will be generated',
+                        'Name of the module where whitelist will be generated',
                         FileResolverByModule::ALL_MODULES
                     )
                 ]
@@ -90,7 +90,7 @@ class TablesWhitelistGenerateCommand extends Command
     }
 
     /**
-     * Update whitelist tables for all modules that are enabled on the moment
+     * Update whitelist tables for all modules that are enabled on the moment.
      *
      * @param string $moduleName
      * @return void
@@ -99,15 +99,18 @@ class TablesWhitelistGenerateCommand extends Command
     {
         $content = [];
         $modulePath = $this->componentRegistrar->getPath('module', $moduleName);
-        $whiteListFileName = $modulePath . DIRECTORY_SEPARATOR . Dir::MODULE_ETC_DIR .
-            DIRECTORY_SEPARATOR . self::GENERATED_FILE_NAME;
-        //We need to load whitelist file and update it with new revision of code
+        $whiteListFileName = $modulePath
+            . DIRECTORY_SEPARATOR
+            . Dir::MODULE_ETC_DIR
+            . DIRECTORY_SEPARATOR
+            . self::GENERATED_FILE_NAME;
+        //We need to load whitelist file and update it with new revision of code.
         if (file_exists($whiteListFileName)) {
             $content = json_decode(file_get_contents($whiteListFileName), true);
         }
         $newContent = $this->readerComposite->read($moduleName);
 
-        //Do merge between what we have before, and what we have now
+        //Do merge between what we have before, and what we have now.
         $content = array_replace_recursive(
             $content,
             $this->selectNamesFromContent($newContent)
@@ -140,7 +143,7 @@ class TablesWhitelistGenerateCommand extends Command
 
     /**
      * As for whitelist we do not need any specific attributes like nullable or indexType,
-     * we need to choose only names
+     * we need to choose only names.
      *
      * @param array $content
      * @return array

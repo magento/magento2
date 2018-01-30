@@ -6,13 +6,15 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Persist json files
+ * Persist json files.
  */
 class JsonPersistor
 {
     /**
+     * Persist data to json file.
+     *
      * @param array $data
-     * @param $path
+     * @param string $path
      * @return bool
      */
     public function persist(array $data, $path)

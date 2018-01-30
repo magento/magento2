@@ -14,26 +14,26 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for install and update of DB schema
+ * Command for install and update of DB schema.
  */
 class DbSchemaUpgradeCommand extends AbstractSetupCommand
 {
     /**
-     * Factory to create installer
+     * Factory to create installer.
      *
      * @var InstallerFactory
      */
     private $installFactory;
 
     /**
-     * Deployment configuration
+     * Deployment configuration.
      *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * Inject dependencies
+     * Inject dependencies.
      *
      * @param InstallerFactory $installFactory
      * @param DeploymentConfig $deploymentConfig
@@ -46,7 +46,7 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * Initialization of the command
+     * Initialization of the command.
      *
      * @return void
      */
@@ -81,5 +81,6 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installSchema($input->getOptions());
+        return null;
     }
 }

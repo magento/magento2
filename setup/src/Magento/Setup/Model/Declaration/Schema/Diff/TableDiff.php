@@ -14,27 +14,27 @@ use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\ModifyColumn;
 
 /**
- * As table can have different types of elements inside itself
- * We need to compare all of this elements
+ * As table can have different types of elements inside itself.
+ * We need to compare all of this elements.
  *
- * If element exists only in XML -> then we need to create element
- * If element exists in both version and are different -> then we need to modify element
- * If element exists only in db -> then we need to remove this element
+ * If element exists only in XML -> then we need to create element.
+ * If element exists in both version and are different -> then we need to modify element.
+ * If element exists only in db -> then we need to remove this element.
  */
 class TableDiff
 {
     /**
-     * Column type for diff
+     * Column type for diff.
      */
     const COLUMN_DIFF_TYPE = "columns";
 
     /**
-     * Constraint type for diff
+     * Constraint type for diff.
      */
     const CONSTRAINT_DIFF_TYPE = "constraints";
 
     /**
-     * Constraint type for diff
+     * Constraint type for diff.
      */
     const INDEX_DIFF_TYPE = "indexes";
 
@@ -44,6 +44,8 @@ class TableDiff
     private $diffManager;
 
     /**
+     * Constructor.
+     *
      * @param DiffManager $diffManager
      */
     public function __construct(DiffManager $diffManager)
@@ -53,7 +55,7 @@ class TableDiff
 
     /**
      * As SQL engine can automatically create indexes for foreign keys in order to speedup selection
-     * and we do not have this keys in declaration - we need to ignore them
+     * and we do not have this keys in declaration - we need to ignore them.
      *
      * @param  Table   $table
      * @param  Index[] $indexes
@@ -71,9 +73,9 @@ class TableDiff
     /**
      * As foreign key is constraint, that do not allow to change column schema definition
      * we need to disable it in order to change column definition. When column definition
-     * will be changed we need to enable foreign key again
+     * will be changed we need to enable foreign key again.
      * We need to start column modification from parent table (reference table) and then go to
-     * tables that have foreign keys
+     * tables that have foreign keys.
      *
      * @param Table $declaredTable
      * @param Table $generatedTable
@@ -112,6 +114,8 @@ class TableDiff
     }
 
     /**
+     * Diff between tables.
+     *
      * @param Table | ElementInterface $declaredTable
      * @param Table | ElementInterface $generatedTable
      * @param Diff                     $diff

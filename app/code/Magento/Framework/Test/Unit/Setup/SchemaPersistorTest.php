@@ -6,27 +6,41 @@
 
 namespace Magento\Framework\Test\Unit\Setup;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\SchemaListener;
 use Magento\Framework\Setup\XmlPersistor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Unit test for schema persistor.
+ *
+ * @package Magento\Framework\Test\Unit\Setup
+ */
 class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Setup\SchemaPersistor */
-    protected $model;
+    /**
+     * @var \Magento\Framework\Setup\SchemaPersistor
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $componentRegistrarMock;
+    /**
+     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrarMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var XmlPersistor|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $xmlPersistor;
 
     protected function setUp()
     {
-        $this->componentRegistrarMock = $this->getMockBuilder(\Magento\Framework\Component\ComponentRegistrar::class)
+        $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->xmlPersistor = $this->getMockBuilder(XmlPersistor::class)
@@ -49,6 +63,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     public function testPersist(array $tables, $expectedXML)
     {
         $moduleName = 'First_Module';
+        /** @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject $schemaListenerMock */
         $schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,7 +84,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Provide listened schema
+     * Provide listened schema.
      *
      * @return array
      */
@@ -129,14 +144,23 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
                 'XMLResult' => '<?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-<table name="first_table" resource="default" engine="innodb">
-<column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1" unsigned="0"/>
-<column xmlns:xsi="xsi" xsi:type="date" name="second_column" nullable="0"/>
-<constraint xmlns:xsi="xsi" xsi:type="foreign" name="some_foreign_constraint" referenceTable="table" referenceColumn="column" table="first_table" column="first_column"/>
-<constraint xmlns:xsi="xsi" xsi:type="primary" name="PRIMARY"><column name="second_column"/>
-</constraint><index name="TEST_INDEX" indexType="btree"><column name="first_column"/></index>
-</table></schema>'
+                        <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                            xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+                            <table name="first_table" resource="default" engine="innodb">
+                                <column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1" 
+                                    unsigned="0"/>
+                                <column xmlns:xsi="xsi" xsi:type="date" name="second_column" nullable="0"/>
+                                <constraint xmlns:xsi="xsi" xsi:type="foreign" name="some_foreign_constraint" 
+                                    referenceTable="table" referenceColumn="column" 
+                                    table="first_table" column="first_column"/>
+                                <constraint xmlns:xsi="xsi" xsi:type="primary" name="PRIMARY">
+                                    <column name="second_column"/>
+                                </constraint>
+                                <index name="TEST_INDEX" indexType="btree">
+                                    <column name="first_column"/>
+                                </index>
+                            </table>
+                        </schema>'
             ]
         ];
     }

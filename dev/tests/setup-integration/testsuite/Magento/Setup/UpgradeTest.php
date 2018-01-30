@@ -9,7 +9,7 @@ namespace Magento\Setup;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * The purpose of this test is verifying initial UpgradeSchema, UpgradeData scripts
+ * The purpose of this test is verifying upgrade process.
  */
 class UpgradeTest extends \PHPUnit\Framework\TestCase
 {

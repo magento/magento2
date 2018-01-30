@@ -10,7 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 
 /**
- * Statement object aggregates different SQL statements and run all of them for one table
+ * Statement factory.
+ * Statement aggregates SQL statements and executes them for one table.
  */
 class StatementFactory
 {
@@ -30,6 +31,8 @@ class StatementFactory
     private $referenceClassName;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string $className
      * @param string $referenceClassName
@@ -45,7 +48,7 @@ class StatementFactory
     }
 
     /**
-     * Create statemtnt object
+     * Create statement object.
      *
      * @param string $name
      * @param string $tableName

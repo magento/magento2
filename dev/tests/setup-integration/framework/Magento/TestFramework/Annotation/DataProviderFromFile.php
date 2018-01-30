@@ -11,7 +11,7 @@ use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\TestCase\MutableDataInterface;
 
 /**
- * Handler for applying reinstallMagento annotation
+ * Handler for applying reinstallMagento annotation.
  */
 class DataProviderFromFile
 {
@@ -35,6 +35,8 @@ class DataProviderFromFile
     }
 
     /**
+     * Start test.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @throws \Exception
      */
@@ -51,6 +53,8 @@ class DataProviderFromFile
     }
 
     /**
+     * Finish test.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @throws \Exception
      */

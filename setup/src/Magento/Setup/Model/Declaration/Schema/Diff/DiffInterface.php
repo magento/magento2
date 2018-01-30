@@ -13,12 +13,12 @@ use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
  * DiffInterface is type of classes, that holds all information
- * that need to be changed from one installation to another
+ * that need to be changed from one installation to another.
  */
 interface DiffInterface
 {
     /**
-     * Retrieve operations by type
+     * Retrieve operations by type.
      *
      * Please note: that we wants to save history and we retrieve next structure:
      * [
@@ -37,7 +37,7 @@ interface DiffInterface
     public function getAll();
 
     /**
-     * Register operation
+     * Register operation.
      *
      * @param  ElementInterface|object $dtoObject
      * @param  string                  $operation
@@ -51,7 +51,7 @@ interface DiffInterface
     );
 
     /**
-     * Register current state of schema to registry
+     * Register current state of schema to registry.
      *
      * @param  Schema $schema
      * @return void
@@ -59,21 +59,21 @@ interface DiffInterface
     public function registerSchema(Schema $schema);
 
     /**
-     * Retrieve current schema object
+     * Retrieve current schema object.
      *
      * @return Schema
      */
     public function getCurrentSchemaState();
 
     /**
-     * Return current installation request
+     * Return current installation request.
      *
      * @return Request
      */
     public function getCurrentInstallationRequest();
 
     /**
-     * Register installation request with all needed options
+     * Register installation request with all needed options.
      *
      * @param  Request $request
      * @return void

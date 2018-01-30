@@ -16,11 +16,11 @@ use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from XML
- * into DTO`s format, with aggregation root: Schema
+ * into DTO`s format, with aggregation root: Schema.
  *
  * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
- * In order to convert build only 1 structural element use directly it factory
+ * In order to convert build only 1 structural element use directly it factory.
  *
  * structure
  *  - table[N,]
@@ -87,8 +87,8 @@ class SchemaBuilder
     }
 
     /**
-     * Add tables data to builder
-     * Tables data holds tables information: columns, constraints, indexes, attributes
+     * Add tables data to builder.
+     * Tables data holds tables information: columns, constraints, indexes, attributes.
      *
      * @param  array $tablesData
      * @return self
@@ -100,7 +100,7 @@ class SchemaBuilder
     }
 
     /**
-     * Do schema validation and print all errors
+     * Do schema validation and print all errors.
      *
      * @param  Schema $schema
      * @throws Exception
@@ -120,7 +120,7 @@ class SchemaBuilder
     }
 
     /**
-     * Build schema
+     * Build schema.
      *
      * @param  Schema $schema
      * @throws Exception
@@ -142,6 +142,8 @@ class SchemaBuilder
     }
 
     /**
+     * Get resource for structural elements.
+     *
      * @param array $tableData
      * @return string
      */
@@ -152,7 +154,7 @@ class SchemaBuilder
     }
 
     /**
-     * Check whether element is disabled and should not appear in final declaration
+     * Check whether element is disabled and should not appear in final declaration.
      *
      * @param  array $structuralElementData
      * @return bool
@@ -164,8 +166,8 @@ class SchemaBuilder
     }
 
     /**
-     * Instantiate column DTO objects from array
-     * If column was renamed new key will be associated to it
+     * Instantiate column DTO objects from array.
+     * If column was renamed new key will be associated to it.
      *
      * @param  array  $tableData
      * @param  string $resource
@@ -190,7 +192,7 @@ class SchemaBuilder
     }
 
     /**
-     * Process generic data that is support by all 3 child types: columns, constraints, indexes
+     * Process generic data that is support by all 3 child types: columns, constraints, indexes.
      *
      * @param  array    $elementData
      * @param  Table    $table
@@ -206,8 +208,8 @@ class SchemaBuilder
     }
 
     /**
-     * Process tables and add them to schema
-     * If table already exists - then we need to skip it
+     * Process tables and add them to schema.
+     * If table already exists - then we need to skip it.
      *
      * @param  Schema $schema
      * @param  array  $tableData
@@ -238,7 +240,7 @@ class SchemaBuilder
     }
 
     /**
-     * Convert column names to objects
+     * Convert column names to objects.
      *
      * @param  array $columnNames
      * @param  Table $table
@@ -256,7 +258,7 @@ class SchemaBuilder
     }
 
     /**
-     * Convert and instantiate index objects
+     * Convert and instantiate index objects.
      *
      * @param  array    $tableData
      * @param  $resource
@@ -286,7 +288,7 @@ class SchemaBuilder
     }
 
     /**
-     * Convert and instantiate constraint objects
+     * Convert and instantiate constraint objects.
      *
      * @param  array $tableData
      * @param  $resource

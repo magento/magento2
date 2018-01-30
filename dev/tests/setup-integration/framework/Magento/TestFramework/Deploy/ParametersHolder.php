@@ -10,17 +10,19 @@ use Magento\Framework\Shell;
 use Magento\Setup\Console\Command\InstallCommand;
 
 /**
- * The purpose of this class is enable/disable module and upgrade commands execution
+ * The purpose of this class is enable/disable module and upgrade commands execution.
  */
 class ParametersHolder
 {
     /**
+     * Initialize params.
+     *
      * @var array
      */
     private $initParams;
 
     /**
-     * Return application initialization parameters
+     * Return application initialization parameters.
      *
      * @return array
      */
@@ -33,7 +35,7 @@ class ParametersHolder
             $customDirs = $this->getCustomDirs();
             $initParams = [
                 \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
-                \Magento\Framework\App\State::PARAM_MODE => $appMode
+//                \Magento\Framework\App\State::PARAM_MODE => $appMode
             ];
             $this->initParams = ['magento-init-params' => urldecode(http_build_query($initParams))];
         }
@@ -41,7 +43,7 @@ class ParametersHolder
     }
 
     /**
-     * Include data from config file and convert it to db format
+     * Include data from config file and convert it to db format:
      * -db-name
      * -db-user-name
      * -db-password
@@ -52,14 +54,12 @@ class ParametersHolder
      */
     public function getDbData($resource)
     {
-        $dbData = include TESTS_BASE_DIR .
-            DIRECTORY_SEPARATOR .
-            TESTS_INSTALL_CONFIG_FILE;
+        $dbData = include TESTS_INSTALLATION_DB_CONFIG_FILE;
         return $dbData[$resource];
     }
 
     /**
-     * Get customized directory paths
+     * Get customized directory paths.
      *
      * @return array
      */

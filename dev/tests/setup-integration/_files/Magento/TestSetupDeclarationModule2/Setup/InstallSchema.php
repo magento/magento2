@@ -11,14 +11,12 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
- * InstallSchema mock class
+ * InstallSchema mock class.
  */
 class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

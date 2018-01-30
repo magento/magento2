@@ -85,7 +85,7 @@ class DbVersionInfo
     }
 
     /**
-     * Get array of errors if DB is out of date, return [] if DB is current
+     * Get array of errors if DB is out of date, return [] if DB is current.
      *
      * @return string[] Array of errors, each error contains module name, current version, required version,
      *                  and type (schema or data).  The array will be empty if all schema and data are current.

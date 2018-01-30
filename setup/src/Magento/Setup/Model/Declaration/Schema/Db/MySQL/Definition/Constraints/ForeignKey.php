@@ -12,17 +12,19 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Foreign key constraint processor.
+ *
  * MySQL holds foreign keys definitions only in "CREATE TABLE" sql. So we can access them
- * only with parsing of this statement, and searching by ADD CONSTRAINT FOREIGN KEY
+ * only with parsing of this statement, and searching by ADD CONSTRAINT FOREIGN KEY.
  *
  * @inheritdoc
  */
 class ForeignKey implements DbDefinitionProcessorInterface
 {
     /**
-     * Usually used in MySQL requests
+     * Foreign key statement.
      */
-    const FOREIGN_KEY_NAME = 'FOREIGN KEY';
+    const FOREIGN_KEY_STATEMENT = 'FOREIGN KEY';
 
     /**
      * @var ResourceConnection
@@ -30,6 +32,8 @@ class ForeignKey implements DbDefinitionProcessorInterface
     private $resourceConnection;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -54,7 +58,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
         $foreignKeySql = sprintf(
             "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s",
             $adapter->quoteIdentifier($foreignKey->getName()),
-            self::FOREIGN_KEY_NAME,
+            self::FOREIGN_KEY_STATEMENT,
             $adapter->quoteIdentifier($foreignKey->getColumn()->getName()),
             $adapter->quoteIdentifier($referenceTable),
             $adapter->quoteIdentifier($foreignKey->getReferenceColumn()->getName()),

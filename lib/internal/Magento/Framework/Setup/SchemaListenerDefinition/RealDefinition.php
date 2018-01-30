@@ -7,12 +7,12 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * Convert definition for all real types: decimal, float, double
+ * Convert definition for all real types: decimal, float, double.
  */
 class RealDefinition implements DefinitionConverterInterface
 {
     /**
-     * Decimal, double and float have different default values
+     * Decimal, double and float have different default values.
      *
      * @var array
      */
@@ -42,7 +42,7 @@ class RealDefinition implements DefinitionConverterInterface
         return [
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],
-            //In previos adapter this 2 fields were switched, so we need to switch again
+            //In previous adapter this 2 fields were switched, so we need to switch again
             'scale' => $definition['scale'] ?? self::$shapeByType[$definition['type']]['scale'],
             'precision' => $definition['precision'] ?? self::$shapeByType[$definition['type']]['precision'],
             'unsigned' => $definition['unsigned'] ?? false,

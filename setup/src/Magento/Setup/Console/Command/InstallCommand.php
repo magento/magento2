@@ -40,7 +40,7 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
-     * List of comma-separated module names. That must be enabled during installation
+     * List of comma-separated module names. That must be enabled during installation.
      * Available magic param all.
      */
     const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
@@ -53,7 +53,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * If this flag is enabled, than all your old scripts with format:
-     * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format
+     * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
      */
     const CONVERT_OLD_SCRIPTS_KEY = 'convert_old_scripts';
 
@@ -146,21 +146,21 @@ class InstallCommand extends AbstractSetupCommand
                 Request::DUMP_ENABLE_OPTIONS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Should removed columns be dumped or recovered columns data reverted'
+                'Should removed columns be dumped or recovered columns data reverted.'
             ),
             new InputOption(
                 self::INPUT_KEY_ENABLE_MODULES,
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'List of comma-separated module names. That must be included during installation. 
-                Avaiable magic param "all".'
+                'List of comma-separated module names. That must be included during installation. '
+                . 'Avaiable magic param "all".'
             ),
             new InputOption(
                 self::INPUT_KEY_DISABLE_MODULES,
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'List of comma-separated module names. That must be avoided during installation. 
-                Avaiable magic param "all".'
+                'List of comma-separated module names. That must be avoided during installation. '
+                . 'Avaiable magic param "all".'
             ),
             new InputOption(
                 self::CONVERT_OLD_SCRIPTS_KEY,

@@ -124,31 +124,34 @@ class OperationsExecutor
 
     /**
      * Loop through all operations that are configured in di.xml
-     * and execute them with elements from ChangeRegistyr
+     * and execute them with elements from ChangeRegistry.
      *
      * @see    OperationInterface
      * @param  DiffInterface $diff
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute(DiffInterface $diff)
     {
         $this->startSetupForAllConnections();
         $tableHistories = $diff->getAll();
+        if (is_array($tableHistories)) {
+            foreach ($tableHistories as $tableHistory) {
+                $statementAggregator = $this->statementAggregatorFactory->create();
 
-        foreach ($tableHistories as $tableHistory) {
-            $statementAggregator = $this->statementAggregatorFactory->create();
-
-            foreach ($this->operations as $operation) {
-                if (isset($tableHistory[$operation->getOperationName()])) {
-                    /** @var ElementHistory $elementHistory */
-                    foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
-                        $statementAggregator->addStatements(
-                            $operation->doOperation($elementHistory)
-                        );
+                foreach ($this->operations as $operation) {
+                    if (isset($tableHistory[$operation->getOperationName()])) {
+                        /** @var ElementHistory $elementHistory */
+                        foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
+                            $statementAggregator->addStatements(
+                                $operation->doOperation($elementHistory)
+                            );
+                        }
                     }
                 }
+                $this->dbSchemaWriter->compile($statementAggregator);
             }
-            $this->dbSchemaWriter->compile($statementAggregator);
         }
 
         $this->endSetupForAllConnections();

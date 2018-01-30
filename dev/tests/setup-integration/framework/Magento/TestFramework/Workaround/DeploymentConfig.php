@@ -4,22 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Implementation of the @magentoSchemaFixture DocBlock annotation
- */
 namespace Magento\TestFramework\Workaround;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Represents
+ * Deployment config handler.
  *
- * @magentoSchemaFixture {link_to_file.php}
+ * @package Magento\TestFramework\Workaround
  */
 class DeploymentConfig
 {
     /**
-     * Apply magento data fixture on
+     * Start test.
      *
      * @return void
      */

@@ -7,7 +7,7 @@
 namespace Magento\TestFramework\Annotation;
 
 /**
- * Handler for applying reinstallMagento annotation
+ * Handler for applying reinstallMagento annotation.
  */
 class ReinstallInstance
 {
@@ -27,7 +27,7 @@ class ReinstallInstance
     }
 
     /**
-     * Handler for 'endTest' event
+     * Handler for 'endTest' event.
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */

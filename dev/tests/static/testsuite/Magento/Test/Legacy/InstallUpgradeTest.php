@@ -11,7 +11,7 @@ use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
- * Tests to find obsolete install/upgrade schema/data scripts
+ * Tests to find obsolete install/upgrade schema/data scripts.
  */
 class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
 {

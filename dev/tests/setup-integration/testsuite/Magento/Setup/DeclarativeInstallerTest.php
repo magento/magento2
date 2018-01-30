@@ -7,8 +7,6 @@
 namespace Magento\Setup;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Console\Command\InstallCommand;
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
 use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
@@ -19,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
- * The purpose of this test is verifying declarative installation works
+ * The purpose of this test is verifying declarative installation works.
  */
 class DeclarativeInstallerTest extends SetupTestCase
 {
@@ -71,8 +69,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     public function testInstallation()
     {
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         $diff = $this->schemaDiff->diff(
@@ -80,11 +77,10 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
 
-        //$tablesData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         //Second time installation should not find anything as we do not change anything
-        self::assertNull($diff->get());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getData());
+        self::assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -94,8 +90,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     public function testInstallationWithColumnsModification()
     {
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         //Move InstallSchema file and tried to install
@@ -107,17 +102,16 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         //@TODO: change this to upgrade in future
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->get());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getData());
+        self::assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -127,8 +121,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     public function testInstallationWithColumnsRemoval()
     {
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         //Move InstallSchema file and tried to install
@@ -141,17 +134,16 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         //@TODO: change this to upgrade in future
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->get());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getData());
+        self::assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -177,8 +169,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     public function testInstallationWithConstraintsModification()
     {
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         //Move InstallSchema file and tried to install
@@ -191,17 +182,16 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         //@TODO: change this to upgrade in future
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->get());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getTrimmedData());
+        self::assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -211,11 +201,10 @@ class DeclarativeInstallerTest extends SetupTestCase
     public function testInstallationWithDroppingTables()
     {
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
-        //Move InstallSchema file and tried to install
+        //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
             'drop_table',
@@ -225,16 +214,15 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         //@TODO: change this to upgrade in future
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1'],
-            [InstallCommand::DECLARATION_MODE_KEY => true]
+            ['Magento_TestSetupDeclarationModule1']
         );
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        self::assertNull($diff->get());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getData());
+        self::assertEquals($this->getData(), $shardData);
     }
 }

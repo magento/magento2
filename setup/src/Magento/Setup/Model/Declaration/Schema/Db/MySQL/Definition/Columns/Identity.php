@@ -11,14 +11,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnIdentityAwareInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Find out whether column can be auto_incremented or not
+ * Identity (auto_increment) column processor.
  *
  * @inheritdoc
  */
 class Identity implements DbDefinitionProcessorInterface
 {
     /**
-     * MySQL flag, that says that we need to increment field, each time when we add new row
+     * Auto increment flag.
      */
     const IDENTITY_FLAG = 'auto_increment';
 

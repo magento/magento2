@@ -56,7 +56,7 @@ return [
                 \Magento\Framework\Component\ComponentRegistrarInterface::class =>
                     \Magento\Framework\Component\ComponentRegistrar::class,
             ],
-            \Magento\Setup\Model\Declaration\Schema\Db\Config::class => [
+            \Magento\Setup\Model\Declaration\Schema\SchemaConfig::class => [
                 'parameters' => [
                     'connectionScopes' => [
                         'default',

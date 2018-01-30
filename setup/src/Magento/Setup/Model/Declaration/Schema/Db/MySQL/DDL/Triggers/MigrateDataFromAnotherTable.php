@@ -12,13 +12,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Used to migrate data from one column to another in scope of one table
- * Also can add statement in case when data can`t be migrate easily
+ * Used to migrate data from one column to another in scope of one table.
+ * Can add statement in case when data can`t be migrate easily.
  */
 class MigrateDataFromAnotherTable implements DDLTriggerInterface
 {
     /**
-     * Pattern with which we can match whether we can apply and use this trigger or not
+     * Pattern with which we can match whether we can apply and use this trigger or not.
      */
     const MATCH_PATTERN = '/migrateDataFromAnotherTable\(([^\)]+)\,([^\)]+)\)/';
 
@@ -28,6 +28,8 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     private $resourceConnection;
 
     /**
+     * Constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -63,7 +65,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
                     $this->resourceConnection->getTableName($tableMigrateFrom),
                     [$column->getName() => $columnMigrateFrom]
                 );
-            //We need to do update only if table exists
+            //Update only if table exists
             if ($adapter->isTableExists($tableMigrateFrom)) {
                 $adapter->query(
                     $adapter->insertFromSelect(

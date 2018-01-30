@@ -9,7 +9,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Shell;
 
 /**
- * Persist listened schema to db_schema.xml file
+ * Persist listened schema to db_schema.xml file.
  */
 class SchemaPersistor
 {
@@ -24,6 +24,8 @@ class SchemaPersistor
     private $xmlPersistor;
 
     /**
+     * Constructor.
+     *
      * @param ComponentRegistrar $componentRegistrar
      * @param XmlPersistor $xmlPersistor
      */
@@ -34,6 +36,8 @@ class SchemaPersistor
     }
 
     /**
+     * Initialize bare DOM XML element.
+     *
      * @return \SimpleXMLElement
      */
     private function initEmptyDom()
@@ -46,7 +50,7 @@ class SchemaPersistor
     }
 
     /**
-     * Do persist by modules to db_schema.xml file
+     * Do persist by modules to db_schema.xml file.
      *
      * @param SchemaListener $schemaListener
      */
@@ -55,7 +59,7 @@ class SchemaPersistor
         foreach ($schemaListener->getTables() as $moduleName => $tablesData) {
             $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
             if (empty($path)) {
-                /** Empty path means that module doesn`t exists */
+                /** Empty path means that module does not exist */
                 continue;
             }
             $schemaPatch = sprintf('%s/etc/db_schema.xml', $path);
@@ -85,8 +89,8 @@ class SchemaPersistor
     }
 
     /**
-     * If disabled attribute is set to false it remove it at all
-     * Also handle other generic attributes
+     * If disabled attribute is set to false it remove it at all.
+     * Also handle other generic attributes.
      *
      * @param array $definition
      * @return array
@@ -101,7 +105,7 @@ class SchemaPersistor
     }
 
     /**
-     * Cast boolean types to string
+     * Cast boolean types to string.
      *
      * @param bool $boolean
      * @return string
@@ -112,7 +116,7 @@ class SchemaPersistor
     }
 
     /**
-     * Convert columns from array to XML format
+     * Convert columns from array to XML format.
      *
      * @param array $tableData
      * @param \SimpleXMLElement $table
@@ -145,7 +149,7 @@ class SchemaPersistor
     }
 
     /**
-     * Convert columns from array to XML format
+     * Convert columns from array to XML format.
      *
      * @param array $tableData
      * @param \SimpleXMLElement $table
@@ -176,7 +180,7 @@ class SchemaPersistor
     }
 
     /**
-     * Convert constraints from array to XML format
+     * Convert constraints from array to XML format.
      *
      * @param array $tableData
      * @param \SimpleXMLElement $table
@@ -222,7 +226,7 @@ class SchemaPersistor
     }
 
     /**
-     * Do schema persistence to specific module
+     * Do schema persistence to specific module.
      *
      * @param \SimpleXMLElement $simpleXmlElementDom
      * @param string $path

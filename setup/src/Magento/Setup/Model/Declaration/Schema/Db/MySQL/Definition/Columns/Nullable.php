@@ -11,7 +11,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnNullableAwareInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Go through all columns that can be nullable and modify them
+ * Nullable columns processor.
  *
  * @inheritdoc
  */

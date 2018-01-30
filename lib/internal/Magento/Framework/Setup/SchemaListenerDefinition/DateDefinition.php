@@ -7,7 +7,7 @@
 namespace Magento\Framework\Setup\SchemaListenerDefinition;
 
 /**
- * Find boolean type
+ * Date type definition.
  */
 class DateDefinition implements DefinitionConverterInterface
 {

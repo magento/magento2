@@ -8,16 +8,20 @@ namespace Magento\TestFramework\Deploy;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader;
 
 /**
- * The purpose of this class is adding test modules files to Magento code base
+ * The purpose of this class is adding test modules files to Magento code base.
  */
 class DescribeTable
 {
     /**
+     * Schema reader.
+     *
      * @var DbSchemaReader
      */
     private $dbSchemaReader;
 
     /**
+     * Constructor.
+     *
      * @param DbSchemaReader $dbSchemaReader
      */
     public function __construct(DbSchemaReader $dbSchemaReader)
@@ -26,7 +30,7 @@ class DescribeTable
     }
 
     /**
-     * Describe shards
+     * Describe shards.
      *
      * @param  string $shardName
      * @return array

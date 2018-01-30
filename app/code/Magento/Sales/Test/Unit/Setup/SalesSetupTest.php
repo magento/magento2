@@ -5,30 +5,50 @@
  */
 namespace Magento\Sales\Test\Unit\Setup;
 
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Test for sales setup model.
+ *
+ * @package Magento\Sales\Test\Unit\Setup
+ */
 class SalesSetupTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Setup\SalesSetup */
-    protected $model;
+    /**
+     * @var \Magento\Sales\Setup\SalesSetup
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\Setup\ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $moduleDataSetupMock;
+    /**
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $moduleDataSetupMock;
 
-    /** @var \Magento\Eav\Model\Entity\Setup\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $contextMock;
+    /**
+     * @var \Magento\Eav\Model\Entity\Setup\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $contextMock;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cacheMock;
+    /**
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheMock;
 
-    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $collectionFactoryMock;
+    /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionFactoryMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigMock;
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
 
     protected function setUp()
     {
@@ -39,7 +59,7 @@ class SalesSetupTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->cacheMock = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
             ->getMockForAbstractClass();
-        $this->collectionFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory::class)
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
