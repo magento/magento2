@@ -79,11 +79,12 @@ class ProfilerEnableCommand extends Command
             $type = self::TYPE_DEFAULT;
         }
 
-        if (!in_array($type, self::BUILT_IN_TYPES)) {
+        if (!in_array($type, self::BUILT_IN_TYPES, true)) {
             $builtInTypes = implode(', ', self::BUILT_IN_TYPES);
             $output->writeln(
-                '<comment>' . sprintf('Type %s is not one of the built-in output types (%s).', $type) .
-                sprintf('Make sure the necessary class exists.', $type, $builtInTypes) . '</comment>'
+                '<comment>'
+                . sprintf('Type %s is not one of the built-in output types (%s).', $type, $builtInTypes) .
+                '</comment>'
             );
         }
 
@@ -100,9 +101,9 @@ class ProfilerEnableCommand extends Command
                 );
             }
             $output->write(PHP_EOL);
+
             return;
         }
-
         $output->writeln('<error>Something went wrong while enabling the profiler.</error>');
     }
 }
