@@ -85,7 +85,7 @@ class SelectBuilder
             . ' OR ((legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression . ' > %2$d)'
             . ' OR (legacy_stock_item.use_config_min_qty = 0 AND'
             . ' ' . $quantityExpression . ' > legacy_stock_item.min_qty))'
-            //todo this is temporary solution to set is_salable for bundle.
+            //todo https://github.com/magento-engcom/msi/issues/479
             . ' OR product_entity.type_id = \'bundle\')',
             $globalManageStock,
             $globalMinQty
