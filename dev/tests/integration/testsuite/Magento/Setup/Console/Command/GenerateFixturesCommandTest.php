@@ -77,6 +77,9 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         parent::setUp();
     }
 
+    /**
+     * @return string
+     */
     private function getEdition()
     {
         if (file_exists(BP . '/setup/performance-toolkit/profiles/b2b/small.xml')) {
@@ -98,6 +101,36 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         parent::tearDown();
     }
 
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+
+        /** @var $appCache \Magento\Framework\App\Cache */
+        $appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
+        $appCache->clean(
+            [
+                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
+            ]
+        );
+    }
+
+    public static function setUpBeforeClass()
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
+    /**
+     *
+     */
     public function testExecute()
     {
         $profile = BP . "/setup/performance-toolkit/profiles/{$this->getEdition()}/small.xml";
