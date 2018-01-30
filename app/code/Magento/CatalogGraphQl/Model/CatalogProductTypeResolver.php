@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * {@inheritdoc}
  */
-class SimpleProductTypeResolver implements TypeResolverInterface
+class CatalogProductTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
@@ -21,6 +21,8 @@ class SimpleProductTypeResolver implements TypeResolverInterface
     {
         if ($data['type_id'] == 'simple') {
             return 'SimpleProduct';
+        } elseif ($data['type_id'] == 'virtual') {
+            return 'VirtualProduct';
         }
 
         return null;

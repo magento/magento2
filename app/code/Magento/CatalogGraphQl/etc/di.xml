@@ -36,6 +36,7 @@
                     <item name="bundle" xsi:type="string">BundleProduct</item>
                     <item name="downloadable" xsi:type="string">DownloadableProduct</item>
                     <item name="virtual" xsi:type="string">VirtualProduct</item>
+                    <item name="grouped" xsi:type="string">GroupedProduct</item>
                 </item>
             </argument>
         </arguments>

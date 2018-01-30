@@ -29,26 +29,26 @@
                 <item name="baseModelData" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\BaseModelData</item>
                 <item name="customAttributes" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\CustomAttributes</item>
                 <item name="entityIdToId" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\EntityIdToId</item>
-                <item name="mediaGalleryEntries" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
-                <item name="options" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Options</item>
-                <item name="price" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
-                <item name="tierPrices" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
-                <item name="newFromTo" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\NewFromTo</item>
-                <item name="productLinks" xsi:type="object">\Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
+                <item name="mediaGalleryEntries" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
+                <item name="options" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Options</item>
+                <item name="price" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
+                <item name="tierPrices" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
+                <item name="newFromTo" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\NewFromTo</item>
+                <item name="productLinks" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="simple_product_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\SimpleProductTypeResolver</item>
+                <item name="catalog_type_resolver" xsi:type="object">Magento\CatalogGraphQl\Model\CatalogProductTypeResolver</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <arguments>
             <argument name="productLinksTypeNameResolvers" xsi:type="array">
-                <item name="catalog_product_link_type_resolver" xsi:type="object">\Magento\CatalogGraphQl\Model\ProductLinksTypeResolver</item>
+                <item name="catalog_product_link_type_resolver" xsi:type="object">Magento\CatalogGraphQl\Model\ProductLinksTypeResolver</item>
             </argument>
         </arguments>
     </type>

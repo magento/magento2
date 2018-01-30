@@ -6,12 +6,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="GroupedProduct">
         <implements interface="ProductInterface" copyFields="true"/>
-        <!-- INVESTIGATE CUSTOM ATTRIBUTES WHY ARE NOT BEING ADDED AUTOMATICALLY -->
-        <field xsi:type="ObjectOutputField" name="color" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="size" type="String"/>
-        <field xsi:type="ObjectOutputField" name="manufacturer" type="Int"/>
     </type>
-    <type xsi:type="OutputType" name="GroupedProductLinks">
+    <type xsi:type="OutputType" name="GroupedProductItem">
         <implements interface="ProductLinksInterface" copyFields="true"/>
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
     </type>
