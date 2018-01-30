@@ -7,7 +7,12 @@
  */
 namespace Magento\TestFramework\Dependency;
 
-class DeclarativeSchemaRule implements \Magento\TestFramework\Dependency\RuleInterface
+/**
+ * Rule for testing integrity within declarative schema.
+ *
+ * @package Magento\TestFramework\Dependency
+ */
+class DeclarativeSchemaRule implements RuleInterface
 {
     /**
      * Map of tables and modules
@@ -80,7 +85,7 @@ class DeclarativeSchemaRule implements \Magento\TestFramework\Dependency\RuleInt
             if (strtolower($currentModule) !== strtolower($this->_moduleTableMap[$table])) {
                 $dependenciesInfo[] = [
                     'module' => $this->_moduleTableMap[$table],
-                    'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                    'type' => RuleInterface::TYPE_HARD,
                     'source' => $table,
                 ];
             }
