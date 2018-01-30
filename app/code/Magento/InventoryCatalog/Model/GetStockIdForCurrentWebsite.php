@@ -12,7 +12,7 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Service for get stock id by code for current website.
+ * Service for get stock id for current website.
  */
 class GetStockIdForCurrentWebsite
 {

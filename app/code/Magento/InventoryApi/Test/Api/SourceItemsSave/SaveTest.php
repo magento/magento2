@@ -96,7 +96,10 @@ class SaveTest extends WebapiAbstract
     private function getSourceItems(): array
     {
         $requestData = [
-            'searchCriteria' => [SearchCriteria::PAGE_SIZE => 10],
+            'searchCriteria' => [
+                SearchCriteria::FILTER_GROUPS => [],
+                SearchCriteria::PAGE_SIZE => 10
+            ],
         ];
         $serviceInfo = [
             'rest' => [
