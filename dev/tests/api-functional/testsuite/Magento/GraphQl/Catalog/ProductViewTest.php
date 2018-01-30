@@ -364,7 +364,6 @@ QUERY;
                 linked_product_sku
                 linked_product_type
                 position
-                qty
                 sku
             }
             short_description
