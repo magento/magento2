@@ -7,10 +7,11 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\JoinAdderToSelect;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -26,24 +27,14 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $aliasResolver;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var EavConfig
      */
     private $eavConfig;
 
     /**
-     * @var ResourceConnection
+     * @var JoinAdderToSelect
      */
-    private $resourceConnection;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private $joinAdderToSelect;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -51,20 +42,21 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param EavConfig $eavConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
-     * @SuppressWarnings(Magento.TypeDuplication)
+     * @param JoinAdderToSelect $joinAdderToSelect
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
         ScopeConfigInterface $scopeConfig,
-        AliasResolver $aliasResolver
+        AliasResolver $aliasResolver,
+        JoinAdderToSelect $joinAdderToSelect = null
     ) {
-        $this->storeManager = $storeManager;
-        $this->resourceConnection = $resourceConnection;
         $this->eavConfig = $eavConfig;
-        $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
+        $this->joinAdderToSelect = $joinAdderToSelect ?: ObjectManager::getInstance()->get(JoinAdderToSelect::class);
     }
 
     /**
@@ -77,27 +69,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
         $attribute = $this->getAttributeByCode($filter->getField());
-        $joinCondition = sprintf(
-            'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
-            $alias,
-            $attribute->getId(),
-            $this->storeManager->getStore()->getId()
-        );
-        $select->joinLeft(
-            [$alias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
-            $joinCondition,
-            []
-        );
-        if ($this->isAddStockFilter()) {
-            $stockAlias = $alias . AliasResolver::STOCK_FILTER_SUFFIX;
-            $select->joinLeft(
-                [
-                    $stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status'),
-                ],
-                sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
-                []
-            );
-        }
+        $this->joinAdderToSelect->execute((int)$attribute->getId(), $alias, $select);
 
         return true;
     }
@@ -110,18 +82,5 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private function getAttributeByCode($field)
     {
         return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field);
-    }
-
-    /**
-     * @return bool
-     */
-    private function isAddStockFilter()
-    {
-        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
-        );
-
-        return false === $isShowOutOfStock;
     }
 }

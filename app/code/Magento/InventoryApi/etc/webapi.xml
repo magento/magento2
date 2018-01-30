@@ -88,16 +88,22 @@
             <resource ref="Magento_InventoryApi::source_stock_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock/assign-sources/:stockId" method="POST">
-        <service class="Magento\InventoryApi\Api\AssignSourcesToStockInterface" method="execute"/>
+    <route url="/V1/inventory/stock-source-link" method="GET">
+        <service class="Magento\InventoryApi\Api\GetSourceLinksInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_InventoryApi::source_stock_link"/>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock/unassign-source/:stockId/:sourceCode" method="DELETE">
-        <service class="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" method="execute"/>
+    <route url="/V1/inventory/stock-source-link" method="POST">
+        <service class="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_InventoryApi::source_stock_link"/>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/stock-source-link" method="DELETE">
+        <service class="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>
     </route>
     <!-- SourceItem -->

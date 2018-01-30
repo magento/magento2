@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryApi\Test\Api\SourceItemsSave;
+namespace Magento\InventoryApi\Test\Api\StockSourceLink;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -18,28 +18,26 @@ class SaveTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source-item';
-    const SERVICE_NAME = 'inventoryApiSourceItemsSaveV1';
+    const RESOURCE_PATH = '/V1/inventory/stock-source-link';
+    const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
+    const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
+    const SERVICE_NAME_GET_LIST = 'inventoryApiGetSourceLinksV1';
     /**#@-*/
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      */
     public function testExecute()
     {
-        $sourceItems = [
+        $links = [
             [
-                SourceItemInterface::SOURCE_CODE => 'eu-1',
-                SourceItemInterface::SKU => 'SKU-1',
-                SourceItemInterface::QUANTITY => 5.5,
-                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
+                StockSourceLinkInterface::STOCK_ID => 10,
             ],
             [
-                SourceItemInterface::SOURCE_CODE => 'eu-2',
-                SourceItemInterface::SKU => 'SKU-1',
-                SourceItemInterface::QUANTITY => 3,
-                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
+                StockSourceLinkInterface::STOCK_ID => 10,
             ],
         ];
 
@@ -49,51 +47,54 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItems]);
+        $this->_webApiCall($serviceInfo, ['links' => $links]);
 
-        $actualData = $this->getSourceItems();
+        $actualData = $this->getStockSourceLinks();
 
         self::assertEquals(2, $actualData['total_count']);
-        AssertArrayContains::assert($sourceItems, $actualData['items']);
+        AssertArrayContains::assert($links, $actualData['items']);
     }
 
     protected function tearDown()
     {
-        $sourceItems = [
+        $links = [
             [
-                SourceItemInterface::SOURCE_CODE => 'eu-1',
-                SourceItemInterface::SKU => 'SKU-1',
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
+                StockSourceLinkInterface::STOCK_ID => 10,
             ],
             [
-                SourceItemInterface::SOURCE_CODE => 'eu-2',
-                SourceItemInterface::SKU => 'SKU-1',
+                StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
+                StockSourceLinkInterface::STOCK_ID => 10,
             ],
         ];
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
-                    . http_build_query(['sourceItems' => $sourceItems]),
+                    . http_build_query(['links' => $links]),
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_DELETE,
+                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
+
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItems]);
+            : $this->_webApiCall($serviceInfo, ['links' => $links]);
+
         parent::tearDown();
     }
 
     /**
      * @return array
      */
-    private function getSourceItems(): array
+    private function getStockSourceLinks(): array
     {
         $requestData = [
             'searchCriteria' => [
@@ -101,16 +102,18 @@ class SaveTest extends WebapiAbstract
                 SearchCriteria::PAGE_SIZE => 10
             ],
         ];
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => 'inventoryApiSourceItemRepositoryV1',
-                'operation' => 'inventoryApiSourceItemRepositoryV1GetList',
+                'service' => self::SERVICE_NAME_GET_LIST,
+                'operation' => self::SERVICE_NAME_GET_LIST . 'Execute',
             ],
         ];
+
         return (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);

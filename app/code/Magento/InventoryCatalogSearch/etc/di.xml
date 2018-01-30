@@ -13,4 +13,8 @@
         <plugin name="adapt_data_provider_stock_condition_joiner"
                 type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner"/>
     </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\StockConditionApplier">
+        <plugin name="adapt_filter_mapper_term_dropdown_strategy_stock_condition_applier"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy\StockConditionApplier"/>
+    </type>
 </config>
