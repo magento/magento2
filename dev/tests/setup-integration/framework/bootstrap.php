@@ -74,11 +74,9 @@ try {
         new \Magento\TestFramework\Bootstrap\MemoryFactory($shell)
     );
     $bootstrap->runBootstrap();
-    if ($settings->getAsBoolean('TESTS_CLEANUP')) {
-        $application->cleanup();
-        //remove test modules files
-        include_once __DIR__ . '/../../setup-integration/framework/removeTestModules.php';
-    }
+    $application->cleanup();
+    //remove test modules files
+    include_once __DIR__ . '/../../setup-integration/framework/removeTestModules.php';
     //We do not want to install anything
     $application->initialize([]);
 
