@@ -14,7 +14,7 @@
     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <fieldset class="fieldset fieldset-product-options-inner<?= /* @escapeNotVerified */ $class ?>">
         <legend class="legend">
-            <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+            <span><?= $block->escapeHtml(__($_option->getTitle())) ?></span>
             <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
         </legend>
         <div class="control">

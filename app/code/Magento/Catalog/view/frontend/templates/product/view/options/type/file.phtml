@@ -18,7 +18,7 @@
 
 <div class="field file<?= /* @escapeNotVerified */ $class ?>">
     <label class="label" for="<?= /* @noEscape */ $_fileName ?>" id="<?= /* @noEscape */ $_fileName ?>-label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml(__($_option->getTitle())) ?></span>
         <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>

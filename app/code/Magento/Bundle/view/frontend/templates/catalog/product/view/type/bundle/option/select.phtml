@@ -15,7 +15,7 @@
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 <div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
     <label class="label" for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml(__($_option->getTitle())) ?></span>
     </label>
     <div class="control">
         <?php if ($block->showSingle()): ?>
