@@ -9,6 +9,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\OnUpdate;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean as BooleanColumnDto;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 
 class OnUpdateTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,8 +37,8 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp::class)
+        /** @var Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOnUpdate'])
             ->getMock();
@@ -54,8 +56,8 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNonUpdate()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp::class)
+        /** @var Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOnUpdate'])
             ->getMock();
@@ -73,8 +75,8 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNonTimestamp()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean::class)
+        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertEquals(

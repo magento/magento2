@@ -21,6 +21,13 @@ use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 
+/**
+ * Test for AddColumn.
+ *
+ * @package Magento\Setup\Test\Unit\Model\Declaration\Schema\Operations
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -135,7 +142,8 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
         $dropComplexElement = $this->getMockBuilder(Statement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $callback = function () {};
+        $callback = function () {
+        };
         $column = $this->prepareColumn();
         $elementHistory = new ElementHistory($column);
         $definition = '`int` INT(11) NOT NULL DEFAULT 0 Comment "Azaza"';

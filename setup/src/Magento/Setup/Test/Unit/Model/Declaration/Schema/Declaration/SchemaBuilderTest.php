@@ -19,6 +19,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
+/**
+ * Test for SchemaBuilder.
+ *
+ * @package Magento\Setup\Test\Unit\Model\Declaration\Schema\Declaration
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -260,7 +267,6 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'btree'
         );
     }
-
 
     /**
      * Create timestamp column.

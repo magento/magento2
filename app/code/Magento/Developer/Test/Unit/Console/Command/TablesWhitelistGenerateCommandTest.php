@@ -131,20 +131,17 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                 'expected' => [
                     'SomeModule' => [
                         'first_table' => [
-                            'column' =>
-                                [
-                                    'first_column' => true,
-                                    'second_column' => true,
-                                ],
-                            'index' =>
-                                [
-                                    'TEST_INDEX' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'foreign' => true,
-                                    'primary' => true,
-                                ]
+                            'column' => [
+                                'first_column' => true,
+                                'second_column' => true,
+                            ],
+                            'index' => [
+                                'TEST_INDEX' => true,
+                            ],
+                            'constraint' => [
+                                'foreign' => true,
+                                'primary' => true,
+                            ]
                         ]
                     ]
                 ]
@@ -258,38 +255,32 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                 'expected' => [
                     'SomeModule' => [
                         'first_table' => [
-                            'column' =>
-                                [
-                                    'first_column' => true,
-                                    'second_column' => true,
-                                ],
-                            'index' =>
-                                [
-                                    'TEST_INDEX' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'foreign' => true,
-                                    'primary' => true,
-                                ]
+                            'column' => [
+                                'first_column' => true,
+                                'second_column' => true,
+                            ],
+                            'index' => [
+                                'TEST_INDEX' => true,
+                            ],
+                            'constraint' => [
+                                'foreign' => true,
+                                'primary' => true,
+                            ]
                         ]
                     ],
                     'Module2' => [
                         'second_table' => [
-                            'column' =>
-                                [
-                                    'first_column' => true,
-                                    'second_column' => true,
-                                ],
-                            'index' =>
-                                [
-                                    'TEST_INDEX' => true,
-                                ],
-                            'constraint' =>
-                                [
-                                    'foreign' => true,
-                                    'primary' => true,
-                                ]
+                            'column' => [
+                                'first_column' => true,
+                                'second_column' => true,
+                            ],
+                            'index' => [
+                                'TEST_INDEX' => true,
+                            ],
+                            'constraint' => [
+                                'foreign' => true,
+                                'primary' => true,
+                            ]
                         ]
                     ]
                 ]

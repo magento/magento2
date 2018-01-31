@@ -58,35 +58,30 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 'table' => [
                     'test_table' => [
                         'column' => [
-                            'id' =>
-                                [
-                                    'type' => 'int',
-                                    'name' => 'id',
-                                    'nullable' => 'false',
-                                    'identity' => 'true',
-                                    'comment' => 'Id',
-                                ],
-                            'data' =>
-                                [
-                                    'type' => 'varchar',
-                                    'name' => 'data',
-                                    'length' => '100',
-                                    'identity' => 'false',
-                                    'comment' => 'Data',
-                                ],
-                        ],
-                        'constraint' =>
-                            [
-                                'PRIMARY' =>
-                                    [
-                                        'column' =>
-                                            [
-                                                'id' => 'id',
-                                            ],
-                                        'type' => 'primary',
-                                        'name' => 'PRIMARY',
-                                    ],
+                            'id' => [
+                                'type' => 'int',
+                                'name' => 'id',
+                                'nullable' => 'false',
+                                'identity' => 'true',
+                                'comment' => 'Id',
                             ],
+                            'data' => [
+                                'type' => 'varchar',
+                                'name' => 'data',
+                                'length' => '100',
+                                'identity' => 'false',
+                                'comment' => 'Data',
+                            ],
+                        ],
+                        'constraint' => [
+                            'PRIMARY' => [
+                                'column' => [
+                                    'id' => 'id',
+                                ],
+                                'type' => 'primary',
+                                'name' => 'PRIMARY',
+                            ],
+                        ],
                         'name' => 'test_table',
                         'resource' => 'default',
                     ],

@@ -13,6 +13,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Identity;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Unsigned;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer as IntegerColumnDto;
 
 class IntegerTest extends \PHPUnit\Framework\TestCase
 {
@@ -95,8 +96,8 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer::class)
+        /** @var IntegerColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $column->expects($this->any())

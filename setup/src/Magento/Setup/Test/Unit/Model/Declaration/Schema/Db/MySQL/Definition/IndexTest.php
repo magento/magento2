@@ -110,7 +110,6 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'expectedExpression' => "INDEX `ft_index` (`title`)"
             ],
         ];
-
     }
 
     /**

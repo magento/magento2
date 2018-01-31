@@ -491,7 +491,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $sqlMessage = explode(' ', $sql, 3);
             $startSql = strtolower(substr($sqlMessage[0], 0, 3));
             if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
-                trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
+                throw new ConnectionException(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
@@ -1058,7 +1058,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $flushData = false,
         $schemaName = null
     ) {
-        $this->getSchemaListener()->changeColumn($tableName,
+        $this->getSchemaListener()->changeColumn(
+            $tableName,
             $oldColumnName,
             $newColumnName,
             $definition
@@ -1109,7 +1110,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
         $this->getSchemaListener()->modifyColumn(
-            $tableName, $columnName, $definition
+            $tableName,
+            $columnName,
+            $definition
         );
         if (!$this->tableColumnExists($tableName, $columnName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Column "%s" does not exist in table "%s".', $columnName, $tableName));

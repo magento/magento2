@@ -74,8 +74,12 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
     /**
      * Test conversion to definition.
      * @dataProvider toDefinitionProvider()
+     * @param string $default
+     * @param bool $nullable
+     * @param bool $onUpdate
+     * @param string $expectedStatement
      */
-    public function testToDefinition($default, $nullable = false, $onUpdate = false, $expectedStatement)
+    public function testToDefinition($default, $nullable, $onUpdate, $expectedStatement)
     {
         /** @var BooleanColumn|\PHPUnit_Framework_MockObject_MockObject $column */
         $column = $this->getMockBuilder(BooleanColumn::class)
@@ -162,4 +166,3 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
         ];
     }
 }
-
