@@ -138,92 +138,91 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
-//    /**
-//     * Test return action with configurable product.
-//     *
-//     * Skipped due to MAGETWO-87333
-//     * #@magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
-//     */
-//    public function testReturnAction()
-//    {
-//        $this->markTestSkipped('MAGETWO-87333');
-//        $quote = $this->_objectManager->create(Quote::class);
-//        $quote->load('test_cart_with_configurable', 'reserved_order_id');
-//
-//        $payment = $quote->getPayment();
-//        $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS)
-//            ->setAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, 123);
-//
-//        $quote->save();
-//
-//        $this->_objectManager->removeSharedInstance(Session::class);
-//        $session = $this->_objectManager->get(Session::class);
-//        $session->setQuoteId($quote->getId());
-//
-//        $nvpMethods = [
-//            'setToken',
-//            'setPayerId',
-//            'setAmount',
-//            'setPaymentAction',
-//            'setNotifyUrl',
-//            'setInvNum',
-//            'setCurrencyCode',
-//            'setPaypalCart',
-//            'setIsLineItemsEnabled',
-//            'setAddress',
-//            'setBillingAddress',
-//            'callDoExpressCheckoutPayment',
-//            'callGetExpressCheckoutDetails',
-//            'getExportedBillingAddress'
-//        ];
-//
-//        $nvpMock = $this->getMockBuilder(Nvp::class)
-//            ->setMethods($nvpMethods)
-//            ->disableOriginalConstructor()
-//            ->getMock();
-//
-//        foreach ($nvpMethods as $method) {
-//            $nvpMock->method($method)
-//                ->willReturnSelf();
-//        }
-//
-//        $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
-//            ->disableOriginalConstructor()
-//            ->setMethods(['create'])
-//            ->getMock();
-//
-//        $apiFactoryMock->method('create')
-//            ->with(Nvp::class)
-//            ->willReturn($nvpMock);
-//
-//        $this->_objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
-//
-//        $sessionMock = $this->getMockBuilder(GenericSession::class)
-//            ->setMethods(['getExpressCheckoutToken'])
-//            ->setConstructorArgs(
-//                [
-//                    $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),
-//                    $this->_objectManager->get(\Magento\Framework\Session\SidResolverInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Session\StorageInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class),
-//                    $this->_objectManager->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class),
-//                    $this->_objectManager->get(\Magento\Framework\App\State::class),
-//                ]
-//            )
-//            ->getMock();
-//
-//        $sessionMock->method('getExpressCheckoutToken')
-//            ->willReturn(true);
-//
-//        $this->_objectManager->addSharedInstance($sessionMock, PaypalSession::class);
-//
-//        $this->dispatch('paypal/express/returnAction');
-//        $this->assertRedirect($this->stringContains('checkout/onepage/success'));
-//
-//        $this->_objectManager->removeSharedInstance(ApiFactory::class);
-//        $this->_objectManager->removeSharedInstance(PaypalSession::class);
-//    }
+    /**
+     * Test return action with configurable product.
+     */
+    public function testReturnAction()
+    {
+        // Skipped due to MAGETWO-87333
+        //@magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
+        $this->markTestSkipped('MAGETWO-87333');
+        $quote = $this->_objectManager->create(Quote::class);
+        $quote->load('test_cart_with_configurable', 'reserved_order_id');
+
+        $payment = $quote->getPayment();
+        $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS)
+            ->setAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, 123);
+
+        $quote->save();
+
+        $this->_objectManager->removeSharedInstance(Session::class);
+        $session = $this->_objectManager->get(Session::class);
+        $session->setQuoteId($quote->getId());
+
+        $nvpMethods = [
+            'setToken',
+            'setPayerId',
+            'setAmount',
+            'setPaymentAction',
+            'setNotifyUrl',
+            'setInvNum',
+            'setCurrencyCode',
+            'setPaypalCart',
+            'setIsLineItemsEnabled',
+            'setAddress',
+            'setBillingAddress',
+            'callDoExpressCheckoutPayment',
+            'callGetExpressCheckoutDetails',
+            'getExportedBillingAddress'
+        ];
+
+        $nvpMock = $this->getMockBuilder(Nvp::class)
+            ->setMethods($nvpMethods)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        foreach ($nvpMethods as $method) {
+            $nvpMock->method($method)
+                ->willReturnSelf();
+        }
+
+        $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $apiFactoryMock->method('create')
+            ->with(Nvp::class)
+            ->willReturn($nvpMock);
+
+        $this->_objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
+
+        $sessionMock = $this->getMockBuilder(GenericSession::class)
+            ->setMethods(['getExpressCheckoutToken'])
+            ->setConstructorArgs(
+                [
+                    $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),
+                    $this->_objectManager->get(\Magento\Framework\Session\SidResolverInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Session\StorageInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class),
+                    $this->_objectManager->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class),
+                    $this->_objectManager->get(\Magento\Framework\App\State::class),
+                ]
+            )
+            ->getMock();
+
+        $sessionMock->method('getExpressCheckoutToken')
+            ->willReturn(true);
+
+        $this->_objectManager->addSharedInstance($sessionMock, PaypalSession::class);
+
+        $this->dispatch('paypal/express/returnAction');
+        $this->assertRedirect($this->stringContains('checkout/onepage/success'));
+
+        $this->_objectManager->removeSharedInstance(ApiFactory::class);
+        $this->_objectManager->removeSharedInstance(PaypalSession::class);
+    }
 }
