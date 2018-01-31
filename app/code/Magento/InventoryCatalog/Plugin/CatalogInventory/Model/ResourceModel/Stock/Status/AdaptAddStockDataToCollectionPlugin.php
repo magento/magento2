@@ -10,12 +10,12 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\S
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
-use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
+use Magento\InventoryCatalog\Model\ResourceModel\AddStockDataToCollection;
 
 /**
- * Adapt adding is in stock filter to collection for multi stocks.
+ * Adapt adding stock data to collection for multi stocks.
  */
-class AdaptAddIsInStockFilterToCollection
+class AdaptAddStockDataToCollectionPlugin
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -23,38 +23,40 @@ class AdaptAddIsInStockFilterToCollection
     private $getStockIdForCurrentWebsite;
 
     /**
-     * @var AddIsInStockFilterToCollection
+     * @var AddStockDataToCollection
      */
-    private $adaptedAddIsInStockFilterToCollection;
+    private $addStockDataToCollection;
 
     /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
-     * @param AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
+     * @param AddStockDataToCollection $addStockDataToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
+        AddStockDataToCollection $addStockDataToCollection
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->adaptedAddIsInStockFilterToCollection = $adaptedAddIsInStockFilterToCollection;
+        $this->addStockDataToCollection = $addStockDataToCollection;
     }
 
     /**
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Collection $collection
-     * @return Status
+     * @param bool $isFilterInStock
+     * @return Collection $collection
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundAddIsInStockFilterToCollection(
+    public function aroundAddStockDataToCollection(
         Status $stockStatus,
         callable $proceed,
-        $collection
+        $collection,
+        $isFilterInStock
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->adaptedAddIsInStockFilterToCollection->addIsInStockFilterToCollection($collection, $stockId);
+        $this->addStockDataToCollection->execute($collection, (bool)$isFilterInStock, $stockId);
 
-        return $stockStatus;
+        return $collection;
     }
 }
