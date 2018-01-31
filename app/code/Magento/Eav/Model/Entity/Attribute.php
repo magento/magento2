@@ -391,6 +391,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 break;
 
             case 'textarea':
+            case 'texteditor':
                 $field = 'default_value_textarea';
                 break;
 

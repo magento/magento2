@@ -163,7 +163,7 @@
         </parameters>
     </widget>
     <widget id="catalog_recently_viewed" class="Magento\Catalog\Block\Widget\RecentlyViewed"
-            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.png">
         <label translate="true">Recently Viewed Products</label>
         <description translate="true">List of Products Recently Viewed by Visitor</description>
         <parameters>
@@ -235,7 +235,7 @@
         </containers>
     </widget>
     <widget id="catalog_recently_compared" class="Magento\Catalog\Block\Widget\RecentlyCompared"
-            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.png">
         <label translate="true">Recently Compared Products</label>
         <description translate="true">List of Products Recently Compared by Visitor</description>
         <parameters>

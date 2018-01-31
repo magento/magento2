@@ -37,6 +37,7 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
         $inputTypesSet = [
             ['value' => 'text', 'label' => 'Text Field'],
             ['value' => 'textarea', 'label' => 'Text Area'],
+            ['value' => 'texteditor', 'label' => 'Text Editor'],
             ['value' => 'date', 'label' => 'Date'],
             ['value' => 'boolean', 'label' => 'Yes/No'],
             ['value' => 'multiselect', 'label' => 'Multiple Select'],

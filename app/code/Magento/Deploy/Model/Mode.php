@@ -168,6 +168,25 @@ class Mode
     }
 
     /**
+     * Enable Default mode.
+     *
+     * @return void
+     */
+    public function enableDefaultMode()
+    {
+        $this->filesystem->cleanupFilesystem(
+            [
+                DirectoryList::CACHE,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW,
+            ]
+        );
+        $this->setStoreMode(State::MODE_DEFAULT);
+    }
+
+    /**
      * Get current mode information
      *
      * @return string

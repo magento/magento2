@@ -18,4 +18,41 @@ class Js extends \Magento\Backend\Block\Template
      * @var string
      */
     protected $_template = 'attribute/edit/js.phtml';
+
+    /**
+     * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
+     */
+    private $inputtype;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype $inputtype,
+        array $data = []
+    ) {
+        $this->inputtype = $inputtype;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Get compatible input types.
+     *
+     * @return array
+     */
+    public function getComaptibleInputTypes()
+    {
+        return $this->inputtype->getVolatileInputTypes();
+    }
+
+    /**
+     * Get hints on input types.
+     *
+     * @return array
+     */
+    public function getInputTypeHints()
+    {
+        return $this->inputtype->getInputTypeHints();
+    }
 }

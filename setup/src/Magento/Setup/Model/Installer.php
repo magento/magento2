@@ -1010,6 +1010,7 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDbConfigExists();
+        $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
         $setup = $this->setupFactory->create($this->context->getResources());
         $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();

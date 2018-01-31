@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © Magento, Inc. All rights reserved.
+  See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
+    <type xsi:type="OutputType" name="Query" />
+    <type xsi:type="InputType" name="FilterTypeInput">
+        <field xsi:type="ScalarInputField" name="eq" type="String"/>
+        <field xsi:type="ScalarArrayInputField" name="finset" itemType="String"/>
+        <field xsi:type="ScalarInputField" name="from" type="String"/>
+        <field xsi:type="ScalarInputField" name="gt" type="String"/>
+        <field xsi:type="ScalarInputField" name="gteq" type="String"/>
+        <field xsi:type="ScalarArrayInputField" name="in" itemType="String"/>
+        <field xsi:type="ScalarInputField" name="like" type="String"/>
+        <field xsi:type="ScalarInputField" name="lt" type="String"/>
+        <field xsi:type="ScalarInputField" name="lteq" type="String"/>
+        <field xsi:type="ScalarInputField" name="moreq" type="String"/>
+        <field xsi:type="ScalarInputField" name="neq" type="String"/>
+        <field xsi:type="ScalarInputField" name="notnull" type="String"/>
+        <field xsi:type="ScalarInputField" name="null" type="String"/>
+        <field xsi:type="ScalarInputField" name="to" type="String"/>
+        <field xsi:type="ScalarArrayInputField" name="nin" itemType="String"/>
+    </type>
+    <type xsi:type="OutputType" name="SearchResultPageInfo">
+        <field xsi:type="ScalarOutputField" name="page_size" type="Int"/>
+        <field xsi:type="ScalarOutputField" name="current_page" type="Int"/>
+    </type>
+    <type xsi:type="Enum" name="SortEnum">
+        <item name="asc">ASC</item>
+        <item name="desc">DESC</item>
+    </type>
+</config>

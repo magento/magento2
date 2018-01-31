@@ -447,4 +447,67 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+    
+    /**
+     * @dataProvider dhlProductsDataProvider
+     *
+     * @param string $docType
+     * @param array $products
+     */
+    public function testGetDhlProducts(string $docType, array $products)
+    {
+        $this->assertEquals($products, $this->model->getDhlProducts($docType));
+    }
+
+    /**
+     * @return array
+     */
+    public function dhlProductsDataProvider() : array
+    {
+        return [
+            'doc' => [
+                'docType' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_DOC,
+                'products' => [
+                    '2' => 'Easy shop',
+                    '5' => 'Sprintline',
+                    '6' => 'Secureline',
+                    '7' => 'Express easy',
+                    '9' => 'Europack',
+                    'B' => 'Break bulk express',
+                    'C' => 'Medical express',
+                    'D' => 'Express worldwide',
+                    'U' => 'Express worldwide',
+                    'K' => 'Express 9:00',
+                    'L' => 'Express 10:30',
+                    'G' => 'Domestic economy select',
+                    'W' => 'Economy select',
+                    'I' => 'Domestic express 9:00',
+                    'N' => 'Domestic express',
+                    'O' => 'Others',
+                    'R' => 'Globalmail business',
+                    'S' => 'Same day',
+                    'T' => 'Express 12:00',
+                    'X' => 'Express envelope',
+                ]
+            ],
+            'non-doc' => [
+                'docType' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_NON_DOC,
+                'products' => [
+                    '1' => 'Domestic express 12:00',
+                    '3' => 'Easy shop',
+                    '4' => 'Jetline',
+                    '8' => 'Express easy',
+                    'P' => 'Express worldwide',
+                    'Q' => 'Medical express',
+                    'E' => 'Express 9:00',
+                    'F' => 'Freight worldwide',
+                    'H' => 'Economy select',
+                    'J' => 'Jumbo box',
+                    'M' => 'Express 10:30',
+                    'V' => 'Europack',
+                    'Y' => 'Express 12:00',
+                ]
+            ]
+        ];
+    }
 }

@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
 use Magento\Framework\GraphQl\ArgumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplierInterface;
 use Magento\Framework\Phrase;
 
@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
  */
 class PageSize implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'pageSize';
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +27,7 @@ class PageSize implements ArgumentApplierInterface
             $searchCriteria->setPageSize($argument->getValue());
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type Int', $argument->getName())
+                new Phrase('Argument %1 not of type Int', [$argument->getName()])
             );
         }
     }

@@ -37,7 +37,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Store\App\Request\PathInfoProcessor($this->_storeManagerMock);
     }
 
-    public function testProcessIfStoreExistsAndIsNotDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndIsNotDirectAccessToFrontName()
     {
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(
@@ -62,7 +62,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/node_one/', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 
-    public function testProcessIfStoreExistsAndDirectAcccessToFrontName()
+    public function testProcessIfStoreExistsAndDirectAccessToFrontName()
     {
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeManagerMock->expects(

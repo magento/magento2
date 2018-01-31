@@ -19,11 +19,17 @@ interface EngineInterface
 
     /**
      * Scope identifier
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const SCOPE_IDENTIFIER = 'scope';
 
     /**
      * Configuration path by which current indexer handler stored
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 

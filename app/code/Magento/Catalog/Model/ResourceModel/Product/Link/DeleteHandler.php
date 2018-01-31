@@ -72,8 +72,8 @@ class DeleteHandler
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
         $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-        $prodyctHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
-        $productData = $prodyctHydrator->extract($product);
+        $productHydrator = $this->metadataPool->getHydrator(ProductInterface::class);
+        $productData = $productHydrator->extract($product);
         $linkId = $this->linkResource->getProductLinkId(
             $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
             $linkedProduct->getId(),

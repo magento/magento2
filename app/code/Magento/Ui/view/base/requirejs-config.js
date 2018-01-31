@@ -4,8 +4,15 @@
  */
 
 var config = {
+    shim: {
+        'tinymce4': {
+            'exports': 'tinymce'
+        }
+    },
     paths: {
-        'ui/template': 'Magento_Ui/templates'
+        'ui/template': 'Magento_Ui/templates',
+        'tinymce4': 'tiny_mce_4/tinymce.min',
+        'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
     },
     map: {
         '*': {

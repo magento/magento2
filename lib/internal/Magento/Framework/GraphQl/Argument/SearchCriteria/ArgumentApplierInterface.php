@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
 use Magento\Framework\GraphQl\ArgumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Interface used to apply each argument to a search criteria

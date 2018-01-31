@@ -91,6 +91,7 @@
         "magento/module-marketplace": "100.3.0-dev",
         "magento/module-admin-notification": "100.3.0-dev",
         "magento/module-advanced-pricing-import-export": "100.3.0-dev",
+        "magento/module-analytics": "100.3.0-dev",
         "magento/module-authorization": "100.3.0-dev",
         "magento/module-authorizenet": "100.3.0-dev",
         "magento/module-backend": "100.3.0-dev",
@@ -101,6 +102,7 @@
         "magento/module-cache-invalidate": "100.3.0-dev",
         "magento/module-captcha": "100.3.0-dev",
         "magento/module-catalog": "101.2.0-dev",
+        "magento/module-catalog-analytics": "100.3.0-dev",
         "magento/module-catalog-import-export": "100.3.0-dev",
         "magento/module-catalog-inventory": "100.3.0-dev",
         "magento/module-catalog-rule": "100.3.0-dev",
@@ -121,6 +123,7 @@
         "magento/module-cron": "100.3.0-dev",
         "magento/module-currency-symbol": "100.3.0-dev",
         "magento/module-customer": "100.3.0-dev",
+        "magento/module-customer-analytics": "100.3.0-dev",
         "magento/module-customer-import-export": "100.3.0-dev",
         "magento/module-deploy": "100.3.0-dev",
         "magento/module-developer": "100.3.0-dev",
@@ -137,6 +140,16 @@
         "magento/module-google-analytics": "100.3.0-dev",
         "magento/module-google-optimizer": "100.3.0-dev",
         "magento/module-graph-ql": "100.0.0-dev",
+        "magento/module-catalog-graph-ql": "100.0.0-dev",
+        "magento/module-catalog-url-rewrite-graph-ql": "100.0.0-dev",
+        "magento/module-configurable-product-graph-ql": "100.0.0-dev",
+        "magento/module-customer-graph-ql": "100.0.0-dev",
+        "magento/module-eav-graph-ql": "100.0.0-dev",
+        "magento/module-swatches-graph-ql": "100.0.0-dev",
+        "magento/module-tax-graph-ql": "100.0.0-dev",
+        "magento/module-url-rewrite-graph-ql": "100.0.0-dev",
+        "magento/module-cms-url-rewrite-graph-ql": "100.0.0-dev",
+        "magento/module-weee-graph-ql": "100.0.0-dev",
         "magento/module-grouped-import-export": "100.3.0-dev",
         "magento/module-grouped-product": "100.3.0-dev",
         "magento/module-import-export": "100.3.0-dev",
@@ -158,13 +171,17 @@
         "magento/module-product-alert": "100.3.0-dev",
         "magento/module-product-video": "100.3.0-dev",
         "magento/module-quote": "100.3.0-dev",
+        "magento/module-quote-analytics": "100.3.0-dev",
+        "magento/module-release-notification": "100.3.0",
         "magento/module-reports": "100.3.0-dev",
         "magento/module-require-js": "100.3.0-dev",
         "magento/module-review": "100.3.0-dev",
+        "magento/module-review-analytics": "100.3.0-dev",
         "magento/module-robots": "100.3.0-dev",
         "magento/module-rss": "100.3.0-dev",
         "magento/module-rule": "100.3.0-dev",
         "magento/module-sales": "100.3.0-dev",
+        "magento/module-sales-analytics": "100.3.0-dev",
         "magento/module-sales-inventory": "100.3.0-dev",
         "magento/module-sales-rule": "100.3.0-dev",
         "magento/module-sales-sequence": "100.3.0-dev",
@@ -195,6 +212,7 @@
         "magento/module-weee": "100.3.0-dev",
         "magento/module-widget": "100.3.0-dev",
         "magento/module-wishlist": "100.3.0-dev",
+        "magento/module-wishlist-analytics": "100.3.0-dev",
         "magento/theme-adminhtml-backend": "100.3.0-dev",
         "magento/theme-frontend-blank": "100.3.0-dev",
         "magento/theme-frontend-luma": "100.3.0-dev",
@@ -212,7 +230,8 @@
         "blueimp/jquery-file-upload": "5.6.14",
         "components/jqueryui": "1.10.4",
         "twbs/bootstrap": "3.1.0",
-        "tinymce/tinymce": "3.4.7"
+        "tinymce/tinymce": "3.4.7",
+        "magento/module-tinymce-3": "100.3.0-dev"
     },
     "extra": {
         "component_paths": {
@@ -229,7 +248,7 @@
             "twbs/bootstrap": [
                 "lib/web/jquery/jquery.tabs.js"
             ],
-            "tinymce/tinymce": "lib/web/tiny_mce"
+            "tinymce/tinymce": "lib/web/tiny_mce_4"
         }
     },
     "autoload": {

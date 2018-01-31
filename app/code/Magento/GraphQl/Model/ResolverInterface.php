@@ -15,8 +15,9 @@ interface ResolverInterface
      * Parse arguments of a field and convert them to an array structure
      *
      * @param \Magento\Framework\GraphQl\ArgumentInterface[] $args
+     * @param \Magento\GraphQl\Model\ResolverContextInterface $context
      * @return array|null
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException|\Exception
      */
-    public function resolve(array $args);
+    public function resolve(array $args, \Magento\GraphQl\Model\ResolverContextInterface $context);
 }
