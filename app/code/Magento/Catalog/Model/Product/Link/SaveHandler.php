@@ -31,27 +31,19 @@ class SaveHandler
     private $linkResource;
 
     /**
-     * @var linkTypeProvider
-     */
-    private $linkTypeProvider;
-
-    /**
      * SaveHandler constructor.
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
      * @param ProductLinkRepositoryInterface $productLinkRepository
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         MetadataPool $metadataPool,
         Link $linkResource,
-        ProductLinkRepositoryInterface $productLinkRepository,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+        ProductLinkRepositoryInterface $productLinkRepository
     ) {
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
         $this->productLinkRepository = $productLinkRepository;
-        $this->linkTypeProvider = $linkTypeProvider;
     }
 
     /**
