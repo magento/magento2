@@ -186,10 +186,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $this->updateDbSchemaRevision('constraint_modifications');
-        //@TODO: change this to upgrade in future
-        $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1']
-        );
+        $this->cliCommad->upgrade();
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),
@@ -218,10 +215,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             'etc'
         );
 
-        //@TODO: change this to upgrade in future
-        $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1']
-        );
+        $this->cliCommad->upgrade();
 
         $diff = $this->schemaDiff->diff(
             $this->schemaConfig->getDeclarationConfig(),

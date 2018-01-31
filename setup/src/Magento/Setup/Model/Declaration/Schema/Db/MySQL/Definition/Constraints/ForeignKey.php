@@ -54,7 +54,6 @@ class ForeignKey implements DbDefinitionProcessorInterface
             $foreignKey->getReferenceTable()->getName()
         );
         //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option
-        /** @TODO: purge records, if the are not satisfied on delete statement */
         $foreignKeySql = sprintf(
             "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s",
             $adapter->quoteIdentifier($foreignKey->getName()),

@@ -169,7 +169,6 @@ class SchemaBuilder
         $referenceColumns = [];
         foreach ($data['column'] as $columnName) {
             if (!isset($columns[$columnName])) {
-                //todo: add extension point to change the current behavior
                 //Depends on business logic, can either ignore non-existing column
                 //or throw exception if db is not consistent and there is no column
                 //that was specified for key
