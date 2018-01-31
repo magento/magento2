@@ -26,7 +26,6 @@
     <type xsi:type="OutputType" name="BundleItemOption">
         <!-- is product_id same with entity_id and id ?? -->
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="product_id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="label" type="String"/>
         <!--<field xsi:type="ScalarOutputField" name="option_id" type="Int"/>-->
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
