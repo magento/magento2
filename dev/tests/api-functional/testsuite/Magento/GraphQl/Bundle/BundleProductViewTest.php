@@ -61,12 +61,12 @@ class BundleProductViewTest extends GraphQlAbstract
                  price
                  price_type
                  can_change_quantity
+                 product {
+                        id
+                        name
+                        sku
+                 }
                }
-             }
-             bundle_product_links {
-               id
-               name
-               sku
              }
            }
        }
@@ -94,8 +94,8 @@ QUERY;
 
         $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
         $this->assertNotEmpty(
-            $response['products']['items'][0]['bundle_product_links'],
-            "Precondition failed: 'bundle_product_links' must not be empty"
+            $response['products']['items'][0]['items'],
+            "Precondition failed: 'items' must not be empty"
         );
     }
 
@@ -149,13 +149,18 @@ QUERY;
             $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
-                'product_id' => $bundleProductLink->getEntityId(),
                 'qty' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                 'price' =>  $bundleProductLink->getPrice(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
+            ]
+        );
+        $this->assertResponseFields(
+            $actualResponse['items'][0]['options'][0]['product'],
+            [
+                'sku' => $bundleProductLink->getSku()
             ]
         );
     }
@@ -252,12 +257,17 @@ QUERY;
             dynamic_price
             dynamic_weight
             price_view
-            ship_bundle_items             
-             bundle_product_links {
-               id
-               name
-               sku
-             }
+            ship_bundle_items
+            items {
+                options {
+                    label
+                    product {
+                        id
+                        name
+                        sku
+                    }
+                }
+            }
            }
        }
    }   

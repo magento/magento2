@@ -13,7 +13,6 @@
         <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum"/>
         <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean"/>
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="BundleItem"/>
-        <field xsi:type="ObjectArrayOutputField" name="bundle_product_links" itemType="SimpleProduct"/>
     </type>
     <type xsi:type="OutputType" name="BundleItem">
         <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>
@@ -28,7 +27,7 @@
         <!-- is product_id same with entity_id and id ?? -->
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="product_id" type="Int"/>
-        <!--<field xsi:type="ScalarOutputField" name="sku" type="String"/>-->
+        <field xsi:type="ScalarOutputField" name="label" type="String"/>
         <!--<field xsi:type="ScalarOutputField" name="option_id" type="Int"/>-->
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
         <field xsi:type="ScalarOutputField" name="position" type="Int"/>
@@ -37,6 +36,7 @@
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean"/>
+        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface"/>
     </type>
     <type xsi:type="Enum" name="ShipBundleItemsEnum">
         <item name="together">TOGETHER</item>

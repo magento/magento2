@@ -79,8 +79,22 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
 
         $this->searchCriteriaBuilder->addFilter('entity_id', $childrenIds, 'in');
         $childProducts = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
+        $resultData = $this->addChildData($childProducts->getItems(), $resultData);
+
+        return $resultData;
+    }
+
+    /**
+     * Format and add configurable child data to their matching products result items.
+     *
+     * @param \Magento\Catalog\Model\Product[] $childProducts
+     * @param array $resultData
+     * @return array
+     */
+    private function addChildData(array $childProducts, array $resultData)
+    {
         /** @var \Magento\Catalog\Model\Product $childProduct */
-        foreach ($childProducts->getItems() as $childProduct) {
+        foreach ($childProducts as $childProduct) {
             $childData = $this->formatter->format($childProduct);
             $childId = (int)$childProduct->getId();
             foreach ($resultData as $key => $item) {
@@ -96,7 +110,6 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
                 }
             }
         }
-
         return $resultData;
     }
 }

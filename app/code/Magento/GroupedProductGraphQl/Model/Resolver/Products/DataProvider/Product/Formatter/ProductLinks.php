@@ -19,11 +19,6 @@ class ProductLinks implements FormatterInterface
     const LINK_TYPE = 'associated';
 
     /**
-     * @var Product
-     */
-    private $productDataProvider;
-
-    /**
      * Format product links data to conform to GraphQL schema
      *
      * {@inheritdoc}

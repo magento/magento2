@@ -63,7 +63,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
     public function process(array $resultData)
     {
         $childrenSkus = [];
-        foreach ($resultData as $key => $product) {
+        foreach ($resultData as $product) {
             if ($product['type_id'] === Grouped::TYPE_CODE) {
                 if (isset($product['items'])) {
                     foreach ($product['items'] as $link) {
@@ -78,8 +78,21 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
 
         $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $childrenSkus, 'in');
         $childResults = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
-        /** @var \Magento\Catalog\Model\Product $child */
-        foreach ($childResults->getItems() as $child) {
+        $resultData = $this->addChildData($childResults->getItems(), $resultData);
+
+        return $resultData;
+    }
+
+    /**
+     * Format and add child data of grouped products to matching grouped items
+     *
+     * @param \Magento\Catalog\Model\Product[] $childResults
+     * @param array $resultData
+     * @return array
+     */
+    private function addChildData(array $childResults, array $resultData)
+    {
+        foreach ($childResults as $child) {
             $childData = $this->formatter->format($child);
             $childSku = $child->getSku();
             foreach ($resultData as $key => $item) {

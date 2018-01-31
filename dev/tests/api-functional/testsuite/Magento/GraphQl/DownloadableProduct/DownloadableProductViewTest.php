@@ -34,7 +34,6 @@ class DownloadableProductViewTest extends GraphQlAbstract
            sku
            type_id        
            updated_at
-           weight
         price{
         regularPrice{
           amount{
