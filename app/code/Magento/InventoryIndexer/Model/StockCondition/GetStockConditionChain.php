@@ -53,7 +53,7 @@ class GetStockConditionChain implements GetStockConditionInterface
     {
         $conditionString = '';
         $lastElement = end($this->stockConditions);
-        foreach ($this->stockConditions as $key => $stockCondition) {
+        foreach ($this->stockConditions as $stockCondition) {
             $conditionString .= $stockCondition->execute();
             if ($lastElement !== $stockCondition) {
                 $conditionString .= ' OR ';
