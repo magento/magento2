@@ -40,8 +40,8 @@
             </span>
                     <?php endif;?>
 
-                    <label class="admin__field-label"
-                           for="p_method_<?= $block->escapeHtml($_code); ?>"><?= $block->escapeHtml($_method->getTitle()) ?>
+                    <label class="admin__field-label"for="p_method_<?= $block->escapeHtml($_code); ?>">
+                        <?= $block->escapeHtml($_method->getTitle()) ?>
                     </label>
                 </dt>
                 <dd class="admin__payment-method-wrapper">
@@ -57,9 +57,9 @@
         ], function(mage) {
             mage.apply();
         <?php if ($_methodsCount != 1) : ?>
-            order.setPaymentMethod('<?= $block->escapeHtml( $currentSelectedMethod); ?>');
-        <?php else: ?>
-            payment.switchMethod('<?= $block->escapeHtml( $currentSelectedMethod); ?>');
+            order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
+        <?php else : ?>
+            payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
         <?php endif; ?>
         });
     </script>
