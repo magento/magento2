@@ -186,7 +186,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_1.php
      */
     public function testAndMaxMinPriceBundleProduct()
     {
@@ -279,7 +279,7 @@ QUERY;
         );
         $this->assertEquals(
             $maximalPrice,
-            $response['products']['items'][0]['price']['minimalPrice']['amount']['value']
+            $response['products']['items'][0]['price']['maximalPrice']['amount']['value']
         );
     }
 }
