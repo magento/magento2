@@ -90,13 +90,13 @@ class InstallSchema implements InstallSchemaInterface
                 'is_active',
                 Table::TYPE_BOOLEAN,
                 null,
-                ['nullable' => false, 'dafault' => true],
+                ['nullable' => false, 'default' => true],
                 'Is active flag'
             )->addColumn(
                 'is_visible',
                 Table::TYPE_BOOLEAN,
                 null,
-                ['nullable' => false, 'dafault' => true],
+                ['nullable' => false, 'default' => true],
                 'Is visible flag'
             )->addIndex(
                 $setup->getIdxName(
