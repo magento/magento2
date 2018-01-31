@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid\Options;
 
 use Magento\Framework\Option\ArrayInterface;
@@ -32,7 +34,7 @@ class SourceCodeOptionHash implements ArrayInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $optionArray = [];
         $sourcesSearchResult = $this->sourceRepository->getList();

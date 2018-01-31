@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock;
 
@@ -15,6 +16,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
@@ -47,6 +49,7 @@ class Collection extends SourceItemCollection
         AbstractDb $resource = null
     ) {
         $this->attributeRepositoryInterface = $attributeRepositoryInterface;
+        // TODO: use stock configuration from InventoryConfiguration when the logic is ready
         $this->stockConfiguration = $stockConfiguration;
         parent::__construct(
             $entityFactory,
@@ -61,7 +64,7 @@ class Collection extends SourceItemCollection
     /**
      * {@inheritdoc}
      */
-    protected function _initSelect()
+    protected function _initSelect(): AbstractCollection
     {
         $this->addFilterToMap('inventory_source_code', 'main_table.source_code');
         $this->addFilterToMap('source_item_sku', 'main_table.sku');
@@ -73,9 +76,9 @@ class Collection extends SourceItemCollection
     /**
      * Join tables with product information
      *
-     * @return $this
+     * @return Collection
      */
-    public function joinCatalogProduct()
+    public function joinCatalogProduct(): Collection
     {
         $productEntityTable = $this->getTable('catalog_product_entity');
         $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
@@ -114,9 +117,9 @@ class Collection extends SourceItemCollection
     /**
      * Join inventory configuration table
      *
-     * @return $this
+     * @return Collection
      */
-    public function joinInventoryConfiguration()
+    public function joinInventoryConfiguration(): Collection
     {
         /* Join by sku field */
         $joinExpression = sprintf(
@@ -146,9 +149,9 @@ class Collection extends SourceItemCollection
      *
      * @param array|string $typeFilter
      * @throws LocalizedException
-     * @return $this
+     * @return Collection
      */
-    public function filterByProductType($typeFilter)
+    public function filterByProductType($typeFilter): Collection
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
             throw new LocalizedException(__('The product type filter specified is incorrect.'));
@@ -161,21 +164,22 @@ class Collection extends SourceItemCollection
     /**
      * Add filter by product types from config - only types which have QTY parameter
      *
-     * @return $this
+     * @return Collection
      */
-    public function filterByIsQtyProductTypes()
+    public function filterByIsQtyProductTypes(): Collection
     {
         $this->filterByProductType(array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds())));
+
         return $this;
     }
 
     /**
      * Add Notify Stock Qty Condition to collection
      *
-     * @param null $storeId
-     * @return $this
+     * @param null|int $storeId
+     * @return Collection
      */
-    public function useNotifyStockQtyFilter($storeId = null)
+    public function useNotifyStockQtyFilter($storeId = null): Collection
     {
         $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
             '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;

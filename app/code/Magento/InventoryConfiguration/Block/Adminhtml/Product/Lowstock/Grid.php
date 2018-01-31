@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock;
 
@@ -47,7 +48,7 @@ class Grid extends GridWidget
     /**
      * @return GridWidget
      */
-    protected function _prepareCollection()
+    protected function _prepareCollection(): GridWidget
     {
         $website = $this->getRequest()->getParam('website');
         $group = $this->getRequest()->getParam('group');
