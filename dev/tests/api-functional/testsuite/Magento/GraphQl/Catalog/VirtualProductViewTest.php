@@ -68,6 +68,51 @@ QUERY;
     }
 
     /**
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCannotQueryWeightOnVirtualProductException()
+    {
+        $productSku = 'virtual-product';
+
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "$productSku"}})
+   {
+       items{
+           id
+           attribute_set_id    
+           created_at
+           name
+           sku
+           type_id
+           tax_class_id
+           updated_at
+           ... on PhysicalProductInterface {
+             weight
+           }  
+           ... on VirtualProduct {
+            attribute_set_id
+            name
+            weight
+            id
+            sku          
+           }
+       }
+   }
+   
+}
+QUERY;
+
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Cannot query field "weight" on type "VirtualProduct"');
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
