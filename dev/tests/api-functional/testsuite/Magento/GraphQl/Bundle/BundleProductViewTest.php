@@ -292,4 +292,48 @@ QUERY;
             $response['products']['items'][0]['price']['maximalPrice']['amount']['value']
         );
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testNonExistentFieldQtyExceptionOnBundleProduct()
+    {
+        $productSku = 'bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           id           
+           type_id
+           qty
+           ... on PhysicalProductInterface {
+             weight
+           }
+           category_ids 
+           
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items             
+             bundle_product_links {
+               id
+               name
+               sku
+             }
+           }
+       }
+   }   
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Cannot'. ' ' .
+            'query field "qty" on type "ProductInterface".');
+        $this->graphQlQuery($query);
+    }
 }
