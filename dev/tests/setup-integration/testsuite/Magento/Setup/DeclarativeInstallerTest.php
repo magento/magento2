@@ -78,9 +78,9 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
 
         //Second time installation should not find anything as we do not change anything
-        $this->assertNull($diff->getAll());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        $this->assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -155,9 +155,9 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        $this->assertNull($diff->getAll());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        $this->assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getData(), $shardData);
     }
 
     /**
@@ -192,9 +192,9 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        $this->assertNull($diff->getAll());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        $this->assertEquals($this->getTrimmedData(), $shardData);
+        self::assertEquals($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -221,8 +221,8 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDeclarationConfig(),
             $this->schemaConfig->getDbConfig()
         );
-        $this->assertNull($diff->getAll());
+        self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        $this->assertEquals($this->getData(), $shardData);
+        self::assertEquals($this->getData(), $shardData);
     }
 }

@@ -6,10 +6,10 @@
 
 return [
     'default' => [
-        'db-host' => '{{db_host}}',
-        'db-user' => '{{db_user}}',
-        'db-password' => '{{db_password}}',
-        'db-name' => '{{db_name}}',
+        'db-host' => '{{db-host}}',
+        'db-user' => '{{db-user}}',
+        'db-password' => '{{db-password}}',
+        'db-name' => '{{db-name}}',
         'db-prefix' => '',
         'backend-frontname' => 'admin',
         'admin-user' => 'admin',
@@ -21,15 +21,15 @@ return [
         'disable_modules' => 'all'
     ],
     'checkout' => [
-        'host' => '{{db_host}}',
-        'username' => '{{db_user}}',
-        'password' => '{{db_password}}',
-        'dbname' => '{{db_checkout}}'
+        'host' => '{{db-host}}',
+        'username' => '{{db-user}}',
+        'password' => '{{db-password}}',
+        'dbname' => '{{db-checkout}}'
     ],
     'sales' => [
-        'host' => '{{db_host}}',
-        'username' => '{{db_user}}',
-        'password' => '{{db_password}}',
-        'dbname' => '{{db_sales}}'
+        'host' => '{{db-host}}',
+        'username' => '{{db-user}}',
+        'password' => '{{db-password}}',
+        'dbname' => '{{db-sales}}'
     ]
 ];
