@@ -15,9 +15,9 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 class GetProductQuantityInStock implements GetProductQuantityInStockInterface
 {
     /**
-     * @var GetStockItemQuantityInterface
+     * @var GetStockItemDataInterface
      */
-    private $getStockItemQuantity;
+    private $getStockItemData;
 
     /**
      * @var GetReservationsQuantityInterface
@@ -25,14 +25,14 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
     private $getReservationsQuantity;
 
     /**
-     * @param GetStockItemQuantityInterface $getStockItemQuantity
+     * @param GetStockItemDataInterface $getStockItemData
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      */
     public function __construct(
-        GetStockItemQuantityInterface $getStockItemQuantity,
+        GetStockItemDataInterface $getStockItemData,
         GetReservationsQuantityInterface $getReservationsQuantity
     ) {
-        $this->getStockItemQuantity = $getStockItemQuantity;
+        $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
     }
 
@@ -41,8 +41,9 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        $productQtyInStock = $this->getStockItemQuantity->execute($sku, $stockId) +
-            $this->getReservationsQuantity->execute($sku, $stockId);
+        $stockItemQty = $this->getStockItemData->execute($sku, $stockId)['quantity'];
+        $productQtyInStock =  $stockItemQty + $this->getReservationsQuantity->execute($sku, $stockId);
+
         return $productQtyInStock;
     }
 }

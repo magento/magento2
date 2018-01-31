@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\ResourceModel\Stock;
 
-use Magento\Inventory\Model\GetStockItemQuantityInterface;
+use Magento\Inventory\Model\GetStockItemDataInterface;
 
 /**
  * @inheritdoc
  */
-class GetStockItemQuantity implements GetStockItemQuantityInterface
+class GetStockItemData implements GetStockItemDataInterface
 {
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId): float
+    public function execute(string $sku, int $stockId): array
     {
         throw new \Exception('https://github.com/magento-engcom/msi/issues/420');
     }

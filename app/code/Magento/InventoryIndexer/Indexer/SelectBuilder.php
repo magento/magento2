@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Indexer;
 
-use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
@@ -16,6 +15,7 @@ use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkReso
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryIndexer\Model\StockCondition\GetStockConditionInterface;
 
 /**
  * Select builder data provider
@@ -28,20 +28,20 @@ class SelectBuilder
     private $resourceConnection;
 
     /**
-     * @var Configuration
+     * @var GetStockConditionInterface
      */
-    private $configuration;
+    private $getStockCondition;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param Configuration $configuration
+     * @param GetStockConditionInterface $getStockCondition
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        Configuration $configuration
+        GetStockConditionInterface $getStockCondition
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->configuration = $configuration;
+        $this->getStockCondition = $getStockCondition;
     }
 
     /**
@@ -52,9 +52,6 @@ class SelectBuilder
      */
     public function execute($stockId): Select
     {
-        $globalManageStock = $this->configuration->getManageStock();
-        $globalMinQty = $this->configuration->getMinQty();
-
         $connection = $this->resourceConnection->getConnection();
         $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
         $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
@@ -79,26 +76,12 @@ class SelectBuilder
             SourceItemInterface::QUANTITY
         );
 
-        $isSalableString = sprintf(
-            '(((legacy_stock_item.use_config_manage_stock = 1 AND 0 = %1$d)'
-            . ' OR (legacy_stock_item.use_config_manage_stock = 0 AND legacy_stock_item.manage_stock = 0))'
-            . ' OR ((legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression . ' > %2$d)'
-            . ' OR (legacy_stock_item.use_config_min_qty = 0 AND'
-            . ' ' . $quantityExpression . ' > legacy_stock_item.min_qty))'
-            //todo https://github.com/magento-engcom/msi/issues/479
-            . ' OR product_entity.type_id = \'bundle\')',
-            $globalManageStock,
-            $globalMinQty
-        );
-
-        $isSalableExpression = $select->getConnection()->getCheckSql($isSalableString, 1, 0);
-
         $select->from(
             ['source_item' => $sourceItemTable],
             [
                 SourceItemInterface::SKU,
                 SourceItemInterface::QUANTITY => 'SUM(' . $quantityExpression . ')',
-                IndexStructure::IS_SALABLE => 'MAX(' . $isSalableExpression . ')'
+                IndexStructure::IS_SALABLE => 'MAX(' . $this->getStockCondition->execute() . ')'
             ]
         )->joinLeft(
             ['stock_source_link' => $sourceStockLinkTable],

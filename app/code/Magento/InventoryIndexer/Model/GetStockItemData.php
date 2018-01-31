@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\GetStockItemQuantityInterface;
+use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
 /**
  * @inheritdoc
  */
-class GetStockItemQuantity implements GetStockItemQuantityInterface
+class GetStockItemData implements GetStockItemDataInterface
 {
     /**
      * @var ResourceConnection
@@ -41,19 +41,21 @@ class GetStockItemQuantity implements GetStockItemQuantityInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId): float
+    public function execute(string $sku, int $stockId): array
     {
         $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $connection = $this->resource->getConnection();
         $select = $connection->select()
-            ->from($stockItemTableName, [IndexStructure::QUANTITY])
+            ->from($stockItemTableName, [IndexStructure::QUANTITY, IndexStructure::IS_SALABLE])
             ->where(IndexStructure::SKU . ' = ?', $sku);
 
-        $stockItemQty = $connection->fetchOne($select);
-        if (false === $stockItemQty) {
-            $stockItemQty = 0;
+        $stockItemData = $connection->fetchRow($select);
+
+        if (false === $stockItemData) {
+            $stockItemData = [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0];
         }
-        return (float)$stockItemQty;
+
+        return $stockItemData;
     }
 }

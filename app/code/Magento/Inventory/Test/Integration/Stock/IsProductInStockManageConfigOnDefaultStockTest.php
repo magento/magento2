@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
 
-class IsProductInStockOnDefaultStockTest extends TestCase
+class IsProductInStockManageConfigOnDefaultStockTest extends TestCase
 {
     /**
      * @var IsProductInStockInterface
@@ -38,14 +38,15 @@ class IsProductInStockOnDefaultStockTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
      * @param string $sku
      * @param bool $expectedValue
      *
      * @return void
-     * @dataProvider executeWithDifferentQtyDataProvider
+     * @dataProvider executeWithManageStockFalseDataProvider
      */
-    public function testExecuteWithDifferentQty(string $sku, bool $expectedValue)
+    public function testExecuteWithManageStockFalse(string $sku, bool $expectedValue)
     {
         $isInStock = $this->isProductInStock->execute($sku, $this->defaultStockProvider->getId());
         self::assertEquals($expectedValue, $isInStock);
@@ -54,12 +55,12 @@ class IsProductInStockOnDefaultStockTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithDifferentQtyDataProvider(): array
+    public function executeWithManageStockFalseDataProvider(): array
     {
         return [
             ['SKU-1', true],
             ['SKU-2', true],
-            ['SKU-3', false],
+            ['SKU-3', true],
         ];
     }
 }
