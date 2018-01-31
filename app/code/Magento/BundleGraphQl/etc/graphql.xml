@@ -48,5 +48,6 @@
     <type xsi:type="Enum" name="PriceTypeEnum">
         <item name="fixed">FIXED</item>
         <item name="percent">PERCENT</item>
+        <item name="dynamic">DYNAMIC</item>
     </type>
 </config>

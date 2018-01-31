@@ -104,7 +104,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
                                 'price_type' => $this->enumLookup->getEnumValueFromField(
                                     'PriceTypeEnum',
                                     $link->getPriceType()
-                                ),
+                                ) ?: 'DYNAMIC',
                                 'can_change_quantity' => $link->getCanChangeQuantity()
                             ];
                             $resultData[$productKey]['items'][$optionKey]['options'][$link['sku']] = $formattedLink;
