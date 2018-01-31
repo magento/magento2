@@ -78,6 +78,6 @@ class SchemaReaderTest extends SetupTestCase
     {
         $this->updateRevisionTo('foreign_key_interpreter');
         $schema = $this->reader->read('all');
-        self::assertEquals($schema, $this->getData());
+        self::assertEquals($this->getData(), $schema);
     }
 }
