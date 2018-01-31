@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemRepository;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkus;
-use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 
 /**
  * Return product availability by Product SKU and Stock Id (stock data + reservations)
@@ -41,9 +41,9 @@ class IsProductInStock implements IsProductInStockInterface
     private $legacyStockItemRepository;
 
     /**
-     * @var GetProductIdsBySkus
+     * @var ProductResourceModel
      */
-    private $getProductIdsBySkus;
+    private $productResource;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
@@ -55,7 +55,7 @@ class IsProductInStock implements IsProductInStockInterface
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      * @param Configuration $configuration
      * @param LegacyStockItemRepository $legacyStockItemRepository
-     * @param GetProductIdsBySkus $getProductIdsBySkus
+     * @param ProductResourceModel $productResource
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      */
     public function __construct(
@@ -63,14 +63,14 @@ class IsProductInStock implements IsProductInStockInterface
         GetReservationsQuantityInterface $getReservationsQuantity,
         Configuration $configuration,
         LegacyStockItemRepository $legacyStockItemRepository,
-        GetProductIdsBySkus $getProductIdsBySkus,
+        ProductResourceModel $productResource,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
     ) {
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
         $this->configuration = $configuration;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->productResource = $productResource;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
     }
 
@@ -85,7 +85,7 @@ class IsProductInStock implements IsProductInStockInterface
         $globalMinQty = $this->configuration->getMinQty();
         $legacyStockItem = $this->getLegacyStockItem($sku);
 
-        if ($this->getManageStock($legacyStockItem)) {
+        if ($this->isManageStock($legacyStockItem)) {
             if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
                 || ($legacyStockItem->getUseConfigMinQty() == 0 && $qtyWithReservation <= $legacyStockItem->getMinQty())
             ) {
@@ -101,7 +101,7 @@ class IsProductInStock implements IsProductInStockInterface
      *
      * @return bool
      */
-    private function getManageStock(LegacyStockItem $legacyStockItem): bool
+    private function isManageStock(LegacyStockItem $legacyStockItem): bool
     {
         $globalManageStock = $this->configuration->getManageStock();
         $manageStock = false;
@@ -121,7 +121,7 @@ class IsProductInStock implements IsProductInStockInterface
      */
     private function getLegacyStockItem(string $sku): LegacyStockItem
     {
-        $productIds = $this->getProductIdsBySkus->execute([$sku]);
+        $productIds = $this->productResource->getProductsIdsBySkus([$sku]);
         $searchCriteria = $this->stockItemCriteriaFactory->create();
         $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productIds[$sku]);
 

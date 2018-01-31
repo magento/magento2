@@ -18,7 +18,7 @@ class GetStockConditionChain implements GetStockConditionInterface
     /**
      * @var GetStockConditionInterface[]
      */
-    private $stockConditions;
+    private $stockConditions = [];
 
     /**
      * @var ResourceConnection
@@ -26,14 +26,14 @@ class GetStockConditionChain implements GetStockConditionInterface
     private $resourceConnection;
 
     /**
-     * @param array $stockConditions
      * @param ResourceConnection $resourceConnection
+     * @param array $stockConditions
      *
      * @throws LocalizedException
      */
     public function __construct(
-        array $stockConditions = [],
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        array $stockConditions = []
     ) {
         foreach ($stockConditions as $stockCondition) {
             if (!$stockCondition instanceof GetStockConditionInterface) {
@@ -42,8 +42,8 @@ class GetStockConditionChain implements GetStockConditionInterface
                 );
             }
         }
-        $this->stockConditions = $stockConditions;
         $this->resourceConnection = $resourceConnection;
+        $this->stockConditions = $stockConditions;
     }
 
     /**
