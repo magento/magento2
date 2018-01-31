@@ -10,12 +10,5 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminManageSourcesGrid">
         <element name="addNewSource" type="button" selector="#add" timeout="30"/>
-        <element name="filters" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] button[data-action='grid-filter-expand']"/>
-
-        <element name="rowOne" type="text" selector="tr[data-repeat-index='0']"/>
-    </section>
-    <section name="AdminManageSourcesFilters">
-        <element name="code" type="input" selector=".admin__data-grid-filters-wrap input[name='source_code']"/>
-        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
     </section>
 </sections>

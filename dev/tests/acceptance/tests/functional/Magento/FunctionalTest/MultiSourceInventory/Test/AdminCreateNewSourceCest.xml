@@ -55,14 +55,14 @@
         <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="clickOnSaveArrow1"/>
         <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickOnSaveAndClose"/>
 
-        <click selector="{{AdminManageSourcesGrid.filters}}" stepKey="clickOnFilters1"/>
-        <fillField userInput="{{TestSource.code}}" selector="{{AdminManageSourcesFilters.code}}" stepKey="fillCodeField2"/>
-        <click selector="{{AdminManageSourcesFilters.applyFilters}}" stepKey="clickOnApplyFilters1"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <fillField userInput="{{TestSource.code}}" selector="{{AdminGridFilterControls.code}}" stepKey="fillCodeField2"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
 
-        <see userInput="{{TestSource.code}}" selector="{{AdminManageSourcesGrid.rowOne}}" stepKey="seeCodeInRow1"/>
-        <see userInput="{{TestSource.name}}" selector="{{AdminManageSourcesGrid.rowOne}}" stepKey="seeNameInRow1"/>
-        <see userInput="Enabled" selector="{{AdminManageSourcesGrid.rowOne}}" stepKey="seeIsEnabledInRow1"/>
+        <see userInput="{{TestSource.code}}" selector="{{AdminGrid.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="{{TestSource.name}}" selector="{{AdminGrid.rowOne}}" stepKey="seeNameInRow1"/>
+        <see userInput="Enabled" selector="{{AdminGrid.rowOne}}" stepKey="seeIsEnabledInRow1"/>
         <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
-        <see userInput="0" selector="{{AdminManageSourcesGrid.rowOne}}" stepKey="seePriorityInRow1"/>
+        <see userInput="0" selector="{{AdminGrid.rowOne}}" stepKey="seePriorityInRow1"/>
     </test>
 </tests>
