@@ -8,6 +8,8 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\LoggerInterface;
+use Magento\Framework\Setup\SchemaPersistor;
+use Magento\Setup\Model\DeclarationInstaller;
 use \Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Module\ResourceFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -35,8 +37,12 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Setup\Model\DeclarationInstaller::class)
-            ->willReturn($this->createMock(\Magento\Setup\Model\DeclarationInstaller::class));
+            ->willReturnMap(
+                [
+                    [DeclarationInstaller::class, $this->createMock(DeclarationInstaller::class)],
+                    [SchemaPersistor::class, $this->createMock(SchemaPersistor::class)],
+                ]
+            );
         $this->objectManagerProviderMock->expects($this->any())
             ->method('get')
             ->willReturn($objectManagerMock);
