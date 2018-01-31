@@ -13,8 +13,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
 
 /**
- * Go through all available SQL operations and do execute of each of them
- * with data that come from change registry
+ * Schema operations executor.
+ *
+ * Go through all available SQL operations and execute each one with data from change registry.
  */
 class OperationsExecutor
 {
@@ -49,6 +50,8 @@ class OperationsExecutor
     private $statementAggregatorFactory;
 
     /**
+     * Constructor.
+     *
      * @param array $operations
      * @param Sharding $sharding
      * @param ResourceConnection $resourceConnection
@@ -73,9 +76,9 @@ class OperationsExecutor
     }
 
     /**
-     * Retrieve only destructive operation names
+     * Retrieve only destructive operation names.
      *
-     * For example, drop_table, recreate_table, etc
+     * For example, drop_table, recreate_table, etc.
      *
      * @return array
      */
@@ -94,7 +97,7 @@ class OperationsExecutor
 
     /**
      * In order to successfully run all operations we need to start setup for all
-     * connections first
+     * connections first.
      *
      * @return void
      */
@@ -110,7 +113,7 @@ class OperationsExecutor
 
     /**
      * In order to revert previous state we need to end setup for all connections
-     * connections first
+     * connections first.
      *
      * @return void
      */

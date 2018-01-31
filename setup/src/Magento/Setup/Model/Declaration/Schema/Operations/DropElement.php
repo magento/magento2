@@ -15,14 +15,14 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop element operation
- * Mean any structural element, except table element
- * @see ElementInterface
+ * Drop element operation.
+ *
+ * Drops structural element.
  */
 class DropElement implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'drop_element';
 
@@ -37,6 +37,8 @@ class DropElement implements OperationInterface
     private $definitionAggregator;
 
     /**
+     * Constructor.
+     *
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param DefinitionAggregator $definitionAggregator
      */
@@ -49,7 +51,7 @@ class DropElement implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -57,7 +59,7 @@ class DropElement implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -65,7 +67,7 @@ class DropElement implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

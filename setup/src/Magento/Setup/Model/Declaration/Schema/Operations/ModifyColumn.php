@@ -13,12 +13,12 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Modify table column
+ * Modify column in table operation.
  */
 class ModifyColumn implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'modify_column';
 
@@ -33,6 +33,8 @@ class ModifyColumn implements OperationInterface
     private $dbSchemaWriter;
 
     /**
+     * Constructor.
+     *
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
      */
@@ -45,7 +47,7 @@ class ModifyColumn implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -53,7 +55,7 @@ class ModifyColumn implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -61,9 +63,7 @@ class ModifyColumn implements OperationInterface
     }
 
     /**
-     * Modify table column
-     *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

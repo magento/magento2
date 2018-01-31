@@ -9,6 +9,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
+ * Timestamp DTO element factory.
+ *
  * This format is used to save date (year, month, day).
  * Probably your SQL engine will save date in this format: 'YYYY-MM-DD HH:MM::SS'
  * Date time in invalid format will be converted to '0000-00-00 00:00:00' string
@@ -19,7 +21,9 @@ use Magento\Framework\Stdlib\BooleanUtils;
  */
 class Timestamp implements FactoryInterface
 {
-    /** Nullable timestamp */
+    /**
+     * Nullable timestamp value.
+     */
     const NULL_TIMESTAMP = 'NULL';
 
     /**
@@ -38,6 +42,8 @@ class Timestamp implements FactoryInterface
     private $booleanUtils;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param BooleanUtils           $booleanUtils
      * @param string                 $className
@@ -53,17 +59,12 @@ class Timestamp implements FactoryInterface
     }
 
     /**
-     * Change on_update and default params
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {
         $data['onUpdate'] = isset($data['on_update']) ? $data['on_update'] : null;
-        //As we have only one value for timestamp on update -> it is convinient to use boolean type for it
-        //But later we need to convert it to SQL value
+        //OnUpdate is boolean as there is only one possible value for onUpdate statement.
         if ($data['onUpdate'] && $data['onUpdate'] !== 'CURRENT_TIMESTAMP') {
             if ($this->booleanUtils->toBoolean($data['onUpdate'])) {
                 $data['onUpdate'] = 'CURRENT_TIMESTAMP';
@@ -71,7 +72,7 @@ class Timestamp implements FactoryInterface
                 unset($data['onUpdate']);
             }
         }
-        //By default we do not want to use default attribute
+        //By default default attribute is not used.
         if (!isset($data['default'])) {
             $data['default'] = self::NULL_TIMESTAMP;
         }

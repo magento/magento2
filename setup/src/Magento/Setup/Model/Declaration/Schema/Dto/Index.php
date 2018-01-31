@@ -6,8 +6,8 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * Index structural element
- * Used to speedup read operations from SQL database
+ * Index structural element.
+ * Used to speedup read operations from SQL database.
  */
 class Index extends GenericElement implements
     ElementInterface,
@@ -15,13 +15,12 @@ class Index extends GenericElement implements
     ElementDiffAwareInterface
 {
     /**
-     * In case if we will need to change this object: add, modify or drop, we will need
-     * to define it by its type
+     * Element type.
      */
     const TYPE = 'index';
 
     /**
-     * Fulltext index type
+     * Fulltext index type.
      */
     const FULLTEXT_INDEX = "fulltext";
 
@@ -41,6 +40,8 @@ class Index extends GenericElement implements
     private $indexType;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -61,7 +62,7 @@ class Index extends GenericElement implements
     }
 
     /**
-     * Return columns in order, in which they should go in composite index
+     * Return columns in order, in which they should go in composite index.
      *
      * @return Column[]
      */
@@ -71,9 +72,7 @@ class Index extends GenericElement implements
     }
 
     /**
-     * Retrieve table name
-     *
-     * @return Table
+     * {@inheritdoc}
      */
     public function getTable()
     {
@@ -81,7 +80,7 @@ class Index extends GenericElement implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDiffSensitiveParams()
     {
@@ -93,7 +92,7 @@ class Index extends GenericElement implements
     }
 
     /**
-     * Retrieve array with column names from column objects collections
+     * Retrieve array with column names from column objects collections.
      *
      * @return array
      */
@@ -108,7 +107,7 @@ class Index extends GenericElement implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getElementType()
     {
@@ -116,6 +115,8 @@ class Index extends GenericElement implements
     }
 
     /**
+     * Get index type (FULLTEXT, BTREE, HASH).
+     *
      * @return string
      */
     public function getIndexType()

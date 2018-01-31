@@ -75,6 +75,10 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider executeDataProvider
+     * @param array $options
+     * @param string $deployMode
+     * @param string $expectedString
+     * @param array $expectedOptions
      */
     public function testExecute($options, $deployMode, $expectedString = '', $expectedOptions)
     {

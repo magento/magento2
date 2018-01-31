@@ -8,7 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Serves unique key constraint needs
+ * Unique constraint DTO element factory.
  */
 class Unique implements FactoryInterface
 {
@@ -23,6 +23,8 @@ class Unique implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -35,11 +37,7 @@ class Unique implements FactoryInterface
     }
 
     /**
-     * Set default padding, like INTEGER(11)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

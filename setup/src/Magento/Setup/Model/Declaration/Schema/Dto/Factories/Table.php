@@ -10,13 +10,13 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Table factory tries to create table with params
+ * Table DTO element factory.
  */
 class Table implements FactoryInterface
 {
     /**
-     * Default engine
-     * In this case we use MySQL, but this option can be overrided for another SQL
+     * Default engine.
+     * May be overriden for another DBMS.
      */
     const DEFAULT_ENGINE = 'innodb';
 
@@ -36,6 +36,8 @@ class Table implements FactoryInterface
     private $resourceConnection;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
      * @param string $className
@@ -51,11 +53,7 @@ class Table implements FactoryInterface
     }
 
     /**
-     * Set default padding, like BIGINT(20)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

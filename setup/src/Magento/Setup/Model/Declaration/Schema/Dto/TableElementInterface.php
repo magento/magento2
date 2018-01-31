@@ -6,14 +6,14 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This interface can be used for elements
- * that hold table name, like
- * constraints
+ * Table DTO Element interface.
+ *
+ * This interface can be used for elements that hold tables, like constraints.
  */
 interface TableElementInterface
 {
     /**
-     * Return table with data
+     * Get table object.
      *
      * @return Table
      */

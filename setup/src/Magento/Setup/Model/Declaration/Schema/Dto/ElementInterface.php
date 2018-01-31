@@ -6,15 +6,15 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This is generic interface
+ * Generic DTO Element interface.
  *
- * It is parent interface for all various schema structural elements:
- * table, column, constaint, index
+ * Is parent interface for all various schema structural elements:
+ * table, column, constraint, index.
  */
 interface ElementInterface
 {
     /**
-     * Return customer name of structural element
+     * Return name of structural element.
      *
      * @return string
      */
@@ -28,11 +28,11 @@ interface ElementInterface
     public function getType();
 
     /**
-     * Retrieve high level type: column, constraint, index, table
+     * Retrieve high level type: column, constraint, index, table.
      *
-     * On high level different elements can be created or modified in different ways
-     * So for each high level type of elements were created different operations
-     * And in order to distinguish this types of elements we use this method
+     * On high level different elements can be created or modified in different ways.
+     * So for each high level type of elements were created different operations.
+     * And in order to distinguish this types of elements we use this method.
      *
      * @return string
      */

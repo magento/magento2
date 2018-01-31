@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Setup\SchemaListener;
 use Magento\Setup\Model\DeclarationInstaller;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -143,6 +144,11 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     private $declarationInstallerMock;
 
     /**
+     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $schemaListenerMock;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -197,6 +203,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
         $this->declarationInstallerMock = $this->createMock(DeclarationInstaller::class);
+        $this->schemaListenerMock = $this->createMock(SchemaListener::class);
         $this->object = $this->createObject();
     }
 
@@ -269,7 +276,10 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
         $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
-        $connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->setMethods(['getSchemaListener', 'newTable'])
+            ->getMockForAbstractClass();
+        $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $setup->expects($this->any())->method('getConnection')->willReturn($connection);
         $table->expects($this->any())->method('addColumn')->willReturn($table);
         $table->expects($this->any())->method('setComment')->willReturn($table);
@@ -279,6 +289,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
+        $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
         $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);

@@ -6,8 +6,8 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * Constraint structural element
- * Used for creating additional rules on db tables
+ * Constraint structural element.
+ * Used for creating additional rules on db tables.
  */
 class Constraint extends GenericElement implements
     ElementInterface,
@@ -15,7 +15,7 @@ class Constraint extends GenericElement implements
 {
     /**
      * In case if we will need to change this object: add, modify or drop, we will need
-     * to define it by its type
+     * to define it by its type.
      */
     const TYPE = 'constraint';
 
@@ -35,6 +35,8 @@ class Constraint extends GenericElement implements
     private $table;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table  $table
@@ -49,7 +51,7 @@ class Constraint extends GenericElement implements
     }
 
     /**
-     * Retrieve table name
+     * Retrieve table object.
      *
      * @return Table
      */

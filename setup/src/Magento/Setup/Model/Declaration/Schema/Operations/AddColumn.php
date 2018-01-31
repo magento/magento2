@@ -19,18 +19,17 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Add column to table
+ * Add column to table operation.
  */
 class AddColumn implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'add_column';
 
     /**
-     * This key is service key and need only for migration of data
-     * on auto_increment field
+     * This key is service key and need only for migration of data on auto_increment field.
      */
     const TEMPORARY_KEY = 'AUTO_INCREMENT_TEMPORARY_KEY';
 
@@ -70,6 +69,8 @@ class AddColumn implements OperationInterface
     private $triggers;
 
     /**
+     * AddColumn constructor.
+     *
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param ElementFactory $elementFactory
@@ -97,7 +98,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * Creates index history
+     * Creates index history.
      *
      * @param Column $column
      * @return ElementHistory
@@ -116,7 +117,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -132,7 +133,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * Check whether column is auto increment or not
+     * Check whether column is auto increment or not.
      *
      * @param Column $column
      * @return bool
@@ -143,7 +144,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * Setup triggers if column have onCreate syntax
+     * Setup triggers if column have onCreate syntax.
      *
      * @param Statement $statement
      * @param Column $column
@@ -160,16 +161,16 @@ class AddColumn implements OperationInterface
         $statements = [$statement];
         /**
          * If column has triggers, only than we need to create temporary index on it.
-         * As triggers means, that we will not enable primary key until all data will be transfered
-         * So column can left without key (as primary key is disabled) and this cause an error.
+         * As triggers means, that we will not enable primary key until all data will be transferred,
+         * so column can left without key (as primary key is disabled) and this cause an error.
          */
         if ($this->columnIsAutoIncrement($column) && !empty($statement->getTriggers())) {
             /**
-             * We need to create additional index for auto_increment
+             * We need to create additional index for auto_increment.
              * As we create new field, and for this field we do not have any key/index, that are
-             * required by SQL on any auto_increment field
+             * required by SQL on any auto_increment field.
              * Primary key will be added to the column later, because column is empty at the moment
-             * and if the table is not empty we will get error, such as "Duplicate key entry:"
+             * and if the table is not empty we will get error, such as "Duplicate key entry:".
              */
             $indexHistory = $this->getTemporaryIndexHistory($column);
             /** Add index should goes first */
@@ -182,7 +183,7 @@ class AddColumn implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

@@ -6,7 +6,9 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This interface provides all params, that should participate in elements comparison
+ * Element diff provider interface.
+ *
+ * This interface provides all params, that should participate in elements comparison.
  */
 interface ElementDiffAwareInterface
 {
@@ -16,8 +18,8 @@ interface ElementDiffAwareInterface
      *  padding => '2'
      *  identity => null
      *
-     * Such params as name, renamedTo, disabled, tableName should be avoided here
-     * As this params are system and must not participate in comparison at all
+     * Such params as name, renamedTo, disabled, tableName should be avoided here.
+     * As this params are system and must not participate in comparison at all.
      *
      * @return array
      */

@@ -6,26 +6,25 @@
 namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Declaration\ValidationRules;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex */
-    protected $model;
+    /** @var CheckReferenceColumnHasIndex */
+    private $model;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     protected function setUp()
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex::class,
+            CheckReferenceColumnHasIndex::class,
             [
             ]
         );
@@ -57,6 +56,7 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
         $table->addColumns([$column]);
         $refTable->addColumns([$refColumn]);
         $table->addConstraints([$reference]);
+        /** @var Schema|\PHPUnit_Framework_MockObject_MockObject $schemaMock */
         $schemaMock = $this->getMockBuilder(Schema::class)
             ->disableOriginalConstructor()
             ->getMock();

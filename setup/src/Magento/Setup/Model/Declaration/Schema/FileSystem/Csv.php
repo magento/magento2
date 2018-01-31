@@ -7,22 +7,22 @@
 namespace Magento\Setup\Model\Declaration\Schema\FileSystem;
 
 /**
- * Read batch data from csv
+ * CSV file operations wrapper.
  */
 class Csv
 {
     /**
-     * Default batch size
+     * Default batch size.
      *
      * @var int
      */
     private $batchSize = 15000;
 
     /**
-     * Save to csv data with batches
+     * Save to csv data with batches.
      *
-     * @param  $file
-     * @param  array $data
+     * @param string $file
+     * @param array $data
      * @return $this
      */
     public function save($file, array $data)
@@ -46,9 +46,9 @@ class Csv
     }
 
     /**
-     * Generator which allows to read file
+     * File read generator.
      *
-     * @param  $file
+     * @param string $file
      * @return \Generator
      */
     public function readGenerator($file)

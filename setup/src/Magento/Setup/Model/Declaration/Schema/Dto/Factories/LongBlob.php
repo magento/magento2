@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Create text with different params
+ * LongBlob DTO element factory.
  */
 class LongBlob implements FactoryInterface
 {
     /**
-     * Default small integer padding
+     * Default long blog length.
      */
     const DEFAULT_BLOB_LENGTH = 2147483648;
 
@@ -28,6 +28,8 @@ class LongBlob implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -40,11 +42,7 @@ class LongBlob implements FactoryInterface
     }
 
     /**
-     * Set default padding, like SMALLINT(5)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

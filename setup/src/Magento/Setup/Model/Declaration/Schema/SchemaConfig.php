@@ -13,7 +13,7 @@ use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
  */
 class SchemaConfig implements SchemaConfigInterface
 {
@@ -38,6 +38,8 @@ class SchemaConfig implements SchemaConfigInterface
     private $readerComposite;
 
     /**
+     * Constructor.
+     *
      * @param DbSchemaBuilder          $dbSchemaBuilder
      * @param DeclarativeSchemaBuilder $declarativeSchemaBuilder
      * @param SchemaFactory            $schemaFactory

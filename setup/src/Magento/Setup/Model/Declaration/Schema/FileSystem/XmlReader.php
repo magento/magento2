@@ -10,12 +10,13 @@ use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
- * Class Reader
+ * DB Schema XML configuration reader.
+ * Reads schema config from db_schema.xml files in enabled modules.
  */
 class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
-     * Attributes by names of which we will do nodes merge
+     * Attributes by names of which we will do nodes merge.
      *
      * @var array
      */
@@ -29,7 +30,9 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements R
     ];
 
     /**
-     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * XmlReader constructor.
+     *
+     * @param FileResolverByModule $fileResolver
      * @param \Magento\Setup\Model\Declaration\Schema\Config\Converter $converter
      * @param \Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState

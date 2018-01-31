@@ -6,12 +6,12 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 /**
- * This interface says whether element can have default value or not
+ * Provides default value for column.
  */
 interface ColumnDefaultAwareInterface
 {
     /**
-     * Check whether element is unsigned or not
+     * Check whether element is unsigned or not.
      *
      * @return array
      */

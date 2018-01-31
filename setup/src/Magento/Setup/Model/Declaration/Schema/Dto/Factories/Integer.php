@@ -9,13 +9,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Serves needs in integer digits. Default padding is 11.
- * Size is 4 byte.
+ * Integer DTO element factory.
  */
 class Integer implements FactoryInterface
 {
     /**
-     * Describe default for different integer types
+     * Describe default for different integer types.
      *
      * @var array
      */
@@ -37,6 +36,8 @@ class Integer implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -49,11 +50,7 @@ class Integer implements FactoryInterface
     }
 
     /**
-     * Set default padding, like INTEGER(11)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

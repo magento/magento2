@@ -12,7 +12,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 /**
  * Real data column.
  * Declared in SQL, like FLOAT(P, S), DOUBLE(P, S) or DECIMAL(P, S)
- * Where S - is scale, P - is precision
+ * where S - is scale, P - is precision.
  * https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
  */
 class Real extends Column implements
@@ -47,6 +47,8 @@ class Real extends Column implements
     private $unsigned;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -81,7 +83,7 @@ class Real extends Column implements
     }
 
     /**
-     * Column precision
+     * Column precision.
      *
      * @return int
      */
@@ -91,7 +93,7 @@ class Real extends Column implements
     }
 
     /**
-     * Column scale
+     * Column scale.
      *
      * @return int
      */
@@ -101,7 +103,7 @@ class Real extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */
@@ -111,10 +113,10 @@ class Real extends Column implements
     }
 
     /**
-     * Return default value
-     * Note: default value should be float
+     * Return default value.
+     * Note: default value should be float.
      *
-     * @return float | null
+     * @return float|null
      */
     public function getDefault()
     {
@@ -122,7 +124,7 @@ class Real extends Column implements
     }
 
     /**
-     * Check whether element is unsigned or not
+     * Check whether element is unsigned or not.
      *
      * @return bool
      */

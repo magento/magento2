@@ -10,10 +10,10 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Date column
- * Declared in SQL, like DATE
- * Doesnt have any additional params
- * Is represented like: YY:MM:DD
+ * Date column.
+ * Declared in SQL, like DATE.
+ * Does not have any additional params.
+ * Is represented like: YY:MM:DD.
  */
 class Date extends Column implements
     ElementDiffAwareInterface,
@@ -25,6 +25,8 @@ class Date extends Column implements
     private $nullable;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -57,7 +59,7 @@ class Date extends Column implements
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isNullable(): bool
     {

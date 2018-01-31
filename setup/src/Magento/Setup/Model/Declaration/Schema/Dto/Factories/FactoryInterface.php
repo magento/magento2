@@ -8,13 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Factories create different types of DTO`s from configuration
- * They need in order to provide validation
+ * DTO Element Factory Interface.
  */
 interface FactoryInterface
 {
     /**
-     * Compute and return effective value of an argument
+     * Create element using definition data array.
      *
      * @param  array $data
      * @return ElementInterface

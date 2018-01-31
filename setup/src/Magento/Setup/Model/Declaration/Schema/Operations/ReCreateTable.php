@@ -10,12 +10,13 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop and create table again
+ * Recreate table operation.
+ * Drops and creates table again.
  */
 class ReCreateTable implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'recreate_table';
 
@@ -30,6 +31,8 @@ class ReCreateTable implements OperationInterface
     private $dropTable;
 
     /**
+     * Constructor.
+     *
      * @param CreateTable $createTable
      * @param DropTable $dropTable
      */
@@ -40,7 +43,7 @@ class ReCreateTable implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -48,7 +51,7 @@ class ReCreateTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -56,7 +59,7 @@ class ReCreateTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

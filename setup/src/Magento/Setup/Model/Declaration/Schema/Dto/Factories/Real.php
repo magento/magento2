@@ -8,19 +8,20 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * This type is equal to SQL TYPE(PRECISION,SCALE) type.
- * Used for real numbers storage like decimal, float or double.
+ * Real type DTO element factory.
+ *
+ * Used for real numbers DTO elements like decimal, float or double.
  * Decimal type is highly recommended for business math.
  */
 class Real implements FactoryInterface
 {
     /**
-     * Default SQL precision
+     * Default SQL precision.
      */
     const DEFAULT_PRECISION = "10";
 
     /**
-     * Default SQL scale
+     * Default SQL scale.
      */
     const DEFAULT_SCALE = "0";
 
@@ -35,6 +36,8 @@ class Real implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -47,11 +50,7 @@ class Real implements FactoryInterface
     }
 
     /**
-     * Set shape to fixed point, that is by default (10,0) for decimal and (0,0) for double or float
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

@@ -14,13 +14,14 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Modify table operation is used to change table options
- * At this moment it change only table comment
+ * Modify table operation.
+ *
+ * Used to change table options.
  */
 class ModifyTable implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'modify_table';
 
@@ -30,6 +31,8 @@ class ModifyTable implements OperationInterface
     private $dbSchemaWriter;
 
     /**
+     * Constructor.
+     *
      * @param DbSchemaWriterInterface $dbSchemaWriter
      */
     public function __construct(
@@ -39,7 +42,7 @@ class ModifyTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -47,7 +50,7 @@ class ModifyTable implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -55,15 +58,12 @@ class ModifyTable implements OperationInterface
     }
 
     /**
-     * Modify table column
-     *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {
         /** @var Table $table */
         $table = $elementHistory->getNew();
-        /** @TODO: add engine change here */
         return [
             $this->dbSchemaWriter->modifyTableOption(
                 $table->getName(),

@@ -10,8 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Text column
- * Declared in SQL, like: TEXT, MEDIUMTEXT, LONGTEXT
+ * Text column.
+ * Declared in SQL, like: TEXT, TINYTEXT, MEDIUMTEXT, LONGTEXT.
  */
 class Text extends Column implements
     ElementDiffAwareInterface,
@@ -23,6 +23,8 @@ class Text extends Column implements
     private $nullable;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -43,7 +45,7 @@ class Text extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */

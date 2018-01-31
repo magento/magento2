@@ -10,12 +10,12 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop foreign key operation
+ * Drop foreign key operation.
  */
 class DropReference implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'drop_reference';
 
@@ -25,6 +25,8 @@ class DropReference implements OperationInterface
     private $dropElement;
 
     /**
+     * Constructor.
+     *
      * @param DropElement $dropElement
      */
     public function __construct(DropElement $dropElement)
@@ -33,7 +35,8 @@ class DropReference implements OperationInterface
     }
 
     /**
-     * We can drop references and this will not cause any issues
+     * {@inheritdoc}
+     * We can drop references and this will not cause any issues.
      *
      * @return bool
      */
@@ -43,7 +46,7 @@ class DropReference implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -51,7 +54,7 @@ class DropReference implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

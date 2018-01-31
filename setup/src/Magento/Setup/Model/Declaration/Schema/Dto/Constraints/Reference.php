@@ -11,14 +11,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Reference constraint is type of constraint, where one table from one column
- * is referenced to another table column with the same definition
+ * Reference (Foreign Key) constraint.
  */
 class Reference extends Constraint implements ElementDiffAwareInterface
 {
     /**
      * In case if we will need to change this object: add, modify or drop, we will need
-     * to define it by its type
+     * to define it by its type.
      */
     const TYPE = 'reference';
 
@@ -43,6 +42,8 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     private $onDelete;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table  $table
@@ -68,6 +69,8 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
+     * Get column instance.
+     *
      * @return Column
      */
     public function getColumn()
@@ -76,7 +79,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
-     * External column, from table to where we do reference
+     * Get external column in reference table.
      *
      * @return Column
      */
@@ -86,7 +89,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
-     * External table to where we do reference
+     * Get external referenced table.
      *
      * @return Table
      */
@@ -96,7 +99,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
-     * Trigger param, which attach custom action, on delete value from reference table
+     * On delete action.
      *
      * @return string
      */
@@ -106,7 +109,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
-     * For foreign key type always will be 'reference'
+     * For foreign key type is always 'reference'.
      *
      * @return string
      */

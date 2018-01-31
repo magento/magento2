@@ -6,14 +6,13 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 /**
- * This interface says whether element can be nullable or not
- * If column element implement this interface, than it will have NULL or NOT NULL flag in column
- * definition
+ * Provides nullable flag for element.
+ * If column element implement this interface, than it will have NULL or NOT NULL flag in column definition.
  */
 interface ColumnNullableAwareInterface
 {
     /**
-     * Check whether element is nullable or not
+     * Check is element nullable or not.
      *
      * @return array
      */

@@ -6,10 +6,11 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This is data transfer object, that provides access to basic attributes of different
- * structural elements
+ * Generic element DTO.
  *
- * Under structural element means one of next element, with which db schema can be represented:
+ * Data transfer object, that provides access to basic attributes of various structural elements.
+ *
+ * Under structural element means one of next element, with can be represented in db schema :
  *  - column
  *  - constraint
  *  - index
@@ -18,16 +19,22 @@ abstract class GenericElement implements
     ElementInterface
 {
     /**
+     * High level type.
+     *
      * @var string
      */
     private $type;
 
     /**
+     * Element name.
+     *
      * @var string
      */
     private $name;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      */
@@ -38,7 +45,7 @@ abstract class GenericElement implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -46,7 +53,7 @@ abstract class GenericElement implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getType()
     {

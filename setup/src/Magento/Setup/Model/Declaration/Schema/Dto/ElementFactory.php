@@ -9,15 +9,17 @@ use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Setup\Model\Declaration\Schema\Dto\Factories\FactoryInterface;
 
 /**
- * This is abstract factory that allows to
- * instantiate any type of structural elements
+ * DTO Element factory.
+ *
+ * Instantiates any type of structural elements.
  *
  * @see ElementInterface
  */
 class ElementFactory
 {
     /**
-     * This is predefined types of elements, that can be instantiate with this factory
+     * Predefined types of elements, that can be instantiated using this factory.
+     *
      * Where @key - is xsi:type of the object
      * Where @value - is instance class name
      */
@@ -29,6 +31,8 @@ class ElementFactory
     private $booleanUtils;
 
     /**
+     * Constructor.
+     *
      * @param FactoryInterface[] $typeFactories
      * @param BooleanUtils       $booleanUtils
      */
@@ -41,12 +45,13 @@ class ElementFactory
     }
 
     /**
-     * As we have few attributes, that are generic and be applied to few types:
+     * Cast generic attributes.
+     *
+     * Common attributes for multiple types:
      *  - nullable
      *  - unsigned
      *  - identity
-     *
-     * We need to cast this attributes to boolean values in abstract factory
+     * Casted to boolean value in factory.
      *
      * @param  array $elementStructuralData
      * @return array
@@ -66,7 +71,7 @@ class ElementFactory
     }
 
     /**
-     * Instantiate different types of elements, depends on their xsi:type
+     * Instantiate different types of elements, depends on their xsi:type.
      *
      * @param  string $type
      * @param  array  $elementStructuralData

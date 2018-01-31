@@ -11,7 +11,7 @@ use Magento\Setup\Model\Declaration\Schema\RequestFactory;
 use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 
 /**
- * Declaration Installer is facade for installation and upgrade db in declaration mode
+ * Declaration Installer is facade for installation and upgrade db in declaration mode.
  */
 class DeclarationInstaller
 {
@@ -36,6 +36,8 @@ class DeclarationInstaller
     private $schemaConfig;
 
     /**
+     * Constructor.
+     *
      * @param SchemaConfigInterface $schemaConfig
      * @param SchemaDiff $schemaDiff
      * @param OperationsExecutor $operationsExecutor
@@ -54,9 +56,9 @@ class DeclarationInstaller
     }
 
     /**
-     * Install Schema in declarative way
+     * Install Schema in declarative way.
      *
-     * @param array $requestData -> Data params which comes from UI or from CLI
+     * @param array $requestData -> Data params which comes from UI or from CLI.
      * @return void
      */
     public function installSchema(array $requestData)

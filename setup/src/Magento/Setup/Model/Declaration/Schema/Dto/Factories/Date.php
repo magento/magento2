@@ -8,8 +8,8 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Date caster
- * Remove default and nullable attributes, as date type must not have any attributes
+ * Date factory.
+ * Remove default and nullable attributes, as date type must not have any attributes.
  */
 class Date implements FactoryInterface
 {
@@ -24,6 +24,8 @@ class Date implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -36,11 +38,7 @@ class Date implements FactoryInterface
     }
 
     /**
-     * Set shape to floating point, that is by default (10,0)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

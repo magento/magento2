@@ -15,14 +15,14 @@ class DbSchemaUpgradeCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $installerFactory;
+    private $installerFactory;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $deploymentConfig;
+    private $deploymentConfig;
 
-    protected function setup()
+    protected function setUp()
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

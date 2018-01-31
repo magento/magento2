@@ -7,12 +7,12 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 /**
- * Object for transporting CLI or Ui params
+ * CLI or Ui params transport object.
  */
 class Request
 {
     /**
-     * Option that says that we are in safe mode and should enable dump functionality
+     * Option to enable dump functionality for safe mode.
      */
     const DUMP_ENABLE_OPTIONS = "dump_enable";
 
@@ -22,6 +22,8 @@ class Request
     private $dumpEnable = false;
 
     /**
+     * Constructor.
+     *
      * @param array $request
      */
     public function __construct(array $request)
@@ -32,7 +34,7 @@ class Request
     }
 
     /**
-     * Check whether dump is enabled or not
+     * Check whether dump is enabled.
      *
      * @return boolean
      */

@@ -10,9 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Timestamp column
- * Declared in SQL, like Timestamp
- * Has 2 additional params: default and on_update
+ * Timestamp column.
+ * Declared in SQL, like Timestamp.
+ * Has 2 additional params: default and on_update.
  */
 class Timestamp extends Column implements
     ElementDiffAwareInterface,
@@ -35,6 +35,8 @@ class Timestamp extends Column implements
     private $nullable;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -61,9 +63,9 @@ class Timestamp extends Column implements
     }
 
     /**
-     * Return default value
+     * Return default value.
      *
-     * @return int | null
+     * @return int|null
      */
     public function getDefault()
     {
@@ -71,7 +73,7 @@ class Timestamp extends Column implements
     }
 
     /**
-     * Retrieve on_update param
+     * Retrieve on_update param.
      *
      * @return string
      */
@@ -94,7 +96,7 @@ class Timestamp extends Column implements
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isNullable(): bool
     {

@@ -9,7 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * This class holds history about element modifications
+ * Element history container factory.
  */
 class ElementHistoryFactory
 {
@@ -19,6 +19,8 @@ class ElementHistoryFactory
     private $objectManager;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
@@ -27,6 +29,8 @@ class ElementHistoryFactory
     }
 
     /**
+     * Create element history container.
+     *
      * @param array $data
      *  - Should consist of 2 params:
      *      new

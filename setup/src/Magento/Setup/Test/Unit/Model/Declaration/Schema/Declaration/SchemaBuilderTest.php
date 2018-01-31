@@ -8,52 +8,69 @@ namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Declaration;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\Declaration\SchemaBuilder */
-    protected $model;
+    /**
+     * @var \Magento\Setup\Model\Declaration\Schema\Declaration\SchemaBuilder
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $elementFactoryMock;
+    /**
+     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementFactoryMock;
 
-    /** @var \Magento\Framework\Stdlib\BooleanUtils|\PHPUnit_Framework_MockObject_MockObject */
-    protected $booleanUtilsMock;
+    /**
+     * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $booleanUtilsMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Sharding|\PHPUnit_Framework_MockObject_MockObject */
-    protected $shardingMock;
+    /**
+     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shardingMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite|\PHPUnit_Framework_MockObject_MockObject */
-    protected $validationCompositeMock;
+    /**
+     * @var ValidationComposite|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationCompositeMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resourceConnectionMock;
+    /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnectionMock;
 
     protected function setUp()
     {
-        $this->elementFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory::class)
+        $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->booleanUtilsMock = $this->getMockBuilder(\Magento\Framework\Stdlib\BooleanUtils::class)
+        $this->booleanUtilsMock = $this->getMockBuilder(BooleanUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shardingMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Sharding::class)
+        $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->validationCompositeMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite::class)
+        $this->validationCompositeMock = $this->getMockBuilder(ValidationComposite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceConnectionMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -172,6 +189,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create integer column with autoincrement.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer
@@ -190,6 +209,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create integer column.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer
@@ -205,6 +226,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create PK constraint.
+     *
      * @param Table $table
      * @param array $columns
      * @return Internal
@@ -220,6 +243,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create index.
+     *
      * @param string $indexName
      * @param Table $table
      * @param array $columns
@@ -238,6 +263,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 
 
     /**
+     * Create timestamp column.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp
@@ -257,6 +284,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider tablesProvider
      * @param array $tablesData
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testBuild(array $tablesData)
     {

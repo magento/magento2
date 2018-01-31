@@ -6,14 +6,14 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 /**
- * This interface says whether element can be unsigned or not
- * If column element implement this interface, than it will have UNSGINED flag in column
- * definition
+ * Unsigned flag provider for element.
+ * If column element implement this interface, than it will have UNSIGNED flag in column
+ * definition.
  */
 interface ColumnUnsignedAwareInterface
 {
     /**
-     * Check whether element is unsigned or not
+     * Check whether element is unsigned or not.
      *
      * @return array
      */

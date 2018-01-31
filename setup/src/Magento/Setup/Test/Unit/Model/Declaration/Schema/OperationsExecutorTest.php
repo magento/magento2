@@ -6,62 +6,82 @@
 
 namespace Magento\Setup\Test\Unit\Model\Declaration\Schema;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregator;
+use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory;
+use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
+use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\OperationsExecutor */
-    protected $model;
+    /**
+     * @var \Magento\Setup\Model\Declaration\Schema\OperationsExecutor
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
-    protected $safeReflectionClassMock;
+    /**
+     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shardingMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Sharding|\PHPUnit_Framework_MockObject_MockObject */
-    protected $shardingMock;
+    /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnectionMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resourceConnectionMock;
+    /**
+     * @var StatementFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $statementFactoryMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\StatementFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $statementFactoryMock;
+    /**
+     * @var DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbSchemaWriterMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dbSchemaWriterMock;
+    /**
+     * @var StatementAggregatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $statementAggregatorFactoryMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $statementAggregatorFactoryMock;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var CreateTable|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $createTableOperation;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var DropElement|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $dropElement;
 
     protected function setUp()
     {
-        $this->shardingMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Sharding::class)
+        $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceConnectionMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statementFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\StatementFactory::class)
+        $this->statementFactoryMock = $this->getMockBuilder(StatementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface::class)
+        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
             ->getMockForAbstractClass();
-        $this->statementAggregatorFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory::class)
+        $this->statementAggregatorFactoryMock = $this->getMockBuilder(StatementAggregatorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->createTableOperation = $this->getMockBuilder(CreateTable::class)
@@ -111,6 +131,7 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
+        /** @var DiffInterface|\PHPUnit_Framework_MockObject_MockObject $diff */
         $diff = $this->getMockBuilder(DiffInterface::class)
             ->getMock();
         $this->shardingMock->expects(self::exactly(2))

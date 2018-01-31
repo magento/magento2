@@ -9,7 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema;
 use Zend\Di\Di;
 
 /**
- * Request Factory
+ * Request Factory.
  */
 class RequestFactory
 {
@@ -34,7 +34,7 @@ class RequestFactory
     }
 
     /**
-     * Create request object with requestOptions params
+     * Create request object with requestOptions params.
      *
      * @param  array $requestOptions
      * @return Request

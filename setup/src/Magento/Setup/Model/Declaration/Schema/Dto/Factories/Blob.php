@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Create text with different params
+ * Blob factory.
  */
 class Blob implements FactoryInterface
 {
     /**
-     * Default small integer padding
+     * Default blob length.
      */
     const DEFAULT_BLOB_LENGTH = 65536;
 
@@ -28,6 +28,8 @@ class Blob implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -40,11 +42,7 @@ class Blob implements FactoryInterface
     }
 
     /**
-     * Set default padding, like SMALLINT(5)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

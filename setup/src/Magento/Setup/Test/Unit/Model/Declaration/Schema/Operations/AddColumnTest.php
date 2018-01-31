@@ -6,60 +6,83 @@
 namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Operations;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFrom;
 use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
+use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 
 class AddColumnTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\Operations\AddColumn */
-    protected $model;
+    /**
+     * @var AddColumn
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator|\PHPUnit_Framework_MockObject_MockObject */
-    protected $definitionAggregatorMock;
+    /**
+     * @var DefinitionAggregator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $definitionAggregatorMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dbSchemaWriterMock;
+    /**
+     * @var DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbSchemaWriterMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $elementFactoryMock;
+    /**
+     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementFactoryMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $elementHistoryFactoryMock;
+    /**
+     * @var ElementHistoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementHistoryFactoryMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement|\PHPUnit_Framework_MockObject_MockObject */
-    protected $addComplexElementMock;
+    /**
+     * @var AddComplexElement|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $addComplexElementMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Operations\DropElement|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dropElementMock;
+    /**
+     * @var DropElement|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dropElementMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MigrateDataFrom|\PHPUnit_Framework_MockObject_MockObject */
     private $migrateDataTrigger;
 
     protected function setUp()
     {
-        $this->definitionAggregatorMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator::class)
+        $this->definitionAggregatorMock = $this->getMockBuilder(DefinitionAggregator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface::class)
+        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
             ->getMockForAbstractClass();
-        $this->elementFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory::class)
+        $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->elementHistoryFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory::class)
+        $this->elementHistoryFactoryMock = $this->getMockBuilder(ElementHistoryFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addComplexElementMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement::class)
+        $this->addComplexElementMock = $this->getMockBuilder(AddComplexElement::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dropElementMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Operations\DropElement::class)
+        $this->dropElementMock = $this->getMockBuilder(DropElement::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->migrateDataTrigger = $this->getMockBuilder(MigrateDataFrom::class)
@@ -67,7 +90,7 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Setup\Model\Declaration\Schema\Operations\AddColumn::class,
+            AddColumn::class,
             [
                 'definitionAggregator' => $this->definitionAggregatorMock,
                 'dbSchemaWriter' => $this->dbSchemaWriterMock,

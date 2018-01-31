@@ -10,17 +10,23 @@ use Magento\Setup\Model\Declaration\Schema\Db\ReferenceStatement;
 use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregator;
 
+/**
+ * Test for StatementAggregator.
+ *
+ * @package Magento\Setup\Test\Unit\Model\Declaration\Schema\Db
+ */
 class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\StatementAggregator */
-    protected $model;
+    /**
+     * @var \Magento\Setup\Model\Declaration\Schema\Db\StatementAggregator
+     */
+    private $model;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     protected function setUp()
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = new StatementAggregator();
     }

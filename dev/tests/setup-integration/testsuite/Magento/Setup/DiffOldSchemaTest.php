@@ -22,7 +22,7 @@ use Magento\TestFramework\TestCase\SetupTestCase;
 class DiffOldSchemaTest extends SetupTestCase
 {
     /**
-     * @var  TestModuleManager
+     * @var TestModuleManager
      */
     private $moduleManager;
 

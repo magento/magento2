@@ -40,7 +40,7 @@ class SchemaReaderTest extends SetupTestCase
     public function testSuccessfullRead()
     {
         $schema = $this->reader->read();
-        self::assertEquals($schema, $this->getData());
+        self::assertEquals($this->getData(), $schema);
     }
 
     /**

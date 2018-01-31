@@ -11,13 +11,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Internal key constraint is constraint that add KEY onto table columns, on which it is declared
- * All columns that are holded in this constraint are represented as unique vector
+ * Internal key constraint is constraint that add KEY onto table columns, on which it is declared.
+ * All columns that are holded in this constraint are represented as unique vector.
  */
 class Internal extends Constraint implements ElementDiffAwareInterface
 {
     /**
-     * As we can have only one primary key. It name should be always PRIMARY
+     * As we can have only one primary key. It name should be always PRIMARY/
      */
     const PRIMARY_NAME = "PRIMARY";
 
@@ -45,6 +45,8 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
+     * Get key columns.
+     *
      * @return Column[]
      */
     public function getColumns()
@@ -53,7 +55,7 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
-     * Retrieve column names
+     * Retrieve column names.
      *
      * @return array
      */

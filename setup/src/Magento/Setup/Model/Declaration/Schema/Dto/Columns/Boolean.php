@@ -10,8 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Boolean column
- * Declared in SQL, like TINYINT(1) or BOOL or BOOLEAN. Is just alias for integer or binary type.
+ * Boolean column.
+ * Declared in SQL, like TINYINT(1) or BOOL or BOOLEAN. Alias for integer or binary type.
  */
 class Boolean extends Column implements
     ElementDiffAwareInterface,
@@ -29,6 +29,8 @@ class Boolean extends Column implements
     private $default;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -52,7 +54,7 @@ class Boolean extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */
@@ -62,10 +64,10 @@ class Boolean extends Column implements
     }
 
     /**
-     * Return default value
-     * Note: default value should be float
+     * Return default value.
+     * Note: default value should be int.
      *
-     * @return float | null
+     * @return int|null
      */
     public function getDefault()
     {

@@ -10,13 +10,14 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
- * Sharding gives possibility to see what structural element should be installed on what shard
- * You can find what is shard in any SQL documentation
+ * Sharding provider.
+ *
+ * Sharding distributes structural elements among various shards (connections) described in deployment configuration.
  */
 class Sharding
 {
     /**
-     * Name of default connection
+     * Name of default connection.
      */
     const DEFAULT_CONNECTION = 'default';
 
@@ -26,14 +27,17 @@ class Sharding
     private $deploymentConfig;
 
     /**
-     * Under resources means connection names
-     * Each connection name represents each shard
+     * Connection names.
+     *
+     * Each connection name represents each shard.
      *
      * @var array
      */
     private $resources;
 
     /**
+     * Constructor.
+     *
      * @param DeploymentConfig $deploymentConfig
      * @param array            $resources
      */
@@ -44,7 +48,7 @@ class Sharding
     }
 
     /**
-     * Depends on different settings we should have different qty of connection names
+     * Depends on different settings we should have different qty of connection names.
      *
      * @return array
      */
@@ -62,7 +66,7 @@ class Sharding
     }
 
     /**
-     * Check whether our resource is valid one
+     * Check whether our resource is valid one.
      *
      * @param  string $scopeName
      * @return bool
@@ -75,7 +79,7 @@ class Sharding
     }
 
     /**
-     * Retrieve default resource name, that is used by the system
+     * Retrieve default resource name, that is used by the system.
      *
      * @return string
      */

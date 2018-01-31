@@ -37,7 +37,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     }
 
     /**
-     * Tests primary key constraint convertion from XML and renamed functionality.
+     * Tests primary key constraint conversion from XML and renamed functionality.
      *
      * @moduleName Magento_TestSetupDeclarationModule1
      */

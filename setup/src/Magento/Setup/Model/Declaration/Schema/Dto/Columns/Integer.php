@@ -10,9 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * Integer column
- * Declared in SQL, like INT(11) or BIGINT(20)
- * Where digit is padding, how many zeros should be added before first non-zero digit
+ * Integer column.
+ * Declared in SQL, like INT(11) or BIGINT(20).
+ * Where digit is padding, how many zeros should be added before first non-zero digit.
  */
 class Integer extends Column implements
     ElementDiffAwareInterface,
@@ -45,6 +45,8 @@ class Integer extends Column implements
     private $identity;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -79,7 +81,7 @@ class Integer extends Column implements
     }
 
     /**
-     * Column padding
+     * Column padding.
      *
      * @return int
      */
@@ -89,7 +91,7 @@ class Integer extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */
@@ -99,8 +101,8 @@ class Integer extends Column implements
     }
 
     /**
-     * Return default value
-     * Note: default value should be int
+     * Return default value.
+     * Note: default value should be int.
      *
      * @return int | null
      */
@@ -110,7 +112,7 @@ class Integer extends Column implements
     }
 
     /**
-     * Check whether element is unsigned or not
+     * Check whether element is unsigned or not.
      *
      * @return bool
      */
@@ -120,7 +122,7 @@ class Integer extends Column implements
     }
 
     /**
-     * Define whether column can be autoincremented or not
+     * Define whether column can be autoincrement or not.
      *
      * @return bool
      */

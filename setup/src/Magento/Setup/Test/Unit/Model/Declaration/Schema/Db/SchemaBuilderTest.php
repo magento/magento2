@@ -7,39 +7,52 @@ namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Db;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\SchemaBuilder */
-    protected $model;
+    /**
+     * @var \Magento\Setup\Model\Declaration\Schema\Db\SchemaBuilder
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $elementFactoryMock;
+    /**
+     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementFactoryMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dbSchemaReaderMock;
+    /**
+     * @var DbSchemaReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbSchemaReaderMock;
 
-    /** @var \Magento\Setup\Model\Declaration\Schema\Sharding|\PHPUnit_Framework_MockObject_MockObject */
-    protected $shardingMock;
+    /**
+     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shardingMock;
 
     protected function setUp()
     {
-        $this->elementFactoryMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory::class)
+        $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaReaderMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface::class)
+        $this->dbSchemaReaderMock = $this->getMockBuilder(DbSchemaReaderInterface::class)
             ->getMockForAbstractClass();
-        $this->shardingMock = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Sharding::class)
+        $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,6 +69,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function dataProvider()
     {
@@ -130,7 +144,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create table
+     * Create table.
      *
      * @param string $name
      * @return Table
@@ -147,6 +161,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create integer column with autoincrement.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer
@@ -165,6 +181,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create integer column.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer
@@ -180,6 +198,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create primary key constraint.
+     *
      * @param Table $table
      * @param array $columns
      * @return Internal
@@ -195,6 +215,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Create index.
+     *
      * @param string $indexName
      * @param Table $table
      * @param array $columns
@@ -213,6 +235,8 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 
 
     /**
+     * Create timestamp column.
+     *
      * @param string $name
      * @param Table $table
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp

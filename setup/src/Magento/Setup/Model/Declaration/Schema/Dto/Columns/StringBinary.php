@@ -10,9 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
- * String or Binary column
+ * String or Binary column.
  * Declared in SQL, like VARCHAR(L), BINARY(L)
- * where L - length
+ * where L - length.
  */
 class StringBinary extends Column implements
     ElementDiffAwareInterface,
@@ -35,6 +35,8 @@ class StringBinary extends Column implements
     private $length;
 
     /**
+     * Constructor.
+     *
      * @param string $name
      * @param string $type
      * @param Table $table
@@ -61,7 +63,7 @@ class StringBinary extends Column implements
     }
 
     /**
-     * Check whether column can be nullable
+     * Check whether column can be nullable.
      *
      * @return bool
      */
@@ -71,8 +73,8 @@ class StringBinary extends Column implements
     }
 
     /**
-     * Return default value
-     * Note: default value should be string
+     * Return default value.
+     * Note: default value should be string.
      *
      * @return string | null
      */
@@ -82,7 +84,7 @@ class StringBinary extends Column implements
     }
 
     /**
-     * Length can be integer value from 0 to 255
+     * Length can be integer value from 0 to 255.
      *
      * @return int
      */

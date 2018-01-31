@@ -10,12 +10,12 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
- * Can accept only 2 values: true or false
+ * Boolean factory.
  */
 class Boolean implements FactoryInterface
 {
     /**
-     * Default value for boolean xsi:type
+     * Default value for boolean xsi:type.
      */
     const DEFAULT_BOOLEAN = false;
 
@@ -35,6 +35,8 @@ class Boolean implements FactoryInterface
     private $booleanUtils;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param BooleanUtils           $booleanUtils
      * @param string                 $className
@@ -50,11 +52,7 @@ class Boolean implements FactoryInterface
     }
 
     /**
-     * Convert default attribute from string to boolean value
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

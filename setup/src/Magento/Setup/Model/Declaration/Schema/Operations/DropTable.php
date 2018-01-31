@@ -13,12 +13,12 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop table operation
+ * Drop table operation.
  */
 class DropTable implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'drop_table';
 
@@ -33,6 +33,8 @@ class DropTable implements OperationInterface
     private $dbSchemaWriter;
 
     /**
+     * Constructor.
+     *
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
      */
@@ -45,7 +47,7 @@ class DropTable implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -53,7 +55,7 @@ class DropTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -61,7 +63,7 @@ class DropTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $tableHistory)
     {

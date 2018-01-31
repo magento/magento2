@@ -5,25 +5,23 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Declaration\Schema;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ShardingTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Setup\Model\Declaration\Schema\Sharding */
-    protected $model;
+    private $model;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
-    protected $deploymentConfigMock;
-
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
-    protected $safeReflectionClassMock;
+    /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    private $deploymentConfigMock;
 
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 

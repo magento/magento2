@@ -10,6 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Config\Converter;
 
 /**
  * Test for Converter class.
+ *
  * @package Magento\Setup\Test\Unit\Model\Declaration\Schema\Config.
  */
 class ConverterTest extends \PHPUnit\Framework\TestCase

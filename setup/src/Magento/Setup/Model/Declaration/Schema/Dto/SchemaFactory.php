@@ -8,7 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for @see \Magento\Setup\Model\Declaration\Schema\Dto\Schema
+ * Schema DTO element factory.
  */
 class SchemaFactory
 {
@@ -24,6 +24,7 @@ class SchemaFactory
 
     /**
      * SchemaFactory constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
@@ -32,7 +33,7 @@ class SchemaFactory
     }
 
     /**
-     * Create class instance with specified parameters
+     * Create class instance with specified parameters.
      *
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Schema
      */

@@ -14,14 +14,14 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Add element to table
- * Under complex element means element that has different dependencies, like foreign key has dependencies
- * to another table
+ * Add complex element operation.
+ *
+ * Adds element that has various dependencies, like foreign key that has dependencies to another table.
  */
 class AddComplexElement implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'add_complex_element';
 
@@ -36,6 +36,8 @@ class AddComplexElement implements OperationInterface
     private $dbSchemaWriter;
 
     /**
+     * Constructor.
+     *
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
      */
@@ -48,7 +50,7 @@ class AddComplexElement implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -56,7 +58,7 @@ class AddComplexElement implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -64,7 +66,7 @@ class AddComplexElement implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {

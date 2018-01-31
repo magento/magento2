@@ -8,23 +8,29 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Schema is aggregation root, which holds all structural elements
- * and allow access to tables by their names
+ * Schema DTO element.
+ *
+ * Aggregation root for all structural elements. Provides access to tables by their names.
  */
 class Schema
 {
     /**
+     * Resource connection.
+     *
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
+     * Schema tables.
+     *
      * @var Table[]
      */
     private $tables;
 
     /**
      * Schema constructor.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -34,7 +40,7 @@ class Schema
     }
 
     /**
-     * Retrieve all tables, that presents in schema
+     * Retrieve all tables, that are presented in schema.
      *
      * @return Table[]
      */
@@ -44,7 +50,7 @@ class Schema
     }
 
     /**
-     * Add table by name key to tables registry
+     * Add table by name key to tables registry.
      *
      * @param  Table $table
      * @return $this
@@ -56,7 +62,8 @@ class Schema
     }
 
     /**
-     * Retrieve table by it name
+     * Retrieve table by it name.
+     * Return false if table is not present in schema.
      *
      * @param  $name
      * @return bool|Table

@@ -18,12 +18,12 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Creates table operation
+ * Create table operation.
  */
 class CreateTable implements OperationInterface
 {
     /**
-     * Operation name
+     * Operation name.
      */
     const OPERATION_NAME = 'create_table';
 
@@ -43,6 +43,8 @@ class CreateTable implements OperationInterface
     private $triggers;
 
     /**
+     * Constructor.
+     *
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param DefinitionAggregator $definitionAggregator
      * @param array $triggers
@@ -58,7 +60,7 @@ class CreateTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOperationName()
     {
@@ -66,7 +68,7 @@ class CreateTable implements OperationInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isOperationDestructive()
     {
@@ -74,7 +76,7 @@ class CreateTable implements OperationInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function doOperation(ElementHistory $elementHistory)
     {
@@ -92,7 +94,7 @@ class CreateTable implements OperationInterface
              * @var ElementInterface $element
              */
             foreach ($elements as $element) {
-                //Make definition as flat list
+                //Make definition as flat list.
                 $definition[$type . $element->getName()] = $this->definitionAggregator->toDefinition($element);
             }
         }
@@ -105,7 +107,7 @@ class CreateTable implements OperationInterface
                 ['engine' => $table->getEngine(), 'comment' => $table->getComment()]
             );
 
-        //Setup triggers for all column for table
+        //Setup triggers for all column for table.
         foreach ($table->getColumns() as $column) {
             foreach ($this->triggers as $trigger) {
                 if ($trigger->isApplicable($column->getOnCreate())) {

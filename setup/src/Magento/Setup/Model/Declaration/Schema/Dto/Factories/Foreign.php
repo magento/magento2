@@ -8,13 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Serves foreign key constraint needs.
- * Add additonal onDelete param
+ * Foreign key constraint factory.
  */
 class Foreign implements FactoryInterface
 {
     /**
-     * Default padding number
+     * Default ON DELETE action.
      */
     const DEFAULT_ON_DELETE = "CASCADE";
 
@@ -29,6 +28,8 @@ class Foreign implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -41,11 +42,7 @@ class Foreign implements FactoryInterface
     }
 
     /**
-     * Set default on delete to foreign key
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

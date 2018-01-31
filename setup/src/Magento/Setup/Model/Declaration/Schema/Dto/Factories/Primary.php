@@ -9,10 +9,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 
 /**
- * Serves foreign key constraint needs.
- * By default primary key can have only one name - PRIMARY
- * And this name is hardcoded. This is done, in order to prevent creating 2 primary keys
- * for one table
+ * Primary key DTO element factory.
+ *
+ * By default primary key can have only one name - PRIMARY to prevent duplicate primary key creation attempts.
  */
 class Primary implements FactoryInterface
 {
@@ -27,6 +26,8 @@ class Primary implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -39,11 +40,7 @@ class Primary implements FactoryInterface
     }
 
     /**
-     * Set default padding, like INTEGER(11)
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

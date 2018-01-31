@@ -364,7 +364,7 @@ class Installer
         );
 
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
-            //throw new \LogicException('Installation progress did not finish properly.');
+            throw new \LogicException('Installation progress did not finish properly.');
         }
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
@@ -774,7 +774,7 @@ class Installer
     }
 
     /**
-     * Install Magento if declaration mode was enabled
+     * Install Magento if declaration mode was enabled.
      *
      * @param array $request
      * @return void

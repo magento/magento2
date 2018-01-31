@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Serves needs of indexes, that speedup DB
+ * Index element factory.
  */
 class Index implements FactoryInterface
 {
     /**
-     * Default padding number
+     * Default index type.
      */
     const DEFAULT_INDEX_TYPE = "BTREE";
 
@@ -28,6 +28,8 @@ class Index implements FactoryInterface
     private $className;
 
     /**
+     * Constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param string                 $className
      */
@@ -40,11 +42,7 @@ class Index implements FactoryInterface
     }
 
     /**
-     * Set default on delete to foreign key
-     *
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function create(array $data)
     {

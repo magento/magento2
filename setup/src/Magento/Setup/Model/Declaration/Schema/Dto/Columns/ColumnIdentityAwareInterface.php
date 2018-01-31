@@ -6,12 +6,12 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 /**
- * This interface says whether element can be auto_incremental or not
+ * Provides auto_increment flag for column.
  */
 interface ColumnIdentityAwareInterface
 {
     /**
-     * Check whether element is auto incremental or not
+     * Check whether element is auto incremental or not.
      *
      * @return array
      */
