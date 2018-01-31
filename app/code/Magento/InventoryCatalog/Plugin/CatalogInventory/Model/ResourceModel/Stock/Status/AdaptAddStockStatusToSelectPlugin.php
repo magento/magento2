@@ -18,7 +18,7 @@ use Magento\Store\Model\Website;
 /**
  * Adapt adding stock status to select for multi stocks.
  */
-class AdaptAddStockStatusToSelect
+class AdaptAddStockStatusToSelectPlugin
 {
     /**
      * @var StockResolverInterface
@@ -28,18 +28,18 @@ class AdaptAddStockStatusToSelect
     /**
      * @var AddStockStatusToSelect
      */
-    private $adaptedAddStockStatusToSelect;
+    private $addStockStatusToSelect;
 
     /**
      * @param StockResolverInterface $getStockIdForCurrentWebsite
-     * @param AddStockStatusToSelect $adaptedAddStockStatusToSelect
+     * @param AddStockStatusToSelect $addStockStatusToSelect
      */
     public function __construct(
         StockResolverInterface $getStockIdForCurrentWebsite,
-        AddStockStatusToSelect $adaptedAddStockStatusToSelect
+        AddStockStatusToSelect $addStockStatusToSelect
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->adaptedAddStockStatusToSelect = $adaptedAddStockStatusToSelect;
+        $this->addStockStatusToSelect = $addStockStatusToSelect;
     }
 
     /**
@@ -65,7 +65,7 @@ class AdaptAddStockStatusToSelect
         $stock = $this->getStockIdForCurrentWebsite->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
 
-        $this->adaptedAddStockStatusToSelect->addStockStatusToSelect($select, $stockId);
+        $this->addStockStatusToSelect->execute($select, $stockId);
 
         return $stockStatus;
     }

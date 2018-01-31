@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
+use Magento\Catalog\Model\Product\Type;
 
 /**
  * Save source product relations during product persistence via controller
@@ -74,24 +74,24 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
+        if ($product->getTypeId() != Type::TYPE_SIMPLE) {
+            return;
+        }
+        /** @var Save $controller */
+        $controller = $observer->getEvent()->getController();
 
-        if ($product->getTypeId() !== GroupedProductType::TYPE_CODE) {
-            /** @var Save $controller */
-            $controller = $observer->getEvent()->getController();
+        $sources = $controller->getRequest()->getParam('sources', []);
+        $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
+            ? $sources['assigned_sources'] : [];
 
-            $sources = $controller->getRequest()->getParam('sources', []);
-            $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
-                ? $sources['assigned_sources'] : [];
+        $this->sourceItemsProcessor->process(
+            $product->getSku(),
+            $assignedSources
+        );
 
-            $this->sourceItemsProcessor->process(
-                $product->getSku(),
-                $assignedSources
-            );
-
-            $productParams = $controller->getRequest()->getParam('product');
-            if (is_array($productParams)) {
-                $this->updateDefaultSourceQty($productParams);
-            }
+        $productParams = $controller->getRequest()->getParam('product');
+        if (is_array($productParams)) {
+            $this->updateDefaultSourceQty($productParams);
         }
     }
 

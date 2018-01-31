@@ -14,7 +14,7 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
+    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
         <plugin name="prevent_assign_sources_to_default_stock"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStockPlugin"/>
     </type>
@@ -39,13 +39,14 @@
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
         <plugin name="adapt_add_stock_data_to_collection"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollection"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollectionPlugin"/>
         <plugin name="adapt_add_stock_status_to_select"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockStatusToSelect"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockStatusToSelectPlugin"/>
         <plugin name="adapt_add_is_in_stock_filter_to_collection"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollection"/>
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollectionPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Helper\Stock">
+        <plugin name="adapt_add_in_stock_filter_to_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddInStockFilterToCollectionPlugin"/>
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
     </type>
 </config>
