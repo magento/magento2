@@ -11,6 +11,7 @@
     </type>
     <type xsi:type="OutputType" name="GroupedProductItem">
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
         <field xsi:type="ObjectOutputField" name="product" type="ProductInterface"/>
     </type>
 </config>
