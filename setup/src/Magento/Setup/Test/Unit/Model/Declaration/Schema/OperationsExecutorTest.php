@@ -21,6 +21,13 @@ use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
+/**
+ * Test for OperationsExecutor.
+ *
+ * @package Magento\Setup\Test\Unit\Model\Declaration\Schema
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
 {
     /**

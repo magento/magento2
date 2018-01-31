@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for updating installed application after the code base has changed.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeCommand extends AbstractSetupCommand
 {

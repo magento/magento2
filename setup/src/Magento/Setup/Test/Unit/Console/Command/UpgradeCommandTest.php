@@ -80,7 +80,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedString
      * @param array $expectedOptions
      */
-    public function testExecute($options, $deployMode, $expectedString = '', $expectedOptions)
+    public function testExecute($options, $deployMode, $expectedString, $expectedOptions)
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
         $this->installerMock->expects($this->at(0))

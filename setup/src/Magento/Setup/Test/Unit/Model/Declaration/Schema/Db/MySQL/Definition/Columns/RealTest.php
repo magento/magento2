@@ -14,6 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Real;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Unsigned;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real as RealColumnDto;
 
 class RealTest extends \PHPUnit\Framework\TestCase
 {
@@ -78,8 +79,8 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoScale()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real::class)
+        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $column->expects($this->any())
@@ -128,8 +129,8 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real::class)
+        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $column->expects($this->any())
@@ -178,8 +179,8 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoDefault()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\Columns\Real::class)
+        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $column->expects($this->any())

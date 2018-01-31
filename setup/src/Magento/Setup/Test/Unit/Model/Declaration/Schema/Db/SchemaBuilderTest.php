@@ -18,6 +18,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
+/**
+ * Test for SchemaBuilder.
+ *
+ * @package Magento\Setup\Test\Unit\Model\Declaration\Schema\Db
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -233,7 +240,6 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     /**
      * Create timestamp column.
      *
@@ -253,15 +259,15 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     /**
      * @dataProvider dataProvider
      * @param array $columns
      * @param array $references
      * @param array $constraints
      * @param array $indexes
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testBuild(array $columns,  array $references, array $constraints, array $indexes)
+    public function testBuild(array $columns, array $references, array $constraints, array $indexes)
     {
         $withContext = [['first_table', 'default'], ['second_table', 'default']];
         $this->shardingMock->expects(self::once())

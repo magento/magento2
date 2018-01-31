@@ -105,7 +105,6 @@ class InternalTest extends \PHPUnit\Framework\TestCase
                 'expectedExpression' => "CONSTRAINT `constraint_name_unique` UNIQUE KEY (`id`,`parent_id`)"
             ],
         ];
-
     }
 
     /**

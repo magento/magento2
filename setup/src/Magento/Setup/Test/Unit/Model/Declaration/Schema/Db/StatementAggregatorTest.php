@@ -120,7 +120,12 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $statementThree->expects(self::exactly(0))
             ->method('getTriggers')
-            ->willReturn([function() {}]);
+            ->willReturn(
+                [
+                    function () {
+                    }
+                ]
+            );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
         self::assertEquals(
             [[$statementOne, $statementTwo, $statementThree]],
@@ -141,7 +146,12 @@ class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $statementOne->expects(self::exactly(2))
             ->method('getTriggers')
-            ->willReturn([function() {}]);
+            ->willReturn(
+                [
+                    function () {
+                    }
+                ]
+            );
         $this->model->addStatements([$statementOne, $statementTwo, $statementThree]);
         self::assertEquals(
             [[$statementOne], [$statementTwo, $statementThree]],

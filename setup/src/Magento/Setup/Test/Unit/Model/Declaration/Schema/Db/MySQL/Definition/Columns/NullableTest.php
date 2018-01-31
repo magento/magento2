@@ -7,7 +7,8 @@ namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Db\MySQL\Definition\C
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean as BooleanColumnDto;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 class NullableTest extends \PHPUnit\Framework\TestCase
 {
@@ -34,8 +35,8 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var Boolean|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(Boolean::class)
+        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
             ->getMock();
@@ -53,8 +54,8 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNull()
     {
-        /** @var Boolean|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(Boolean::class)
+        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
             ->getMock();
@@ -72,8 +73,8 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNullableAware()
     {
-        /** @var \Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface|\PHPUnit_Framework_MockObject_MockObject $column */
-        $column = $this->getMockBuilder(\Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface::class)
+        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertEquals(

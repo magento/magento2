@@ -29,13 +29,9 @@ class ParametersHolder
     public function getInitParams()
     {
         if (!isset($this->initParams)) {
-            $testsBaseDir = dirname(__DIR__);
-            $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
-            $appMode = $settings->get('TESTS_MAGENTO_MODE');
             $customDirs = $this->getCustomDirs();
             $initParams = [
                 \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
-//                \Magento\Framework\App\State::PARAM_MODE => $appMode
             ];
             $this->initParams = ['magento-init-params' => urldecode(http_build_query($initParams))];
         }
