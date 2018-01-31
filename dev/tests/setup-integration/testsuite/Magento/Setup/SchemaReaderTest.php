@@ -39,7 +39,7 @@ class SchemaReaderTest extends SetupTestCase
      */
     public function testSuccessfullRead()
     {
-        $schema = $this->reader->read();
+        $schema = $this->reader->read('all');
         self::assertEquals($this->getData(), $schema);
     }
 
@@ -67,7 +67,7 @@ class SchemaReaderTest extends SetupTestCase
     public function testFailOnInvalidColumnDeclaration()
     {
         $this->updateRevisionTo('fail_on_column_declaration');
-        $this->reader->read();
+        $this->reader->read('all');
     }
 
     /**
@@ -77,7 +77,7 @@ class SchemaReaderTest extends SetupTestCase
     public function testForeignKeyInterpreter()
     {
         $this->updateRevisionTo('foreign_key_interpreter');
-        $schema = $this->reader->read();
+        $schema = $this->reader->read('all');
         self::assertEquals($schema, $this->getData());
     }
 }

@@ -31,7 +31,7 @@ return [
   `double` double(245,10) DEFAULT NULL,
   `decimal` decimal(15,4) DEFAULT \'0.0000\',
   `date` date DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `datetime` datetime DEFAULT \'0000-00-00 00:00:00\',
   `longtext` longtext,
   `mediumtext` mediumtext,
@@ -40,7 +40,7 @@ return [
   `blob` blob,
   `boolean` tinyint(1) DEFAULT \'1\',
   UNIQUE KEY `some_unique_key` (`smallint`,`bigint`),
-  KEY `speedup_index` (`tinyint`,`bigint`) USING BTREE,
+  KEY `speedup_index` (`tinyint`,`bigint`),
   CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
 ];

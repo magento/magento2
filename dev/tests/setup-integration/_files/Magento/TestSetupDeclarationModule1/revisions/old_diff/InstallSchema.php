@@ -34,7 +34,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 3,
                 ['primary' => true, 'identity' => true, 'nullable' => false],
-                'Value ID'
+                'Smallint'
             )
             ->setComment('Reference table');
         $installer->getConnection()->createTable($table);
@@ -45,56 +45,56 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 2,
                 ['nullable' => true, 'default' => 0],
-                'Value ID'
+                'Smallint'
             )
             ->addColumn(
                 'bigint',
                 \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 10,
                 ['nullable' => true, 'unsigned' => false, 'default' => 0],
-                'Value ID'
+                'Bigint'
             )
             ->addColumn(
                 'float',
                 \Magento\Framework\DB\Ddl\Table::TYPE_FLOAT,
-                '12,0',
+                null,
                 ['default' => 0],
-                'Value ID'
+                'Float'
             )
             ->addColumn(
                 'date',
                 \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
                 null,
                 [],
-                'Value ID'
+                'Date'
             )
             ->addColumn(
                 'timestamp',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
                 ['default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
-                'Value ID'
+                'Timestamp'
             )
             ->addColumn(
                 'mediumtext',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 11222222,
                 [],
-                'Value ID'
+                'Mediumtext'
             )
             ->addColumn(
                 'varchar',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 254,
                 ['nullable' => true],
-                'Value ID'
+                'Varchar'
             )
             ->addColumn(
                 'boolean',
                 \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
                 1,
                 [],
-                'Value ID'
+                'Boolean'
             )
             ->addIndex(
                 'some_unique_key',

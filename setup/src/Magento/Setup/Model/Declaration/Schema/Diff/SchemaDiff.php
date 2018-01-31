@@ -71,9 +71,13 @@ class SchemaDiff
         Schema $generatedSchema
     ) {
         $generatedTables = $generatedSchema->getTables();
+        $tableIndex = array_replace(
+            array_flip(array_keys($schema->getTables())),
+            array_flip(array_keys($generatedSchema->getTables()))
+        );
         $diff = $this->diffFactory->create(
             [
-                'tableIndexes' => array_flip(array_keys($schema->getTables())),
+                'tableIndexes' => $tableIndex,
                 'destructiveOperations' => $this->operationsExecutor->getDestructiveOperations()
             ]
         );

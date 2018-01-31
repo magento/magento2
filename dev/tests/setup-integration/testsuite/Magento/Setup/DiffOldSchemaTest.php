@@ -7,8 +7,6 @@
 namespace Magento\Setup;
 
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffFactory;
-use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
 use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 use Magento\TestFramework\Deploy\CliCommand;
@@ -64,7 +62,7 @@ class DiffOldSchemaTest extends SetupTestCase
         //Move db_schema.xml
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
-            'old_diff',
+            'old_diff_before',
             'db_schema.xml',
             'etc'
         );
@@ -75,25 +73,26 @@ class DiffOldSchemaTest extends SetupTestCase
             'InstallSchema.php',
             'Setup'
         );
-
         $this->cliCommad->install(['Magento_TestSetupDeclarationModule1']);
+        //Move db_schema.xml
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'old_diff',
+            'db_schema.xml',
+            'etc'
+        );
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
         $generatedSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
-        //Change operations
-        $changeOperations = $diff->get(DiffInterface::CHANGE_OPERATION);
-        self::assertCount(1, $changeOperations);
+        $allChanges = $diff->getAll();
+        self::assertCount(1, $allChanges);
         self::assertEquals(
             $this->getBigIntKeyXmlSensitiveData(),
-            $changeOperations['biginteger'][0]['new']->getDiffSensitiveParams()
+            reset($allChanges)['modify_column'][0]->getNew()->getDiffSensitiveParams()
         );
         self::assertEquals(
             $this->getBigIntKeyDbSensitiveData(),
-            $changeOperations['biginteger'][0]['old']->getDiffSensitiveParams()
-        );
-        self::assertCount(
-            5,
-            $diff->get(DiffInterface::REMOVE_OPERATION)['table']
+            reset($allChanges)['modify_column'][0]->getOld()->getDiffSensitiveParams()
         );
     }
 
@@ -103,12 +102,13 @@ class DiffOldSchemaTest extends SetupTestCase
     private function getBigIntKeyDbSensitiveData()
     {
         return [
-            'type' => 'biginteger',
+            'type' => 'bigint',
             'nullable' => true,
-            'padding' => '20',
+            'padding' => 20,
             'unsigned' => false,
             'identity' => false,
             'default' => 0,
+            'comment' => 'Bigint'
         ];
     }
 
@@ -118,12 +118,13 @@ class DiffOldSchemaTest extends SetupTestCase
     private function getBigIntKeyXmlSensitiveData()
     {
         return [
-            'type' => 'biginteger',
+            'type' => 'bigint',
             'nullable' => true,
-            'padding' => '20',
+            'padding' => 20,
             'unsigned' => false,
             'identity' => false,
             'default' => 1,
+            'comment' => 'Bigint',
         ];
     }
 }

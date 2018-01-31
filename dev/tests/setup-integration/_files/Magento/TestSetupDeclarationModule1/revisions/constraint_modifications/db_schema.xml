@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="reference_table" resource="sales">
+    <table name="reference_table" resource="default">
         <column xsi:type="tinyint" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false"/>
         <column xsi:type="tinyint" name="tinyint_without_padding" default="0" nullable="false" unsigned="false"/>
         <column xsi:type="bigint" name="bigint_without_padding" default="0" nullable="false" unsigned="false"/>
@@ -45,9 +45,9 @@
         <column xsi:type="smallint" name="smallint" padding="3" nullable="true"/>
         <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false"/>
         <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false"/>
-        <column xsi:type="float" name="float" default="0" scale="4" precision="12"/>
+        <column xsi:type="float" name="float" default="0" scale="10" precision="12"/>
         <column xsi:type="smallint" name="smallint_main" padding="254" default="0" nullable="false" unsigned="false"/>
-        <column xsi:type="double" name="double" default="11111111.111111" precision="14" scale="6"/>
+        <column xsi:type="double" name="double" default="11111111.111111" precision="245" scale="10"/>
         <column xsi:type="decimal" name="decimal" default="0" scale="4" precision="15"/>
         <column xsi:type="date" name="date"/>
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true"/>

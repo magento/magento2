@@ -10,6 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
+use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -29,11 +30,17 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
      */
     private $schemaConfig;
 
+    /**
+     * @var CliCommand
+     */
+    private $cliCommad;
+
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->schemaConfig = $objectManager->create(SchemaConfig::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
+        $this->cliCommad = $objectManager->get(CliCommand::class);
     }
 
     /**
@@ -43,9 +50,15 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
      */
     public function testSchemaBuilder()
     {
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule1']
+        );
         $dbSchema = $this->schemaConfig->getDeclarationConfig();
+        $schemaTables = $dbSchema->getTables();
+        self::assertArrayHasKey('reference_table', $dbSchema->getTables());
+        self::assertArrayHasKey('test_table', $dbSchema->getTables());
         //Test primary key and renaming
-        $referenceTable = $dbSchema->getTableByName('reference_table');
+        $referenceTable = $schemaTables['reference_table'];
         /**
         * @var Internal $primaryKey
         */
@@ -53,7 +66,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         $columns = $primaryKey->getColumns();
         self::assertEquals(reset($columns)->getName(), 'tinyint_ref');
         //Test column
-        $testTable = $dbSchema->getTableByName('test_table');
+        $testTable = $schemaTables['test_table'];
         /**
         * @var Timestamp $timestampColumn
         */
