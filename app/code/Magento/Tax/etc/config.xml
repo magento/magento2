@@ -16,7 +16,6 @@
             <calculation>
                 <algorithm>TOTAL_BASE_CALCULATION</algorithm>
                 <apply_after_discount>1</apply_after_discount>
-                <discount_tax>0</discount_tax>
                 <based_on>shipping</based_on>
                 <price_includes_tax>0</price_includes_tax>
                 <shipping_includes_tax>0</shipping_includes_tax>
