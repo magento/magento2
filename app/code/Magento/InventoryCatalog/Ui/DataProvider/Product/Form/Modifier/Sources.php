@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -15,7 +16,6 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 
 /**
  * Product form modifier. Add to form source data
@@ -89,29 +89,27 @@ class Sources extends AbstractModifier
                 SourceInterface::NAME => $row['source_name'],
             ];
         }
-
         return $sourceItemsData;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
         $product = $this->locator->getProduct();
 
-        if ($product->getTypeId() === GroupedProductType::TYPE_CODE) {
+        if ($product->getTypeId() !== Type::TYPE_SIMPLE) {
             $meta['sources'] = [
                 'arguments' => [
                     'data' => [
                         'config' => [
-                            'visible' => 0
-                        ]
-                    ]
-                ]
+                            'visible' => 0,
+                        ],
+                    ],
+                ],
             ];
         }
-
         return $meta;
     }
 }
