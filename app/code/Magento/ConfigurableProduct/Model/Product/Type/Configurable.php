@@ -10,11 +10,11 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
  * Configurable product type implementation
@@ -267,7 +267,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $productRepository,
             $serializer
         );
-
     }
 
     /**
@@ -1277,6 +1276,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Load collection on sub-products for specified configurable product
      *
      * Load collection of sub-products, apply result to specified configurable product and store result to cache
+     * Please note $salableOnly parameter is used for backwards compatibility because of deprecated method
+     * getSalableUsedProducts
      * Number of loaded sub-products depends on $salableOnly parameter
      * $salableOnly = true - result array contains only salable sub-products
      * $salableOnly = false - result array contains all sub-products
@@ -1293,7 +1294,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($dataFieldName)) {
             $usedProducts = $this->readUsedProductsCacheData($cacheKey);
             if ($usedProducts === null) {
-                $collection = $this->getConfiguredUsedProductCollection($product);
+                $collection = $this->getConfiguredUsedProductCollection($product, false);
                 if ($salableOnly) {
                     $collection = $this->salableProcessor->process($collection);
                 }
@@ -1387,13 +1388,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve related products collection with additional configuration
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @param bool $skipStockFilter
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      */
-    private function getConfiguredUsedProductCollection(\Magento\Catalog\Model\Product $product)
-    {
+    private function getConfiguredUsedProductCollection(
+        \Magento\Catalog\Model\Product $product,
+        $skipStockFilter = true
+    ) {
         $collection = $this->getUsedProductCollection($product);
+        if ($skipStockFilter) {
+            $collection->setFlag('has_stock_status_filter', true);
+        }
         $collection
-            ->setFlag('has_stock_status_filter', true)
             ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
