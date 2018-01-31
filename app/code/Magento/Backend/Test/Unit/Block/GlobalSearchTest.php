@@ -35,6 +35,26 @@ class GlobalSearchTest extends \PHPUnit\Framework\TestCase
      */
     private $searchEntityFactory;
 
+    /**
+     * @var array
+     */
+    private $entityResources = [
+        'Products' => \Magento\Catalog\Controller\Adminhtml\Product::ADMIN_RESOURCE,
+        'Orders' => \Magento\Sales\Controller\Adminhtml\Order::ADMIN_RESOURCE,
+        'Customers' => \Magento\Customer\Controller\Adminhtml\Index::ADMIN_RESOURCE,
+        'Pages' => \Magento\Cms\Controller\Adminhtml\Page\Index::ADMIN_RESOURCE,
+    ];
+
+    /**
+     * @var array
+     */
+    private $entityPaths = [
+        'Products' => 'catalog/product/index/',
+        'Orders' => 'sales/order/index/',
+        'Customers' => 'customer/index/index',
+        'Pages' => 'cms/page/index/',
+    ];
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -53,6 +73,8 @@ class GlobalSearchTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $context,
                 'searchEntityFactory' => $this->searchEntityFactory,
+                'entityResources' => $this->entityResources,
+                'entityPaths' => $this->entityPaths,
             ]
         );
     }

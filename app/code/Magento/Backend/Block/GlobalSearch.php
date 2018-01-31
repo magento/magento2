@@ -16,23 +16,6 @@ use Magento\Framework\App\ObjectManager;
  */
 class GlobalSearch extends \Magento\Backend\Block\Template
 {
-    const ENTITY_TYPE_PRODUCTS = 'Products';
-    const ENTITY_TYPE_ORDERS = 'Orders';
-    const ENTITY_TYPE_CUSTOMERS = 'Customers';
-    const ENTITY_TYPE_PAGES = 'Pages';
-
-    /**
-     * Affiliation between entity types for global search and corresponding admin resources.
-     *
-     * @var array
-     */
-    private $entityTypes = [
-        self::ENTITY_TYPE_PRODUCTS => \Magento\Catalog\Controller\Adminhtml\Product::ADMIN_RESOURCE,
-        self::ENTITY_TYPE_ORDERS => \Magento\Sales\Controller\Adminhtml\Order::ADMIN_RESOURCE,
-        self::ENTITY_TYPE_CUSTOMERS => \Magento\Customer\Controller\Adminhtml\Index::ADMIN_RESOURCE,
-        self::ENTITY_TYPE_PAGES => \Magento\Cms\Controller\Adminhtml\Page\Index::ADMIN_RESOURCE,
-    ];
-
     /**
      * @var SearchEntityFactory
      */
@@ -44,18 +27,33 @@ class GlobalSearch extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::system/search.phtml';
 
     /**
+     * @var array
+     */
+    private $entityResources;
+
+    /**
+     * @var array
+     */
+    private $entityPaths;
+
+    /**
      * @param Template\Context $context
      * @param array $data
+     * @param array $entityResources
+     * @param array $entityPaths
      * @param SearchEntityFactory|null $searchEntityFactory
      */
     public function __construct(
         Template\Context $context,
         array $data = [],
+        array $entityResources = [],
+        array $entityPaths = [],
         SearchEntityFactory $searchEntityFactory = null
     ) {
-        $this->searchEntityFactory = $searchEntityFactory ?: ObjectManager::getInstance()->get(
-            SearchEntityFactory::class
-        );
+        $this->entityResources = $entityResources;
+        $this->entityPaths = $entityPaths;
+        $this->searchEntityFactory = $searchEntityFactory ?: ObjectManager::getInstance()
+            ->get(SearchEntityFactory::class);
 
         parent::__construct($context, $data);
     }
@@ -89,7 +87,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
         $allowedEntityTypes = [];
         $entitiesToShow = [];
 
-        foreach ($this->entityTypes as $entityType => $resource) {
+        foreach ($this->entityResources as $entityType => $resource) {
             if ($this->getAuthorization()->isAllowed($resource)) {
                 $allowedEntityTypes[] = $entityType;
             }
@@ -118,22 +116,7 @@ class GlobalSearch extends \Magento\Backend\Block\Template
      */
     private function getUrlEntityType(string $entityType)
     {
-        $urlPath = '';
-
-        switch ($entityType) {
-            case self::ENTITY_TYPE_PRODUCTS:
-                $urlPath = 'catalog/product/index/';
-                break;
-            case self::ENTITY_TYPE_ORDERS:
-                $urlPath = 'sales/order/index/';
-                break;
-            case self::ENTITY_TYPE_CUSTOMERS:
-                $urlPath = 'customer/index/index/';
-                break;
-            case self::ENTITY_TYPE_PAGES:
-                $urlPath = 'cms/page/index/';
-                break;
-        }
+        $urlPath = $this->entityPaths[$entityType] ?? '';
 
         return $this->getUrl($urlPath);
     }
