@@ -16,6 +16,19 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 class ConfigurableOptions implements FormatterInterface
 {
     /**
+     * @var Configurable
+     */
+    private $configurableData;
+
+    /**
+     * @param Configurable $configurableData
+     */
+    public function __construct(Configurable $configurableData)
+    {
+        $this->configurableData = $configurableData;
+    }
+
+    /**
      * Add configurable links and options to configurable types
      *
      * {@inheritdoc}
@@ -26,6 +39,11 @@ class ConfigurableOptions implements FormatterInterface
             $extensionAttributes = $product->getExtensionAttributes();
             $productData['configurable_product_options'] = $extensionAttributes->getConfigurableProductOptions();
             $productData['configurable_product_links'] = $extensionAttributes->getConfigurableProductLinks();
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
+            foreach ($productData['configurable_product_options'] as $optionKey => $option) {
+                $productData['configurable_product_options'][$optionKey]['attribute_code']
+                    = $option->getProductAttribute()->getAttributeCode();
+            }
         }
 
         return $productData;

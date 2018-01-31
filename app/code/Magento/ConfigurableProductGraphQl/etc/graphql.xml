@@ -13,6 +13,7 @@
     <type xsi:type="OutputType" name="ConfigurableProductOptions">
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="attribute_id" type="String"/>
+        <field xsi:type="ScalarOutputField" name="attribute_code" type="String"/>
         <field xsi:type="ScalarOutputField" name="label" type="String"/>
         <field xsi:type="ScalarOutputField" name="position" type="Int"/>
         <field xsi:type="ScalarOutputField" name="is_use_default" type="Boolean"/>
