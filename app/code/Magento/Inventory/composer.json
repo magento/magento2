@@ -9,6 +9,7 @@
         "magento/module-directory": "100.3.*",
         "magento/module-shipping": "100.3.*",
         "magento/module-catalog-inventory": "100.3.*",
+        "magento/module-catalog": "101.2.*",
         "magento/module-ui": "100.3.*"
     },
     "type": "magento2-module",
