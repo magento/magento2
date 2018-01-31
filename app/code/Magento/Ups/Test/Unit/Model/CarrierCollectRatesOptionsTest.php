@@ -274,10 +274,9 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
         if (isset($pathMap[$path])) {
             if ($pathMap[$path]) {
                  return(true);
-            } else {
-                 return(false);
-            }
+            } 
         }
+        return(false);
     }
     
     /**
