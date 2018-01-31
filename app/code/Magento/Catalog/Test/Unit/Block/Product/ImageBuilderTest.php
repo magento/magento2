@@ -29,24 +29,16 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->helperFactory = $this->getMockBuilder(\Magento\Catalog\Helper\ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->helperFactory = $this->createPartialMock(\Magento\Catalog\Helper\ImageFactory::class, ['create']);
 
-        $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->imageFactory = $this->createPartialMock(ImageFactory::class, ['create']);
 
         $this->model = new ImageBuilder($this->helperFactory, $this->imageFactory);
     }
 
     public function testSetProduct()
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $this->assertInstanceOf(
             ImageBuilder::class,
@@ -83,13 +75,9 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $imageId = 'test_image_id';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
-        $helperMock = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createMock(Image::class);
         $helperMock->expects($this->once())
             ->method('init')
             ->with($productMock, $imageId)
@@ -118,9 +106,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($helperMock);
 
-        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $imageMock = $this->createMock(\Magento\Catalog\Block\Product\Image::class);
 
         $this->imageFactory->expects($this->once())
             ->method('create')
@@ -144,13 +130,9 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
 
         $imageId = 'test_image_id';
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
-        $helperMock = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createMock(Image::class);
         $helperMock->expects($this->exactly(2))
             ->method('init')
             ->with($productMock, $imageId)
@@ -188,9 +170,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($helperMock);
 
-        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $imageMock = $this->createMock(\Magento\Catalog\Block\Product\Image::class);
 
         $this->imageFactory->expects($this->at(0))
             ->method('create')
