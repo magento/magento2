@@ -80,7 +80,6 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testFromDefinitionSigned()
     {
         $data = [
