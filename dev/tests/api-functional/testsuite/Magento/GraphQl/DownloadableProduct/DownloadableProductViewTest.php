@@ -106,7 +106,7 @@ QUERY;
     }
 
     /**
-     * @param ProductInterface $product $
+     * @param ProductInterface $product
      * @param  array $actualResponse
      */
     private function assertDownloadableProductLinks($product, $actualResponse)
@@ -154,7 +154,6 @@ QUERY;
             [
                 'title' => $downloadableProductSample->getTitle(),
                 'sort_order' =>$downloadableProductSample->getSortOrder(),
-               // 'sample_url' => $downloadableProductSample->getSampleUrl(),
                 'sample_type' => strtoupper($downloadableProductSample->getSampleType()),
                 'sample_file' => $downloadableProductSample->getSampleFile()
             ]

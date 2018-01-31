@@ -32,7 +32,7 @@ class ProductLinks implements FormatterInterface
                 if ($productLink->getLinkType() === self::LINK_TYPE) {
                     $data['product'] = $productLink->getData();
                     $data['qty'] = $productLink->getExtensionAttributes()->getQty();
-                    $data['position'] = $productLink->getPosition();
+                    $data['position'] = (int)$productLink->getPosition();
                     $productData['items'][$productLinkKey] = $data;
                 }
             }

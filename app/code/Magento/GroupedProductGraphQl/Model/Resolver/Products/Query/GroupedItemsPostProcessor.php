@@ -103,7 +103,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
                     ) {
                         continue;
                     }
-                    $resultData[$key]['items'][$linkKey] = ['product' => $childData, 'qty' => $link['qty']];
+                    $resultData[$key]['items'][$linkKey]['product'] = $childData;
                     $categoryLinks = $this->productResource->getCategoryIds($child);
                     foreach ($categoryLinks as $position => $catLink) {
                         $resultData[$key]['items'][$linkKey]['product']['category_links'][] =
