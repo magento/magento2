@@ -11,9 +11,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLinkFactory;
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetSourceLinksInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 
 /**
  * At the time of processing Stock save form this class used to save links correctly
@@ -32,39 +33,39 @@ class StockSourceLinkProcessor
     private $stockSourceLinkFactory;
 
     /**
-     * @var GetAssignedSourcesForStockInterface
+     * @var StockSourceLinksSaveInterface
      */
-    private $getAssignedSourcesForStock;
+    private $stockSourceLinksSave;
 
     /**
-     * @var AssignSourcesToStockInterface
+     * @var StockSourceLinksDeleteInterface
      */
-    private $assignSourcesToStock;
+    private $stockSourceLinksDelete;
 
     /**
-     * @var UnassignSourceFromStockInterface
+     * @var GetSourceLinksInterface
      */
-    private $unassignSourceFromStock;
+    private $getSourceLinks;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StockSourceLinkFactory $stockSourceLinkFactory
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
-     * @param AssignSourcesToStockInterface $assignSourcesToStock
-     * @param UnassignSourceFromStockInterface $unassignSourceFromStock
+     * @param StockSourceLinksSaveInterface $stockSourceLinksSave
+     * @param StockSourceLinksDeleteInterface $stockSourceLinksDelete
+     * @param GetSourceLinksInterface $getSourceLinks
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StockSourceLinkFactory $stockSourceLinkFactory,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
-        AssignSourcesToStockInterface $assignSourcesToStock,
-        UnassignSourceFromStockInterface $unassignSourceFromStock
+        StockSourceLinksSaveInterface $stockSourceLinksSave,
+        StockSourceLinksDeleteInterface $stockSourceLinksDelete,
+        GetSourceLinksInterface $getSourceLinks
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
-        $this->assignSourcesToStock = $assignSourcesToStock;
-        $this->unassignSourceFromStock = $unassignSourceFromStock;
+        $this->stockSourceLinksSave = $stockSourceLinksSave;
+        $this->stockSourceLinksDelete = $stockSourceLinksDelete;
+        $this->getSourceLinks = $getSourceLinks;
     }
 
     /**
@@ -77,25 +78,40 @@ class StockSourceLinkProcessor
     {
         $this->validateStockSourceData($stockSourceLinksData);
 
-        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
-        $sourceCodesForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE));
-        $sourceCodesForDelete = [];
+        $assignedLinks = $this->getAssignedLinks($stockId);
+        $sourceCodesToSave = $this->getSourceCodes($stockSourceLinksData);
 
-        foreach ($assignedSources as $assignedSource) {
-            if (array_key_exists($assignedSource->getSourceCode(), $sourceCodesForSave)) {
-                unset($sourceCodesForSave[$assignedSource->getSourceCode()]);
-            } else {
-                $sourceCodesForDelete[] = $assignedSource->getSourceCode();
+        $linksToDelete = [];
+        $assignedSourceCodes = [];
+
+        foreach ($assignedLinks as $assignedLink) {
+            $assignedSourceCodes[] = $assignedLink->getSourceCode();
+            if (in_array($assignedLink->getSourceCode(), $sourceCodesToSave)) {
+                continue;
             }
+            $linksToDelete[] = $assignedLink;
         }
 
-        if ($sourceCodesForSave) {
-            $this->assignSourcesToStock->execute(array_keys($sourceCodesForSave), $stockId);
+        if (count($linksToDelete) > 0) {
+            $this->stockSourceLinksDelete->execute($linksToDelete);
         }
-        if ($sourceCodesForDelete) {
-            foreach ($sourceCodesForDelete as $sourceCodeForDelete) {
-                $this->unassignSourceFromStock->execute($sourceCodeForDelete, $stockId);
+
+        $linksToSave = [];
+
+        foreach ($sourceCodesToSave as $sourceCodeToSave) {
+            if (in_array($sourceCodeToSave, $assignedSourceCodes)) {
+                continue;
             }
+            $linksToSave[] = $this->stockSourceLinkFactory->create([
+                'data' => [
+                    'source_code' => $sourceCodeToSave,
+                    'stock_id' => $stockId,
+                ]
+            ]);
+        }
+
+        if (count($linksToSave) > 0) {
+            $this->stockSourceLinksSave->execute($linksToSave);
         }
     }
 
@@ -111,5 +127,32 @@ class StockSourceLinkProcessor
                 throw new InputException(__('Wrong Stock to Source relation parameters given.'));
             }
         }
+    }
+
+    /**
+     * Retrieves links that are assigned to $stockId
+     *
+     * @param int $stockId
+     * @return StockSourceLinkInterface[]
+     */
+    private function getAssignedLinks(int $stockId):array
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->create();
+
+        $searchResult = $this->getSourceLinks->execute($searchCriteria);
+
+        return $searchResult->getItems();
+    }
+
+    /**
+     * @param array $stockSourceLinksData
+     *
+     * @return array
+     */
+    private function getSourceCodes($stockSourceLinksData)
+    {
+        return array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE);
     }
 }

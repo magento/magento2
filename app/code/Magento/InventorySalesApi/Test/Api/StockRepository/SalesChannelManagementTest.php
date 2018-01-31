@@ -19,12 +19,12 @@ class SalesChannelManagementTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock';
-    const SERVICE_NAME = 'inventorySalesApiStockRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiStockRepositoryV1';
     /**#@-*/
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      */
     public function testCreateStockWithSalesChannels()
     {
@@ -57,7 +57,7 @@ class SalesChannelManagementTest extends WebapiAbstract
 
     /**
      * @param array $salesChannels
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      * @dataProvider updateStockWithSalesChannelsReplacingDataProvider
      */

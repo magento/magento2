@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
+use Magento\InventoryApi\Api\GetSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,11 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
 {
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
     /**
      * @var SearchCriteriaBuilder
      */
@@ -39,25 +32,30 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     private $sourceRepository;
 
     /**
+     * @var GetSourceLinksInterface
+     */
+    private $getSourceLinks;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param ResourceConnection $resourceConnection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
+     * @param GetSourceLinksInterface $getSourceLinks
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
+        GetSourceLinksInterface $getSourceLinks,
         LoggerInterface $logger
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
+        $this->getSourceLinks = $getSourceLinks;
         $this->logger = $logger;
     }
 
@@ -72,7 +70,9 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter(SourceInterface::SOURCE_CODE, $sourceCodes, 'in')
                 ->create();
+
             $searchResult = $this->sourceRepository->getList($searchCriteria);
+
             return $searchResult->getItems();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -88,14 +88,19 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      */
     private function getAssignedSourceCodes(int $stockId): array
     {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection
-            ->select()
-            ->from(
-                $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
-                [StockSourceLink::SOURCE_CODE]
-            )
-            ->where(StockSourceLink::STOCK_ID . ' = ?', $stockId);
-        return $connection->fetchCol($select);
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->create();
+        $searchResult = $this->getSourceLinks->execute($searchCriteria);
+        $links = $searchResult->getItems();
+        if (!$links) {
+            return [];
+        }
+        $sourceCodes = [];
+        foreach ($links as $link) {
+            $sourceCodes[] = $link->getSourceCode();
+        }
+
+        return $sourceCodes;
     }
 }

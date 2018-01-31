@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\MultiDimensionalIndexer\Alias;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 use Magento\Inventory\Model\GetStockItemQuantityInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
@@ -25,28 +22,20 @@ class GetStockItemQuantity implements GetStockItemQuantityInterface
     private $resource;
 
     /**
-     * @var IndexNameBuilder
+     * @var StockIndexTableNameResolverInterface
      */
-    private $indexNameBuilder;
-
-    /**
-     * @var IndexNameResolverInterface
-     */
-    private $indexNameResolver;
+    private $stockIndexTableNameResolver;
 
     /**
      * @param ResourceConnection $resource
-     * @param IndexNameBuilder $indexNameBuilder
-     * @param IndexNameResolverInterface $indexNameResolver
+     * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      */
     public function __construct(
         ResourceConnection $resource,
-        IndexNameBuilder $indexNameBuilder,
-        IndexNameResolverInterface $indexNameResolver
+        StockIndexTableNameResolverInterface $stockIndexTableNameResolver
     ) {
         $this->resource = $resource;
-        $this->indexNameBuilder = $indexNameBuilder;
-        $this->indexNameResolver = $indexNameResolver;
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
     }
 
     /**
@@ -54,12 +43,7 @@ class GetStockItemQuantity implements GetStockItemQuantityInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        $indexName = $this->indexNameBuilder
-            ->setIndexId('inventory_stock')
-            ->addDimension('stock_', (string)$stockId)
-            ->setAlias(Alias::ALIAS_MAIN)
-            ->build();
-        $stockItemTableName = $this->indexNameResolver->resolveName($indexName);
+        $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
 
         $connection = $this->resource->getConnection();
         $select = $connection->select()
