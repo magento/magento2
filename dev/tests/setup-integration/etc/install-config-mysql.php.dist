@@ -6,10 +6,10 @@
 
 return [
     'default' => [
-        'db-host' => 'localhost',
-        'db-user' => 'root',
-        'db-password' => '',
-        'db-name' => 'magento_setup_integration_tests',
+        'db-host' => '{{db_host}}',
+        'db-user' => '{{db_user}}',
+        'db-password' => '{{db_password}}',
+        'db-name' => '{{db_name}}',
         'db-prefix' => '',
         'backend-frontname' => 'admin',
         'admin-user' => 'admin',
@@ -21,15 +21,15 @@ return [
         'disable_modules' => 'all'
     ],
     'checkout' => [
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'checkout'
+        'host' => '{{db_host}}',
+        'username' => '{{db_user}}',
+        'password' => '{{db_password}}',
+        'dbname' => '{{db_checkout}}'
     ],
     'sales' => [
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'dbname' => 'sales'
+        'host' => '{{db_host}}',
+        'username' => '{{db_user}}',
+        'password' => '{{db_password}}',
+        'dbname' => '{{db_sales}}'
     ]
 ];
