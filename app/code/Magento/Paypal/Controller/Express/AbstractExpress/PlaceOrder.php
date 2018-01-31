@@ -90,7 +90,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             // an order may be created
             $order = $this->_checkout->getOrder();
             if ($order) {
-                $this->_getCheckoutSession()->setLastOrderId($order->getId())
+                $this->_getCheckoutSession()
+                    ->setLastOrderId($order->getId())
+                    ->setLastOrderIds([$order->getId() => $order->getIncrementId()])
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
             }
