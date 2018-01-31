@@ -91,7 +91,7 @@ class CliCommand
     public function disableModule($moduleName)
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable Magento_'. $moduleName
+        $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable '. $moduleName
             . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
         return $this->shell->execute($disableModuleCommand);
     }
