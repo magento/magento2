@@ -55,7 +55,8 @@ define([
                     }
                 });
 
-                var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
+                var searchButtonId = 'add_products',
+                    searchButton = new ControlButton(jQuery.mage.__('Add Products'), searchButtonId),
                     searchAreaId = this.getAreaId('search');
                 searchButton.onClick = function() {
                     $(searchAreaId).show();
@@ -74,7 +75,7 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });
@@ -1394,12 +1395,15 @@ define([
         _label: '',
         _node: null,
 
-        initialize: function(label){
+        initialize: function(label, id){
             this._label = label;
             this._node = new Element('button', {
                 'class': 'action-secondary action-add',
                 'type':  'button'
             });
+            if (typeof id !== 'undefined') {
+                this._node.setAttribute('id', id)
+            }
         },
 
         onClick: function(){
