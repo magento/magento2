@@ -164,10 +164,20 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls($firstCall['data']['url'], $secondCall['data']['url']);
         $helperMock->expects($this->exactly(4))
             ->method('getWidth')
-            ->willReturnOnConsecutiveCalls($firstCall['data']['width'], $firstCall['data']['width'], $secondCall['data']['width'], $secondCall['data']['width']);
+            ->willReturnOnConsecutiveCalls(
+                $firstCall['data']['width'],
+                $firstCall['data']['width'],
+                $secondCall['data']['width'],
+                $secondCall['data']['width']
+            );
         $helperMock->expects($this->exactly(4))
             ->method('getHeight')
-            ->willReturnOnConsecutiveCalls($firstCall['data']['height'], $firstCall['data']['height'], $secondCall['data']['height'], $secondCall['data']['height']);
+            ->willReturnOnConsecutiveCalls(
+                $firstCall['data']['height'],
+                $firstCall['data']['height'],
+                $secondCall['data']['height'],
+                $secondCall['data']['height']
+            );
         $helperMock->expects($this->exactly(2))
             ->method('getLabel')
             ->willReturnOnConsecutiveCalls($firstCall['data']['label'], $secondCall['data']['label']);
