@@ -141,7 +141,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test return action with configurable product.
      *
-     * @magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
+     * Skipped due to MAGETWO-87333
+     * #@magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
      */
     public function testReturnAction()
     {
