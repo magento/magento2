@@ -665,7 +665,7 @@ QUERY;
             $expectedAttribute = $product->getCustomAttribute($attributeCode);
 
             $assertionMap[] = [
-                'response_field' => $this->eavAttributesToGrahQlSchemaFieldTranslator($attributeCode),
+                'response_field' => $this->eavAttributesToGraphQlSchemaFieldTranslator($attributeCode),
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
             ];
         }
@@ -677,7 +677,7 @@ QUERY;
      * @param string $eavAttributeCode
      * @return string
      */
-    private function eavAttributesToGrahQlSchemaFieldTranslator(string $eavAttributeCode)
+    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode)
     {
         switch ($eavAttributeCode) {
             case 'news_from_date':
