@@ -20,6 +20,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Import entity product model
@@ -830,12 +831,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
-        $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(CatalogConfig::class);
-        $this->imageTypeProcessor = $imageTypeProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(ImageTypeProcessor::class);
-        $this->mediaProcessor = $mediaProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(MediaGalleryProcessor::class);
+        $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
+        $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
+        $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
 
         parent::__construct(
             $jsonHelper,
