@@ -11,6 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * @codeCoverageIgnore
@@ -246,7 +247,7 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('store_website'),
             [
                 'website_id' => 0,
-                'code' => 'admin',
+                'code' => WebsiteInterface::ADMIN_CODE,
                 'name' => 'Admin',
                 'sort_order' => 0,
                 'default_group_id' => 0,

@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
+use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -700,6 +701,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
+     * Stock Item Importer
+     *
+     * @var StockItemImporterInterface $stockItemImporter
+     */
+    private $stockItemImporter;
+
+    /**
      * @var ImageTypeProcessor
      */
     private $imageTypeProcessor;
@@ -743,6 +751,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
+     * @param StockItemImporterInterface $stockItemImporter
      * @param ImageTypeProcessor $imageTypeProcessor
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -788,7 +797,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $data = [],
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null,
-        ImageTypeProcessor $imageTypeProcessor = null
+        ImageTypeProcessor $imageTypeProcessor = null,
+        StockItemImporterInterface $stockItemImporter = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -821,6 +831,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CatalogConfig::class);
+        $this->stockItemImporter = $stockItemImporter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StockItemImporterInterface::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ImageTypeProcessor::class);
 
@@ -2284,6 +2296,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // Insert rows
             if (!empty($stockData)) {
                 $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
+                $this->stockItemImporter->import($bunch);
             }
 
             $this->reindexProducts($productIdsToReindex);

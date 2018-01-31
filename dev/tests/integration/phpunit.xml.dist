@@ -21,7 +21,11 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Integration</directory>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
+        </testsuite>
+        <testsuite name="msi">
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Integration</directory>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->

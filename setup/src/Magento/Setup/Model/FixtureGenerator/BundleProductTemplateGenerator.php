@@ -82,6 +82,7 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
         $bundleOptions = $this->fixture['_bundle_options'];
         $bundleProductsPerOption = $this->fixture['_bundle_products_per_option'];
         $bundleVariationSkuPattern = $this->fixture['_bundle_variation_sku_pattern'];
+        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
         $productRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
         $bundleProduct = $this->productFactory->create([
             'data' => [
@@ -89,7 +90,7 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
                 'type_id' => Type::TYPE_BUNDLE,
                 'name' => 'template name' . $productRandomizerNumber,
                 'url_key' => 'template-url' . $productRandomizerNumber,
-                'sku' => 'template_sku' . $productRandomizerNumber,
+                'sku' => 'template_sku_bundle' . $productRandomizerNumber,
                 'price' => 10,
                 'visibility' => Visibility::VISIBILITY_BOTH,
                 'status' => Status::STATUS_ENABLED,
