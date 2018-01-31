@@ -197,58 +197,30 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public function createDataProvider(): array
+    {
+        return [
+            $this->getTestDataWithoutAttributes(),
+            $this->getTestDataWithAttributes(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function createMultipleCallsDataProvider(): array
     {
         return [
             [
-                'data' => [
-                    'frame' => 0,
-                    'url' => 'test_url_1',
-                    'width' => 100,
-                    'height' => 100,
-                    'label' => 'test_label',
-                    'custom_attributes' => [],
-                    'imagesize' => [100, 100],
-                ],
-                'expected' => [
-                    'data' => [
-                        'template' => 'Magento_Catalog::product/image_with_borders.phtml',
-                        'image_url' => 'test_url_1',
-                        'width' => 100,
-                        'height' => 100,
-                        'label' => 'test_label',
-                        'ratio' => 1,
-                        'custom_attributes' => '',
-                        'resized_image_width' => 100,
-                        'resized_image_height' => 100,
-                    ],
+                [
+                    'without_attributes' => $this->getTestDataWithoutAttributes(),
+                    'with_attributes' => $this->getTestDataWithAttributes(),
                 ],
             ],
             [
-                'data' => [
-                    'frame' => 1,
-                    'url' => 'test_url_2',
-                    'width' => 100,
-                    'height' => 50,
-                    'label' => 'test_label_2',
-                    'custom_attributes' => [
-                        'name_1' => 'value_1',
-                        'name_2' => 'value_2',
-                    ],
-                    'imagesize' => [120, 70],
-                ],
-                'expected' => [
-                    'data' => [
-                        'template' => 'Magento_Catalog::product/image.phtml',
-                        'image_url' => 'test_url_2',
-                        'width' => 100,
-                        'height' => 50,
-                        'label' => 'test_label_2',
-                        'ratio' => 0.5,
-                        'custom_attributes' => 'name_1="value_1" name_2="value_2"',
-                        'resized_image_width' => 120,
-                        'resized_image_height' => 70,
-                    ],
+                [
+                    'with_attributes' => $this->getTestDataWithAttributes(),
+                    'without_attributes' => $this->getTestDataWithoutAttributes(),
                 ],
             ],
         ];
@@ -257,117 +229,63 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function createMultipleCallsDataProvider()
+    private function getTestDataWithoutAttributes(): array
     {
         return [
-            [
-                [
-                    'without_attributes' => [
-                        'data' => [
-                            'frame' => 0,
-                            'url' => 'test_url_1',
-                            'width' => 100,
-                            'height' => 100,
-                            'label' => 'test_label',
-                            'custom_attributes' => [],
-                            'imagesize' => [100, 100],
-                        ],
-                        'expected' => [
-                            'data' => [
-                                'template' => 'Magento_Catalog::product/image_with_borders.phtml',
-                                'image_url' => 'test_url_1',
-                                'width' => 100,
-                                'height' => 100,
-                                'label' => 'test_label',
-                                'ratio' => 1,
-                                'custom_attributes' => '',
-                                'resized_image_width' => 100,
-                                'resized_image_height' => 100,
-                            ],
-                        ],
-                    ],
-                    'with_attributes' => [
-                        'data' => [
-                            'frame' => 1,
-                            'url' => 'test_url_2',
-                            'width' => 100,
-                            'height' => 50,
-                            'label' => 'test_label_2',
-                            'custom_attributes' => [
-                                'name_1' => 'value_1',
-                                'name_2' => 'value_2',
-                            ],
-                            'imagesize' => [120, 70],
-                        ],
-                        'expected' => [
-                            'data' => [
-                                'template' => 'Magento_Catalog::product/image.phtml',
-                                'image_url' => 'test_url_2',
-                                'width' => 100,
-                                'height' => 50,
-                                'label' => 'test_label_2',
-                                'ratio' => 0.5,
-                                'custom_attributes' => 'name_1="value_1" name_2="value_2"',
-                                'resized_image_width' => 120,
-                                'resized_image_height' => 70,
-                            ],
-                        ],
-                    ],
+            'data' => [
+                'frame' => 0,
+                'url' => 'test_url_1',
+                'width' => 100,
+                'height' => 100,
+                'label' => 'test_label',
+                'custom_attributes' => [],
+                'imagesize' => [100, 100],
+            ],
+            'expected' => [
+                'data' => [
+                    'template' => 'Magento_Catalog::product/image_with_borders.phtml',
+                    'image_url' => 'test_url_1',
+                    'width' => 100,
+                    'height' => 100,
+                    'label' => 'test_label',
+                    'ratio' => 1,
+                    'custom_attributes' => '',
+                    'resized_image_width' => 100,
+                    'resized_image_height' => 100,
                 ],
             ],
-            [
-                [
-                    'with_attributes' => [
-                        'data' => [
-                            'frame' => 1,
-                            'url' => 'test_url_2',
-                            'width' => 100,
-                            'height' => 50,
-                            'label' => 'test_label_2',
-                            'custom_attributes' => [
-                                'name_1' => 'value_1',
-                                'name_2' => 'value_2',
-                            ],
-                            'imagesize' => [120, 70],
-                        ],
-                        'expected' => [
-                            'data' => [
-                                'template' => 'Magento_Catalog::product/image.phtml',
-                                'image_url' => 'test_url_2',
-                                'width' => 100,
-                                'height' => 50,
-                                'label' => 'test_label_2',
-                                'ratio' => 0.5,
-                                'custom_attributes' => 'name_1="value_1" name_2="value_2"',
-                                'resized_image_width' => 120,
-                                'resized_image_height' => 70,
-                            ],
-                        ],
-                    ],
-                    'without_attributes' => [
-                        'data' => [
-                            'frame' => 0,
-                            'url' => 'test_url_1',
-                            'width' => 100,
-                            'height' => 100,
-                            'label' => 'test_label',
-                            'custom_attributes' => [],
-                            'imagesize' => [100, 100],
-                        ],
-                        'expected' => [
-                            'data' => [
-                                'template' => 'Magento_Catalog::product/image_with_borders.phtml',
-                                'image_url' => 'test_url_1',
-                                'width' => 100,
-                                'height' => 100,
-                                'label' => 'test_label',
-                                'ratio' => 1,
-                                'custom_attributes' => '',
-                                'resized_image_width' => 100,
-                                'resized_image_height' => 100,
-                            ],
-                        ],
-                    ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getTestDataWithAttributes(): array
+    {
+        return [
+            'data' => [
+                'frame' => 1,
+                'url' => 'test_url_2',
+                'width' => 100,
+                'height' => 50,
+                'label' => 'test_label_2',
+                'custom_attributes' => [
+                    'name_1' => 'value_1',
+                    'name_2' => 'value_2',
+                ],
+                'imagesize' => [120, 70],
+            ],
+            'expected' => [
+                'data' => [
+                    'template' => 'Magento_Catalog::product/image.phtml',
+                    'image_url' => 'test_url_2',
+                    'width' => 100,
+                    'height' => 50,
+                    'label' => 'test_label_2',
+                    'ratio' => 0.5,
+                    'custom_attributes' => 'name_1="value_1" name_2="value_2"',
+                    'resized_image_width' => 120,
+                    'resized_image_height' => 70,
                 ],
             ],
         ];
