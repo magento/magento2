@@ -145,6 +145,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testReturnAction()
     {
+        $this->markTestSkipped('MAGETWO-87333');
         $quote = $this->_objectManager->create(Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
 
