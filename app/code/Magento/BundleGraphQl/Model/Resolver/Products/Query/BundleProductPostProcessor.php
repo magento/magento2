@@ -126,13 +126,23 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      */
     private function formatBundleAttributes(array $product)
     {
-        $product['price_view']
-            = $this->enumLookup->getEnumValueFromField('PriceViewEnum', $product['price_view']);
-        $product['ship_bundle_items']
-            = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
-        $product['dynamic_price'] = !(bool)$product['price_type'];
-        $product['dynamic_sku'] = !(bool)$product['sku_type'];
-        $product['dynamic_weight'] = !(bool)$product['weight_type'];
+        if (isset($product['price_view'])) {
+            $product['price_view']
+                = $this->enumLookup->getEnumValueFromField('PriceViewEnum', $product['price_view']);
+        }
+        if (isset($product['shipment_type'])) {
+            $product['ship_bundle_items']
+                = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
+        }
+        if (isset($product['price_view'])) {
+            $product['dynamic_price'] = !(bool)$product['price_type'];
+        }
+        if (isset($product['sku_type'])) {
+            $product['dynamic_sku'] = !(bool)$product['sku_type'];
+        }
+        if (isset($product['weight_type'])) {
+            $product['dynamic_weight'] = !(bool)$product['weight_type'];
+        }
         return $product;
     }
 
