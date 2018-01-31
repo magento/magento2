@@ -73,7 +73,6 @@ class SchemaPersistor
                 $tableData = $this->handleDefinition($tableData);
                 $table = $dom->addChild('table');
                 $table->addAttribute('name', $tableName);
-                /** @TODO: handle different resources for sales and checkout tables */
                 $table->addAttribute('resource', $tableData['resource']);
                 if (isset($tableData['engine']) && $tableData['engine'] !== null) {
                     $table->addAttribute('engine', $tableData['engine']);
