@@ -107,7 +107,6 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $this->model->createTable($this->getCreateTableDDL('index_table'));
         $this->model->dropIndex('index_table', 'INDEX_KEY', 'index');
         self::assertTrue($this->model->getTables()['First_Module']['index_table']['indexes']['INDEX_KEY']['disabled']);
-
     }
 
     public function testCreateTable()

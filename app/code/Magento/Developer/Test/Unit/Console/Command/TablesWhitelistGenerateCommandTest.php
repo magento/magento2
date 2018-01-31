@@ -340,7 +340,6 @@ class TablesWhitelistGenerateCommandTest extends \PHPUnit\Framework\TestCase
                     '/etc/db_schema_whitelist.json'
                 );
         }
-
         $commandTester->execute($options);
     }
 }
