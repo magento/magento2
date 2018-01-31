@@ -55,8 +55,8 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         );
         $dbSchema = $this->schemaConfig->getDeclarationConfig();
         $schemaTables = $dbSchema->getTables();
-        self::assertArrayHasKey('reference_table', $dbSchema->getTables());
-        self::assertArrayHasKey('test_table', $dbSchema->getTables());
+        $this->assertArrayHasKey('reference_table', $dbSchema->getTables());
+        $this->assertArrayHasKey('test_table', $dbSchema->getTables());
         //Test primary key and renaming
         $referenceTable = $schemaTables['reference_table'];
         /**
@@ -64,22 +64,22 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         */
         $primaryKey = $referenceTable->getPrimaryConstraint();
         $columns = $primaryKey->getColumns();
-        self::assertEquals('tinyint_ref', reset($columns)->getName());
+        $this->assertEquals('tinyint_ref', reset($columns)->getName());
         //Test column
         $testTable = $schemaTables['test_table'];
         /**
         * @var Timestamp $timestampColumn
         */
         $timestampColumn = $testTable->getColumnByName('timestamp');
-        self::assertEquals('CURRENT_TIMESTAMP', $timestampColumn->getOnUpdate());
+        $this->assertEquals('CURRENT_TIMESTAMP', $timestampColumn->getOnUpdate());
         //Test disabled
-        self::assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());
+        $this->assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());
         //Test foreign key
         /**
         * @var Reference $foreignKey
         */
         $foreignKey = $testTable->getConstraintByName('some_foreign_key');
-        self::assertEquals('NO ACTION', $foreignKey->getOnDelete());
-        self::assertEquals('tinyint_ref', $foreignKey->getReferenceColumn()->getName());
+        $this->assertEquals('NO ACTION', $foreignKey->getOnDelete());
+        $this->assertEquals('tinyint_ref', $foreignKey->getReferenceColumn()->getName());
     }
 }

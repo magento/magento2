@@ -11,7 +11,7 @@ use Magento\Framework\View\DesignExceptions;
 /**
  * Instance of Setup test case. Used in order to tweak dataProviders functionality.
  */
-class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataInterface
+class SetupTestCase extends \PHPUnit_Framework_TestCase implements MutableDataInterface
 {
     /**
      * @var array
