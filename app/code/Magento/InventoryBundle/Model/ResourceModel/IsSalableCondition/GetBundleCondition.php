@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryBundle\Model\ResourceModel\IsSalableCondition;
 
+use Magento\Framework\DB\Select;
 use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
 
 /**
@@ -17,8 +18,9 @@ class GetBundleCondition implements GetIsSalableConditionInterface
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(): string
+    public function execute(Select $select): string
     {
         $condition = '(product_entity.type_id = \'bundle\')';
 

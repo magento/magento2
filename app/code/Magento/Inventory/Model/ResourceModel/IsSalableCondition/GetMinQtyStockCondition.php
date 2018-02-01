@@ -9,6 +9,7 @@ namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -40,8 +41,9 @@ class GetMinQtyStockCondition implements GetIsSalableConditionInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(): string
+    public function execute(Select $select): string
     {
         $globalMinQty = (float)$this->configuration->getMinQty();
 

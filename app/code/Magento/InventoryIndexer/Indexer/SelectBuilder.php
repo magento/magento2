@@ -70,18 +70,12 @@ class SelectBuilder
         }
 
         $select = $connection->select();
-        $quantityExpression = (string)$select->getConnection()->getCheckSql(
-            'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
-            0,
-            SourceItemInterface::QUANTITY
-        );
-
         $select->from(
             ['source_item' => $sourceItemTable],
             [
                 SourceItemInterface::SKU,
-                SourceItemInterface::QUANTITY => 'SUM(' . $quantityExpression . ')',
-                IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute() ?: 1,
+                SourceItemInterface::QUANTITY => 'SUM(' . SourceItemInterface::QUANTITY . ')',
+                IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute($select),
             ]
         )->joinInner(
             ['stock_source_link' => $sourceStockLinkTable],

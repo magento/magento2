@@ -7,15 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 
+use Magento\Framework\DB\Select;
+
 /**
- * Responsible for build is_salable conditions.
+ * Responsible for building is_salable conditions.
  *
  * @api
  */
 interface GetIsSalableConditionInterface
 {
     /**
+     * @param Select $select
      * @return string
      */
-    public function execute(): string;
+    public function execute(Select $select): string;
 }

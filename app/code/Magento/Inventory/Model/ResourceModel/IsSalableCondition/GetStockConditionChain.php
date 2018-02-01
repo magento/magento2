@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -48,16 +49,17 @@ class GetStockConditionChain implements GetIsSalableConditionInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(): string
+    public function execute(Select $select): string
     {
         if (empty($this->getIsSalableConditions)) {
-            return '';
+            return '1';
         }
 
         $conditionStrings = [];
         foreach ($this->getIsSalableConditions as $getIsSalableCondition) {
-            $conditionStrings[] = $getIsSalableCondition->execute();
+            $conditionStrings[] = $getIsSalableCondition->execute($select);
         }
 
         $conditionString = (string)$this->resourceConnection->getConnection()->getCheckSql(
@@ -65,6 +67,6 @@ class GetStockConditionChain implements GetIsSalableConditionInterface
             1,
             0
         );
-        return 'MAX(' . $conditionString . ')';
+        return $conditionString;
     }
 }

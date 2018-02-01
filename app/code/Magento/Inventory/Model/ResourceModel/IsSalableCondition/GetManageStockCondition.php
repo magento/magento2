@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\DB\Select;
 
 /**
  * Condition for manage_stock configuration.
@@ -29,8 +30,9 @@ class GetManageStockCondition implements GetIsSalableConditionInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(): string
+    public function execute(Select $select): string
     {
         $globalManageStock = (int)$this->configuration->getManageStock();
 
