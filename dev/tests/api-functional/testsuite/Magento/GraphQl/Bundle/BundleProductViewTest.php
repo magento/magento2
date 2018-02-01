@@ -28,50 +28,48 @@ class BundleProductViewTest extends GraphQlAbstract
    products(filter: {sku: {eq: "{$productSku}"}})
    {
        items{
-           id
-           attribute_set_id    
-           created_at
-           name
            sku
            type_id
-           updated_at
+           id
+           name
+           attribute_set_id
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids                
+           category_ids 
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
             dynamic_weight
             price_view
             ship_bundle_items
-             items {
-               option_id
-               title
-               required
-               type
-               position
-               sku
-               options {
-                 id
-                 product_id
-                 qty
-                 position
-                 is_default
-                 price
-                 price_type
-                 can_change_quantity
-                 product {
-                        id
-                        name
-                        sku
-                 }
-               }
-             }
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku              
+              options {
+                id
+                qty
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
            }
        }
-   }
-   
+   }   
 }
 QUERY;
 
@@ -109,6 +107,9 @@ QUERY;
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'name', 'expected_value' => $product->getName()],
+            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
+             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
             ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
             ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
             ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]
@@ -133,6 +134,9 @@ QUERY;
         $option = $options[0];
         $bundleProductLinks = $option->getProductLinks();
         $bundleProductLink = $bundleProductLinks[0];
+        $childProductSku = $bundleProductLink->getSku();
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $childProduct = $productRepository->get($childProductSku);
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
             $actualResponse['items'][0],
@@ -154,12 +158,16 @@ QUERY;
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                 'price' =>  $bundleProductLink->getPrice(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
-                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
+                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
+                'label' => $childProduct->getName()
             ]
         );
         $this->assertResponseFields(
             $actualResponse['items'][0]['options'][0]['product'],
             [
+                'id' => $childProduct->getId(),
+                'name' => $childProduct->getName(),
+                'type_id' => $childProduct->getTypeId(),
                 'sku' => $bundleProductLink->getSku()
             ]
         );

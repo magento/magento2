@@ -22,6 +22,7 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('bundle')
     ->setId(3)
     ->setAttributeSetId(4)
+    ->setWeight(2)
     ->setWebsiteIds([1])
     ->setName('Bundle Product')
     ->setSku('bundle-product')
