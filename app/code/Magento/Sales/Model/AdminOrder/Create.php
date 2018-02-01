@@ -333,7 +333,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
         $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
@@ -1466,32 +1466,36 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function setBillingAddress($address)
     {
-        if (is_array($address)) {
-            $billingAddress = $this->_objectManager->create(
-                \Magento\Quote\Model\Quote\Address::class
-            )->setData(
-                $address
-            )->setAddressType(
-                \Magento\Quote\Model\Quote\Address::TYPE_BILLING
-            );
-            $this->_setQuoteAddress($billingAddress, $address);
-            /**
-             * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
-             * that is why it should be added after _setQuoteAddress call
-             */
-            $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
-            $billingAddress->setData('save_in_address_book', $saveInAddressBook);
-
-            if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
-                $shippingAddress = clone $billingAddress;
-                $shippingAddress->setSameAsBilling(true);
-                $shippingAddress->setSaveInAddressBook(false);
-                $address['save_in_address_book'] = 0;
-                $this->setShippingAddress($address);
-            }
-
-            $this->getQuote()->setBillingAddress($billingAddress);
+        if (!is_array($address)) {
+            return $this;
         }
+
+        $billingAddress = $this->_objectManager->create(Address::class)
+            ->setData($address)
+            ->setAddressType(Address::TYPE_BILLING);
+
+        $this->_setQuoteAddress($billingAddress, $address);
+
+        /**
+         * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
+         * that is why it should be added after _setQuoteAddress call
+         */
+        $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
+        $billingAddress->setData('save_in_address_book', $saveInAddressBook);
+
+        $quote = $this->getQuote();
+        if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+            $address['save_in_address_book'] = 0;
+            $this->setShippingAddress($address);
+        }
+
+        // not assigned billing address should be saved as new
+        // but if quote already has the billing address it won't be overridden
+        if (empty($billingAddress->getCustomerAddressId())) {
+            $billingAddress->setCustomerAddressId(null);
+            $quote->getBillingAddress()->setCustomerAddressId(null);
+        }
+        $quote->setBillingAddress($billingAddress);
 
         return $this;
     }
@@ -1794,6 +1798,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $address = $this->getShippingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
             $this->setShippingAddress($address);
         }
+        $this->getBillingAddress()->setCustomerId($customer->getId());
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 
         $customer = $this->getQuote()->getCustomer();

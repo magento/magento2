@@ -68,6 +68,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     protected $backendDataMock;
 
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $escaperMock;
+
+    /**
      * @var string
      */
     protected $path;
@@ -127,13 +132,16 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+
         $this->imagesHelper = $this->objectManager->getObject(
             \Magento\Cms\Helper\Wysiwyg\Images::class,
             [
                 'context' => $this->contextMock,
                 'filesystem' => $this->filesystemMock,
                 'storeManager' => $this->storeManagerMock,
-                'backendData' => $this->backendDataMock
+                'backendData' => $this->backendDataMock,
+                'escaper' => $this->escaperMock,
             ]
         );
     }
@@ -151,6 +159,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->requestMock = null;
         $this->urlEncoderMock = null;
         $this->backendDataMock = null;
+        $this->escaperMock = null;
     }
 
     /**
@@ -293,7 +302,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $this->imagesHelper->setStoreId($storeId);
-        $checkResult = new \StdClass();
+        $checkResult = new \stdClass();
         $checkResult->isAllowed = false;
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
@@ -413,20 +422,38 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @param string $baseUrl
      * @param string $fileName
      * @param bool $isUsingStaticUrls
+     * @param string|null $escapedValue
      * @param string $expectedHtml
      * @dataProvider providerGetImageHtmlDeclarationRenderingAsTag
      */
-    public function testGetImageHtmlDeclarationRenderingAsTag($baseUrl, $fileName, $isUsingStaticUrls, $expectedHtml)
-    {
-        $this->generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls);
+    public function testGetImageHtmlDeclarationRenderingAsTag(
+        $baseUrl,
+        $fileName,
+        $isUsingStaticUrls,
+        $escapedValue,
+        $expectedHtml
+    ) {
+        $this->generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls, $escapedValue);
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName, true));
     }
 
     public function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
-            ['http://localhost', 'test.png', true, '<img src="http://localhost/test.png" alt="" />'],
-            ['http://localhost', 'test.png', false, '<img src="{{media url="/test.png"}}" alt="" />']
+            [
+                'http://localhost',
+                'test.png',
+                true,
+                null,
+                '<img src="http://localhost/test.png" alt="" />'
+            ],
+            [
+                'http://localhost',
+                'test.png',
+                false,
+                '{{media url=&quot;/test.png&quot;}}',
+                '<img src="{{media url=&quot;/test.png&quot;}}" alt="" />'
+            ]
         ];
     }
 
@@ -467,8 +494,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $baseUrl
      * @param bool $isUsingStaticUrls
+     * @param string|null $escapedValue
      */
-    protected function generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls)
+    protected function generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls, $escapedValue = null)
     {
         $storeId = 1;
         $this->imagesHelper->setStoreId($storeId);
@@ -480,6 +508,10 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
+
+        if ($escapedValue) {
+            $this->escaperMock->expects($this->once())->method('escapeHtml')->willReturn($escapedValue);
+        }
 
         $this->generalSettingsIsUsingStaticUrlsAllowed($isUsingStaticUrls);
     }

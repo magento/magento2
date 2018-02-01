@@ -408,7 +408,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_decimal_qty.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
@@ -439,6 +439,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod
         );
         $order = $this->model->createOrder();
+        //Check, order considering decimal qty in product.
+        foreach ($order->getItems() as $orderItem) {
+            self::assertTrue($orderItem->getIsQtyDecimal());
+        }
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
