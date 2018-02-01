@@ -16,10 +16,7 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Setup/Upgrade Tests">
-            <file>testsuite/Magento/Setup/DeclarativeInstallerTest.php</file>
-            <file>testsuite/Magento/Setup/DiffOldSchemaTest.php</file>
-            <file>testsuite/Magento/Setup/DeclarativeSchemaBuilder.php</file>
-            <file>testsuite/Magento/Setup/SchemaReaderTest.php</file>
+            <directory suffix="Test.php">testsuite</directory>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
@@ -40,7 +37,7 @@
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <const name="TESTS_CLEANUP" value="{{tests_cleanup}}"/>
         <const name="TESTS_MAGENTO_MODE" value="{{app_mode}}"/>
-        <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
+        <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="1"/>
     </php>
     <!-- Test listeners -->
     <listeners>
