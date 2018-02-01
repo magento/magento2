@@ -18,7 +18,7 @@ class DownloadableProductTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'downloadable') {
+        if (isset($data['type_id']) && $data['type_id'] == 'downloadable') {
             return 'DownloadableProduct';
         }
 

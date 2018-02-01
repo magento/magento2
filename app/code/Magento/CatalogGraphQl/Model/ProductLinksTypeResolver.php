@@ -23,9 +23,11 @@ class ProductLinksTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        $linkType = $data['link_type'];
-        if (in_array($linkType, $this->linkTypes)) {
-            return 'ProductLinks';
+        if (isset($data['type_id'])) {
+            $linkType = $data['link_type'];
+            if (in_array($linkType, $this->linkTypes)) {
+                return 'ProductLinks';
+            }
         }
 
         return null;

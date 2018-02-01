@@ -170,7 +170,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             }
         }
     }
-    
 }
 QUERY;
 

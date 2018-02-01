@@ -23,9 +23,11 @@ class GroupedProductLinksTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        $linkType = $data['link_type'];
-        if (in_array($linkType, $this->linkTypes)) {
-            return 'GroupedProductLinks';
+        if (isset($data['link_type'])) {
+            $linkType = $data['link_type'];
+            if (in_array($linkType, $this->linkTypes)) {
+                return 'GroupedProductLinks';
+            }
         }
 
         return null;

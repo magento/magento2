@@ -81,7 +81,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $childrenSkus = [];
         $bundleMap = [];
         foreach ($resultData as $productKey => $product) {
-            if ($product['type_id'] === Bundle::TYPE_CODE) {
+            if (isset($product['type_id']) && $product['type_id'] === Bundle::TYPE_CODE) {
                 $resultData[$productKey] = $this->formatBundleAttributes($product);
                 if (isset($product['bundle_product_options'])) {
                     $bundleMap[$product['sku']] = [];

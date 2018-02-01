@@ -44,7 +44,7 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
     public function process(array $resultData)
     {
         foreach ($resultData as $productKey => $product) {
-            if ($product['type_id'] === Downloadable::TYPE_DOWNLOADABLE) {
+            if (isset($product['type_id']) && $product['type_id'] === Downloadable::TYPE_DOWNLOADABLE) {
                 if (isset($product['downloadable_product_samples'])) {
                     $resultData[$productKey]['downloadable_product_samples']
                         = $this->formatSamples($product['downloadable_product_samples']);

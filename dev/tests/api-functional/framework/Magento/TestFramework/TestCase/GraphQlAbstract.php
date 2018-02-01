@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

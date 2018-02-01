@@ -71,11 +71,9 @@ class DownloadableProductViewTest extends GraphQlAbstract
               sample_type
               sample_file
             }
-            
            }
        }
    }
-  
 }
 QUERY;
         $response = $this->graphQlQuery($query);

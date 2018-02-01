@@ -13,7 +13,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class VirtualProductViewTest extends GraphQlAbstract
 {
-
     /**
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
@@ -49,10 +48,8 @@ class VirtualProductViewTest extends GraphQlAbstract
            }
        }
    }
-   
 }
 QUERY;
-
 
         $response = $this->graphQlQuery($query);
 
@@ -64,7 +61,11 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
-        $this->assertArrayNotHasKey('weight', $response['products']['items'][0], "response does contain the key weight");
+        $this->assertArrayNotHasKey(
+            'weight',
+            $response['products']['items'][0],
+            "response does contain the key weight"
+        );
     }
 
     /**
@@ -101,14 +102,14 @@ QUERY;
             sku          
            }
        }
-   }
-   
+   }   
 }
 QUERY;
 
-
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Cannot query field "weight" on type "VirtualProduct"');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Cannot query field "weight" on type "VirtualProduct"'
+        );
         $this->graphQlQuery($query);
     }
 
@@ -118,7 +119,6 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
@@ -130,7 +130,6 @@ QUERY;
 
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
-
 
     /**
      * @param array $actualResponse

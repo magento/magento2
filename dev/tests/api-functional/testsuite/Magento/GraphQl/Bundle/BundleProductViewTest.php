@@ -17,7 +17,7 @@ class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      */
     public function testAllFielsBundleProducts()
     {
@@ -302,7 +302,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testNonExistentFieldQtyExceptionOnBundleProduct()
