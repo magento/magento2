@@ -23,6 +23,7 @@ interface ConfigInterface
     const TOPIC_RESPONSE = 'response';
     const TOPIC_IS_SYNCHRONOUS = 'is_synchronous';
     const TOPIC_REQUEST_TYPE = 'request_type';
+    const TOPIC_SERVICE_SCHEMA = 'serviceSchema';
 
     const TOPIC_REQUEST_TYPE_CLASS = 'object_interface';
     const TOPIC_REQUEST_TYPE_METHOD = 'service_method_interface';
