@@ -130,7 +130,8 @@ class Csv implements ReportProcessorInterface
         return $this->sourceCsvFactory->create(
             [
                 'file' => $sourceFile,
-                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)
+                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR),
+                'delimiter' => $this->reportHelper->getDelimiter(),
             ]
         );
     }
