@@ -69,12 +69,23 @@ class SelectBuilder
             return $select;
         }
 
-        $select = $connection->select();
+        $quantityExpression = (string)$this->resourceConnection->getConnection()->getCheckSql(
+            'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
+            0,
+            SourceItemInterface::QUANTITY
+        );
+
+        $select = $connection->select()->joinInner(
+            ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            'product_entity.sku = source_item.sku',
+            []
+        );
+
         $select->from(
             ['source_item' => $sourceItemTable],
             [
                 SourceItemInterface::SKU,
-                SourceItemInterface::QUANTITY => 'SUM(' . SourceItemInterface::QUANTITY . ')',
+                SourceItemInterface::QUANTITY => 'SUM(' . $quantityExpression . ')',
                 IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute($select),
             ]
         )->joinInner(
@@ -84,14 +95,6 @@ class SelectBuilder
                 SourceItemInterface::SOURCE_CODE,
                 StockSourceLink::SOURCE_CODE
             ),
-            []
-        )->joinInner(
-            ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            'product_entity.sku = source_item.sku',
-            []
-        )->joinInner(
-            ['config' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'product_entity.entity_id = config.product_id',
             []
         )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
