@@ -48,7 +48,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
 
-        <see selector="{{AdminProductSourcesGrid.rowId}}" userInput="{{_defaultSource.id}}" stepKey="seeDefaultAsId"/>
+        <see selector="{{AdminProductSourcesGrid.rowId}}" userInput="{{_defaultSource.source_code}}" stepKey="seeDefaultAsId"/>
         <see selector="{{AdminProductSourcesGrid.rowName}}" userInput="{{_defaultSource.name}}" stepKey="seeDefaultSourceAsName"/>
         <seeOptionIsSelected selector="{{AdminProductSourcesGrid.rowStatus}}" userInput="{{SimpleMsiProduct.stockStatus}}" stepKey="seeInStock"/>
         <seeInField selector="{{AdminProductSourcesGrid.rowQty}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeQtyInField"/>

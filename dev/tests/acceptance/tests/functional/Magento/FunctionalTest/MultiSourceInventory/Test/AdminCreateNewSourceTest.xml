@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminCreateNewSourceTest">
         <annotations>
             <features value="Multi-Store Inventory"/>
@@ -27,10 +27,10 @@
         <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage"/>
         <click selector="{{AdminManageSourcesGrid.addNewSource}}" stepKey="clickOnAddNewSource"/>
 
-        <fillField userInput="{{TestSource.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField1"/>
-        <fillField userInput="{{TestSource.code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField1"/>
+        <fillField userInput="{{TestSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField1"/>
+        <fillField userInput="{{TestSource1.source_code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField1"/>
         <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled"/>
-        <fillField userInput="{{TestSource.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField1"/>
+        <fillField userInput="{{TestSource1.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField1"/>
 
         <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
         <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.latitude}}" stepKey="fillLatitudeField1"/>
@@ -38,17 +38,17 @@
         <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.priority}}" stepKey="fillPriorityField1"/>
 
         <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo1"/>
-        <fillField userInput="{{TestSource.contactName}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField1"/>
-        <fillField userInput="{{TestSource.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField1"/>
-        <fillField userInput="{{TestSource.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField1"/>
-        <fillField userInput="{{TestSource.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField1"/>
+        <fillField userInput="{{TestSource1.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField1"/>
+        <fillField userInput="{{TestSource1.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField1"/>
+        <fillField userInput="{{TestSource1.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField1"/>
+        <fillField userInput="{{TestSource1.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField1"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses1"/>
-        <selectOption userInput="{{TestSource.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry1"/>
-        <selectOption userInput="{{TestSource.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState1"/>
-        <fillField userInput="{{TestSource.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField1"/>
-        <fillField userInput="{{TestSource.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField1"/>
-        <fillField userInput="{{TestSource.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
+        <selectOption userInput="{{TestSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry1"/>
+        <selectOption userInput="{{TestSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState1"/>
+        <fillField userInput="{{TestSource1.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField1"/>
+        <fillField userInput="{{TestSource1.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField1"/>
+        <fillField userInput="{{TestSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
 
         <conditionalClick selector="{{AdminEditSourceCarriersSection.closed}}" dependentSelector="{{AdminEditSourceCarriersSection.opened}}" visible="false" stepKey="clickOnCarriers1"/>
         <checkOption selector="{{AdminEditSourceCarriersSection.useGlobalShippingConfiguration}}" stepKey="checkUseGlobalShippingConfiguration1"/>
@@ -56,11 +56,11 @@
         <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickOnSaveAndClose"/>
 
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
-        <fillField userInput="{{TestSource.code}}" selector="{{AdminGridFilterControls.code}}" stepKey="fillCodeField2"/>
+        <fillField userInput="{{TestSource1.source_code}}" selector="{{AdminGridFilterControls.code}}" stepKey="fillCodeField2"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
 
-        <see userInput="{{TestSource.code}}" selector="{{AdminGrid.rowOne}}" stepKey="seeCodeInRow1"/>
-        <see userInput="{{TestSource.name}}" selector="{{AdminGrid.rowOne}}" stepKey="seeNameInRow1"/>
+        <see userInput="{{TestSource1.source_code}}" selector="{{AdminGrid.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="{{TestSource1.name}}" selector="{{AdminGrid.rowOne}}" stepKey="seeNameInRow1"/>
         <see userInput="Enabled" selector="{{AdminGrid.rowOne}}" stepKey="seeIsEnabledInRow1"/>
         <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
         <see userInput="0" selector="{{AdminGrid.rowOne}}" stepKey="seePriorityInRow1"/>
