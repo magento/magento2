@@ -70,15 +70,14 @@ class SchemaDiff
      */
     private function createTableIndex(array $tableNames, array $generatedTableNames)
     {
-        $tableNames = array_flip($tableNames);
         foreach ($generatedTableNames as $tableName) {
             //If table exists only in db
-            if (!isset($tableNames[$tableName])) {
-                array_push($tableNames, $tableName);
+            if (!in_array($tableName, $tableNames)) {
+                $tableNames[] = $tableName;
             }
         }
 
-        return $tableNames;
+        return array_flip($tableNames);
     }
 
     /**
