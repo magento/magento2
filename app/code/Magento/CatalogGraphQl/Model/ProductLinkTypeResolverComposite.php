@@ -7,7 +7,7 @@
 namespace Magento\CatalogGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * {@inheritdoc}
@@ -29,28 +29,27 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
 
     /**
      * {@inheritdoc}
+     * @throws GraphQlInputException
      */
     public function resolveType(array $data)
     {
         $resolvedType = null;
 
         foreach ($this->productLinksTypeNameResolvers as $productLinksTypeNameResolvers) {
-            $linkType = $data['link_type'];
-            if (!isset($linkType)) {
-                throw new InputException(
+            if (!isset($data['link_type'])) {
+                throw new GraphQlInputException(
                     __('%1 key doesn\'t exist in product data', ['link_type'])
                 );
             }
             $resolvedType = $productLinksTypeNameResolvers->resolveType($data);
-            if ($resolvedType) {
-                return $resolvedType;
+
+            if (!$resolvedType) {
+                throw new GraphQlInputException(
+                    __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
+                );
             }
         }
 
-        if (!$resolvedType) {
-            throw new InputException(
-                __('Concrete type for %1 not implemented', 'ProductLinksInterface')
-            );
-        }
+        return $resolvedType;
     }
 }

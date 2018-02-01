@@ -32,11 +32,15 @@
                 <item name="catalog_product" xsi:type="array">
                     <item name="product" xsi:type="string">ProductInterface</item>
                     <item name="simple" xsi:type="string">SimpleProduct</item>
-                    <item name="configurable" xsi:type="string">ConfigurableProduct</item>
-                    <item name="bundle" xsi:type="string">BundleProduct</item>
-                    <item name="downloadable" xsi:type="string">DownloadableProduct</item>
                     <item name="virtual" xsi:type="string">VirtualProduct</item>
-                    <item name="grouped" xsi:type="string">GroupedProduct</item>
+                </item>
+                <item name="customizable_options" xsi:type="array">
+                    <item name="field" xsi:type="string">CustomizableFieldOption</item>
+                    <item name="date_time" xsi:type="string">CustomizableDateOption</item>
+                    <item name="file" xsi:type="string">CustomizableFileOption</item>
+                    <item name="area" xsi:type="string">CustomizableAreaOption</item>
+                    <item name="drop_down" xsi:type="string">CustomizableDropDownOption</item>
+                    <item name="radio" xsi:type="string">CustomizableRadioOption</item>
                 </item>
             </argument>
         </arguments>

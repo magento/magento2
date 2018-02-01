@@ -7,7 +7,7 @@
 namespace Magento\CatalogGraphQl\Model;
 
 use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * {@inheritdoc}
@@ -29,6 +29,7 @@ class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
 
     /**
      * {@inheritdoc}
+     * @throws GraphQlInputException
      */
     public function resolveType(array $data)
     {
@@ -36,7 +37,7 @@ class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
 
         foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
             if (!isset($data['type_id'])) {
-                throw new InputException(
+                throw new GraphQlInputException(
                     __('%1 key doesn\'t exist in product data', ['type_id'])
                 );
             }
@@ -47,8 +48,8 @@ class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
         }
 
         if (!$resolvedType) {
-            throw new InputException(
-                __('Concrete type for %1 not implemented', 'ProductInterface')
+            throw new GraphQlInputException(
+                __('Concrete type for %1 not implemented', ['ProductInterface'])
             );
         }
     }

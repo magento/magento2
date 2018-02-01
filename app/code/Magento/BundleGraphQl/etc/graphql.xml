@@ -45,9 +45,4 @@
         <item name="price_range">PRICE_RANGE</item>
         <item name="as_low_as">AS_LOW_AS</item>
     </type>
-    <type xsi:type="Enum" name="PriceTypeEnum">
-        <item name="fixed">FIXED</item>
-        <item name="percent">PERCENT</item>
-        <item name="dynamic">DYNAMIC</item>
-    </type>
 </config>
