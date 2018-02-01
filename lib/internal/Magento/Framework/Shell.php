@@ -56,6 +56,7 @@ class Shell implements ShellInterface
 
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
+        var_dump($command);
         var_dump($output);
         $this->log($output);
         if ($exitCode) {
