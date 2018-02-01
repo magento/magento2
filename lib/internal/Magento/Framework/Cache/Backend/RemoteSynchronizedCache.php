@@ -162,6 +162,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * Remove a cache record
+     * Removing any cache item in the RemoteSynchronizedCache must invalidate all cache items
      *
      * @param  string $id Cache id
      * @return boolean True if no problem
@@ -174,6 +175,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * Clean some cache records
+     * Cleaning any cache item in the RemoteSynchronizedCache must invalidate all cache items
      *
      * Available modes are :
      * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
