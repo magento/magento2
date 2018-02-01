@@ -24,7 +24,7 @@ class ServiceShellUser
             return $userFromArgument;
         }
 
-        $user = `echo \$USER`;
+        $user = "echo \$USER";
         if ($user) {
             return $user;
         }
