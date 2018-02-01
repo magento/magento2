@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
@@ -21,13 +22,20 @@ class ReaderComposite implements ReaderInterface
     private $readers;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor.
      *
+     * @param DeploymentConfig $deploymentConfig
      * @param ReaderInterface[] $readers
      */
-    public function __construct(array $readers = [])
+    public function __construct(DeploymentConfig $deploymentConfig, array $readers = [])
     {
         $this->readers = $readers;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -39,7 +47,12 @@ class ReaderComposite implements ReaderInterface
         foreach ($this->readers as $reader) {
             $schema = array_replace_recursive($schema, $reader->read($scope));
         }
-        var_dump($schema);
+
+        if (!count($schema)) {
+            var_dump($this->deploymentConfig->get());
+            var_dump($this->deploymentConfig->getConfigData());
+        }
+
         return $schema;
     }
 }
