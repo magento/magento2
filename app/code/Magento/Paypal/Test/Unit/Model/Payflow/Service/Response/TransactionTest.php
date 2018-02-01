@@ -67,7 +67,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "Input data is a string" => ['testInput'],
-            "Input data is an object" => [new \StdClass],
+            "Input data is an object" => [new \stdClass],
             "Input data is an array" => [['test' => 'input']]
         ];
     }
