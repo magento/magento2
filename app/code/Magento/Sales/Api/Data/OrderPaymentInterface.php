@@ -802,7 +802,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      */
     public function setAdditionalData($additionalData);
 
-    /**s
+    /**
      * Set Additional information about payment into Payment model
      *
      * @param string $key
