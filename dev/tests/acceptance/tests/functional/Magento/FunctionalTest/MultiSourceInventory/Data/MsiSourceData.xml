@@ -19,8 +19,8 @@
     </entity>
     <entity name="_defaultSource" type="general">
         <data key="id_field_name">source_code</data>
-        <data key="name">Default Source</data>
-        <data key="source_code" unique="suffix">default</data>
+        <data key="name" unique="suffix">Default Source </data>
+        <data key="source_code" unique="suffix">default_</data>
         <data key="enabled">1</data>
         <data key="isEnabled">true</data>
         <data key="description">Default Source</data>
@@ -34,7 +34,7 @@
     </entity>
     <entity name="TestSource1" type="general">
         <data key="id_field_name">source_code</data>
-        <data key="name">Test Source 1</data>
+        <data key="name" unique="suffix">Test Source 1 </data>
         <data key="source_code" unique="suffix">test_source_1_</data>
         <data key="isEnabled">true</data>
         <data key="enabled">1</data>
@@ -61,11 +61,11 @@
     </entity>
     <entity name="TestSource2" type="general">
         <data key="id_field_name">new_source_code</data>
-        <data key="name">Test Source 2</data>
+        <data key="name" unique="suffix">Test Source 2 </data>
         <data key="source_code" unique="suffix">test_source_2_</data>
         <data key="isEnabled">true</data>
         <data key="enabled">1</data>
-        <data key="description">Test Source 1</data>
+        <data key="description">Test Source 2</data>
         <data key="latitude">0</data>
         <data key="longitude">0</data>
         <data key="priority">0</data>
@@ -79,9 +79,9 @@
         <data key="country_id">CA</data>
         <data key="stateProvince">Quebec</data>
         <data key="region_id">76</data>
-        <data key="city">Culver City</data>
-        <data key="street">6161 West Centinela Avenue</data>
-        <data key="postcode">90230</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
 
         <data key="useGlobalShippingConfiguration">true</data>
         <data key="use_default_carrier_config">1</data>
