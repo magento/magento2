@@ -39,7 +39,7 @@ class ReaderComposite implements ReaderInterface
         foreach ($this->readers as $reader) {
             $schema = array_replace_recursive($schema, $reader->read($scope));
         }
-
+        var_dump($schema);
         return $schema;
     }
 }
