@@ -6,6 +6,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_GraphQl:etc/graphql.xsd">
     <type xsi:type="OutputType" name="DownloadableProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <implements interface="CustomizableProductInterface" copyFields="true"/>
         <field xsi:type="ObjectArrayOutputField" name="downloadable_product_samples" itemType="DownloadableProductSamples"/>
         <field xsi:type="ObjectArrayOutputField" name="downloadable_product_links" itemType="DownloadableProductLinks"/>
         <field xsi:type="ObjectOutputField" name="links_purchased_separately" type="Int"/>

@@ -222,30 +222,6 @@
     <type xsi:type="OutputType" name="ProductLinks">
         <implements interface="ProductLinksInterface" copyFields="true"/>
     </type>
-    <type xsi:type="OutputType" name="ProductOptionsValues">
-        <field xsi:type="ScalarOutputField" name="title" type="String"/>
-        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
-        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
-        <field xsi:type="ScalarOutputField" name="option_type_id" type="Int"/>
-    </type>
-    <type xsi:type="OutputType" name="ProductOptions">
-        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
-        <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="title" type="String"/>
-        <field xsi:type="ScalarOutputField" name="type" type="String"/>
-        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="is_require" type="Boolean"/>
-        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="price_type" type="String"/>
-        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
-        <field xsi:type="ScalarOutputField" name="file_extension" type="String"/>
-        <field xsi:type="ScalarOutputField" name="max_characters" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="image_size_x" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="image_size_y" type="Int"/>
-        <field xsi:type="ObjectArrayOutputField" name="values" itemType="ProductOptionsValues"/>
-    </type>
     <type xsi:type="OutputType" name="ProductTierPrices">
         <field xsi:type="ScalarOutputField" name="customer_group_id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
@@ -291,7 +267,6 @@
         <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int"/>
         <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks"/>
         <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinksInterface"/>
-        <field xsi:type="ObjectArrayOutputField" name="options" itemType="ProductOptions"/>
         <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry"/>
         <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices"/>
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices"/>
@@ -307,14 +282,15 @@
         <field xsi:type="ScalarOutputField" name="title" type="String"/>
         <field xsi:type="ScalarOutputField" name="required" type="Boolean"/>
         <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="previous_group" type="String"/>
     </type>
     <type xsi:type="OutputType" name="VirtualProduct">
         <implements interface="ProductInterface" copyFields="true"/>
+        <implements interface="CustomizableProductInterface" copyFields="true"/>
     </type>
     <type xsi:type="OutputType" name="SimpleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
+        <implements interface="CustomizableProductInterface" copyFields="true"/>
     </type>
     <type xsi:type="InputType" name="ProductFilterInput">
         <field xsi:type="ObjectInputField" name="name" type="FilterTypeInput"/>

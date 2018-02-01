@@ -7,6 +7,7 @@
     <type xsi:type="OutputType" name="BundleProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
+        <implements interface="CustomizableProductInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum"/>
         <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean"/>
         <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean"/>
