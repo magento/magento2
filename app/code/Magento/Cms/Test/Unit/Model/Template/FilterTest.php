@@ -62,4 +62,20 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($baseMediaDir);
         $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
     }
+
+    public function testMediaDirectiveWithEncodedQuotes()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url=&quot;wysiwyg/image.jpg&quot;}}',
+            'media',
+            ' url=&quot;wysiwyg/image.jpg&quot;'
+        ];
+        $expectedResult = 'pub/media/wysiwyg/image.jpg';
+
+        $this->storeMock->expects($this->once())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+    }
 }

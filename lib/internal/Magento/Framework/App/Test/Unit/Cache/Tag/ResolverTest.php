@@ -47,7 +47,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     public function testGetTagsForObject()
     {
         $strategyReturnValue = ['test tag'];
-        $object = new \StdClass;
+        $object = new \stdClass;
         $this->strategy->expects($this->once())
             ->method('getTags')
             ->with($object)

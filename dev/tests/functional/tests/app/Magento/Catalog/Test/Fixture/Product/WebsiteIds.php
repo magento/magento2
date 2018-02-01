@@ -37,7 +37,7 @@ class WebsiteIds extends DataSource
     private $fixtureFactory;
 
     /**
-     * Rought fixture field data.
+     * Rough fixture field data.
      *
      * @var array
      */
