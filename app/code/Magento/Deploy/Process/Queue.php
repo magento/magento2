@@ -157,13 +157,6 @@ class Queue
         $returnStatus = 0;
         $this->start = $this->lastJobStarted = time();
         $packages = $this->packages;
-        $pc = [];
-        foreach ($packages as $id => $data) {
-            $pc[] = ['id' => $id, 'deps' => array_keys($data['dependencies'])];
-        }
-        $json = json_encode($pc);
-        $js=$json;
-        '[{"id":"base\/Magento\/base\/default","deps":[]},{"id":"adminhtml\/Magento\/base\/default","deps":["base\/Magento\/base\/default"]},{"id":"frontend\/Magento\/base\/default","deps":["base\/Magento\/base\/default"]},{"id":"frontend\/Magento\/luma\/default","deps":["base\/Magento\/base\/default","frontend\/Magento\/base\/default","frontend\/Magento\/blank\/default"]},{"id":"frontend\/Magento\/blank\/default","deps":["base\/Magento\/base\/default","frontend\/Magento\/base\/default"]},{"id":"adminhtml\/Magento\/backend\/default","deps":["base\/Magento\/base\/default","adminhtml\/Magento\/base\/default"]},{"id":"frontend\/Magento\/luma\/en_US","deps":["base\/Magento\/base\/default","frontend\/Magento\/base\/default","frontend\/Magento\/blank\/default","frontend\/Magento\/blank\/en_US","frontend\/Magento\/luma\/default"]},{"id":"frontend\/Magento\/blank\/en_US","deps":["base\/Magento\/base\/default","frontend\/Magento\/base\/default","frontend\/Magento\/blank\/default"]},{"id":"adminhtml\/Magento\/backend\/en_US","deps":["base\/Magento\/base\/default","adminhtml\/Magento\/base\/default","adminhtml\/Magento\/backend\/default"]}]';
         while (count($packages) && $this->checkTimeout()) {
             foreach ($packages as $name => $packageJob) {
                 $this->assertAndExecute($name, $packages, $packageJob);
