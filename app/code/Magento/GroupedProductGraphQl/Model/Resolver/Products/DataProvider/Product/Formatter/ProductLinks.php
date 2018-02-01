@@ -26,7 +26,7 @@ class ProductLinks implements FormatterInterface
     public function format(Product $product, array $productData = [])
     {
         $productLinks = $product->getProductLinks();
-        if ($productLinks && $product->getTypeId() === Grouped::TYPE_CODE && isset($productData['items'])) {
+        if ($productLinks && $product->getTypeId() === Grouped::TYPE_CODE) {
             /** @var Link $productLink */
             foreach ($productLinks as $productLinkKey => $productLink) {
                 if ($productLink->getLinkType() === self::LINK_TYPE) {
