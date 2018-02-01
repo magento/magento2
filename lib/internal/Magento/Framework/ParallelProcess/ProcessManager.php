@@ -49,11 +49,6 @@ class ProcessManager
     private $failed = [];
 
     /**
-     * @var int
-     */
-    private $forksStarted = 0;
-
-    /**
      * @param RunnerInterface $runner
      * @param ForkManagerInterface $fork
      * @param Data[] $processes
@@ -83,37 +78,6 @@ class ProcessManager
      */
     public function run()
     {
-        //Waiting for fork processes to finish to count them out.
-        $handler = function (int $forkId) {
-            if (in_array($forkId, $this->pids)) {
-                $this->forksStarted--;
-            }
-        };
-        $exitListener = new class($handler)
-            implements ExitEventListenerInterface {
-            /**
-             * @var callable
-             */
-            private $handler;
-
-            /**
-             * @param callable $handler
-             */
-            public function __construct(callable $handler)
-            {
-                $this->handler = $handler;
-            }
-
-            /**
-             * @inheritDoc
-             */
-            public function observe(int $forkId, bool $successfulRun)
-            {
-                ($this->handler)($forkId, $successfulRun);
-            }
-        };
-        $this->fork->addExitEventListener($exitListener);
-
         //Sorting processes based on their dependencies.
         $sorted = array_values($this->processes);
         usort(
@@ -129,18 +93,23 @@ class ProcessManager
                 return 0;
             }
         );
+        //Dividing processes to honor limit.
+        if ($this->limit > 0 ) {
+            $chunkSize = ceil(count($sorted) / $this->limit);
+        } else {
+            $chunkSize = 1;
+        }
+        /** @var Data[][] $processChunks */
+        $processChunks = array_chunk($sorted, $chunkSize, true);
         //Running processes.
-        foreach ($sorted as $process) {
-            $this->startProcess($process);
+        foreach ($processChunks as $processes) {
+            $this->startProcesses($processes);
         }
         //Collecting processes' results.
         $remainingProcesses = array_keys($this->pids);
         foreach ($remainingProcesses as $dataId) {
             $this->waitForProcessExit($dataId);
         }
-        //Deleting links for this manager.
-        $this->fork->remoteExitEventListener($exitListener);
-        unset($exitListener);
         //Notifying if there were failed processes.
         if ($this->failed) {
             throw new ExitedWithErrorException($this->failed);
@@ -161,36 +130,53 @@ class ProcessManager
     }
 
     /**
-     * @param Data $process
+     * @param Data[] $processes
      * @return void
      */
-    private function startProcess(Data $process)
+    private function startProcesses(array $processes)
     {
-        //Dealing with provider processes.
-        /** @var bool $dependencyFailed One of provider processes failed */
-        $dependencyFailed = false;
-        foreach ($process->getDependsOn() as $providerId) {
-            if (array_key_exists($providerId, $this->pids)) {
-                if (!$this->waitForProcessExit($providerId)) {
-                    $dependencyFailed = true;
+        $processesToLaunch = [];
+        //Dealing with providing processes.
+        foreach ($processes as $process) {
+            foreach ($process->getDependsOn() as $providerId) {
+                //If we know that a provider already failed then
+                //not launching the process at all.
+                if (in_array(
+                    $this->processes[$providerId],
+                    $this->failed,
+                    true
+                )) {
+                    $this->failed[] = $process;
+                    continue 2;
+                }
+                //If a provider was unsuccessful then not launching the
+                //process at all.
+                if (array_key_exists($providerId, $this->pids)) {
+                    if (!$this->waitForProcessExit($providerId)) {
+                        $this->failed[] = $process;
+                        continue 2;
+                    }
                 }
             }
+            $processesToLaunch[] = $process;
         }
-        if ($dependencyFailed) {
-            $this->failed[] = $process;
+        if (!$processesToLaunch) {
             return;
         }
 
-        //Launching process.
+        //Launching processes.
         try {
             //Main process.
-            $this->pids[$process->getId()] = $this->fork();
+            $forkId = $this->fork();
+            foreach ($processesToLaunch as $process) {
+                $this->pids[$process->getId()] = $forkId;
+            }
         } catch (ChildProcessException $exception) {
-            //Child process.
-            $this->runChildProcess($process);
+            //Child processes.
+            $this->runChildProcesses($processesToLaunch);
         } catch (\Throwable $exception) {
-            //Not using forks.
-            $this->runLocalProcess($process);
+            //Not using fork.
+            $this->runLocalProcesses($processesToLaunch);
         }
     }
 
@@ -213,17 +199,19 @@ class ProcessManager
     }
 
     /**
-     * @param Data $process
+     * @param Data[] $processes
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    private function runChildProcess(Data $process)
+    private function runChildProcesses(array $processes)
     {
         $code = 0;
         try {
-            $this->runner->run($process->getData());
+            foreach ($processes as $process) {
+                $this->runner->run($process->getData());
+            }
         } catch (\Throwable $ex) {
             $code = $ex->getCode() ?: 1;
         }
@@ -232,16 +220,18 @@ class ProcessManager
     }
 
     /**
-     * @param Data $process
+     * @param Data[] $processes
      *
      * @return void
      */
-    private function runLocalProcess(Data $process)
+    private function runLocalProcesses(array $processes)
     {
         try {
-            $this->runner->run($process->getData());
+            foreach ($processes as $process) {
+                $this->runner->run($process->getData());
+            }
         } catch (\Throwable $ex) {
-            $this->failed[] = $process;
+            $this->failed = array_merge($this->failed, $processes);
         }
     }
 }

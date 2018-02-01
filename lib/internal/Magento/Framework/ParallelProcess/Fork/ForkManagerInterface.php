@@ -31,29 +31,4 @@ interface ForkManagerInterface
      * false if the process exited with an error.
      */
     public function waitForProcessExit(int $forkId): bool;
-
-    /**
-     * Add an event listener for when a fork process finishes.
-     *
-     * @param ExitEventListenerInterface $eventListener
-     * @param int[]|null $forkIds Call observer only for given processes.
-     *
-     * @return void
-     */
-    public function addExitEventListener(
-        ExitEventListenerInterface $eventListener,
-        array $forkIds = null
-    );
-
-    /**
-     * Remove listener.
-     *
-     * @param ExitEventListenerInterface $eventListener
-     * @throws \InvalidArgumentException When such listener wasn't attached.
-     *
-     * @return void
-     */
-    public function remoteExitEventListener(
-        ExitEventListenerInterface $eventListener
-    );
 }
