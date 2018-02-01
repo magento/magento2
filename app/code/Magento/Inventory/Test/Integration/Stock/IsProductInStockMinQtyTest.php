@@ -28,9 +28,9 @@ class IsProductInStockMinQtyTest extends TestCase
      */
     protected function setUp()
     {
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
-
         parent::setUp();
+
+        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
     }
 
     /**

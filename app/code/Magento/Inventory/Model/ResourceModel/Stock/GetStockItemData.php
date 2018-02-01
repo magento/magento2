@@ -17,8 +17,8 @@ class GetStockItemData implements GetStockItemDataInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId): array
+    public function execute(string $sku, int $stockId)
     {
-        throw new \Exception('https://github.com/magento-engcom/msi/issues/420');
+        return null;
     }
 }

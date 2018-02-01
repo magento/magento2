@@ -75,7 +75,7 @@
             <argument name="stockValidator" xsi:type="object">Magento\Inventory\Model\Stock\Validator\ValidatorChain</argument>
         </arguments>
     </type>
-    <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemQuantity"/>
+    <preference for="Magento\Inventory\Model\GetStockItemDataInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData"/>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
@@ -99,4 +99,15 @@
     <!-- Query interfaces -->
     <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
     <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
+    <!-- IsSalableCondition -->
+    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+        <arguments>
+            <argument name="getIsSalableConditions" xsi:type="array">
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
+                <item name="manage_stock" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
+                <item name="min_qty" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
 </config>

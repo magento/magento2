@@ -9,13 +9,13 @@ namespace Magento\InventoryIndexer\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryIndexer\Model\StockCondition\GetStockConditionInterface;
 
 /**
  * Select builder data provider
@@ -28,20 +28,20 @@ class SelectBuilder
     private $resourceConnection;
 
     /**
-     * @var GetStockConditionInterface
+     * @var GetIsSalableConditionInterface
      */
-    private $getStockCondition;
+    private $getIsSalableCondition;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param GetStockConditionInterface $getStockCondition
+     * @param GetIsSalableConditionInterface $getIsSalableCondition
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetStockConditionInterface $getStockCondition
+        GetIsSalableConditionInterface $getIsSalableCondition
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->getStockCondition = $getStockCondition;
+        $this->getIsSalableCondition = $getIsSalableCondition;
     }
 
     /**
@@ -81,9 +81,9 @@ class SelectBuilder
             [
                 SourceItemInterface::SKU,
                 SourceItemInterface::QUANTITY => 'SUM(' . $quantityExpression . ')',
-                IndexStructure::IS_SALABLE => 'MAX(' . $this->getStockCondition->execute() . ')'
+                IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute() ?: 1,
             ]
-        )->joinLeft(
+        )->joinInner(
             ['stock_source_link' => $sourceStockLinkTable],
             sprintf(
                 'source_item.%s = stock_source_link.%s',
@@ -96,8 +96,8 @@ class SelectBuilder
             'product_entity.sku = source_item.sku',
             []
         )->joinInner(
-            ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'product_entity.entity_id = legacy_stock_item.product_id',
+            ['config' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
+            'product_entity.entity_id = config.product_id',
             []
         )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)

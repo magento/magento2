@@ -29,10 +29,10 @@ class IsProductInStockOnDefaultStockTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProvider::class);
-
-        parent::setUp();
     }
 
     /**

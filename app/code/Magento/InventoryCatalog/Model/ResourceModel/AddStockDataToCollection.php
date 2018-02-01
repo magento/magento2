@@ -45,16 +45,16 @@ class AddStockDataToCollection
             sprintf('product.entity_id = %s.entity_id', Collection::MAIN_TABLE_ALIAS),
             []
         );
-        $collection->getSelect()->join(
-            ['stock_status_index' => $tableName],
-            'product.sku = stock_status_index.' . IndexStructure::SKU,
-            [IndexStructure::IS_SALABLE]
-        );
+        $collection->getSelect()
+            ->join(
+                ['stock_status_index' => $tableName],
+                'product.sku = stock_status_index.' . IndexStructure::SKU,
+                [IndexStructure::IS_SALABLE]
+            );
 
         if ($isFilterInStock) {
-            $collection->getSelect()->where(
-                'stock_status_index.' . IndexStructure::IS_SALABLE . ' = 1'
-            );
+            $collection->getSelect()
+                ->where('stock_status_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
         }
     }
 }

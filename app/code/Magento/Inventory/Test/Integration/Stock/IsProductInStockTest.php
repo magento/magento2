@@ -41,12 +41,12 @@ class IsProductInStockTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
-
-        parent::setUp();
     }
 
     /**

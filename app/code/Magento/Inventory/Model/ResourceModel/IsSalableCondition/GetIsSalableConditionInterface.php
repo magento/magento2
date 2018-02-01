@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Model\StockCondition;
+namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 
 /**
- * Responsible for build conditions.
+ * Responsible for build is_salable conditions.
  *
  * @api
  */
-interface GetStockConditionInterface
+interface GetIsSalableConditionInterface
 {
     /**
      * @return string

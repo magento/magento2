@@ -19,7 +19,7 @@ interface GetStockItemDataInterface
      *
      * @param string $sku
      * @param int $stockId
-     * @return array
+     * @return array|null
      */
-    public function execute(string $sku, int $stockId): array;
+    public function execute(string $sku, int $stockId);
 }

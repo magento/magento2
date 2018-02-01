@@ -114,7 +114,7 @@ class IndexStructure implements IndexStructureInterface
             [
                 Table::OPTION_NULLABLE => false,
             ],
-            'Availability'
+            'Is Salable'
         );
         $connection->createTable($table);
     }

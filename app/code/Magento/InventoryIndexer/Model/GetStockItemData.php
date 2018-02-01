@@ -41,7 +41,7 @@ class GetStockItemData implements GetStockItemDataInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId): array
+    public function execute(string $sku, int $stockId)
     {
         $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
 
@@ -50,12 +50,6 @@ class GetStockItemData implements GetStockItemDataInterface
             ->from($stockItemTableName, [IndexStructure::QUANTITY, IndexStructure::IS_SALABLE])
             ->where(IndexStructure::SKU . ' = ?', $sku);
 
-        $stockItemData = $connection->fetchRow($select);
-
-        if (false === $stockItemData) {
-            $stockItemData = [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0];
-        }
-
-        return $stockItemData;
+        return $connection->fetchRow($select) ?: null;
     }
 }

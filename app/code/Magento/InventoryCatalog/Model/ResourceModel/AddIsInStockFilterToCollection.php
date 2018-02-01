@@ -43,6 +43,6 @@ class AddIsInStockFilterToCollection
             ['stock_status_index' => $tableName],
             'e.sku = stock_status_index.sku',
             []
-        )->where('stock_status_index.' . IndexStructure::IS_SALABLE . ' = 1');
+        )->where('stock_status_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
     }
 }

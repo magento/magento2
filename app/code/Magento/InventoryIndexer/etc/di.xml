@@ -50,14 +50,4 @@
             <argument name="dimensionName" xsi:type="string">stock_</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryIndexer\Model\StockCondition\GetStockConditionChain">
-        <arguments>
-            <argument name="stockConditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="object">Magento\InventoryIndexer\Model\StockCondition\GetManageStockCondition</item>
-                <item name="min_qty" xsi:type="object">Magento\InventoryIndexer\Model\StockCondition\GetMinQtyStockCondition</item>
-                <item name="bundle" xsi:type="object">Magento\InventoryIndexer\Model\StockCondition\GetBundleCondition</item>
-            </argument>
-        </arguments>
-    </type>
-    <preference for="Magento\InventoryIndexer\Model\StockCondition\GetStockConditionInterface" type="Magento\InventoryIndexer\Model\StockCondition\GetStockConditionChain"/>
 </config>

@@ -80,6 +80,10 @@ class IsProductInStock implements IsProductInStockInterface
     public function execute(string $sku, int $stockId): bool
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        if (null === $stockItemData) {
+            return false;
+        }
+
         $isInStock = (bool)$stockItemData['is_salable'];
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
