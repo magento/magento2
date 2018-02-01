@@ -77,7 +77,7 @@ class CreateStockSourceLinkTable
             Table::TYPE_SMALLINT,
             null,
             [
-                Table::OPTION_NULLABLE => true,
+                Table::OPTION_NULLABLE => false,
                 Table::OPTION_UNSIGNED => true,
             ],
             'Priority'

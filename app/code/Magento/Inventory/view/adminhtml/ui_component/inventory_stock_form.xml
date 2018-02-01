@@ -152,6 +152,11 @@
                         <dataType>number</dataType>
                         <dataScope>priority</dataScope>
                         <label translate="true">Priority</label>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-integer" xsi:type="boolean">true</rule>
+                            <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                 </field>
                 <field name="actionDelete" formElement="actionDelete" sortOrder="40">
