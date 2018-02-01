@@ -101,11 +101,6 @@ define([
 
             /* eslint-disable no-undef */
             if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
-                
-                _.each(wysiwyg.activeEditor().controlManager.controls, function (property, index, controls) {
-                    controls[property.id].setDisabled(disabled);
-                });
-
                 if (wysiwyg && disabled) {
                     wysiwyg.setEnabledStatus(false);
                     wysiwyg.getPluginButtons().prop('disabled', 'disabled');
