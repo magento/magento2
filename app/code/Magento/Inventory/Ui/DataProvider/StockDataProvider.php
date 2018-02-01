@@ -7,16 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder as ApiSearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
  * @api
@@ -39,6 +43,21 @@ class StockDataProvider extends DataProvider
     private $getAssignedSourcesForStock;
 
     /**
+     * @var GetStockSourceLinksInterface
+     */
+    private $getStockSourceLinks;
+
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
+
+    /**
+     * @var ApiSearchCriteriaBuilder
+     */
+    private $apiSearchCriteriaBuilder;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -48,9 +67,13 @@ class StockDataProvider extends DataProvider
      * @param FilterBuilder $filterBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param SearchResultFactory $searchResultFactory
+     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param SourceRepositoryInterface $sourceRepository
      * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+     * @param ApiSearchCriteriaBuilder $apiSearchCriteriaBuilder
      * @param array $meta
      * @param array $data
+     * @internal param ApiSearchCriteriaInterface $apiSearchCriteria
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
@@ -63,7 +86,10 @@ class StockDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         StockRepositoryInterface $stockRepository,
         SearchResultFactory $searchResultFactory,
+        GetStockSourceLinksInterface $getStockSourceLinks,
+        SourceRepositoryInterface $sourceRepository,
         GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
+        ApiSearchCriteriaBuilder $apiSearchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -81,6 +107,10 @@ class StockDataProvider extends DataProvider
         $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
         $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->sourceRepository = $sourceRepository;
+        $this->apiSearchCriteriaBuilder = $apiSearchCriteriaBuilder;
     }
 
     /**
@@ -132,13 +162,26 @@ class StockDataProvider extends DataProvider
      */
     private function getAssignedSourcesData(int $stockId): array
     {
-        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
+        $searchCriteria = $this->apiSearchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->create();
+
+        $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
+        $links = $searchResult->getItems();
+
+        if (!$links) {
+            return [];
+        }
 
         $assignedSourcesData = [];
-        foreach ($assignedSources as $assignedSource) {
+        foreach ($links as $link) {
+            $sourceData = $this->sourceRepository->get($link->getSourceCode());
+
             $assignedSourcesData[] = [
-                SourceInterface::SOURCE_CODE => $assignedSource->getSourceCode(),
-                SourceInterface::NAME => $assignedSource->getName(),
+                SourceInterface::NAME => $sourceData->getName(),
+                StockSourceLinkInterface::SOURCE_CODE => $link->getSourceCode(),
+                StockSourceLinkInterface::STOCK_ID => $link->getStockId(),
+                StockSourceLinkInterface::PRIORITY => $link->getPriority(),
             ];
         }
         return $assignedSourcesData;
