@@ -410,7 +410,7 @@
     </type>
     <type xsi:type="OutputType" name="CustomizableDateOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
-        <<field xsi:type="ObjectOutputField" name="value" type="CustomizableDateValue"/>
+        <field xsi:type="ObjectOutputField" name="value" type="CustomizableDateValue"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableDropDownOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
