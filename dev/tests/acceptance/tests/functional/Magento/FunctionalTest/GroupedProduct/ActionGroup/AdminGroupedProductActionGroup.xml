@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
+    <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInGroupedProductForm">
         <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
         <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
@@ -18,6 +18,7 @@
         <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
     </actionGroup>
 
+    <!--Fill main fields in grouped product form-->
     <actionGroup name="fillGroupedProductForm">
         <arguments>
             <argument name="product" defaultValue="GroupedProduct"/>
@@ -26,6 +27,7 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
     </actionGroup>
 
+    <!--Filter product grid and see expected grouped product-->
     <actionGroup name="viewGroupedProductInAdminGrid">
         <arguments>
             <argument name="product" defaultValue="GroupedProduct"/>

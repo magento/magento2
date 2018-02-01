@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
+    <!--Filter the product grid and view expected products-->
     <actionGroup name="viewConfigurableProductInAdminGrid">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
@@ -34,14 +34,5 @@
         <dontSee selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.price}}"  stepKey="dontSeeProductPriceNameInGrid"/>
 
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
-    </actionGroup>
-
-    <actionGroup name="addProductImage">
-        <arguments>
-            <argument name="image" defaultValue="ImageUpload"/>
-        </arguments>
-        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
-        <waitForAjaxLoad stepKey="waitForAjaxUpload"/>
     </actionGroup>
 </actionGroups>

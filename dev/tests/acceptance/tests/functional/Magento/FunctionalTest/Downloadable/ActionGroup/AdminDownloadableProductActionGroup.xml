@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
+    <!--Fill main fields in product form-->
     <actionGroup name="fillMainDownloadableProductForm">
         <arguments>
             <argument name="product" defaultValue="DownloadableProduct"/>
@@ -19,6 +19,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
     </actionGroup>
 
+    <!--Add a downloadable link that has max downloads-->
     <actionGroup name="addDownloadableProductLinkWithMaxDownloads">
         <arguments>
             <argument name="link" defaultValue="downloadableLinkWithMaxDownloads"/>
@@ -35,6 +36,7 @@
         <fillField userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUrlInput('0')}}" stepKey="fillDownloadableLinkSampleUrl"/>
     </actionGroup>
 
+    <!--Add a downloadable link with unlimited downloads-->
     <actionGroup name="addDownloadableProductLink">
         <arguments>
             <argument name="link" defaultValue="downloadableLink"/>
@@ -50,7 +52,8 @@
         <fillField userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput('1')}}" stepKey="fillDownloadableLinkFileUrl"/>
         <attachFile userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile('1')}}" stepKey="attachDownloadableLinkUploadSample"/>
     </actionGroup>
-    
+
+    <!--Add a downloadable sample file-->
     <actionGroup name="addDownloadableSampleFile">
         <arguments>
             <argument name="sample" defaultValue="downloadableSampleFile"/>
@@ -63,6 +66,7 @@
         <waitForAjaxLoad stepKey="waitForSampleFileUpload"/>
     </actionGroup>
 
+    <!--Add a downloadable sample URL-->
     <actionGroup name="addDownloadableSampleUrl">
         <arguments>
             <argument name="sample" defaultValue="downloadableSampleUrl"/>

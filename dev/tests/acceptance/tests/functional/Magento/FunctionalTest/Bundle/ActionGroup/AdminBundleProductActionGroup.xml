@@ -8,6 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Fill main fields in create product form-->
     <actionGroup name="fillMainBundleProductForm">
         <arguments>
             <argument name="product" defaultValue="BundleProduct"/>
@@ -17,6 +18,7 @@
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
     </actionGroup>
 
+    <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInBundleProductForm">
         <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
         <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
@@ -26,6 +28,7 @@
         <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
     </actionGroup>
 
+    <!--Filter product grid and see expected product-->
     <actionGroup name="viewBundleProductInAdminGrid">
         <arguments>
             <argument name="product" defaultValue="BundleProduct"/>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-
+    <!--Reset the product grid to the default view-->
     <actionGroup name="resetProductGridToDefaultView">
         <click selector="{{AdminProductGridFilterSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
         <click selector="{{AdminProductGridFilterSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
@@ -16,6 +16,7 @@
         <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
     </actionGroup>
 
+    <!--Filter the product grid by the SKU field-->
     <actionGroup name="filterProductGridBySku">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
@@ -27,6 +28,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid by the Name field-->
     <actionGroup name="filterProductGridByName">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
@@ -38,6 +40,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid by a price range-->
     <actionGroup name="filterProductGridByPriceRange">
         <arguments>
             <argument name="filter"/>
@@ -50,6 +53,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid to Enabled products-->
     <actionGroup name="filterProductGridByEnabledStatus">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
@@ -58,6 +62,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter the product grid to Disabled products-->
     <actionGroup name="filterProductGridByDisabledStatus">
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
@@ -66,6 +71,7 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Filter product grid by name, sku, and type; and see expected product-->
     <actionGroup name="viewProductInAdminGrid">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
@@ -83,6 +89,7 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
     </actionGroup>
 
+    <!--Delete a product by filtering grid and using delete action-->
     <actionGroup name="deleteProductUsingProductGrid">
         <arguments>
             <argument name="product"/>
