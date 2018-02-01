@@ -403,14 +403,17 @@
     <type xsi:type="OutputType" name="CustomizableFieldOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="value" type="CustomizableFieldValue"/>
+        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableFileOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="value" type="CustomizableFileValue"/>
+        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableDateOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="value" type="CustomizableDateValue"/>
+        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableDropDownOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
@@ -423,13 +426,13 @@
     <type xsi:type="OutputType" name="CustomizableAreaOption">
         <implements interface="CustomizableOptionInterface" copyFields="true"/>
         <field xsi:type="ObjectOutputField" name="value" type="CustomizableAreaValue"/>
+        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableFieldValue">
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="max_characters" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableFileValue">
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
@@ -438,13 +441,11 @@
         <field xsi:type="ScalarOutputField" name="file_extension" type="String"/>
         <field xsi:type="ScalarOutputField" name="image_size_x" type="Int"/>
         <field xsi:type="ScalarOutputField" name="image_size_y" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableDateValue">
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
-        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableDropDownValue">
         <field xsi:type="ScalarOutputField" name="option_type_id" type="Int"/>
@@ -452,6 +453,7 @@
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableRadioValue">
         <field xsi:type="ScalarOutputField" name="option_type_id" type="Int"/>
@@ -459,12 +461,12 @@
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="title" type="String"/>
+        <field xsi:type="ScalarOutputField" name="sort_order" type="Int"/>
     </type>
     <type xsi:type="OutputType" name="CustomizableAreaValue">
         <field xsi:type="ScalarOutputField" name="price" type="Float"/>
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
-        <field xsi:type="ScalarOutputField" name="product_sku" type="String"/>
         <field xsi:type="ScalarOutputField" name="max_characters" type="Int"/>
     </type>
     <type xsi:type="Enum" name="PriceTypeEnum">

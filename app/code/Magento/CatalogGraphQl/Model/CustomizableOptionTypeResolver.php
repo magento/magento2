@@ -22,6 +22,14 @@ class CustomizableOptionTypeResolver implements TypeResolverInterface
     private $mapper;
 
     /**
+     * @param MapperInterface $mapper
+     */
+    public function __construct(MapperInterface $mapper)
+    {
+        $this->mapper = $mapper;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function resolveType(array $data)
