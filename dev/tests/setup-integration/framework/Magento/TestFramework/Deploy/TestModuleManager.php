@@ -78,7 +78,7 @@ class TestModuleManager
 
         if (file_exists($oldFile) && file_exists($revisionFile)) {
             unlink($oldFile);
-            rename($revisionFile, $oldFile);
+            copy($revisionFile, $oldFile);
         } else {
             throw new \InvalidArgumentException("Old File or revision files paths are invalid");
         }
