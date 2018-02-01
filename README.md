@@ -5,13 +5,13 @@
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
 
 ## Magento system requirements
-[Magento system requirements](http://devdocs.magento.com/magento-system-requirements.html)
+[Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
 
 ## Install Magento
 To install Magento, see either:
 
 *	[Magento DevBox](https://magento.com/tech-resources/download), the easiest way to get started with Magento.
-*	[Installation guide](http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html)
+*	[Installation guide](http://devdocs.magento.com/guides/v2.2/install-gde/bk-install-guide.html)
 
 <h2>Contributing to the Magento 2 code base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
@@ -22,8 +22,8 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html>
-[2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
+[1]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html>
+[2]: <http://devdocs.magento.com/guides/v2.2/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
 

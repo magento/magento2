@@ -25,14 +25,11 @@
             </tr>
         </thead>
         <?php foreach ($_creditmemo->getAllItems() as $_item): ?>
-            <?php
-                if ($_item->getOrderItem()->getParentItem()) {
-                    continue;
-                }
-            ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
+            <?php if (!$_item->getOrderItem()->getParentItem())  : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
             <?= $block->getChildHtml('creditmemo_totals') ?>
