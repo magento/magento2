@@ -128,7 +128,7 @@ class Writer
                 $currentData = $this->reader->load($fileKey);
                 $currentComments = $this->commentParser->execute($paths[$fileKey]);
 
-                if ($currentData) {
+                if (is_array($currentData)) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
                     } else {
