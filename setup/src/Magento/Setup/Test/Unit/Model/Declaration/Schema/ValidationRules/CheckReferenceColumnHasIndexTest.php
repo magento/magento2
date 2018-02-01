@@ -1,9 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\Declaration\ValidationRules;
+
+namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\ValidationRules;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex;
