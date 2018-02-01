@@ -81,39 +81,53 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         parent::_afterSave($object);
 
-        $conditions = [
+        $condition = [
             'option_id = ?' => $object->getId(),
-            'store_id = ? OR store_id = 0' => $object->getStoreId(),
+            'store_id = ?' => $object->getStoreId(),
             'parent_product_id = ?' => $object->getParentId()
         ];
-
         $connection = $this->getConnection();
 
-        if ($this->isOptionPresent($conditions)) {
+        // save option data for all store view scopes except for 0
+        if ($this->isOptionPresent($condition)) {
             $connection->update(
                 $this->getTable('catalog_product_bundle_option_value'),
                 [
                     'title' => $object->getTitle()
                 ],
-                $conditions
+                $condition
+            );
+        } else {
+            if ($object->getStoreId() != 0) {
+                $data = new \Magento\Framework\DataObject();
+                $data->setOptionId($object->getId())
+                    ->setStoreId($object->getStoreId())
+                    ->setParentProductId($object->getParentId())
+                    ->setTitle($object->getTitle());
+
+                $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            }
+        }
+
+        $condition['store_id = ?'] = 0;
+
+        // also save default value
+        if ($this->isOptionPresent($condition)) {
+            $connection->update(
+                $this->getTable('catalog_product_bundle_option_value'),
+                [
+                    'title' => $object->getDefaultTitle()
+                ],
+                $condition
             );
         } else {
             $data = new \Magento\Framework\DataObject();
             $data->setOptionId($object->getId())
-                ->setStoreId($object->getStoreId())
+                ->setStoreId(0)
                 ->setParentProductId($object->getParentId())
-                ->setTitle($object->getTitle());
+                ->setTitle($object->getDefaultTitle());
 
             $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
-
-            /**
-             * also saving default value if this store view scope
-             */
-            if ($object->getStoreId()) {
-                $data->setStoreId(0);
-                $data->setTitle($object->getDefaultTitle());
-                $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
-            }
         }
 
         return $this;
