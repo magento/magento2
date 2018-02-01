@@ -42,16 +42,13 @@ class ReadSnapshotPlugin
 
     /**
      * @param ReadSnapshot $subject
-     * @param \Closure $proceed
-     * @param string $entityType
      * @param array $entityData
-     * @param array $arguments
+     * @param string $entityType
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(ReadSnapshot $subject, \Closure $proceed, $entityType, $entityData, $arguments = [])
+    public function afterExecute(ReadSnapshot $subject, array $entityData, $entityType)
     {
-        $entityData = $proceed($entityType, $entityData, $arguments);
         if (!in_array($entityType, [ProductInterface::class, CategoryInterface::class], true)) {
             return $entityData;
         }
