@@ -270,11 +270,27 @@ class Customer extends AbstractCustomer
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                $this->customerFields
+                $this->getCustomerEntityFieldsToUpdate($entitiesToUpdate)
             );
         }
 
         return $this;
+    }
+
+    /**
+     * Filter the entity that are being updated so we only change fields found in the importer file
+     *
+     * @param array $entitiesToUpdate
+     * @return array
+     */
+    private function getCustomerEntityFieldsToUpdate(array $entitiesToUpdate): array
+    {
+        $firstCustomer = reset($entitiesToUpdate);
+        $columnsToUpdate = array_keys($firstCustomer);
+        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
+            return in_array($field, $columnsToUpdate);
+        });
+        return $customerFieldsToUpdate;
     }
 
     /**

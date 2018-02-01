@@ -10,16 +10,16 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToWYSIWYGWithTypeOfCMSStaticBlock">
         <annotations>
-            <features value="Add Widget to WYSIWYG"/>
-            <stories value="Widgets in WYSIWYG"/>
-            <group value="CMSStaticBlock"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
+            <group value="Cms"/>
             <title value="Create CMS Page With Widget Type:CMS Static Block"/>
-            <description value="Create CMS Page With Widget Type:CMS Static Blocl"/>
+            <description value="Create CMS Page With Widget Type:CMS Static Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83787"/>
         </annotations>
         <before>
-            <createData entity="_defaultBlock" stepKey="createPreBlock" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
@@ -29,10 +29,10 @@
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-        <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
@@ -47,8 +47,10 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <waitForLoadingMaskToDisappear stepKey="wait3"/>
-        <waitForElementVisible selector="{{WidgetSection.BlockPage($$createPreBlock.identifier$$)}}" stepKey="waitForSlideoutOpens" />
-        <click selector="{{WidgetSection.BlockPage($$createPreBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <waitForElementVisible selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="waitForSlideoutOpens" />
+        <scrollTo selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}"  stepKey="scrollToBlockIdentifier" />
+        <click selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectBlockTitle}}" stepKey="waitForSlideoutCloses" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForLoadingMaskToDisappear stepKey="waitingForLoading" />
@@ -61,8 +63,9 @@
         <waitForPageLoad stepKey="wait5" />
         <!--see widget on Storefront-->
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
-        <see userInput="$$createPreBlock.content$$" stepKey="seeBlockLink"/>
+        <see userInput="$$createPreReqBlock.content$$" stepKey="seeBlockLink"/>
         <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
