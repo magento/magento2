@@ -20,7 +20,7 @@ class CacheClean
      *
      * @return void
      */
-    public function startTest()
+    public function endTest()
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\Manager::class);
