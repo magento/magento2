@@ -75,15 +75,14 @@ class LastOrderedItems implements SectionSourceInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
         $this->_customerSession = $customerSession;
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
-        $this->productRepository = $productRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -121,7 +120,9 @@ class LastOrderedItems implements SectionSourceInterface
             foreach ($order->getParentItemsRandomCollection($limit) as $item) {
                 /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->productRepository->getById(
-                    $item->getProductId(), false, $this->_storeManager->getStore()->getId()
+                    $item->getProductId(),
+                    false,
+                    $this->_storeManager->getStore()->getId()
                 );
                 if ($product && in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
