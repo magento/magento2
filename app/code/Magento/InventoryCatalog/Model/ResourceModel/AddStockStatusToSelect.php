@@ -34,7 +34,7 @@ class AddStockStatusToSelect
      * @param int $stockId
      * @return void
      */
-    public function addStockStatusToSelect(Select $select, int $stockId)
+    public function execute(Select $select, int $stockId)
     {
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 

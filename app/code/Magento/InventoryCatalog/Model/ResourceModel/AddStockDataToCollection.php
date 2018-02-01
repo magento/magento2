@@ -35,7 +35,7 @@ class AddStockDataToCollection
      * @param int $stockId
      * @return void
      */
-    public function addStockDataToCollection(Collection $collection, bool $isFilterInStock, int $stockId)
+    public function execute(Collection $collection, bool $isFilterInStock, int $stockId)
     {
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
 

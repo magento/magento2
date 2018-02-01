@@ -14,7 +14,7 @@ use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
 /**
  * Adapt adding is in stock filter to collection for multi stocks.
  */
-class AdaptAddIsInStockFilterToCollection
+class AdaptAddIsInStockFilterToCollectionPlugin
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -24,18 +24,18 @@ class AdaptAddIsInStockFilterToCollection
     /**
      * @var AddIsInStockFilterToCollection
      */
-    private $adaptedAddIsInStockFilterToCollection;
+    private $addIsInStockFilterToCollection;
 
     /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
-     * @param AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
+     * @param AddIsInStockFilterToCollection $addIsInStockFilterToCollection
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        AddIsInStockFilterToCollection $adaptedAddIsInStockFilterToCollection
+        AddIsInStockFilterToCollection $addIsInStockFilterToCollection
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->adaptedAddIsInStockFilterToCollection = $adaptedAddIsInStockFilterToCollection;
+        $this->addIsInStockFilterToCollection = $addIsInStockFilterToCollection;
     }
 
     /**
@@ -52,7 +52,7 @@ class AdaptAddIsInStockFilterToCollection
         $collection
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $this->adaptedAddIsInStockFilterToCollection->addIsInStockFilterToCollection($collection, $stockId);
+        $this->addIsInStockFilterToCollection->execute($collection, $stockId);
 
         return $stockStatus;
     }
