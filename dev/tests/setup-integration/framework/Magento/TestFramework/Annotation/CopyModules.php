@@ -6,7 +6,6 @@
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Framework\Filesystem\Io\File;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 
@@ -45,7 +44,10 @@ class CopyModules
         $annotations = $test->getAnnotations();
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
-            $this->cliCommand->introduceModule($annotations['method']['moduleName'][0]);
+            $moduleName = $annotations['method']['moduleName'][0];
+            $this->cliCommand->introduceModule($moduleName);
+            $path = MAGENTO_MODULES_PATH . explode("_", $moduleName)[1] . '/registration.php';
+            include_once $path;
         }
     }
 }

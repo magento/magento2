@@ -73,6 +73,8 @@ try {
         $application,
         new \Magento\TestFramework\Bootstrap\MemoryFactory($shell)
     );
+    //remove test modules files
+    include_once __DIR__ . '/../../setup-integration/framework/removeTestModules.php';
     $bootstrap->runBootstrap();
     $application->createInstallDir();
     //We do not want to install anything
