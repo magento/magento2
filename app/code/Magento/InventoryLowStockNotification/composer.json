@@ -7,7 +7,7 @@
         "magento/module-catalog": "101.2.*",
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
-        "magento/module-inventory-low-stock-configuration-api": "100.0.*"
+        "magento/module-inventory-low-stock-notification-api": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",

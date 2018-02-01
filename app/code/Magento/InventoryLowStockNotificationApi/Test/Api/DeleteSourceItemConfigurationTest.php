@@ -14,8 +14,8 @@ use Magento\Framework\Webapi\Rest\Request;
 class DeleteSourceItemConfigurationTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
-    const SERVICE_NAME_DELETE = 'InventoryLowStockNotificationApiDeleteSourceItemConfigurationV1';
-    const SERVICE_NAME_GET = 'InventoryLowStockNotificationApiGetSourceItemConfigurationV1';
+    const SERVICE_NAME_DELETE = 'inventoryLowStockNotificationApiDeleteSourceItemConfigurationV1';
+    const SERVICE_NAME_GET = 'inventoryLowStockNotificationApiGetSourceItemConfigurationV1';
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
