@@ -16,9 +16,7 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Setup/Upgrade Tests">
-            <file>testsuite/Magento/Setup/DiffOldSchemaTest.php</file>
-            <file>testsuite/Magento/Setup/DeclarativeSchemaBuilderTest.php</file>
-            <file>testsuite/Magento/Setup/SchemaReaderTest.php</file>
+            <directory suffix="Test.php">testsuite</directory>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
