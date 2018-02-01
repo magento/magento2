@@ -48,7 +48,6 @@ class VirtualProductViewTest extends GraphQlAbstract
            }
        }
    }
-   
 }
 QUERY;
 
@@ -131,7 +130,6 @@ QUERY;
 
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
-
 
     /**
      * @param array $actualResponse

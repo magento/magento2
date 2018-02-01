@@ -429,7 +429,6 @@ QUERY;
           page_size
           current_page
         }
-        
     }
 }
 QUERY;
@@ -632,7 +631,6 @@ QUERY;
           page_size
           current_page
         }
-
     }
 }
 QUERY;
@@ -665,10 +663,8 @@ QUERY;
                weight
            }
            category_ids                
-           
        }
    }
-  
 }
 QUERY;
 
