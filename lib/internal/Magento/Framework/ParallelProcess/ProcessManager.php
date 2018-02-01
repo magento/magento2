@@ -7,7 +7,6 @@
 namespace Magento\Framework\ParallelProcess;
 
 use Magento\Framework\ParallelProcess\Fork\ChildProcessException;
-use Magento\Framework\ParallelProcess\Fork\ExitEventListenerInterface;
 use Magento\Framework\ParallelProcess\Fork\ForkManagerInterface;
 use Magento\Framework\ParallelProcess\Process\Data;
 use Magento\Framework\ParallelProcess\Process\ExitedWithErrorException;
@@ -94,7 +93,7 @@ class ProcessManager
             }
         );
         //Dividing processes to honor limit.
-        if ($this->limit > 0 ) {
+        if ($this->limit > 1) {
             $chunkSize = ceil(count($sorted) / $this->limit);
         } else {
             $chunkSize = 1;

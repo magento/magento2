@@ -17,6 +17,11 @@ class PcntlForkManager implements ForkManagerInterface
     private $pidsLaunched = [];
 
     /**
+     * @var int[]
+     */
+    private $pidStatuses = [];
+
+    /**
      * @inheritDoc
      */
     public function fork(): int
@@ -43,9 +48,15 @@ class PcntlForkManager implements ForkManagerInterface
         }
 
         $result = pcntl_waitpid($forkId, $status);
-        if ($result === -1) {
+        if ($result === -1 && !array_key_exists($forkId, $this->pidStatuses)) {
             throw new \RuntimeException('Error on waiting on a child process');
         }
+        if (array_key_exists($forkId, $this->pidStatuses)) {
+            $status = $this->pidStatuses[$forkId];
+        } else {
+            $this->pidStatuses[$forkId] = $status;
+        }
+
         if (pcntl_wifexited($status)) {
             $code = pcntl_wexitstatus($status);
             if ($code === 0) {
