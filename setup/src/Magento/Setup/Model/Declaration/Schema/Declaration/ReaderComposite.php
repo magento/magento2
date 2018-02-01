@@ -48,7 +48,7 @@ class ReaderComposite implements ReaderInterface
             $schema = array_replace_recursive($schema, $reader->read($scope));
         }
 
-        if (!count($schema)) {
+        if (count($schema['table']) === 0) {
             var_dump($this->deploymentConfig->get());
             var_dump($this->deploymentConfig->getConfigData());
         }
