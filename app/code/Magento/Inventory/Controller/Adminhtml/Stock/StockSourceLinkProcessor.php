@@ -91,10 +91,10 @@ class StockSourceLinkProcessor
         $linksForSave = [];
 
         foreach ($linksData as $linkData) {
-            $stockId = $linkData[StockSourceLink::STOCK_ID];
+            $sourceCode = $linkData[StockSourceLink::SOURCE_CODE];
 
-            if (isset($linksForDelete[$stockId])) {
-                $link = $linksForDelete[$stockId];
+            if (isset($linksForDelete[$sourceCode])) {
+                $link = $linksForDelete[$sourceCode];
             } else {
                 /** @var StockSourceLinkInterface $link */
                 $link = $this->stockSourceLinkFactory->create();
@@ -104,7 +104,7 @@ class StockSourceLinkProcessor
             $this->dataObjectHelper->populateWithArray($link, $linkData, StockSourceLinkInterface::class);
 
             $linksForSave[] = $link;
-            unset($linksForDelete[$linkData[StockSourceLink::STOCK_ID]]);
+            unset($linksForDelete[$sourceCode]);
         }
 
         if (count($linksForSave) > 0) {
@@ -143,7 +143,7 @@ class StockSourceLinkProcessor
 
         $result = [];
         foreach ($this->getStockSourceLinks->execute($searchCriteria)->getItems() as $link) {
-            $result[$link->getStockId()] = $link;
+            $result[$link->getSourceCode()] = $link;
         }
         return $result;
     }
