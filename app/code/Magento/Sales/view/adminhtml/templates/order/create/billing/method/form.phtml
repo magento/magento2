@@ -45,8 +45,7 @@
                     </label>
                 </dt>
                 <dd class="admin__payment-method-wrapper">
-                    <?= /* @noEscape */
-                    $block->getChildHtml('payment.method.' . $_code) ?>
+                    <?= /* @noEscape */ $block->getChildHtml('payment.method.' . $_code) ?>
                 </dd>
             <?php endforeach; ?>
         </dl>
@@ -55,13 +54,13 @@
         require([
             'mage/apply/main',
             'Magento_Sales/order/create/form'
-        ], function (mage) {
+        ], function(mage) {
             mage.apply();
-            <?php if ($_methodsCount != 1) : ?>
+        <?php if ($_methodsCount != 1) : ?>
             order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
-            <?php else : ?>
+        <?php else : ?>
             payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
-            <?php endif; ?>
+        <?php endif; ?>
         });
     </script>
 <?php else : ?>
