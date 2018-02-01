@@ -59,6 +59,7 @@
         "ext-dom": "*",
         "ext-simplexml": "*",
         "ext-mcrypt": "*",
+        "ext-bcmath": "*",
         "ext-hash": "*",
         "ext-curl": "*",
         "ext-iconv": "*",

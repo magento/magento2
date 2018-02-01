@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Store\Model\Store;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -110,21 +111,22 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $index = 0;
         $ids = [];
         $origProducts = [];
+        /** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+        $stockRegistryStorage = $this->objectManager->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
-            $origProducts[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
-                ->load($ids[$index]);
+            $origProducts[$index] = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID);
             $index++;
         }
 
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
-
         while ($index > 0) {
             $index--;
-            $newProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
-                ->load($ids[$index]);
-
+            $stockRegistryStorage->removeStockItem($ids[$index]);
+            $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // @todo uncomment or remove after MAGETWO-49806 resolved
             //$this->assertEquals(count($origProductData[$index]), count($newProductData));
 
@@ -294,10 +296,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $index = 0;
         $ids = [];
         $origProducts = [];
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
-            $origProducts[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
-                ->load($ids[$index]);
+            $origProducts[$index] = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID);
             $index++;
         }
 
@@ -317,10 +320,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
         while ($index > 0) {
             $index--;
-
-            $id = $this->productResource->getIdBySku($skus[$index]);
-            $newProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($id);
-
+            $productRepository->cleanCache();
+            $newProduct = $productRepository->get($skus[$index], false, Store::DEFAULT_STORE_ID, true);
             // check original product is deleted
             $origProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($ids[$index]);
             $this->assertNull($origProduct->getId());
