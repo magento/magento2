@@ -135,6 +135,19 @@ class CliCommand
     }
 
     /**
+     * Clean all types of cache
+     */
+    public function cacheClean()
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $command = 'php -f ' . BP . '/bin/magento cache:clean ' .
+            ' -vvv --magento-init-params=' .
+            $initParams['magento-init-params'];
+
+        $this->shell->execute($command);
+    }
+
+    /**
      * Convert from raw params to CLI arguments, like --admin-username.
      *
      * @param  array $params

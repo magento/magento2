@@ -31,6 +31,7 @@ class SetupDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
             new \Magento\TestFramework\Annotation\ComponentRegistrarFixture($this->_fixturesBaseDir),
             new \Magento\TestFramework\Annotation\SchemaFixture($this->_fixturesBaseDir),
             new \Magento\TestFramework\Annotation\Cache(),
+            new \Magento\TestFramework\Workaround\CacheClean(),
             new \Magento\TestFramework\Annotation\ReinstallInstance($application),
             new \Magento\TestFramework\Annotation\CopyModules(),
             new \Magento\TestFramework\Annotation\DataProviderFromFile()
