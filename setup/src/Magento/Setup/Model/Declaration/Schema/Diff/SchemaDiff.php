@@ -60,6 +60,28 @@ class SchemaDiff
     }
 
     /**
+     * Create consistent table index from all tables
+     *
+     * All declared table names should have order, all tables exists only in db should goes after them
+     *
+     * @param array $tableNames
+     * @param array $generatedTableNames
+     * @return array
+     */
+    private function createTableIndex(array $tableNames, array $generatedTableNames)
+    {
+        $tableNames = array_flip($tableNames);
+        foreach ($generatedTableNames as $tableName) {
+            //If table exists only in db
+            if (!isset($tableNames[$tableName])) {
+                array_push($tableNames, $tableName);
+            }
+        }
+
+        return $tableNames;
+    }
+
+    /**
      * Create diff.
      *
      * @param Schema $schema
@@ -71,10 +93,12 @@ class SchemaDiff
         Schema $generatedSchema
     ) {
         $generatedTables = $generatedSchema->getTables();
-        $tableIndex = array_flip(array_keys($schema->getTables()));
+        $tableNames = array_keys($schema->getTables());
+        $generatedTableNames = array_keys($generatedSchema->getTables());
+
         $diff = $this->diffFactory->create(
             [
-                'tableIndexes' => $tableIndex,
+                'tableIndexes' => $this->createTableIndex($tableNames, $generatedTableNames),
                 'destructiveOperations' => $this->operationsExecutor->getDestructiveOperations()
             ]
         );
