@@ -18,7 +18,7 @@ class BundleProductTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'bundle') {
+        if (isset($data['type_id']) && $data['type_id'] == 'bundle') {
             return 'BundleProduct';
         }
 

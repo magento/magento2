@@ -18,9 +18,9 @@ class CatalogProductTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'simple') {
+        if (isset($data['type_id']) && $data['type_id'] == 'simple') {
             return 'SimpleProduct';
-        } elseif ($data['type_id'] == 'virtual') {
+        } elseif (isset($data['type_id']) && $data['type_id'] == 'virtual') {
             return 'VirtualProduct';
         }
 

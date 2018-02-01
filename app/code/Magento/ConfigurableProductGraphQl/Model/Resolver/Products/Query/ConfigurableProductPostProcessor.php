@@ -65,7 +65,7 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
     {
         $childrenIds = [];
         foreach ($resultData as $key => $product) {
-            if ($product['type_id'] === Configurable::TYPE_CODE) {
+            if (isset($product['type_id']) && $product['type_id'] === Configurable::TYPE_CODE) {
                 $formattedChildIds = [];
                 if (isset($product['configurable_product_links'])) {
                     foreach ($product['configurable_product_links'] as $childId) {

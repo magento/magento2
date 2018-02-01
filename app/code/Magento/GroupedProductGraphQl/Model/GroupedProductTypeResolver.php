@@ -18,7 +18,7 @@ class GroupedProductTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data)
     {
-        if ($data['type_id'] == 'grouped') {
+        if (isset($data['type_id']) && $data['type_id'] == 'grouped') {
             return 'GroupedProduct';
         }
 
