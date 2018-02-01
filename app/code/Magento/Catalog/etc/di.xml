@@ -810,7 +810,7 @@
         </arguments>
     </virtualType>
     <type name="Magento\Eav\Model\ResourceModel\ReadSnapshot">
-        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\Product\ReadSnapshotPlugin" />
+        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin" />
     </type>
     <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>

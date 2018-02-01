@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Plugin\Model\ResourceModel\Product;
+namespace Magento\Catalog\Plugin\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\ReadSnapshot;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Extend Eav ReadSnapshot by adding data from product attributes with global scope.
+ * Extend Eav ReadSnapshot by adding data from product or category attributes with global scope.
  * Default ReadSnapshot returns only data for current scope where entity is editing, but attributes with global scope,
  * e.g. price, is written only to default scope (store_id = 0) in case Catalog Price Scope set to "Global"
  */
@@ -51,7 +52,7 @@ class ReadSnapshotPlugin
     public function aroundExecute(ReadSnapshot $subject, \Closure $proceed, $entityType, $entityData, $arguments = [])
     {
         $entityData = $proceed($entityType, $entityData, $arguments);
-        if ($entityType !== ProductInterface::class) {
+        if (!in_array($entityType, [ProductInterface::class, CategoryInterface::class], true)) {
             return $entityData;
         }
 
