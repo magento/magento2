@@ -802,6 +802,15 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      */
     public function setAdditionalData($additionalData);
 
+    /**s
+     * Set Additional information about payment into Payment model
+     *
+     * @param string $key
+     * @param string|null $value
+     * @return mixed
+     */
+    public function setAdditionalInformation($key, $value = null);
+
     /**
      * Sets the credit card expiration month for the order payment.
      *
