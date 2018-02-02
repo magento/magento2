@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Block\Catalog\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -162,7 +163,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             'children_count' => (int)$node->getChildrenCount(),
             'is_active' => (bool)$node->getIsActive(),
             // Scrub names for raw js output
-            'name' => htmlspecialchars($this->escapeHtml($node->getName()), ENT_COMPAT, 'UTF-8'),
+            'name' => $this->escapeHtmlAttr($node->getName(), false),
             'level' => (int)$node->getLevel(),
             'product_count' => (int)$node->getProductCount(),
         ];
