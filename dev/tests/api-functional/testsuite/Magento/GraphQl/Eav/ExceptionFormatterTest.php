@@ -43,6 +43,9 @@ class ExceptionFormatterTest extends GraphQlAbstract
 
     public function testInvalidEntityTypeExceptionInDeveloperMode($mageMode = State::MODE_DEVELOPER)
     {
+        $this->markTestSkipped(
+            "Current infrastructure cannot switch out of produciton mode, which is required for this test."
+        );
         $this->setDeveloperMode();
         $this->objectManager->get(State::class)->setMode($mageMode);
 

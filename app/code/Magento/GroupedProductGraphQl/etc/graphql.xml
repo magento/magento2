@@ -7,7 +7,6 @@
     <type xsi:type="OutputType" name="GroupedProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
-        <implements interface="CustomizableProductInterface" copyFields="true"/>
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="GroupedProductItem"/>
     </type>
     <type xsi:type="OutputType" name="GroupedProductItem">
