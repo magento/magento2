@@ -9,7 +9,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_bundle_data" xsi:type="object">Magento\BundleGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\BundleOptions</item>
+                <item name="add_bundle_data" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\BundleOptions</item>
             </argument>
         </arguments>
     </type>
