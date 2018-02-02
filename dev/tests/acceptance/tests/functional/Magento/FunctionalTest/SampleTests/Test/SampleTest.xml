@@ -198,6 +198,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <parseFloat userInput="300,000.2325" stepKey="parseFloat1"/>
+        <magentoCLI stepKey="enableMaintenance1" command="maintenance:enable"/>
     </test>
     <test name="AllVariableMethodsTest">
         <annotations>
