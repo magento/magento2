@@ -14,5 +14,6 @@
         <element name="cartItems" type="text" selector=".minicart-items"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
+        <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
     </section>
 </sections>

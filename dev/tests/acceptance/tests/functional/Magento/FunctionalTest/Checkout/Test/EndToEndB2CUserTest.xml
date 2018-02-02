@@ -623,5 +623,10 @@
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="total" value="E2EB2CQuote.total"/>
         </actionGroup>
+
+        <!-- Check out -->
+        <actionGroup ref="GuestCheckoutWithCheckMoneyOrderPaymentActionGroup" stepKey="guestCheckoutWithCheckMoneyOrderPayment">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
     </test>
 </tests>
