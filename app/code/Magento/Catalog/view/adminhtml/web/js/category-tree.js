@@ -5,58 +5,11 @@
 
 define([
     'jquery',
+    'underscore',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($) {
+], function ($, _) {
     'use strict';
-
-    var decodeEntities,
-        doc,
-        element,
-        x;
-
-    // noinspection JSUnusedAssignment
-    decodeEntities = (function () {
-        //create a new html document (doesn't execute script tags in child elements)
-
-        doc = document.implementation.createHTMLDocument('');
-        element = doc.createElement('div');
-
-        /**
-         * Get Text Content
-         * @param {*} str
-         * @return {*}
-         * @public
-         */
-        function getText(str) {
-            element.innerHTML = str;
-            str = element.textContent;
-            element.textContent = '';
-
-            return str;
-        }
-
-        /**
-         * Get HTML decoded Entities
-         * @param {*} str
-         * @return {*}
-         * @public
-         */
-        function decodeHTMLEntities(str) {
-            if (str && typeof str === 'string') {
-                x = getText(str);
-
-                while (str !== x) {
-                    str = x;
-                    x = getText(x);
-                }
-
-                return x;
-            }
-        }
-
-        return decodeHTMLEntities;
-    }(decodeEntities || {}));
 
     $.widget('mage.categoryTree', {
         options: {
@@ -138,7 +91,7 @@ define([
             }
             result = {
                 data: {
-                    title: decodeEntities(node.name) + ' (' + node['product_count'] + ')'
+                    title: _.unescape(node.name) + ' (' + node['product_count'] + ')'
                 },
                 attr: {
                     'class': node.cls + (!!node.disabled ? ' disabled' : '') //eslint-disable-line no-extra-boolean-cast
