@@ -4,17 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\DownloadableGraphQl\Model\Resolver\Products\Query;
+namespace Magento\DownloadableGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
+use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
+use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
 
 /**
- * Retrieves simple product data for child products, and formats configurable data
+ * Post formatting plugin to continue formatting data for downloadable type products
  */
-class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
+class DownloadableOptions implements FormatterInterface
 {
     /**
      * @var EnumLookup
@@ -27,45 +31,64 @@ class DownloadableProductPostProcessor implements \Magento\Framework\GraphQl\Que
     private $downloadableHelper;
 
     /**
-     * @param EnumLookup $enumLookup
+     * @var SampleCollection
      */
-    public function __construct(EnumLookup $enumLookup, DownloadableHelper $downloadableHelper)
-    {
+    private $sampleCollection;
+
+    /**
+     * @var LinkCollection
+     */
+    private $linkCollection;
+
+    /**
+     * @param EnumLookup $enumLookup
+     * @param DownloadableHelper $downloadableHelper
+     * @param SampleCollection $sampleCollection
+     * @param LinkCollection $linkCollection
+     */
+    public function __construct(
+        EnumLookup $enumLookup,
+        DownloadableHelper $downloadableHelper,
+        SampleCollection $sampleCollection,
+        LinkCollection $linkCollection
+    ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
+        $this->sampleCollection = $sampleCollection;
+        $this->linkCollection = $linkCollection;
     }
 
     /**
-     * Process all downloadable product data, including adding simple product data and formatting relevant attributes.
+     * Add downloadable options and options to configurable types
      *
-     * @param array $resultData
-     * @return array
+     * {@inheritdoc}
      */
-    public function process(array $resultData)
+    public function format(Product $product, array $productData = [])
     {
-        foreach ($resultData as $productKey => $product) {
-            if (isset($product['type_id']) && $product['type_id'] === Downloadable::TYPE_DOWNLOADABLE) {
-                if (isset($product['downloadable_product_samples'])) {
-                    $resultData[$productKey]['downloadable_product_samples']
-                        = $this->formatSamples($product['downloadable_product_samples']);
-                }
-                if (isset($product['downloadable_product_links'])) {
-                    $resultData[$productKey]['downloadable_product_links']
-                        = $this->formatLinks($product['downloadable_product_links']);
-                }
-            }
+        if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
+            $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
+                ->addProductToFilter($product->getId());
+            $links = $this->linkCollection->addTitleToResult($product->getStoreId())
+                ->addPriceToResult($product->getStore()->getWebsiteId())
+                ->addProductToFilter($product->getId());
+            $productData['downloadable_product_links'] =  $this->formatLinks(
+                $links
+            );
+            $productData['downloadable_product_samples'] = $this->formatSamples(
+                $samples
+            );
         }
 
-        return $resultData;
+        return $productData;
     }
 
     /**
      * Format links from collection as array
      *
-     * @param Collection $links
+     * @param \Magento\Downloadable\Api\Data\LinkInterface[] $links
      * @return array
      */
-    private function formatLinks(Collection $links)
+    private function formatLinks($links)
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
