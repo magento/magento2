@@ -182,6 +182,8 @@ class Queue
      * @param array $packages
      * @param array $packageJob
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function assertAndExecute($name, array & $packages, array $packageJob)
     {
@@ -205,6 +207,7 @@ class Queue
                 }
             }
         }
+
         if (!$dependenciesNotFinished
             && !$this->isDeployed($package)
             && (
