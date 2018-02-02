@@ -601,6 +601,7 @@ QUERY;
     /**
      * @param ProductInterface $product
      * @param $actualResponse
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function assertOptions($product, $actualResponse)
     {
@@ -610,9 +611,23 @@ QUERY;
             $option = null;
             /** @var \Magento\Catalog\Model\Product\Option $optionSelect */
             foreach ($productOptions as $optionSelect) {
+                $match = false;
                 if ($optionSelect->getTitle() == $optionsArray['title']) {
                     $option = $optionSelect;
-                    break;
+                    if (!empty($option->getValues())) {
+                        $values = $option->getValues();
+                        /** @var \Magento\Catalog\Model\Product\Option\Value $value */
+                        $value = current($values);
+                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
+                            $match = true;
+                        }
+                    } else {
+                        $match = true;
+                    }
+                    if ($match) {
+                        break;
+                    }
                 }
             }
             $assertionMap = [
