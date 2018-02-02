@@ -6,22 +6,22 @@
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\Weight;
 use Magento\ImportExport\Model\Import;
 
 /**
- * Class QuantityTest
+ * Class WeightTest
  */
-class QuantityTest extends \PHPUnit\Framework\TestCase
+class WeightTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Quantity
+     * @var Weight
      */
-    private $quantity;
+    private $weight;
 
     protected function setUp()
     {
-        $this->quantity = new Quantity();
+        $this->weight = new Weight();
 
         $contextStub = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -31,7 +31,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
             ->willReturn(Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT);
 
         $contextStub->method('retrieveMessageTemplate')->willReturn(null);
-        $this->quantity->init($contextStub);
+        $this->weight->init($contextStub);
     }
 
     /**
@@ -41,7 +41,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValid($expectedResult, $value)
     {
-        $result = $this->quantity->isValid($value);
+        $result = $this->weight->isValid($value);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -51,17 +51,17 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     public function isValidDataProvider()
     {
         return [
-            [true, ['qty' => 0]],
-            [true, ['qty' => 1]],
-            [true, ['qty' => 5]],
-            [true, ['qty' => -1]],
-            [true, ['qty' => -10]],
-            [true, ['qty' => '']],
-            [false, ['qty' => 'abc']],
-            [false, ['qty' => true]],
-            [false, ['qty' => true]],
-            [true, ['qty' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT]],
-            [false, ['qty' => '__EMPTY__VALUE__TEST__']],
+            [true, ['weight' => 0]],
+            [true, ['weight' => 1]],
+            [true, ['weight' => 5]],
+            [false, ['weight' => -1]],
+            [false, ['weight' => -10]],
+            [true, ['weight' => '']],
+            [false, ['weight' => 'abc']],
+            [false, ['weight' => true]],
+            [false, ['weight' => true]],
+            [true, ['weight' => Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT]],
+            [false, ['weight' => '__EMPTY__VALUE__TEST__']],
         ];
     }
 }

@@ -188,6 +188,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if (!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
+
+        if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
+            return true;
+        }
+
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
