@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
+use Magento\Framework\Api\CriteriaInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder as ApiSearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -53,11 +53,6 @@ class StockDataProvider extends DataProvider
     private $sourceRepository;
 
     /**
-     * @var ApiSearchCriteriaBuilder
-     */
-    private $apiSearchCriteriaBuilder;
-
-    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -70,10 +65,8 @@ class StockDataProvider extends DataProvider
      * @param GetStockSourceLinksInterface $getStockSourceLinks
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
-     * @param ApiSearchCriteriaBuilder $apiSearchCriteriaBuilder
      * @param array $meta
      * @param array $data
-     * @internal param ApiSearchCriteriaInterface $apiSearchCriteria
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
@@ -89,7 +82,6 @@ class StockDataProvider extends DataProvider
         GetStockSourceLinksInterface $getStockSourceLinks,
         SourceRepositoryInterface $sourceRepository,
         GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
-        ApiSearchCriteriaBuilder $apiSearchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -110,7 +102,6 @@ class StockDataProvider extends DataProvider
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->sourceRepository = $sourceRepository;
-        $this->apiSearchCriteriaBuilder = $apiSearchCriteriaBuilder;
     }
 
     /**
@@ -162,8 +153,14 @@ class StockDataProvider extends DataProvider
      */
     private function getAssignedSourcesData(int $stockId): array
     {
-        $searchCriteria = $this->apiSearchCriteriaBuilder
-            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+        $filter = $this->filterBuilder
+            ->setField(StockSourceLinkInterface::STOCK_ID)
+            ->setValue($stockId)
+            ->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter($filter)
+            ->addSortOrder(StockSourceLinkInterface::PRIORITY, CriteriaInterface::SORT_ORDER_ASC)
             ->create();
 
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
