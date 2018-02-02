@@ -130,7 +130,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         );
         $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
-        $this->productMock->expects($this->once())->method('getBundleOptionsData')->willReturn(['option_1' => ['delete' => 1]]);
+        $this->productMock->expects($this->once())
+            ->method('getBundleOptionsData')
+            ->willReturn(['option_1' => ['delete' => 1]]);
         $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])

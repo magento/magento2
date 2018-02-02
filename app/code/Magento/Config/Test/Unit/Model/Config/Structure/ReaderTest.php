@@ -103,7 +103,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test the execution with the Validation exception of the 'read' method
-     * 
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid XML in file file:
      */
