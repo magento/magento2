@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
@@ -21,13 +22,20 @@ class ReaderComposite implements ReaderInterface
     private $readers;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor.
      *
+     * @param DeploymentConfig $deploymentConfig
      * @param ReaderInterface[] $readers
      */
-    public function __construct(array $readers = [])
+    public function __construct(DeploymentConfig $deploymentConfig, array $readers = [])
     {
         $this->readers = $readers;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**

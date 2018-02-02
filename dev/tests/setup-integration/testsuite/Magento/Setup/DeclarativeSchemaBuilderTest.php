@@ -38,7 +38,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->schemaConfig = $objectManager->create(SchemaConfig::class);
+        $this->schemaConfig = $objectManager->get(SchemaConfig::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
     }

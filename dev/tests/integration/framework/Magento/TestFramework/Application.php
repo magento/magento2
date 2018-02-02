@@ -451,16 +451,26 @@ class Application
     }
 
     /**
+     * Create install dir for integration framework
+     *
+     * @return void
+     */
+    public function createInstallDir()
+    {
+        $this->_ensureDirExists($this->installDir);
+        $this->_ensureDirExists($this->_configDir);
+
+        $this->copyAppConfigFiles();
+    }
+
+    /**
      * Cleanup both the database and the file system
      *
      * @return void
      */
     public function cleanup()
     {
-        $this->_ensureDirExists($this->installDir);
-        $this->_ensureDirExists($this->_configDir);
-
-        $this->copyAppConfigFiles();
+        $this->createInstallDir();
         /**
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */

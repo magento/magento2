@@ -33,8 +33,6 @@ class ReinstallInstance
      */
     public function endTest()
     {
-        if ($this->application->isInstalled()) {
-            $this->application->cleanup();
-        }
+        $this->application->cleanup();
     }
 }
