@@ -16,14 +16,14 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      *
      * @var \Zend_Cache_Backend_ExtendedInterface
      */
-    protected $local;
+    private $local;
 
     /**
      * Remote backend cache adapter
      *
      * @var \Zend_Cache_Backend_ExtendedInterface
      */
-    protected $remote;
+    private $remote;
 
     /**
      * Cache invalidation time
