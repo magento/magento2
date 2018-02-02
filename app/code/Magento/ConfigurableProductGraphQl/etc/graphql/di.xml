@@ -9,7 +9,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
+                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
             </argument>
         </arguments>
     </type>
