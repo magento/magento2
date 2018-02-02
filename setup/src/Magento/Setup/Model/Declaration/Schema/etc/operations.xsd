@@ -19,7 +19,6 @@
                 easily do it in your declaration, by removing schema entity declaration or renaming name attribute
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="renameTo" type="xs:string" />
         <xs:attribute name="disabled" type="xs:boolean" />
     </xs:attributeGroup>
 </xs:schema>
