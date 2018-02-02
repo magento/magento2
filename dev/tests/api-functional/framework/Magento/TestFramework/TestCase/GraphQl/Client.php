@@ -73,6 +73,9 @@ class Client
                 foreach ($responseBodyArray['errors'] as $error) {
                     if (isset($error['message'])) {
                         $errorMessage .= $error['message'] . PHP_EOL;
+                        if (isset($error['debugMessage'])) {
+                            $errorMessage .= $error['debugMessage'] . PHP_EOL;
+                        }
                     }
                     if (isset($error['trace'])) {
                         $traceString = $error['trace'];

@@ -221,10 +221,9 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
-        $response = $this->graphQlQuery($query);
-        $response = $response;
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
+        $this->graphQlQuery($query);
     }
 
     /**
@@ -636,8 +635,8 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
         $this->graphQlQuery($query);
     }
 
@@ -669,8 +668,8 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: One' .' ' .
-            'of \'search\' or \'filter\' input arguments needs to be specified in products request.');
+        $this->expectExceptionMessage('GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
+            'required.');
         $this->graphQlQuery($query);
     }
 

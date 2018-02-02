@@ -69,8 +69,7 @@ class ExceptionFormatterTest extends GraphQlAbstract
 QUERY;
         $this->expectException(\Exception::class);
 
-        $this->expectExceptionMessage('GraphQL response contains errors: Attribute' . ' ' .
-            'code sku of entity type invalid not configured to have a type.');
+        $this->expectExceptionMessage('Invalid entity_type specified: invalid');
 
         $this->graphQlQuery($query);
     }

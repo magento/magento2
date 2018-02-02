@@ -38,7 +38,7 @@ class ProductInterfaceTypeResolverComposite implements TypeResolverInterface
         foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
             if (!isset($data['type_id'])) {
                 throw new GraphQlInputException(
-                    __('%1 key doesn\'t exist in product data', ['type_id'])
+                    __('Missing key %1 in product data', ['type_id'])
                 );
             }
             $resolvedType = $productTypeNameResolver->resolveType($data);

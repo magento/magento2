@@ -94,7 +94,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
                             $childrenSkus[] = $link['sku'];
                             $formattedLink = [
                                 'product' => new GraphQlNoSuchEntityException(
-                                    __('Bundled product item not found')
+                                    __('Bundled product not found')
                                 ),
                                 'price' => $link->getPrice(),
                                 'position' => $link->getPosition(),
