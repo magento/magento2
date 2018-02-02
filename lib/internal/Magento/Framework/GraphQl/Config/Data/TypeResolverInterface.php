@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Config\Data;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 /**
  * Determines a concrete GraphQL type for data returned that implements an interface type.
  */
@@ -16,6 +17,7 @@ interface TypeResolverInterface
      *
      * @param array $data
      * @return string|null
+     * @throws GraphQlInputException
      */
     public function resolveType(array $data);
 }

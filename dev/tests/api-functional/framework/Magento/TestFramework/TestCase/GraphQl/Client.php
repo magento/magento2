@@ -67,6 +67,25 @@ class Client
         $responseBody = $this->curlClient->post($url, $postData, $headers);
         $responseBodyArray = $this->json->jsonDecode($responseBody);
 
+        if (!is_array($responseBodyArray)) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        }
+
+        $this->processErrors($responseBodyArray);
+
+        if (!isset($responseBodyArray['data'])) {
+            throw new \Exception('Unknown GraphQL response body: ' . json_encode($responseBodyArray));
+        } else {
+            return $responseBodyArray['data'];
+        }
+    }
+
+    /**
+     * @param array $responseBodyArray
+     * @throws \Exception
+     */
+    private function processErrors($responseBodyArray)
+    {
         if (isset($responseBodyArray['errors'])) {
             $errorMessage = '';
             if (is_array($responseBodyArray['errors'])) {
@@ -85,12 +104,8 @@ class Client
 
                 throw new \Exception('GraphQL response contains errors: ' . $errorMessage);
             }
-            throw new \Exception('GraphQL responded with an unknown error: ' . $responseBody);
-        } elseif (!isset($responseBodyArray['data'])) {
-            throw new \Exception('Unknown GraphQL response body: ' . $responseBody);
+            throw new \Exception('GraphQL responded with an unknown error: ' . json_encode($responseBodyArray));
         }
-
-        return $responseBodyArray['data'];
     }
 
     /**
@@ -99,6 +114,6 @@ class Client
      */
     public function getEndpointUrl()
     {
-        return rtrim(TESTS_BASE_URL, '/') . '/graphql';
+        return rtrim(TESTS_BASE_URL, '/') . '/graphql5';
     }
 }

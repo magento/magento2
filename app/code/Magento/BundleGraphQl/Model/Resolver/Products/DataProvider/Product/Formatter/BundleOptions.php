@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\BundleGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter;
+namespace Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
 use Magento\Catalog\Model\Product;
 use Magento\Bundle\Model\Product\Type as Bundle;
