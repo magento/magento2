@@ -7,11 +7,11 @@
     <type xsi:type="OutputType" name="GroupedProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
-        <field xsi:type="ObjectArrayOutputField" name="items" itemType="GroupedProductItem"/>
+        <field xsi:type="ObjectArrayOutputField" name="items" itemType="GroupedProductItem" description="An array containing grouped product items"/>
     </type>
     <type xsi:type="OutputType" name="GroupedProductItem">
-        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
-        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface"/>
+        <field xsi:type="ScalarOutputField" name="qty" type="Float" description="The quantity of this grouped product item"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int" description="The relative position of this item compared to the other group items."/>
+        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface" description="The ProductInterface object, which contains details about this product option"/>
     </type>
 </config>

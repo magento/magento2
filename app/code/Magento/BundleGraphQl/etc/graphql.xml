@@ -8,35 +8,35 @@
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
         <implements interface="CustomizableProductInterface" copyFields="true"/>
-        <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum"/>
-        <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean"/>
-        <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean"/>
-        <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum"/>
-        <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean"/>
-        <field xsi:type="ObjectArrayOutputField" name="items" itemType="BundleItem"/>
+        <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum" description="One of PRICE_RANGE or AS_LOW_AS"/>
+        <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean" description="Indicates whether the bundle product has a dynamic price."/>
+        <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean" description="Indicates whether the bundle product has a dynamic SKU."/>
+        <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum" description="Indicates whether to ship bundle items together or individually."/>
+        <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean" description="Indicates whether the bundle product has a dynamically calculated weight."/>
+        <field xsi:type="ObjectArrayOutputField" name="items" itemType="BundleItem" description="An array containing information about individual bundle items."/>
     </type>
     <type xsi:type="OutputType" name="BundleItem">
-        <field xsi:type="ScalarOutputField" name="option_id" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="title" type="String"/>
-        <field xsi:type="ScalarOutputField" name="required" type="Boolean"/>
-        <field xsi:type="ScalarOutputField" name="type" type="String"/>
-        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="sku" type="String"/>
-        <field xsi:type="ObjectArrayOutputField" name="options" itemType="BundleItemOption"/>
+        <field xsi:type="ScalarOutputField" name="option_id" type="Int" description="An ID assigned to each type of item in a bundle product."/>
+        <field xsi:type="ScalarOutputField" name="title" type="String" description="The display name of the item"/>
+        <field xsi:type="ScalarOutputField" name="required" type="Boolean" description="Indicates whether the item must be included in the bundle."/>
+        <field xsi:type="ScalarOutputField" name="type" type="String" description="The input type that the customer uses to select the item. Examples include radio button and checkbox." />
+        <field xsi:type="ScalarOutputField" name="position" type="Int" description="The relative position of this item compared to the other bundle items."/>
+        <field xsi:type="ScalarOutputField" name="sku" type="String" description="The SKU of the bundle product"/>
+        <field xsi:type="ObjectArrayOutputField" name="options" itemType="BundleItemOption" description="An array of additional options for this bundle item"/>
     </type>
     <type xsi:type="OutputType" name="BundleItemOption">
         <!-- is product_id same with entity_id and id ?? -->
-        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="label" type="String"/>
+        <field xsi:type="ScalarOutputField" name="id" type="Int" description="The ID assigned to the bundled item option"/>
+        <field xsi:type="ScalarOutputField" name="label" type="String" description="The text that identifies the bundled item option"/>
         <!--<field xsi:type="ScalarOutputField" name="option_id" type="Int"/>-->
-        <field xsi:type="ScalarOutputField" name="qty" type="Float"/>
-        <field xsi:type="ScalarOutputField" name="position" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="is_default" type="Boolean"/>
+        <field xsi:type="ScalarOutputField" name="qty" type="Float" description="Indicates the quantity of this specific bundle item"/>
+        <field xsi:type="ScalarOutputField" name="position" type="Int" description="When a bundle item contains multiple options, the relative position of this option compared to the other options"/>
+        <field xsi:type="ScalarOutputField" name="is_default" type="Boolean" description="Indicates whether this option is the default option"/>
         <!-- price type and price don't get populated is it something about fixed price ? -->
-        <field xsi:type="ScalarOutputField" name="price" type="Float"/>
-        <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum"/>
-        <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean"/>
-        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface"/>
+        <field xsi:type="ScalarOutputField" name="price" type="Float" description="The price of the selected option"/>
+        <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum" description="One of FIXED, PERCENT, or DYNAMIC"/>
+        <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean" description="Indicates whether the customer can change the number of items for this option"/>
+        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface" description="The ProductInterface object, which contains details about this product option"/>
     </type>
     <type xsi:type="Enum" name="ShipBundleItemsEnum">
         <item name="together">TOGETHER</item>
