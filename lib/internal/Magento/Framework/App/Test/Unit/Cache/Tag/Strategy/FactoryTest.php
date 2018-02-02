@@ -55,7 +55,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStrategyWithObject()
     {
-        $this->assertEquals($this->dummyStrategy, $this->model->getStrategy(new \StdClass));
+        $this->assertEquals($this->dummyStrategy, $this->model->getStrategy(new \stdClass));
     }
 
     public function testGetStrategyWithIdentityInterface()
