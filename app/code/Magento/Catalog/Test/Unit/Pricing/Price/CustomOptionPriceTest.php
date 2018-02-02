@@ -307,7 +307,7 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
-        $priceMock->method('getValue')->willReturn($price );
+        $priceMock->method('getValue')->willReturn($price);
 
         $this->priceInfo->method('getPrice')->willReturn($priceMock);
 
