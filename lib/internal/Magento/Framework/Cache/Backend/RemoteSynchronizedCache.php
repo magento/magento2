@@ -32,7 +32,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     protected $cacheInvalidationTime = null;
 
-    protected $_options = array(
+    protected $_options = [
         'remote_backend' => '',
         'remote_backend_invalidation_time_id' => 'default_remote_backend_invalidation_time',
         'remote_backend_custom_naming' => true,
@@ -42,7 +42,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'local_backend_options' => [],
         'local_backend_custom_naming' => true,
         'local_backend_autoload' => true
-    );
+    ];
 
     /**
      * @param array $options
@@ -58,7 +58,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         } elseif ($this->_options['remote_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
             $this->remote = $this->_options['remote_backend'];
         } else {
-                $this->remote = \Zend_Cache::_makeBackend(
+            $this->remote = \Zend_Cache::_makeBackend(
                 $this->_options['remote_backend'],
                 array_merge($universalOptions, $this->_options['remote_backend_options']),
                 $this->_options['remote_backend_custom_naming'],
@@ -152,10 +152,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param  string $data            Datas to cache
      * @param  string $id              Cache id
      * @param  array $tags             Array of strings, the cache record will be tagged by each string entry
-     * @param  int   $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @param  integer|bool $specificLifetime
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         return $this->local->save($data, $id, $tags, $specificLifetime);
     }
@@ -191,7 +191,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param  array  $tags Array of tags
      * @return boolean true if no problem
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
         $this->updateRemoteCacheStatusInfo();
         return $this->local->clean($mode, $tags);
@@ -225,7 +225,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param array $tags array of tags
      * @return array array of matching cache ids (string)
      */
-    public function getIdsMatchingTags($tags = array())
+    public function getIdsMatchingTags($tags = [])
     {
         return $this->local->getIdsMatchingTags($tags);
     }
@@ -238,7 +238,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param array $tags array of tags
      * @return array array of not matching cache ids (string)
      */
-    public function getIdsNotMatchingTags($tags = array())
+    public function getIdsNotMatchingTags($tags = [])
     {
         return $this->local->getIdsNotMatchingTags($tags);
     }
@@ -251,7 +251,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param array $tags array of tags
      * @return array array of any matching cache ids (string)
      */
-    public function getIdsMatchingAnyTags($tags = array())
+    public function getIdsMatchingAnyTags($tags = [])
     {
         return $this->local->getIdsMatchingAnyTags($tags);
     }
