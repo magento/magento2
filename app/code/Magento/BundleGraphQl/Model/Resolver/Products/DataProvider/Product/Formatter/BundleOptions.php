@@ -11,7 +11,7 @@ use Magento\Bundle\Model\Product\Type as Bundle;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
- * Post formatting plugin to continue formatting data for bundle type products
+ * Post formatting data to set option for bundle product
  */
 class BundleOptions implements FormatterInterface
 {

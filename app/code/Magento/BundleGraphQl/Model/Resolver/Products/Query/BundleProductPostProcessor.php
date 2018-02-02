@@ -87,7 +87,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
                     $bundleMap[$product['sku']] = [];
                     foreach ($product['bundle_product_options'] as $optionKey => $option) {
                         $resultData[$productKey]['items'][$optionKey]
-                            = $this->formatProductOptions($option);
+                            = $option->getData();
                         /** @var Link $link */
                         foreach ($option['product_links'] as $link) {
                             $bundleMap[$product['sku']][] = $link['sku'];
@@ -185,16 +185,5 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
             $product['dynamic_weight'] = !(bool)$product['weight_type'];
         }
         return $product;
-    }
-
-    /**
-     * Format bundle option
-     *
-     * @param Option $option
-     * @return array
-     */
-    private function formatProductOptions(Option $option)
-    {
-        return $option->getData();
     }
 }
