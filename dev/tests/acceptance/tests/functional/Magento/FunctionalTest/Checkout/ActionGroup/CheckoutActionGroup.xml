@@ -32,7 +32,7 @@
         <conditionalClick selector="{{GuestCheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{GuestCheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
         <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{product.name}}" stepKey="seeProductInCart"/>
-        <click selector="{{GuestCheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="clickCheckMoneyOrderPayment" />
+        <conditionalClick selector="{{GuestCheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{GuestCheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
         <see selector="{{GuestCheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAddress"/>
         <click selector="{{GuestCheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" stepKey="seeOrderNumber"/>
