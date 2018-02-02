@@ -49,4 +49,11 @@
         <plugin name="adapt_add_in_stock_filter_to_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddInStockFilterToCollectionPlugin"/>
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="stock_status" xsi:type="object">Magento\InventoryCatalog\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
