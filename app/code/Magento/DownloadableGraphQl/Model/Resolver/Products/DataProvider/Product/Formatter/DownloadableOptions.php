@@ -16,7 +16,7 @@ use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollecti
 use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
 
 /**
- * Post formatting plugin to continue formatting data for downloadable type products
+ * Format for downloadable product types
  */
 class DownloadableOptions implements FormatterInterface
 {
@@ -59,7 +59,7 @@ class DownloadableOptions implements FormatterInterface
     }
 
     /**
-     * Add downloadable options and options to configurable types
+     * Add downloadable options to configurable types
      *
      * {@inheritdoc}
      */
@@ -85,10 +85,10 @@ class DownloadableOptions implements FormatterInterface
     /**
      * Format links from collection as array
      *
-     * @param \Magento\Downloadable\Api\Data\LinkInterface[] $links
+     * @param LinkCollection $links
      * @return array
      */
-    private function formatLinks($links)
+    private function formatLinks(LinkCollection $links)
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {

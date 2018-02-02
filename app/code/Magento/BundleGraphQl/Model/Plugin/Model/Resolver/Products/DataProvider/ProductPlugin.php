@@ -11,6 +11,9 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\Bundle\Model\Product\OptionList;
 
+/**
+ * Fetch bundle product object and set necessary extension attributes for search result
+ */
 class ProductPlugin
 {
     /**
