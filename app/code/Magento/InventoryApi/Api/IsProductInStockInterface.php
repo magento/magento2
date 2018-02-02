@@ -15,7 +15,7 @@ namespace Magento\InventoryApi\Api;
 interface IsProductInStockInterface
 {
     /**
-     * Get Product Quantity for given SKU in a given Stock
+     * Get is product in stock for given SKU in a given Stock
      *
      * @param string $sku
      * @param int $stockId

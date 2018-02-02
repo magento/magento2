@@ -43,6 +43,6 @@ class AddIsInStockFieldToCollection
             ['inventory_in_stock' => $tableName],
             'e.sku = inventory_in_stock.sku',
             []
-        )->where('inventory_in_stock.' . IndexStructure::QUANTITY . ' > 0');
+        )->where('inventory_in_stock.' . IndexStructure::IS_SALABLE . ' = ?', 1);
     }
 }
