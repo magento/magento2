@@ -114,6 +114,6 @@ class Client
      */
     public function getEndpointUrl()
     {
-        return rtrim(TESTS_BASE_URL, '/') . '/graphql5';
+        return rtrim(TESTS_BASE_URL, '/') . '/graphql';
     }
 }
