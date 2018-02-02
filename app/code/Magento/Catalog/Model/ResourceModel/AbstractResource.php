@@ -595,8 +595,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         }
 
         if (is_array($attributesData) && sizeof($attributesData) == 1) {
-            $_data = each($attributesData);
-            $attributesData = $_data[1];
+            $attributesData = array_shift($attributesData);
         }
 
         return $attributesData === false ? false : $attributesData;
