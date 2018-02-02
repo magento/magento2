@@ -14,10 +14,6 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
-        <plugin name="prevent_assign_sources_to_default_stock"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStockPlugin"/>
-    </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
@@ -48,6 +44,14 @@
     <type name="Magento\CatalogInventory\Helper\Stock">
         <plugin name="adapt_add_in_stock_filter_to_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddInStockFilterToCollectionPlugin"/>
         <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
+    </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignDefaultSourceToNonDefaultStockValidator</item>
+                <item name="default_stock" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignNonDefaultSourceToDefaultStockValidator</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
