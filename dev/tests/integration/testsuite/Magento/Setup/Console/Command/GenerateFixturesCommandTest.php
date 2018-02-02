@@ -101,20 +101,6 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         parent::tearDown();
     }
 
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        /** @var $appCache \Magento\Framework\App\Cache */
-        $appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
-        $appCache->clean(
-            [
-                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
-            ]
-        );
-    }
-
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
@@ -129,7 +115,8 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     }
 
     /**
-     *
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
      */
     public function testExecute()
     {
