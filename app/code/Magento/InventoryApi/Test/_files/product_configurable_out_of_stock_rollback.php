@@ -30,7 +30,8 @@ foreach (['simple_30', 'simple_40', 'configurable_out_of_stock'] as $sku) {
     }
 }
 
-require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/ConfigurableProduct/_files/configurable_attribute_rollback.php';
+require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/ConfigurableProduct/'
+    . '_files/configurable_attribute_rollback.php';
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
