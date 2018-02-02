@@ -63,7 +63,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
                 sprintf('stock.sku = parent.sku'),
                 []
             )->where('stock.quantity > 0');
-            //todo )->where('stock.is_salable = ?', 1);
+            //todo https://github.com/magento-engcom/msi/pull/442 )->where('stock.is_salable = ?', 1);
         }
 
         return $select;
