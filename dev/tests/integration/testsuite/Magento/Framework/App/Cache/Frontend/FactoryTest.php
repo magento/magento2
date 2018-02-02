@@ -20,12 +20,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Factory
      */
-    protected $factory;
+    private $factory;
 
     /**
      * @var \Magento\Framework\App\Area
      */
-    protected $model;
+    private $model;
 
     protected function setUp()
     {
