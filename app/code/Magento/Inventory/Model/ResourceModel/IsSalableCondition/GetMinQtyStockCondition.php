@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * Condition for min_qty configuration.
@@ -46,10 +47,17 @@ class GetMinQtyStockCondition implements GetIsSalableConditionInterface
     {
         $globalMinQty = (float)$this->configuration->getMinQty();
 
-        // Don't apply source item status due to supposed that qty value is calculated only for in stock source items
-        $condition = '(legacy_stock_item.use_config_min_qty = 1 AND quantity > ' . $globalMinQty . ')'
+        $quantityExpression = (string)$this->resourceConnection->getConnection()->getCheckSql(
+            'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
+            0,
+            SourceItemInterface::QUANTITY
+        );
+        $quantityExpression = 'SUM(' . $quantityExpression . ')';
+
+        $condition =
+            '(legacy_stock_item.use_config_min_qty = 1 AND ' . $quantityExpression . ' > ' . $globalMinQty . ')'
             . ' OR '
-            . '(legacy_stock_item.use_config_min_qty = 0 AND quantity > legacy_stock_item.min_qty)';
+            . '(legacy_stock_item.use_config_min_qty = 0 AND ' . $quantityExpression . ' > legacy_stock_item.min_qty)';
         return $condition;
     }
 }

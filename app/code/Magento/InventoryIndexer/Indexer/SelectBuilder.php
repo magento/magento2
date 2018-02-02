@@ -108,7 +108,7 @@ class SelectBuilder
                 'source.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
                 []
             )
-            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . '= ?', $stockId)
+            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
             ->where(SourceInterface::ENABLED . ' = ?', 1);
 
         $sourceCodes = $connection->fetchCol($select);
