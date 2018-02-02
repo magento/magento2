@@ -42,7 +42,7 @@ class ProfilerEnableCommand extends Command
     /**
      * @var File
      */
-    protected $filesystem;
+    private $filesystem;
 
     /**
      * Initialize dependencies.

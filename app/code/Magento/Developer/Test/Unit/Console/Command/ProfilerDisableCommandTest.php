@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\Io\File;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-
 /**
  * Class ProfilerDisableCommandTest
  *
