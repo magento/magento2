@@ -56,11 +56,7 @@
             <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" stepKey="grabOrderNumber"/>
             <!-- end todo -->
 
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="goToAdmin"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
 
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
