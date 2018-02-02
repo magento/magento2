@@ -8,6 +8,9 @@ namespace Magento\Framework\Cache\Backend;
 
 /**
  * Remote synchronized cache
+ *
+ * This class created for correct work local caches with multiple web nodes,
+ * that will be check cache status from remote cache
  */
 class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
@@ -57,7 +60,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $universalOptions = array_diff_key($options, $this->_options);
 
         if ($this->_options['remote_backend'] === null) {
-            \Zend_Cache::throwException('remote_backend option has to set');
+            \Zend_Cache::throwException('remote_backend option must be set');
         } elseif ($this->_options['remote_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
             $this->remote = $this->_options['remote_backend'];
         } else {
@@ -67,7 +70,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 $this->_options['remote_backend_custom_naming'],
                 $this->_options['remote_backend_autoload']
             );
-            if (!in_array('Zend_Cache_Backend_ExtendedInterface', class_implements($this->remote))) {
+            if (!($this->remote instanceof \Zend_Cache_Backend_ExtendedInterface)) {
                 \Zend_Cache::throwException(
                     'remote_backend must implement the Zend_Cache_Backend_ExtendedInterface interface'
                 );
@@ -75,7 +78,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         }
 
         if ($this->_options['local_backend'] === null) {
-            \Zend_Cache::throwException('local_backend option has to set');
+            \Zend_Cache::throwException('local_backend option must be set');
         } elseif ($this->_options['local_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
             $this->local = $this->_options['local_backend'];
         } else {
@@ -85,7 +88,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 $this->_options['local_backend_custom_naming'],
                 $this->_options['local_backend_autoload']
             );
-            if (!in_array('Zend_Cache_Backend_ExtendedInterface', class_implements($this->local))) {
+            if (!($this->local instanceof \Zend_Cache_Backend_ExtendedInterface)) {
                 \Zend_Cache::throwException(
                     'local_backend must implement the Zend_Cache_Backend_ExtendedInterface interface'
                 );
@@ -103,10 +106,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $this->remote->save(time(), $this->_options['remote_backend_invalidation_time_id'], [], null);
         $this->cacheInvalidationTime = null;
     }
+
     /**
-     * Set the frontend directives
-     *
-     * @param array $directives assoc of directives
+     * {@inheritdoc}
      */
     public function setDirectives($directives)
     {
@@ -114,13 +116,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Test if a cache is available for the given id and (if yes) return it (false else)
-     *
-     * Note : return value is always "string" (unserialization is done by the core not by the backend)
-     *
-     * @param  string  $id                     Cache id
-     * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
-     * @return string|false cached datas
+     * {@inheritdoc}
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -136,10 +132,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Test if a cache is available or not (for the given id)
-     *
-     * @param  string $id cache id
-     * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
+     * {@inheritdoc}
      */
     public function test($id)
     {
@@ -147,16 +140,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Save some string datas into a cache record
-     *
-     * Note : $data is always "string" (serialization is done by the
-     * core not by the backend)
-     *
-     * @param  string $data            Datas to cache
-     * @param  string $id              Cache id
-     * @param  array $tags             Array of strings, the cache record will be tagged by each string entry
-     * @param  integer|bool $specificLifetime
-     * @return boolean true if no problem
+     * {@inheritdoc}
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -164,11 +148,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Remove a cache record
-     * Removing any cache item in the RemoteSynchronizedCache must invalidate all cache items
-     *
-     * @param  string $id Cache id
-     * @return boolean True if no problem
+     * {@inheritdoc}
      */
     public function remove($id)
     {
@@ -177,22 +157,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Clean some cache records
-     * Cleaning any cache item in the RemoteSynchronizedCache must invalidate all cache items
-     *
-     * Available modes are :
-     * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
-     * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
-     * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
-     *                                               ($tags can be an array of strings or a single string)
-     * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
-     *                                               ($tags can be an array of strings or a single string)
-     * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
-     *                                               ($tags can be an array of strings or a single string)
-     *
-     * @param  string $mode Clean mode
-     * @param  array  $tags Array of tags
-     * @return boolean true if no problem
+     * {@inheritdoc}
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -201,9 +166,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of stored cache ids
-     *
-     * @return array array of stored cache ids (string)
+     * {@inheritdoc}
      */
     public function getIds()
     {
@@ -211,9 +174,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of stored tags
-     *
-     * @return array array of stored tags (string)
+     * {@inheritdoc}
      */
     public function getTags()
     {
@@ -221,12 +182,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of stored cache ids which match given tags
-     *
-     * In case of multiple tags, a logical AND is made between tags
-     *
-     * @param array $tags array of tags
-     * @return array array of matching cache ids (string)
+     * {@inheritdoc}
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -234,12 +190,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of stored cache ids which don't match given tags
-     *
-     * In case of multiple tags, a logical OR is made between tags
-     *
-     * @param array $tags array of tags
-     * @return array array of not matching cache ids (string)
+     * {@inheritdoc}
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -247,12 +198,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of stored cache ids which match any given tags
-     *
-     * In case of multiple tags, a logical AND is made between tags
-     *
-     * @param array $tags array of tags
-     * @return array array of any matching cache ids (string)
+     * {@inheritdoc}
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -260,9 +206,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return the filling percentage of the backend storage
-     *
-     * @return int integer between 0 and 100
+     * {@inheritdoc}
      */
     public function getFillingPercentage()
     {
@@ -270,15 +214,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an array of metadatas for the given cache id
-     *
-     * The array must include these keys :
-     * - expire : the expire timestamp
-     * - tags : a string array of tags
-     * - mtime : timestamp of last modification time
-     *
-     * @param string $id cache id
-     * @return array array of metadatas (false if the cache id is not found)
+     * {@inheritdoc}
      */
     public function getMetadatas($id)
     {
@@ -286,11 +222,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Give (if possible) an extra lifetime to the given cache id
-     *
-     * @param string $id cache id
-     * @param int $extraLifetime
-     * @return boolean true if ok
+     * {@inheritdoc}
      */
     public function touch($id, $extraLifetime)
     {
@@ -298,18 +230,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
-     * Return an associative array of capabilities (booleans) of the backend
-     *
-     * The array must include these keys :
-     * - automatic_cleaning (is automating cleaning necessary)
-     * - tags (are tags supported)
-     * - expired_read (is it possible to read expired cache records
-     *                 (for doNotTestCacheValidity option for example))
-     * - priority does the backend deal with priority when saving
-     * - infinite_lifetime (is infinite lifetime can work with this backend)
-     * - get_list (is it possible to get the list of cache ids and the complete list of tags)
-     *
-     * @return array associative of with capabilities
+     * {@inheritdoc}
      */
     public function getCapabilities()
     {
