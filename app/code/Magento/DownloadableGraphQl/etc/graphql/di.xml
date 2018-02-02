@@ -9,7 +9,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_downloadable_data" xsi:type="object">Magento\DownloadableGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\DownloadableOptions</item>
+                <item name="add_downloadable_data" xsi:type="object">Magento\DownloadableGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\DownloadableOptions</item>
             </argument>
         </arguments>
     </type>
@@ -20,12 +20,21 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper">
+    <type name="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="DownloadableFileTypeEnum" xsi:type="array">
                     <item name="file" xsi:type="string">file</item>
                     <item name="url" xsi:type="string">url</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="downloadable" xsi:type="string">DownloadableProduct</item>
                 </item>
             </argument>
         </arguments>
