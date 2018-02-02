@@ -22,7 +22,7 @@ class GetBundleCondition implements GetIsSalableConditionInterface
      */
     public function execute(Select $select): string
     {
-        $condition = '(product_entity.type_id = \'bundle\')';
+        $condition = 'product_entity.type_id = \'bundle\'';
 
         return $condition;
     }

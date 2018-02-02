@@ -53,31 +53,23 @@ class SelectBuilder
     public function execute($stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
         $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
-        $sourceStockLinkTable = $this->resourceConnection->getTableName(
-            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
-        );
-
-        // find all enabled sources
-        $select = $connection->select()
-            ->from($sourceTable, [SourceInterface::SOURCE_CODE])
-            ->where(SourceInterface::ENABLED . ' = ?', 1);
-        $sourceCodes = $connection->fetchCol($select);
-
-        if (0 === count($sourceCodes)) {
-            return $select;
-        }
 
         $quantityExpression = (string)$this->resourceConnection->getConnection()->getCheckSql(
             'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
             0,
             SourceItemInterface::QUANTITY
         );
+        $sourceCodes = $this->getSourceCodes($stockId);
 
-        $select = $connection->select()->joinInner(
+        $select = $connection->select();
+        $select->joinInner(
             ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
             'product_entity.sku = source_item.sku',
+            []
+        )->joinInner(
+            ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
+            'product_entity.entity_id = legacy_stock_item.product_id',
             []
         );
 
@@ -85,22 +77,41 @@ class SelectBuilder
             ['source_item' => $sourceItemTable],
             [
                 SourceItemInterface::SKU,
-                SourceItemInterface::QUANTITY => 'SUM(' . $quantityExpression . ')',
+                IndexStructure::QUANTITY => 'SUM(' . $quantityExpression . ')',
                 IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute($select),
             ]
-        )->joinInner(
-            ['stock_source_link' => $sourceStockLinkTable],
-            sprintf(
-                'source_item.%s = stock_source_link.%s',
-                SourceItemInterface::SOURCE_CODE,
-                StockSourceLink::SOURCE_CODE
-            ),
-            []
         )
-            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
+            ->where('source_item.' . SourceItemInterface::SOURCE_CODE . ' IN (?)', $sourceCodes)
             ->group([SourceItemInterface::SKU]);
 
         return $select;
+    }
+
+    /**
+     * Get all enabled sources related to stock
+     *
+     * @param int $stockId
+     * @return array
+     */
+    private function getSourceCodes(int $stockId): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
+        $sourceStockLinkTable = $this->resourceConnection->getTableName(
+            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
+        );
+
+        $select = $connection->select()
+            ->from(['source' => $sourceTable], [SourceInterface::SOURCE_CODE])
+            ->joinInner(
+                ['stock_source_link' => $sourceStockLinkTable],
+                'source.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
+                []
+            )
+            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . '= ?', $stockId)
+            ->where(SourceInterface::ENABLED . ' = ?', 1);
+
+        $sourceCodes = $connection->fetchCol($select);
+        return $sourceCodes;
     }
 }

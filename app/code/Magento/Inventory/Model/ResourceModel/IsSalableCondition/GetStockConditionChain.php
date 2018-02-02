@@ -59,14 +59,13 @@ class GetStockConditionChain implements GetIsSalableConditionInterface
 
         $conditionStrings = [];
         foreach ($this->getIsSalableConditions as $getIsSalableCondition) {
-            $conditionStrings[] = $getIsSalableCondition->execute($select);
+            $conditionString = $getIsSalableCondition->execute($select);
+            if ('' !== trim($conditionString)) {
+                $conditionStrings[] = $conditionString;
+            }
         }
 
-        $conditionString = (string)$this->resourceConnection->getConnection()->getCheckSql(
-            implode($conditionStrings, 'OR'),
-            1,
-            0
-        );
-        return $conditionString;
+        $isSalableString = '(' . implode($conditionStrings, ') OR (') . ')';
+        return (string)$this->resourceConnection->getConnection()->getCheckSql($isSalableString, 1, 0);
     }
 }

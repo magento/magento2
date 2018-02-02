@@ -91,11 +91,10 @@
     <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
         <arguments>
             <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
                 <item name="manage_stock" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
-                <item name="min_qty" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\IsSalableCondition"/>
+    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
 </config>

@@ -21,6 +21,6 @@ class GetSourceItemStatusCondition implements GetIsSalableConditionInterface
      */
     public function execute(Select $select): string
     {
-        return '(source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_IN_STOCK . ')';
+        return 'MAX(source_item.' . SourceItemInterface::STATUS . ') = ' . SourceItemInterface::STATUS_IN_STOCK;
     }
 }
