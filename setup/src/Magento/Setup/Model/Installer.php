@@ -806,6 +806,7 @@ class Installer
         $schemaListener = $adapter->getSchemaListener();
 
         if ($this->convertationOfOldScriptsIsAllowed($request)) {
+            $schemaListener->setResource('default');
             $this->schemaPersistor->persist($schemaListener);
         }
     }
