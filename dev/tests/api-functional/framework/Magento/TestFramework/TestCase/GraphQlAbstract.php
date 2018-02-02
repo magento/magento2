@@ -9,6 +9,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test case for Web API functional tests for Graphql.
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
