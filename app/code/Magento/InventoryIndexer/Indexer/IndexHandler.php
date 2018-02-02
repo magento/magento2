@@ -64,7 +64,7 @@ class IndexHandler implements IndexHandlerInterface
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
-        $columns = [IndexStructure::SKU, IndexStructure::QUANTITY];
+        $columns = [IndexStructure::SKU, IndexStructure::QUANTITY, IndexStructure::IS_SALABLE];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $connection->insertArray($tableName, $columns, $batchDocuments);
         }
