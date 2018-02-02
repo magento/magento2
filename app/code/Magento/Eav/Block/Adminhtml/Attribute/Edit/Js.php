@@ -37,11 +37,20 @@ class Js extends \Magento\Backend\Block\Template
     }
 
     /**
+     * @deprecated Misspelled method
+     * @see getCompatibleInputTypes
+     */
+    public function getComaptibleInputTypes()
+    {
+        return $this->getCompatibleInputTypes();
+    }
+
+    /**
      * Get compatible input types.
      *
      * @return array
      */
-    public function getComaptibleInputTypes()
+    public function getCompatibleInputTypes()
     {
         return $this->inputtype->getVolatileInputTypes();
     }
