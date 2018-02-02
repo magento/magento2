@@ -20,4 +20,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="configurable" xsi:type="string">ConfigurableProduct</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
