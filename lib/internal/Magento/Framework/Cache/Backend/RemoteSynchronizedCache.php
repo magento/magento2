@@ -30,8 +30,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      *
      * @var \Zend_Cache_Backend_ExtendedInterface
      */
-    protected $cacheInvalidationTime = null;
+    protected $cacheInvalidationTime;
 
+    /**
+     * {@inheritdoc}
+     */
     protected $_options = [
         'remote_backend' => '',
         'remote_backend_invalidation_time_id' => 'default_remote_backend_invalidation_time',
