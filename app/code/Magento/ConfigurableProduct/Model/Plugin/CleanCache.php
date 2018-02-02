@@ -19,6 +19,9 @@ class CleanCache
      */
     private $cacheManager;
 
+    /**
+     * @param CacheInterface $cacheManager
+     */
     public function __construct(CacheInterface $cacheManager)
     {
         $this->cacheManager = $cacheManager;
@@ -35,7 +38,7 @@ class CleanCache
         $product
     ) {
         $items = $product->getCollection()->getItems();
-        foreach ($items as $item){
+        foreach ($items as $item) {
             if ($item->getId()) {
                 $this->cacheManager->clean(
                     \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $item->getId()
