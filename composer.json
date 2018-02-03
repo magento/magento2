@@ -1,6 +1,6 @@
 {
     "name": "magento/magento2ce",
-    "description": "Magento 2 (Community Edition)",
+    "description": "Magento 2 (Open Source)",
     "type": "project",
     "version": "2.3.0-dev",
     "license": [
