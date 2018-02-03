@@ -11,15 +11,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
-use Magento\Bundle\Model\Link;
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 
 /**
- * Retrieves simple product data for child products, and formats configurable data
+ * Retrieves simple product data for child products, and formats children data
  */
 class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
 {
@@ -74,7 +73,6 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      *
      * @param array $resultData
      * @return array
-     * @throws RuntimeException
      */
     public function process(array $resultData)
     {
@@ -82,16 +80,16 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         $bundleMap = [];
         foreach ($resultData as $productKey => $product) {
             if (isset($product['type_id']) && $product['type_id'] === Bundle::TYPE_CODE) {
-                $resultData[$productKey] = $this->formatBundleAttributes($product);
                 if (isset($product['bundle_product_options'])) {
                     $bundleMap[$product['sku']] = [];
+                    /** @var Option $option */
                     foreach ($product['bundle_product_options'] as $optionKey => $option) {
                         $resultData[$productKey]['items'][$optionKey]
                             = $option->getData();
-                        /** @var Link $link */
+                        /** @var LinkInterface $link */
                         foreach ($option['product_links'] as $link) {
-                            $bundleMap[$product['sku']][] = $link['sku'];
-                            $childrenSkus[] = $link['sku'];
+                            $bundleMap[$product['sku']][] = $link->getSku();
+                            $childrenSkus[] = $link->getSku();
                             $formattedLink = [
                                 'product' => new GraphQlNoSuchEntityException(
                                     __('Bundled product not found')
@@ -156,34 +154,5 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
         }
 
         return $resultData;
-    }
-
-    /**
-     * Format bundle specific top level attributes from product
-     *
-     * @param array $product
-     * @return array
-     * @throws RuntimeException
-     */
-    private function formatBundleAttributes(array $product)
-    {
-        if (isset($product['price_view'])) {
-            $product['price_view']
-                = $this->enumLookup->getEnumValueFromField('PriceViewEnum', $product['price_view']);
-        }
-        if (isset($product['shipment_type'])) {
-            $product['ship_bundle_items']
-                = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
-        }
-        if (isset($product['price_view'])) {
-            $product['dynamic_price'] = !(bool)$product['price_type'];
-        }
-        if (isset($product['sku_type'])) {
-            $product['dynamic_sku'] = !(bool)$product['sku_type'];
-        }
-        if (isset($product['weight_type'])) {
-            $product['dynamic_weight'] = !(bool)$product['weight_type'];
-        }
-        return $product;
     }
 }
