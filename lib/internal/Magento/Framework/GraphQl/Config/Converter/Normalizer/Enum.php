@@ -29,9 +29,7 @@ class Enum implements NormalizerInterface
             $enums[$entry['name']]['name'] = $entry['name'];
             $enums[$entry['name']]['type'] = 'graphql_enum';
             foreach ($entry['item'] as $item) {
-                //force usage of the value
-                $item['name'] = $item['_value'];
-                $enums[$entry['name']]['items'][$item['name']] = $item;
+                $enums[$entry['name']]['items'][$item['_value']] = $item;
             }
         }
         return $enums;
