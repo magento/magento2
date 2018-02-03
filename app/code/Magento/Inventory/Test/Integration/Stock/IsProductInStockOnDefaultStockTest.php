@@ -10,14 +10,14 @@ namespace Magento\Inventory\Test\Integration\Stock;
 use Magento\InventoryCatalog\Model\DefaultStockProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 
-class IsProductInStockOnDefaultStockTest extends TestCase
+class IsProductSalableOnDefaultStockTest extends TestCase
 {
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @var DefaultStockProvider
@@ -31,7 +31,7 @@ class IsProductInStockOnDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProvider::class);
     }
 
@@ -47,7 +47,7 @@ class IsProductInStockOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithDifferentQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductInStock->execute($sku, $this->defaultStockProvider->getId());
+        $isInStock = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
         self::assertEquals($expectedValue, $isInStock);
     }
 
