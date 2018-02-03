@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -30,14 +30,9 @@ class Stock extends Column
     private $stockRepository;
 
     /**
-     * @var array
+     * @var GetAssignedStockIdsBySku
      */
-    private $stocks;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private $getAssignedStockIdsBySku;
 
     /**
      * @param ContextInterface $context
@@ -51,13 +46,13 @@ class Stock extends Column
         UiComponentFactory $uiComponentFactory,
         GetProductQuantityInStockInterface $productQuantityInStock,
         StockRepositoryInterface $stockRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        GetAssignedStockIdsBySku $getAssignedStockIdsBySku,
         array $components = [],
         array $data = []
     ) {
         $this->productQuantityInStock = $productQuantityInStock;
         $this->stockRepository = $stockRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -87,43 +82,18 @@ class Stock extends Column
      */
     private function getStockData(string $sku): array
     {
-        $stockData = [];
-        foreach ($this->getStocks() as $stockName => $stockId) {
-
-            try {
-                $qty = $this->productQuantityInStock->execute($sku, $stockId);
-            } catch (\Exception $exception) {
-                $qty = '-';
-            }
-
-            $stockData[] = [
-                'stock_name' => $stockName,
-                'qty' => $qty
-            ];
-        }
-
-        return $stockData;
-    }
-
-    /**
-     * Return all stocks as list.
-     *
-     * @return array [ stockName => stockId]
-     */
-    private function getStocks(): array
-    {
-
-        if ($this->stocks === null) {
-            $this->stocks = [];
-
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-            $stocks = $this->stockRepository->getList($searchCriteria)->getItems();
-
-            foreach ($stocks as $stock) {
-                $this->stocks[$stock->getName()] = (int) $stock->getStockId();
+        $stockIds = $this->getAssignedStockIdsBySku->execute($sku);
+        $stockInfo = [];
+        if (count($stockIds)) {
+            foreach ($stockIds as $stockId) {
+                $stockId = (int)$stockId;
+                $stock = $this->stockRepository->get($stockId);
+                $stockInfo[] = [
+                    'stock_name' => $stock->getName(),
+                    'qty' => $this->productQuantityInStock->execute($sku, $stockId),
+                ];
             }
         }
-
-        return $this->stocks;
+        return $stockInfo;
     }
 }
