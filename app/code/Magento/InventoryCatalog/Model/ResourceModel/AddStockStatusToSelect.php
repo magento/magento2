@@ -34,19 +34,14 @@ class AddStockStatusToSelect
      * @param int $stockId
      * @return void
      */
-    public function addStockStatusToSelect(Select $select, int $stockId)
+    public function execute(Select $select, int $stockId)
     {
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
-        $isSalableExpression = $select->getConnection()->getCheckSql(
-            'stock_status.' . IndexStructure::QUANTITY . ' > 0',
-            1,
-            0
-        );
 
         $select->joinLeft(
             ['stock_status' => $tableName],
             'e.sku = stock_status.sku',
-            ['is_salable' => $isSalableExpression]
+            [IndexStructure::IS_SALABLE]
         );
     }
 }

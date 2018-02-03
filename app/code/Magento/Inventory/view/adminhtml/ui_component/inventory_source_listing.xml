@@ -93,7 +93,6 @@
                 <filter>text</filter>
                 <label translate="true">Code</label>
                 <editor>
-                    <editorType>text</editorType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>

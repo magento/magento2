@@ -86,6 +86,7 @@ class SourceDataProvider extends DataProvider
                 $sourceCode = $data['items'][0][SourceInterface::SOURCE_CODE];
                 $sourceGeneralData = $data['items'][0];
                 $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceCode);
+                $sourceGeneralData['disable_source_code'] = !empty($sourceGeneralData['source_code']);
                 $dataForSingle[$sourceCode] = [
                     'general' => $sourceGeneralData,
                 ];

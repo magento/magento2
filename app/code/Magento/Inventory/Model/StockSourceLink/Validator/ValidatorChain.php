@@ -41,7 +41,7 @@ class ValidatorChain implements StockSourceLinkValidatorInterface
         foreach ($validators as $validator) {
             if (!$validator instanceof StockSourceLinkValidatorInterface) {
                 throw new LocalizedException(
-                    __('Stock Source link Validator must implement StockSourceLinkValidatorInterface.')
+                    __('Validator must implement StockSourceLinkValidatorInterface.')
                 );
             }
         }
