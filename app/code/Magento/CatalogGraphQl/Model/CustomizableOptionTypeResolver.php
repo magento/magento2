@@ -10,7 +10,7 @@ use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
 use Magento\Framework\GraphQl\Type\Entity\MapperInterface;
 
 /**
- * Class CustomizableOptionTypeResolver
+ * Resolve the CustomizableOptionType for graphql schema
  */
 class CustomizableOptionTypeResolver implements TypeResolverInterface
 {
@@ -35,10 +35,8 @@ class CustomizableOptionTypeResolver implements TypeResolverInterface
     public function resolveType(array $data)
     {
         $map = $this->mapper->getMappedTypes(self::ENTITY_TYPE);
-        if (!isset($map[$data['type']]) || !isset($map[$data['type']])) {
-            return null;
+        if (isset($map[$data['type']])) {
+            return $map[$data['type']];
         }
-
-        return $map[$data['type']];
     }
 }

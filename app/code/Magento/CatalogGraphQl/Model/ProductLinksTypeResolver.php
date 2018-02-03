@@ -29,7 +29,5 @@ class ProductLinksTypeResolver implements TypeResolverInterface
                 return 'ProductLinks';
             }
         }
-
-        return null;
     }
 }

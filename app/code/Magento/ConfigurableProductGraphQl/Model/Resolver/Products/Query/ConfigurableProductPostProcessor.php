@@ -13,7 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 
 /**
- * Retrieves simple product data for child products, and formats configurable data
+ * Retrieves simple product data for child products and formats configurable data
  */
 class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
 {

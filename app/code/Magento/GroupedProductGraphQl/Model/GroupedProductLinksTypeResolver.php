@@ -29,7 +29,5 @@ class GroupedProductLinksTypeResolver implements TypeResolverInterface
                 return 'GroupedProductLinks';
             }
         }
-
-        return null;
     }
 }

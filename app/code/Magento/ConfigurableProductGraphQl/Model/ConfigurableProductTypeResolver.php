@@ -21,7 +21,5 @@ class ConfigurableProductTypeResolver implements TypeResolverInterface
         if (isset($data['type_id']) && $data['type_id'] == 'configurable') {
             return 'ConfigurableProduct';
         }
-
-        return null;
     }
 }

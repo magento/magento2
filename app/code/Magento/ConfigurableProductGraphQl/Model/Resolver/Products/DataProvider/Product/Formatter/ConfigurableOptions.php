@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
- * Post formatting plugin to continue formatting data for configurable type products
+ * Post formatting to continue formatting data for configurable type products
  */
 class ConfigurableOptions implements FormatterInterface
 {

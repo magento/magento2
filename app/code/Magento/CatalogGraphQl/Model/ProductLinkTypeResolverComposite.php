@@ -43,13 +43,15 @@ class ProductLinkTypeResolverComposite implements TypeResolverInterface
             }
             $resolvedType = $productLinksTypeNameResolvers->resolveType($data);
 
-            if (!$resolvedType) {
-                throw new GraphQlInputException(
-                    __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
-                );
+            if ($resolvedType) {
+                return $resolvedType;
             }
         }
 
-        return $resolvedType;
+        if (!$resolvedType) {
+            throw new GraphQlInputException(
+                __('Concrete type for %1 not implemented', ['ProductLinksInterface'])
+            );
+        }
     }
 }

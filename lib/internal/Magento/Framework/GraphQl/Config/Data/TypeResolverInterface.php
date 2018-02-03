@@ -17,7 +17,7 @@ interface TypeResolverInterface
      * Determine a concrete GraphQL type based off the given data.
      *
      * @param array $data
-     * @return string|null
+     * @return string
      * @throws GraphQlInputException
      */
     public function resolveType(array $data);

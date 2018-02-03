@@ -116,7 +116,7 @@ class AstConverter
     private function getCatalogProductFields()
     {
         $productTypeSchema = $this->config->getTypeStructure('SimpleProduct');
-        if (! $productTypeSchema instanceof Type) {
+        if (!$productTypeSchema instanceof Type) {
             throw new \LogicException(__("SimpleProduct type not defined in schema."));
         }
 
