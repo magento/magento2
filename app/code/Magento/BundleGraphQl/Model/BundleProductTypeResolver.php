@@ -6,17 +6,19 @@
 
 namespace Magento\BundleGraphQl\Model;
 
+use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
+
 /**
  * {@inheritdoc}
  */
-class BundleProductTypeResolver
+class BundleProductTypeResolver implements TypeResolverInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function resolveType($typeId)
+    public function resolveType(array $data)
     {
-        if ($typeId == 'bundle') {
+        if (isset($data['type_id']) && $data['type_id'] == 'bundle') {
             return 'BundleProduct';
         }
     }
