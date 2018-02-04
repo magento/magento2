@@ -4,17 +4,30 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter;
+namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
- * Post formatting plugin to continue formatting data for configurable type products
+ * Post formatting to continue formatting data for configurable type products
  */
 class ConfigurableOptions implements FormatterInterface
 {
+    /**
+     * @var Configurable
+     */
+    private $configurableData;
+
+    /**
+     * @param Configurable $configurableData
+     */
+    public function __construct(Configurable $configurableData)
+    {
+        $this->configurableData = $configurableData;
+    }
+
     /**
      * Add configurable links and options to configurable types
      *
@@ -26,6 +39,11 @@ class ConfigurableOptions implements FormatterInterface
             $extensionAttributes = $product->getExtensionAttributes();
             $productData['configurable_product_options'] = $extensionAttributes->getConfigurableProductOptions();
             $productData['configurable_product_links'] = $extensionAttributes->getConfigurableProductLinks();
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
+            foreach ($productData['configurable_product_options'] as $optionKey => $option) {
+                $productData['configurable_product_options'][$optionKey]['attribute_code']
+                    = $option->getProductAttribute()->getAttributeCode();
+            }
         }
 
         return $productData;
