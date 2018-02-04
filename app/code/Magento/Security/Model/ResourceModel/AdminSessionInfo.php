@@ -42,7 +42,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Security\Setup\InstallSchema::ADMIN_SESSIONS_DB_TABLE_NAME, 'id');
+        $this->_init('admin_user_session', 'id');
     }
 
     /**
