@@ -8,7 +8,7 @@ define([
     'underscore',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($,_) {
+], function ($, _) {
     'use strict';
 
     $.widget('mage.categoryTree', {
