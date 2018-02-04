@@ -68,7 +68,7 @@
     </custom_design>
     <seo>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>//div[div/strong/span[text()="Search Engine Optimisation"]]</selector>
+        <selector>//div[div/strong/span[text()="Search Engine Optimization"]]</selector>
         <strategy>xpath</strategy>
         <fields>
             <identifier />

@@ -28,7 +28,7 @@ class DummyTest extends \PHPUnit\Framework\TestCase
     {
         $emptyArray = [];
 
-        $this->assertEquals($emptyArray, $this->model->getTags(new \StdClass));
+        $this->assertEquals($emptyArray, $this->model->getTags(new \stdClass));
 
         $identityInterface = $this->getMockForAbstractClass(\Magento\Framework\DataObject\IdentityInterface::class);
         $this->assertEquals($emptyArray, $this->model->getTags($identityInterface));

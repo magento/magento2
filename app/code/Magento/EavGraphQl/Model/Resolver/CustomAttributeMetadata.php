@@ -93,7 +93,7 @@ class CustomAttributeMetadata implements ResolverInterface
 
         return new GraphQlInputException(
             __(
-                'Attribute input does not contain %1 for the input %2.',
+                'Missing %1 for the input %2.',
                 [$messagePart, $identifier]
             )
         );
