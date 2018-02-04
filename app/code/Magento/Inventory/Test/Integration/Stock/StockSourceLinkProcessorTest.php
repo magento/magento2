@@ -91,5 +91,4 @@ class StockSourceLinkProcessorTest extends TestCase
 
         self::assertCount(2, $links);
     }
-
 }
