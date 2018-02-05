@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Plugin\Import;
 
 use Magento\CatalogImportExport\Model\StockItemImporter;
-use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\Inventory\Model\SourceItemFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
@@ -65,6 +65,9 @@ class SourceItemImporter
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
+     * @return void
+     * @see StockItemImporterInterface::import()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundImport(
         StockItemImporter $subject,
