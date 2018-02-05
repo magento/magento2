@@ -88,6 +88,9 @@ class IsProductSalable implements IsProductSalableInterface
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
         $legacyStockItem = $this->getLegacyStockItem($sku);
+        if (null === $legacyStockItem) {
+            return false;
+        }
 
         if ($this->isManageStock($legacyStockItem)) {
             if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
@@ -121,9 +124,9 @@ class IsProductSalable implements IsProductSalableInterface
     /**
      * @param string $sku
      *
-     * @return LegacyStockItem
+     * @return LegacyStockItem|null
      */
-    private function getLegacyStockItem(string $sku): LegacyStockItem
+    private function getLegacyStockItem(string $sku)
     {
         $productIds = $this->productResource->getProductsIdsBySkus([$sku]);
         $searchCriteria = $this->stockItemCriteriaFactory->create();
@@ -132,6 +135,6 @@ class IsProductSalable implements IsProductSalableInterface
         $legacyStockItem = $this->legacyStockItemRepository->getList($searchCriteria);
         $items = $legacyStockItem->getItems();
 
-        return reset($items);
+        return count($items) ? reset($items) : null;
     }
 }
