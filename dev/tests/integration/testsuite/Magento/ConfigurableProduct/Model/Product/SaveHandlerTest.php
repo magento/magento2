@@ -19,7 +19,6 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
  */
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Object under test
      *
