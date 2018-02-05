@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Created by PhpStorm.
+ * User: josh
+ * Date: 05/02/2018
+ * Time: 00:57
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryImportExport\Model;
+namespace Magento\InventoryImportExport\Plugin\Import;
 
-use Magento\CatalogImportExport\Model\StockItemImporterInterface;
+use Magento\CatalogImportExport\Model\StockItemImporter;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Inventory\Model\SourceItemFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
-class StockItemImporter implements StockItemImporterInterface
+class SourceItemImporter
 {
     /**
      * Source Items Save Interface for saving multiple source items
@@ -55,13 +57,21 @@ class StockItemImporter implements StockItemImporterInterface
     }
 
     /**
-     * Handle Import of Stock Item Data
+     * Plugin around Import to import Stock Data to Source Item
      *
+     * @param StockItemImporter $subject
+     * @param callable $proceed
      * @param array $stockData
-     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
-    public function import(array $stockData)
-    {
+    public function aroundImport(
+        StockItemImporter $subject,
+        callable $proceed,
+        array $stockData
+    ) {
+        $proceed($stockData);
         $sourceItems = [];
         foreach ($stockData as $stockDatum) {
             if (isset($stockDatum[Product::COL_SKU])) {
