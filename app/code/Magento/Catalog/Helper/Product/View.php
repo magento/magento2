@@ -146,7 +146,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageMainTitle->setPageTitle($product->getName());
         }
 
-        return $resultPage;
+        return $this;
     }
 
     /**
@@ -163,7 +163,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $settings = $this->_catalogDesign->getDesignSettings($product);
         $pageConfig = $resultPage->getConfig();
-        $resultPage = $this->preparePageMetadata($resultPage, $product);
 
         if ($settings->getCustomDesign()) {
             $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
@@ -284,6 +283,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $this->initProductLayout($resultPage, $product, $params);
+        $this->preparePageMetadata($resultPage, $product);
         return $this;
     }
 }

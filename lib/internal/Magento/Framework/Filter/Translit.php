@@ -434,7 +434,7 @@ class Translit implements \Zend_Filter_Interface
     {
         $string = strtr($string, $this->getConvertTable());
         return '"libiconv"' == ICONV_IMPL ? iconv(
-            \Magento\Framework\Stdlib\StringUtils::ICONV_CHARSET,
+            \Magento\Framework\Stdlib\StringUtils::CHARSET,
             'ascii//ignore//translit',
             $string
         ) : $string;

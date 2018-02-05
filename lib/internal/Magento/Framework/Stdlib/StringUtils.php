@@ -14,8 +14,14 @@ class StringUtils
 {
     /**
      * Default charset
+     * @deprecated
      */
     const ICONV_CHARSET = 'UTF-8';
+
+    /**
+     * Default charset
+     */
+    const CHARSET = 'UTF-8';
 
     /**
      * Capitalize first letters and convert separators if needed
@@ -148,7 +154,7 @@ class StringUtils
      */
     public function strlen($string)
     {
-        return mb_strlen($string, self::ICONV_CHARSET);
+        return mb_strlen($string, self::CHARSET);
     }
 
     /**
@@ -159,7 +165,7 @@ class StringUtils
      */
     public function cleanString($string)
     {
-        return mb_convert_encoding($string, self::ICONV_CHARSET);
+        return mb_convert_encoding($string, self::CHARSET);
     }
 
     /**
@@ -176,7 +182,7 @@ class StringUtils
         if ($length === null) {
             $length = $this->strlen($string) - $offset;
         }
-        return mb_substr($string, $offset, $length, self::ICONV_CHARSET);
+        return mb_substr($string, $offset, $length, self::CHARSET);
     }
 
     /**
@@ -208,6 +214,6 @@ class StringUtils
      */
     public function strpos($haystack, $needle, $offset = null)
     {
-        return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
+        return mb_strpos($haystack, $needle, $offset, self::CHARSET);
     }
 }
