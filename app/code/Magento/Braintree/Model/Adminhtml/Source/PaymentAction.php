@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Model\Adminhtml\Source;
 
 use Magento\Framework\Option\ArrayInterface;
-use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Class PaymentAction
@@ -22,11 +21,11 @@ class PaymentAction implements ArrayInterface
     {
         return [
             [
-                'value' => AbstractMethod::ACTION_AUTHORIZE,
+                'value' => 'authorize',
                 'label' => __('Authorize'),
             ],
             [
-                'value' => AbstractMethod::ACTION_AUTHORIZE_CAPTURE,
+                'value' => 'authorize_capture',
                 'label' => __('Authorize and Capture'),
             ]
         ];
