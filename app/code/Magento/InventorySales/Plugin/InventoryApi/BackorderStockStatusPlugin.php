@@ -11,10 +11,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 
 /**
- * Adapt backorders to IsProductInStockInterface
+ * Adapt backorders to IsProductSalableInterface
  */
 class BackorderStockStatusPlugin
 {
@@ -51,7 +51,7 @@ class BackorderStockStatusPlugin
     /**
      * Return true status if backorders is enabled for the item
      *
-     * @param IsProductInStockInterface $subject
+     * @param IsProductSalableInterface $subject
      * @param callable $proceed
      * @param string $sku
      * @param int $stockId
@@ -59,7 +59,7 @@ class BackorderStockStatusPlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        IsProductInStockInterface $subject,
+        IsProductSalableInterface $subject,
         callable $proceed,
         string $sku,
         int $stockId

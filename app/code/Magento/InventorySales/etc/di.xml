@@ -24,7 +24,7 @@
     <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
     </type>
-    <type name="Magento\InventoryApi\Api\IsProductInStockInterface">
+    <type name="Magento\InventoryApi\Api\IsProductSalableInterface">
         <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\StockManagement">

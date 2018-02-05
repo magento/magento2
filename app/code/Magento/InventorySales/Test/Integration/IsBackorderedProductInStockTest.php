@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -42,9 +42,9 @@ class IsBackorderedProductInStockTest extends TestCase
     private $productRepository;
 
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @var StockItemRepositoryInterface
@@ -66,7 +66,7 @@ class IsBackorderedProductInStockTest extends TestCase
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -93,8 +93,8 @@ class IsBackorderedProductInStockTest extends TestCase
         $sourceItem->setQuantity(-15);
         $this->sourceItemsSave->execute([$sourceItem]);
 
-        $this->assertTrue($this->isProductInStock->execute('SKU-2', 20));
-        $this->assertTrue($this->isProductInStock->execute('SKU-2', 30));
+        $this->assertTrue($this->isProductSalable->execute('SKU-2', 20));
+        $this->assertTrue($this->isProductSalable->execute('SKU-2', 30));
     }
 
     /**
