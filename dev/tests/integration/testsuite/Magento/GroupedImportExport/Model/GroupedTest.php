@@ -58,6 +58,7 @@ class GroupedTest extends AbstractProductExportImportTestCase
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @dataProvider importReplaceDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
     {
