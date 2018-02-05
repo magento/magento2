@@ -14,14 +14,14 @@
             <stories value="Filter Sources in Grid"/>
             <title value="Filter Sources on the Manage Sources grid"/>
             <description value="You should be able to Filter the Sources from the Manage Sources grid."/>
-            <testCaseId value="1408749"/>
+            <testCaseId value="493"/>
             <group value="msi"/>
         </annotations>
         <before>
-            <createData entity="TestSource1" stepKey="createStuff1"/>
-            <createData entity="TestSource2" stepKey="createStuff2"/>
-            <createData entity="TestSource1" stepKey="createStuff3"/>
-            <createData entity="TestSource2" stepKey="createStuff4"/>
+            <createData entity="TestSource1" stepKey="createSource1"/>
+            <createData entity="TestSource2" stepKey="createSource2"/>
+            <createData entity="TestSource1" stepKey="createSource3"/>
+            <createData entity="TestSource2" stepKey="createSource4"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -32,11 +32,11 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
-        <fillField userInput="$$createStuff3.general[source_code]$$" selector="{{AdminGridFilterControls.code}}" stepKey="fillCodeField2"/>
+        <fillField userInput="$$createSource3.general[source_code]$$" selector="{{AdminGridFilterControls.code}}" stepKey="fillCodeField2"/>
         <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
 
-        <see userInput="$$createStuff3.general[source_code]$$" selector="{{AdminGrid.rowOne}}" stepKey="seeCodeInRow1"/>
-        <see userInput="$$createStuff3.general[name]$$" selector="{{AdminGrid.rowOne}}" stepKey="seeNameInRow1"/>
+        <see userInput="$$createSource3.general[source_code]$$" selector="{{AdminGrid.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createSource3.general[name]$$" selector="{{AdminGrid.rowOne}}" stepKey="seeNameInRow1"/>
         <see userInput="Enabled" selector="{{AdminGrid.rowOne}}" stepKey="seeIsEnabledInRow1"/>
         <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
         <see userInput="0" selector="{{AdminGrid.rowOne}}" stepKey="seePriorityInRow1"/>

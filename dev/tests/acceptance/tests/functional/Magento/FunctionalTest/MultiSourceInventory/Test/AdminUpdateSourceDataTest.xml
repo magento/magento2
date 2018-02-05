@@ -14,7 +14,7 @@
             <stories value="Update existing Source Data"/>
             <title value="Source data updated by Admin user"/>
             <description value="You should be able to update a Sources data via the Admin."/>
-            <testCaseId value="1408732"/>
+            <testCaseId value="492"/>
             <group value="msi"/>
         </annotations>
 
