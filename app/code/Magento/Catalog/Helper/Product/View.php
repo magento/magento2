@@ -67,11 +67,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     private $string;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
-     */
-    private $productHelper;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -83,7 +78,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
      * @param \Magento\Framework\Stdlib\StringUtils|null $string
-     * @param \Magento\Catalog\Helper\Product|null $productHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -94,8 +88,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         array $messageGroups = [],
-        \Magento\Framework\Stdlib\StringUtils $string = null,
-        \Magento\Catalog\Helper\Product $productHelper = null
+        \Magento\Framework\Stdlib\StringUtils $string = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -106,8 +99,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->string = $string ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->productHelper = $productHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Helper\Product::class);
         parent::__construct($context);
     }
 
@@ -142,7 +133,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setDescription($this->string->substr($product->getDescription(), 0, 255));
         }
 
-        if ($this->productHelper->canUseCanonicalTag()) {
+        if ($this->_catalogProduct->canUseCanonicalTag()) {
             $pageConfig->addRemotePageAsset(
                 $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
                 'canonical',
