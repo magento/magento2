@@ -41,8 +41,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
-        /** @var $pageConfig \Magento\Framework\View\Page\Config */
-        $pageConfig = $objectManager->get(\Magento\Framework\View\Page\Config::class);
 
         $productView = $layout->createBlock(\Magento\Catalog\Block\Product\View::class);
 
