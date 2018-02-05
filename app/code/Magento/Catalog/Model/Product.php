@@ -1058,12 +1058,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        if ($this->getId()) {
-            $this->_cacheManager->clean(
-                self::CACHE_TAG . '_' . $this->getId()
-            );
-        }
-        return $this;
+        return parent::cleanModelCache();
     }
 
     /**

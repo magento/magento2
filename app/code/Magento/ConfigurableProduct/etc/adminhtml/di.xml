@@ -77,8 +77,4 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="clean_configurable_product_and_its_children_cache"
-                type="Magento\ConfigurableProduct\Model\Plugin\CleanCache"/>
-    </type>
 </config>

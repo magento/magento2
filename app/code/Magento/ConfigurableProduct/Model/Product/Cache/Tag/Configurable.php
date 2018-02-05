@@ -43,9 +43,6 @@ class Configurable implements StrategyInterface
 
         $result = $object->getIdentities();
 
-        foreach ($this->catalogProductTypeConfigurable->getParentIdsByChild($object->getId()) as $parentId) {
-            $result[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $parentId;
-        }
         return $result;
     }
 }
