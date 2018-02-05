@@ -2272,8 +2272,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
-                $this->stockItemImporter->import($bunch);
+                $this->stockItemImporter->import($stockData);
             }
 
             $this->reindexProducts($productIdsToReindex);
