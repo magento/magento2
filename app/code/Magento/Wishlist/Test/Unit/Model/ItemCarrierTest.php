@@ -584,7 +584,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception, []);
 
-        $this->managerMock->expects($this->at(0))
+        $this->managerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('We can\'t add this item to your shopping cart right now.'), null)
             ->willReturnSelf();
@@ -602,11 +602,6 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $this->redirectMock->expects($this->once())
             ->method('getRefererUrl')
             ->willReturn('');
-
-        $this->managerMock->expects($this->at(1))
-            ->method('addErrorMessage')
-            ->with(__('We can\'t update the Wish List right now.'), null)
-            ->willReturnSelf();
 
         $productOneMock->expects($this->any())
             ->method('getName')
