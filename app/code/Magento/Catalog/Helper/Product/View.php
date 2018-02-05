@@ -62,6 +62,16 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $categoryUrlPathGenerator;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
+    private $string;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    private $productHelper;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -72,6 +82,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
+     * @param \Magento\Framework\Stdlib\StringUtils|null $string
+     * @param \Magento\Catalog\Helper\Product|null $productHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -81,7 +93,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        array $messageGroups = []
+        array $messageGroups = [],
+        \Magento\Framework\Stdlib\StringUtils $string = null,
+        \Magento\Catalog\Helper\Product $productHelper = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -90,7 +104,58 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
+        $this->string = $string ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->productHelper = $productHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Product::class);
         parent::__construct($context);
+    }
+
+    /**
+     * Add meta information from product to layout
+     *
+     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Framework\View\Result\Page
+     */
+    private function preparePageMetadata(ResultPage $resultPage, $product)
+    {
+        $pageConfig = $resultPage->getConfig();
+
+        $title = $product->getMetaTitle();
+        if ($title) {
+            $pageConfig->getTitle()->set($title);
+        }
+
+        $keyword = $product->getMetaKeyword();
+        $currentCategory = $this->_coreRegistry->registry('current_category');
+        if ($keyword) {
+            $pageConfig->setKeywords($keyword);
+        } elseif ($currentCategory) {
+            $pageConfig->setKeywords($product->getName());
+        }
+
+        $description = $product->getMetaDescription();
+        if ($description) {
+            $pageConfig->setDescription($description);
+        } else {
+            $pageConfig->setDescription($this->string->substr($product->getDescription(), 0, 255));
+        }
+
+        if ($this->productHelper->canUseCanonicalTag()) {
+            $pageConfig->addRemotePageAsset(
+                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
+
+        $pageMainTitle = $resultPage->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($product->getName());
+        }
+
+        return $resultPage;
     }
 
     /**
@@ -107,6 +172,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $settings = $this->_catalogDesign->getDesignSettings($product);
         $pageConfig = $resultPage->getConfig();
+        $resultPage = $this->preparePageMetadata($resultPage, $product);
 
         if ($settings->getCustomDesign()) {
             $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
