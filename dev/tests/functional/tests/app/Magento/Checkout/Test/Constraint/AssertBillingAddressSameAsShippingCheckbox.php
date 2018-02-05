@@ -37,7 +37,7 @@ class AssertBillingAddressSameAsShippingCheckbox extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of successfull assertion.
+     * Returns a string representation of successful assertion.
      *
      * @return string
      */

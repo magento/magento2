@@ -21,6 +21,9 @@ $product->setTypeId(
     4
 )->setStoreId(
     1
+)->setCustomAttribute(
+    'tax_class_id',
+    1
 )->setWebsiteIds(
     [1]
 )->setName(

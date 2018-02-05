@@ -20,14 +20,19 @@ define([
             });
         });
         describe('"sendPostponeRequest" method', function () {
-            it('should insert "Error" notification if request failed', function () {
+            it('should insert "Error" notification if request failed', function (done) {
                 jQuery('<div class="page-main-actions"></div>').appendTo('body');
                 jQuery('body').notification();
 
                 jQuery.ajax().abort();
 
-                expect(jQuery('.message-error').length).toBe(1);
-                expect(jQuery('body:contains("A technical problem with the server created an error")').length).toBe(1);
+                setTimeout(function () {
+                    expect(jQuery('.message-error').length).toBe(1);
+                    expect(
+                        jQuery('body:contains("A technical problem with the server created an error")').length
+                    ).toBe(1);
+                    done();
+                }, 1);
             });
         });
     });
