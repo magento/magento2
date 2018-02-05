@@ -146,4 +146,3 @@ $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
-
