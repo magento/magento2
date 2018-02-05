@@ -46,8 +46,8 @@ class IsProductSalableManageConfigTest extends TestCase
     public function testExecuteWithManageStockFalse(int $stockId, array $expectedResults)
     {
         foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isInStock = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 

@@ -51,8 +51,8 @@ class IsProductSalableMinQtyTest extends TestCase
     public function testExecuteWithMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $isInStock = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
@@ -87,8 +87,8 @@ class IsProductSalableMinQtyTest extends TestCase
     public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $isInStock = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 

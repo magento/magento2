@@ -48,8 +48,8 @@ class IsProductSalableMinQtyOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithMinQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
-        self::assertEquals($expectedValue, $isInStock);
+        $isSalable = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
+        self::assertEquals($expectedValue, $isSalable);
     }
 
     /**
@@ -78,8 +78,8 @@ class IsProductSalableMinQtyOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithManageStockFalseAndMinQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
-        self::assertEquals($expectedValue, $isInStock);
+        $isSalable = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
+        self::assertEquals($expectedValue, $isSalable);
     }
 
     /**

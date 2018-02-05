@@ -16,7 +16,7 @@ use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemR
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 
 /**
- * Return product availability by Product SKU and Stock Id (stock data + reservations)
+ * @inheritdoc
  */
 class IsProductSalable implements IsProductSalableInterface
 {
@@ -84,20 +84,23 @@ class IsProductSalable implements IsProductSalableInterface
             return false;
         }
 
-        $isInStock = (bool)$stockItemData['is_salable'];
+        $isSalable = (bool)$stockItemData['is_salable'];
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
         $legacyStockItem = $this->getLegacyStockItem($sku);
+        if (null === $legacyStockItem) {
+            return false;
+        }
 
         if ($this->isManageStock($legacyStockItem)) {
             if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
                 || ($legacyStockItem->getUseConfigMinQty() == 0 && $qtyWithReservation <= $legacyStockItem->getMinQty())
             ) {
-                $isInStock = false;
+                $isSalable = false;
             }
         }
 
-        return $isInStock;
+        return $isSalable;
     }
 
     /**
@@ -121,9 +124,9 @@ class IsProductSalable implements IsProductSalableInterface
     /**
      * @param string $sku
      *
-     * @return LegacyStockItem
+     * @return LegacyStockItem|null
      */
-    private function getLegacyStockItem(string $sku): LegacyStockItem
+    private function getLegacyStockItem(string $sku)
     {
         $productIds = $this->productResource->getProductsIdsBySkus([$sku]);
         $searchCriteria = $this->stockItemCriteriaFactory->create();
@@ -132,6 +135,6 @@ class IsProductSalable implements IsProductSalableInterface
         $legacyStockItem = $this->legacyStockItemRepository->getList($searchCriteria);
         $items = $legacyStockItem->getItems();
 
-        return reset($items);
+        return count($items) ? reset($items) : null;
     }
 }
