@@ -76,7 +76,7 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * Save attributes for configurable product
+     * Save only newly created attributes for configurable product
      *
      * @param ProductInterface $product
      * @param array $attributes
@@ -85,26 +85,36 @@ class SaveHandler implements ExtensionInterface
     private function saveConfigurableProductAttributes(ProductInterface $product, array $attributes)
     {
         $ids = [];
+        $existingAttributeIds = [];
+        foreach ($this->optionRepository->getList($product->getSku()) as $option) {
+            $existingAttributeIds[] = $option->getAttributeId();
+        }
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
         foreach ($attributes as $attribute) {
-            $attribute->setId(null);
-            $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
+            if (!in_array($attribute->getAttributeId(), $existingAttributeIds)) {
+                $attribute->setId(null);
+                $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
+            }
         }
-
         return $ids;
     }
 
     /**
-     * Remove product attributes
+     * Remove product attributes which no longer used
      *
      * @param ProductInterface $product
      * @return void
      */
     private function deleteConfigurableProductAttributes(ProductInterface $product)
     {
-        $list = $this->optionRepository->getList($product->getSku());
-        foreach ($list as $item) {
-            $this->optionRepository->deleteById($product->getSku(), $item->getId());
+        $newAttributeIds = [];
+        foreach ($product->getExtensionAttributes()->getConfigurableProductOptions() as $option) {
+            $newAttributeIds[] = $option->getAttributeId();
+        }
+        foreach ($this->optionRepository->getList($product->getSku()) as $option) {
+            if (!in_array($option->getAttributeId(), $newAttributeIds)) {
+                $this->optionRepository->deleteById($product->getSku(), $option->getId());
+            }
         }
     }
 }
