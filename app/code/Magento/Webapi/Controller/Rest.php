@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Controller\Rest\RequestProcessorPool;
+use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 
 /**
  * Front controller for WebAPI REST area.
@@ -110,7 +110,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
 
     /**
-     * @var RequestProcessorPool
+     * @var RequestProcessorInterface
      */
     protected $requestProcessorPool;
 
@@ -154,7 +154,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\AreaList $areaList,
         ParamsOverrider $paramsOverrider,
         StoreManagerInterface $storeManager,
-        RequestProcessorPool $requestProcessorPool
+        RequestProcessorInterface $requestProcessorPool
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -168,8 +168,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList = $areaList;
         $this->paramsOverrider = $paramsOverrider;
         $this->storeManager = $storeManager;
-        $this->requestProcessorPool = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get('Magento\Webapi\Controller\Rest\RequestProcessorInterface');
+        $this->requestProcessorPool = $requestProcessorPool;
     }
 
 
@@ -265,6 +264,4 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
     }
-
-
 }

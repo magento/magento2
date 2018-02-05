@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
@@ -37,13 +38,26 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
      */
     protected $fieldsFilter;
 
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
     protected $deploymentConfig;
 
     /**
      * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    protected $objectManager;
 
+    /**
+     * SynchronousRequestProcessor constructor.
+     *
+     * @param \Magento\Framework\Webapi\Rest\Response              $response
+     * @param \Magento\Webapi\Controller\Rest\InputParamsResolver  $inputParamsResolver
+     * @param \Magento\Framework\Webapi\ServiceOutputProcessor     $serviceOutputProcessor
+     * @param \Magento\Framework\Webapi\Rest\Response\FieldsFilter $fieldsFilter
+     * @param \Magento\Framework\App\DeploymentConfig              $deploymentConfig
+     * @param \Magento\Framework\ObjectManagerInterface            $objectManager
+     */
     public function __construct(
         RestResponse $response,
         InputParamsResolver $inputParamsResolver,
@@ -51,17 +65,14 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         FieldsFilter $fieldsFilter,
         DeploymentConfig $deploymentConfig,
         ObjectManagerInterface $objectManager
-    )
-    {
-        $this->_response = $response;
-        $this->inputParamsResolver = $inputParamsResolver;
+    ) {
+        $this->_response              = $response;
+        $this->inputParamsResolver    = $inputParamsResolver;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->fieldsFilter = $fieldsFilter;
-        $this->deploymentConfig = $deploymentConfig;
-        $this->_objectManager = $objectManager;
+        $this->fieldsFilter           = $fieldsFilter;
+        $this->deploymentConfig       = $deploymentConfig;
+        $this->objectManager          = $objectManager;
     }
-
-
 
     /**
      *  {@inheritdoc}
@@ -70,12 +81,14 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     {
         $inputParams = $this->inputParamsResolver->resolve();
 
-        $route = $this->inputParamsResolver->getRoute();
+        $route             = $this->inputParamsResolver->getRoute();
         $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
+        $serviceClassName  = $route->getServiceClass();
 
-        $service = $this->_objectManager->get($serviceClassName);
-        /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
+        $service = $this->objectManager->get($serviceClassName);
+        /**
+ * @var \Magento\Framework\Api\AbstractExtensibleObject $outputData
+*/
         $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
         $outputData = $this->serviceOutputProcessor->process(
             $outputData,
@@ -91,7 +104,4 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         }
         $this->_response->prepareResponse($outputData);
     }
-
-
-
 }

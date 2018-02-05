@@ -29,5 +29,4 @@ class Async extends Template
     {
         return rtrim($this->getBaseUrl(), '/') . '/rest/' . $this->getParamStore() . '/async/schema?services=all';
     }
-
 }

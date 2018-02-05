@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller\Rest;
+
 use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
@@ -13,24 +15,28 @@ use Magento\Framework\Webapi\Request;
  */
 class SchemaRequestProcessor implements RequestProcessorInterface
 {
-     /**
+    /**
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
      */
-    private $swaggerGenerator;
-
+    protected $swaggerGenerator;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
      */
     protected $_response;
 
+    /**
+     * SchemaRequestProcessor constructor.
+     *
+     * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
+     * @param \Magento\Framework\Webapi\Rest\Response      $response
+     */
     public function __construct(
         Generator $swaggerGenerator,
         RestResponse $response
-    )
-    {
+    ) {
         $this->swaggerGenerator = $swaggerGenerator;
-        $this->_response = $response;
+        $this->_response        = $response;
     }
 
     /**
@@ -42,7 +48,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
         $requestedServices = $requestedServices == Request::ALL_SERVICES
             ? $this->swaggerGenerator->getListOfServices()
             : $requestedServices;
-        $responseBody = $this->swaggerGenerator->generate(
+        $responseBody      = $this->swaggerGenerator->generate(
             $requestedServices,
             $request->getScheme(),
             $request->getHttpHost(),

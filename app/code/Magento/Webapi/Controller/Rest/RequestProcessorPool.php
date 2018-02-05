@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Controller\Rest;
 
 /**
@@ -11,7 +12,7 @@ namespace Magento\Webapi\Controller\Rest;
 class RequestProcessorPool implements RequestProcessorInterface
 {
 
-    /** @var array  */
+    /** @var array */
     private $requestProcessors;
 
     /**
@@ -19,15 +20,15 @@ class RequestProcessorPool implements RequestProcessorInterface
      */
     private $objectManager;
 
-
     /**
      * RequestProcessorPool constructor.
+     *
      * @param array $requestProcessors
      */
     public function __construct($requestProcessors = [])
     {
         $this->requestProcessors = $requestProcessors;
-        $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->objectManager     = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**
@@ -50,5 +51,4 @@ class RequestProcessorPool implements RequestProcessorInterface
             throw new \Magento\Framework\Exception\NotFoundException(__('Specified request cannot be processed.'));
         }
     }
-
 }
