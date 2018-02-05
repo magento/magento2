@@ -174,43 +174,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     }
 
     /**
-     * Pre-loading customers for existing customers checks in order
-     * to perform mass validation/import efficiently.
-     *
-     * @param \Traversable $rows Each row must contain data from columns email
-     * and website code.
-     *
-     * @return void
-     */
-    public function prepareCustomerData(\Traversable $rows)
-    {
-        $customersPresent = [];
-        foreach ($rows as $rowData) {
-            $email = isset($rowData[static::COLUMN_EMAIL])
-                ? $rowData[static::COLUMN_EMAIL] : null;
-            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
-                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
-            if ($email && $websiteId !== false) {
-                $customersPresent[] = [
-                    'email' => $email,
-                    'website_id' => $websiteId
-                ];
-            }
-        }
-        $this->getCustomerStorage()->prepareCustomers($customersPresent);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateData()
-    {
-        $this->prepareCustomerData($this->getSource());
-
-        return parent::validateData();
-    }
-
-    /**
      * Validate data row
      *
      * @param array $rowData

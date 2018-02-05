@@ -487,34 +487,54 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * @inheritDoc
-     *
+     * Pre-loading customers for existing customers checks in order
+     * to perform mass validation/import efficiently.
      * Also loading existing addresses for requested customers.
+     *
+     * @param \Traversable $rows Each row must contain data from columns email
+     * and website code.
+     *
+     * @return void
      */
     public function prepareCustomerData(\Traversable $rows)
     {
-        parent::prepareCustomerData($rows);
+        $customersPresent = [];
+        foreach ($rows as $rowData) {
+            $email = isset($rowData[static::COLUMN_EMAIL])
+                ? $rowData[static::COLUMN_EMAIL] : null;
+            $websiteId = isset($rowData[static::COLUMN_WEBSITE])
+                ? $this->getWebsiteId($rowData[static::COLUMN_WEBSITE]) : false;
+            if ($email && $websiteId !== false) {
+                $customersPresent[] = [
+                    'email' => $email,
+                    'website_id' => $websiteId
+                ];
+            }
+        }
+        $this->getCustomerStorage()->prepareCustomers($customersPresent);
 
         $ids = [];
-        foreach ($rows as $customerData) {
-            if (isset($customerData[static::COLUMN_EMAIL])
-                && ($email = $customerData[static::COLUMN_EMAIL])
-                && isset($customerData[static::COLUMN_WEBSITE])
-                && (
-                    $websiteId = $this->getWebsiteId(
-                        $customerData[static::COLUMN_WEBSITE]
-                    )
-                ) !== false
-            ) {
-                $id = $this->getCustomerStorage()
-                    ->getCustomerId($email, $websiteId);
-                if ($id) {
-                    $ids[] = $id;
-                }
+        foreach ($customersPresent as $customerData) {
+            $id = $this->getCustomerStorage()->getCustomerId(
+                $customerData['email'],
+                $customerData['website_id']
+            );
+            if ($id) {
+                $ids[] = $id;
             }
         }
 
         $this->addressStorage->prepareAddresses($ids);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        $this->prepareCustomerData($this->getSource());
+
+        return parent::validateData();
     }
 
     /**
