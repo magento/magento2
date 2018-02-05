@@ -58,11 +58,7 @@ class Type
      */
     public function getType(string $attributeCode, string $entityType)
     {
-        try {
-            $type = $this->typeLocator->getType($attributeCode, $entityType);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-        }
+        $type = $this->typeLocator->getType($attributeCode, $entityType);
 
         $isComplexType = strpos($type, '\\') !== false;
         if ($type === TypeProcessor::NORMALIZED_ANY_TYPE) {
