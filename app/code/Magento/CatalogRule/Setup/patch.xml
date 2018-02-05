@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\CatalogRule\Setup\Patch\PatchInitial" sortOrder="1"/>
+    <patch name="Magento\CatalogRule\Setup\Patch\Patch203" sortOrder="1"/>
+  </patches>
+</data>

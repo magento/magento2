@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Braintree\Setup\Patch\Patch201" sortOrder="1"/>
+  </patches>
+</data>

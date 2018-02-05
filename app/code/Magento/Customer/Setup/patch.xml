@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Customer\Setup\Patch\PatchInitial" sortOrder="1"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch206" sortOrder="1"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch201" sortOrder="2"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch202" sortOrder="3"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch203" sortOrder="4"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch204" sortOrder="5"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch205" sortOrder="6"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch208" sortOrder="7"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch207" sortOrder="8"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch209" sortOrder="9"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch2011" sortOrder="10"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch2012" sortOrder="11"/>
+    <patch name="Magento\Customer\Setup\Patch\Patch2013" sortOrder="12"/>
+  </patches>
+</data>

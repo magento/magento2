@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Theme\Setup\Patch\PatchInitial" sortOrder="1"/>
+    <patch name="Magento\Theme\Setup\Patch\Patch202" sortOrder="1"/>
+  </patches>
+</data>

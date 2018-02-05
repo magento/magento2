@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Store\Setup\Patch\Patch210" sortOrder="1"/>
+  </patches>
+</data>

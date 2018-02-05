@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Analytics\Setup\Patch\PatchInitial" sortOrder="1"/>
+  </patches>
+</data>

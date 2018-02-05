@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<data>
+  <patches>
+    <patch name="Magento\Catalog\Setup\Patch\PatchInitial" sortOrder="1"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch201" sortOrder="1"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch202" sortOrder="2"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch203" sortOrder="3"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch204" sortOrder="4"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch205" sortOrder="5"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch207" sortOrder="6"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch213" sortOrder="7"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch215" sortOrder="8"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch221" sortOrder="9"/>
+    <patch name="Magento\Catalog\Setup\Patch\Patch222" sortOrder="10"/>
+  </patches>
+</data>
