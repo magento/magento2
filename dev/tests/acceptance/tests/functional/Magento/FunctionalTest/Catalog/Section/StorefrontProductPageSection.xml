@@ -8,9 +8,9 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="CheckoutShippingMethodsSection">
-        <element name="next" type="button" selector="button.button.action.continue.primary"/>
-        <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
-        <element name="shippingMethodRow" type="text" selector=".form.methods-shipping table tbody tr"/>
+    <section name="StorefrontProductPageSection">
+        <element name="QtyInput" type="button" selector="input.input-text.qty"/>
+        <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
+        <element name="SuccessMsg" type="button" selector="div.message-success"/>
     </section>
 </config>
