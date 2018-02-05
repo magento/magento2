@@ -47,8 +47,8 @@ class IsProductSalableOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithDifferentQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
-        self::assertEquals($expectedValue, $isInStock);
+        $isSalable = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
+        self::assertEquals($expectedValue, $isSalable);
     }
 
     /**

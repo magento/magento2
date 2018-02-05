@@ -7,19 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Helper\Stock;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class AddStockStatusToProductsTest extends TestCase
+class AssignStatusToProductTest extends TestCase
 {
     /**
      * @var Stock
      */
     private $stockHelper;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     /**
      * @var StoreManagerInterface
@@ -36,9 +41,11 @@ class AddStockStatusToProductsTest extends TestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/385');
         parent::setUp();
 
         $this->stockHelper = Bootstrap::getObjectManager()->get(Stock::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
     }
@@ -52,32 +59,54 @@ class AddStockStatusToProductsTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @dataProvider addStockStatusToProductsDataProvider
+     * @dataProvider assignStatusToProductDataProvider
      * @param string $storeCode
      * @param array $productsData
      */
-    public function testAddStockStatusToProducts(string $storeCode, array $productsData)
+    public function testAssignStatusToProductIfStatusParameterIsNotPassed(string $storeCode, array $productsData)
     {
         $this->storeManager->setCurrentStore($storeCode);
 
-        /** @var Collection $collection */
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $collection->addFieldToFilter(ProductInterface::SKU, ['in' => array_keys($productsData)]);
-        $collection->load();
-        self::assertCount(3, $collection->getItems());
+        foreach ($productsData as $sku => $expectedStatus) {
+            $product = $this->productRepository->get($sku);
+            /** @var Product $product */
+            $this->stockHelper->assignStatusToProduct($product);
 
-        $this->stockHelper->addStockStatusToProducts($collection);
+            self::assertEquals($expectedStatus, $product->isSalable());
+        }
+    }
 
-        /** @var ProductInterface $product */
-        foreach ($collection as $product) {
-            self::assertEquals($productsData[$product->getSku()], $product->isSalable());
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @dataProvider assignStatusToProductDataProvider
+     * @param string $storeCode
+     * @param array $productsData
+     */
+    public function testAssignStatusToProductIfStatusParameterIsPassed(string $storeCode, array $productsData)
+    {
+        $expectedStatus = 1;
+        $this->storeManager->setCurrentStore($storeCode);
+
+        foreach (array_keys($productsData) as $sku) {
+            $product = $this->productRepository->get($sku);
+            /** @var Product $product */
+            $this->stockHelper->assignStatusToProduct($product, $expectedStatus);
+
+            self::assertEquals($expectedStatus, $product->isSalable());
         }
     }
 
     /**
      * @return array
      */
-    public function addStockStatusToProductsDataProvider(): array
+    public function assignStatusToProductDataProvider(): array
     {
         return [
             'eu_website' => [
