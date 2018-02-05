@@ -58,6 +58,7 @@ class DefaultShippingAlgorithmTest extends TestCase
         ]);
 
         $algorithmResult = $this->shippingAlgorithm->execute($order);
+        self::assertEquals($algorithmResult->isShippable(), true);
 
         $sourceSelections = $algorithmResult->getSourceSelections();
         self::assertCount(1, $sourceSelections);
