@@ -54,7 +54,9 @@ class ProductSearchTest extends GraphQlAbstract
             }
          }
          name
-         weight
+         ... on PhysicalProductInterface {
+            weight
+         }
          type_id
          attribute_set_id
        }    
@@ -129,7 +131,9 @@ QUERY;
             }
            }
            name
-           weight           
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -201,7 +205,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -215,8 +221,8 @@ QUERY;
 }
 QUERY;
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
         $this->graphQlQuery($query);
     }
 
@@ -265,7 +271,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -333,7 +341,9 @@ QUERY;
             }
            }
            name
-           weight
+           ... on PhysicalProductInterface {
+            weight
+           }
            type_id           
            attribute_set_id
          }    
@@ -407,7 +417,9 @@ QUERY;
         }
         name
         type_id
-           weight           
+        ... on PhysicalProductInterface {
+            weight
+           }
            attribute_set_id
          }    
         total_count
@@ -416,7 +428,6 @@ QUERY;
           page_size
           current_page
         }
-        
     }
 }
 QUERY;
@@ -474,7 +485,9 @@ QUERY;
             }
         }
         name
-        weight
+        ... on PhysicalProductInterface {
+            weight
+        }
         type_id
         attribute_set_id       
       }           
@@ -549,7 +562,9 @@ products(
             }
        }
        name
-       weight
+       ... on PhysicalProductInterface {
+        weight
+       }
        type_id
        attribute_set_id
      }    
@@ -604,7 +619,9 @@ QUERY;
         }
         name
         type_id
+        ... on PhysicalProductInterface {
            weight
+         }
            attribute_set_id
          }
         total_count
@@ -613,14 +630,46 @@ QUERY;
           page_size
           current_page
         }
-
     }
 }
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
-            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->expectExceptionMessage('GraphQL response contains errors: currentPage value 1 specified is greater ' .
+            'than the number of pages available.');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryWithNoSearchOrFilterArgumentException()
+    {
+        $query
+            = <<<QUERY
+{
+  products(pageSize:1)
+  {
+       items{
+           id
+           attribute_set_id    
+           created_at
+           name
+           sku
+           type_id        
+           updated_at
+           ... on PhysicalProductInterface {
+               weight
+           }
+           category_ids                
+       }
+   }
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: \'search\' or \'filter\' input argument is ' .
+            'required.');
         $this->graphQlQuery($query);
     }
 

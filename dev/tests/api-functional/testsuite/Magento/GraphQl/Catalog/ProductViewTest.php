@@ -88,30 +88,69 @@ class ProductViewTest extends GraphQlAbstract
             new_from_date
             new_to_date
             options_container
-            options
-            {
-                file_extension
-                image_size_x
-                image_size_y
-                is_require
-                max_characters
-                option_id
-                price
-                price_type
-                product_sku
-                sku
-                sort_order
+            ... on CustomizableProductInterface {
+              options {
                 title
-                type
-                values
-                {
-                    title
-                    sort_order
+                required
+                sort_order
+                ... on CustomizableFieldOption {
+                  product_sku
+                  field_option: value {
+                    sku
                     price
                     price_type
-                    sku
-                    option_type_id
+                    max_characters
+                  }
                 }
+                ... on CustomizableAreaOption {
+                  product_sku
+                  area_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableDateOption {
+                  product_sku
+                  date_option: value {
+                    sku
+                    price
+                    price_type
+                  }
+                }
+                ... on CustomizableDropDownOption {
+                  drop_down_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableRadioOption {
+                  radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ...on CustomizableFileOption {
+                    product_sku
+                    file_option: value {
+                      sku
+                      price
+                      price_type
+                      file_extension
+                      image_size_x
+                      image_size_y
+                    }
+                  }
+              }
             }
             page_layout
             price {
@@ -164,7 +203,6 @@ class ProductViewTest extends GraphQlAbstract
                 linked_product_sku
                 linked_product_type
                 position
-                qty
                 sku
             }
             short_description
@@ -192,7 +230,9 @@ class ProductViewTest extends GraphQlAbstract
             url_key
             url_path
             website_ids
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }
@@ -287,30 +327,67 @@ QUERY;
             new_from_date
             new_to_date
             options_container
-            options
-            {
-                file_extension
-                image_size_x
-                image_size_y
-                is_require
-                max_characters
-                option_id
-                price
-                price_type
-                product_sku
-                sku
-                sort_order
+            ... on CustomizableProductInterface {
+              field_options: options {
                 title
-                type
-                values
-                {
-                    title
-                    sort_order
+                required
+                sort_order
+                ... on CustomizableFieldOption {
+                  product_sku
+                  field_option: value {
+                    sku
                     price
                     price_type
-                    sku
-                    option_type_id
+                    max_characters
+                  }
                 }
+                ... on CustomizableAreaOption {
+                  product_sku
+                  area_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableDateOption {
+                  product_sku
+                  date_option: value {
+                    sku
+                    price
+                    price_type
+                  }
+                }
+                ... on CustomizableDropDownOption {
+                  drop_down_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ... on CustomizableRadioOption {
+                  radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ...on CustomizableFileOption {
+                    product_sku
+                    file_option: value {
+                      sku
+                      price
+                      price_type
+                      file_extension
+                      image_size_x
+                      image_size_y
+                    }
+                  }
+              }
             }
             page_layout
             price {
@@ -363,7 +440,6 @@ QUERY;
                 linked_product_sku
                 linked_product_type
                 position
-                qty
                 sku
             }
             short_description
@@ -391,7 +467,9 @@ QUERY;
             url_key
             url_path
             website_ids
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }
@@ -523,6 +601,7 @@ QUERY;
     /**
      * @param ProductInterface $product
      * @param $actualResponse
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function assertOptions($product, $actualResponse)
     {
@@ -532,61 +611,85 @@ QUERY;
             $option = null;
             /** @var \Magento\Catalog\Model\Product\Option $optionSelect */
             foreach ($productOptions as $optionSelect) {
-                if ($optionSelect->getOptionId() == $optionsArray['option_id']) {
+                $match = false;
+                if ($optionSelect->getTitle() == $optionsArray['title']) {
                     $option = $optionSelect;
-                    break;
+                    if (!empty($option->getValues())) {
+                        $values = $option->getValues();
+                        /** @var \Magento\Catalog\Model\Product\Option\Value $value */
+                        $value = current($values);
+                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
+                            $match = true;
+                        }
+                    } else {
+                        $match = true;
+                    }
+                    if ($match) {
+                        break;
+                    }
                 }
             }
             $assertionMap = [
-                ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
-                ['response_field' => 'type', 'expected_value' => $option->getType()],
-                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()],
-                ['response_field' => 'is_require', 'expected_value' => $option->getIsRequire()],
-                ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()]
+                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()]
             ];
 
             if (!empty($option->getValues())) {
-                $value = current($optionsArray['values']);
+                $valueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                $value = current($optionsArray[$valueKeyName]);
                 /** @var \Magento\Catalog\Model\Product\Option\Value $productValue */
                 $productValue = current($option->getValues());
                 $assertionMapValues = [
                     ['response_field' => 'title', 'expected_value' => $productValue->getTitle()],
                     ['response_field' => 'sort_order', 'expected_value' => $productValue->getSortOrder()],
                     ['response_field' => 'price', 'expected_value' => $productValue->getPrice()],
-                    ['response_field' => 'price_type', 'expected_value' => $productValue->getPriceType()],
+                    ['response_field' => 'price_type', 'expected_value' => strtoupper($productValue->getPriceType())],
                     ['response_field' => 'sku', 'expected_value' => $productValue->getSku()],
                     ['response_field' => 'option_type_id', 'expected_value' => $productValue->getOptionTypeId()]
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
-                if ($option->getType() === 'file') {
-                    $assertionMap = array_merge(
-                        $assertionMap,
-                        [
-                            ['response_field' => 'file_extension', 'expected_value' => $option->getFileExtension()],
-                            ['response_field' => 'image_size_x', 'expected_value' => $option->getImageSizeX()],
-                            ['response_field' => 'image_size_y', 'expected_value' => $option->getImageSizeY()]
-                        ]
-                    );
-                } elseif ($option->getType() === 'area') {
-                    $assertionMap = array_merge(
-                        $assertionMap,
-                        [
-                            ['response_field' => 'max_characters', 'expected_value' => $option->getMaxCharacters()],
-                        ]
-                    );
-                }
-
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
+                        ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
+                    ]
+                );
+                $valueKeyName = "";
+                if ($option->getType() === 'file') {
+                    $valueKeyName = 'file_option';
+                    $valueAssertionMap = [
+                        ['response_field' => 'file_extension', 'expected_value' => $option->getFileExtension()],
+                        ['response_field' => 'image_size_x', 'expected_value' => $option->getImageSizeX()],
+                        ['response_field' => 'image_size_y', 'expected_value' => $option->getImageSizeY()]
+                    ];
+                } elseif ($option->getType() === 'area') {
+                    $valueKeyName = 'area_option';
+                    $valueAssertionMap = [
+                        ['response_field' => 'max_characters', 'expected_value' => $option->getMaxCharacters()],
+                    ];
+                } elseif ($option->getType() === 'field') {
+                    $valueKeyName = 'field_option';
+                    $valueAssertionMap = [
+                        ['response_field' => 'max_characters', 'expected_value' => $option->getMaxCharacters()]
+                    ];
+                } else {
+                    $valueKeyName = 'date_option';
+                    $valueAssertionMap = [];
+                }
+
+                $valueAssertionMap = array_merge(
+                    $valueAssertionMap,
+                    [
                         ['response_field' => 'price', 'expected_value' => $option->getPrice()],
-                        ['response_field' => 'price_type', 'expected_value' => $option->getPriceType()],
+                        ['response_field' => 'price_type', 'expected_value' => strtoupper($option->getPriceType())],
                         ['response_field' => 'sku', 'expected_value' => $option->getSku()]
                     ]
                 );
+
+                $this->assertResponseFields($optionsArray[$valueKeyName], $valueAssertionMap);
             }
             $this->assertResponseFields($optionsArray, $assertionMap);
         }
@@ -665,7 +768,7 @@ QUERY;
             $expectedAttribute = $product->getCustomAttribute($attributeCode);
 
             $assertionMap[] = [
-                'response_field' => $this->eavAttributesToGrahQlSchemaFieldTranslator($attributeCode),
+                'response_field' => $this->eavAttributesToGraphQlSchemaFieldTranslator($attributeCode),
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
             ];
         }
@@ -677,7 +780,7 @@ QUERY;
      * @param string $eavAttributeCode
      * @return string
      */
-    private function eavAttributesToGrahQlSchemaFieldTranslator(string $eavAttributeCode)
+    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode)
     {
         switch ($eavAttributeCode) {
             case 'news_from_date':

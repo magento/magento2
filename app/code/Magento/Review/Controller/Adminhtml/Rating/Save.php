@@ -17,7 +17,7 @@ class Save extends RatingController
      */
     public function execute()
     {
-        $this->initEnityId();
+        $this->initEntityId();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($this->getRequest()->getPostValue()) {

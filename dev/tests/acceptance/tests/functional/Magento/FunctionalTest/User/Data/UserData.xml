@@ -12,4 +12,10 @@
         <data key="email">admin@magento.com</data>
         <data key="password">admin123</data>
     </entity>
+    <entity name="admin2" type="user">
+        <data key="username" unique="suffix">admin</data>
+        <data key="firstName">John</data>
+        <data key="lastName">Smith</data>
+        <data key="password">admin123</data>
+    </entity>
 </entities>
