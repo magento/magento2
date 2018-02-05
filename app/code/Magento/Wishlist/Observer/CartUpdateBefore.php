@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
 
 /**
  * Class CartUpdateBefore
@@ -31,15 +32,24 @@ class CartUpdateBefore implements ObserverInterface
     protected $wishlistFactory;
 
     /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $resourceModel;
+
+    /**
      * @param Data $wishlistData
      * @param WishlistFactory $wishlistFactory
+     * @param \Magento\Wishlist\Model\ResourceModel\Wishlist $resourceModel
      */
     public function __construct(
         Data $wishlistData,
-        WishlistFactory $wishlistFactory
+        WishlistFactory $wishlistFactory,
+        ResourceWishlist $resourceModel = null
     ) {
         $this->wishlistData = $wishlistData;
         $this->wishlistFactory = $wishlistFactory;
+        $this->resourceModel = $resourceModel ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Wishlist::class);
     }
 
     /**
@@ -92,7 +102,7 @@ class CartUpdateBefore implements ObserverInterface
         }
 
         if (count($productIds)) {
-            $wishlist->save();
+            $this->resourceModel->save($wishlist);
             $this->wishlistData->calculate();
         }
         return $this;

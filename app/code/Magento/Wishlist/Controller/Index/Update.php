@@ -5,9 +5,13 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\LocaleQuantityProcessor;
+use Magento\Wishlist\Model\ResourceModel\Wishlist;
 
 class Update extends \Magento\Wishlist\Controller\AbstractIndex
 {
@@ -27,21 +31,30 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
     protected $quantityProcessor;
 
     /**
-     * @param Action\Context $context
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $resourceModel;
+
+    /**
+     * @param Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+     * @param \Magento\Wishlist\Model\ResourceModel\Wishlist $resourceModel
      */
     public function __construct(
-        Action\Context $context,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+        Context $context,
+        Validator $formKeyValidator,
+        WishlistProviderInterface $wishlistProvider,
+        LocaleQuantityProcessor $quantityProcessor,
+        Wishlist $resourceModel = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
         parent::__construct($context);
+        $this->resourceModel = $resourceModel ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Wishlist::class);
     }
 
     /**
@@ -101,7 +114,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                         $item->delete();
                     } catch (\Exception $e) {
                         $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                        $this->messageManager->addError(__('We can\'t delete item from Wish List right now.'));
+                        $this->messageManager->addErrorMessage(__('We can\'t delete item from Wish List right now.'));
                     }
                 }
 
@@ -113,7 +126,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                     $item->setDescription($description)->setQty($qty)->save();
                     $updatedItems++;
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'Can\'t save description %1',
                             $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($description)
@@ -125,10 +138,10 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
             // save wishlist model for setting date of last update
             if ($updatedItems) {
                 try {
-                    $wishlist->save();
+                    $this->resourceModel->save($wishlist);
                     $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Can\'t update wish list'));
+                    $this->messageManager->addErrorMessage(__('Can\'t update wish list'));
                 }
             }
 
