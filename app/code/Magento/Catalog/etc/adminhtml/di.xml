@@ -193,4 +193,9 @@
     <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
         <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager</argument>
+        </arguments>
+    </type>
 </config>

@@ -42,6 +42,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_logger;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @var \Magento\Catalog\Model\ImageUploader
      */
     private $imageUploader;
@@ -55,15 +60,19 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+           ->get(\Magento\Store\Model\StoreManager::class);
     }
 
     /**
@@ -94,6 +103,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
+
+        if ($this->fileResidesOutsideCategoryDir($value)) {
+            // use relative path for image attribute so we know it's outside of category dir when we fetch it
+            $value[0]['name'] = $value[0]['url'];
+        }
 
         if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
@@ -132,6 +146,26 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check for file path resides outside of category media dir. The URL will be a path including pub/media if true
+     *
+     * @param array|null $value
+     * @return bool
+     */
+    private function fileResidesOutsideCategoryDir($value)
+    {
+        if (!is_array($value) || !isset($value[0]['url'])) {
+            return false;
+        }
+
+        $fileUrl = ltrim($value[0]['url'], '/');
+        $baseMediaDir = $this->storeManager->getStore()->getBaseMediaDir();
+
+        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
+
+        return $usingPathRelativeToBase;
+    }
+
+    /**
      * Save uploaded file and set its name to category
      *
      * @param \Magento\Framework\DataObject $object
@@ -148,6 +182,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_logger->critical($e);
             }
         }
+
         return $this;
     }
 }

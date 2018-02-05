@@ -40,11 +40,16 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         $filename = $this->getRequest()->getParam('filename');
         $filename = $helper->idDecode($filename);
         $asIs = $this->getRequest()->getParam('as_is');
+        $forceStaticPath = $this->getRequest()->getParam('force_static_path');
 
         $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
         $helper->setStoreId($storeId);
 
-        $image = $helper->getImageHtmlDeclaration($filename, $asIs);
+        if ($forceStaticPath) {
+            $image = parse_url($helper->getCurrentUrl() . $filename, PHP_URL_PATH);
+        } else {
+            $image = $helper->getImageHtmlDeclaration($filename, $asIs);
+        }
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

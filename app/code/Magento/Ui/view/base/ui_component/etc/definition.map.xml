@@ -419,6 +419,15 @@
             </argument>
         </schema>
     </component>
+    <component name="imageUploader" include="fileUploader">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="openDialogTitle" type="string" translate="true" xsi:type="xpath">settings/openDialogTitle</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
     <component name="filterRange" include="uiElementSettings">
         <schema name="current">
             <argument name="data" xsi:type="array">
