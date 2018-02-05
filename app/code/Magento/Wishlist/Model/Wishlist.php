@@ -128,6 +128,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     private $serializer;
 
     /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $resourceModel;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -181,6 +186,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
+        $this->resourceModel = $resource;
     }
 
     /**
@@ -196,12 +202,12 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             return $this;
         }
         $customerId = (int)$customerId;
-        $customerIdFieldName = $this->_getResource()->getCustomerIdFieldName();
-        $this->_getResource()->load($this, $customerId, $customerIdFieldName);
+        $customerIdFieldName = $this->resourceModel->getCustomerIdFieldName();
+        $this->resourceModel->load($this, $customerId, $customerIdFieldName);
         if (!$this->getId() && $create) {
             $this->setCustomerId($customerId);
             $this->setSharingCode($this->_getSharingRandomCode());
-            $this->save();
+            $this->resourceModel->save($this);
         }
 
         return $this;
@@ -240,7 +246,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function loadByCode($code)
     {
-        $this->_getResource()->load($this, $code, 'sharing_code');
+        $this->resourceModel->load($this, $code, 'sharing_code');
         if (!$this->getShared()) {
             $this->setId(null);
         }
@@ -486,7 +492,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function setCustomerId($customerId)
     {
-        return $this->setData($this->_getResource()->getCustomerIdFieldName(), $customerId);
+        return $this->setData($this->resourceModel->getCustomerIdFieldName(), $customerId);
     }
 
     /**
@@ -496,7 +502,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getCustomerId()
     {
-        return $this->getData($this->_getResource()->getCustomerIdFieldName());
+        return $this->getData($this->resourceModel->getCustomerIdFieldName());
     }
 
     /**
@@ -507,7 +513,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     public function getDataForSave()
     {
         $data = [];
-        $data[$this->_getResource()->getCustomerIdFieldName()] = $this->getCustomerId();
+        $data[$this->resourceModel->getCustomerIdFieldName()] = $this->getCustomerId();
         $data['shared'] = (int)$this->getShared();
         $data['sharing_code'] = $this->getSharingCode();
         return $data;

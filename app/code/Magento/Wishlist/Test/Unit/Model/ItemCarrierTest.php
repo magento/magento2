@@ -42,6 +42,11 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $redirectMock;
 
+    /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
     protected function setUp()
     {
         $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -64,9 +69,12 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
         $this->managerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
             ->getMockForAbstractClass();
+        $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Wishlist::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new \Magento\Wishlist\Model\ItemCarrier(
             $this->sessionMock,
@@ -77,7 +85,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             $this->cartHelperMock,
             $this->urlBuilderMock,
             $this->managerMock,
-            $this->redirectMock
+            $this->redirectMock,
+            $this->resource
         );
     }
 
@@ -216,10 +225,6 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getCartUrl')
             ->willReturn($redirectUrl);
 
-        $wishlistMock->expects($this->once())
-            ->method('save')
-            ->willReturnSelf();
-
         $productOneMock->expects($this->any())
             ->method('getName')
             ->willReturn($productOneName);
@@ -228,7 +233,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productTwoName . '"'), null)
             ->willReturnSelf();
 
@@ -431,12 +436,12 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('%1 for "%2".', 'Localized Exception', $productTwoName), null)
             ->willReturnSelf();
 
         $this->managerMock->expects($this->at(1))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(
                 __(
                     'We couldn\'t add the following product(s) to the shopping cart: %1.',
@@ -579,8 +584,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception, []);
 
-        $this->managerMock->expects($this->at(0))
-            ->method('addError')
+        $this->managerMock->expects($this->once())
+            ->method('addErrorMessage')
             ->with(__('We can\'t add this item to your shopping cart right now.'), null)
             ->willReturnSelf();
 
@@ -598,15 +603,6 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getRefererUrl')
             ->willReturn('');
 
-        $wishlistMock->expects($this->once())
-            ->method('save')
-            ->willThrowException(new \Exception());
-
-        $this->managerMock->expects($this->at(1))
-            ->method('addError')
-            ->with(__('We can\'t update the Wish List right now.'), null)
-            ->willReturnSelf();
-
         $productOneMock->expects($this->any())
             ->method('getName')
             ->willReturn($productOneName);
@@ -615,7 +611,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productOneName . '"'), null)
             ->willReturnSelf();
 

@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+use Magento\Wishlist\Model\ResourceModel\Wishlist;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -68,6 +69,11 @@ class ItemCarrier
     protected $redirector;
 
     /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $resourceModel;
+
+    /**
      * @param Session $customerSession
      * @param LocaleQuantityProcessor $quantityProcessor
      * @param Cart $cart
@@ -87,7 +93,8 @@ class ItemCarrier
         CartHelper $cartHelper,
         UrlInterface $urlBuilder,
         MessageManager $messageManager,
-        RedirectInterface $redirector
+        RedirectInterface $redirector,
+        Wishlist $resourceModel = null
     ) {
         $this->customerSession = $customerSession;
         $this->quantityProcessor = $quantityProcessor;
@@ -98,6 +105,8 @@ class ItemCarrier
         $this->urlBuilder = $urlBuilder;
         $this->messageManager = $messageManager;
         $this->redirector = $redirector;
+        $this->resourceModel = $resourceModel ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Wishlist::class);
     }
 
     /**
@@ -110,7 +119,7 @@ class ItemCarrier
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function moveAllToCart(Wishlist $wishlist, $qtys)
+    public function moveAllToCart($wishlist, $qtys)
     {
         $isOwner = $wishlist->isOwner($this->customerSession->getCustomerId());
 
@@ -182,7 +191,7 @@ class ItemCarrier
 
         if ($messages) {
             foreach ($messages as $message) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
             }
             $redirectUrl = $indexUrl;
         }
@@ -190,9 +199,9 @@ class ItemCarrier
         if ($addedProducts) {
             // save wishlist model for setting date of last update
             try {
-                $wishlist->save();
+                $this->resourceModel->save($wishlist);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t update the Wish List right now.'));
+                $this->messageManager->addErrorMessage(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }
 
@@ -202,7 +211,7 @@ class ItemCarrier
                 $products[] = '"' . $product->getName() . '"';
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
             );
 

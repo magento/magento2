@@ -220,7 +220,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function getMetadataPool()
     {
-        if ($this->metadataPool == null) {
+        if ($this->metadataPool === null) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }

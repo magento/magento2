@@ -11,6 +11,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Model\ResourceModel\Wishlist;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,24 +39,33 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
     protected $formKeyValidator;
 
     /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist
+     */
+    protected $resourceModel;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
      * @param Validator $formKeyValidator
+     * @param \Magento\Wishlist\Model\ResourceModel\Wishlist $resourceModel
      */
     public function __construct(
         Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        Wishlist $resourceModel = null
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
         $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context);
+        $this->resourceModel = $resourceModel ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Wishlist::class);
     }
 
     /**
@@ -114,7 +124,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             if (is_string($result)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
-            $wishlist->save();
+            $this->resourceModel->save($wishlist);
 
             $this->_eventManager->dispatch(
                 'wishlist_add_product',

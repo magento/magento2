@@ -116,6 +116,11 @@ class CartTest extends \PHPUnit\Framework\TestCase
     protected $formKeyValidator;
 
     /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -172,7 +177,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess'])
+            ->setMethods(['addSuccessMessage'])
             ->getMockForAbstractClass();
 
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
@@ -189,6 +194,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -237,7 +246,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $this->escaperMock,
             $this->helperMock,
             $this->cartHelperMock,
-            $this->formKeyValidator
+            $this->formKeyValidator,
+            $this->resource
         );
     }
 
@@ -540,10 +550,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->method('collectTotals')
             ->willReturnSelf();
 
-        $wishlistMock->expects($this->once())
-            ->method('save')
-            ->willReturnSelf();
-
         $quoteMock->expects($this->once())
             ->method('getHasError')
             ->willReturn(false);
@@ -566,7 +572,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productName);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You added '  . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
@@ -581,7 +587,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())
             ->method('calculate')
             ->willReturnSelf();
-        
+
         return $refererUrl;
     }
 
@@ -735,8 +741,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new ProductException(__('Test Phrase')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with('This product(s) is out of stock.', null)
+            ->method('addExceptionMessage')
+            ->with(self::isInstanceOf('\Magento\Catalog\Model\Product\Exception'), 'This product(s) is out of stock.')
             ->willReturnSelf();
 
         $this->helperMock->expects($this->once())
@@ -901,7 +907,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 
@@ -1073,7 +1079,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 

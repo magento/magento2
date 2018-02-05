@@ -48,6 +48,11 @@ class CartUpdateBeforeTest extends \PHPUnit\Framework\TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var \Magento\Wishlist\Model\ResourceModel\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
     protected function setUp()
     {
         $this->helper = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
@@ -63,10 +68,14 @@ class CartUpdateBeforeTest extends \PHPUnit\Framework\TestCase
         $this->wishlistFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->wishlist);
+        $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Wishlist::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->observer = new Observer(
             $this->helper,
-            $this->wishlistFactory
+            $this->wishlistFactory,
+            $this->resource
         );
     }
 
@@ -164,9 +173,6 @@ class CartUpdateBeforeTest extends \PHPUnit\Framework\TestCase
         $this->wishlist->expects($this->once())
             ->method('addNewItem')
             ->with($this->logicalOr($productId, $buyRequest));
-
-        $this->wishlist->expects($this->once())
-            ->method('save');
 
         $this->helper->expects($this->once())
             ->method('calculate');
