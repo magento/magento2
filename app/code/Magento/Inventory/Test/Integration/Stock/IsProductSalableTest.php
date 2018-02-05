@@ -57,7 +57,7 @@ class IsProductSalableTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testProductIsInStock()
+    public function testProductIsSalable()
     {
         self::assertTrue($this->isProductSalable->execute('SKU-1', 10));
     }
@@ -102,8 +102,8 @@ class IsProductSalableTest extends TestCase
     public function testExecuteWithDifferentQty(int $stockId, array $expectedResults)
     {
         foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isInStock = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 

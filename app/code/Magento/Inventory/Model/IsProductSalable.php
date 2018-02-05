@@ -16,7 +16,7 @@ use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemR
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 
 /**
- * Return product availability by Product SKU and Stock Id (stock data + reservations)
+ * @inheritdoc
  */
 class IsProductSalable implements IsProductSalableInterface
 {
@@ -84,7 +84,7 @@ class IsProductSalable implements IsProductSalableInterface
             return false;
         }
 
-        $isInStock = (bool)$stockItemData['is_salable'];
+        $isSalable = (bool)$stockItemData['is_salable'];
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
         $legacyStockItem = $this->getLegacyStockItem($sku);
@@ -93,11 +93,11 @@ class IsProductSalable implements IsProductSalableInterface
             if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
                 || ($legacyStockItem->getUseConfigMinQty() == 0 && $qtyWithReservation <= $legacyStockItem->getMinQty())
             ) {
-                $isInStock = false;
+                $isSalable = false;
             }
         }
 
-        return $isInStock;
+        return $isSalable;
     }
 
     /**
