@@ -18,7 +18,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     /**
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
      */
-    protected $swaggerGenerator;
+    private $_swaggerGenerator;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
@@ -35,7 +35,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
         Generator $swaggerGenerator,
         RestResponse $response
     ) {
-        $this->swaggerGenerator = $swaggerGenerator;
+        $this->_swaggerGenerator = $swaggerGenerator;
         $this->_response        = $response;
     }
 
@@ -46,9 +46,9 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     {
         $requestedServices = $request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
-            ? $this->swaggerGenerator->getListOfServices()
+            ? $this->_swaggerGenerator->getListOfServices()
             : $requestedServices;
-        $responseBody      = $this->swaggerGenerator->generate(
+        $responseBody      = $this->_swaggerGenerator->generate(
             $requestedServices,
             $request->getScheme(),
             $request->getHttpHost(),
