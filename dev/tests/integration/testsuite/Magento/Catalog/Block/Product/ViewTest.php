@@ -44,12 +44,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         /** @var $pageConfig \Magento\Framework\View\Page\Config */
         $pageConfig = $objectManager->get(\Magento\Framework\View\Page\Config::class);
 
-        $layout->createBlock(\Magento\Catalog\Block\Product\View::class);
+        $productView = $layout->createBlock(\Magento\Catalog\Block\Product\View::class);
 
-        $this->assertNotEmpty($pageConfig->getTitle()->get());
-        $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle()->get());
-        $this->assertEquals($this->_product->getMetaKeyword(), $pageConfig->getKeywords());
-        $this->assertEquals($this->_product->getMetaDescription(), $pageConfig->getDescription());
+        $this->assertInstanceOf(\Magento\Framework\View\LayoutInterface::class, $productView->getLayout());
+        $this->assertEmpty($pageConfig->getTitle()->get());
+        $this->assertEmpty($pageConfig->getKeywords());
+        $this->assertEmpty($pageConfig->getDescription());
     }
 
     public function testGetProduct()
