@@ -24,6 +24,7 @@ class ShippingAlgorithmResult implements ShippingAlgorithmResultInterface
 
     /**
      * @param SourceSelectionInterface[] $sourceSelections
+     * @param bool $isShippable
      */
     public function __construct(array $sourceSelections, bool $isShippable)
     {
