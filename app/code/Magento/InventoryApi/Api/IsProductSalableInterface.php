@@ -12,7 +12,7 @@ namespace Magento\InventoryApi\Api;
  *
  * @api
  */
-interface IsProductInStockInterface
+interface IsProductSalableInterface
 {
     /**
      * Get is product in stock for given SKU in a given Stock

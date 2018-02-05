@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
+use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
 
 /**
  * @inheritdoc
  */
-class GetProductQuantityInStock implements GetProductQuantityInStockInterface
+class GetSalableProductQty implements GetSalableProductQtyInterface
 {
     /**
      * @var GetStockItemDataInterface

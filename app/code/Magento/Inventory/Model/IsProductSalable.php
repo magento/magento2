@@ -13,12 +13,12 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemRepository;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 
 /**
  * Return product availability by Product SKU and Stock Id (stock data + reservations)
  */
-class IsProductInStock implements IsProductInStockInterface
+class IsProductSalable implements IsProductSalableInterface
 {
     /**
      * @var GetStockItemDataInterface

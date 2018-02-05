@@ -86,8 +86,8 @@
     </type>
     <preference for="Magento\Inventory\Model\GetReservationsQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\GetReservationsQuantity"/>
     <!-- Query interfaces -->
-    <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
-    <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
+    <preference for="Magento\InventoryApi\Api\GetSalableProductQtyInterface" type="Magento\Inventory\Model\GetSalableProductQty"/>
+    <preference for="Magento\InventoryApi\Api\IsProductSalableInterface" type="Magento\Inventory\Model\IsProductSalable"/>
     <!-- IsSalableCondition -->
     <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
         <arguments>
