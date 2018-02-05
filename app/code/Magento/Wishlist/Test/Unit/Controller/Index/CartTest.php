@@ -605,9 +605,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $options = [5 => 'option'];
         $params = ['item' => $itemId, 'qty' => $qty];
 
-        $exceptionMessage = 'exception_message';
-        $exception = new \Exception($exceptionMessage);
-
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->requestMock)
