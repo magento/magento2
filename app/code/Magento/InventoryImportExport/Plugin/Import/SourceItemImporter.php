@@ -73,18 +73,16 @@ class SourceItemImporter
     ) {
         $proceed($stockData);
         $sourceItems = [];
-        foreach ($stockData as $stockDatum) {
-            if (isset($stockDatum[Product::COL_SKU])) {
-                $inStock = (isset($stockDatum['is_in_stock'])) ? $stockDatum['is_in_stock'] : 0;
-                $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
-                /** @var SourceItemInterface $sourceItem */
-                $sourceItem = $this->sourceItemFactory->create();
-                $sourceItem->setSku($stockDatum[Product::COL_SKU]);
-                $sourceItem->setSourceCode($this->defaultSource->getCode());
-                $sourceItem->setQuantity($qty);
-                $sourceItem->setStatus($inStock);
-                $sourceItems[] = $sourceItem;
-            }
+        foreach ($stockData as $sku => $stockDatum) {
+            $inStock = (isset($stockDatum['is_in_stock'])) ? intval($stockDatum['is_in_stock']) : 0;
+            $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
+            /** @var SourceItemInterface $sourceItem */
+            $sourceItem = $this->sourceItemFactory->create();
+            $sourceItem->setSku($sku);
+            $sourceItem->setSourceCode($this->defaultSource->getCode());
+            $sourceItem->setQuantity($qty);
+            $sourceItem->setStatus($inStock);
+            $sourceItems[] = $sourceItem;
         }
         if (count($sourceItems) > 0) {
             /** Magento\Inventory\Model\SourceItem[] $sourceItems */
