@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- IsSalableCondition -->
+    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+        <arguments>
+            <argument name="getIsSalableConditions" xsi:type="array">
+                <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
+                <item name="min_qty" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
