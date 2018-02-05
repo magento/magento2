@@ -53,8 +53,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
-        <plugin name="process_check_admin_part"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockResolver\ProcessCheckAdminPartPlugin"/>
-    </type>
 </config>

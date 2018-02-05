@@ -5,14 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockResolver;
+namespace Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver;
 
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
-class ProcessCheckAdminPartPlugin
+/**
+ * Adapt Stock resolver to admin website
+ */
+class AdaptStockResolverToAdminWebsitePlugin
 {
     /**
      * @var StockRepositoryInterface
@@ -25,10 +30,8 @@ class ProcessCheckAdminPartPlugin
     private $defaultStockProviderInterface;
 
     /**
-     * ProcessCheckAdminPartPlugin constructor.
-     *
      * @param DefaultStockProviderInterface $defaultStockProviderInterface
-     * @param StockRepositoryInterface      $stockRepositoryInterface
+     * @param StockRepositoryInterface $stockRepositoryInterface
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProviderInterface,
@@ -40,13 +43,11 @@ class ProcessCheckAdminPartPlugin
 
     /**
      * @param StockResolverInterface $stockResolverInterface
-     * @param callable               $proceed
-     * @param string                 $type
-     * @param string                 $code
-     *
+     * @param callable $proceed
+     * @param string $type
+     * @param string $code
      * @return StockInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function aroundGet(
         StockResolverInterface $stockResolverInterface,
@@ -54,10 +55,9 @@ class ProcessCheckAdminPartPlugin
         string $type,
         string $code
     ) {
-        if ($code == WebsiteInterface::ADMIN_CODE) {
+        if (SalesChannelInterface::TYPE_WEBSITE === $type && WebsiteInterface::ADMIN_CODE === $code) {
             return $this->stockRepository->get($this->defaultStockProviderInterface->getId());
         }
-
         return $proceed($type, $code);
     }
 }
