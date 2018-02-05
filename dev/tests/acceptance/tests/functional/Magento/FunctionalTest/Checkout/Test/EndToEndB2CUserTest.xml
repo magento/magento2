@@ -11,12 +11,12 @@
     <test name="EndToEndB2CUserCest">
         <annotations>
             <features value="End to End scenarios"/>
-            <stories value="End-to-end automation: B2C user - MAGETWO-75411"/>
+            <stories value="End-to-end automation: B2C guest user - MAGETWO-75411"/>
             <group value="e2e"/>
-            <title value="You should be able to pass End to End B2C User scenario"/>
+            <title value="You should be able to pass End to End B2C Guest User scenario"/>
             <description value="User browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-75411"/>
+            <testCaseId value="MAGETWO-87435"/>
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
