@@ -128,6 +128,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @dataProvider importReplaceDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
     {
