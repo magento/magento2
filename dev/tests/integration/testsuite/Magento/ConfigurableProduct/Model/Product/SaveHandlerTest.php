@@ -11,7 +11,6 @@ namespace Magento\ConfigurableProduct\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
 
 /**
@@ -20,10 +19,6 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
  */
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var Configurable
-     */
-    private $model;
 
     /**
      * Object under test
