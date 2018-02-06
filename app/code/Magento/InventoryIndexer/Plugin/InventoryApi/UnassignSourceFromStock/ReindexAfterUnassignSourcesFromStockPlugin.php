@@ -11,7 +11,6 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 
-
 /**
  * Invalidate InventoryIndexer
  */

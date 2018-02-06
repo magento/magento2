@@ -11,6 +11,9 @@ use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
+use Magento\Inventory\Model\StockSourceLink;
+use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
@@ -30,24 +33,41 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
     private $logger;
 
     /**
+     * @var StockSourceLinkValidatorInterface
+     */
+    private $stockSourceLinkValidator;
+
+    /**
+     * AssignSourcesToStock constructor.
      * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
+     * @param StockSourceLinkValidatorInterface $stockSourceLinkValidator
      */
     public function __construct(
         SaveMultiple $saveMultiple,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        StockSourceLinkValidatorInterface $stockSourceLinkValidator
     ) {
         $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
+        $this->stockSourceLinkValidator = $stockSourceLinkValidator;
     }
 
     /**
-     * @inheritdoc
+     * @param StockSourceLink[] $links
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws ValidationException
      */
     public function execute(array $links)
     {
         if (empty($links)) {
             throw new InputException(__('Input data is empty'));
+        }
+
+        $validationResult = $this->stockSourceLinkValidator->validate($links);
+        if (!$validationResult->isValid()) {
+            throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
         try {

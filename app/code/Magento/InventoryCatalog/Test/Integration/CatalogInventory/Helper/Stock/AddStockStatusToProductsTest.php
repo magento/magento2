@@ -64,6 +64,7 @@ class AddStockStatusToProductsTest extends TestCase
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addFieldToFilter(ProductInterface::SKU, ['in' => array_keys($productsData)]);
         $collection->load();
+        self::assertCount(3, $collection->getItems());
 
         $this->stockHelper->addStockStatusToProducts($collection);
 

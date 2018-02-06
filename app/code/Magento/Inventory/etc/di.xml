@@ -16,6 +16,7 @@
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
+    <preference for="Magento\Inventory\Model\Source\Validator\SourceValidatorInterface" type="Magento\Inventory\Model\Source\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\Source\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -27,11 +28,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Model\Source\Command\Save">
-        <arguments>
-            <argument name="sourceValidator" xsi:type="object">Magento\Inventory\Model\Source\Validator\ValidatorChain</argument>
-        </arguments>
-    </type>
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemsSaveInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave"/>
@@ -39,6 +35,7 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetListInterface" type="Magento\Inventory\Model\SourceItem\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\SourceItem\Validator\SourceItemValidatorInterface" type="Magento\Inventory\Model\SourceItem\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\SourceItem\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -47,11 +44,6 @@
                 <item name="quantity" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\QuantityValidator</item>
                 <item name="status" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\StatusValidator</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator">
-        <arguments>
-            <argument name="sourceItemValidator" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\ValidatorChain</argument>
         </arguments>
     </type>
     <!-- Stock -->
@@ -63,6 +55,7 @@
     <preference for="Magento\Inventory\Model\Stock\Command\GetListInterface" type="Magento\Inventory\Model\Stock\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetProductQuantityInterface" type="Magento\Inventory\Model\Stock\Command\GetProductQuantity"/>
     <preference for="Magento\Inventory\Model\Stock\Command\SaveInterface" type="Magento\Inventory\Model\Stock\Command\Save"/>
+    <preference for="Magento\Inventory\Model\Stock\Validator\StockValidatorInterface" type="Magento\Inventory\Model\Stock\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\Stock\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -70,12 +63,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Model\Stock\Command\Save">
-        <arguments>
-            <argument name="stockValidator" xsi:type="object">Magento\Inventory\Model\Stock\Validator\ValidatorChain</argument>
-        </arguments>
-    </type>
-    <preference for="Magento\Inventory\Model\GetStockItemQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemQuantity"/>
+    <preference for="Magento\Inventory\Model\GetStockItemDataInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData"/>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
@@ -84,6 +72,7 @@
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
+    <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
@@ -97,6 +86,16 @@
     </type>
     <preference for="Magento\Inventory\Model\GetReservationsQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\GetReservationsQuantity"/>
     <!-- Query interfaces -->
-    <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
-    <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
+    <preference for="Magento\InventoryApi\Api\GetSalableProductQtyInterface" type="Magento\Inventory\Model\GetSalableProductQty"/>
+    <preference for="Magento\InventoryApi\Api\IsProductSalableInterface" type="Magento\Inventory\Model\IsProductSalable"/>
+    <!-- IsSalableCondition -->
+    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+        <arguments>
+            <argument name="getIsSalableConditions" xsi:type="array">
+                <item name="manage_stock" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
 </config>
