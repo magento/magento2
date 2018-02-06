@@ -62,7 +62,7 @@ class StockDataProvider extends DataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param ReportingInterface $reporting
-     * @param SearchSearchCriteriaBuilder $searchSearchCriteriaBuilder
+     * @param SearchSearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param StockRepositoryInterface $stockRepository
@@ -80,7 +80,7 @@ class StockDataProvider extends DataProvider
         $primaryFieldName,
         $requestFieldName,
         ReportingInterface $reporting,
-        SearchSearchCriteriaBuilder $searchSearchCriteriaBuilder,
+        SearchSearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         StockRepositoryInterface $stockRepository,
@@ -97,7 +97,7 @@ class StockDataProvider extends DataProvider
             $primaryFieldName,
             $requestFieldName,
             $reporting,
-            $searchSearchCriteriaBuilder,
+            $searchCriteriaBuilder,
             $request,
             $filterBuilder,
             $meta,
