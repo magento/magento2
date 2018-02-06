@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Plugin\InventoryApi\SourceItemsDelete;
+namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;

@@ -12,15 +12,14 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection as StockSourceLinkCollection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory as StockSourceLinkCollectionFactory;
-use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterfaceFactory;
-use Magento\InventoryApi\Api\GetSourceLinksInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 
 /**
  * @inheritdoc
  */
-class GetSourceLinks implements GetSourceLinksInterface
+class GetStockSourceLinks implements GetStockSourceLinksInterface
 {
     /**
      * @var CollectionProcessorInterface

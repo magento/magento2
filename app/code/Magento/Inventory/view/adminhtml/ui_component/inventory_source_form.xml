@@ -120,15 +120,6 @@
                 <label translate="true">Longitude</label>
             </settings>
         </field>
-        <field name="priority" formElement="input" sortOrder="70">
-            <settings>
-                <validation>
-                    <rule name="validate-integer" xsi:type="boolean">true</rule>
-                </validation>
-                <dataType>number</dataType>
-                <label translate="true">Priority</label>
-            </settings>
-        </field>
     </fieldset>
     <fieldset name="contact_info" sortOrder="20">
         <settings>

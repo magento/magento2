@@ -10,24 +10,23 @@ namespace Magento\InventoryApi\Test\Api\StockSourceLink;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class GetListTest extends WebapiAbstract
+class GetStockSourceLinksTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
-    const SERVICE_NAME = 'inventoryApiGetSourceLinksV1';
+    const SERVICE_NAME = 'inventoryApiGetStockSourceLinksV1';
     /**#@-*/
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testGetList()
     {
@@ -59,10 +58,12 @@ class GetListTest extends WebapiAbstract
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 2,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
         ];
 
