@@ -50,7 +50,7 @@ class StockDataProvider extends DataProvider
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $apiSearchCriteriaBuilder;
 
     /**
      * @var SortOrderBuilder
@@ -69,7 +69,7 @@ class StockDataProvider extends DataProvider
      * @param SearchResultFactory $searchResultFactory
      * @param GetStockSourceLinksInterface $getStockSourceLinks
      * @param SourceRepositoryInterface $sourceRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchCriteriaBuilder $apiSearchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param array $meta
      * @param array $data
@@ -87,7 +87,7 @@ class StockDataProvider extends DataProvider
         SearchResultFactory $searchResultFactory,
         GetStockSourceLinksInterface $getStockSourceLinks,
         SourceRepositoryInterface $sourceRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchCriteriaBuilder $apiSearchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         array $meta = [],
         array $data = []
@@ -107,7 +107,7 @@ class StockDataProvider extends DataProvider
         $this->searchResultFactory = $searchResultFactory;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->sourceRepository = $sourceRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->apiSearchCriteriaBuilder = $apiSearchCriteriaBuilder;
         $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
@@ -164,7 +164,7 @@ class StockDataProvider extends DataProvider
             ->setField(StockSourceLinkInterface::PRIORITY)
             ->setAscendingDirection()
             ->create();
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $this->apiSearchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
             ->addSortOrder($sortOrder)
             ->create();
