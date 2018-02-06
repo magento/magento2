@@ -9,6 +9,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="CheckoutPage" url="/checkout" module="Checkout">
+        <section name="CheckoutHeaderSection"/>
         <section name="CheckoutShippingSection"/>
         <section name="CheckoutShippingMethodsSection"/>
         <section name="CheckoutOrderSummarySection"/>
