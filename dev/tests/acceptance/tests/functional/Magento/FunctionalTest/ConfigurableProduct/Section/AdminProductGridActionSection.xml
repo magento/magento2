@@ -8,8 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="AdminCategoryMainActionsSection">
-        <element name="SaveButton" type="button" selector=".page-actions-inner #save" timeout="30"/>
-        <element name="DeleteButton" type="button" selector=".page-actions-inner #delete" timeout="30"/>
+    <section name="AdminProductGridActionSection">
+        <element name="addConfigurableProduct" type="button" selector=".item[data-ui-id='products-list-add-new-product-button-item-configurable']" timeout="30"/>
     </section>
 </sections>
