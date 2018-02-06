@@ -11,13 +11,12 @@
         <container name="assign_sources_container">
             <button
                     name="assign_sources_button"
-                    class="Magento\InventoryCatalog\Ui\Component\AssignSourcesButton"
-                    template="Magento_InventoryCatalog/assign-sources-button.html">
-            </button>
+                    class="Magento\InventoryCatalog\Ui\Component\AssignSources\Button"
+                    template="Magento_InventoryCatalog/stock/assign-sources/button.html"/>
         </container>
         <dynamicRows name="assigned_sources">
-            <container name="record" class="Magento\InventoryCatalog\Ui\Component\Record">
-                <field name="actionDelete" template="Magento_InventoryCatalog/action-delete.html" />
+            <container name="record" class="Magento\InventoryCatalog\Ui\Component\AssignSources\Record">
+                <field name="actionDelete" template="Magento_InventoryCatalog/stock/assign-sources/action-delete.html"/>
             </container>
         </dynamicRows>
     </fieldset>
