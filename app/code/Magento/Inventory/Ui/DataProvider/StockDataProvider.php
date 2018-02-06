@@ -24,6 +24,7 @@ use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockDataProvider extends DataProvider
 {
