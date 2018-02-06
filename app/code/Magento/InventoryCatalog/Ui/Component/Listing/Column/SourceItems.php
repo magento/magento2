@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
+namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
 
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -18,6 +19,11 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  */
 class SourceItems extends Column
 {
+    /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
     /**
      * @var SourceRepositoryInterface
      */
@@ -31,6 +37,7 @@ class SourceItems extends Column
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param array $components
@@ -39,12 +46,14 @@ class SourceItems extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         SourceRepositoryInterface $sourceRepository,
         GetSourceItemsBySkuInterface $getSourceItemsBySku,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->sourceRepository = $sourceRepository;
         $this->getSourceItemsBySku = $getSourceItemsBySku;
     }
@@ -59,7 +68,9 @@ class SourceItems extends Column
     {
         if ($dataSource['data']['totalRecords'] > 0) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['qty'] = $this->getSourceItemsData($row['sku']);
+                $row['qty'] = $this->isSourceItemsManagementAllowedForProductType->execute($row['type_id']) === true
+                    ? $this->getSourceItemsData($row['sku'])
+                    : [];
             }
         }
         unset($row);

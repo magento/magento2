@@ -8,13 +8,22 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Ui\Component;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\Ui\Component\Container;
 use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
 
+/**
+ * Container with stocks data
+ */
 class Stocks extends Container
 {
+    /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
     /**
      * @var StockRepositoryInterface
      */
@@ -32,6 +41,7 @@ class Stocks extends Container
 
     /**
      * @param ContextInterface $context
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param StockRepositoryInterface $stockRepository
      * @param GetSalableProductQtyInterface $getSalableProductQty
      * @param GetAssignedStockIdsBySku $getAssignedStockIdsBySku
@@ -40,6 +50,7 @@ class Stocks extends Container
      */
     public function __construct(
         ContextInterface $context,
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         StockRepositoryInterface $stockRepository,
         GetSalableProductQtyInterface $getSalableProductQty,
         GetAssignedStockIdsBySku $getAssignedStockIdsBySku,
@@ -47,6 +58,7 @@ class Stocks extends Container
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->stockRepository = $stockRepository;
         $this->getSalableProductQty = $getSalableProductQty;
         $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
@@ -58,11 +70,15 @@ class Stocks extends Container
      */
     public function prepareDataSource(array $dataSource): array
     {
-        if (!isset($dataSource['data']['product']['sku']) || empty($dataSource['data']['product']['sku'])) {
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($dataSource['data']['product']['type_id'])
+            === false
+        ) {
             return $dataSource;
         }
-        $productSku = $dataSource['data']['product']['sku'];
-        $dataSource['data']['stocks'] = $this->getActiveStocksQtyInfo($productSku);
+        if (!isset($dataSource['data']['product']['sku']) || '' === trim($dataSource['data']['product']['sku'])) {
+            return $dataSource;
+        }
+        $dataSource['data']['stocks'] = $this->getAssignedStocksData($dataSource['data']['product']['sku']);
         return $dataSource;
     }
 
@@ -70,10 +86,10 @@ class Stocks extends Container
      * @param string $productSku
      * @return array
      */
-    private function getActiveStocksQtyInfo(string $productSku): array
+    private function getAssignedStocksData(string $productSku): array
     {
-        $stockIds = $this->getAssignedStockIdsBySku->execute($productSku);
         $stockInfo = [];
+        $stockIds = $this->getAssignedStockIdsBySku->execute($productSku);
         if (count($stockIds)) {
             foreach ($stockIds as $stockId) {
                 $stockId = (int)$stockId;

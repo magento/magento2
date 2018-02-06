@@ -61,7 +61,7 @@ class Sources extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -107,17 +107,19 @@ class Sources extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
-            $meta['sources'] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'visible' => 0,
-                        ],
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
+            return $meta;
+        }
+
+        $meta['sources'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'visible' => 0,
                     ],
                 ],
-            ];
-        }
+            ],
+        ];
         return $meta;
     }
 }
