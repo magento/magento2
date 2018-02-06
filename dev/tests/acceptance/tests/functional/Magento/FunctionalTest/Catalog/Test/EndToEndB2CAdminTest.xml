@@ -22,12 +22,10 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginToAdminArea"/>
         </before>
         <after>
-            <!--Clean up products-->
-
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
-        <!--Step 2. Admin create product-->
+        <!--Admin creates product-->
         <!--Create Simple Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageSimple"/>
         <waitForPageLoad stepKey="waitForProductPageLoadSimple"/>
@@ -68,6 +66,28 @@
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
 
+        <!--Admin creates category-->
+        <amOnPage url="{{AdminCategoryPage}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <!--Create category under Default Category-->
+        <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
+        <actionGroup ref="CheckCategoryNameIsRequiredField" stepKey="checkCategoryNameIsRequired"/>
+        <actionGroup ref="CreateCategory" stepKey="createCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+        <!--Create category under newly created category-->
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="clickCreatedCategoryInTree"/>
+        <actionGroup ref="CreateCategory" stepKey="createSubCategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+
+        <!--Clean up categories-->
+        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
+        <actionGroup ref="DeleteCategory" stepKey="deleteDefaultCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
+        <!--Clean up products-->
         <!--TODO - Move to 'after' block when MQE-732 is fixed-->
         <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
             <argument name="product" value="SimpleProduct"/>

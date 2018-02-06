@@ -43,7 +43,8 @@
         <arguments>
             <argument name="categoryEntity" defaultValue="_defaultCategory"/>
         </arguments>
-        <seeInCurrentUrl url="{{AdminCategoryPage}}" stepKey="seeOnCategoryPage"/>
+        <amOnPage url="{{AdminCategoryPage}}" stepKey="goToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="clickCategoryLink"/>
         <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
         <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
