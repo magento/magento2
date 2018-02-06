@@ -6,16 +6,17 @@
 
 namespace Magento\CatalogSearch\Setup\Patch;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class PatchInitial
+class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -45,13 +46,33 @@ class PatchInitial
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $this->setWeight('sku', 6);
         $this->setWeight('name', 5);
         $this->getIndexer('catalogsearch_fulltext')->reindexAll();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function setWeight($attributeCode, $weight
     )

@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch203
+class Patch203 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -37,12 +37,12 @@ class Patch203
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
 
-            /** @var CategorySetup $categorySetup */
+        /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
         $categorySetup->updateAttribute(3, 54, 'default_value', 1);
 
@@ -50,5 +50,25 @@ class Patch203
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch206
+class Patch206 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -43,12 +43,32 @@ class Patch206
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
         $this->convertSerializedDataToJsonFactory->create(['quoteSetup' => $quoteSetup])
             ->convert();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch209
+class Patch209 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -39,7 +39,7 @@ class Patch209
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
         /** @var CustomerSetup $customerSetup */
@@ -60,6 +60,26 @@ class Patch209
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup
     )

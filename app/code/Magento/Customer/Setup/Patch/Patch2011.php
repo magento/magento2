@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Setup\Patch;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -15,7 +16,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch2011
+class Patch2011 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -27,10 +28,13 @@ class Patch2011
     /**
      * @param FieldDataConverterFactory $fieldDataConverterFactory = null@param \Magento\Eav\Model\Config $eavConfig
      */
-    public function __construct(FieldDataConverterFactory $fieldDataConverterFactory, \Magento\Eav\Model\Config $eavConfig)
+    public function __construct(FieldDataConverterFactory $fieldDataConverterFactory = null
+
+        ,
+                                \Magento\Eav\Model\Config $eavConfig)
     {
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
-        $this->eavConfig = $eavConfig;
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
+            $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -40,7 +44,7 @@ class Patch2011
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
         /** @var CustomerSetup $customerSetup */
@@ -59,5 +63,25 @@ class Patch2011
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

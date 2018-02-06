@@ -34,6 +34,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Model\Patch\PatchApplier;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -235,6 +236,11 @@ class Installer
     private $schemaPersistor;
 
     /**
+     * @var PatchApplier
+     */
+    private $patchApplier;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -312,6 +318,7 @@ class Installer
             DeclarationInstaller::class
         );
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
+        $this->patchApplier = $this->objectManagerProvider->get()->create(PatchApplier::class);
     }
 
     /**
@@ -927,6 +934,8 @@ class Installer
                     $resource->setDataVersion($moduleName, $configVer);
                 }
             }
+
+            $this->patchApplier->execute($setup, $moduleName);
             $this->logProgress();
         }
 

@@ -15,7 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch202
+class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -39,7 +39,7 @@ class Patch202
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
@@ -49,6 +49,26 @@ class Patch202
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function upgradeSerializedFields($setup
     )

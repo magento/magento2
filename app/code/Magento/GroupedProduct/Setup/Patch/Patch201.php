@@ -17,7 +17,7 @@ use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch201
+class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -47,7 +47,7 @@ class Patch201
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
@@ -71,5 +71,25 @@ class Patch201
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

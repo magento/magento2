@@ -10,7 +10,7 @@ namespace %namespace%;
 /**
 * Patch is mechanism, that allows to do atomic upgrade data changes
 */
-class %class%
+class %class% implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
     %constants%
     %variables%
@@ -24,9 +24,29 @@ class %class%
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
 %code%
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
     %additional_functions%
 }

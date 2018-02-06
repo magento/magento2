@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class PatchInitial
+class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -37,7 +37,7 @@ class PatchInitial
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
@@ -150,5 +150,25 @@ class PatchInitial
         }
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

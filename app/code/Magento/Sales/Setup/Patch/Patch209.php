@@ -15,7 +15,7 @@ use Magento\Sales\Model\OrderFactory;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch209
+class Patch209 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -36,7 +36,7 @@ class Patch209
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
         //Correct wrong source model for "invoice" entity type, introduced by mistake in 2.0.1 upgrade.
@@ -48,5 +48,25 @@ class Patch209
         $this->eavConfig->clear();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

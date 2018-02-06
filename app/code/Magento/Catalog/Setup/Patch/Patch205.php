@@ -6,14 +6,16 @@
 
 namespace Magento\Catalog\Setup\Patch;
 
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch205
+class Patch205 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -37,12 +39,12 @@ class Patch205
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
 
-            /** @var CategorySetup $categorySetup */
+        /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
 
         //Product Details tab
@@ -231,5 +233,25 @@ class Patch205
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

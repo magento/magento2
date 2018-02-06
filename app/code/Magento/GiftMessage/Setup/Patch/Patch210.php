@@ -10,12 +10,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch210
+class Patch210 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -34,7 +35,7 @@ class Patch210
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
@@ -55,5 +56,25 @@ class Patch210
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

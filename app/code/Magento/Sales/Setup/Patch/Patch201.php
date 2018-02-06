@@ -15,7 +15,7 @@ use Magento\Sales\Model\OrderFactory;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch201
+class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -36,12 +36,32 @@ class Patch201
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
         $salesSetup->updateEntityTypes();
         $this->eavConfig->clear();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
 }

@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch220
+class Patch220 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -56,7 +56,7 @@ class Patch220
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
         $this->upgradeCatalogInventoryStockItem($setup);
@@ -64,6 +64,26 @@ class Patch220
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function upgradeCatalogInventoryStockItem($setup
     )

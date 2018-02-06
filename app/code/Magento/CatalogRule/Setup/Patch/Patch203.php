@@ -6,19 +6,20 @@
 
 namespace Magento\CatalogRule\Setup\Patch;
 
-use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\CatalogRule\Api\Data\RuleInterface;
 
 
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch203
+class Patch203 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -50,7 +51,7 @@ class Patch203
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         $setup->startSetup();
 
@@ -59,6 +60,26 @@ class Patch203
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function convertSerializedDataToJson($setup
     )

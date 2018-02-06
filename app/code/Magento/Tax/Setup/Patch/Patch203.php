@@ -15,7 +15,7 @@ use Magento\Tax\Api\TaxRateRepositoryInterface;
 /**
  * Patch is mechanism, that allows to do atomic upgrade data changes
  */
-class Patch203
+class Patch203 implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
 
 
@@ -53,7 +53,7 @@ class Patch203
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function up(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply(ModuleDataSetupInterface $setup)
     {
         /** @var TaxSetup $taxSetup */
         $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
@@ -79,6 +79,26 @@ class Patch203
         $setup->endSetup();
 
     }
+
+    /**
+     * Do Revert
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function revert(ModuleDataSetupInterface $setup)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDisabled()
+    {
+        return false;
+    }
+
 
     private function parseRegionFromTaxCode($taxCode
     )

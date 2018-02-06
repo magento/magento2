@@ -44,4 +44,5 @@ foreach ($cR->getPaths('module') as $path) {
     $path .= '/Setup';
     $counter = 1;
     $pCreator->createPatchFromFile($path, 'UpgradeData.php', $counter);
+    $pCreator->createPatchFromFile($path, 'InstallData.php', $counter);
 }

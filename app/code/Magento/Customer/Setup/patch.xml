@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <data>
   <patches>
-    <patch name="Magento\Customer\Setup\Patch\PatchInitial" sortOrder="1"/>
     <patch name="Magento\Customer\Setup\Patch\Patch206" sortOrder="1"/>
     <patch name="Magento\Customer\Setup\Patch\Patch201" sortOrder="2"/>
     <patch name="Magento\Customer\Setup\Patch\Patch202" sortOrder="3"/>
@@ -14,5 +13,6 @@
     <patch name="Magento\Customer\Setup\Patch\Patch2011" sortOrder="10"/>
     <patch name="Magento\Customer\Setup\Patch\Patch2012" sortOrder="11"/>
     <patch name="Magento\Customer\Setup\Patch\Patch2013" sortOrder="12"/>
+    <patch name="Magento\Customer\Setup\Patch\PatchInitial" sortOrder="13"/>
   </patches>
 </data>
