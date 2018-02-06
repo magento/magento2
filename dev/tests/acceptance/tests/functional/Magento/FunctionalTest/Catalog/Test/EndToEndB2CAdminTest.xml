@@ -67,6 +67,7 @@
         </actionGroup>
 
         <!--Admin creates category-->
+        <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
         <amOnPage url="{{AdminCategoryPage}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <!--Create category under Default Category-->
@@ -80,6 +81,21 @@
         <actionGroup ref="CreateCategory" stepKey="createSubCategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
+
+        <!--Admin moves category-->
+        <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
+        <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToMoveCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoadMoveCategory"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
+                     selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
+                     stepKey="dragAndDropCategory"/>
+        <waitForPageLoad stepKey="waitForMoveConfirmation"/>
+        <see selector="{{AdminCategoryModalSection.title}}" userInput="Warning Message" stepKey="seeMoveConfirmationModal"/>
+        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkConfirmMove"/>
+        <waitForPageLoad stepKey="waitForMove"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeCategoryMoveSuccessMessage"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTreeUnderRoot(SimpleSubCategory.name)}}" stepKey="seeSubcategoryIsUnderDefault"/>
 
         <!--Clean up categories-->
         <!--TODO - Move to 'after' block when MQE-732 is fixed-->
