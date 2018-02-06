@@ -39,6 +39,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabled()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/456');
+
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
             ->create();
@@ -73,6 +75,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabledPerStore()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/456');
+
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
             ->create();

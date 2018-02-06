@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 
 /**
@@ -24,20 +24,20 @@ class AdaptAddStockStatusToProductsPlugin
     private $getStockIdForCurrentWebsite;
 
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
-     * @param IsProductInStockInterface $isProductInStock
+     * @param IsProductSalableInterface $isProductSalable
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        IsProductInStockInterface $isProductInStock
+        IsProductSalableInterface $isProductSalable
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->isProductInStock = $isProductInStock;
+        $this->isProductSalable = $isProductSalable;
     }
 
     /**
@@ -57,7 +57,7 @@ class AdaptAddStockStatusToProductsPlugin
 
         /** @var Product $product */
         foreach ($productCollection as $product) {
-            $isSalable = (int)$this->isProductInStock->execute($product->getSku(), $stockId);
+            $isSalable = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
             $product->setIsSalable($isSalable);
         }
     }

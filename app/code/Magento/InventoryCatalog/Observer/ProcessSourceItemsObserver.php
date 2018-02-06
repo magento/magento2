@@ -15,6 +15,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\Catalog\Model\Product\Type;
 
 /**
  * Save source product relations during product persistence via controller
@@ -73,6 +74,9 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
+        if ($product->getTypeId() != Type::TYPE_SIMPLE) {
+            return;
+        }
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
