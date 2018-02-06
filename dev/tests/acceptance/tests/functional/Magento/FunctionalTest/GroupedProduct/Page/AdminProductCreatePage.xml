@@ -8,11 +8,8 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminProductIndexPage" url="catalog/product/index" area="admin" module="Magento_Catalog">
-        <section name="AdminProductGridActionSection" />
-        <section name="AdminProductGridFilterSection" />
-        <section name="AdminProductGridPaginationSection"/>
-        <section name="AdminProductGridSection" />
-        <section name="AdminMessagesSection" />
+    <page name="AdminProductCreatePage" url="catalog/product/new/set/{{set}}/type/{{type}}/" area="admin" module="Magento_Catalog" parameterized="true">
+        <section name="AdminProductFormGroupedProductsSection"/>
+        <section name="AdminAddProductsToGroupPanel"/>
     </page>
 </pages>
