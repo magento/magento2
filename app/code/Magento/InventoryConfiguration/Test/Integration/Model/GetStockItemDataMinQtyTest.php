@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration;
+namespace Magento\InventoryConfiguration\Test\Integration\Model;
 
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\GetStockItemData;
