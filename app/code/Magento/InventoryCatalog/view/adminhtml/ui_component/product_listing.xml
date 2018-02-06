@@ -17,5 +17,15 @@
                 <label translate="true">Quantity</label>
             </settings>
         </column>
+        <column name="stocks"
+                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\Stocks"
+                component="Magento_InventoryCatalog/js/product/grid/cell/stocks"
+                sortOrder="85">
+            <settings>
+                <filter>false</filter>
+                <sortable>false</sortable>
+                <label translate="true">Quantity per Stock</label>
+            </settings>
+        </column>
     </columns>
 </listing>

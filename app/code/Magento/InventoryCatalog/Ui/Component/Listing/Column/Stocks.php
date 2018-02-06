@@ -5,17 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\Component;
+namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalog\Model\GetAssignedStocksDataBySku;
-use Magento\Ui\Component\Container;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Container with stocks data
+ * Add grid column with stocks data
  */
-class Stocks extends Container
+class Stocks extends Column
 {
     /**
      * @var IsSourceItemsManagementAllowedForProductTypeInterface
@@ -29,6 +30,7 @@ class Stocks extends Container
 
     /**
      * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param GetAssignedStocksDataBySku $getAssignedStocksDataBySku
      * @param array $components
@@ -36,12 +38,13 @@ class Stocks extends Container
      */
     public function __construct(
         ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         GetAssignedStocksDataBySku $getAssignedStocksDataBySku,
-        $components = [],
+        array $components = [],
         array $data = []
     ) {
-        parent::__construct($context, $components, $data);
+        parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->getAssignedStocksDataBySku = $getAssignedStocksDataBySku;
     }
@@ -49,22 +52,17 @@ class Stocks extends Container
     /**
      * @inheritdoc
      */
-    public function prepareDataSource(array $dataSource): array
+    public function prepareDataSource(array $dataSource)
     {
-        if (!isset($dataSource['data']['product']['type_id']) || '' === trim($dataSource['data']['product']['type_id'])
-            || $this->isSourceItemsManagementAllowedForProductType->execute($dataSource['data']['product']['type_id'])
-            === false
-        ) {
-            return $dataSource;
+        if ($dataSource['data']['totalRecords'] > 0) {
+            foreach ($dataSource['data']['items'] as &$row) {
+                $row['stocks'] = $this->isSourceItemsManagementAllowedForProductType->execute($row['type_id']) === true
+                    ? $this->getAssignedStocksDataBySku->execute($row['sku'])
+                    : [];
+            }
         }
+        unset($row);
 
-        if (!isset($dataSource['data']['product']['sku']) || '' === trim($dataSource['data']['product']['sku'])) {
-            return $dataSource;
-        }
-
-        $dataSource['data']['stocks'] = $this->getAssignedStocksDataBySku->execute(
-            $dataSource['data']['product']['sku']
-        );
         return $dataSource;
     }
 }
