@@ -508,7 +508,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeSetId = $object->getAttributeSetId() ?: 0;
         $storeId = $object->getStoreId() ?: 0;
         return $storeId . '-' . $attributeSetId;
-     }
+    }
 
     /**
      * Retrieve partial load flag
