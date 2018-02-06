@@ -70,11 +70,13 @@ class Stocks extends Container
      */
     public function prepareDataSource(array $dataSource): array
     {
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($dataSource['data']['product']['type_id'])
+        if (!isset($dataSource['data']['product']['type_id']) || '' === trim($dataSource['data']['product']['type_id'])
+            || $this->isSourceItemsManagementAllowedForProductType->execute($dataSource['data']['product']['type_id'])
             === false
         ) {
             return $dataSource;
         }
+
         if (!isset($dataSource['data']['product']['sku']) || '' === trim($dataSource['data']['product']['sku'])) {
             return $dataSource;
         }

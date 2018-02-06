@@ -20,7 +20,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * Product form modifier. Add to form source data
  */
-class Sources extends AbstractModifier
+class SourceItems extends AbstractModifier
 {
     /**
      * @var IsSourceItemsManagementAllowedForProductTypeInterface
