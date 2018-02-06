@@ -35,9 +35,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddMessage()
     {
         $messages = [
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_3']),
         ];
 
         foreach ($messages as $message) {
@@ -58,12 +58,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetItems()
     {
         $messages = [
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class, ['text' => 'notice_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class, ['text' => 'notice_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class, ['text' => 'warning_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class, ['text' => 'warning_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class, ['text' => 'success_1']),
         ];
 
         foreach ($messages as $message) {
@@ -83,13 +83,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetItemsByType()
     {
         $messages = [
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class, ['text' => 'notice_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class, ['text' => 'success_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class, ['text' => 'notice_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class, ['text' => 'success_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class, ['text' => 'warning_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_2']),
         ];
 
         $messageTypes = [
@@ -124,12 +124,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetErrors()
     {
         $messages = [
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
-            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class, ['text' => 'notice_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_2']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_3']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class, ['text' => 'warning_1']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'error_4']),
         ];
 
         foreach ($messages as $message) {
@@ -207,5 +207,55 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(count($messages), $this->model->getCount());
         $this->model->clear();
         $this->assertEquals(1, $this->model->getCount());
+    }
+
+    /**
+     * Test adding duplicate messages is not allowed.
+     *
+     * @covers \Magento\Framework\Message\Collection::addMessage
+     */
+    public function testAddingDuplicateMessagesCount()
+    {
+        $messages = [
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'some_text']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'some_text']),
+        ];
+
+        foreach ($messages as $message) {
+            $this->model->addMessage($message);
+        }
+
+        $this->assertCount(
+            1,
+            $this->model->getItemsByType(MessageInterface::TYPE_ERROR)
+        );
+    }
+
+    /**
+     * Test getting last added message after adding duplicate messages.
+     *
+     * @covers \Magento\Framework\Message\Collection::addMessage
+     */
+    public function testAddingDuplicateMessagesLast()
+    {
+        $messages = [
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'some_text']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'another_text']),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class, ['text' => 'some_text']),
+        ];
+
+        foreach ($messages as $message) {
+            $this->model->addMessage($message);
+        }
+        $lastMessage = array_pop($messages);
+
+        $this->assertEquals(
+            $messages,
+            $this->model->getItems($messages)
+        );
+        $this->assertEquals(
+            $lastMessage,
+            $this->model->getLastAddedMessage()
+        );
     }
 }
