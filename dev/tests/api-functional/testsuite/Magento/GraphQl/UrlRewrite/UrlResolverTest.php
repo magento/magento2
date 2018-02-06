@@ -63,7 +63,6 @@ class UrlResolverTest extends GraphQlAbstract
    canonical_url
    type
   }
-    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -108,7 +107,6 @@ QUERY;
    canonical_url
    type
   }
-    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -151,8 +149,7 @@ QUERY;
    id
    canonical_url
    type
-  }
-    
+  } 
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -189,7 +186,6 @@ QUERY;
    canonical_url
    type
   }
-    
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -232,8 +228,7 @@ QUERY;
    id
    canonical_url
    type
-  }
-    
+  } 
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -274,7 +269,6 @@ QUERY;
    canonical_url
    type
   }
-    
 }
 QUERY;
         $response = $this->graphQlQuery($query);

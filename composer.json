@@ -1,6 +1,6 @@
 {
     "name": "magento/magento2ce",
-    "description": "Magento 2 (Community Edition)",
+    "description": "Magento 2 (Open Source)",
     "type": "project",
     "version": "2.3.0-dev",
     "license": [
@@ -98,6 +98,7 @@
         "magento/module-backup": "100.3.0-dev",
         "magento/module-braintree": "100.3.0-dev",
         "magento/module-bundle": "100.3.0-dev",
+        "magento/module-bundle-graph-ql": "100.0.0-dev",
         "magento/module-bundle-import-export": "100.3.0-dev",
         "magento/module-cache-invalidate": "100.3.0-dev",
         "magento/module-captcha": "100.3.0-dev",
@@ -130,6 +131,7 @@
         "magento/module-dhl": "100.3.0-dev",
         "magento/module-directory": "100.3.0-dev",
         "magento/module-downloadable": "100.3.0-dev",
+        "magento/module-downloadable-graph-ql": "100.0.0-dev",
         "magento/module-downloadable-import-export": "100.3.0-dev",
         "magento/module-eav": "100.3.0-dev",
         "magento/module-email": "100.3.0-dev",
@@ -152,6 +154,7 @@
         "magento/module-weee-graph-ql": "100.0.0-dev",
         "magento/module-grouped-import-export": "100.3.0-dev",
         "magento/module-grouped-product": "100.3.0-dev",
+        "magento/module-grouped-product-graph-ql": "100.0.0-dev",
         "magento/module-import-export": "100.3.0-dev",
         "magento/module-indexer": "100.3.0-dev",
         "magento/module-instant-purchase": "100.3.0-dev",
