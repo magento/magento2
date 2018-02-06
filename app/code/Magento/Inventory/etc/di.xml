@@ -90,4 +90,11 @@
     <preference for="Magento\InventoryApi\Api\IsProductSalableInterface" type="Magento\Inventory\Model\IsProductSalable"/>
     <!-- IsSalable -->
     <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
+    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+        <arguments>
+            <argument name="getIsSalableConditions" xsi:type="array">
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
