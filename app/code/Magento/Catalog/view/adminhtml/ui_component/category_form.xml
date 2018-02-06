@@ -173,6 +173,7 @@
                         </uploaderConfig>
                         <previewTmpl>Magento_Catalog/image-preview</previewTmpl>
                         <openDialogTitle>Insert Images...</openDialogTitle> <!-- TODO - not appearing in $_data in \Magento\Ui\Component\Form\Element\DataType\Media\Image::prepare -->
+                        <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                     </settings>
                 </imageUploader>
             </formElements>

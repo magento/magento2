@@ -36,11 +36,11 @@ define([
         /**
          * Add file event callback triggered from media gallery
          *
-         * @param {FileUploader} fileUploader FileUploader UI Class
+         * @param {ImageUploader} imageUploader UI Class
          * @param {Event} e
          * @return {void}
          */
-        addFileFromMediaGallery: function (fileUploader, e) {
+        addFileFromMediaGallery: function (imageUploader, e) {
             var $buttonEl = $(e.target),
                 fileSize = $buttonEl.data('size'),
                 fileMimeType = $buttonEl.data('mime-type'),
@@ -58,11 +58,11 @@ define([
         /**
          * Open the media browser dialog using the
          *
-         * @param {FileUploader} fileUploader FileUploader UI Class
+         * @param {ImageUploader} imageUploader UI Class
          * @param {Event} e
          * @return {void}
          */
-        openMediaBrowserDialog: function (fileUploader, e) {
+        openMediaBrowserDialog: function (imageUploader, e) {
             var $buttonEl = $(e.target),
                 openDialogUrl = this.mediaGallery.openDialogUrl +
                 'target_element_id/' + $buttonEl.attr('id') +
@@ -70,6 +70,33 @@ define([
                 '/type/image/?isAjax=true';
 
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
+        },
+
+        /**
+         * Trigger native browser file upload UI via clicking on 'Upload' button
+         *
+         * @param {ImageUploader} imageUploader UI Class
+         * @param {Event} e
+         * @return {void}
+         */
+        triggerImageUpload: function (imageUploader, e) {
+            $(e.target).closest('.file-uploader').find('input[type="file"]').click();
+        },
+
+        /**
+         * Get list of file extensions allowed in comma delimited format
+         *
+         * @return {String}
+         */
+        getAllowedFileExtensionsInCommaDelimitedFormat: function () {
+            var allowedExtensions = this.allowedExtensions.toUpperCase().split(' ');
+
+            // if jpg and jpeg in allowed extensions, remove jpeg from list
+            if (allowedExtensions.indexOf('JPG') !== -1 && allowedExtensions.indexOf('JPEG') !== -1) {
+                allowedExtensions.splice(allowedExtensions.indexOf('JPEG'), 1);
+            }
+
+            return allowedExtensions.join(', ');
         }
     });
 });

@@ -24,6 +24,14 @@
 
                 <span class="file-uploader-spinner"/>
                 <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+                <p>
+                    <span if="$data.maxFileSize">
+                        Maximum file size: <text args="formatSize($data.maxFileSize)"/>
+                    </span>
+                    <span if="$data.allowedExtensions">
+                        Allowed file types: <text args="getAllowedFileExtensionsInCommaDelimitedFormat()"/>.
+                    </span>
+                </p>
             </div>
 
             <render args="tooltipTpl" if="$data.tooltip"/>
@@ -36,13 +44,10 @@
 
             <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"/>
 
-            <div if="isMultipleFiles" class="file-uploader-summary">
-                <label attr="for: uid"
-                       class="file-uploader-placeholder"
-                       css="'placeholder-' + placeholderType">
-                    <span class="file-uploader-placeholder-text"
-                          translate="'Click here or drag and drop to add files.'"/>
-                </label>
+            <div if="!hasData()" class="image image-placeholder" click="triggerImageUpload">
+                <div class="file-uploader-summary product-image-wrapper">
+                    <p class="image-placeholder-text" translate="'Browse to find or drag image here'"/>
+                </div>
             </div>
         </div>
         <render args="$data.service.template" if="$data.hasService()"/>
