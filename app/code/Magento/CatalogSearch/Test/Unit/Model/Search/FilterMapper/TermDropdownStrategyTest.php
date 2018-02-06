@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\JoinAdderToSelect;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\AddJoinToSelect;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -46,7 +46,7 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(EavConfig::class);
         $this->aliasResolver = $this->createMock(AliasResolver::class);
-        $this->joinAdderToSelect = $this->createMock(JoinAdderToSelect::class);
+        $this->joinAdderToSelect = $this->createMock(AddJoinToSelect::class);
         $this->model = $objectManager->getObject(
             TermDropdownStrategy::class,
             [

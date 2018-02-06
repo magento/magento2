@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
@@ -31,9 +31,9 @@ class SelectBuilderForAttribute
     private $resource;
 
     /**
-     * @var StockConditionJoiner
+     * @var JoinStockCondition
      */
-    private $stockConditionJoiner;
+    private $joinStockCondition;
 
     /**
      * @var Session
@@ -43,18 +43,18 @@ class SelectBuilderForAttribute
     /**
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param StockConditionJoiner $stockConditionJoiner
+     * @param JoinStockCondition $joinStockCondition
      * @param Session $customerSession
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        StockConditionJoiner $stockConditionJoiner,
+        JoinStockCondition $joinStockCondition,
         Session $customerSession
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
-        $this->stockConditionJoiner = $stockConditionJoiner;
+        $this->joinStockCondition = $joinStockCondition;
         $this->customerSession = $customerSession;
     }
 
@@ -65,7 +65,7 @@ class SelectBuilderForAttribute
      *
      * @return Select
      */
-    public function execute(Select $select, AbstractAttribute $attribute, int $currentScope): Select
+    public function build(Select $select, AbstractAttribute $attribute, int $currentScope): Select
     {
         if ($attribute->getAttributeCode() === 'price') {
             /** @var Store $store */
@@ -88,7 +88,7 @@ class SelectBuilderForAttribute
                 ->distinct()
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId);
-            $this->stockConditionJoiner->execute($subSelect);
+            $subSelect = $this->joinStockCondition->execute($subSelect);
 
             $parentSelect = $this->resource->getConnection()->select();
             $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);

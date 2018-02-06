@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\StockConditionJoiner
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition
     as LegacyStockConditionJoiner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
@@ -18,7 +18,7 @@ use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 /**
  * Adapt stock condition joiner to multi stocks.
  */
-class StockConditionJoiner
+class JoinStockCondition
 {
     /**
      * @var StockIndexTableNameResolver
@@ -54,13 +54,15 @@ class StockConditionJoiner
      * @param LegacyStockConditionJoiner $stockConditionJoiner
      * @param callable $proceed
      * @param Select $select
+     * @return Select
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         LegacyStockConditionJoiner $stockConditionJoiner,
         callable $proceed,
         Select $select
-    ) {
+    ): Select {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
         $tableName = $this->stockIndexTableNameResolver->execute($stockId);
         $select->joinInner(
@@ -73,5 +75,7 @@ class StockConditionJoiner
             'product.sku = stock_index.sku',
             []
         )->where('stock_index.' . IndexStructure::QUANTITY . ' > 0');
+
+        return $select;
     }
 }

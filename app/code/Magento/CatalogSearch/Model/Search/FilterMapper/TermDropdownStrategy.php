@@ -7,12 +7,9 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\JoinAdderToSelect;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\AddJoinToSelect;
 use Magento\Eav\Model\Config as EavConfig;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This strategy handles attributes which comply with two criteria:
@@ -32,31 +29,23 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $eavConfig;
 
     /**
-     * @var JoinAdderToSelect
+     * @var AddJoinToSelect
      */
-    private $joinAdderToSelect;
+    private $addJoinToSelect;
 
     /**
-     * @param StoreManagerInterface $storeManager
-     * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
-     * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
-     * @param JoinAdderToSelect $joinAdderToSelect
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param AddJoinToSelect $addJoinToSelect
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
-        ScopeConfigInterface $scopeConfig,
         AliasResolver $aliasResolver,
-        JoinAdderToSelect $joinAdderToSelect = null
+        AddJoinToSelect $addJoinToSelect = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->aliasResolver = $aliasResolver;
-        $this->joinAdderToSelect = $joinAdderToSelect ?: ObjectManager::getInstance()->get(JoinAdderToSelect::class);
+        $this->addJoinToSelect = $addJoinToSelect ?: ObjectManager::getInstance()->get(AddJoinToSelect::class);
     }
 
     /**
@@ -69,7 +58,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
         $attribute = $this->getAttributeByCode($filter->getField());
-        $this->joinAdderToSelect->execute((int)$attribute->getId(), $alias, $select);
+        $this->addJoinToSelect->execute((int)$attribute->getId(), $alias, $select);
 
         return true;
     }

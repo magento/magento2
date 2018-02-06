@@ -7,7 +7,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
-use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
@@ -44,16 +43,12 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param Session $customerSession
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession,
         SelectBuilderForAttribute $selectBuilderForAttribute = null
     ) {
         $this->eavConfig = $eavConfig;
@@ -80,7 +75,7 @@ class DataProvider implements DataProviderInterface
             'main_table.entity_id  = entities.entity_id',
             []
         );
-        $select = $this->selectBuilderForAttribute->execute($select, $attribute, $currentScope);
+        $select = $this->selectBuilderForAttribute->build($select, $attribute, $currentScope);
 
         return $select;
     }

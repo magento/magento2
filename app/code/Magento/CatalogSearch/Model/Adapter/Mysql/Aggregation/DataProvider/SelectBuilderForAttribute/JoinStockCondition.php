@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 /**
  * Join stock table with stock condition to select.
  */
-class StockConditionJoiner
+class JoinStockCondition
 {
     /**
      * @var ResourceConnection
@@ -31,13 +31,16 @@ class StockConditionJoiner
 
     /**
      * @param Select $select
+     * @return Select
      */
-    public function execute(Select $select)
+    public function execute(Select $select): Select
     {
         $select->joinInner(
             ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
             'main_table.source_id = stock_index.product_id',
             []
         )->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK);
+
+        return $select;
     }
 }

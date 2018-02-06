@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 /**
  * Apply stock condition to select.
  */
-class StockConditionApplier
+class ApplyStockCondition
 {
     /**
      * @var ResourceConnection
