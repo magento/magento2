@@ -12,6 +12,9 @@ use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Store\Model\ResourceModel\Group\Collection as StoreGroupCollection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
@@ -44,11 +47,17 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
     private $dataUrlRewriteClassNames;
 
     /**
+     * @var CollectionFactory
+     */
+    private $storeGroupFactory;
+
+    /**
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param UrlRewriteHandler $urlRewriteHandler
      * @param UrlRewriteBunchReplacer $urlRewriteBunchReplacer
      * @param DatabaseMapPool $databaseMapPool
      * @param string[] $dataUrlRewriteClassNames
+     * @param CollectionFactory|null $storeGroupFactory
      */
     public function __construct(
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
@@ -58,13 +67,17 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         $dataUrlRewriteClassNames = [
         DataCategoryUrlRewriteDatabaseMap::class,
         DataProductUrlRewriteDatabaseMap::class
-        ]
+        ],
+        CollectionFactory $storeGroupFactory = null
+
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlRewriteHandler = $urlRewriteHandler;
         $this->urlRewriteBunchReplacer = $urlRewriteBunchReplacer;
         $this->databaseMapPool = $databaseMapPool;
         $this->dataUrlRewriteClassNames = $dataUrlRewriteClassNames;
+        $this->storeGroupFactory = $storeGroupFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);;
     }
 
     /**
@@ -80,6 +93,23 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         $category = $observer->getEvent()->getData('category');
         if ($category->getParentId() == Category::TREE_ROOT_ID) {
             return;
+        }
+
+        /** @var StoreGroupCollection $storeGroupCollection */
+        $storeGroupCollection = $this->storeGroupFactory->create();
+
+        // in case store_id is not set for category then we can assume that it was passed through product import.
+        // store group must have only one root category, so receiving category's path and checking if one of it parts
+        // is the root category for store group, we can set default_store_id value from it to category.
+        // it prevents urls duplication for different stores
+        // ("Default Category/category/sub" and "Default Category2/category/sub")
+        if (!$category->hasData('store_id')) {
+            foreach ($storeGroupCollection as $storeGroup) {
+                /** @var \Magento\Store\Model\Group $storeGroup */
+                if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath()))) {
+                    $category->setStoreId($storeGroup->getDefaultStoreId());
+                }
+            }
         }
 
         $mapsGenerated = false;
