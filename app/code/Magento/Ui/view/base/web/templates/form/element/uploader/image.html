@@ -10,7 +10,7 @@
     </label>
 
     <div class="admin__field-control" css="'_with-tooltip': $data.tooltip">
-        <div class="file-uploader" data-role="drop-zone" css="_loading: isLoading">
+        <div class="file-uploader image-uploader" data-role="drop-zone" css="_loading: isLoading">
             <div class="file-uploader-area">
                 <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles" disable="disabled" />
                 <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
@@ -21,12 +21,10 @@
                     attr="id: mediaGalleryUid"
                     data-force_static_path="1"
                     translate="'Select from Gallery'"/>
-
-                <span class="file-uploader-spinner"/>
                 <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
-                <p>
+                <p class="image-upload-requirements">
                     <span if="$data.maxFileSize">
-                        Maximum file size: <text args="formatSize($data.maxFileSize)"/>
+                        Maximum file size: <text args="formatSize($data.maxFileSize)"/>.
                     </span>
                     <span if="$data.allowedExtensions">
                         Allowed file types: <text args="getAllowedFileExtensionsInCommaDelimitedFormat()"/>.
@@ -46,6 +44,7 @@
 
             <div if="!hasData()" class="image image-placeholder" click="triggerImageUpload">
                 <div class="file-uploader-summary product-image-wrapper">
+                    <div class="file-uploader-spinner image-uploader-spinner" />
                     <p class="image-placeholder-text" translate="'Browse to find or drag image here'"/>
                 </div>
             </div>
