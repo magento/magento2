@@ -121,16 +121,6 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Add meta information from product to head block
-     *
-     * @return \Magento\Catalog\Block\Product\View
-     */
-    protected function _prepareLayout()
-    {
-        return parent::_prepareLayout();
-    }
-
-    /**
      * Retrieve current product model
      *
      * @return \Magento\Catalog\Model\Product
