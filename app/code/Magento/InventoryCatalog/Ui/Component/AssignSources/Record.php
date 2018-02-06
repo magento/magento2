@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\Component;
+namespace Magento\InventoryCatalog\Ui\Component\AssignSources;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -21,7 +21,6 @@ class Record extends Container
     private $defaultStockProvider;
 
     /**
-     * Record constructor.
      * @param ContextInterface $context
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param UiComponentInterface[] $components
