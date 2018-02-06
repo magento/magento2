@@ -9,6 +9,7 @@ namespace Magento\InventoryIndexer\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
@@ -27,11 +28,20 @@ class SelectBuilder
     private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @var GetIsSalableConditionInterface
      */
-    public function __construct(ResourceConnection $resourceConnection)
-    {
+    private $getIsSalableCondition;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     * @param GetIsSalableConditionInterface $getIsSalableCondition
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        GetIsSalableConditionInterface $getIsSalableCondition
+    ) {
         $this->resourceConnection = $resourceConnection;
+        $this->getIsSalableCondition = $getIsSalableCondition;
     }
 
     /**
@@ -43,45 +53,65 @@ class SelectBuilder
     public function execute($stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
         $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+
+        $quantityExpression = (string)$this->resourceConnection->getConnection()->getCheckSql(
+            'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
+            0,
+            SourceItemInterface::QUANTITY
+        );
+        $sourceCodes = $this->getSourceCodes($stockId);
+
+        $select = $connection->select();
+        $select->joinInner(
+            ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            'product_entity.sku = source_item.sku',
+            []
+        )->joinInner(
+            ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
+            'product_entity.entity_id = legacy_stock_item.product_id',
+            []
+        );
+
+        $select->from(
+            ['source_item' => $sourceItemTable],
+            [
+                SourceItemInterface::SKU,
+                IndexStructure::QUANTITY => 'SUM(' . $quantityExpression . ')',
+                IndexStructure::IS_SALABLE => $this->getIsSalableCondition->execute($select),
+            ]
+        )
+            ->where('source_item.' . SourceItemInterface::SOURCE_CODE . ' IN (?)', $sourceCodes)
+            ->group([SourceItemInterface::SKU]);
+
+        return $select;
+    }
+
+    /**
+     * Get all enabled sources related to stock
+     *
+     * @param int $stockId
+     * @return array
+     */
+    private function getSourceCodes(int $stockId): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
         $sourceStockLinkTable = $this->resourceConnection->getTableName(
             StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
         );
 
-        // find all enabled sources
         $select = $connection->select()
-            ->from($sourceTable, [SourceInterface::SOURCE_CODE])
-            ->where(SourceInterface::ENABLED . ' = ?', 1);
-        $sourceCodes = $connection->fetchCol($select);
-
-        if (0 === count($sourceCodes)) {
-            return $select;
-        }
-
-        $select = $connection
-            ->select()
-            ->from(
-                ['source_item' => $sourceItemTable],
-                [
-                    SourceItemInterface::SKU,
-                    // Quick fix. Proper solution will be provided in https://github.com/magento-engcom/msi/issues/429
-                    SourceItemInterface::QUANTITY => 'SUM(IF(source_item.' . SourceItemInterface::STATUS . ' = '
-                        . SourceItemInterface::STATUS_OUT_OF_STOCK . ', 0, IF(quantity > 0, quantity, 1)))',
-                ]
-            )
-            ->joinLeft(
+            ->from(['source' => $sourceTable], [SourceInterface::SOURCE_CODE])
+            ->joinInner(
                 ['stock_source_link' => $sourceStockLinkTable],
-                sprintf(
-                    'source_item.%s = stock_source_link.%s',
-                    SourceItemInterface::SOURCE_CODE,
-                    StockSourceLink::SOURCE_CODE
-                ),
+                'source.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
                 []
             )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
-            ->group([SourceItemInterface::SKU]);
-        return $select;
+            ->where(SourceInterface::ENABLED . ' = ?', 1);
+
+        $sourceCodes = $connection->fetchCol($select);
+        return $sourceCodes;
     }
 }

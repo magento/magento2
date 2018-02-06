@@ -53,7 +53,7 @@ class Sources extends AbstractEntity
      * @param DataHelper $dataHelper
      * @param ImportData $importData
      * @param ValidatorInterface $validator
-     * @param array $commands
+     * @param CommandInterface[] $commands
      * @throws LocalizedException
      */
     public function __construct(

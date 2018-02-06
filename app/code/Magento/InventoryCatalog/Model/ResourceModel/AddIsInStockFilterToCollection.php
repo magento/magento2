@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
@@ -30,11 +31,11 @@ class AddIsInStockFilterToCollection
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param Collection $collection
      * @param int $stockId
      * @return void
      */
-    public function addIsInStockFilterToCollection($collection, int $stockId)
+    public function execute($collection, int $stockId)
     {
         $tableName = $this->stockIndexTableProvider->execute($stockId);
 
@@ -42,6 +43,6 @@ class AddIsInStockFilterToCollection
             ['stock_status_index' => $tableName],
             'e.sku = stock_status_index.sku',
             []
-        )->where('stock_status_index.' . IndexStructure::QUANTITY . ' > 0');
+        )->where('stock_status_index.' . IndexStructure::IS_SALABLE . ' = ?', 1);
     }
 }
