@@ -38,9 +38,9 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param object $entity
+     * @param object|ProductInterface $entity
      * @param array $arguments
-     * @return ProductInterface|object
+     * @return object|ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
