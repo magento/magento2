@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\Model;
+namespace Magento\InventoryConfiguration\Test\Integration\GetStockItemData;
 
+use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\InventoryIndexer\Model\GetStockItemData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetStockItemDataManageConfigTest extends TestCase
+class ManageConfigTest extends TestCase
 {
     /**
-     * @var GetStockItemData
+     * @var GetStockItemDataInterface
      */
     private $getStockItemData;
 
@@ -26,7 +26,7 @@ class GetStockItemDataManageConfigTest extends TestCase
     {
         parent::setUp();
 
-        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemData::class);
+        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemDataInterface::class);
     }
 
     /**

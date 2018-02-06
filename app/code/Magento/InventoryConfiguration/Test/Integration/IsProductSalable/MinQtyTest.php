@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\Model;
+namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
-use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetStockItemDataMinQtyTest extends TestCase
+class MinQtyTest extends TestCase
 {
     /**
-     * @var GetStockItemData
+     * @var IsProductSalableInterface
      */
-    private $getStockItemData;
+    private $isProductSalable;
 
     /**
      * @var array
@@ -31,7 +30,7 @@ class GetStockItemDataMinQtyTest extends TestCase
     {
         parent::setUp();
 
-        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemData::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -44,26 +43,16 @@ class GetStockItemDataMinQtyTest extends TestCase
      * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
      *
      * @param int $stockId
-     * @param array $expectedQty
-     * @param array $expectedIsSalable
+     * @param array $expectedResults
      * @return void
      *
      * @dataProvider executeWithMinQtyDataProvider
      */
-    public function testExecuteWithMinQty(int $stockId, array $expectedQty, array $expectedIsSalable)
+    public function testExecuteWithMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            if (null !== $stockItemData) {
-                self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY]);
-                self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE]);
-            } else {
-                $isSame = $expectedQty[$key] === $expectedIsSalable[$key] && $expectedQty[$key] === $stockItemData
-                    ? true
-                    : false;
-
-                self::assertTrue($isSame);
-            }
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
@@ -73,9 +62,9 @@ class GetStockItemDataMinQtyTest extends TestCase
     public function executeWithMinQtyDataProvider(): array
     {
         return [
-            ['10', [8.5, null, 0], [1, null, 0]],
-            ['20', [null, 5, null], [null, 0, null]],
-            ['30', [8.5, 5, 0], [1, 0, 0]],
+            ['10', [true, false, false]],
+            ['20', [false, false, false]],
+            ['30', [true, false, false]],
         ];
     }
 
@@ -90,26 +79,16 @@ class GetStockItemDataMinQtyTest extends TestCase
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
      * @param int $stockId
-     * @param array $expectedQty
-     * @param array $expectedIsSalable
+     * @param array $expectedResults
      * @return void
      *
      * @dataProvider executeWithManageStockFalseAndMinQty
      */
-    public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedQty, array $expectedIsSalable)
+    public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            if (null !== $stockItemData) {
-                self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY]);
-                self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE]);
-            } else {
-                $isSame = $expectedQty[$key] === $expectedIsSalable[$key] && $expectedQty[$key] === $stockItemData
-                    ? true
-                    : false;
-
-                self::assertTrue($isSame);
-            }
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
@@ -119,9 +98,9 @@ class GetStockItemDataMinQtyTest extends TestCase
     public function executeWithManageStockFalseAndMinQty(): array
     {
         return [
-            ['10', [8.5, null, 0], [1, null, 1]],
-            ['20', [null, 5, null], [null, 1, null]],
-            ['30', [8.5, 5, 0], [1, 1, 1]],
+            ['10', [true, false, true]],
+            ['20', [false, true, false]],
+            ['30', [true, true, true]],
         ];
     }
 }

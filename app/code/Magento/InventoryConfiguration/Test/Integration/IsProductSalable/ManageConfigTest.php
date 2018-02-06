@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\Model;
+namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductSalableManageConfigTest extends TestCase
+class ManageConfigTest extends TestCase
 {
     /**
      * @var IsProductSalableInterface
