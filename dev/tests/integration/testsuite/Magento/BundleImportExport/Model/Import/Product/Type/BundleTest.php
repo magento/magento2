@@ -104,6 +104,18 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 $optionSku = 'Simple ' . ($optionKey + 1 + $linkKey);
                 $this->assertEquals($optionIdList[$optionSku], $productLink->getData('entity_id'));
                 $this->assertEquals($optionSku, $productLink->getData('sku'));
+
+                switch ($optionKey) {
+                    case 0:
+                        $this->assertEquals(1, $productLink->getData('selection_can_change_qty'));
+                        break;
+                    case 1:
+                        $this->assertEquals(0, $productLink->getData('selection_can_change_qty'));
+                        break;
+                    case 2:
+                        $this->assertEquals(1, $productLink->getData('selection_can_change_qty'));
+                        break;
+                }
             }
         }
     }
