@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockCondition
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect
     as LegacyStockConditionApplier;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
-class ApplyStockCondition
+class ApplyStockConditionTo
 {
     /**
      * @var ResourceConnection

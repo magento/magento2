@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect
     as LegacyStockConditionJoiner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
@@ -18,7 +18,7 @@ use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 /**
  * Adapt stock condition joiner to multi stocks.
  */
-class JoinStockCondition
+class JoinStockConditionToSelect
 {
     /**
      * @var StockIndexTableNameResolver

@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 /**
  * Join stock table with stock condition to select.
  */
-class JoinStockCondition
+class JoinStockConditionToSelect
 {
     /**
      * @var ResourceConnection

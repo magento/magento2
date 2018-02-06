@@ -1,25 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright :copyright: Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
+namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockCondition;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ApplyStockConditionTest extends TestCase
+class JoinStockConditionToSelectTest extends TestCase
 {
     /**
-     * @var ApplyStockCondition
+     * @var JoinStockConditionToSelect
      */
-    private $applyStockCondition;
+    private $joinStockCondition;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
 
     /**
      * @var StoreManagerInterface
@@ -36,45 +40,44 @@ class ApplyStockConditionTest extends TestCase
      */
     protected function setUp()
     {
-        $this->applyStockCondition = Bootstrap::getObjectManager()->get(ApplyStockCondition::class);
+        parent::setUp();
+
+        $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $this->joinStockCondition = Bootstrap::getObjectManager()->get(JoinStockConditionToSelect::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
-
-        parent::setUp();
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @param string $store
      * @param int $expectedSize
-     * @return void
      *
+     * @return void
      * @dataProvider executeDataProvider
      */
-    public function testExecute($store, $expectedSize)
+    public function testExecute(string $store, int $expectedSize)
     {
         $this->storeManager->setCurrentStore($store);
 
-        /** @var ResourceConnection $resource */
-        $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $connection = $this->resource->getConnection();
+        $select = $connection->select();
+        $select->from(
+            ['main_table' => $this->resource->getTableName('catalog_product_index_eav')],
+            ['main_table.entity_id', 'main_table.value']
+        )->distinct();
 
-        /** @var Select $select */
-        $select = $resource->getConnection()->select();
-        $select->from(['eav_index' => $resource->getTableName('catalog_product_index_eav')], 'entity_id');
-        $this->applyStockCondition->execute('eav_index', 'eav_index_stock', $select);
-        $select->where('eav_index_stock.is_salable = 1');
+        $this->joinStockCondition->execute($select);
 
-        $result = $select->query()->fetchAll();
-
-        self::assertEquals($expectedSize, count($result));
+        self::assertEquals($expectedSize, count($select->query()->fetchAll()));
     }
 
     /**

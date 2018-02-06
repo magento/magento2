@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class JoinStockConditionWithDefaultStockTest extends TestCase
+class JoinStockConditionToSelectWithDefaultStockTest extends TestCase
 {
     /**
-     * @var JoinStockCondition
+     * @var JoinStockConditionToSelect
      */
     private $joinStockCondition;
 
@@ -32,7 +32,7 @@ class JoinStockConditionWithDefaultStockTest extends TestCase
         parent::setUp();
 
         $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-        $this->joinStockCondition = Bootstrap::getObjectManager()->get(JoinStockCondition::class);
+        $this->joinStockCondition = Bootstrap::getObjectManager()->get(JoinStockConditionToSelect::class);
     }
 
     /**

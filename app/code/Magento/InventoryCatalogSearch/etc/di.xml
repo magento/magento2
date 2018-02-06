@@ -9,12 +9,12 @@
     <type name="Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter">
         <plugin name="adapt_stock_status_filter" type="Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper\AdaptStockStatusFilterPlugin"/>
     </type>
-    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition">
-        <plugin name="adapt_data_provider_join_stock_condition"
-                type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition"/>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect">
+        <plugin name="adapt_data_provider_join_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect"/>
     </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockCondition">
-        <plugin name="adapt_filter_mapper_term_dropdown_strategy_apply_stock_condition"
-                type="Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockCondition"/>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect">
+        <plugin name="adapt_filter_mapper_term_dropdown_strategy_apply_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect"/>
     </type>
 </config>

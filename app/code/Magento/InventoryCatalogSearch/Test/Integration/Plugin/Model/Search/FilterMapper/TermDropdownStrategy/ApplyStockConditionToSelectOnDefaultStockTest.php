@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockCondition;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ApplyStockConditionOnDefaultStockTest extends TestCase
+class ApplyStockConditionToSelectOnDefaultStockTest extends TestCase
 {
     /**
-     * @var ApplyStockCondition
+     * @var ApplyStockConditionToSelect
      */
     private $applyStockCondition;
 
@@ -25,7 +25,7 @@ class ApplyStockConditionOnDefaultStockTest extends TestCase
      */
     protected function setUp()
     {
-        $this->applyStockCondition = Bootstrap::getObjectManager()->get(ApplyStockCondition::class);
+        $this->applyStockCondition = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
 
         parent::setUp();
     }

@@ -24,7 +24,7 @@ class AddJoinToSelect
     private $resourceConnection;
 
     /**
-     * @var ApplyStockCondition
+     * @var ApplyStockConditionToSelect
      */
     private $applyStockCondition;
 
@@ -42,13 +42,13 @@ class AddJoinToSelect
      * @param ResourceConnection $resourceConnection
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param ApplyStockCondition $applyStockCondition
+     * @param ApplyStockConditionToSelect $applyStockCondition
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        ApplyStockCondition $applyStockCondition
+        ApplyStockConditionToSelect $applyStockCondition
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->scopeConfig = $scopeConfig;

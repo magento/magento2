@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 /**
  * Apply stock condition to select.
  */
-class ApplyStockCondition
+class ApplyStockConditionToSelect
 {
     /**
      * @var ResourceConnection
@@ -40,7 +40,7 @@ class ApplyStockCondition
         string $stockAlias,
         Select $select
     ) {
-        $select->joinLeft(
+        $select->joinInner(
             [$stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status')],
             sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
             []

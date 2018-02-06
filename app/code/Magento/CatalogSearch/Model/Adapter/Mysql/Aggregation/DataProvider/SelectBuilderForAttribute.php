@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockCondition;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
@@ -31,7 +31,7 @@ class SelectBuilderForAttribute
     private $resource;
 
     /**
-     * @var JoinStockCondition
+     * @var JoinStockConditionToSelect
      */
     private $joinStockCondition;
 
@@ -43,13 +43,13 @@ class SelectBuilderForAttribute
     /**
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param JoinStockCondition $joinStockCondition
+     * @param JoinStockConditionToSelect $joinStockCondition
      * @param Session $customerSession
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        JoinStockCondition $joinStockCondition,
+        JoinStockConditionToSelect $joinStockCondition,
         Session $customerSession
     ) {
         $this->resource = $resource;
