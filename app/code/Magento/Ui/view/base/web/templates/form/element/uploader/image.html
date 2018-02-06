@@ -24,10 +24,10 @@
                 <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
                 <p class="image-upload-requirements">
                     <span if="$data.maxFileSize">
-                        Maximum file size: <text args="formatSize($data.maxFileSize)"/>.
+                        <span translate="'Maximum file size'" />: <text args="formatSize($data.maxFileSize)"/>.
                     </span>
                     <span if="$data.allowedExtensions">
-                        Allowed file types: <text args="getAllowedFileExtensionsInCommaDelimitedFormat()"/>.
+                        <span translate="'Allowed file types'" />: <text args="getAllowedFileExtensionsInCommaDelimitedFormat()"/>.
                     </span>
                 </p>
             </div>
