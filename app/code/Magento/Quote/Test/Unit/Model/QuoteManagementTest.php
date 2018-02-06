@@ -246,11 +246,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-
-        $quoteAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates']
+        );
+        $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteAddress);
 
         $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 

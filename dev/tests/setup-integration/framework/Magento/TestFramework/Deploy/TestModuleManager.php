@@ -6,19 +6,25 @@
 namespace Magento\TestFramework\Deploy;
 
 /**
- * The purpose of this class is adding test modules files to Magento code base
+ * The purpose of this class is adding test modules files to Magento code base.
  */
 class TestModuleManager
 {
     /**
-     * Add test module files to Magento code base
+     * Name of file of DB XML declaration.
+     */
+    const DECLARATIVE_FILE_NAME = "db_schema.xml";
+
+    /**
+     * Add test module files to Magento code base.
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return void
      * @throws \RuntimeException
      */
     public function addModuleFiles($moduleName)
     {
+        $moduleName = str_replace("Magento_", "", $moduleName);
         $pathToCommittedTestModules = TESTS_MODULES_PATH . '/Magento/' . $moduleName;
         $pathToInstalledMagentoInstanceModules = MAGENTO_MODULES_PATH . $moduleName;
         $iterator = new \RecursiveIteratorIterator(
@@ -55,14 +61,39 @@ class TestModuleManager
     }
 
     /**
-     * Remove test module files to Magento code base
+     * Update module version.
      *
-     * @param string $moduleName
+     * @param string $moduleName   Like Magento_TestSetupModule
+     * @param string $revisionName Folder name, like reviisions/revision_1/db_schema.xml
+     * @param string $fileName     For example db_schema.xml
+     * @param string $fileDir      For example etc or Setup
+     */
+    public function updateRevision($moduleName, $revisionName, $fileName, $fileDir)
+    {
+        $modulePath = str_replace("Magento_", "", $moduleName);
+        $folder = MAGENTO_MODULES_PATH . $modulePath;
+        $oldFile = $folder . DIRECTORY_SEPARATOR . $fileDir . "/" . $fileName;
+        $revisionFile = MAGENTO_MODULES_PATH . $modulePath . "/revisions/" .
+            $revisionName . DIRECTORY_SEPARATOR . $fileName;
+
+        if (file_exists($oldFile) && file_exists($revisionFile)) {
+            unlink($oldFile);
+            copy($revisionFile, $oldFile);
+        } else {
+            throw new \InvalidArgumentException("Old File or revision files paths are invalid");
+        }
+    }
+
+    /**
+     * Remove test module files to Magento code base.
+     *
+     * @param  string $moduleName
      * @return void
      */
-    public function removeModuleFiles($moduleName)//add logic to remove every time and add ability to disable
+    public function removeModuleFiles($moduleName)
     {
-        $folder = MAGENTO_MODULES_PATH . $moduleName;
+        $modulePath = str_replace("Magento_", "", $moduleName);
+        $folder = MAGENTO_MODULES_PATH . $modulePath;
 
         //remove test modules from magento codebase
         if (is_dir($folder)) {
@@ -71,9 +102,9 @@ class TestModuleManager
     }
 
     /**
-     * Update module files
+     * Update module files.
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return void
      */
     public function updateModuleFiles($moduleName)

@@ -19,6 +19,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer model
@@ -59,6 +60,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
+    /**
+     * @deprecated
+     * @see AccountConfirmation::XML_PATH_IS_CONFIRM
+     */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
@@ -210,6 +215,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $indexerRegistry;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -230,6 +240,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param AccountConfirmation|null $accountConfirmation
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -253,7 +264,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        AccountConfirmation $accountConfirmation = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -270,6 +282,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->indexerRegistry = $indexerRegistry;
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
         parent::__construct(
             $context,
             $registry,
@@ -771,20 +785,14 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
     public function isConfirmationRequired()
     {
-        if ($this->canSkipConfirmation()) {
-            return false;
-        }
-
         $websiteId = $this->getWebsiteId() ? $this->getWebsiteId() : null;
 
-        return (bool)$this->_scopeConfig->getValue(
-            self::XML_PATH_IS_CONFIRM,
-            ScopeInterface::SCOPE_WEBSITES,
-            $websiteId
-        );
+        return $this->accountConfirmation->isConfirmationRequired($websiteId, $this->getId(), $this->getEmail());
     }
 
     /**
@@ -1157,6 +1165,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check whether confirmation may be skipped when registering using certain email address
      *
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation()
     {
