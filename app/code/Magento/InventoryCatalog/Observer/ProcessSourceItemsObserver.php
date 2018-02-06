@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Inventory\Model\IsManageSourceItemsAllowedForProductTypeInterface;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 
 /**
  * Save source product relations during product persistence via controller
@@ -22,9 +22,9 @@ use Magento\Inventory\Model\IsManageSourceItemsAllowedForProductTypeInterface;
 class ProcessSourceItemsObserver implements ObserverInterface
 {
     /**
-     * @var IsManageSourceItemsAllowedForProductTypeInterface
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
      */
-    private $isManageSourceItemsAllowedForProductType;
+    private $isSourceItemsManagementAllowedForProductType;
 
     /**
      * @var SourceItemsProcessor
@@ -32,14 +32,14 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private $sourceItemsProcessor;
 
     /**
-     * @param IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param SourceItemsProcessor $sourceItemsProcessor
      */
     public function __construct(
-        IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType,
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         SourceItemsProcessor $sourceItemsProcessor
     ) {
-        $this->isManageSourceItemsAllowedForProductType = $isManageSourceItemsAllowedForProductType;
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->sourceItemsProcessor = $sourceItemsProcessor;
     }
 
@@ -53,7 +53,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($this->isManageSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
         /** @var Save $controller */

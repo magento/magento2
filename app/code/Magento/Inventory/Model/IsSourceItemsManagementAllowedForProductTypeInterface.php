@@ -12,7 +12,7 @@ namespace Magento\Inventory\Model;
  *
  * @api
  */
-interface IsManageSourceItemsAllowedForProductTypeInterface
+interface IsSourceItemsManagementAllowedForProductTypeInterface
 {
     /**
      * @param string $productType

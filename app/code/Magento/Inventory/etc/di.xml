@@ -99,5 +99,5 @@
     </type>
     <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
     <!-- Product types -->
-    <preference for="Magento\Inventory\Model\IsManageSourceItemsAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsManageSourceItemsAllowedForProductType"/>
+    <preference for="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType"/>
 </config>

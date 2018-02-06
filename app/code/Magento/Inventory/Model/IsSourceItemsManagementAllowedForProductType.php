@@ -10,7 +10,7 @@ namespace Magento\Inventory\Model;
 /**
  * @inheritdoc
  */
-class IsManageSourceItemsAllowedForProductType implements IsManageSourceItemsAllowedForProductTypeInterface
+class IsSourceItemsManagementAllowedForProductType implements IsSourceItemsManagementAllowedForProductTypeInterface
 {
     /**
      * @var array

@@ -54,7 +54,7 @@
         </arguments>
     </type>
     <!-- Product types -->
-    <type name="Magento\Inventory\Model\IsManageSourceItemsAllowedForProductType">
+    <type name="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType">
         <arguments>
             <argument name="allowedProductTypes" xsi:type="array">
                 <item name="simple" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_SIMPLE</item>
