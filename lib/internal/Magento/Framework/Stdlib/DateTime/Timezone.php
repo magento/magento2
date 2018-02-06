@@ -174,7 +174,15 @@ class Timezone implements TimezoneInterface
                     $timeType,
                     new \DateTimeZone($timezone)
                 );
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                // IntlDateFormatter does not parse correctly date formats per some locales
+                // It depends on ICU lib version used by intl extension
+                // For locales like fr_FR, ar_KW parse date with hyphen as separator
+                try {
+                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                } catch (\Exception $e) {
+                    $date = str_replace('/', '-', $date);
+                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                }
                 break;
         }
 
