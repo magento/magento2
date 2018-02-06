@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper;
 
 use InvalidArgumentException;
+use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
@@ -144,7 +145,8 @@ class AdaptStockStatusFilterPlugin
             []
         );
         if ($showOutOfStockFlag === false) {
-            $select->where($this->conditionManager->generateCondition('stock_index.quantity', '>', 0));
+            $condition = $this->conditionManager->generateCondition('stock_index.'. IndexStructure::IS_SALABLE, '=', 1);
+            $select->where($condition);
         }
     }
 
@@ -161,7 +163,9 @@ class AdaptStockStatusFilterPlugin
             []
         );
         if ($showOutOfStockFlag === false) {
-            $select->where($this->conditionManager->generateCondition('sub_product_stock_index.quantity', '>', 0));
+            $condition = $this->conditionManager
+                ->generateCondition('sub_product_stock_index.' . IndexStructure::IS_SALABLE, '=', 1);
+            $select->where($condition);
         }
     }
 

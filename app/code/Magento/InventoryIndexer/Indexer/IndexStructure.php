@@ -24,6 +24,7 @@ class IndexStructure implements IndexStructureInterface
      */
     const SKU = 'sku';
     const QUANTITY = 'quantity';
+    const IS_SALABLE = 'is_salable';
     /**#@-*/
 
     /**
@@ -106,6 +107,14 @@ class IndexStructure implements IndexStructureInterface
                 Table::OPTION_SCALE => 4,
             ],
             'Quantity'
+        )->addColumn(
+            self::IS_SALABLE,
+            Table::TYPE_BOOLEAN,
+            null,
+            [
+                Table::OPTION_NULLABLE => false,
+            ],
+            'Is Salable'
         );
         $connection->createTable($table);
     }
