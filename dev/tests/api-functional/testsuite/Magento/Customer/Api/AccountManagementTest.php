@@ -150,8 +150,8 @@ class AccountManagementTest extends WebapiAbstract
             $this->configValue
         );
         $this->config->save();
-        unset($this->accountManagement);
-        unset($this->subscriber);
+        $this->accountManagement = null;
+        $this->subscriber = null;
     }
 
     private function initSubscriber()
