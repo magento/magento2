@@ -100,7 +100,7 @@
         <field xsi:type="ScalarOutputField" name="website_id" type="Float"/>
         <field xsi:type="ScalarOutputField" name="customer_group_id" type="String"/>
     </type>
-    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="id" type="Int"/>
         <field xsi:type="ScalarOutputField" name="name" type="String"/>
         <field xsi:type="ScalarOutputField" name="sku" type="String"/>
