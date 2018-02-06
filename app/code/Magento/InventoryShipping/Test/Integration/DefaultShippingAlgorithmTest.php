@@ -58,6 +58,7 @@ class DefaultShippingAlgorithmTest extends TestCase
         ]);
 
         $algorithmResult = $this->shippingAlgorithm->execute($order);
+        self::assertEquals($algorithmResult->isShippable(), true);
 
         $sourceSelections = $algorithmResult->getSourceSelections();
         self::assertCount(1, $sourceSelections);
@@ -133,6 +134,7 @@ class DefaultShippingAlgorithmTest extends TestCase
 
         $sourceSelections = $algorithmResult->getSourceSelections();
         self::assertCount(count($expectedResult), $sourceSelections);
+        self::assertEquals($algorithmResult->isShippable(), true);
 
         foreach ($expectedResult as $i => $expectedSourceSelection) {
             $sourceSelection = $sourceSelections[$i];
@@ -148,6 +150,23 @@ class DefaultShippingAlgorithmTest extends TestCase
                 self::assertEquals($expectedSourceItemSelection[2], $sourceItemSelection->getQtyAvailable());
             }
         }
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     */
+    public function testStockSourceCombinationNoShippable()
+    {
+        $order = $this->createOrder([
+            'SKU-1' => 50.0
+        ]);
+
+        $algorithmResult = $this->shippingAlgorithm->execute($order);
+        self::assertEquals($algorithmResult->isShippable(), false);
     }
 
     /**
