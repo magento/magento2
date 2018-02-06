@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Ui\Component;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
+use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\Ui\Component\Container;
 use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
 
-class StockInformation extends Container
+class Stocks extends Container
 {
     /**
      * @var StockRepositoryInterface
@@ -21,9 +21,9 @@ class StockInformation extends Container
     private $stockRepository;
 
     /**
-     * @var GetProductQuantityInStockInterface
+     * @var GetSalableProductQtyInterface
      */
-    private $getProductQuantityInStock;
+    private $getSalableProductQty;
 
     /**
      * @var GetAssignedStockIdsBySku
@@ -33,7 +33,7 @@ class StockInformation extends Container
     /**
      * @param ContextInterface $context
      * @param StockRepositoryInterface $stockRepository
-     * @param GetProductQuantityInStockInterface $getProductQuantityInStock
+     * @param GetSalableProductQtyInterface $getSalableProductQty
      * @param GetAssignedStockIdsBySku $getAssignedStockIdsBySku
      * @param array $components
      * @param array $data
@@ -41,15 +41,29 @@ class StockInformation extends Container
     public function __construct(
         ContextInterface $context,
         StockRepositoryInterface $stockRepository,
-        GetProductQuantityInStockInterface $getProductQuantityInStock,
+        GetSalableProductQtyInterface $getSalableProductQty,
         GetAssignedStockIdsBySku $getAssignedStockIdsBySku,
         $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->stockRepository = $stockRepository;
-        $this->getProductQuantityInStock = $getProductQuantityInStock;
+        $this->getSalableProductQty = $getSalableProductQty;
         $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
+    }
+
+    /**
+     * @param array $dataSource
+     * @return array
+     */
+    public function prepareDataSource(array $dataSource): array
+    {
+        if (!isset($dataSource['data']['product']['sku']) || empty($dataSource['data']['product']['sku'])) {
+            return $dataSource;
+        }
+        $productSku = $dataSource['data']['product']['sku'];
+        $dataSource['data']['stocks'] = $this->getActiveStocksQtyInfo($productSku);
+        return $dataSource;
     }
 
     /**
@@ -66,25 +80,10 @@ class StockInformation extends Container
                 $stock = $this->stockRepository->get($stockId);
                 $stockInfo[] = [
                     'stock_name' => $stock->getName(),
-                    'qty' => $this->getProductQuantityInStock->execute($productSku, $stockId),
+                    'qty' => $this->getSalableProductQty->execute($productSku, $stockId),
                 ];
             }
         }
         return $stockInfo;
-    }
-
-    /**
-     * @param array $dataSource
-     * @return array
-     */
-    public function prepareDataSource(array $dataSource): array
-    {
-        if (!isset($dataSource['data']['product']['sku']) || empty($dataSource['data']['product']['sku'])) {
-            return $dataSource;
-        }
-        $productSku = $dataSource['data']['product']['sku'];
-        $stocksData = $this->getActiveStocksQtyInfo($productSku);
-        $dataSource['data']['stocks'] = $stocksData;
-        return $dataSource;
     }
 }

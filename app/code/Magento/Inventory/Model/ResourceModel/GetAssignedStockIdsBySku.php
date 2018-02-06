@@ -33,10 +33,10 @@ class GetAssignedStockIdsBySku
     }
 
     /**
-     * @param $productSku string
+     * @param string $productSku
      * @return array
      */
-    public function execute($productSku): array
+    public function execute(string $productSku): array
     {
         $connection = $this->resource->getConnection();
         $sourceItemTable = $this->resource->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
@@ -49,7 +49,7 @@ class GetAssignedStockIdsBySku
             )->join(
                 ['stock_source_link' => $stockSourceLinkTable],
                 'source_item.'. SourceItemInterface::SOURCE_CODE .' = stock_source_link.'
-                . SourceItemInterface::SOURCE_CODE,
+                . StockSourceLinkInterface::SOURCE_CODE,
                 [StockSourceLinkInterface::STOCK_ID]
             )->where(
                 'source_item.' . SourceItemInterface::SKU . ' = ?',

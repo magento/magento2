@@ -35,7 +35,7 @@ class GetAssignedStockIdsBySkuTest extends TestCase
     public function testExecute()
     {
         $productSku = 'SKU-1';
-        $expectedStockIds = [10,30];
+        $expectedStockIds = [10, 30];
 
         self::assertEquals($expectedStockIds, $this->getAssignedStockIdsBySku->execute($productSku));
     }
