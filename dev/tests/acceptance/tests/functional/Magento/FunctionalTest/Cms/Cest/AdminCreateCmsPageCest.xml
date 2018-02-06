@@ -24,10 +24,7 @@
                 <testCaseId value="MAGETWO-25580"/>
                 <group value="cms"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
             <click selector="{{CmsPagesPageActionsSection.addNewPage}}" stepKey="clickAddNewPage"/>

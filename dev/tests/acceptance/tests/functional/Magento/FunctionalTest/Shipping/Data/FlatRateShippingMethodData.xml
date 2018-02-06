@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+
+    <!-- Enable Flat Rate Shipping method config -->
+    <entity name="FlatRateShippingMethodConfig" type="flat_rate_shipping_method">
+        <required-entity type="active">flatRateActiveEnable</required-entity>
+    </entity>
+
+    <entity name="flatRateActiveEnable" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <!-- Flat Rate Shipping method default setup -->
+    <entity name="FlatRateShippingMethodDefault" type="flat_rate_shipping_method">
+        <required-entity type="active">flatRateActiveDefault</required-entity>
+        <required-entity type="title">flatRateTitleDefault</required-entity>
+        <required-entity type="name">flatRateNameDefault</required-entity>
+        <required-entity type="type">flatRateTypeDefault</required-entity>
+        <required-entity type="price">flatRatePriceDefault</required-entity>
+        <required-entity type="handling_type">flatRateHandlingTypeDefault</required-entity>
+        <required-entity type="handling_fee">flatRateHandlingFeeDefault</required-entity>
+        <required-entity type="specificerrmsg">flatRateSpecificerrmsgDefault</required-entity>
+        <required-entity type="sallowspecific">flatRateSallowspecificDefault</required-entity>
+        <required-entity type="specificcountry">flatRateSpecificcountryDefault</required-entity>
+        <required-entity type="showmethod">flatRateShowmethodDefault</required-entity>
+        <required-entity type="sort_order">flatRateSortOrderDefault</required-entity>
+    </entity>
+
+    <entity name="flatRateActiveDefault" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="flatRateTitleDefault" type="title">
+        <data key="value">Flat Rate</data>
+    </entity>
+    <entity name="flatRateNameDefault" type="name">
+        <data key="value">Fixed</data>
+    </entity>
+    <entity name="flatRateTypeDefault" type="type">
+        <data key="value">I</data>
+    </entity>
+    <entity name="flatRatePriceDefault" type="price">
+        <data key="value">5.00</data>
+    </entity>
+    <entity name="flatRateHandlingFeeDefault" type="handling_fee">
+        <data key="value">F</data>
+    </entity>
+    <entity name="flatRateSpecificerrmsgDefault" type="specificerrmsg">
+        <data key="value">This shipping method is not available. To use this shipping method, please contact us.</data>
+    </entity>
+    <entity name="flatRateSallowspecificDefault" type="sallowspecific">
+        <data key="value">0</data>
+    </entity>
+    <entity name="flatRateSpecificcountryDefault" type="specificcountry">
+        <data key="value"></data>
+    </entity>
+    <entity name="flatRateShowmethodDefault" type="showmethod">
+        <data key="value">0</data>
+    </entity>
+    <entity name="flatRateSortOrderDefault" type="sort_order">
+        <data key="value"></data>
+    </entity>
+</config>
