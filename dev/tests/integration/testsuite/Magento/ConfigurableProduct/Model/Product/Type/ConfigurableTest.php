@@ -130,6 +130,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($testConfigurable->getData(), $attributes[$attributeId]->getData());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
     public function testGetConfigurableAttributes()
     {
         $collection = $this->model->getConfigurableAttributes($this->product);

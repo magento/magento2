@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Catalog product option select type model
@@ -21,6 +23,9 @@ use Magento\Catalog\Pricing\Price\BasePrice;
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - added use of constants instead of string literals:
+ *      BasePrice::PRICE_CODE - instead of 'base_price'
+ *      RegularPrice::PRICE_CODE - instead of 'regular_price'
  * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
@@ -62,6 +67,11 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     protected $_valueCollectionFactory;
 
     /**
+     * @var CustomOptionPriceCalculator
+     */
+    private $customOptionPriceCalculator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory
@@ -75,9 +85,12 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
+        $this->customOptionPriceCalculator = $customOptionPriceCalculator
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
         parent::__construct(
             $context,
             $registry,
@@ -224,10 +237,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
+        if ($flag) {
+            return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, BasePrice::PRICE_CODE);
         }
         return $this->_getData(self::KEY_PRICE);
     }
@@ -239,12 +250,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getRegularPrice()
     {
-        if ($this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
-        }
-        return $this->_getData(self::KEY_PRICE);
+        return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, RegularPrice::PRICE_CODE);
     }
 
     /**
