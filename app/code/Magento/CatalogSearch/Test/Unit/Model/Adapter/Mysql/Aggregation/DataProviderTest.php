@@ -124,7 +124,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributeMock);
 
         $selectMock = $this->createMock(Select::class);
-        $this->selectBuilderForAttribute->expects($this->once())->method('execute')->willReturn($selectMock);
+        $this->selectBuilderForAttribute->expects($this->once())->method('build')->willReturn($selectMock);
         $this->adapterMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
         $tableMock = $this->createMock(Table::class);
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);

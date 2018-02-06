@@ -43,12 +43,14 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
+     * @param $customerSession
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
+        $customerSession,
         SelectBuilderForAttribute $selectBuilderForAttribute = null
     ) {
         $this->eavConfig = $eavConfig;

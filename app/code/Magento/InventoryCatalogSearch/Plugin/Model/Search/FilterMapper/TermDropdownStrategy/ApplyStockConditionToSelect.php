@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
 
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect
-    as LegacyStockConditionApplier;
+    as LegacyApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
-class ApplyStockConditionTo
+class ApplyStockConditionToSelect
 {
     /**
      * @var ResourceConnection
@@ -47,7 +47,7 @@ class ApplyStockConditionTo
     }
 
     /**
-     * @param LegacyStockConditionApplier $stockConditionApplier
+     * @param LegacyApplyStockConditionToSelect $applyStockConditionToSelect
      * @param callable $proceed
      * @param string $alias
      * @param string $stockAlias
@@ -57,7 +57,7 @@ class ApplyStockConditionTo
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        LegacyStockConditionApplier $stockConditionApplier,
+        LegacyApplyStockConditionToSelect $applyStockConditionToSelect,
         callable $proceed,
         string $alias,
         string $stockAlias,

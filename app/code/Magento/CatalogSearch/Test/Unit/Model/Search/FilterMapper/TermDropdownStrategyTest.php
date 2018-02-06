@@ -37,22 +37,22 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     private $aliasResolver;
 
     /**
-     * JoinAdderToSelect|\PHPUnit_Framework_MockObject_MockObject
+     * AddJoinToSelect|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $joinAdderToSelect;
+    private $addJoinToSelect;
 
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(EavConfig::class);
         $this->aliasResolver = $this->createMock(AliasResolver::class);
-        $this->joinAdderToSelect = $this->createMock(AddJoinToSelect::class);
+        $this->addJoinToSelect = $this->createMock(AddJoinToSelect::class);
         $this->model = $objectManager->getObject(
             TermDropdownStrategy::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'aliasResolver' => $this->aliasResolver,
-                'joinAdderToSelect' => $this->joinAdderToSelect
+                'addJoinToSelect' => $this->addJoinToSelect
             ]
         );
     }
@@ -73,7 +73,7 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
         $this->eavConfig->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $attribute->expects($this->once())->method('getId')->willReturn($attributeId);
         $searchFilter->expects($this->once())->method('getField');
-        $this->joinAdderToSelect->expects($this->once())->method('execute')->with($attributeId, $alias, $select);
+        $this->addJoinToSelect->expects($this->once())->method('execute')->with($attributeId, $alias, $select);
 
         $this->assertTrue($this->model->apply($searchFilter, $select));
     }

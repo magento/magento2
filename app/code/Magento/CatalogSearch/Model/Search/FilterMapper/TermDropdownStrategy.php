@@ -34,12 +34,18 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $addJoinToSelect;
 
     /**
+     * @param $storeManager
+     * @param $resourceConnection
      * @param EavConfig $eavConfig
+     * @param $scopeConfig
      * @param AliasResolver $aliasResolver
-     * @param AddJoinToSelect $addJoinToSelect
+     * @param AddJoinToSelect|null $addJoinToSelect
      */
     public function __construct(
+        $storeManager,
+        $resourceConnection,
         EavConfig $eavConfig,
+        $scopeConfig,
         AliasResolver $aliasResolver,
         AddJoinToSelect $addJoinToSelect = null
     ) {
