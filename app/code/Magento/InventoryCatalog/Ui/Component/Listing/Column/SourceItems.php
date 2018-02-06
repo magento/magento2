@@ -59,10 +59,7 @@ class SourceItems extends Column
     }
 
     /**
-     * Prepare data source
-     *
-     * @param array $dataSource
-     * @return array
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -79,8 +76,6 @@ class SourceItems extends Column
     }
 
     /**
-     * Prepare source items
-     *
      * @param string $sku
      * @return array
      */

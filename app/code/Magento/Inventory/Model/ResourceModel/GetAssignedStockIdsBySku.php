@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
- * Get all stocks Ids for this product.
+ * Get all stocks Ids by sku
  */
 class GetAssignedStockIdsBySku
 {
@@ -33,10 +31,10 @@ class GetAssignedStockIdsBySku
     }
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @return array
      */
-    public function execute(string $productSku): array
+    public function execute(string $sku): array
     {
         $connection = $this->resource->getConnection();
         $sourceItemTable = $this->resource->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
@@ -53,7 +51,7 @@ class GetAssignedStockIdsBySku
                 [StockSourceLinkInterface::STOCK_ID]
             )->where(
                 'source_item.' . SourceItemInterface::SKU . ' = ?',
-                $productSku
+                $sku
             )->distinct(true);
 
         return $connection->fetchCol($select);
