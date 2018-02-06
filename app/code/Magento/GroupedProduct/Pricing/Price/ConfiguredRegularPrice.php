@@ -15,7 +15,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 /**
  * Configured regular price model.
  */
-class ConfiguredRegularPrice extends AbstractPrice
+class ConfiguredRegularPrice extends AbstractPrice implements ConfiguredPriceInterface
 {
     /**
      * Price type configured
@@ -60,7 +60,7 @@ class ConfiguredRegularPrice extends AbstractPrice
                 continue;
             }
             $finalPrice = $product->getPriceInfo()
-                ->getPrice(RegularPrice::PRICE_CODE)
+                ->getPrice(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
                 ->getValue();
             $value += $finalPrice * ($customOption->getValue() ?: 1);
         }
