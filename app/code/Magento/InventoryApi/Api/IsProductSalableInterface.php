@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api;
 
 /**
- * Service which detects whether Product is In Stock for a given Stock (stock data + reservations)
+ * Service which detects whether Product is salable for a given Stock (stock data + reservations)
  *
  * @api
  */
-interface IsProductInStockInterface
+interface IsProductSalableInterface
 {
     /**
-     * Get is product in stock for given SKU in a given Stock
+     * Get is product in salable for given SKU in a given Stock
      *
      * @param string $sku
      * @param int $stockId

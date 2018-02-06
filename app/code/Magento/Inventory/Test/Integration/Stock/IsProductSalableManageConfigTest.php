@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductInStockManageConfigTest extends TestCase
+class IsProductSalableManageConfigTest extends TestCase
 {
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @inheritdoc
@@ -25,7 +25,7 @@ class IsProductInStockManageConfigTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -46,8 +46,8 @@ class IsProductInStockManageConfigTest extends TestCase
     public function testExecuteWithManageStockFalse(int $stockId, array $expectedResults)
     {
         foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isInStock = $this->isProductInStock->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 

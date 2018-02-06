@@ -70,13 +70,13 @@
         </resources>
     </route>
     <route url="/V1/inventory/stock/get-product-quantity/:sku/:stockId" method="GET">
-        <service class="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" method="execute"/>
+        <service class="Magento\InventoryApi\Api\GetSalableProductQtyInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
     <route url="/V1/inventory/stock/is-product-in-stock/:sku/:stockId" method="GET">
-        <service class="Magento\InventoryApi\Api\IsProductInStockInterface" method="execute"/>
+        <service class="Magento\InventoryApi\Api\IsProductSalableInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>

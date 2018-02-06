@@ -8,15 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\CatalogInventory\Helper\Stock;
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 
 /**
- * Adapt addStockStatusToProducts for multi stocks.
+ * Adapt assignStatusToProduct for multi stocks.
  */
-class AdaptAddStockStatusToProductsPlugin
+class AdaptAssignStatusToProductPlugin
 {
     /**
      * @var GetStockIdForCurrentWebsite
@@ -43,22 +42,24 @@ class AdaptAddStockStatusToProductsPlugin
     /**
      * @param Stock $subject
      * @param callable $proceed
-     * @param AbstractCollection $productCollection
+     * @param Product $product
+     * @param int|null $status
      * @return void
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundAddStockStatusToProducts(
+    public function aroundAssignStatusToProduct(
         Stock $subject,
         callable $proceed,
-        AbstractCollection $productCollection
+        Product $product,
+        $status = null
     ) {
-        $stockId = $this->getStockIdForCurrentWebsite->execute();
-
-        /** @var Product $product */
-        foreach ($productCollection as $product) {
-            $isSalable = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
-            $product->setIsSalable($isSalable);
+        if (null === $product->getSku()) {
+            return;
         }
+        if (null === $status) {
+            $stockId = $this->getStockIdForCurrentWebsite->execute();
+            $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
+        }
+        $proceed($product, $status);
     }
 }

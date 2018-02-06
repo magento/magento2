@@ -9,12 +9,12 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductInStockTest extends TestCase
+class IsProductSalableTest extends TestCase
 {
     /**
      * @var ReservationBuilderInterface
@@ -32,9 +32,9 @@ class IsProductInStockTest extends TestCase
     private $cleanupReservations;
 
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @inheritdoc
@@ -46,7 +46,7 @@ class IsProductInStockTest extends TestCase
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -57,9 +57,9 @@ class IsProductInStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      */
-    public function testProductIsInStock()
+    public function testProductIsSalable()
     {
-        self::assertTrue($this->isProductInStock->execute('SKU-1', 10));
+        self::assertTrue($this->isProductSalable->execute('SKU-1', 10));
     }
 
     /**
@@ -76,7 +76,7 @@ class IsProductInStockTest extends TestCase
         $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),
         ]);
-        self::assertFalse($this->isProductInStock->execute('SKU-1', 10));
+        self::assertFalse($this->isProductSalable->execute('SKU-1', 10));
 
         $this->appendReservations->execute([
             // unreserve 8.5 units for cleanup
@@ -102,8 +102,8 @@ class IsProductInStockTest extends TestCase
     public function testExecuteWithDifferentQty(int $stockId, array $expectedResults)
     {
         foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isInStock = $this->isProductInStock->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 

@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
+use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetProductQuantityInStockTest extends TestCase
+class GetSalableProductQtyTest extends TestCase
 {
     /**
      * @var ReservationBuilderInterface
@@ -32,7 +32,7 @@ class GetProductQuantityInStockTest extends TestCase
     private $cleanupReservations;
 
     /**
-     * @var GetProductQuantityInStockInterface
+     * @var GetSalableProductQtyInterface
      */
     private $getProductQtyInStock;
 
@@ -42,7 +42,7 @@ class GetProductQuantityInStockTest extends TestCase
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
-            GetProductQuantityInStockInterface::class
+            GetSalableProductQtyInterface::class
         );
     }
 

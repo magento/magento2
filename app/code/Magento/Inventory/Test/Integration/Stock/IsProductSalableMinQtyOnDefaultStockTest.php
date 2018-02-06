@@ -10,14 +10,14 @@ namespace Magento\Inventory\Test\Integration\Stock;
 use Magento\InventoryCatalog\Model\DefaultStockProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 
-class IsProductInStockMinQtyOnDefaultStockTest extends TestCase
+class IsProductSalableMinQtyOnDefaultStockTest extends TestCase
 {
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @var DefaultStockProvider
@@ -31,7 +31,7 @@ class IsProductInStockMinQtyOnDefaultStockTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProvider::class);
     }
 
@@ -48,8 +48,8 @@ class IsProductInStockMinQtyOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithMinQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductInStock->execute($sku, $this->defaultStockProvider->getId());
-        self::assertEquals($expectedValue, $isInStock);
+        $isSalable = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
+        self::assertEquals($expectedValue, $isSalable);
     }
 
     /**
@@ -78,8 +78,8 @@ class IsProductInStockMinQtyOnDefaultStockTest extends TestCase
      */
     public function testExecuteWithManageStockFalseAndMinQty(string $sku, bool $expectedValue)
     {
-        $isInStock = $this->isProductInStock->execute($sku, $this->defaultStockProvider->getId());
-        self::assertEquals($expectedValue, $isInStock);
+        $isSalable = $this->isProductSalable->execute($sku, $this->defaultStockProvider->getId());
+        self::assertEquals($expectedValue, $isSalable);
     }
 
     /**

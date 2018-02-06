@@ -30,6 +30,10 @@ class AddStockStatusToProductsOnDefaultStockTest extends TestCase
         $this->stockHelper = Bootstrap::getObjectManager()->get(Stock::class);
     }
 
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     */
     public function testAddStockStatusToProducts()
     {
         $productsData = [
@@ -42,6 +46,7 @@ class AddStockStatusToProductsOnDefaultStockTest extends TestCase
         $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addFieldToFilter(ProductInterface::SKU, ['in' => array_keys($productsData)]);
         $collection->load();
+        self::assertCount(3, $collection->getItems());
 
         $this->stockHelper->addStockStatusToProducts($collection);
 

@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductInStockMinQtyTest extends TestCase
+class IsProductSalableMinQtyTest extends TestCase
 {
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @var array
@@ -30,7 +30,7 @@ class IsProductInStockMinQtyTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -51,8 +51,8 @@ class IsProductInStockMinQtyTest extends TestCase
     public function testExecuteWithMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $isInStock = $this->isProductInStock->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
@@ -87,8 +87,8 @@ class IsProductInStockMinQtyTest extends TestCase
     public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedResults)
     {
         foreach ($this->skus as $key => $sku) {
-            $isInStock = $this->isProductInStock->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isInStock);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
