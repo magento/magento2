@@ -84,13 +84,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
      */
     private function getEdition()
     {
-        if (file_exists(BP . '/setup/performance-toolkit/profiles/b2b/small.xml')) {
-            return 'b2b';
-        } elseif (file_exists(BP . '/setup/performance-toolkit/profiles/ee/small.xml')) {
-            return 'ee';
-        } else {
-            return 'ce';
-        }
+        return trim(file_get_contents(__DIR__  . '/_files/edition'));
     }
 
     /**
