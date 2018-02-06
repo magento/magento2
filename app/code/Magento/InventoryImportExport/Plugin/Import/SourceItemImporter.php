@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: josh
- * Date: 05/02/2018
- * Time: 00:57
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
