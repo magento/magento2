@@ -122,7 +122,7 @@ class CategoryProcessor
         try {
             $category->save();
             $this->categoriesCache[$category->getId()] = $category;
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->addFailedCategory($category, $e);
         }
 
