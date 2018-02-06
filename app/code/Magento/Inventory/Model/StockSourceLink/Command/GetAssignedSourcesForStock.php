@@ -92,15 +92,15 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
             ->create();
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
-        $links = $searchResult->getItems();
-        if (!$links) {
+
+        if (0 === $searchResult->getTotalCount()) {
             return [];
         }
+
         $sourceCodes = [];
-        foreach ($links as $link) {
+        foreach ($searchResult->getItems() as $link) {
             $sourceCodes[] = $link->getSourceCode();
         }
-
         return $sourceCodes;
     }
 }

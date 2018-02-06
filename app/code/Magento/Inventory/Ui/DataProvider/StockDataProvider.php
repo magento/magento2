@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
-use Magento\Framework\Api\CriteriaInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder as SearchSearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -47,17 +48,29 @@ class StockDataProvider extends DataProvider
     private $sourceRepository;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param ReportingInterface $reporting
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchSearchCriteriaBuilder $searchSearchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param StockRepositoryInterface $stockRepository
      * @param SearchResultFactory $searchResultFactory
      * @param GetStockSourceLinksInterface $getStockSourceLinks
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -67,13 +80,15 @@ class StockDataProvider extends DataProvider
         $primaryFieldName,
         $requestFieldName,
         ReportingInterface $reporting,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchSearchCriteriaBuilder $searchSearchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
         StockRepositoryInterface $stockRepository,
         SearchResultFactory $searchResultFactory,
         GetStockSourceLinksInterface $getStockSourceLinks,
         SourceRepositoryInterface $sourceRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SortOrderBuilder $sortOrderBuilder,
         array $meta = [],
         array $data = []
     ) {
@@ -82,7 +97,7 @@ class StockDataProvider extends DataProvider
             $primaryFieldName,
             $requestFieldName,
             $reporting,
-            $searchCriteriaBuilder,
+            $searchSearchCriteriaBuilder,
             $request,
             $filterBuilder,
             $meta,
@@ -90,9 +105,10 @@ class StockDataProvider extends DataProvider
         );
         $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->sourceRepository = $sourceRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -144,29 +160,27 @@ class StockDataProvider extends DataProvider
      */
     private function getAssignedSourcesData(int $stockId): array
     {
-        $filter = $this->filterBuilder
-            ->setField(StockSourceLinkInterface::STOCK_ID)
-            ->setValue($stockId)
+        $sortOrder = $this->sortOrderBuilder
+            ->setField(StockSourceLinkInterface::PRIORITY)
+            ->setAscendingDirection()
             ->create();
-
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($filter)
-            ->addSortOrder(StockSourceLinkInterface::PRIORITY, CriteriaInterface::SORT_ORDER_ASC)
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->addSortOrder($sortOrder)
             ->create();
 
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
-        $links = $searchResult->getItems();
 
-        if (!$links) {
+        if ($searchResult->getTotalCount() === 0) {
             return [];
         }
 
         $assignedSourcesData = [];
-        foreach ($links as $link) {
-            $sourceData = $this->sourceRepository->get($link->getSourceCode());
+        foreach ($searchResult->getItems() as $link) {
+            $source = $this->sourceRepository->get($link->getSourceCode());
 
             $assignedSourcesData[] = [
-                SourceInterface::NAME => $sourceData->getName(),
+                SourceInterface::NAME => $source->getName(),
                 StockSourceLinkInterface::SOURCE_CODE => $link->getSourceCode(),
                 StockSourceLinkInterface::STOCK_ID => $link->getStockId(),
                 StockSourceLinkInterface::PRIORITY => $link->getPriority(),

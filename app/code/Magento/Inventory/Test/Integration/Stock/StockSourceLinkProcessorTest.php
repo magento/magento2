@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\Framework\Api\CriteriaInterface;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Inventory\Controller\Adminhtml\Stock\StockSourceLinkProcessor;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
@@ -24,9 +23,9 @@ class StockSourceLinkProcessorTest extends TestCase
     private $stockSourceLinkProcessor;
 
     /**
-     * @var FilterBuilder
+     * @var SortOrderBuilder
      */
-    private $filterBuilder;
+    private $sortOrderBuilder;
 
     /**
      * @var SearchCriteriaBuilder
@@ -46,7 +45,7 @@ class StockSourceLinkProcessorTest extends TestCase
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->getStockSourceLinks = Bootstrap::getObjectManager()->get(GetStockSourceLinksInterface::class);
         $this->stockSourceLinkProcessor = Bootstrap::getObjectManager()->get(StockSourceLinkProcessor::class);
-        $this->filterBuilder = Bootstrap::getObjectManager()->get(FilterBuilder::class);
+        $this->sortOrderBuilder = Bootstrap::getObjectManager()->get(SortOrderBuilder::class);
     }
 
     /**
@@ -75,20 +74,16 @@ class StockSourceLinkProcessorTest extends TestCase
 
         $this->stockSourceLinkProcessor->process($stockId, $linksData);
 
-        $filter = $this->filterBuilder
-            ->setField(StockSourceLinkInterface::STOCK_ID)
-            ->setValue($stockId)
+        $sortOrder = $this->sortOrderBuilder
+            ->setField(StockSourceLinkInterface::PRIORITY)
+            ->setAscendingDirection()
             ->create();
-
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($filter)
-            ->addSortOrder(StockSourceLinkInterface::PRIORITY, CriteriaInterface::SORT_ORDER_ASC)
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->addSortOrder($sortOrder)
             ->create();
-
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
 
-        $links = $searchResult->getItems();
-
-        self::assertCount(2, $links);
+        self::assertCount(2, $searchResult->getItems());
     }
 }
