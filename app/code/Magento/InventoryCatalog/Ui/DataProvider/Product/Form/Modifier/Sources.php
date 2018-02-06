@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Inventory\Model\IsManageSourceItemsAllowedForProductTypeInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
@@ -22,6 +22,11 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
  */
 class Sources extends AbstractModifier
 {
+    /**
+     * @var IsManageSourceItemsAllowedForProductTypeInterface
+     */
+    private $isManageSourceItemsAllowedForProductType;
+
     /**
      * @var LocatorInterface
      */
@@ -38,15 +43,18 @@ class Sources extends AbstractModifier
     private $resourceConnection;
 
     /**
+     * @param IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
+        IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection
     ) {
+        $this->isManageSourceItemsAllowedForProductType = $isManageSourceItemsAllowedForProductType;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
@@ -58,9 +66,9 @@ class Sources extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-
-        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
-
+        if ($this->isManageSourceItemsAllowedForProductType->execute($product->getTypeId()) === true) {
+            $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
+        }
         return $data;
     }
 
@@ -99,7 +107,7 @@ class Sources extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($product->getTypeId() !== Type::TYPE_SIMPLE) {
+        if ($this->isManageSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             $meta['sources'] = [
                 'arguments' => [
                     'data' => [

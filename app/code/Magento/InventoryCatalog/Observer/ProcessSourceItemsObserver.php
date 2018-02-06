@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Catalog\Model\Product\Type;
+use Magento\Inventory\Model\IsManageSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Save source product relations during product persistence via controller
@@ -22,16 +22,24 @@ use Magento\Catalog\Model\Product\Type;
 class ProcessSourceItemsObserver implements ObserverInterface
 {
     /**
+     * @var IsManageSourceItemsAllowedForProductTypeInterface
+     */
+    private $isManageSourceItemsAllowedForProductType;
+
+    /**
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
 
     /**
+     * @param IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType
      * @param SourceItemsProcessor $sourceItemsProcessor
      */
     public function __construct(
+        IsManageSourceItemsAllowedForProductTypeInterface $isManageSourceItemsAllowedForProductType,
         SourceItemsProcessor $sourceItemsProcessor
     ) {
+        $this->isManageSourceItemsAllowedForProductType = $isManageSourceItemsAllowedForProductType;
         $this->sourceItemsProcessor = $sourceItemsProcessor;
     }
 
@@ -45,7 +53,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($product->getTypeId() !== Type::TYPE_SIMPLE) {
+        if ($this->isManageSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
         /** @var Save $controller */
