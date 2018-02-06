@@ -16,7 +16,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -36,11 +35,6 @@ class StockDataProvider extends DataProvider
      * @var SearchResultFactory
      */
     private $searchResultFactory;
-
-    /**
-     * @var GetAssignedSourcesForStockInterface
-     */
-    private $getAssignedSourcesForStock;
 
     /**
      * @var GetStockSourceLinksInterface
@@ -64,7 +58,6 @@ class StockDataProvider extends DataProvider
      * @param SearchResultFactory $searchResultFactory
      * @param GetStockSourceLinksInterface $getStockSourceLinks
      * @param SourceRepositoryInterface $sourceRepository
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -81,7 +74,6 @@ class StockDataProvider extends DataProvider
         SearchResultFactory $searchResultFactory,
         GetStockSourceLinksInterface $getStockSourceLinks,
         SourceRepositoryInterface $sourceRepository,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
         array $meta = [],
         array $data = []
     ) {
@@ -98,7 +90,6 @@ class StockDataProvider extends DataProvider
         );
         $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->sourceRepository = $sourceRepository;
