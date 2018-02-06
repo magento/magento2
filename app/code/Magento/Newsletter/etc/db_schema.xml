@@ -33,6 +33,9 @@
         <index name="NEWSLETTER_SUBSCRIBER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <index name="NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL" indexType="btree">
+            <column name="subscriber_email"/>
+        </index>
     </table>
     <table name="newsletter_template" resource="default" engine="innodb" comment="Newsletter Template">
         <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"
