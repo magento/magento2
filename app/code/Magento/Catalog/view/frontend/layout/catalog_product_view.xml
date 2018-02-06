@@ -28,6 +28,13 @@
                 <argument name="add_attribute" xsi:type="string">itemscope itemtype="http://schema.org/Product"</argument>
             </arguments>
         </referenceBlock>
+
+        <referenceBlock name="breadcrumbs" template="Magento_Catalog::product/breadcrumbs.phtml">
+            <arguments>
+                <argument name="viewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Breadcrumbs</argument>
+            </arguments>
+        </referenceBlock>
+
         <referenceContainer name="content">
             <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
                 <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price">
