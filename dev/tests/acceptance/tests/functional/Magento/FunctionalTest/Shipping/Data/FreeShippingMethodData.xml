@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+
+    <!-- Enable Free Shipping method -->
+    <entity name="FreeShippinMethodConfig" type="free_shipping_method">
+        <required-entity type="active">freeActiveEnable</required-entity>
+    </entity>
+
+    <entity name="freeActiveEnable" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <!-- Free Shipping method default setup -->
+    <entity name="FreeShippinMethodDefault" type="free_shipping_method">
+        <required-entity type="active">freeActiveDefault</required-entity>
+        <required-entity type="title">freeTitleDefault</required-entity>
+        <required-entity type="name">freeNameDefault</required-entity>
+        <required-entity type="free_shipping_subtotal">freeShippingSubtotalDefault</required-entity>
+        <required-entity type="specificerrmsg">freeSpecificerrmsgDefault</required-entity>
+        <required-entity type="sallowspecific">freeSallowspecificDefault</required-entity>
+        <required-entity type="specificcountry">freeSpecificcountryDefault</required-entity>
+        <required-entity type="showmethod">freeShowmethodDefault</required-entity>
+        <required-entity type="sort_order">freeSortOrderDefault</required-entity>
+    </entity>
+
+    <entity name="freeActiveDefault" type="active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="freeTitleDefault" type="title">
+        <data key="value">Free Shipping</data>
+    </entity>
+    <entity name="freeNameDefault" type="name">
+        <data key="value">Free</data>
+    </entity>
+    <entity name="freeShippingSubtotalDefault" type="free_shipping_subtotal">
+        <data key="value"></data>
+    </entity>
+    <entity name="freeSpecificerrmsgDefault" type="specificerrmsg">
+        <data key="value">This shipping method is not available. To use this shipping method, please contact us.</data>
+    </entity>
+    <entity name="freeSallowspecificDefault" type="sallowspecific">
+        <data key="value">0</data>
+    </entity>
+    <entity name="freeSpecificcountryDefault" type="specificcountry">
+        <data key="value"></data>
+    </entity>
+    <entity name="freeShowmethodDefault" type="showmethod">
+        <data key="value">0</data>
+    </entity>
+    <entity name="freeSortOrderDefault" type="sort_order">
+        <data key="value"></data>
+    </entity>
+</config>
