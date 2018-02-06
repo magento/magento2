@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Catalog category image attribute backend model
  *
@@ -42,11 +44,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_logger;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @var \Magento\Catalog\Model\ImageUploader
      */
     private $imageUploader;
@@ -60,19 +57,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-           ->get(\Magento\Store\Model\StoreManager::class);
     }
 
     /**
@@ -158,7 +151,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $fileUrl = ltrim($value[0]['url'], '/');
-        $baseMediaDir = $this->storeManager->getStore()->getBaseMediaDir();
+        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
         $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
 
