@@ -20,6 +20,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
+/**
+ * Fetch configurable product children data and add to final result of product collection.
+ */
 class ProductPlugin
 {
     /**

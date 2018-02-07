@@ -8,6 +8,11 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Test for Utility/Files class.
+ *
+ * @package Magento\Framework\App\Test\Unit\Utility
+ */
 class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -44,6 +49,21 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         $actual = Files::init()->getConfigFiles('some.file', ['some.other.file'], false);
         $this->assertSame($expected, $actual);
         // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testGetDbSchemaFiles()
+    {
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
         $this->assertSame($expected, $actual);
     }
 
