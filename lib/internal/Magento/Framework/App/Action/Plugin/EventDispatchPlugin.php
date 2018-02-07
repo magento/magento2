@@ -11,6 +11,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
 
+/**
+ * 
+ */
 class EventDispatchPlugin
 {
     /**
@@ -38,8 +41,6 @@ class EventDispatchPlugin
     public function beforeExecute(ActionInterface $subject)
     {
         $this->dispatchPreDispatchEvents($subject);
-        
-        return [];
     }
 
     /**
