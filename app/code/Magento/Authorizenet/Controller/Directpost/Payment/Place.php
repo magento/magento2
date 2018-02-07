@@ -122,7 +122,7 @@ class Place extends Payment
     /**
      * Place order for checkout flow
      *
-     * @return string
+     * @return void
      */
     protected function placeCheckoutOrder()
     {
