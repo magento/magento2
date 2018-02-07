@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -175,10 +175,10 @@ define([
          */
         clearEvents: function () {
             this.fotoramaItem.off(
-                'fotorama:show ' +
-                'fotorama:showend ' +
-                'fotorama:fullscreenenter ' +
-                'fotorama:fullscreenexit'
+                'fotorama:show.' + this.PV +
+                ' fotorama:showend.' + this.PV +
+                ' fotorama:fullscreenenter.' + this.PV +
+                ' fotorama:fullscreenexit.' + this.PV
             );
         },
 
@@ -207,7 +207,7 @@ define([
                 if (options.dataMergeStrategy === 'prepend') {
                     this.options.videoData = [].concat(
                         this.options.optionsVideoData[options.selectedOption],
-                        this.options.videoData
+                        this.defaultVideoData
                     );
                 } else {
                     this.options.videoData = this.options.optionsVideoData[options.selectedOption];
@@ -232,11 +232,11 @@ define([
          * @private
          */
         _listenForFullscreen: function () {
-            this.fotoramaItem.on('fotorama:fullscreenenter', $.proxy(function () {
+            this.fotoramaItem.on('fotorama:fullscreenenter.' + this.PV, $.proxy(function () {
                 this.isFullscreen = true;
             }, this));
 
-            this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function () {
+            this.fotoramaItem.on('fotorama:fullscreenexit.' + this.PV, $.proxy(function () {
                 this.isFullscreen = false;
                 this._hideVideoArrows();
             }, this));
@@ -468,7 +468,7 @@ define([
                 t;
 
             if (!fotorama.activeFrame.$navThumbFrame) {
-                this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
+                this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (evt, fotoramaData) {
                     $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
                 }, this));
 
@@ -486,7 +486,7 @@ define([
                 this._checkForVideo(e, fotorama, t + 1);
             }
 
-            this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
+            this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
         },
@@ -528,15 +528,15 @@ define([
          * @private
          */
         _attachFotoramaEvents: function () {
-            this.fotoramaItem.on('fotorama:showend', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:showend.' + this.PV, $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
 
-            this.fotoramaItem.on('fotorama:show', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:show.' + this.PV, $.proxy(function (e, fotorama) {
                 this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
             }, this));
 
-            this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function (e, fotorama) {
+            this.fotoramaItem.on('fotorama:fullscreenexit.' + this.PV, $.proxy(function (e, fotorama) {
                 fotorama.activeFrame.$stageFrame.find('.' + this.PV).remove();
                 this._startPrepareForPlayer(e, fotorama);
             }, this));

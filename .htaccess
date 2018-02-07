@@ -106,6 +106,10 @@ DirectoryIndex index.php
         order allow,deny
         deny from all
     </Files>
+    <Files auth.json>
+       order allow,deny
+       deny from all
+    </Files>
     <Files magento_umask>
         order allow,deny
         deny from all

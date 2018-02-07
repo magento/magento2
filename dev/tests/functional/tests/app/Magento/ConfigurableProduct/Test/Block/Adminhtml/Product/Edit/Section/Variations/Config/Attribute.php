@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -160,6 +160,20 @@ class Attribute extends Form
     private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
 
     /**
+     * Attributes grid spinner selector
+     *
+     * @var string
+     */
+    private $attributesGridSpinner = '.productFormConfigurable [data-role="spinner"]';
+
+    /**
+     * CSS Selector for attribute grid.
+     *
+     * @var string
+     */
+    private $attributesGridSelector = '#variation-steps-wizard_step1 .admin__data-grid-outer-wrap';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -176,10 +190,12 @@ class Attribute extends Form
         }
 
         //select attributes
+        $this->waitAttributesGridLoad();
         $this->getAttributesGrid()->resetFilter();
+        $this->getAttributesGrid()->waitForElementNotVisible($this->attributesGridSpinner);
         $this->getTemplateBlock()->waitLoader();
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
-        if ($attributesList != '--') {
+        if ($attributesList !== '--') {
             $this->getAttributesGrid()->deselectAttributes();
         }
 
@@ -199,6 +215,17 @@ class Attribute extends Form
         $this->browser->find($this->nextButton)->click();
         $this->getTemplateBlock()->waitLoader();
         $this->browser->find($this->nextButton)->click();
+    }
+
+    /**
+     * Wait for 'Attributes Grid' loaded.
+     *
+     * @return void
+     */
+    private function waitAttributesGridLoad()
+    {
+        $this->waitForElementVisible($this->attributesGridSelector);
+        $this->waitForElementNotVisible($this->attributesGridSpinner);
     }
 
     /**

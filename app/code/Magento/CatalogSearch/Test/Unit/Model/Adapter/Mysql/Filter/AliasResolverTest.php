@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,11 @@ class AliasResolverTest extends \PHPUnit_Framework_TestCase
             ],
             'category_ids' => [
                 'field' => 'category_ids',
-                'alias' => 'category_ids_index',
+                'alias' => 'category_products_index',
+            ],
+            'visibility' => [
+                'field' => 'visibility',
+                'alias' => 'category_products_index',
             ],
         ];
     }
