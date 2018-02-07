@@ -34,11 +34,9 @@
                 <group value="checkout"/>
             </annotations>
 
-            <amOnPage stepKey="s1"  url="customer/account/login/"/>
-            <fillField  stepKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-            <fillField  stepKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-            <click stepKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-            <waitForPageLoad stepKey="s9"/>
+            <actionGroup stepKey="customerLogin" ref="CustomerLoginOnStorefront">
+                <argument name="customer" value="$$simpleuscustomer$$"/>
+            </actionGroup>
 
             <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
             <moveMouseOver stepKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
@@ -60,12 +58,7 @@
             <waitForPageLoad stepKey="s51"/>
             <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
             <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
-
-            <amOnPage stepKey="s59" url="{{AdminLoginPage.url}}" />
-            <fillField stepKey="s61" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" />
-            <fillField stepKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
-            <click stepKey="s65" selector="{{AdminLoginFormSection.signIn}}" />
-
+            <actionGroup stepKey="loginToAdminPanel" ref="LoginToAdminActionGroup" />
             <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
             <waitForPageLoad stepKey="s75"/>
             <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
