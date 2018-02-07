@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Add joins to select.
  */
-class AddJoinToSelect
+class SelectBuilder
 {
     /**
      * @var ResourceConnection
@@ -26,7 +26,7 @@ class AddJoinToSelect
     /**
      * @var ApplyStockConditionToSelect
      */
-    private $applyStockCondition;
+    private $applyStockConditionToSelect;
 
     /**
      * @var StoreManagerInterface
@@ -42,18 +42,18 @@ class AddJoinToSelect
      * @param ResourceConnection $resourceConnection
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param ApplyStockConditionToSelect $applyStockCondition
+     * @param ApplyStockConditionToSelect $applyStockConditionToSelect
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        ApplyStockConditionToSelect $applyStockCondition
+        ApplyStockConditionToSelect $applyStockConditionToSelect
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->applyStockCondition = $applyStockCondition;
+        $this->applyStockConditionToSelect = $applyStockConditionToSelect;
     }
 
     /**
@@ -79,7 +79,7 @@ class AddJoinToSelect
         );
         if ($this->isAddStockFilter()) {
             $stockAlias = $alias . AliasResolver::STOCK_FILTER_SUFFIX;
-            $this->applyStockCondition->execute($alias, $stockAlias, $select);
+            $this->applyStockConditionToSelect->execute($alias, $stockAlias, $select);
         }
     }
 

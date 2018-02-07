@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
+namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Search\FilterMapper\TermDropdownStrategy;
 
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
@@ -19,7 +19,7 @@ class ApplyStockConditionToSelectTest extends TestCase
     /**
      * @var ApplyStockConditionToSelect
      */
-    private $applyStockCondition;
+    private $applyStockConditionToSelect;
 
     /**
      * @var StoreManagerInterface
@@ -32,15 +32,21 @@ class ApplyStockConditionToSelectTest extends TestCase
     private $storeCodeBefore;
 
     /**
+     * @var ResourceConnection $resource
+     */
+    private $resource;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->applyStockCondition = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
+        parent::setUp();
+
+        $this->applyStockConditionToSelect = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
-
-        parent::setUp();
+        $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
     }
 
     /**
@@ -63,14 +69,10 @@ class ApplyStockConditionToSelectTest extends TestCase
     {
         $this->storeManager->setCurrentStore($store);
 
-        /** @var ResourceConnection $resource */
-        $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-
         /** @var Select $select */
-        $select = $resource->getConnection()->select();
-        $select->from(['eav_index' => $resource->getTableName('catalog_product_index_eav')], 'entity_id');
-        $this->applyStockCondition->execute('eav_index', 'eav_index_stock', $select);
-        $select->where('eav_index_stock.is_salable = 1');
+        $select = $this->resource->getConnection()->select();
+        $select->from(['eav_index' => $this->resource->getTableName('catalog_product_index_eav')], 'entity_id');
+        $this->applyStockConditionToSelect->execute('eav_index', 'eav_index_stock', $select);
 
         $result = $select->query()->fetchAll();
 
@@ -83,9 +85,9 @@ class ApplyStockConditionToSelectTest extends TestCase
     public function executeDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 1],
+            ['store_for_eu_website', 2],
             ['store_for_us_website', 1],
-            ['store_for_global_website', 2],
+            ['store_for_global_website', 3],
         ];
     }
 

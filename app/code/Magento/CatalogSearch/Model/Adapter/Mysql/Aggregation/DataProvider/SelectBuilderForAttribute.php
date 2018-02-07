@@ -6,13 +6,15 @@
 
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -31,9 +33,9 @@ class SelectBuilderForAttribute
     private $resource;
 
     /**
-     * @var JoinStockConditionToSelect
+     * @var ApplyStockConditionToSelect
      */
-    private $joinStockCondition;
+    private $applyStockConditionToSelect;
 
     /**
      * @var Session
@@ -41,21 +43,29 @@ class SelectBuilderForAttribute
     private $customerSession;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param JoinStockConditionToSelect $joinStockCondition
+     * @param ApplyStockConditionToSelect $applyStockConditionToSelect
      * @param Session $customerSession
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        JoinStockConditionToSelect $joinStockCondition,
-        Session $customerSession
+        ApplyStockConditionToSelect $applyStockConditionToSelect,
+        Session $customerSession,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
-        $this->joinStockCondition = $joinStockCondition;
+        $this->applyStockConditionToSelect = $applyStockConditionToSelect;
         $this->customerSession = $customerSession;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -88,7 +98,9 @@ class SelectBuilderForAttribute
                 ->distinct()
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId);
-            $subSelect = $this->joinStockCondition->execute($subSelect);
+            if ($this->isAddStockFilter()) {
+                $subSelect = $this->applyStockConditionToSelect->execute($subSelect);
+            }
 
             $parentSelect = $this->resource->getConnection()->select();
             $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
@@ -96,5 +108,18 @@ class SelectBuilderForAttribute
         }
 
         return $select;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAddStockFilter()
+    {
+        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return false === $isShowOutOfStock;
     }
 }

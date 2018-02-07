@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalogSearch\Test\Integration\Plugin\Adapter\Mysql\Aggregation\DataProvider;
+namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\JoinStockConditionToSelect;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class JoinStockConditionToSelectWithDefaultStockTest extends TestCase
+class ApplyStockConditionToSelectWithDefaultStockTest extends TestCase
 {
     /**
-     * @var JoinStockConditionToSelect
+     * @var ApplyStockConditionToSelect
      */
-    private $joinStockCondition;
+    private $applyStockConditionToSelect;
 
     /**
      * @var ResourceConnection
@@ -32,7 +32,7 @@ class JoinStockConditionToSelectWithDefaultStockTest extends TestCase
         parent::setUp();
 
         $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-        $this->joinStockCondition = Bootstrap::getObjectManager()->get(JoinStockConditionToSelect::class);
+        $this->applyStockConditionToSelect = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
     }
 
     /**
@@ -48,7 +48,7 @@ class JoinStockConditionToSelectWithDefaultStockTest extends TestCase
             ['main_table.entity_id', 'main_table.value']
         )->distinct();
 
-        $this->joinStockCondition->execute($select);
+        $this->applyStockConditionToSelect->execute($select);
         self::assertEquals(2, count($select->query()->fetchAll()));
     }
 }

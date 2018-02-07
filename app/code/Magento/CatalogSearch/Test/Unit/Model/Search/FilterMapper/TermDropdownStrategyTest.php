@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\AddJoinToSelect;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\SelectBuilder;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -29,7 +29,7 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * @var TermDropdownStrategy
      */
-    private $model;
+    private $termDropdownStrategy;
 
     /**
      * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -37,22 +37,22 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     private $aliasResolver;
 
     /**
-     * AddJoinToSelect|\PHPUnit_Framework_MockObject_MockObject
+     * SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $addJoinToSelect;
+    private $selectBuilder;
 
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(EavConfig::class);
         $this->aliasResolver = $this->createMock(AliasResolver::class);
-        $this->addJoinToSelect = $this->createMock(AddJoinToSelect::class);
-        $this->model = $objectManager->getObject(
+        $this->selectBuilder = $this->createMock(SelectBuilder::class);
+        $this->termDropdownStrategy = $objectManager->getObject(
             TermDropdownStrategy::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'aliasResolver' => $this->aliasResolver,
-                'addJoinToSelect' => $this->addJoinToSelect
+                'selectBuilder' => $this->selectBuilder
             ]
         );
     }
@@ -73,8 +73,8 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
         $this->eavConfig->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $attribute->expects($this->once())->method('getId')->willReturn($attributeId);
         $searchFilter->expects($this->once())->method('getField');
-        $this->addJoinToSelect->expects($this->once())->method('execute')->with($attributeId, $alias, $select);
+        $this->selectBuilder->expects($this->once())->method('execute')->with($attributeId, $alias, $select);
 
-        $this->assertTrue($this->model->apply($searchFilter, $select));
+        $this->assertTrue($this->termDropdownStrategy->apply($searchFilter, $select));
     }
 }

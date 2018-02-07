@@ -7,7 +7,7 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\AddJoinToSelect;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\SelectBuilder;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ObjectManager;
 
@@ -29,9 +29,9 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $eavConfig;
 
     /**
-     * @var AddJoinToSelect
+     * @var SelectBuilder
      */
-    private $addJoinToSelect;
+    private $selectBuilder;
 
     /**
      * @param $storeManager
@@ -39,7 +39,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param EavConfig $eavConfig
      * @param $scopeConfig
      * @param AliasResolver $aliasResolver
-     * @param AddJoinToSelect|null $addJoinToSelect
+     * @param SelectBuilder|null $selectBuilder
      */
     public function __construct(
         $storeManager,
@@ -47,11 +47,11 @@ class TermDropdownStrategy implements FilterStrategyInterface
         EavConfig $eavConfig,
         $scopeConfig,
         AliasResolver $aliasResolver,
-        AddJoinToSelect $addJoinToSelect = null
+        SelectBuilder $selectBuilder = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->aliasResolver = $aliasResolver;
-        $this->addJoinToSelect = $addJoinToSelect ?: ObjectManager::getInstance()->get(AddJoinToSelect::class);
+        $this->selectBuilder = $selectBuilder ?: ObjectManager::getInstance()->get(SelectBuilder::class);
     }
 
     /**
@@ -64,7 +64,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
         $attribute = $this->getAttributeByCode($filter->getField());
-        $this->addJoinToSelect->execute((int)$attribute->getId(), $alias, $select);
+        $this->selectBuilder->execute((int)$attribute->getId(), $alias, $select);
 
         return true;
     }

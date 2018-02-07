@@ -73,7 +73,7 @@ class ApplyStockConditionToSelect
 
         $select->joinInner(
             [$stockAlias => $tableName],
-            sprintf('product.sku = %1$s.sku', $stockAlias),
+            sprintf('product.sku = %s.sku', $stockAlias),
             []
         );
     }
