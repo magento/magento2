@@ -228,7 +228,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        return $this->_localeDate->getDateFormatWithLongYear();
     }
 
     /**
