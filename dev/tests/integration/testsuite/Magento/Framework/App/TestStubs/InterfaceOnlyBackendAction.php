@@ -5,6 +5,9 @@ namespace Magento\Framework\App\TestStubs;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Stub interface action controller implementation for testing purposes. 
+ */
 class InterfaceOnlyBackendAction implements ActionInterface
 {
     /**

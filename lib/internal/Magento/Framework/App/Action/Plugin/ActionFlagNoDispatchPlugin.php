@@ -7,7 +7,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- *
+ * Do not call Action::execute() if the action flag FLAG_NO_DISPATCH is set.
  */
 class ActionFlagNoDispatchPlugin
 {
@@ -28,6 +28,8 @@ class ActionFlagNoDispatchPlugin
     }
 
     /**
+     * Do not call proceed if the no dispatch action flag is set.
+     *
      * @param ActionInterface $subject
      * @param callable $proceed
      * @return ResponseInterface

@@ -6,6 +6,9 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Stub inheritance based frontend action controller for testing purposes.
+ */
 class InheritanceBasedFrontendAction extends Action
 {
     /**

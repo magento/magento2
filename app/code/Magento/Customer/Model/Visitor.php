@@ -317,6 +317,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return the shared request.
+     * If the request wasn't injected because of the backward compatible optional constructor dependency,
+     * create a new request instance.
+     *
      * @return \Magento\Framework\App\RequestInterface|\Magento\Framework\App\Request\Http
      */
     private function getRequest()
