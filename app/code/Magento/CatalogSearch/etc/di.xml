@@ -310,4 +310,20 @@
             <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
+        <arguments>
+            <!-- @deprecated parameter storeManager has been deprecated and not in used now -->
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface</argument>
+            <!-- @deprecated parameter resourceConnection has been deprecated and not in used now -->
+            <argument name="resourceConnection" xsi:type="object">Magento\Framework\App\ResourceConnection</argument>
+            <!-- @deprecated parameter scopeConfig has been deprecated and not in used now -->
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
+        <arguments>
+            <!-- @deprecated parameter customerSession has been deprecated and not in used now -->
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
 </config>

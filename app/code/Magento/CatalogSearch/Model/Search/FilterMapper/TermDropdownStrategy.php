@@ -34,10 +34,10 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $selectBuilder;
 
     /**
-     * @param $storeManager
-     * @param $resourceConnection
+     * @param $storeManager @deprecated
+     * @param $resourceConnection @deprecated
      * @param EavConfig $eavConfig
-     * @param $scopeConfig
+     * @param $scopeConfig @deprecated
      * @param AliasResolver $aliasResolver
      * @param SelectBuilder|null $selectBuilder
      */
