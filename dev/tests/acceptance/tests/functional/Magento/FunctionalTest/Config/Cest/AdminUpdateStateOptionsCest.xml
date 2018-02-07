@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminUpdateStateOptionsCest">
+        <annotations>
+            <features value="Update State Options"/>
+            <description value="Unable to save state options with all options unchecked"/>
+        </annotations>
+        <test name="UpdateStateOptions">
+            <annotations>
+                <title value="You should be able to save state options with all options unchecked in the admin panel."/>
+                <group value="config"/>
+                <group value="skip" />
+            </annotations>
+            <loginAsAdmin stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminConfigPage.url}}" stepKey="navigateToConfigPage"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+            <conditionalClick selector="{{AdminConfigGeneralSection.StateOptionsTab}}" dependentSelector="{{AdminConfigGeneralSection.ExpandedStateOptionsTab}}" visible="false" stepKey="clickOnStateOptionsTab"/>
+            <selectOption selector="{{AdminConfigGeneralSection.StateOptions}}" parameterArray="['Afghanistan','Algeria', 'Anguilla']" stepKey="fillStateOptions"/>
+            <click selector="#save" stepKey="clickOnSaveButton"/>
+            <unselectOption parameterArray="['Afghanistan','Algeria', 'Anguilla']" selector="{{AdminConfigGeneralSection.StateOptions}}" stepKey="unselectAllOptions" />
+            <click selector="#save" stepKey="clickOnSaveButtonTwo"/>
+            <grabMultiple selector="{{AdminConfigGeneralSection.StateOptions}}" returnVariable="SelectedOptions" stepKey="grabOptions" />
+            <assertEmpty actual="SelectedOptions" actualType="variable" stepKey="assertOptionsAreEmpty" />
+        </test>
+    </cest>
+</config>

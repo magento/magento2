@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminConfigTabSection">
+        <element name="GeneralTab" type="button" selector="//div[contains(@class, 'admin__page-nav-title')][contains(., 'General')]"/>
+        <element name="ExpandedGeneralTab" type="button" selector="//div[contains(@class, 'admin__page-nav-title')][@aria-expanded='false'][contains(., 'General')]"/>
+        <element name="GeneralLink" type="button" selector="//ul[contains(@class, 'admin__page-nav-items')][contains(., 'General')]"/>
+    </section>
+</config>
