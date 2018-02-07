@@ -41,7 +41,7 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
     {
         // parent::beforeSave() is not called intentionally
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if ($object->hasData($attrCode)) {
+        if ($object->hasData($attrCode) && !is_string($object->getData($attrCode))) {
             $object->setData($attrCode, $this->jsonSerializer->serialize($object->getData($attrCode)));
         }
         return $this;
