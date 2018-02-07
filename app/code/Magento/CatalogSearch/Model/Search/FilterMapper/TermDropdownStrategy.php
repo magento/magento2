@@ -40,6 +40,8 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param null $scopeConfig @deprecated
      * @param AliasResolver $aliasResolver
      * @param SelectBuilder|null $selectBuilder
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         $storeManager,
