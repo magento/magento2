@@ -27,6 +27,10 @@
                     <label>Maximum Query Length</label>
                     <validate>validate-digits</validate>
                 </field>
+                <field id="max_count_cacheable_search_terms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Maximum Count Cacheable Search Terms</label>
+                    <validate>validate-digits</validate>
+                </field>
             </group>
         </section>
     </system>
