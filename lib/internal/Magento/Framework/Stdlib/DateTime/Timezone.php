@@ -159,31 +159,29 @@ class Timezone implements TimezoneInterface
             ? $this->getConfigTimezone()
             : date_default_timezone_get();
 
-        switch (true) {
-            case (empty($date)):
-                return new \DateTime('now', new \DateTimeZone($timezone));
-            case ($date instanceof \DateTime):
-                return $date->setTimezone(new \DateTimeZone($timezone));
-            case ($date instanceof \DateTimeImmutable):
-                return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
-            case (!is_numeric($date)):
-                $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
-                $formatter = new \IntlDateFormatter(
-                    $locale,
-                    \IntlDateFormatter::SHORT,
-                    $timeType,
-                    new \DateTimeZone($timezone)
-                );
-                // IntlDateFormatter does not parse correctly date formats per some locales
-                // It depends on ICU lib version used by intl extension
-                // For locales like fr_FR, ar_KW parse date with hyphen as separator
-                try {
-                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
-                } catch (\Exception $e) {
-                    $date = str_replace('/', '-', $date);
-                    $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
-                }
-                break;
+        if (empty($date)) {
+            return new \DateTime('now', new \DateTimeZone($timezone));
+        } elseif ($date instanceof \DateTime) {
+            return $date->setTimezone(new \DateTimeZone($timezone));
+        } elseif ($date instanceof \DateTimeImmutable) {
+            return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
+        } elseif (!is_numeric($date)) {
+            $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
+            $formatter = new \IntlDateFormatter(
+                $locale,
+                \IntlDateFormatter::SHORT,
+                $timeType,
+                new \DateTimeZone($timezone)
+            );
+            // IntlDateFormatter does not parse correctly date formats per some locales
+            // It depends on ICU lib version used by intl extension
+            // For locales like fr_FR, ar_KW parse date with hyphen as separator
+            try {
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+            } catch (\Exception $e) {
+                $date = str_replace('/', '-', $date);
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+            }
         }
 
         return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
