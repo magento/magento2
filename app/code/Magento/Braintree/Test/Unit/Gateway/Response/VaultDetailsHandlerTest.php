@@ -8,16 +8,18 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
-use Magento\Framework\DataObject;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\CreditCardTokenFactory;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -25,44 +27,39 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class VaultDetailsHandlerTest extends TestCase
 {
     const TRANSACTION_ID = '432erwwe';
 
     /**
-     * @var \Magento\Braintree\Gateway\Response\PaymentDetailsHandler
+     * @var PaymentDetailsHandler
      */
     private $paymentHandler;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|MockObject
+     * @var Payment|MockObject
      */
     private $payment;
 
     /**
-     * @var CreditCardTokenFactory|MockObject
+     * @var PaymentTokenFactoryInterface|MockObject
      */
     private $paymentTokenFactory;
 
     /**
      * @var PaymentTokenInterface|MockObject
      */
-    protected $paymentToken;
+    private $paymentToken;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject
+     * @var OrderPaymentExtension|MockObject
      */
     private $paymentExtension;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory|MockObject
+     * @var OrderPaymentExtensionInterfaceFactory|MockObject
      */
     private $paymentExtensionFactory;
-
-    /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReader;
 
     /**
      * @var Config|MockObject
@@ -72,12 +69,11 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->paymentToken = $this->createMock(PaymentTokenInterface::class);
-        $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
+        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentTokenFactory->expects(self::once())
-            ->method('create')
+        $this->paymentTokenFactory->method('create')
             ->willReturn($this->paymentToken);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
@@ -88,17 +84,12 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->paymentExtensionFactory->expects(self::once())
-            ->method('create')
+        $this->paymentExtensionFactory->method('create')
             ->willReturn($this->paymentExtension);
 
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
-            ->getMock();
-
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
             ->getMock();
 
         $mapperArray = [
@@ -118,52 +109,33 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->config->expects(self::once())
-            ->method('getCctypesMapper')
+        $this->config->method('getCctypesMapper')
             ->willReturn($mapperArray);
-
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->paymentHandler = new VaultDetailsHandler(
             $this->paymentTokenFactory,
             $this->paymentExtensionFactory,
             $this->config,
-            $this->subjectReader,
-            $this->serializer
+            new SubjectReader(),
+            new Json()
         );
     }
 
-    /**
-     * @covers \Magento\Braintree\Gateway\Response\VaultDetailsHandler::handle
-     */
     public function testHandle()
     {
-        $this->paymentExtension->expects(self::once())
-            ->method('setVaultPaymentToken')
+        $this->paymentExtension->method('setVaultPaymentToken')
             ->with($this->paymentToken);
-        $this->paymentExtension->expects(self::once())
-            ->method('getVaultPaymentToken')
+        $this->paymentExtension->method('getVaultPaymentToken')
             ->willReturn($this->paymentToken);
 
         $paymentData = $this->getPaymentDataObjectMock();
-        $transaction = $this->getBraintreeTransaction();
 
         $subject = ['payment' => $paymentData];
-        $response = ['object' => $transaction];
+        $response = ['object' => $this->getBraintreeTransaction()];
 
-        $this->subjectReader->expects(self::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($paymentData);
-        $this->subjectReader->expects(self::once())
-            ->method('readTransaction')
-            ->with($response)
-            ->willReturn($transaction);
-        $this->paymentToken->expects(static::once())
-            ->method('setGatewayToken')
+        $this->paymentToken->method('setGatewayToken')
             ->with('rh3gd4');
-        $this->paymentToken->expects(static::once())
-            ->method('setExpiresAt')
+        $this->paymentToken->method('setExpiresAt')
             ->with('2022-01-01 00:00:00');
 
         $this->paymentHandler->handle($subject, $response);
@@ -189,8 +161,8 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create Braintree transaction
-     * @return MockObject
+     * Creates Braintree transaction
+     * @return \stdClass
      */
     private function getBraintreeTransaction()
     {
@@ -200,13 +172,15 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $transaction = Transaction::factory($attributes);
+        $obj = new \stdClass();
+        $obj->transaction = $transaction;
 
-        return $transaction;
+        return $obj;
     }
 
     /**
      * Create Braintree transaction
-     * @return \Braintree\Transaction\CreditCardDetails
+     * @return CreditCardDetails
      */
     private function getCreditCardDetails()
     {
