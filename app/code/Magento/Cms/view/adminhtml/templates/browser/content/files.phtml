@@ -18,8 +18,8 @@ $_height = $block->getImagesHeight();
         data-row="file"
         class="filecnt"
         id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>"
-        data-size="<?= $file->getSize() ?>"
-        data-mime-type="<?= $file->getMimeType() ?>"
+        data-size="<?= $block->escapeHtmlAttr($file->getSize()) ?>"
+        data-mime-type="<?= $block->escapeHtmlAttr($file->getMimeType()) ?>"
     >
         <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;width:<?= $block->escapeHtmlAttr($_width) ?>px;">
         <?php if ($block->getFileThumbUrl($file)):?>

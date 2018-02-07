@@ -500,7 +500,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
                     $categoryData[$attributeCode][0]['name'] = basename($fileName);
 
-                    if ($fileInfo->beginsWithMediaDirectoryPath($fileName)) {
+                    if ($fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
                         $categoryData[$attributeCode][0]['url'] = $fileName;
                     } else {
                         $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);

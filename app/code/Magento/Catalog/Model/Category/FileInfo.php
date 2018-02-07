@@ -136,10 +136,10 @@ class FileInfo
         $filePath = ltrim($fileName, '/');
 
         $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
-        $fileNameBeginsWithMediaDirectoryPath = $this->beginsWithMediaDirectoryPath($fileName);
+        $isFileNameBeginsWithMediaDirectoryPath = $this->isBeginsWithMediaDirectoryPath($fileName);
 
         // if the file is not using a relative path, it resides in the catalog/category media directory
-        $fileIsInCategoryMediaDir = !$fileNameBeginsWithMediaDirectoryPath;
+        $fileIsInCategoryMediaDir = !$isFileNameBeginsWithMediaDirectoryPath;
 
         if ($fileIsInCategoryMediaDir) {
             $filePath = self::ENTITY_MEDIA_PATH . '/' . $filePath;
@@ -156,14 +156,14 @@ class FileInfo
      * @param string $fileName
      * @return bool
      */
-    public function beginsWithMediaDirectoryPath($fileName)
+    public function isBeginsWithMediaDirectoryPath($fileName)
     {
         $filePath = ltrim($fileName, '/');
 
         $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath();
-        $fileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
+        $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
 
-        return $fileNameBeginsWithMediaDirectoryPath;
+        return $isFileNameBeginsWithMediaDirectoryPath;
     }
 
     /**
