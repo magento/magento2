@@ -249,7 +249,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         }
 
         if ($attribute->getIsUnique()) {
-            if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {               
+            if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
             }
         }
