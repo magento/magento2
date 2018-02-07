@@ -2528,4 +2528,5 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+    ['create_function', ''],
 ];
