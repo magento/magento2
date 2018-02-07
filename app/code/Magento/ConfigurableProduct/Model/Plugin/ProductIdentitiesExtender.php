@@ -38,20 +38,19 @@ class ProductIdentitiesExtender
      * Add parent identities to product identities
      *
      * @param Product $subject
-     * @param \Closure $proceed
+     * @param array $identities
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetIdentities(Product $subject, \Closure $proceed)
+    public function afterGetIdentities(Product $subject, $identities)
     {
-        $identities = $proceed();
+        $identities = (array) $identities;
 
         foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
-            $identities = array_merge($identities, $parentProduct->getIdentities());
+            $identities = array_merge($identities, (array) $parentProduct->getIdentities());
         }
-        $identities = array_unique($identities);
 
-        return $identities;
+        return array_unique($identities);
     }
 }

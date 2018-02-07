@@ -41,19 +41,19 @@ class ProductIdentitiesExtenderTest extends \PHPUnit_Framework_TestCase
         $this->plugin = new ProductIdentitiesExtender($this->configurableTypeMock, $this->productRepositoryMock);
     }
 
-    public function testAroundGetIdentities()
+    public function testAfterGetIdentities()
     {
+        $productId = 1;
         $productIdentity = 'cache_tag_1';
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $proceed = function () use ($productIdentity) {
-            return [$productIdentity];
-        };
-
-        $productId = 1;
         $parentProductId = 2;
         $parentProductIdentity = 'cache_tag_2';
+        $parentProductMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
@@ -61,9 +61,6 @@ class ProductIdentitiesExtenderTest extends \PHPUnit_Framework_TestCase
             ->method('getParentIdsByChild')
             ->with($productId)
             ->willReturn([$parentProductId]);
-        $parentProductMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($parentProductId)
@@ -72,7 +69,7 @@ class ProductIdentitiesExtenderTest extends \PHPUnit_Framework_TestCase
             ->method('getIdentities')
             ->willReturn([$parentProductIdentity]);
 
-        $productIdentities = $this->plugin->aroundGetIdentities($productMock, $proceed);
+        $productIdentities = $this->plugin->afterGetIdentities($productMock, [$productIdentity]);
         $this->assertEquals([$productIdentity, $parentProductIdentity], $productIdentities);
     }
 }
