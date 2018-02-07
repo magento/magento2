@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid\Options;
+namespace Magento\InventoryLowStockNotification\Block\Adminhtml\Product\Lowstock\Grid\Options;
 
 use Magento\Framework\Option\ArrayInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;

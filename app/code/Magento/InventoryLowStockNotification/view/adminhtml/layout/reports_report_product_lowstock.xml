@@ -6,7 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="inventoryconfiguration_lowstock_grid"/>
+    <update handle="inventorylowstocknotification_lowstock_grid"/>
     <body>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="adminhtml.report.product.lowstock.store_switcher" template="Magento_Backend::store/switcher.phtml">

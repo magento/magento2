@@ -8,21 +8,21 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.report.grid.container">
-            <block class="Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid" name="adminhtml.block.report.product.inventory.lowstock.grid" as="grid">
+            <block class="Magento\InventoryLowStockNotification\Block\Adminhtml\Product\Lowstock\Grid" name="adminhtml.block.report.product.inventory.lowstock.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">gridLowstock</argument>
                     <argument name="use_ajax" xsi:type="string">0</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\Collection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.block.report.product.inventory.lowstock.export" as="grid.export">
                     <arguments>
                         <argument name="exportTypes" xsi:type="array">
                             <item name="csv" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report/exportLowstockCsv</item>
+                                <item name="urlPath" xsi:type="string">inventorylowstocknotification/report/exportLowstockCsv</item>
                                 <item name="label" xsi:type="string" translate="true">CSV</item>
                             </item>
                             <item name="excel" xsi:type="array">
-                                <item name="urlPath" xsi:type="string">inventoryconfiguration/report/exportLowstockExcel</item>
+                                <item name="urlPath" xsi:type="string">inventorylowstocknotification/report/exportLowstockExcel</item>
                                 <item name="label" xsi:type="string" translate="true">Excel XML</item>
                             </item>
                         </argument>
@@ -67,7 +67,7 @@
                             <argument name="filter_index" xsi:type="string">inventory_source_code</argument>
                             <argument name="index" xsi:type="string">source_code</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock\Grid\Options\SourceCodeOptionHash"/>
+                            <argument name="options" xsi:type="options" model="Magento\InventoryLowStockNotification\Block\Adminhtml\Product\Lowstock\Grid\Options\SourceCodeOptionHash"/>
                             <argument name="header_css_class" xsi:type="string">col-source-code</argument>
                             <argument name="column_css_class" xsi:type="string">col-source-code</argument>
                         </arguments>

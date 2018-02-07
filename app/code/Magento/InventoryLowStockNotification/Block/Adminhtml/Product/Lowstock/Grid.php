@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Block\Adminhtml\Product\Lowstock;
+namespace Magento\InventoryLowStockNotification\Block\Adminhtml\Product\Lowstock;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid as GridWidget;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Data\Collection as DataCollection;
-use Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\Collection as LowstockCollection;
-use Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\CollectionFactory;
+use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\Collection as LowstockCollection;
+use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
 /**
  * Adminhtml low stock products report grid block

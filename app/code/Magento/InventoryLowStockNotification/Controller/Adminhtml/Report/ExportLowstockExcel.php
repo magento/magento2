@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\InventoryConfiguration\Controller\Adminhtml\Report;
+namespace Magento\InventoryLowStockNotification\Controller\Adminhtml\Report;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;

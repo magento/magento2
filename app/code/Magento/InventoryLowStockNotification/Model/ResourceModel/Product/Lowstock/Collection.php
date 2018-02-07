@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock;
+namespace Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -19,8 +19,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryLowStockNotification\Setup\Operation\CreateSourceConfigurationTable;
+use Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
 /**
