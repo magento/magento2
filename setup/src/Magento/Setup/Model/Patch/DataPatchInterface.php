@@ -5,24 +5,10 @@
  */
 namespace Magento\Setup\Model\Patch;
 
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
 /**
  * This interface describe script, that atomic operations with data (DML, DQL) in SQL database
+ * This is wrapper for @see PatchInterface in order to define what kind of patch we have
  */
-interface DataPatchInterface extends PatchDisableInterface
+interface DataPatchInterface extends PatchInterface
 {
-    /**
-     * Provide system ugrade or install
-     *
-     * @return void
-     */
-    public function apply(ModuleDataSetupInterface $moduleDataSetup);
-
-    /**
-     * Provide system downgrade
-     *
-     * @return void
-     */
-    public function revert(ModuleDataSetupInterface $moduleDataSetup);
 }

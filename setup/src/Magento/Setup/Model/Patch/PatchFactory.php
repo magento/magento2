@@ -10,9 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * This factory allows to create data patches:
- * @see DataPatchInterface
+ * @see PatchInterface
  */
-class DataPatchFactory
+class PatchFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -29,20 +29,21 @@ class DataPatchFactory
     /**
      * Create new instance of
      * @param string $instanceName
-     * @return DataPatchInterface |
+     * @return PatchInterface
      */
     public function create($instanceName)
     {
         $patchInstance = $this->objectManager->create($instanceName, []);
-        if (!$patchInstance instanceof DataPatchInterface) {
+        if (!$patchInstance instanceof PatchInterface) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "%s should implement %s interface",
                     $instanceName,
-                    DataPatchInterface::class
+                    PatchInterface::class
                 )
             );
         }
+
         return $patchInstance;
     }
 }

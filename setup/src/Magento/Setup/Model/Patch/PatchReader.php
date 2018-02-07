@@ -31,8 +31,7 @@ class PatchReader implements ReaderInterface
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar
-    )
-    {
+    ) {
         $this->componentRegistrar = $componentRegistrar;
     }
 

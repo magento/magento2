@@ -5,24 +5,10 @@
  */
 namespace Magento\Setup\Model\Patch;
 
-use Magento\Framework\Setup\SchemaSetupInterface;
-
 /**
- * This interface describe script, that atomic operations with db schema (DDL) in SQL database
+ * This interface describe script, that atomic operations with schema (DDL) in SQL database
+ * This is wrapper for @see PatchInterface in order to define what kind of patch we have
  */
-interface SchemaPatchInterface extends PatchDisableInterface
+interface SchemaPatchInterface extends PatchInterface
 {
-    /**
-     * Provide system ugrade or install
-     *
-     * @return void
-     */
-    public function apply(SchemaSetupInterface $moduleDataSetup);
-
-    /**
-     * Provide system downgrade
-     *
-     * @return void
-     */
-    public function revert(SchemaSetupInterface $moduleDataSetup);
 }

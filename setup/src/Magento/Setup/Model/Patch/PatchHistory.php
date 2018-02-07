@@ -115,20 +115,4 @@ class PatchHistory
 
         return $this->patchesRegistry[self::SCHEMA_PATCH_TYPE];
     }
-
-    /**
-     * Check whether patch should be reverted
-     *
-     * @param PatchDisableInterface $patch
-     * @return bool
-     */
-    public function shouldBeReverted(PatchDisableInterface $patch)
-    {
-        if ($patch->isDisabled()) {
-            return in_array(get_class($patch), $this->getAppliedDataPatches()) ||
-                in_array(get_class($patch), $this->getAppliedSchemaPatches());
-        }
-
-        return false;
-    }
 }

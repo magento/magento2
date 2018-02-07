@@ -21,7 +21,7 @@ class PatchApplier
     private $patchReader;
 
     /**
-     * @var DataPatchFactory
+     * @var PatchFactory
      */
     private $dataPatchFactory;
 
@@ -37,13 +37,13 @@ class PatchApplier
 
     /**
      * @param PatchReader $patchReader
-     * @param DataPatchFactory $dataPatchFactory
+     * @param PatchFactory $dataPatchFactory
      * @param SchemaPatchFactory $schemaPatchFactory
      * @param PatchHistory $patchHistory
      */
     public function __construct(
         PatchReader $patchReader,
-        DataPatchFactory $dataPatchFactory,
+        PatchFactory $dataPatchFactory,
         SchemaPatchFactory $schemaPatchFactory,
         PatchHistory $patchHistory
     )
@@ -72,12 +72,7 @@ class PatchApplier
             //Apply schema patches
             foreach ($schemaPatchesToApply as $patchInstanceName) {
                 $patch = $this->schemaPatchFactory->create($patchInstanceName);
-
-                if ($this->patchHistory->shouldBeReverted($patch)) {
-                    $this->revertSchemaPatch($patch, $setup);
-                } else {
-                    $this->applySchemaPatches($patch, $setup);
-                }
+                $this->applySchemaPatches($patch, $setup);
             }
         } elseif ($setup instanceof ModuleDataSetupInterface) {
             $dataPatchesToApply = $this->patchHistory->getDataPatchesToApply($patches['data']);
@@ -85,11 +80,7 @@ class PatchApplier
             //Apply data patches
             foreach ($dataPatchesToApply as $patchInstanceName) {
                 $patch = $this->dataPatchFactory->create($patchInstanceName);
-                if ($this->patchHistory->shouldBeReverted($patch)) {
-                    $this->revertDataPatch($patch, $setup);
-                } else {
-                    $this->applyDataPatch($patch, $setup);
-                }
+                $this->applyDataPatch($patch, $setup);
             }
         }
     }
@@ -97,11 +88,11 @@ class PatchApplier
     /**
      * Revert data patch
      *
-     * @param DataPatchInterface $dataPatch
+     * @param PatchInterface $dataPatch
      * @param ModuleDataSetupInterface $dataSetup
      * @throws LocalizedException
      */
-    private function revertDataPatch(DataPatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
+    private function revertDataPatch(PatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
     {
         $connection = $dataSetup->getConnection();
 
@@ -135,11 +126,11 @@ class PatchApplier
     /**
      * Apply data patches
      *
-     * @param DataPatchInterface $dataPatch
+     * @param PatchInterface $dataPatch
      * @param ModuleDataSetupInterface $dataSetup
      * @throws LocalizedException
      */
-    private function applyDataPatch(DataPatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
+    private function applyDataPatch(PatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
     {
         if (!$dataPatch->isDisabled()) {
             $connection = $dataSetup->getConnection();
