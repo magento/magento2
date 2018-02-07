@@ -97,10 +97,18 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeCategoryMoveSuccessMessage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTreeUnderRoot(SimpleSubCategory.name)}}" stepKey="seeSubcategoryIsUnderDefault"/>
 
+        <!--Admin deletes category-->
+        <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
+        <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToDeleteCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageDelete"/>
+        <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
         <!--Clean up categories-->
         <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="DeleteCategory" stepKey="deleteDefaultCategory">
-            <argument name="categoryEntity" value="_defaultCategory"/>
+        <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
 
         <!--Clean up products-->
