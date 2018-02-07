@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -412,6 +411,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testUpdateNegative($optionData, $message, $exceptionCode)
     {
+        $this->_markTestAsRestOnly();
         $productSku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(ProductRepository::class);
@@ -424,18 +424,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'resourcePath' => '/V1/products/options/' . $optionId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault');
-        } else {
-            $this->setExpectedException('Exception', $message, $exceptionCode);
-        }
+        $this->setExpectedException('Exception', $message, $exceptionCode);
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

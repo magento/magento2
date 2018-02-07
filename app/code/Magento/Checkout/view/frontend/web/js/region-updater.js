@@ -1,6 +1,6 @@
 /**
  * @category    frontend Checkout region-updater
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true expr:true*/
@@ -193,6 +193,8 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');
