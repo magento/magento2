@@ -348,7 +348,8 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => '${ $.ns }.${ $.ns }.' . static::GROUP_CUSTOM_OPTIONS_NAME
+                                            . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'processingAddChild',
                                     ]
                                 ]
