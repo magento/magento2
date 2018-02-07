@@ -10,8 +10,8 @@ namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 
@@ -218,7 +218,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
-                    $this->delete();
                 }
             } else {
                 $this->save();
