@@ -5,6 +5,9 @@ namespace Magento\Framework\App\TestStubs;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Stub inheritance based backend action controller for testing purposes.
+ */
 class InheritanceBasedBackendAction extends Action
 {
     /**

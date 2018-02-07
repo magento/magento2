@@ -72,7 +72,7 @@ class CustomerNotification
         $this->state = $state;
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
-        $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
+        $this->request = $request;
     }
 
     /**
@@ -101,13 +101,30 @@ class CustomerNotification
     }
 
     /**
+     * Return the shared request.
+     * If the request wasn't injected because of the backward compatible optional constructor dependency,
+     * create a new request instance.
+     *
+     * @return RequestInterface
+     */
+    private function getRequest(): RequestInterface
+    {
+        if (null === $this->request) {
+            $this->request = ObjectManager::getInstance()->get(RequestInterface::class);
+        }
+        return $this->request;
+    }
+
+    /**
      * Because RequestInterface has no isPost method the check is requied before calling it.
      *
      * @return bool
      */
     private function isPostRequest(): bool
     {
-        return method_exists($this->request, 'isPost') && $this->request->isPost();
+        $request = $this->getRequest();
+
+        return method_exists($request, 'isPost') && $request->isPost();
     }
 
     /**

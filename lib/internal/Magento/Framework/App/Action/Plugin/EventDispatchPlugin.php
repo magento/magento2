@@ -12,7 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
 
 /**
- *
+ * Dispatch the controller_action_predispatch and controller_action_post_dispatch events.
  */
 class EventDispatchPlugin
 {
@@ -38,12 +38,19 @@ class EventDispatchPlugin
         $this->actionFlag = $actionFlag;
     }
 
+    /**
+     * Trigger the controller_action_predispatch events
+     *
+     * @param ActionInterface $subject
+     */
     public function beforeExecute(ActionInterface $subject)
     {
         $this->dispatchPreDispatchEvents($subject);
     }
 
     /**
+     * Build the event parameter array
+     *
      * @param ActionInterface $subject
      * @return mixed[]
      */
@@ -53,6 +60,8 @@ class EventDispatchPlugin
     }
 
     /**
+     * Trigger the controller_action_postdispatch events if the suppressing action flag is not set
+     *
      * @param ActionInterface $subject
      * @param ResultInterface|Response|null $result
      * @return ResultInterface|Response|null
@@ -67,6 +76,8 @@ class EventDispatchPlugin
     }
 
     /**
+     * Check if action flags are set that would suppress the post dispatch events.
+     *
      * @param ActionInterface $subject
      * @return bool
      *
@@ -78,6 +89,8 @@ class EventDispatchPlugin
     }
 
     /**
+     * Dispatch the controller_action_predispatch events.
+     *
      * @param ActionInterface $action
      */
     private function dispatchPreDispatchEvents(ActionInterface $action)
@@ -94,6 +107,8 @@ class EventDispatchPlugin
     }
 
     /**
+     * Dispatch the controller_action_postdispatch events.
+     *
      * @param ActionInterface $action
      */
     private function dispatchPostDispatchEvents(ActionInterface $action)
