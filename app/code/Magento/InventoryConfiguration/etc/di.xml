@@ -11,7 +11,8 @@
         <arguments>
             <argument name="getIsSalableConditions" xsi:type="array">
                 <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
-                <item name="min_qty" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+                <!-- override source_item_status condition due to min_qty condition includes first (need to for proper work of chain) -->
+                <item name="source_item_status" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
             </argument>
         </arguments>
     </type>

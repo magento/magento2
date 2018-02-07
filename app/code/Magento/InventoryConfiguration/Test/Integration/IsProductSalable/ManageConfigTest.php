@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\Model;
+namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
-use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetStockItemDataManageConfigTest extends TestCase
+class ManageConfigTest extends TestCase
 {
     /**
-     * @var GetStockItemData
+     * @var IsProductSalableInterface
      */
-    private $getStockItemData;
+    private $isProductSalable;
 
     /**
      * @inheritdoc
@@ -26,7 +25,7 @@ class GetStockItemDataManageConfigTest extends TestCase
     {
         parent::setUp();
 
-        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemData::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -39,18 +38,16 @@ class GetStockItemDataManageConfigTest extends TestCase
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
      * @param int $stockId
-     * @param array $expectedQty
-     * @param array $expectedIsSalable
-     *
+     * @param array $expectedResults
      * @return void
+     *
      * @dataProvider executeWithManageStockFalseDataProvider
      */
-    public function testExecuteWithManageStockFalse(int $stockId, array $expectedQty, array $expectedIsSalable)
+    public function testExecuteWithManageStockFalse(int $stockId, array $expectedResults)
     {
         foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY] ?? null);
-            self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE] ?? null);
+            $isSalable = $this->isProductSalable->execute($sku, $stockId);
+            self::assertEquals($expectedResults[$key], $isSalable);
         }
     }
 
@@ -60,9 +57,9 @@ class GetStockItemDataManageConfigTest extends TestCase
     public function executeWithManageStockFalseDataProvider(): array
     {
         return [
-            ['10', [8.5, null, 0], [1, null, 1]],
-            ['20', [null, 5, null], [null, 1, null]],
-            ['30', [8.5, 5, 0], [1, 1, 1]],
+            ['10', [true, false, true]],
+            ['20', [false, true, false]],
+            ['30', [true, true, true]],
         ];
     }
 }
