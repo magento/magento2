@@ -12,7 +12,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter">
         <arguments>
             <argument name="postProcessors" xsi:type="array">
-                <item name="configurableProcessor" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Resolver\Products\Query\ConfigurableProductPostProcessor</item>
+                <item name="configurable_processor" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Resolver\Products\Query\ConfigurableProductPostProcessor</item>
             </argument>
         </arguments>
     </type>

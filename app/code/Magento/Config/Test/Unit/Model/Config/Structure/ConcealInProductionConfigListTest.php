@@ -33,9 +33,13 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
             'third/path' => 'no',
             'third/path/field' => ConcealInProductionConfigList::DISABLED,
             'first/path/field' => 'no',
+            'fourth' => ConcealInProductionConfigList::HIDDEN,
+        ];
+        $exemptions = [
+            'fourth/path/value' => '',
         ];
 
-        $this->model = new ConcealInProductionConfigList($this->stateMock, $configs);
+        $this->model = new ConcealInProductionConfigList($this->stateMock, $configs, $exemptions);
     }
 
     /**
@@ -96,8 +100,10 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
             ['first/path', State::MODE_PRODUCTION, false],
             ['first/path', State::MODE_DEFAULT, false],
             ['some/path', State::MODE_PRODUCTION, false],
-            ['second/path', State::MODE_PRODUCTION, true],
+            ['second/path/field', State::MODE_PRODUCTION, true],
             ['second/path', State::MODE_DEVELOPER, false],
+            ['fourth/path/value', State::MODE_PRODUCTION, false],
+            ['fourth/path/test', State::MODE_PRODUCTION, true],
         ];
     }
 }
