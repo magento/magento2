@@ -8,52 +8,55 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="AdminGridFilterControls">
-        <element name="filters" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] button[data-action='grid-filter-expand']"/>
-        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
-
-        <!-- Manage Sources Filters -->
-        <element name="code" type="input" selector=".admin__data-grid-filters-wrap input[name='source_code']"/>
-        <element name="name" type="input" selector=".admin__data-grid-filters-wrap input[name='name']"/>
-        <element name="priority" type="input" selector=".admin__data-grid-filters-wrap input[name='priority']"/>
+    <section name="AdminGridHeader">
+        <element name="title" type="text" selector=".page-title-wrapper h1"/>
     </section>
+    <!-- TODO: Search, Notifications, Admin Menu -->
+    <section name="AdminGridMainControls">
+        <element name="add" type="button" selector="#add" timeout="30"/>
+        <element name="back" type="button" selector="#back" timeout="30"/>
+        <element name="reset" type="button" selector="#reset" timeout="30"/>
+        <element name="save" type="button" selector="#save-button" timeout="30"/>
+        <element name="saveAndContinue" type="button" selector="#save-button" timeout="30"/>
+        <element name="saveArrow" type="button" selector="button[data-ui-id='save-button-dropdown']" timeout="5"/>
+        <element name="saveAndClose" type="button" selector="span[title='Save &amp; Close']" timeout="30"/>
+        <element name="saveAndNew" type="button" selector="span[title='Save &amp; New']" timeout="30"/>
+    </section>
+    <section name="AdminGridSearchBox">
+        <element name="searchByKeyword" type="input" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] input[placeholder='Search by keyword']"/>
+        <element name="search" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] input[placeholder='Search by keyword'] + .action-submit" timeout="30"/>
+    </section>
+    <section name="AdminGridFilterControls">
+        <element name="filters" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] button[data-action='grid-filter-expand']" timeout="5"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="cancel" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
+    </section>
+    <!-- TODO: "Default View" drop down menu -->
     <section name="AdminGridColumnsControls">
         <element name="columns" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns"/>
 
-        <!-- Manage Sources Column Names -->
-        <element name="code" type="text" selector="//label[contains(text(), 'Code')]"/>
-        <element name="isEnabled" type="text" selector="//label[contains(text(), 'Is Enabled')]"/>
-        <element name="longitude" type="text" selector="//label[contains(text(), 'Longitude')]"/>
-        <element name="stateProvince" type="text" selector="(//label[contains(text(), 'StateProvince')])[1]"/>
-        <element name="postcode" type="text" selector="//label[contains(text(), 'Postcode')]"/>
-        <element name="priority" type="text" selector="//label[contains(text(), 'Priority')]"/>
-        <element name="name" type="text" selector="//label[contains(text(), 'Name')]"/>
-        <element name="email" type="text" selector="//label[contains(text(), 'Email')]"/>
-        <element name="country" type="text" selector="//label[contains(text(), 'Country')]"/>
-        <element name="city" type="text" selector="//label[contains(text(), 'City')]"/>
-        <element name="phone" type="text" selector="//label[contains(text(), 'Phone')]"/>
-        <element name="action" type="text" selector="//label[contains(text(), 'Action')]"/>
-        <element name="contactName" type="text" selector="//label[contains(text(), 'Contact Name')]"/>
-        <element name="latitude" type="text" selector="//label[contains(text(), 'Latitude')]"/>
-        <element name="stateProvince" type="text" selector="(//label[contains(text(), 'StateProvince')])[2]"/>
-        <element name="street" type="text" selector="//label[contains(text(), 'Street')]"/>
-        <element name="fax" type="text" selector="//label[contains(text(), 'Fax')]"/>
+        <element name="columnName" type="button" selector="//label[contains(text(), '{{var1}}')]" parameterized="true" timeout="1"/>
+
+        <element name="reset" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Reset')]" timeout="5"/>
+        <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Cancel')]" timeout="5"/>
     </section>
-    <section name="AdminGridSearchBox">
-        <element name="searchByKeyword" type="input" selector="#fulltext"/>
-        <element name="search" type="button" selector="#fulltext + .action-submit"/>
-    </section>
-    <section name="AdminActionsMenu">
+    <section name="AdminGridActionsMenu">
         <element name="dropDown" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-select" timeout="30"/>
     </section>
     <section name="AdminGridRowsPerPage">
         <element name="count" type="select" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .selectmenu-value input" timeout="30"/>
     </section>
-    <section name="AdminGrid">
-        <element name="rowByIndex" type="text" selector="tr[data-repeat-index='{{var1}}']" parameterized="true"/>
+    <!-- TODO: Pagination controls -->
+    <section name="AdminGridHeaders">
+        <element name="headerByName" type="text" selector="//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
+    </section>
+    <section name="AdminGridRow">
         <element name="rowOne" type="text" selector="tr[data-repeat-index='0']"/>
+        <element name="rowByIndex" type="text" selector="tr[data-repeat-index='{{var1}}']" parameterized="true"/>
+
+        <element name="editByValue" type="button" selector="//div[@class='data-grid-cell-content'][contains(text(), '{{var1}}')]/parent::*/parent::*/*/a" parameterized="true"/>
 
         <element name="checkboxByValue" type="checkbox" selector="//div[@class='data-grid-cell-content'][contains(text(), '{{var1}}')]/parent::*/parent::*/*/*/input" parameterized="true"/>
-        <element name="checkboxes" type="checkbox" selector=".data-row .admin__control-checkbox"/>
+        <element name="checkboxByIndex" type="checkbox" selector=".data-row[data-repeat-index='{{var1}}'] .admin__control-checkbox" parameterized="true"/>
     </section>
 </sections>

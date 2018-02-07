@@ -23,4 +23,7 @@
         <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
         <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
     </section>
+    <section name="AdminProductGridFilterControls">
+        <element name="sku" type="input" selector=".admin__data-grid-filters-wrap input[name='sku']"/>
+    </section>
 </sections>
