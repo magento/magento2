@@ -6,7 +6,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Stub interface action controller implementation for testing purposes. 
+ * Stub interface action controller implementation for testing purposes.
  */
 class InterfaceOnlyBackendAction implements ActionInterface
 {
