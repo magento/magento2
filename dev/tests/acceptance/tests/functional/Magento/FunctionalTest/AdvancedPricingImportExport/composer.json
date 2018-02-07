@@ -32,7 +32,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/AdvancedPricingImportExport"
+                "tests/functional/Magento/FunctionalTest/AdvancedPricingImportExport"
             ]
         ]
     }

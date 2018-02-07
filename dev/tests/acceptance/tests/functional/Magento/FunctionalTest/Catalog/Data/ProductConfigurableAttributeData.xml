@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="colorProductAttribute" type="product_attribute">
         <data key="default_label" unique="suffix">Color</data>
@@ -24,4 +24,4 @@
         <data key="name" unique="suffix">Blue</data>
         <data key="price">3.00</data>
     </entity>
-</config>
+</entities>
