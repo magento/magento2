@@ -7,7 +7,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- * 
+ *
  */
 class ActionFlagNoDispatchPlugin
 {
@@ -31,7 +31,7 @@ class ActionFlagNoDispatchPlugin
      * @param ActionInterface $subject
      * @param callable $proceed
      * @return ResponseInterface
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(ActionInterface $subject, callable $proceed)
