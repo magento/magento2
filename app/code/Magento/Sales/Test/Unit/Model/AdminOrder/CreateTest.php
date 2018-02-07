@@ -147,8 +147,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $quote = $this->createMock(Quote::class);
         $quote->method('getCustomer')->willReturn($customer);
-        $quote->method('addData')
-            ->with(
+        $quote->method('addData')->with(
             [
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId

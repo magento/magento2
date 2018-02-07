@@ -6,7 +6,6 @@
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
-
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
@@ -107,7 +106,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $objectManagerHelper->getObject(QuoteResource::class, [
+        $this->model = $objectManagerHelper->getObject(
+            QuoteResource::class,
+            [
                 'context' => $context,
                 'entitySnapshot' => $snapshot,
                 'entityRelationComposite' => $relationComposite,
