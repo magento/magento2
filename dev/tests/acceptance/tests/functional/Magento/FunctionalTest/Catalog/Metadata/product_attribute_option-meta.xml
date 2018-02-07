@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductAttributeOption" dataType="ProductAttributeOption" type="create" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options" method="POST">
         <contentType>application/json</contentType>
@@ -26,4 +26,4 @@
     <operation name="GetProductAttributeOption" dataType="ProductAttributeOption" type="get" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options/" method="GET">
         <contentType>application/json</contentType>
     </operation>
-</config>
+</operations>
