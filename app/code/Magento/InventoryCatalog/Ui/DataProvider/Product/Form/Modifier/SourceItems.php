@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
@@ -19,8 +20,13 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * Product form modifier. Add to form source data
  */
-class Sources extends AbstractModifier
+class SourceItems extends AbstractModifier
 {
+    /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
     /**
      * @var LocatorInterface
      */
@@ -37,29 +43,32 @@ class Sources extends AbstractModifier
     private $resourceConnection;
 
     /**
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection
     ) {
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-
-        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
-
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
+            $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
+        }
         return $data;
     }
 
@@ -88,15 +97,29 @@ class Sources extends AbstractModifier
                 SourceInterface::NAME => $row['source_name'],
             ];
         }
-
         return $sourceItemsData;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
+        $product = $this->locator->getProduct();
+
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
+            return $meta;
+        }
+
+        $meta['sources'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'visible' => 0,
+                    ],
+                ],
+            ],
+        ];
         return $meta;
     }
 }

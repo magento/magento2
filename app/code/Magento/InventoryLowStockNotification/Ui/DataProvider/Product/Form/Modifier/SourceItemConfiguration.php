@@ -10,6 +10,7 @@ namespace Magento\InventoryLowStockNotification\Ui\DataProvider\Product\Form\Mod
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryLowStockNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInterface;
@@ -19,6 +20,11 @@ use Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInt
  */
 class SourceItemConfiguration extends AbstractModifier
 {
+    /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
     /**
      * @var LocatorInterface
      */
@@ -30,13 +36,16 @@ class SourceItemConfiguration extends AbstractModifier
     private $getSourceItemConfiguration;
 
     /**
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param LocatorInterface $locator
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      */
     public function __construct(
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         LocatorInterface $locator,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration
     ) {
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
     }
@@ -47,8 +56,15 @@ class SourceItemConfiguration extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        $assignedSources = $data[$product->getId()]['sources']['assigned_sources'];
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+            return $data;
+        }
 
+        if (!isset($data[$product->getId()]['sources']['assigned_sources'])) {
+            return $data;
+        }
+
+        $assignedSources = $data[$product->getId()]['sources']['assigned_sources'];
         $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsConfigurationData(
             $assignedSources,
             $product

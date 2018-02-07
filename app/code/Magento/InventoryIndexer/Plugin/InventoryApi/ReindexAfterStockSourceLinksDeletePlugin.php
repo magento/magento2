@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Plugin\InventoryApi\UnassignSourceFromStock;
+namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
@@ -14,7 +14,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 /**
  * Invalidate InventoryIndexer
  */
-class ReindexAfterUnassignSourcesFromStockPlugin
+class ReindexAfterStockSourceLinksDeletePlugin
 {
     /**
      * @var IndexerRegistry

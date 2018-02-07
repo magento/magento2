@@ -105,15 +105,6 @@ class CreateSourceTable
                 Table::OPTION_NULLABLE => true,
             ],
             'Longitude'
-        )->addColumn(
-            SourceInterface::PRIORITY,
-            Table::TYPE_SMALLINT,
-            null,
-            [
-                Table::OPTION_NULLABLE => true,
-                Table::OPTION_UNSIGNED => true,
-            ],
-            'Priority'
         );
     }
 

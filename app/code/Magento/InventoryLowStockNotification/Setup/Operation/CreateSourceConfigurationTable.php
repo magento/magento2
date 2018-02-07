@@ -20,7 +20,7 @@ class CreateSourceConfigurationTable
     /**
      * Source item configuration table name
      */
-    const TABLE_NAME_SOURCE_ITEM_CONFIGURATION = 'inventory_source_item_configuration';
+    const TABLE_NAME_SOURCE_ITEM_CONFIGURATION = 'inventory_low_stock_notification_configuration';
 
     /**
      * @param SchemaSetupInterface $setup

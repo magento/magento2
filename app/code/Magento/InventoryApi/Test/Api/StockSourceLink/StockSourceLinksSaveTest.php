@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class SaveTest extends WebapiAbstract
+class StockSourceLinksSaveTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
@@ -21,7 +21,7 @@ class SaveTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
     const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
     const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
-    const SERVICE_NAME_GET_LIST = 'inventoryApiGetSourceLinksV1';
+    const SERVICE_NAME_GET_LIST = 'inventoryApiGetStockSourceLinksV1';
     /**#@-*/
 
     /**
@@ -34,10 +34,12 @@ class SaveTest extends WebapiAbstract
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-1',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 1,
             ],
             [
                 StockSourceLinkInterface::SOURCE_CODE => 'eu-2',
                 StockSourceLinkInterface::STOCK_ID => 10,
+                StockSourceLinkInterface::PRIORITY => 2,
             ],
         ];
 
@@ -98,8 +100,17 @@ class SaveTest extends WebapiAbstract
     {
         $requestData = [
             'searchCriteria' => [
-                SearchCriteria::FILTER_GROUPS => [],
-                SearchCriteria::PAGE_SIZE => 10
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => StockSourceLinkInterface::STOCK_ID,
+                                'value' => 10,
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
 

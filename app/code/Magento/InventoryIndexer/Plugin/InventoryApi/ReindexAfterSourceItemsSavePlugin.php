@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Plugin\InventoryApi\SourceItemsSave;
+namespace Magento\InventoryIndexer\Plugin\InventoryApi;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;

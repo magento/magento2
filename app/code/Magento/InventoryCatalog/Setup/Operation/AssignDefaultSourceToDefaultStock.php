@@ -14,9 +14,9 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
- * Assign default source to stock processor
+ * Assign default source to default stock
  */
-class AssignSourceToStock
+class AssignDefaultSourceToDefaultStock
 {
     /**
      * @var DefaultStockProviderInterface
@@ -68,6 +68,7 @@ class AssignSourceToStock
 
         $link->setStockId($this->defaultStockProvider->getId());
         $link->setSourceCode($this->defaultSourceProvider->getCode());
+        $link->setPriority(1);
 
         $this->stockSourceLinksSave->execute([$link]);
     }

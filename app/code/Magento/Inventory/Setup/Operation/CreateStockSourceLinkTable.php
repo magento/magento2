@@ -72,6 +72,15 @@ class CreateStockSourceLinkTable
                 Table::OPTION_NULLABLE => false,
             ],
             'Source Code'
+        )->addColumn(
+            StockSourceLink::PRIORITY,
+            Table::TYPE_SMALLINT,
+            null,
+            [
+                Table::OPTION_NULLABLE => false,
+                Table::OPTION_UNSIGNED => true,
+            ],
+            'Priority'
         )->addForeignKey(
             $setup->getFkName(
                 $stockSourceLinkTable,
@@ -108,6 +117,18 @@ class CreateStockSourceLinkTable
                 StockSourceLink::SOURCE_CODE,
             ],
             ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+        )->addIndex(
+            $setup->getIdxName(
+                $stockSourceLinkTable,
+                [
+                    StockSourceLink::STOCK_ID,
+                    StockSourceLink::PRIORITY,
+                ]
+            ),
+            [
+                StockSourceLink::STOCK_ID,
+                StockSourceLink::PRIORITY,
+            ]
         );
     }
 }

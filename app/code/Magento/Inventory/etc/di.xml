@@ -67,12 +67,26 @@
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
-    <preference for="Magento\InventoryApi\Api\GetSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinks"/>
+    <preference for="Magento\InventoryApi\Api\GetStockSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetStockSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="source_code" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\SourceCodeValidator</item>
+                <item name="stock_id" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\StockIdValidator</item>
+                <item name="priority" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\PriorityValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator">
+        <arguments>
+            <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
+        </arguments>
+    </type>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
@@ -97,4 +111,6 @@
             </argument>
         </arguments>
     </type>
+    <!-- Product types -->
+    <preference for="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType"/>
 </config>

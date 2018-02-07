@@ -9,10 +9,10 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\StockSourceLink\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
-use Magento\Inventory\Model\StockSourceLink;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
- * Responsible for StockSourceLink validation
+ * Responsible for Stock Source link validation
  * Extension point for base validation
  *
  * @api
@@ -20,8 +20,8 @@ use Magento\Inventory\Model\StockSourceLink;
 interface StockSourceLinkValidatorInterface
 {
     /**
-     * @param StockSourceLink[] $links
+     * @param StockSourceLinkInterface $link
      * @return ValidationResult
      */
-    public function validate(array $links): ValidationResult;
+    public function validate(StockSourceLinkInterface $link): ValidationResult;
 }

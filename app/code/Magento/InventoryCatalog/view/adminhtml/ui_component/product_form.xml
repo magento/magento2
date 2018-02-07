@@ -56,6 +56,7 @@
                 <label translate="true">Assigned Sources</label>
                 <defaultRecord>false</defaultRecord>
                 <addButton>false</addButton>
+                <deleteProperty>true</deleteProperty>
                 <recordTemplate>record</recordTemplate>
                 <identificationProperty>source_code</identificationProperty>
                 <links>
