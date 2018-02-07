@@ -77,7 +77,7 @@ class CustomerNotification
 
     /**
      * Refresh the customer session on frontend post requests if an update session notification is registered.
-     * 
+     *
      * @param ActionInterface $subject
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -87,8 +87,7 @@ class CustomerNotification
     {
         $customerId = $this->session->getCustomerId();
 
-        if ($this->isFrontendRequest() && $this->isPostRequest() && $this->isSessionUpdateRegisteredFor($customerId))
-        {
+        if ($this->isFrontendRequest() && $this->isPostRequest() && $this->isSessionUpdateRegisteredFor($customerId)) {
             try {
                 $customer = $this->customerRepository->getById($customerId);
                 $this->session->setCustomerData($customer);
@@ -103,7 +102,7 @@ class CustomerNotification
 
     /**
      * Because RequestInterface has no isPost method the check is requied before calling it.
-     * 
+     *
      * @return bool
      */
     private function isPostRequest(): bool
@@ -113,7 +112,7 @@ class CustomerNotification
 
     /**
      * Check if the current application area is frontend.
-     * 
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -124,7 +123,7 @@ class CustomerNotification
 
     /**
      * True if the session for the given customer ID needs to be refreshed.
-     * 
+     *
      * @param int $customerId
      * @return bool
      */
