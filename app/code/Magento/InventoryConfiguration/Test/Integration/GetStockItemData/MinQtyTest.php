@@ -12,7 +12,7 @@ use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class GetStockItemDataMinQtyTest extends TestCase
+class MinQtyTest extends TestCase
 {
     /**
      * @var GetStockItemDataInterface
