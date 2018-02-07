@@ -54,16 +54,8 @@ class GetStockItemDataMinQtyTest extends TestCase
     {
         foreach ($this->skus as $key => $sku) {
             $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            if (null !== $stockItemData) {
-                self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY]);
-                self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE]);
-            } else {
-                $isSame = $expectedQty[$key] === $expectedIsSalable[$key] && $expectedQty[$key] === $stockItemData
-                    ? true
-                    : false;
-
-                self::assertTrue($isSame);
-            }
+            self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY] ?? null);
+            self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE] ?? null);
         }
     }
 
@@ -100,16 +92,8 @@ class GetStockItemDataMinQtyTest extends TestCase
     {
         foreach ($this->skus as $key => $sku) {
             $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            if (null !== $stockItemData) {
-                self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY]);
-                self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE]);
-            } else {
-                $isSame = $expectedQty[$key] === $expectedIsSalable[$key] && $expectedQty[$key] === $stockItemData
-                    ? true
-                    : false;
-
-                self::assertTrue($isSame);
-            }
+            self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY] ?? null);
+            self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE] ?? null);
         }
     }
 
