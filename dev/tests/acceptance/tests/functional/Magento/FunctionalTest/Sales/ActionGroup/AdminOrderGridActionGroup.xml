@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <!--Filter order grid by order id field-->
+    <actionGroup name="filterOrderGridById">
+        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrderGridLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="$getOrderId" stepKey="fillOrderIdFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+    </actionGroup>
+
+    <!--Filter order grid by the billing name field-->
+    <actionGroup name="filterOrderGridByBillingName">
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrderGridLoad"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.billToNameFilter}}" userInput="{{customer.lastname}}" stepKey="fillBillToNameFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+    </actionGroup>
+
+    <!--Reset order grid to default view-->
+    <actionGroup name="resetOrderGridToDefault">
+        <seeInCurrentUrl url="{{AdminOrdersPage}}" stepKey="onOrderGridPage"/>
+        <click selector="{{AdminOrdersGridSection.viewBookmarkDropdown}}" stepKey="openViewBookmarkDropdown"/>
+        <click selector="{{AdminOrdersGridSection.viewBookmark('Default View')}}" stepKey="selectDefaultView"/>
+        <see selector="{{AdminOrdersGridSection.viewBookmarkDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+    </actionGroup>
+</actionGroups>

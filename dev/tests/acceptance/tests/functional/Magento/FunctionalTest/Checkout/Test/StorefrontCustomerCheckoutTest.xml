@@ -61,19 +61,19 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
-        <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
+        <amOnPage stepKey="s67" url="{{AdminOrdersPage.url}}"/>
         <waitForPageLoad stepKey="s75"/>
-        <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
+        <fillField stepKey="s77" selector="{{AdminOrdersGridSection.search}}" userInput="{$s53}" />
         <waitForPageLoad stepKey="s78"/>
 
-        <click stepKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
+        <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
         <waitForPageLoad stepKey="s831"/>
-        <click stepKey="s84" selector="{{OrdersGridSection.firstRow}}" />
-        <see stepKey="s85" selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
-        <see stepKey="s87" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
-        <see stepKey="s89" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
-        <see stepKey="s91" selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s93" selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-        <see stepKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+        <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
+        <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
+        <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
+        <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
+        <see stepKey="s91" selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s93" selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s95" selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
     </test>
 </tests>

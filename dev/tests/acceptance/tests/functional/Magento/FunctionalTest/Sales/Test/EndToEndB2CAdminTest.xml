@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CAdminTest">
+        <!--Prerequisites-->
+        <!--Create store view to ensure multiple store views-->
+        <comment userInput="Create prerequisite store view" stepKey="createStoreViewComment" before="createStoreView"/>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage"/>
+
+        <!--Admin creates order-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment" before="navigateToNewOrderPage"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
+
+        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="navigateToNewOrderPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="addConfigurableProductToOrder" stepKey="addConfigurableProductToOrder" after="addSimpleProductToOrder">
+            <argument name="product" value="BaseConfigurableProduct"/>
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="option" value="colorProductAttribute1"/>
+        </actionGroup>
+
+        <!--Fill customer group information-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectGroup" after="addConfigurableProductToOrder"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmail" after="selectGroup"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillEmail">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleConfigurableProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleConfigurableProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleConfigurableProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="seeOrderShipping"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
+
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" after="seeOrderPendingStatus"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
+        <actionGroup ref="verifyBasicOrderInformation" stepKey="verifyOrderInformation" after="assertOrderIdIsNotEmpty">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeSimpleProductInItemsOrdered" after="verifyOrderInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeConfigurableProductInItemsOrdered" after="seeSimpleProductInItemsOrdered">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Create order invoice-->
+        <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" before="closeAdminNotificationInvoice"/>
+        <closeAdminNotification stepKey="closeAdminNotificationInvoice" after="seeConfigurableProductInItemsOrdered"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction" after="closeAdminNotificationInvoice"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage}}" stepKey="seeOrderInvoiceUrl" after="clickInvoiceAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage" after="seeOrderInvoiceUrl"/>
+
+        <!--Check Invoice Data-->
+        <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingInvoice" after="seePageNameNewInvoicePage"/>
+        <actionGroup ref="verifyBasicInvoiceInformation" stepKey="verifyOrderInvoiceInformation" after="seeOrderPendingInvoice">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <see selector="{{AdminInvoicePaymentShippingSection.ShippingMethod}}" userInput="{{DefaultFlatRateMethod.title}}" stepKey="seeShippingMethod" after="verifyOrderInvoiceInformation"/>
+        <see selector="{{AdminInvoicePaymentShippingSection.ShippingPrice}}" userInput="${{AdminOrderSimpleConfigurableProduct.shipping}}" stepKey="seeShippingCost" after="seeShippingMethod"/>
+        <!--Submit Invoice-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice" after="seeShippingCost"/>
+        <!--Invoice created successfully-->
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage}}" stepKey="seeViewOrderPageInvoice" after="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess" after="seeViewOrderPageInvoice"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess"/>
+
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="seePageNameMatchesOrderIdAfterInvoice"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid" after="clickOrderInvoicesTab"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="seeOrderInvoiceInTabGrid"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnInvoice" after="clickToViewInvoiceRow"/>
+        <actionGroup ref="verifyBasicInvoiceInformation" stepKey="verifyBasicInvoiceInformation" after="seeOrderIdOnInvoice">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInInvoiceItems" stepKey="seeSimpleProductInInvoice" after="verifyBasicInvoiceInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInInvoiceItems" stepKey="seeConfigurableProductInInvoice" after="seeSimpleProductInInvoice">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminInvoiceOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnInvoice" after="seeConfigurableProductInInvoice"/>
+    </test>
+</tests>
