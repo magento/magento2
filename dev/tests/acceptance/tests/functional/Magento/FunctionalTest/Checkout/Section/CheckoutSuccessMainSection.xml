@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutSuccessMainSection">
         <element name="success" type="text" selector="div.checkout-success"/>
@@ -14,4 +14,4 @@
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
         <element name="orderLink" type="text" selector="a[href*=order_id].order-number"/>
     </section>
-</config>
+</sections>
