@@ -58,21 +58,18 @@ class SourceItemImporter
      * Plugin around Import to import Stock Data to Source Item
      *
      * @param StockItemImporter $subject
-     * @param callable $proceed
      * @param array $stockData
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
-     * @return void
+     * @return array
      * @see StockItemImporterInterface::import()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundImport(
+    public function afterImport(
         StockItemImporter $subject,
-        callable $proceed,
         array $stockData
     ) {
-        $proceed($stockData);
         $sourceItems = [];
         foreach ($stockData as $sku => $stockDatum) {
             $inStock = (isset($stockDatum['is_in_stock'])) ? intval($stockDatum['is_in_stock']) : 0;
@@ -89,5 +86,6 @@ class SourceItemImporter
             /** Magento\Inventory\Model\SourceItem[] $sourceItems */
             $this->sourceItemsSave->execute($sourceItems);
         }
+        return $stockData;
     }
 }

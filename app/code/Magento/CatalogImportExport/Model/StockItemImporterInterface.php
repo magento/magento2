@@ -18,7 +18,7 @@ interface StockItemImporterInterface
      * Handle Import of Stock Item Data
      *
      * @param array $stockData
-     * @return void
+     * @return array
      */
-    public function import(array $stockData);
+    public function import(array $stockData): array;
 }
