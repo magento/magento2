@@ -112,13 +112,15 @@
                 <label translate="true">Assigned Sources</label>
                 <defaultRecord>false</defaultRecord>
                 <addButton>false</addButton>
+                <deleteProperty>true</deleteProperty>
                 <recordTemplate>record</recordTemplate>
                 <identificationProperty>source_code</identificationProperty>
                 <links>
                     <link name="insertData">${ $.provider }:${ $.dataProvider }</link>
                 </links>
                 <dndConfig>
-                    <param name="enabled" xsi:type="boolean">false</param>
+                    <param name="enabled" xsi:type="boolean">true</param>
+                    <param name="template" xsi:type="string">ui/dynamic-rows/cells/dnd</param>
                 </dndConfig>
                 <columnsHeader>true</columnsHeader>
             </settings>
@@ -128,6 +130,7 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="dataScope" xsi:type="string" />
+                        <item name="positionProvider" xsi:type="string">priority</item>
                     </item>
                 </argument>
                 <field name="source_code" formElement="input" sortOrder="10">
@@ -146,7 +149,16 @@
                         <label translate="true">Name</label>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="30">
+                <field name="priority" formElement="input" sortOrder="30">
+                    <settings>
+                        <elementTmpl>ui/form/element/input</elementTmpl>
+                        <dataType>number</dataType>
+                        <dataScope>priority</dataScope>
+                        <label translate="true">Priority</label>
+                        <visible>false</visible>
+                    </settings>
+                </field>
+                <field name="actionDelete" formElement="actionDelete" sortOrder="40">
                     <settings>
                         <label translate="true">Unassign</label>
                     </settings>

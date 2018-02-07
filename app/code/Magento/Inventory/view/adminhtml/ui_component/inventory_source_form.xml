@@ -57,6 +57,9 @@
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Code</label>
+                <imports>
+                    <link name="disabled">${ $.provider }:data.general.disable_source_code</link>
+                </imports>
             </settings>
         </field>
         <field name="name" formElement="input" sortOrder="20">
@@ -115,15 +118,6 @@
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Longitude</label>
-            </settings>
-        </field>
-        <field name="priority" formElement="input" sortOrder="70">
-            <settings>
-                <validation>
-                    <rule name="validate-integer" xsi:type="boolean">true</rule>
-                </validation>
-                <dataType>number</dataType>
-                <label translate="true">Priority</label>
             </settings>
         </field>
     </fieldset>

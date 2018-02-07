@@ -37,7 +37,6 @@ interface SourceInterface extends ExtensibleDataInterface
     const POSTCODE = 'postcode';
     const PHONE = 'phone';
     const FAX = 'fax';
-    const PRIORITY = 'priority';
     const USE_DEFAULT_CARRIER_CONFIG = 'use_default_carrier_config';
     const CARRIER_LINKS = 'carrier_links';
 
@@ -280,21 +279,6 @@ interface SourceInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setFax($fax);
-
-    /**
-     * Get source priority
-     *
-     * @return int|null
-     */
-    public function getPriority();
-
-    /**
-     * Set source priority
-     *
-     * @param int|null $priority
-     * @return void
-     */
-    public function setPriority($priority);
 
     /**
      * Check is need to use default config

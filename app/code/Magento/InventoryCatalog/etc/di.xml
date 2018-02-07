@@ -14,10 +14,6 @@
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
-        <plugin name="prevent_assign_sources_to_default_stock"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStockPlugin"/>
-    </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
         <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
@@ -36,5 +32,34 @@
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="update_source_item_at_legacy_stock_item_save"
                 type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockItemSavePlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
+        <plugin name="adapt_add_stock_data_to_collection"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockDataToCollectionPlugin"/>
+        <plugin name="adapt_add_stock_status_to_select"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddStockStatusToSelectPlugin"/>
+        <plugin name="adapt_add_is_in_stock_filter_to_collection"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status\AdaptAddIsInStockFilterToCollectionPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Helper\Stock">
+        <plugin name="adapt_add_in_stock_filter_to_collection" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddInStockFilterToCollectionPlugin"/>
+        <plugin name="adapt_add_stock_status_to_products" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock\AdaptAddStockStatusToProductsPlugin"/>
+    </type>
+    <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default_source" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignDefaultSourceToNonDefaultStockValidator</item>
+                <item name="default_stock" xsi:type="object">Magento\InventoryCatalog\Model\StockSourceLink\Validator\AssignNonDefaultSourceToDefaultStockValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Product types -->
+    <type name="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="simple" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_SIMPLE</item>
+                <item name="virtual" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL</item>
+            </argument>
+        </arguments>
     </type>
 </config>

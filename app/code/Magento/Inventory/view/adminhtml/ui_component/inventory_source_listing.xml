@@ -93,7 +93,6 @@
                 <filter>text</filter>
                 <label translate="true">Code</label>
                 <editor>
-                    <editorType>text</editorType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
                     </validation>
@@ -260,18 +259,6 @@
                 </editor>
                 <label translate="true">Fax</label>
                 <visible>false</visible>
-            </settings>
-        </column>
-        <column name="priority" sortOrder="160">
-            <settings>
-                <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                    <validation>
-                        <rule name="validate-integer" xsi:type="boolean">true</rule>
-                    </validation>
-                </editor>
-                <label translate="true">Priority</label>
             </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="200">

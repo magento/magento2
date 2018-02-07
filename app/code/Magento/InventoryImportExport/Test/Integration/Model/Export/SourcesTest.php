@@ -51,19 +51,24 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExportWithoutAnyFiltering()
     {
         $this->exporter->setParameters([]);
         $this->exporter->export();
 
-        /*
-         * @todo travis fix
-         * $this->assertEquals(
-         *   file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '_files', 'export_full.csv'])),
-         *   file_get_contents($this->exportFilePath)
-        );*/
+        $exportFullLines = file(
+            implode(DIRECTORY_SEPARATOR, [__DIR__, '_files', 'export_full.csv']),
+            FILE_IGNORE_NEW_LINES
+        );
+
+        foreach ($exportFullLines as $line) {
+            $this->assertContains(
+                $line,
+                file_get_contents($this->exportFilePath)
+            );
+        }
     }
 
     /**
@@ -71,7 +76,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExportWithSkuFilter()
     {
@@ -93,7 +98,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExportWithSkuFilterByLikeQuery()
     {
@@ -115,7 +120,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExportWithSourceFilter()
     {
@@ -137,7 +142,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      */
     public function testExportFilteredWithoutStatusColumn()
     {

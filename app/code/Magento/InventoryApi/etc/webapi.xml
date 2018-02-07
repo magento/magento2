@@ -70,13 +70,13 @@
         </resources>
     </route>
     <route url="/V1/inventory/stock/get-product-quantity/:sku/:stockId" method="GET">
-        <service class="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" method="execute"/>
+        <service class="Magento\InventoryApi\Api\GetSalableProductQtyInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
     <route url="/V1/inventory/stock/is-product-in-stock/:sku/:stockId" method="GET">
-        <service class="Magento\InventoryApi\Api\IsProductInStockInterface" method="execute"/>
+        <service class="Magento\InventoryApi\Api\IsProductSalableInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>
@@ -88,16 +88,22 @@
             <resource ref="Magento_InventoryApi::source_stock_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock/assign-sources/:stockId" method="POST">
-        <service class="Magento\InventoryApi\Api\AssignSourcesToStockInterface" method="execute"/>
+    <route url="/V1/inventory/stock-source-link" method="GET">
+        <service class="Magento\InventoryApi\Api\GetStockSourceLinksInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_InventoryApi::source_stock_link"/>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock/unassign-source/:stockId/:sourceCode" method="DELETE">
-        <service class="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" method="execute"/>
+    <route url="/V1/inventory/stock-source-link" method="POST">
+        <service class="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" method="execute"/>
         <resources>
-            <resource ref="Magento_InventoryApi::source_stock_link"/>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/stock-source-link" method="DELETE">
+        <service class="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::stock_source_link"/>
         </resources>
     </route>
     <!-- SourceItem -->

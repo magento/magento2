@@ -11,10 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 
 /**
  * Save source product relations during product persistence via controller
@@ -25,54 +22,40 @@ use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 class ProcessSourceItemsObserver implements ObserverInterface
 {
     /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
+    /**
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
 
     /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @var SourceItemInterfaceFactory
-     */
-    private $sourceItemInterfaceFactory;
-
-    /**
-     * @var SourceItemsSaveInterface
-     */
-    private $sourceItemsSave;
-
-    /**
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param SourceItemsProcessor $sourceItemsProcessor
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param SourceItemInterfaceFactory $sourceItemInterfaceFactory
-     * @param SourceItemsSaveInterface $sourceItemsSave
      */
     public function __construct(
-        SourceItemsProcessor $sourceItemsProcessor,
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        SourceItemInterfaceFactory $sourceItemInterfaceFactory,
-        SourceItemsSaveInterface $sourceItemsSave
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        SourceItemsProcessor $sourceItemsProcessor
     ) {
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->sourceItemsProcessor = $sourceItemsProcessor;
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->sourceItemInterfaceFactory = $sourceItemInterfaceFactory;
-        $this->sourceItemsSave = $sourceItemsSave;
     }
 
     /**
      * Process source items during product saving via controller
      *
      * @param EventObserver $observer
-     *
      * @return void
      */
     public function execute(EventObserver $observer)
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+            return;
+        }
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
@@ -84,35 +67,5 @@ class ProcessSourceItemsObserver implements ObserverInterface
             $product->getSku(),
             $assignedSources
         );
-
-        $productParams = $controller->getRequest()->getParam('product');
-        if (is_array($productParams)) {
-            $this->updateDefaultSourceQty($productParams);
-        }
-    }
-
-    /**
-     * @param array $productParams
-     * @return void
-     */
-    private function updateDefaultSourceQty(array $productParams)
-    {
-        $sku = $productParams['sku'];
-        $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
-        $qty = $qtyAndStockStatus['qty'];
-        $stockStatus = $qtyAndStockStatus['is_in_stock'];
-        $defaultSourceCode = $this->defaultSourceProvider->getCode();
-
-        /** @var  $sourceItem SourceItemInterface */
-        $sourceItem = $this->sourceItemInterfaceFactory->create([
-            'data' => [
-                SourceItemInterface::SKU => $sku,
-                SourceItemInterface::QUANTITY => $qty,
-                SourceItemInterface::STATUS => $stockStatus,
-                SourceItemInterface::SOURCE_CODE => $defaultSourceCode,
-            ]
-        ]);
-
-        $this->sourceItemsSave->execute([$sourceItem]);
     }
 }

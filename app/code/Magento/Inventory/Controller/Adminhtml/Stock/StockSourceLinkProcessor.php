@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\StockSourceLinkFactory;
-use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 
 /**
  * At the time of processing Stock save form this class used to save links correctly
@@ -32,84 +34,101 @@ class StockSourceLinkProcessor
     private $stockSourceLinkFactory;
 
     /**
-     * @var GetAssignedSourcesForStockInterface
+     * @var StockSourceLinksSaveInterface
      */
-    private $getAssignedSourcesForStock;
+    private $stockSourceLinksSave;
 
     /**
-     * @var AssignSourcesToStockInterface
+     * @var StockSourceLinksDeleteInterface
      */
-    private $assignSourcesToStock;
+    private $stockSourceLinksDelete;
 
     /**
-     * @var UnassignSourceFromStockInterface
+     * @var GetStockSourceLinksInterface
      */
-    private $unassignSourceFromStock;
+    private $getStockSourceLinks;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StockSourceLinkFactory $stockSourceLinkFactory
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
-     * @param AssignSourcesToStockInterface $assignSourcesToStock
-     * @param UnassignSourceFromStockInterface $unassignSourceFromStock
+     * @param StockSourceLinksSaveInterface $stockSourceLinksSave
+     * @param StockSourceLinksDeleteInterface $stockSourceLinksDelete
+     * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StockSourceLinkFactory $stockSourceLinkFactory,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
-        AssignSourcesToStockInterface $assignSourcesToStock,
-        UnassignSourceFromStockInterface $unassignSourceFromStock
+        StockSourceLinksSaveInterface $stockSourceLinksSave,
+        StockSourceLinksDeleteInterface $stockSourceLinksDelete,
+        GetStockSourceLinksInterface $getStockSourceLinks,
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockSourceLinkFactory = $stockSourceLinkFactory;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
-        $this->assignSourcesToStock = $assignSourcesToStock;
-        $this->unassignSourceFromStock = $unassignSourceFromStock;
+        $this->stockSourceLinksSave = $stockSourceLinksSave;
+        $this->stockSourceLinksDelete = $stockSourceLinksDelete;
+        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
      * @param int $stockId
-     * @param array $stockSourceLinksData
+     * @param array $linksData
      * @return void
      * @throws InputException
      */
-    public function process(int $stockId, array $stockSourceLinksData)
+    public function process(int $stockId, array $linksData)
     {
-        $this->validateStockSourceData($stockSourceLinksData);
+        $linksForDelete = $this->getAssignedLinks($stockId);
+        $linksForSave = [];
 
-        $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
-        $sourceCodesForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE));
-        $sourceCodesForDelete = [];
+        foreach ($linksData as $linkData) {
+            $sourceCode = $linkData[StockSourceLink::SOURCE_CODE];
 
-        foreach ($assignedSources as $assignedSource) {
-            if (array_key_exists($assignedSource->getSourceCode(), $sourceCodesForSave)) {
-                unset($sourceCodesForSave[$assignedSource->getSourceCode()]);
+            if (isset($linksForDelete[$sourceCode])) {
+                $link = $linksForDelete[$sourceCode];
             } else {
-                $sourceCodesForDelete[] = $assignedSource->getSourceCode();
+                /** @var StockSourceLinkInterface $link */
+                $link = $this->stockSourceLinkFactory->create();
             }
+
+            $linkData[StockSourceLink::STOCK_ID] = $stockId;
+            $this->dataObjectHelper->populateWithArray($link, $linkData, StockSourceLinkInterface::class);
+
+            $linksForSave[] = $link;
+            unset($linksForDelete[$sourceCode]);
         }
 
-        if ($sourceCodesForSave) {
-            $this->assignSourcesToStock->execute(array_keys($sourceCodesForSave), $stockId);
+        if (count($linksForSave) > 0) {
+            $this->stockSourceLinksSave->execute($linksForSave);
         }
-        if ($sourceCodesForDelete) {
-            foreach ($sourceCodesForDelete as $sourceCodeForDelete) {
-                $this->unassignSourceFromStock->execute($sourceCodeForDelete, $stockId);
-            }
+        if (count($linksForDelete) > 0) {
+            $this->stockSourceLinksDelete->execute($linksForDelete);
         }
     }
 
     /**
-     * @param array $stockSourceLinksData
-     * @return void
-     * @throws InputException
+     * Retrieves links that are assigned to $stockId
+     *
+     * @param int $stockId
+     * @return StockSourceLinkInterface[]
      */
-    private function validateStockSourceData(array $stockSourceLinksData)
+    private function getAssignedLinks(int $stockId): array
     {
-        foreach ($stockSourceLinksData as $stockSourceLinkData) {
-            if (!isset($stockSourceLinkData[StockSourceLink::SOURCE_CODE])) {
-                throw new InputException(__('Wrong Stock to Source relation parameters given.'));
-            }
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->create();
+
+        $result = [];
+        foreach ($this->getStockSourceLinks->execute($searchCriteria)->getItems() as $link) {
+            $result[$link->getSourceCode()] = $link;
         }
+        return $result;
     }
 }

@@ -8,10 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Indexer\Model\Indexer;
-use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
 use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
@@ -23,11 +20,6 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 
 class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 {
-    /**
-     * @var Indexer
-     */
-    private $indexer;
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -63,18 +55,9 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
      */
     private $defaultStockProvider;
 
-    /**
-     * @var RemoveIndexData
-     */
-    private $removeIndexData;
-
     protected function setUp()
     {
         $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/368');
-        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
-        $this->indexer->load(SourceItemIndexer::INDEXER_ID);
-        $this->indexer->reindexAll();
-
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 
         $this->legacyStockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
@@ -87,7 +70,6 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
         $this->reservationCleanup = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
 
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
-        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
     }
 
     /**
@@ -95,13 +77,13 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->removeIndexData->execute([$this->defaultStockProvider->getId()]);
         $this->reservationCleanup->execute();
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testApplyDataIfCanSubtractOptionIsEnabled()
@@ -142,6 +124,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testApplyDataIfCanSubtractOptionIsEnabledAndProductBecameOutOfStock()
@@ -182,6 +165,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture current_store cataloginventory/options/can_subtract 0
      */
     public function testApplyDataIfCanSubtractOptionIsDisabled()
