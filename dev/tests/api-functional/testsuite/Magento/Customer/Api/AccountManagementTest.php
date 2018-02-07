@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
@@ -150,8 +150,8 @@ class AccountManagementTest extends WebapiAbstract
             $this->configValue
         );
         $this->config->save();
-        unset($this->accountManagement);
-        unset($this->subscriber);
+        $this->accountManagement = null;
+        $this->subscriber = null;
     }
 
     private function initSubscriber()

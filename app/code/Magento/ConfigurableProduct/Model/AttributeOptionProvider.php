@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,6 +122,12 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 ]
             ),
             []
+        )->joinInner(
+            ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
+            'attribute_option.option_id = entity_value.value',
+            []
+        )->order(
+            'attribute_option.sort_order ASC'
         )->where(
             'super_attribute.product_id = ?',
             $productId
