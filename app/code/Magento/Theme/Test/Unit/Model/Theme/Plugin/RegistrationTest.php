@@ -21,9 +21,6 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     /** @var ActionInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $action;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $request;
-
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $appState;
 
@@ -41,7 +38,6 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $this->themeRegistration = $this->createMock(\Magento\Theme\Model\Theme\Registration::class);
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
         $this->action = $this->createMock(ActionInterface::class);
-        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $this->themeCollection = $this->createMock(\Magento\Theme\Model\Theme\Collection::class);
         $this->themeLoader = $this->createMock(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
@@ -160,7 +156,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     public function testBeforeDispatchWithProductionMode()
     {
         $this->appState->expects($this->once())->method('getMode')->willReturn('production');
-        $this->plugin->beforeExecute($this->action, $this->request);
+        $this->plugin->beforeExecute($this->action);
     }
 
     public function testBeforeDispatchWithException()
@@ -169,6 +165,6 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $this->themeRegistration->expects($this->once())->method('register')->willThrowException($exception);
         $this->logger->expects($this->once())->method('critical');
 
-        $this->plugin->beforeExecute($this->action, $this->request);
+        $this->plugin->beforeExecute($this->action);
     }
 }
