@@ -8,7 +8,7 @@ namespace Magento\Ui\Test\Unit\Model;
 use Magento\Ui\Model\UiComponentTypeResolver;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
+class UiComponentTypeResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var UiComponentTypeResolver
@@ -35,9 +35,9 @@ class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
      * @param string $contentType
      * @dataProvider resolveDataProvider
      */
-    public function testResolve(string $acceptType, string $contentType)
+    public function testResolve($acceptType, $contentType)
     {
-        $uiComponentContextMock = $this->createMock(ContextInterface::class);
+        $uiComponentContextMock = $this->getMock(ContextInterface::class);
         $uiComponentContextMock->expects($this->atLeastOnce())->method('getAcceptType')->willReturn($acceptType);
 
         $this->assertEquals($contentType, $this->model->resolve($uiComponentContextMock));
@@ -46,7 +46,7 @@ class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider(): array
+    public function resolveDataProvider()
     {
         return [
             ['json', 'application/json'],

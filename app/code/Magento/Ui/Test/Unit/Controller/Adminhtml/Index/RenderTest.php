@@ -143,7 +143,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             true,
             ['render']
         );
-        $contextMock = $this->createMock(ContextInterface::class);
+        $contextMock = $this->getMock(ContextInterface::class);
 
         $viewMock->expects($this->once())
             ->method('render')
@@ -197,6 +197,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             true,
             ['render']
         );
+        $contextMock = $this->getMock(ContextInterface::class);
+
         $componentMock->expects($this->any())
             ->method('render')
             ->willReturn($renderedData);
@@ -207,6 +209,9 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('acl')
             ->willReturn($acl);
+        $componentMock->expects($this->any())
+            ->method('getContext')
+            ->willReturn($contextMock);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($componentMock);

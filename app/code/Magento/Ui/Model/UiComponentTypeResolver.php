@@ -38,9 +38,11 @@ class UiComponentTypeResolver
      * @param UiComponentContext $componentContext
      * @return string
      */
-    public function resolve(UiComponentContext $componentContext): string
+    public function resolve(UiComponentContext $componentContext)
     {
         $acceptType = $componentContext->getAcceptType();
-        return $this->uiComponentTypeMap[$acceptType] ?? static::DEFAULT_CONTENT_TYPE;
+        return isset($this->uiComponentTypeMap[$acceptType])
+            ? $this->uiComponentTypeMap[$acceptType]
+            : static::DEFAULT_CONTENT_TYPE;
     }
 }
