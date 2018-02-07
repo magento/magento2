@@ -244,12 +244,8 @@ class Timezone implements TimezoneInterface
             $toTimeStamp += 86400;
         }
 
-        $result = false;
-        if (!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp) {
-        } elseif (!$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp) {
-        } else {
-            $result = true;
-        }
+        $result = !(!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp)
+            && !(!$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp);
         return $result;
     }
 
