@@ -12,7 +12,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
 
 /**
- * 
+ *
  */
 class EventDispatchPlugin
 {
