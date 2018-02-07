@@ -53,5 +53,4 @@ class CollectionTimeLabelTest extends TestCase
 
         return $collectionTimeLabel->render($element);
     }
-
 }
