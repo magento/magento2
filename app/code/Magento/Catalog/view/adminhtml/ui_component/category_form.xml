@@ -172,7 +172,7 @@
                             <param xsi:type="url" name="url" path="catalog/category_image/upload"/>
                         </uploaderConfig>
                         <previewTmpl>Magento_Catalog/image-preview</previewTmpl>
-                        <openDialogTitle>Insert Images...</openDialogTitle> <!-- TODO - not appearing in $_data in \Magento\Ui\Component\Form\Element\DataType\Media\Image::prepare -->
+                        <openDialogTitle>Insert Images...</openDialogTitle>
                         <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                     </settings>
                 </imageUploader>

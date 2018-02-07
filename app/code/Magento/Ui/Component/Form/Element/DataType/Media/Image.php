@@ -61,7 +61,7 @@ class Image extends Media
     public function prepare()
     {
         // dynamically set max file size based on php ini config if not present in XML
-        $maxFileSize = $this->getData()['config']['maxFileSize'] ?? $this->fileSize->getMaxFileSize();
+        $maxFileSize = $this->getConfiguration()['maxFileSize'] ?? $this->fileSize->getMaxFileSize();
 
         $data = array_replace_recursive(
             $this->getData(),
@@ -70,7 +70,7 @@ class Image extends Media
                     'maxFileSize' => $maxFileSize,
                     'mediaGallery' => [
                         'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index'),
-                        'openDialogTitle' => $this->getData('openDialogTitle') ?: __('Insert Images...'),
+                        'openDialogTitle' => $this->getConfiguration()['openDialogTitle'] ?? __('Insert Images...'),
                         'storeId' => $this->storeManager->getStore()->getId(),
                     ],
                 ],
