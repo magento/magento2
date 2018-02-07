@@ -13,12 +13,12 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
     protected $_plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeMock;
 
@@ -26,12 +26,7 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
-
+    
     protected function setUp()
     {
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -43,7 +38,6 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->_storeMock)
         );
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\Action\AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -58,13 +52,13 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
     public function testBeforeExecuteWhenStoreNotActive()
     {
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
-        $this->_plugin->beforeExecute($this->subjectMock, $this->requestMock);
+        $this->_plugin->beforeExecute($this->subjectMock);
     }
 
     public function testBeforeExecuteWhenStoreIsActive()
     {
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
-        $result = $this->_plugin->beforeExecute($this->subjectMock, $this->requestMock);
+        $result = $this->_plugin->beforeExecute($this->subjectMock);
         $this->assertNull($result);
     }
 }
