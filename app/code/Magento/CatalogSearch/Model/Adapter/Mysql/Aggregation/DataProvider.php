@@ -43,7 +43,7 @@ class DataProvider implements DataProviderInterface
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
-     * @param $customerSession @deprecated
+     * @param null $customerSession @deprecated
      * @param SelectBuilderForAttribute|null $selectBuilderForAttribute
      */
     public function __construct(
