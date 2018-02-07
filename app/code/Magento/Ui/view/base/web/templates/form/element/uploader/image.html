@@ -13,12 +13,11 @@
         <div class="file-uploader image-uploader" data-role="drop-zone" css="_loading: isLoading">
             <div class="file-uploader-area">
                 <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles" disable="disabled" />
-                <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
-
+                <label class="file-uploader-button action-default" attr="for: uid, disabled: disabled" disable="disabled" translate="'Upload'" />
                 <label
                     data-bind="event: {change: addFileFromMediaGallery, click: openMediaBrowserDialog}"
                     class="file-uploader-button action-default"
-                    attr="id: mediaGalleryUid"
+                    attr="id: mediaGalleryUid, disabled: disabled"
                     data-force_static_path="1"
                     translate="'Select from Gallery'"/>
                 <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>

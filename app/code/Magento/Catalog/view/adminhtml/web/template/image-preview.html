@@ -22,6 +22,7 @@
                 class="action-remove"
                 data-role="delete-button"
                 attr="title: $t('Delete image')"
+                disable="$parent.disabled"
                 click="$parent.removeFile.bind($parent, $file)">
                 <span translate="'Delete image'"/>
             </button>
