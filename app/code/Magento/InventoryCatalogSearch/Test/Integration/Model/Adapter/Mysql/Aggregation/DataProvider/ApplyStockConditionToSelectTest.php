@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\
+ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;

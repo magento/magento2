@@ -6,7 +6,8 @@
 
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
 
-use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\
+ApplyStockConditionToSelect;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
