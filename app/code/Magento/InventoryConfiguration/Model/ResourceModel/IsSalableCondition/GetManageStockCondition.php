@@ -5,10 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
+namespace Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DB\Select;
+use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
 
 /**
  * Condition for manage_stock configuration.
@@ -39,6 +40,7 @@ class GetManageStockCondition implements GetIsSalableConditionInterface
         $condition = (0 === $globalManageStock)
             ? 'legacy_stock_item.use_config_manage_stock = 1'
             : 'legacy_stock_item.use_config_manage_stock = 0 AND legacy_stock_item.manage_stock = 0';
+
         return $condition;
     }
 }

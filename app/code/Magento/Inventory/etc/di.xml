@@ -102,16 +102,15 @@
     <!-- Query interfaces -->
     <preference for="Magento\InventoryApi\Api\GetSalableProductQtyInterface" type="Magento\Inventory\Model\GetSalableProductQty"/>
     <preference for="Magento\InventoryApi\Api\IsProductSalableInterface" type="Magento\Inventory\Model\IsProductSalable"/>
-    <!-- IsSalableCondition -->
+    <!-- IsSalable -->
+    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
     <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
         <arguments>
             <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
-                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
     <!-- Product types -->
     <preference for="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType"/>
 </config>
