@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -15,6 +15,7 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Quote\Api\Data\CartSearchResultsInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Api\Data\CartExtension;
+use Magento\Store\Model\Website;
 
 /**
  * QuoteRepository test.
@@ -49,6 +50,24 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepository = $this->objectManager->create(QuoteRepository::class);
         $this->searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->filterBuilder = $this->objectManager->create(FilterBuilder::class);
+    }
+
+    /**
+     * Tests getting quote.
+     * @magentoDataFixture Magento/Quote/_files/quote_on_second_website.php
+     */
+    public function testGet()
+    {
+        /** @var Website $website */
+        $website = $this->objectManager->create(Website::class);
+        $website->load('test', 'code');
+
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->setSharedStoreIds($website->getStoreIds());
+        $quote->load('test01', 'reserved_order_id');
+
+        $this->quoteRepository->get($quote->getId());
     }
 
     /**

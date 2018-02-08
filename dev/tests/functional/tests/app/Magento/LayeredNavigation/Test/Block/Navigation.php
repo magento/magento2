@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\LayeredNavigation\Test\Block;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Catalog layered navigation view block.
@@ -48,6 +49,20 @@ class Navigation extends Block
      * @var string
      */
     protected $expandFilterButton = '[data]';
+
+    /**
+     * Locator for category name.
+     *
+     * @var string
+     */
+    private $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
+
+    /**
+     * Locator for element with product quantity.
+     *
+     * @var string
+     */
+    private $productQty = '/following-sibling::span[contains(text(), "%s")]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -137,5 +152,20 @@ class Navigation extends Block
         }
 
         return $data;
+    }
+
+    /**
+     * Check that category with product quantity can be displayed on layered navigation.
+     *
+     * @param Category $category
+     * @param int $qty
+     * @return bool
+     */
+    public function isCategoryVisible(Category $category, $qty)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
     }
 }

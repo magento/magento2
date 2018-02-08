@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
@@ -1487,5 +1487,26 @@ class Configurable extends AbstractType
         });
 
         return $usedSalableProducts;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        /** @var bool $isAllCustomOptionsDisplayed */
+        $isAllCustomOptionsDisplayed = true;
+
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $eavAttribute */
+            $eavAttribute = $attribute->getProductAttribute();
+
+            $isAllCustomOptionsDisplayed = (
+                $isAllCustomOptionsDisplayed
+                && $eavAttribute->getData('used_in_product_listing')
+            );
+        }
+
+        return $isAllCustomOptionsDisplayed;
     }
 }

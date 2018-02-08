@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search;
@@ -84,15 +84,19 @@ class Search implements SearchInterface
      */
     private function addFieldToFilter($field, $condition = null)
     {
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'], true)) {
-            $this->requestBuilder->bind($field, $condition);
-        } else {
+        if (is_array($condition)
+            && (
+                !empty($condition['from']) || !empty($condition['to'])
+            )
+        ) {
             if (!empty($condition['from'])) {
                 $this->requestBuilder->bind("{$field}.from", $condition['from']);
             }
             if (!empty($condition['to'])) {
                 $this->requestBuilder->bind("{$field}.to", $condition['to']);
             }
+        } else {
+            $this->requestBuilder->bind($field, $condition);
         }
 
         return $this;

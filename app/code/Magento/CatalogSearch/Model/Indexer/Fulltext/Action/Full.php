@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -290,6 +290,9 @@ class Full
     /**
      * Get parents IDs of product IDs to be re-indexed
      *
+     * @deprecated as separate service was introduced
+     * @see \Magento\CatalogSearch\Model\Indexer\ParentProductsResolver::getParentProductIds()
+     *
      * @param int[] $entityIds
      * @return int[]
      */
@@ -304,7 +307,6 @@ class Full
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
-            ->where('parent_id NOT IN (?)', $entityIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $fieldForParent,
@@ -328,7 +330,7 @@ class Full
     public function rebuildStoreIndex($storeId, $productIds = null)
     {
         if ($productIds !== null) {
-            $productIds = array_unique(array_merge($productIds, $this->getProductIdsFromParents($productIds)));
+            $productIds = array_unique($productIds);
         }
         // prepare searchable attributes
         $staticFields = [];

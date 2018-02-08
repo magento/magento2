@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -375,9 +375,9 @@ class DataProvider
     public function getProductChildIds($productId, $typeId)
     {
         $typeInstance = $this->getProductTypeInstance($typeId);
-        $relation = $typeInstance->isComposite(
-            $this->getProductEmulator($typeId)
-        ) ? $typeInstance->getRelationInfo() : false;
+        $relation = $typeInstance->isComposite($this->getProductEmulator($typeId))
+            ? $typeInstance->getRelationInfo()
+            : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
             $select = $this->connection->select()->from(

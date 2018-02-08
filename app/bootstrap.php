@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,6 +28,9 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+// Sets default autoload mappings, may be overridden in Bootstrap::create
+\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
+
 require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */
