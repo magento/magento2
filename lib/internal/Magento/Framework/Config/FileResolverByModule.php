@@ -55,6 +55,9 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
             $iterator = isset($iterator[$path]) ? [$path => $iterator[$path]] : [];
         }
 
+        /** Load primary configurations */
+        $iterator += parent::get($filename, 'primary')->toArray();
+
         return $iterator;
     }
 }

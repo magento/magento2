@@ -36,7 +36,7 @@ class PatchHistory
     /**
      * @var array
      */
-    private $patchesRegistry = [];
+    private $patchesRegistry = null;
 
     /**
      * @var ResourceConnection
@@ -55,64 +55,31 @@ class PatchHistory
     /**
      * Read and cache data patches from db
      *
+     * All patches are store in patch_list table
+     * @see self::TABLE_NAME
+     *
      * @return array
      */
-    private function getAppliedDataPatches()
+    private function getAppliedPatches()
     {
-        if (!isset($this->patchesRegistry[self::DATA_PATCH_TYPE])) {
+        if ($this->patchesRegistry === null) {
             $adapter = $this->resourceConnection->getConnection();
             $filterSelect = $adapter->select()
                 ->from($this->resourceConnection->getTableName(self::TABLE_NAME), self::CLASS_NAME);
-            $filterSelect->where('patch_type = ?', self::DATA_PATCH_TYPE);
-            $this->patchesRegistry[self::DATA_PATCH_TYPE] = $adapter->fetchCol($filterSelect);
+            $this->patchesRegistry = $adapter->fetchCol($filterSelect);
         }
 
-        return $this->patchesRegistry[self::DATA_PATCH_TYPE];
+        return $this->patchesRegistry;
     }
 
     /**
-     * Retrieve all data patches, that were applied
+     * Check whether patch was applied on the system or not
      *
-     * @param array $readPatches
-     * @return array
+     * @param string $patchName
+     * @return bool
      */
-    public function getDataPatchesToApply(array $readPatches)
+    public function isApplied($patchName)
     {
-        $appliedPatches = $this->getAppliedDataPatches();
-        return array_filter($readPatches, function (array $patch) use ($appliedPatches) {
-            return !in_array($patch[self::CLASS_NAME], $appliedPatches);
-        });
-    }
-
-    /**
-     * Retrieve all data patches, that were applied
-     *
-     * @param array $readPatches
-     * @return array
-     */
-    public function getSchemaPatchesToApply(array $readPatches)
-    {
-        $appliedPatches = $this->getAppliedSchemaPatches();
-        return array_filter($readPatches, function (array $patch) use ($appliedPatches) {
-            return !in_array($patch[self::CLASS_NAME], $appliedPatches);
-        });
-    }
-
-    /**
-     * Retrieve all schema patches, that were applied
-     *
-     * @return array
-     */
-    private function getAppliedSchemaPatches()
-    {
-        if (!isset($this->patchesRegistry[self::SCHEMA_PATCH_TYPE])) {
-            $adapter = $this->resourceConnection->getConnection();
-            $filterSelect = $adapter->select()
-                ->from($this->resourceConnection->getTableName(self::TABLE_NAME), self::CLASS_NAME);
-            $filterSelect->where('patch_type = ?', self::SCHEMA_PATCH_TYPE);
-            $this->patchesRegistry[self::SCHEMA_PATCH_TYPE] = $adapter->fetchCol($filterSelect);
-        }
-
-        return $this->patchesRegistry[self::SCHEMA_PATCH_TYPE];
+        return isset($this->getAppliedPatches()[$patchName]);
     }
 }

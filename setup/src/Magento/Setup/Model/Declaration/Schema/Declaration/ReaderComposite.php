@@ -27,8 +27,6 @@ class ReaderComposite implements ReaderInterface
     private $deploymentConfig;
 
     /**
-     * Constructor.
-     *
      * @param DeploymentConfig $deploymentConfig
      * @param ReaderInterface[] $readers
      */

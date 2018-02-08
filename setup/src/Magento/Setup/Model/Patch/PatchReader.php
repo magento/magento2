@@ -27,12 +27,33 @@ class PatchReader implements ReaderInterface
     private $componentRegistrar;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * @param ComponentRegistrar $componentRegistrar
+     * @param string $type
      */
     public function __construct(
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrar $componentRegistrar,
+        $type
     ) {
         $this->componentRegistrar = $componentRegistrar;
+        $this->type = $type;
+    }
+
+    /**
+     * Prepare path to patch folder: schema or data
+     *
+     * @param string $moduleName
+     * @return string
+     */
+    private function getPathToPatchFolder($moduleName)
+    {
+        return str_replace('_', '\\', $moduleName) .
+            '\Setup\Patch' .
+            ucfirst($this->type) . '\\';
     }
 
     /**
@@ -42,12 +63,12 @@ class PatchReader implements ReaderInterface
      * @param string $modulePath
      * @return array
      */
-    private function getDataPatchClassesPerModule($moduleName, $modulePath)
+    private function getPatchClassesPerModule($moduleName, $modulePath)
     {
         $patchClasses = [];
         $patchesPath = $modulePath . DIRECTORY_SEPARATOR . Dir::MODULE_SETUP_DIR .
             DIRECTORY_SEPARATOR . self::SETUP_PATCH_FOLDER;
-        $modulePath = str_replace('_', '\\', $moduleName) . '\Setup\Patch\Data\\';
+        $patchesPath = $patchesPath . $this->getPathToPatchFolder($moduleName);
 
         foreach (Glob::glob($patchesPath) as $patchPath) {
             $patchClasses[] = $modulePath . basename($patchPath, '.php');
@@ -57,47 +78,22 @@ class PatchReader implements ReaderInterface
     }
 
     /**
-     * Create array of class patch names from module name
-     *
-     * @param string $moduleName
-     * @param string $modulePath
+     * @param null $moduleName
      * @return array
      */
-    private function getSchemaPatchClassesPerModule($moduleName, $modulePath)
+    public function read($moduleName = null)
     {
-        $patchClasses = [];
-        $patchesPath = $modulePath . DIRECTORY_SEPARATOR . Dir::MODULE_SETUP_DIR .
-            DIRECTORY_SEPARATOR . self::SETUP_PATCH_FOLDER;
-        $modulePath = str_replace('_', '\\', $moduleName) . '\Setup\Patch\Schema\\';
+        $patches = [
+            $this->type => []
+        ];
 
-        foreach (Glob::glob($patchesPath) as $patchPath) {
-            $patchClasses[] = $modulePath . basename($patchPath, '.php');
-        }
-
-        return $patchClasses;
-    }
-
-    /**
-     * @param null $scope
-     * @return array
-     */
-    public function read($scope = null)
-    {
-        $patches = ['schema' => [], 'data' => []];
-        if ($scope === null) {
+        if ($moduleName === null) {
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-                $patches['schema'] += $this->getDataPatchClassesPerModule($moduleName, $modulePath);
-                $patches['data'] += $this->getSchemaPatchClassesPerModule($moduleName, $modulePath);
+                $patches[$this->type] += $this->getPatchClassesPerModule($moduleName, $modulePath);
             }
         } else {
-            $patches['schema'] = $this->getSchemaPatchClassesPerModule(
-                $scope,
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $scope)
-            );
-            $patches['data'] = $this->getDataPatchClassesPerModule(
-                $scope,
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $scope)
-            );
+            $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            $patches[$this->type] += $this->getPatchClassesPerModule($moduleName, $modulePath);
         }
 
         return $patches;
