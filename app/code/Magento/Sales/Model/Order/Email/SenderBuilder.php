@@ -48,6 +48,8 @@ class SenderBuilder
      */
     public function send()
     {
+        $this->transportBuilder->setScopeId($this->identityContainer->getStore()->getId());
+
         $this->configureEmailTemplate();
 
         $this->transportBuilder->addTo(
