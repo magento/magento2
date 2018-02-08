@@ -468,6 +468,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function dispatchExceptionInCallbackDataProvider()
     {
+        $throwable = new \TypeError();
         return [
             'non-callable callback' => [
                 'Not_Existed_Class',
@@ -482,6 +483,15 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'Test exception',
                 2,
                 new \Exception(__('Test exception'))
+            ],
+            'throwable in execution' => [
+                'CronJobException',
+                new \Magento\Cron\Test\Unit\Model\CronJobException(
+                    $throwable
+                ),
+                '',
+                2,
+                $throwable
             ],
         ];
     }
