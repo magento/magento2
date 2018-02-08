@@ -46,7 +46,9 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
             sku
             type_id
             updated_at
-            weight
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }

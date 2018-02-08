@@ -39,7 +39,7 @@ class EnumMapper implements StructureMapperInterface
     {
         $values = [];
         foreach ($data['items'] as $item) {
-            $values[$item['name']] = $this->dataFactory->createValue($item['name'], $item['_value']);
+            $values[$item['_value']] = $this->dataFactory->createValue($item['name'], $item['_value']);
         }
         return $this->dataFactory->createEnum(
             $data['name'],

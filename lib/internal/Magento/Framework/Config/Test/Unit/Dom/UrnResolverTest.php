@@ -52,6 +52,17 @@ class UrnResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($xsdPath, $result, 'XSD paths does not match.');
     }
 
+    public function testGetRealPathWithSetupUrn()
+    {
+        $xsdUrn = 'urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd';
+        $componentRegistrar = new ComponentRegistrar();
+        $xsdPath = $componentRegistrar->getPath(ComponentRegistrar::SETUP, 'magento/setup')
+            . '/Model/Declaration/Schema/etc/schema.xsd';
+
+        $result = $this->urnResolver->getRealPath($xsdUrn);
+        $this->assertSame($xsdPath, $result, 'XSD paths does not match.');
+    }
+
     /**
      * @expectedException \Magento\Framework\Exception\NotFoundException
      * @expectedExceptionMessage Unsupported format of schema location: 'urn:magento:test:test:etc/test_test.xsd'
