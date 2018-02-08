@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect
-    as LegacyApplyStockConditionToSelect;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 
-class ApplyStockConditionToSelect
+/**
+ * Adapt apply stock condition to multi stocks
+ */
+class AdaptApplyStockConditionToSelectPlugin
 {
     /**
      * @var ResourceConnection
@@ -47,7 +49,7 @@ class ApplyStockConditionToSelect
     }
 
     /**
-     * @param LegacyApplyStockConditionToSelect $applyStockConditionToSelect
+     * @param ApplyStockConditionToSelect $applyStockConditionToSelect
      * @param callable $proceed
      * @param string $alias
      * @param string $stockAlias
@@ -57,7 +59,7 @@ class ApplyStockConditionToSelect
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        LegacyApplyStockConditionToSelect $applyStockConditionToSelect,
+        ApplyStockConditionToSelect $applyStockConditionToSelect,
         callable $proceed,
         string $alias,
         string $stockAlias,

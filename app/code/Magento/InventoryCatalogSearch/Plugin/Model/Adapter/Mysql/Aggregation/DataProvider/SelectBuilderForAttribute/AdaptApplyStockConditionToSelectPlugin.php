@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\
-ApplyStockConditionToSelect as LegacyStockConditionJoiner;
+ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
@@ -19,9 +19,9 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Adapt stock condition joiner to multi stocks.
+ * Adapt apply stock condition to multi stocks
  */
-class ApplyStockConditionToSelect
+class AdaptApplyStockConditionToSelectPlugin
 {
     /**
      * @var StockIndexTableNameResolver
@@ -70,7 +70,7 @@ class ApplyStockConditionToSelect
     }
 
     /**
-     * @param LegacyStockConditionJoiner $stockConditionJoiner
+     * @param ApplyStockConditionToSelect $applyStockConditionToSelect
      * @param callable $proceed
      * @param Select $select
      * @return Select
@@ -78,7 +78,7 @@ class ApplyStockConditionToSelect
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        LegacyStockConditionJoiner $stockConditionJoiner,
+        ApplyStockConditionToSelect $applyStockConditionToSelect,
         callable $proceed,
         Select $select
     ): Select {
