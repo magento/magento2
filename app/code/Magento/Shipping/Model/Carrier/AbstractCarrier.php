@@ -390,60 +390,104 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     /**
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _updateFreeMethodQuote($request)
     {
-        if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
+        if (!$request->getFreeMethodWeight()) {
             return;
         }
 
-        $freeMethod = $this->getConfigData($this->_freeMethod);
-        if (!$freeMethod) {
+        $this->resetFreeShippingMethod(
+            $this->determineFreeShippingValue($this->getFreeMethod()),
+            $this->findFreeRateId()
+        );
+    }
+
+    /**
+     * Returns the free shipping rate for this method.
+     *
+     * @return string
+     */
+    private function getFreeMethod()
+    {
+        return $this->getConfigData($this->_freeMethod);
+    }
+
+    /**
+     * Locates the free method from returned shipping results.
+     *
+     * @return string
+     */
+    private function findFreeRateId()
+    {
+        $freeMethod = $this->getFreeMethod();
+        if (!$freeMethod || !is_object($this->_result)) {
             return;
         }
-        $freeRateId = false;
 
-        if (is_object($this->_result)) {
-            foreach ($this->_result->getAllRates() as $i => $item) {
-                if ($item->getMethod() == $freeMethod) {
-                    $freeRateId = $i;
-                    break;
-                }
+        return array_reduce($this->_result->getAllRates(), function($acc, $rate) use ($freeMethod) {
+            if (!$acc && $rate->getMethod() == $freeMethod) {
+                return $freeMethod;
+            } else {
+                return $acc;
             }
+        });
+    }
+
+    /**
+     * Locates the value of the free-shipping method. This results in a separate
+     * lookup request triggered because the weight of the free-shipping items might
+     * not be 100% of the total package weight.
+     *
+     * @param int $freeMethod
+     * @return float
+     */
+    private function determineFreeShippingValue($freeMethod)
+    {
+        $this->_setFreeMethodRequest($freeMethod);
+
+        $result = $this->_getQuotes();
+        if (!$result) {
+            return 0;
         }
 
-        if ($freeRateId === false) {
+        $rates = $result->getAllRates();
+        if (!count($rates)) {
+            return 0;
+        }
+
+        if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
+            return $rates[0]->getPrice();
+        } else {
+            $rates = array_filter($rates, function($rate) use ($freeMethod) {
+                return $rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method &&
+                    $rate->getMethod() == $freeMethod;
+            });
+
+            return array_reduce($rates, function($acc, \Magento\Quote\Model\Quote\Address\RateResult\Method $rate) {
+                return $rate->getPrice();
+            }, 0);
+        }
+    }
+
+    /**
+     * Reduces the shipping amount of the free shipping method by the amount
+     * passed in.
+     *
+     * @param float $freeShippingValue
+     * @param int $freeRateId
+     */
+    private function resetFreeShippingMethod($freeShippingValue, $freeRateId)
+    {
+        if (!$freeShippingValue || !$freeRateId || !$this->_result->getRateByMethodId($freeRateId)) {
             return;
         }
-        $price = null;
-        if ($request->getFreeMethodWeight() > 0) {
-            $this->_setFreeMethodRequest($freeMethod);
 
-            $result = $this->_getQuotes();
-            if ($result && ($rates = $result->getAllRates()) && count($rates) > 0) {
-                if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
-                    $price = $rates[0]->getPrice();
-                }
-                if (count($rates) > 1) {
-                    foreach ($rates as $rate) {
-                        if ($rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method &&
-                            $rate->getMethod() == $freeMethod
-                        ) {
-                            $price = $rate->getPrice();
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * if we did not get our free shipping method in response we must use its old price
-         */
-        if (!is_null($price)) {
-            $this->_result->getRateById($freeRateId)->setPrice($price);
-        }
+        $rate = $this->_result->getRateByMethodId($freeRateId);
+        $oldPrice = $rate->getPrice();
+        $oldCost = $rate->getCost();
+        $rate->setPrice(max(0, $oldPrice - $freeShippingValue));
+        $rate->setCost($oldCost);
     }
 
     /**
