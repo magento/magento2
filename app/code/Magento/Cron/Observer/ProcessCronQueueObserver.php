@@ -227,7 +227,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                     if ($schedule->tryLockJob()) {
                         $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $schedule->setMessages($e->getMessage());
                     if ($schedule->getStatus() === Schedule::STATUS_ERROR) {
                         $this->logger->critical($e);
@@ -259,7 +259,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param Schedule $schedule
      * @param string $groupId
      * @return void
-     * @throws \Exception
+     * @throws \Throwable
      */
     protected function _runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
@@ -290,7 +290,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         try {
             call_user_func_array($callback, [$schedule]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
             throw $e;
         }
