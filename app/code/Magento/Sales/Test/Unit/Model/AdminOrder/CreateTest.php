@@ -156,7 +156,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
-                ['group_id' => 1], CustomerInterface::class
+                ['group_id' => 1],
+                CustomerInterface::class
             );
 
         $this->formFactory->method('create')
