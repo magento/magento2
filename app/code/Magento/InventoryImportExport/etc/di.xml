@@ -28,8 +28,8 @@
     </type>
 
     <!-- Source Item Import Plugin -->
-    <type name="Magento\CatalogImportExport\Model\StockItemImporter">
-        <plugin name="importStockItemDataforSourceItem" type="Magento\InventoryImportExport\Plugin\Import\SourceItemImporter" />
+    <type name="Magento\CatalogImportExport\Model\StockItemImporterInterface">
+        <plugin name="importStockItemDataForSourceItem" type="Magento\InventoryImportExport\Plugin\Import\SourceItemImporter" />
     </type>
 
     <!-- Export -->

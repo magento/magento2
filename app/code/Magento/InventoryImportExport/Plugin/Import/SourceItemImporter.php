@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Plugin\Import;
 
-use Magento\CatalogImportExport\Model\StockItemImporter;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\Inventory\Model\SourceItemFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -57,17 +56,17 @@ class SourceItemImporter
     /**
      * Plugin around Import to import Stock Data to Source Item
      *
-     * @param StockItemImporter $subject
+     * @param StockItemImporterInterface $subject
      * @param array $stockData
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
-     * @return array
+     * @return void
      * @see StockItemImporterInterface::import()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterImport(
-        StockItemImporter $subject,
+        StockItemImporterInterface $subject,
         array $stockData
     ) {
         $sourceItems = [];
@@ -86,6 +85,5 @@ class SourceItemImporter
             /** Magento\Inventory\Model\SourceItem[] $sourceItems */
             $this->sourceItemsSave->execute($sourceItems);
         }
-        return $stockData;
     }
 }
