@@ -37,4 +37,14 @@ class AssertCmsPageFormSingleStoreMode extends AssertCmsPageForm
         $errors = $this->verifyData($cmsFixtureData, $cmsFormData);
         \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
+
+    /**
+     * CMS Page content equals to data from fixture.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'CMS Page content equals to data from fixture.';
+    }
 }

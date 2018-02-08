@@ -46,7 +46,6 @@ class Save extends \Magento\Backend\App\Action
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     *
      */
     public function __construct(
         Action\Context $context,
@@ -62,6 +61,7 @@ class Save extends \Magento\Backend\App\Action
         $this->pageRepository = $pageRepository
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+
         parent::__construct($context);
     }
 

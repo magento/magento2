@@ -47,6 +47,6 @@ class AssertCmsPageOnFrontend extends AbstractConstraint
      */
     public function toString()
     {
-        return 'CMS Page content equals to data from fixture.';
+        return "CMS Page content isn't displayed on frontend.";
     }
 }

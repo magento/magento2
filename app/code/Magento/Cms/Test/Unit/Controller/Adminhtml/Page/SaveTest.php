@@ -109,7 +109,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'dataProcessor' => $this->dataProcessorMock,
                 'dataPersistor' => $this->dataPersistorMock,
                 'pageFactory' => $this->pageFactory,
-                'pageRepository' => $this->pageRepository
+                'pageRepository' => $this->pageRepository,
             ]
         );
     }
@@ -258,7 +258,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(true);
         $page->expects($this->once())->method('setData');
-        $this->pageRepository->expects($this->once())->method('save')->with($page)
+        $this->pageRepository->expects($this->once())
+            ->method('save')
+            ->with($page)
             ->willThrowException(new \Exception('Error message.'));
 
         $this->messageManagerMock->expects($this->never())
