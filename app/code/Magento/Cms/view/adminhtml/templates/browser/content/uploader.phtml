@@ -41,6 +41,7 @@ require([
         sequentialUploads: true,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
         maxFileSize: <?= $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
+        dropZone: $('#<?= $block->getHtmlId() ?>').closest('[role="dialog"]'),
         add: function (e, data) {
             var progressTmpl = mageTemplate('#<?= $block->getHtmlId() ?>-template'),
                 fileSize,
