@@ -497,7 +497,6 @@ class DobTest extends \PHPUnit\Framework\TestCase
             ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
             ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
 
-
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
