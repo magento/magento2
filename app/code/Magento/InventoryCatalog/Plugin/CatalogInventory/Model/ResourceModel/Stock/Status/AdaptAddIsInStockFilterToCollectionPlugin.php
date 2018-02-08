@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\Status;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
@@ -41,7 +42,7 @@ class AdaptAddIsInStockFilterToCollectionPlugin
     /**
      * @param Status $stockStatus
      * @param callable $proceed
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param Collection $collection
      * @return Status
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

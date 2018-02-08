@@ -43,7 +43,6 @@ class CreateTest extends WebapiAbstract
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::PHONE => 'source-phone',
             SourceInterface::FAX => 'source-fax',
-            SourceInterface::PRIORITY => 200,
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => [
                 [

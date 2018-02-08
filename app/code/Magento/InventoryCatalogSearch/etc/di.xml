@@ -9,4 +9,12 @@
     <type name="Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter">
         <plugin name="adapt_stock_status_filter" type="Magento\InventoryCatalogSearch\Plugin\Search\FilterMapper\AdaptStockStatusFilterPlugin"/>
     </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\ApplyStockConditionToSelect">
+        <plugin name="adapt_apply_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBuilderForAttribute\AdaptApplyStockConditionToSelectPlugin"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect">
+        <plugin name="adapt_apply_stock_condition_to_select"
+                type="Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDropdownStrategy\AdaptApplyStockConditionToSelectPlugin"/>
+    </type>
 </config>

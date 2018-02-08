@@ -10,10 +10,9 @@ namespace Magento\Inventory\Model\StockSourceLink\Command;
 use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
-use Magento\Inventory\Model\StockSourceLink;
-use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface;
 use Magento\Framework\Validation\ValidationException;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
+use Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
@@ -33,24 +32,23 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
     private $logger;
 
     /**
-     * @var StockSourceLinkValidatorInterface
+     * @var StockSourceLinksValidator
      */
-    private $stockSourceLinkValidator;
+    private $stockSourceLinksValidator;
 
     /**
-     * AssignSourcesToStock constructor.
+     * @param StockSourceLinksValidator $stockSourceLinksValidator
      * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
-     * @param StockSourceLinkValidatorInterface $stockSourceLinkValidator
      */
     public function __construct(
+        StockSourceLinksValidator $stockSourceLinksValidator,
         SaveMultiple $saveMultiple,
-        LoggerInterface $logger,
-        StockSourceLinkValidatorInterface $stockSourceLinkValidator
+        LoggerInterface $logger
     ) {
         $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
-        $this->stockSourceLinkValidator = $stockSourceLinkValidator;
+        $this->stockSourceLinksValidator = $stockSourceLinksValidator;
     }
 
     /**
@@ -65,7 +63,7 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
             throw new InputException(__('Input data is empty'));
         }
 
-        $validationResult = $this->stockSourceLinkValidator->validate($links);
+        $validationResult = $this->stockSourceLinksValidator->validate($links);
         if (!$validationResult->isValid()) {
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
