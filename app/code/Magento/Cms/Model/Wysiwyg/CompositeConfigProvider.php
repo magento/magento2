@@ -127,7 +127,6 @@ class CompositeConfigProvider
         return $this->updateConfig($config, $this->wysiwygConfigPostProcessor);
     }
 
-
     /**
      * Returns active editor path
      *
