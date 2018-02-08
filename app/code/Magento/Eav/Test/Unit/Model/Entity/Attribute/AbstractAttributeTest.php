@@ -228,8 +228,8 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
     public function attributeValueDataProvider()
     {
         return [
-            [false, '', 'int'],
-            [false, '', 'decimal'],
+            [true, '', 'int'],
+            [true, '', 'decimal'],
             [true, '', 'datetime'],
             [true, '', 'varchar'],
             [true, '', 'text'],

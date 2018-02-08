@@ -7,7 +7,7 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\ResourceModel\ReadSnapshot;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -24,17 +24,17 @@ class ReadSnapshotPlugin
     private $metadataPool;
 
     /**
-     * @var Config
+     * @var EavConfig
      */
     private $config;
 
     /**
      * @param MetadataPool $metadataPool
-     * @param Config $config
+     * @param EavConfig $config
      */
     public function __construct(
         MetadataPool $metadataPool,
-        Config $config
+        EavConfig $config
     ) {
         $this->metadataPool = $metadataPool;
         $this->config = $config;
