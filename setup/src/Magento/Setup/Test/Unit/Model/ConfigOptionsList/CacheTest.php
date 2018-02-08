@@ -39,7 +39,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(4, $options);
+        $this->assertCount(7, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -56,6 +56,18 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(3, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[3]);
         $this->assertEquals('cache-backend-redis-port', $options[3]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[4]);
+        $this->assertEquals('cache-backend-redis-sentinel-master', $options[4]->getName());
+
+        $this->assertArrayHasKey(5, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
+        $this->assertEquals('cache-backend-redis-sentinel-master-verify', $options[5]->getName());
+
+        $this->assertArrayHasKey(2, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('cache-backend-redis-sentinel-load-from-slaves', $options[6]->getName());
     }
 
     public function testCreateConfigCacheRedis()
@@ -70,7 +82,10 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
-                            'database' => ''
+                            'database' => '',
+                            'sentinel_master' => '',
+                            'sentinel_master_verify' => '',
+                            'load_from_slaves' => '',
                         ]
                     ]
                 ]
@@ -92,17 +107,24 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
-                            'database' => '5'
+                            'database' => '5',
+                            'sentinel_master' => 'redismaster',
+                            'sentinel_master_verify' => '1',
+                            'load_from_slaves' => '2',
                         ]
                     ]
                 ]
             ]
         ];
+
         $options = [
             'cache-backend' => 'redis',
             'cache-backend-redis-server' => 'localhost',
             'cache-backend-redis-port' => '1234',
-            'cache-backend-redis-db' => '5'
+            'cache-backend-redis-db' => '5',
+            'cache-backend-redis-sentinel-master' => 'redismaster',
+            'cache-backend-redis-sentinel-master-verify' => '1',
+            'cache-backend-redis-sentinel-load-from-slaves' => '2',
         ];
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);
@@ -118,7 +140,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
-            ->with(['host'=>'localhost', 'db'=>'', 'port'=>''])
+            ->with(['host'=>'localhost'])
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);

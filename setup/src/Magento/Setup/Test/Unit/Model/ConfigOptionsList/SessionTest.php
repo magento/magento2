@@ -29,10 +29,13 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(19, $options);
+        $this->assertCount(25, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -88,27 +91,51 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(13, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[13]);
-        $this->assertEquals('session-save-redis-first-lifetime', $options[13]->getName());
+        $this->assertEquals('session-save-redis-fail-after-frontend', $options[13]->getName());
 
         $this->assertArrayHasKey(14, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[14]);
-        $this->assertEquals('session-save-redis-bot-first-lifetime', $options[14]->getName());
+        $this->assertEquals('session-save-redis-fail-after-adminhtml', $options[14]->getName());
 
         $this->assertArrayHasKey(15, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[15]);
-        $this->assertEquals('session-save-redis-bot-lifetime', $options[15]->getName());
+        $this->assertEquals('session-save-redis-first-lifetime', $options[15]->getName());
 
         $this->assertArrayHasKey(16, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[16]);
-        $this->assertEquals('session-save-redis-disable-locking', $options[16]->getName());
+        $this->assertEquals('session-save-redis-bot-first-lifetime', $options[16]->getName());
 
         $this->assertArrayHasKey(17, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[17]);
-        $this->assertEquals('session-save-redis-min-lifetime', $options[17]->getName());
+        $this->assertEquals('session-save-redis-bot-lifetime', $options[17]->getName());
 
         $this->assertArrayHasKey(18, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[18]);
-        $this->assertEquals('session-save-redis-max-lifetime', $options[18]->getName());
+        $this->assertEquals('session-save-redis-disable-locking', $options[18]->getName());
+
+        $this->assertArrayHasKey(19, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[19]);
+        $this->assertEquals('session-save-redis-min-lifetime', $options[19]->getName());
+
+        $this->assertArrayHasKey(20, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[20]);
+        $this->assertEquals('session-save-redis-max-lifetime', $options[20]->getName());
+
+        $this->assertArrayHasKey(21, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[21]);
+        $this->assertEquals('session-save-redis-sentinel-master', $options[21]->getName());
+
+        $this->assertArrayHasKey(22, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[22]);
+        $this->assertEquals('session-save-redis-sentinel-master-verify', $options[22]->getName());
+
+        $this->assertArrayHasKey(23, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[23]);
+        $this->assertEquals('session-save-redis-sentinel-load-from-slaves', $options[23]->getName());
+
+        $this->assertArrayHasKey(24, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[24]);
+        $this->assertEquals('session-save-redis-sentinel-connect-retries', $options[24]->getName());
     }
 
     public function testCreateConfig()
@@ -156,7 +183,13 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '',
-                    'max_lifetime' => ''
+                    'max_lifetime' => '',
+                    'fail_after_frontend' => '',
+                    'fail_after_adminhtml' => '',
+                    'sentinel_connect_retries' => '',
+                    'sentinel_master' => '',
+                    'sentinel_master_verify' => '',
+                    'load_from_slaves' => '',
                 ]
 
             ]
@@ -186,6 +219,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             'session-save-redis-log-level' => '4',
             'session-save-redis-min-lifetime' => '60',
             'session-save-redis-max-lifetime' => '3600',
+            'session-save-redis-sentinel-master' => 'redismaster',
+            'session-save-redis-sentinel-master-verify' => '1',
+            'session-save-redis-sentinel-load-from-slaves'=> '2',
+            'session-save-redis-sentinel-connect-retries'=> '3',
         ];
 
         $expectedConfigData = [
@@ -209,7 +246,13 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '60',
-                    'max_lifetime' => '3600'
+                    'max_lifetime' => '3600',
+                    'sentinel_master' => 'redismaster',
+                    'sentinel_master_verify' => '1',
+                    'load_from_slaves' => '2',
+                    'fail_after_frontend' => '',
+                    'fail_after_adminhtml' => '',
+                    'sentinel_connect_retries' => 3,
                 ]
             ],
 
@@ -277,12 +320,18 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ['session-save-redis-max-concurrency', 'max_concurrency', '3'],
             ['session-save-redis-break-after-frontend', 'break_after_frontend', '10'],
             ['session-save-redis-break-after-adminhtml', 'break_after_adminhtml', '20'],
+            ['session-save-redis-fail-after-frontend', 'fail_after_frontend', '1'],
+            ['session-save-redis-fail-after-adminhtml', 'fail_after_adminhtml', '10'],
             ['session-save-redis-first-lifetime', 'first_lifetime', '300'],
             ['session-save-redis-bot-first-lifetime', 'bot_first_lifetime', '30'],
             ['session-save-redis-bot-lifetime', 'bot_lifetime', '3600'],
             ['session-save-redis-disable-locking', 'disable_locking', '1'],
             ['session-save-redis-min-lifetime', 'min_lifetime', '20'],
             ['session-save-redis-max-lifetime', 'max_lifetime', '12000'],
+            ['session-save-redis-sentinel-master', 'sentinel_master', 'redismaster'],
+            ['session-save-redis-sentinel-master-verify', 'sentinel_master_verify', '1'],
+            ['session-save-redis-sentinel-load-from-slaves', 'load_from_slaves', '2'],
+            ['session-save-redis-sentinel-connect-retries', 'sentinel_connect_retries', '1'],
         ];
     }
 

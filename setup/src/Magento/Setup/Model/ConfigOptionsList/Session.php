@@ -31,12 +31,18 @@ class Session implements ConfigOptionsListInterface
     const INPUT_KEY_SESSION_REDIS_MAX_CONCURRENCY = 'session-save-redis-max-concurrency';
     const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session-save-redis-break-after-frontend';
     const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session-save-redis-break-after-adminhtml';
+    const INPUT_KEY_SESSION_REDIS_FAIL_AFTER_FRONTEND = 'session-save-redis-fail-after-frontend';
+    const INPUT_KEY_SESSION_REDIS_FAIL_AFTER_ADMINHTML = 'session-save-redis-fail-after-adminhtml';
     const INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME = 'session-save-redis-first-lifetime';
     const INPUT_KEY_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session-save-redis-bot-first-lifetime';
     const INPUT_KEY_SESSION_REDIS_BOT_LIFETIME = 'session-save-redis-bot-lifetime';
     const INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING = 'session-save-redis-disable-locking';
     const INPUT_KEY_SESSION_REDIS_MIN_LIFETIME = 'session-save-redis-min-lifetime';
     const INPUT_KEY_SESSION_REDIS_MAX_LIFETIME = 'session-save-redis-max-lifetime';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER = 'session-save-redis-sentinel-master';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER_VERIFY = 'session-save-redis-sentinel-master-verify';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES= 'session-save-redis-sentinel-load-from-slaves';
+    const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES= 'session-save-redis-sentinel-connect-retries';
 
     const CONFIG_PATH_SESSION_REDIS = 'session/redis';
     const CONFIG_PATH_SESSION_REDIS_HOST = 'session/redis/host';
@@ -51,12 +57,18 @@ class Session implements ConfigOptionsListInterface
     const CONFIG_PATH_SESSION_REDIS_MAX_CONCURRENCY = 'session/redis/max_concurrency';
     const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session/redis/break_after_frontend';
     const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session/redis/break_after_adminhtml';
+    const CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_FRONTEND = 'session/redis/fail_after_frontend';
+    const CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_ADMINHTML = 'session/redis/fail_after_adminhtml';
     const CONFIG_PATH_SESSION_REDIS_FIRST_LIFETIME = 'session/redis/first_lifetime';
     const CONFIG_PATH_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session/redis/bot_first_lifetime';
     const CONFIG_PATH_SESSION_REDIS_BOT_LIFETIME = 'session/redis/bot_lifetime';
     const CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING = 'session/redis/disable_locking';
     const CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME = 'session/redis/min_lifetime';
     const CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME = 'session/redis/max_lifetime';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER = 'session/redis/sentinel_master';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER_VERIFY = 'session/redis/sentinel_master_verify';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES = 'session/redis/load_from_slaves';
+    const CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
 
     /**
      * @var array
@@ -75,12 +87,15 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_MAX_CONCURRENCY => '6',
         self::INPUT_KEY_SESSION_REDIS_BREAK_AFTER_FRONTEND => '5',
         self::INPUT_KEY_SESSION_REDIS_BREAK_AFTER_ADMINHTML => '30',
+        self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_FRONTEND => '1',
+        self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_ADMINHTML => '10',
         self::INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME => '600',
         self::INPUT_KEY_SESSION_REDIS_BOT_FIRST_LIFETIME => '60',
         self::INPUT_KEY_SESSION_REDIS_BOT_LIFETIME => '7200',
         self::INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING => '0',
         self::INPUT_KEY_SESSION_REDIS_MIN_LIFETIME => '60',
-        self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => '2592000'
+        self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => '2592000',
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES => 3,
     ];
 
     /**
@@ -115,12 +130,20 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_MAX_CONCURRENCY => self::CONFIG_PATH_SESSION_REDIS_MAX_CONCURRENCY,
         self::INPUT_KEY_SESSION_REDIS_BREAK_AFTER_FRONTEND => self::CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_FRONTEND,
         self::INPUT_KEY_SESSION_REDIS_BREAK_AFTER_ADMINHTML => self::CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_ADMINHTML,
+        self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_FRONTEND => self::CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_FRONTEND,
+        self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_ADMINHTML => self::CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_ADMINHTML,
         self::INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_FIRST_LIFETIME,
         self::INPUT_KEY_SESSION_REDIS_BOT_FIRST_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_BOT_FIRST_LIFETIME,
         self::INPUT_KEY_SESSION_REDIS_BOT_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_BOT_LIFETIME,
         self::INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING => self::CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING,
         self::INPUT_KEY_SESSION_REDIS_MIN_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME,
         self::INPUT_KEY_SESSION_REDIS_MAX_LIFETIME => self::CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER_VERIFY => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER_VERIFY,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES
+            => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+        self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES
+            => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
     ];
 
     /**
@@ -211,6 +234,18 @@ class Session implements ConfigOptionsListInterface
                 'Number of seconds to wait before trying to break a lock for Admin session'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_FRONTEND,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_FRONTEND,
+                'Number of seconds to wait before completely failing to break the lock for frontend session'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_FAIL_AFTER_ADMINHTML,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_FAIL_AFTER_ADMINHTML,
+                'Number of seconds to wait before completely failing to break the lock for Admin session'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_FIRST_LIFETIME,
@@ -245,6 +280,31 @@ class Session implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME,
                 'Redis max session lifetime, in seconds'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER,
+                'Redis sentinel master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER_VERIFY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER_VERIFY,
+                'Verify connected server is actually master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                'Using the value \'1\' indicates to only load from slaves and ' .
+                    ' \'2\' to include the master in the random read slave selection'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+                'The number of attempts when contacting Redis Sentinel servers.'
             ),
         ];
     }

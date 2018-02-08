@@ -26,11 +26,19 @@ class Cache implements ConfigOptionsListInterface
     const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
     const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
     const INPUT_KEY_CACHE_BACKEND_REDIS_PORT = 'cache-backend-redis-port';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER = 'cache-backend-redis-sentinel-master';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY = 'cache-backend-redis-sentinel-master-verify';
+    const INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES= 'cache-backend-redis-sentinel-load-from-slaves';
 
     const CONFIG_PATH_CACHE_BACKEND = 'cache/frontend/default/backend';
     const CONFIG_PATH_CACHE_BACKEND_SERVER = 'cache/frontend/default/backend_options/server';
     const CONFIG_PATH_CACHE_BACKEND_DATABASE = 'cache/frontend/default/backend_options/database';
     const CONFIG_PATH_CACHE_BACKEND_PORT = 'cache/frontend/default/backend_options/port';
+    const CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER = 'cache/frontend/default/backend_options/sentinel_master';
+    const CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY =
+        'cache/frontend/default/backend_options/sentinel_master_verify';
+    const CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES =
+        'cache/frontend/default/backend_options/load_from_slaves';
 
     /**
      * @var array
@@ -38,7 +46,10 @@ class Cache implements ConfigOptionsListInterface
     private $defaultConfigValues = [
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => '127.0.0.1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => '0',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379'
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => '6379',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER => null,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY => null,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES => null,
     ];
 
     /**
@@ -55,6 +66,11 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_CACHE_BACKEND_SERVER,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER => self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY =>
+            self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES =>
+            self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
     ];
 
     /**
@@ -102,7 +118,26 @@ class Cache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_PORT,
                 'Redis server listen port'
-            )
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                'Redis sentinel master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                'Verify connected server is actually master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                'Using the value \'1\' indicates to only load from slaves and \'2\'  ' .
+                    'to include the master in the random read slave selection'
+            ),
         ];
     }
 
@@ -191,7 +226,21 @@ class Cache implements ConfigOptionsListInterface
                 $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
             );
 
-        return $this->redisValidator->isValidConnection($config);
+        $config['sentinel_master'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER])
+            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER)
+            );
+
+        $config['sentinel_master_verify'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY])
+            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                $this->getDefaultConfigValue(self::CONFIG_PATH_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY)
+            );
+
+        return $this->redisValidator->isValidConnection(array_filter($config));
     }
 
     /**
