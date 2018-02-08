@@ -5,7 +5,8 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+\Magento\TestFramework\Helper\Bootstrap::getInstance()
+    ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
 require __DIR__ . '/../../Store/_files/store.php';
 
