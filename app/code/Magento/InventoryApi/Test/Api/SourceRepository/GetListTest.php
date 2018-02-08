@@ -43,10 +43,6 @@ class GetListTest extends WebapiAbstract
                 ],
                 SearchCriteria::SORT_ORDERS => [
                     [
-                        'field' => SourceInterface::PRIORITY,
-                        'direction' => SortOrder::SORT_DESC,
-                    ],
-                    [
                         'field' => SourceInterface::NAME,
                         'direction' => SortOrder::SORT_DESC,
                     ],
@@ -59,12 +55,10 @@ class GetListTest extends WebapiAbstract
         $expectedItemsData = [
             [
                 SourceInterface::ENABLED => true,
-                SourceInterface::PRIORITY => 100,
                 SourceInterface::NAME => 'US-source-1',
             ],
             [
                 SourceInterface::ENABLED => true,
-                SourceInterface::PRIORITY => 100,
                 SourceInterface::NAME => 'EU-source-1',
             ],
         ];

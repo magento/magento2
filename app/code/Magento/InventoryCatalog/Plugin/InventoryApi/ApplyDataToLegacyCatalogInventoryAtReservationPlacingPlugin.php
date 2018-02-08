@@ -10,9 +10,9 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
+use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 
@@ -44,37 +44,37 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
     private $setDataToLegacyStockStatus;
 
     /**
-     * @var GetProductQuantityInStockInterface
+     * @var GetSalableProductQtyInterface
      */
-    private $getProductQuantityInStock;
+    private $getSalableProductQty;
 
     /**
-     * @var IsProductInStockInterface
+     * @var IsProductSalableInterface
      */
-    private $isProductInStock;
+    private $isProductSalable;
 
     /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param SetDataToLegacyStockStatus $setDataToLegacyStockStatus
-     * @param GetProductQuantityInStockInterface $getProductQuantityInStock
-     * @param IsProductInStockInterface $isProductInStock
+     * @param GetSalableProductQtyInterface $getSalableProductQty
+     * @param IsProductSalableInterface $isProductSalable
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         DefaultStockProviderInterface $defaultStockProvider,
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
         SetDataToLegacyStockStatus $setDataToLegacyStockStatus,
-        GetProductQuantityInStockInterface $getProductQuantityInStock,
-        IsProductInStockInterface $isProductInStock
+        GetSalableProductQtyInterface $getSalableProductQty,
+        IsProductSalableInterface $isProductSalable
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->defaultStockProvider = $defaultStockProvider;
         $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->setDataToLegacyStockStatus = $setDataToLegacyStockStatus;
-        $this->getProductQuantityInStock = $getProductQuantityInStock;
-        $this->isProductInStock = $isProductInStock;
+        $this->getSalableProductQty = $getSalableProductQty;
+        $this->isProductSalable = $isProductSalable;
     }
 
     /**
@@ -93,8 +93,8 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
                 if ($this->defaultStockProvider->getId() !== $reservation->getStockId()) {
                     continue;
                 }
-                $qty = $this->getProductQuantityInStock->execute($reservation->getSku(), $reservation->getStockId());
-                $status = (int)$this->isProductInStock->execute($reservation->getSku(), $reservation->getStockId());
+                $qty = $this->getSalableProductQty->execute($reservation->getSku(), $reservation->getStockId());
+                $status = (int)$this->isProductSalable->execute($reservation->getSku(), $reservation->getStockId());
 
                 $this->setDataToLegacyStockItem->execute($reservation->getSku(), $qty, $status);
                 $this->setDataToLegacyStockStatus->execute($reservation->getSku(), $qty, $status);

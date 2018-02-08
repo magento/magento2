@@ -42,6 +42,11 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
     private $shippingAlgorithmResultFactory;
 
     /**
+     * @var bool
+     */
+    private $isShippable;
+
+    /**
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
@@ -64,6 +69,7 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
      */
     public function execute(OrderInterface $order): ShippingAlgorithmResultInterface
     {
+        $this->isShippable = true;
         $sourceItemSelectionsData = $this->getSourceItemSelectionsData($order);
 
         $sourceSelections = [];
@@ -76,6 +82,7 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
 
         $shippingResult = $this->shippingAlgorithmResultFactory->create([
             'sourceSelections' => $sourceSelections,
+            'isShippable' => $this->isShippable
         ]);
         return $shippingResult;
     }
@@ -116,7 +123,12 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
                     $qtyToDeliver -= $qtyToDeduct;
                 }
             }
+
+            if ($qtyToDeliver > 0.0001) {
+                $this->isShippable = false;
+            }
         }
+
         return $sourceItemSelections;
     }
 }
