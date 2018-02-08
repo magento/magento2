@@ -1452,29 +1452,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getOptionById(100));
     }
 
-    /**
-     * @dataProvider cleanCacheDataProvider
-     */
-    public function testCleanCache($id, $method)
-    {
-        $this->model->setId($id);
-        $this->cacheInterfaceMock
-            ->expects($this->$method())
-            ->method('clean');
-        $this->model->cleanCache();
-    }
-
-    /**
-     * @return array
-     */
-    public function cleanCacheDataProvider()
-    {
-        return [
-            [null, 'never'],
-            ['1', 'once'],
-        ];
-    }
-
     public function testGetCacheTags()
     {
         //If entity is identified getCacheTags has to return the same values
