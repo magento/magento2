@@ -88,7 +88,7 @@ class Product extends AbstractResource
     /**
      * @var ProductAttributeRepositoryInterface
      */
-    protected $metadataService;
+    private $metadataService;
 
     /**
      * @var string[]

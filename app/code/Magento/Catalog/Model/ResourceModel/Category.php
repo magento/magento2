@@ -88,7 +88,7 @@ class Category extends AbstractResource
     /**
      * @var CategoryAttributeRepositoryInterface
      */
-    protected $metadataService;
+    private $metadataService;
 
     /**
      * @var string[]
