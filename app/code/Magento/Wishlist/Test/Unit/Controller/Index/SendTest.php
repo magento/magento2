@@ -630,7 +630,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
                 ['wishlist/email/email_identity', ScopeInterface::SCOPE_STORE, null, $from],
             ]);
 
-        $this->store->expects($this->once())
+        $this->store->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
 
@@ -661,6 +661,9 @@ class SendTest extends \PHPUnit_Framework_TestCase
                 'message' => $text . $text,
                 'store' => $this->store,
             ])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
