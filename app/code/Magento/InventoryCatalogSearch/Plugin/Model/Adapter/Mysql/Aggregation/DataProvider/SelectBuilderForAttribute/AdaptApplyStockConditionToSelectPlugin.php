@@ -11,7 +11,6 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\SelectBui
 ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
@@ -27,11 +26,6 @@ class AdaptApplyStockConditionToSelectPlugin
      * @var StockIndexTableNameResolver
      */
     private $stockIndexTableNameResolver;
-
-    /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
 
     /**
      * @var ResourceConnection
@@ -50,20 +44,17 @@ class AdaptApplyStockConditionToSelectPlugin
 
     /**
      * @param StockIndexTableNameResolver $stockIndexTableNameResolver
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StockIndexTableNameResolver $stockIndexTableNameResolver,
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->resource = $resource;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;

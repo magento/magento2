@@ -10,8 +10,10 @@ namespace Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDr
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Adapt apply stock condition to multi stocks
@@ -24,28 +26,36 @@ class AdaptApplyStockConditionToSelectPlugin
     private $resourceConnection;
 
     /**
-     * @var GetStockIdForCurrentWebsite
-     */
-    private $getStockIdForCurrentWebsite;
-
-    /**
      * @var StockIndexTableNameResolverInterface
      */
     private $stockIndexTableNameResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
      * @param ResourceConnection $resourceConnection
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+     * @param StoreManagerInterface $storeManager
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        StockIndexTableNameResolverInterface $stockIndexTableNameResolver
+        StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
+        StoreManagerInterface $storeManager,
+        StockResolverInterface $stockResolver
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
+        $this->storeManager = $storeManager;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -70,8 +80,9 @@ class AdaptApplyStockConditionToSelectPlugin
             sprintf('product.entity_id = %s.source_id', $alias),
             []
         );
-        $stockId = $this->getStockIdForCurrentWebsite->execute();
-        $tableName = $this->stockIndexTableNameResolver->execute($stockId);
+        $websiteCode = $this->storeManager->getWebsite()->getCode();
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $tableName = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
 
         $select->joinInner(
             [$stockAlias => $tableName],
