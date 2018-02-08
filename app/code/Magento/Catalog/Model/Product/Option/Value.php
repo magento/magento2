@@ -202,27 +202,29 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
-            $this->isDeleted(false);
-            $this->setData(
+            $optionValue = clone $this;
+            $optionValue->isDeleted(false);
+
+            $optionValue->setData(
                 $value
             )->setData(
                 'option_id',
-                $this->getOption()->getId()
+                $optionValue->getOption()->getId()
             )->setData(
                 'store_id',
-                $this->getOption()->getStoreId()
+                $optionValue->getOption()->getStoreId()
             );
 
-            if ($this->getData('is_delete') == '1') {
-                if ($this->getId()) {
-                    $this->deleteValues($this->getId());
-                    $this->delete();
+            if ($optionValue->getData('is_delete') == '1') {
+                if ($optionValue->getId()) {
+                    $optionValue->deleteValues($optionValue->getId());
+                    $optionValue->delete();
                 }
             } else {
-                $this->save();
+                $optionValue->save();
             }
         }
-        //eof foreach()
+
         return $this;
     }
 
