@@ -580,7 +580,7 @@ class Eav extends AbstractModifier
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
-            'label' => $attribute->getDefaultFrontendLabel(),
+            'label' => __($attribute->getDefaultFrontendLabel()),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
             'scopeLabel' => $this->getScopeLabel($attribute),

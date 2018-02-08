@@ -12,12 +12,7 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/form/components/collection', function () {
-
-        var obj = new Constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
+        var obj;
 
         registry.set('provName', {
             /** Stub */
@@ -28,6 +23,12 @@ define([
 
             /** Stub */
             set: function () {}
+        });
+
+        obj = new Constr({
+            provider: 'provName',
+            name: '',
+            index: ''
         });
 
         describe('"initElement" method', function () {

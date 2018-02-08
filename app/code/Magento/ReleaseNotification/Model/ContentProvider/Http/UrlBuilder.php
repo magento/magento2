@@ -31,6 +31,9 @@ class UrlBuilder
      */
     private $config;
 
+    /**
+     * @param ScopeConfigInterface $config
+     */
     public function __construct(ScopeConfigInterface $config)
     {
         $this->config = $config;
