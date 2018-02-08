@@ -31,7 +31,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/yy';
+    const DATE_FORMAT = 'M/d/Y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
