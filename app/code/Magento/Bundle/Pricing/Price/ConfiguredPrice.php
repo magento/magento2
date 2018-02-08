@@ -87,7 +87,9 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         if ($this->item) {
             // get bundle options
             $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
-            $bundleOptionsIds = $this->serializer->unserialize($optionsQuoteItemOption->getValue());
+            if ($optionsQuoteItemOption && $optionsQuoteItemOption->getValue()) {
+                $bundleOptionsIds = $this->serializer->unserialize($optionsQuoteItemOption->getValue());
+            }
         }
         if ($bundleOptionsIds) {
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
