@@ -204,14 +204,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private $productEntityIdentifierField;
 
     /**
-     * Error message for store specific rows with super attributes specified
-     *
-     * @var string
-     */
-    private static $errorProductWithSuperAttr = 'Product with assigned super attributes should not have specified '
-        . '"store_view_code" value';
-
-    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -498,7 +490,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
         } elseif(!empty($rowData['store_view_code'])) {
-            throw new LocalizedException(__(self::$errorProductWithSuperAttr));
+            throw new LocalizedException(
+                __('Product with assigned super attributes should not have specified "store_view_code" value')
+            );
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
         foreach ($variations as $variation) {
