@@ -36,9 +36,8 @@ define([
         /**
          * Add file event callback triggered from media gallery
          *
-         * @param {ImageUploader} imageUploader UI Class
+         * @param {ImageUploader} imageUploader - UI Class
          * @param {Event} e
-         * @return {void}
          */
         addFileFromMediaGallery: function (imageUploader, e) {
             var $buttonEl = $(e.target),
@@ -58,9 +57,8 @@ define([
         /**
          * Open the media browser dialog using the
          *
-         * @param {ImageUploader} imageUploader UI Class
+         * @param {ImageUploader} imageUploader - UI Class
          * @param {Event} e
-         * @return {void}
          */
         openMediaBrowserDialog: function (imageUploader, e) {
             var $buttonEl = $(e.target),
@@ -75,9 +73,8 @@ define([
         /**
          * Trigger native browser file upload UI via clicking on 'Upload' button
          *
-         * @param {ImageUploader} imageUploader UI Class
+         * @param {ImageUploader} imageUploader - UI Class
          * @param {Event} e
-         * @return {void}
          */
         triggerImageUpload: function (imageUploader, e) {
             $(e.target).closest('.file-uploader').find('input[type="file"]').click();

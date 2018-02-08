@@ -25,7 +25,7 @@ define([
             it('sets mediaGalleryUid', function () {
                 component.initConfig();
                 expect(component.mediaGalleryUid).toBeDefined();
-            })
+            });
         });
 
         describe('addFileFromMediaGallery method', function () {
@@ -36,20 +36,20 @@ define([
 
                 $el.data({
                     'size': 1024,
-                    'mime-type': 'image/png',
+                    'mime-type': 'image/png'
                 });
 
                 $el.val('/pub/media/something.png');
-                
+
                 component.addFileFromMediaGallery(null, {
                     target: $el
                 });
-                
+
                 expect(component.addFile).toHaveBeenCalledWith({
                     type: 'image/png',
                     name: 'something.png',
                     url: '/pub/media/something.png',
-                    size: 1024,
+                    size: 1024
                 });
             });
         });
