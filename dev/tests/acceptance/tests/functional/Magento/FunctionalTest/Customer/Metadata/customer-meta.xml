@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCustomer" dataType="customer" type="create" auth="adminOauth" url="/V1/customers" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="customer" key="customer">
+            <field key="group_id">integer</field>
+            <field key="default_billing">string</field>
+            <field key="default_shipping">string</field>
+            <field key="confirmation">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="created_in">string</field>
+            <field key="dob">string</field>
+            <field key="email">string</field>
+            <field key="firstname">string</field>
+            <field key="lastname">string</field>
+            <field key="middlename">string</field>
+            <field key="prefix">string</field>
+            <field key="suffix">string</field>
+            <field key="gender">integer</field>
+            <field key="store_id">integer</field>
+            <field key="taxvat">string</field>
+            <field key="website_id">integer</field>
+            <array key="addresses">
+                <value>address</value>
+            </array>
+            <field key="disable_auto_group_change">integer</field>
+            <field key="extension_attributes">customer_extension_attribute</field>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+        </object>
+        <field key="password">string</field>
+        <field key="redirectUrl">string</field>
+    </operation>
+    <operation name="DeleteCustomer" dataType="customer" type="delete" auth="adminOauth" url="/V1/customers/{id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

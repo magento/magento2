@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerCreateFormSection">
+        <element name="firstnameField" type="input" selector="#firstname"/>
+        <element name="lastnameField" type="input" selector="#lastname"/>
+        <element name="emailField" type="input" selector="#email_address"/>
+        <element name="passwordField" type="input" selector="#password"/>
+        <element name="confirmPasswordField" type="input" selector="#password-confirmation"/>
+        <element name="createAccountButton" type="button" selector="button.action.submit.primary" timeout="30"/>
+    </section>
+</sections>

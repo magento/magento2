@@ -23,17 +23,13 @@ class Tree
      */
     protected $_nodes;
 
-    /**
-     * Enter description here...
-     *
-     */
     public function __construct()
     {
         $this->_nodes = new NodeCollection($this);
     }
 
     /**
-     * Enter description here...
+     * Get Tree.
      *
      * @return \Magento\Framework\Data\Tree
      */
@@ -43,7 +39,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Load Tree.
      *
      * @param Node $parentNode
      * @return void
@@ -54,7 +50,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Load Node by Node id.
      *
      * @param int|string $nodeId
      * @return void
@@ -177,7 +173,7 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Get Nodes.
      *
      * @return NodeCollection
      */
@@ -187,9 +183,9 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Get Node by id.
      *
-     * @param Node $nodeId
+     * @param string|int $nodeId
      * @return Node
      */
     public function getNodeById($nodeId)

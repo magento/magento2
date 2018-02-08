@@ -55,7 +55,8 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
      */
     public function testWrongParametersWhilePhraseCreation($constructArguments, $message)
     {
-        $this->expectException('DomainException', $message);
+        $this->expectException('DomainException');
+        $this->expectExceptionMessage($message);
 
         new Phrase(...array_values($constructArguments));
     }

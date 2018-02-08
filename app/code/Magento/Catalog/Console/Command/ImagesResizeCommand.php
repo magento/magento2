@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Console\Command;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -58,10 +61,8 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(
-        \Symfony\Component\Console\Input\InputInterface $input,
-        \Symfony\Component\Console\Output\OutputInterface $output
-    ) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
@@ -73,6 +74,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
+        $errorMessage = '';
         try {
             foreach ($productIds as $productId) {
                 try {
@@ -82,9 +84,13 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                     continue;
                 }
 
-                /** @var \Magento\Catalog\Model\Product\Image\Cache $imageCache */
-                $imageCache = $this->imageCacheFactory->create();
-                $imageCache->generate($product);
+                try {
+                    /** @var \Magento\Catalog\Model\Product\Image\Cache $imageCache */
+                    $imageCache = $this->imageCacheFactory->create();
+                    $imageCache->generate($product);
+                } catch (\Magento\Framework\Exception\RuntimeException $e) {
+                    $errorMessage = $e->getMessage();
+                }
 
                 $output->write(".");
             }
@@ -95,6 +101,12 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $output->write("\n");
-        $output->writeln("<info>Product images resized successfully</info>");
+        $output->writeln("<info>Product images resized successfully.</info>");
+
+        if ($errorMessage !== '') {
+            $output->writeln("<comment>{$errorMessage}</comment>");
+        }
+
+        return 0;
     }
 }
