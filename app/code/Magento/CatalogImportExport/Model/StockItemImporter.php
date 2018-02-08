@@ -34,15 +34,14 @@ class StockItemImporter implements StockItemImporterInterface
      * Handle Import of Stock Item Data
      *
      * @param array $stockData
-     * @return array
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function import(array $stockData): array
+    public function import(array $stockData)
     {
         /** @var $stockItemResource Item */
         $stockItemResource = $this->stockResourceItemFactory->create();
         $entityTable = $stockItemResource->getMainTable();
         $stockItemResource->getConnection()->insertOnDuplicate($entityTable, array_values($stockData));
-        return $stockData;
     }
 }
