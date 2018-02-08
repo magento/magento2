@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Provide tests for Cms Page resource model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageTest extends TestCase
 {
