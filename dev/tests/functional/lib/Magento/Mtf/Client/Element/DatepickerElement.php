@@ -65,6 +65,7 @@ class DatepickerElement extends SimpleElement
     {
         $date = $this->parseDate($value);
         $date[1] = ltrim($date[1], '0');
+        $this->click();
         $this->find($this->datePickerButton, Locator::SELECTOR_XPATH)->click();
         $datapicker = $this->find($this->datePickerBlock, Locator::SELECTOR_XPATH);
         $datapicker->find($this->datePickerYear, Locator::SELECTOR_XPATH, 'select')->setValue($date[2]);
