@@ -68,7 +68,8 @@ class StockItemImporterTest extends TestCase
     }
 
     /**
-     * Tests Source Item Import of default source should use MSI Plugin on Magento\Catalog\ImportExport\Model\StockItemImporter::import()
+     * Tests Source Item Import of default source should use
+     * MSI Plugin on Magento\Catalog\ImportExport\Model\StockItemImporter::import()
      *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDbIsolation enabled
