@@ -577,11 +577,11 @@ class AccountManagementTest extends WebapiAbstract
         $this->assertFalse($validationResponse['valid']);
 
         $this->assertEquals(
-            'The "firstname" attribute value is empty. Set the attribute and try again.',
+            'The "First Name" attribute value is empty. Set the attribute and try again.',
             $validationResponse['messages'][0]
         );
         $this->assertEquals(
-            'The "lastname" attribute value is empty. Set the attribute and try again.',
+            'The "Last Name" attribute value is empty. Set the attribute and try again.',
             $validationResponse['messages'][1]
         );
     }
