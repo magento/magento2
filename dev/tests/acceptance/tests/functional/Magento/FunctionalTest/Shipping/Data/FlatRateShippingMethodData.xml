@@ -6,11 +6,11 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
 
     <!-- Enable Flat Rate Shipping method config -->
     <entity name="FlatRateShippingMethodConfig" type="flat_rate_shipping_method">
-        <required-entity type="active">flatRateActiveEnable</required-entity>
+        <requiredEntity type="active">flatRateActiveEnable</requiredEntity>
     </entity>
 
     <entity name="flatRateActiveEnable" type="active">
@@ -19,18 +19,18 @@
 
     <!-- Flat Rate Shipping method default setup -->
     <entity name="FlatRateShippingMethodDefault" type="flat_rate_shipping_method">
-        <required-entity type="active">flatRateActiveDefault</required-entity>
-        <required-entity type="title">flatRateTitleDefault</required-entity>
-        <required-entity type="name">flatRateNameDefault</required-entity>
-        <required-entity type="type">flatRateTypeDefault</required-entity>
-        <required-entity type="price">flatRatePriceDefault</required-entity>
-        <required-entity type="handling_type">flatRateHandlingTypeDefault</required-entity>
-        <required-entity type="handling_fee">flatRateHandlingFeeDefault</required-entity>
-        <required-entity type="specificerrmsg">flatRateSpecificerrmsgDefault</required-entity>
-        <required-entity type="sallowspecific">flatRateSallowspecificDefault</required-entity>
-        <required-entity type="specificcountry">flatRateSpecificcountryDefault</required-entity>
-        <required-entity type="showmethod">flatRateShowmethodDefault</required-entity>
-        <required-entity type="sort_order">flatRateSortOrderDefault</required-entity>
+        <requiredEntity type="active">flatRateActiveDefault</requiredEntity>
+        <requiredEntity type="title">flatRateTitleDefault</requiredEntity>
+        <requiredEntity type="name">flatRateNameDefault</requiredEntity>
+        <requiredEntity type="type">flatRateTypeDefault</requiredEntity>
+        <requiredEntity type="price">flatRatePriceDefault</requiredEntity>
+        <requiredEntity type="handling_type">flatRateHandlingTypeDefault</requiredEntity>
+        <requiredEntity type="handling_fee">flatRateHandlingFeeDefault</requiredEntity>
+        <requiredEntity type="specificerrmsg">flatRateSpecificerrmsgDefault</requiredEntity>
+        <requiredEntity type="sallowspecific">flatRateSallowspecificDefault</requiredEntity>
+        <requiredEntity type="specificcountry">flatRateSpecificcountryDefault</requiredEntity>
+        <requiredEntity type="showmethod">flatRateShowmethodDefault</requiredEntity>
+        <requiredEntity type="sort_order">flatRateSortOrderDefault</requiredEntity>
     </entity>
 
     <entity name="flatRateActiveDefault" type="active">
@@ -58,12 +58,12 @@
         <data key="value">0</data>
     </entity>
     <entity name="flatRateSpecificcountryDefault" type="specificcountry">
-        <data key="value"></data>
+        <data key="value" />
     </entity>
     <entity name="flatRateShowmethodDefault" type="showmethod">
         <data key="value">0</data>
     </entity>
     <entity name="flatRateSortOrderDefault" type="sort_order">
-        <data key="value"></data>
+        <data key="value" />
     </entity>
-</config>
+</entities>

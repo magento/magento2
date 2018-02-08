@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateRegion" dataType="region" type="create">
         <field key="region_code">string</field>
@@ -20,4 +20,4 @@
         <field key="region_id">string</field>
         <field key="extension_attributes">empty_extension_attribute</field>
     </operation>
-</config>
+</operations>
