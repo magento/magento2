@@ -8,9 +8,18 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminClearGridFiltersIfPresent">
+    <actionGroup name="AdminGridSearchByKeyword">
+        <arguments>
+            <argument name="value"/>
+        </arguments>
+
+        <!-- Start of Action Group: AdminClearGridFiltersIfPresent -->
         <conditionalClick selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .action-remove" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
         <executeJS function="jQuery('.action-remove').click();" stepKey="clearIfMultipleExist"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
+        <!-- End of Action Group: AdminClearGridFiltersIfPresent -->
+
+        <fillField selector="{{AdminGridSearchBox.searchByKeyword}}" userInput="{{value}}" stepKey="fillSearchByKeyword"/>
+        <click selector="{{AdminGridSearchBox.search}}" stepKey="clickOnSearch"/>
     </actionGroup>
 </actionGroups>
