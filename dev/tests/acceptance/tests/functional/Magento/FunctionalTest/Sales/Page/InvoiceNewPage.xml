@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="InvoiceNewPage" url="/admin/sales/order_invoice/new/order_id/" module="Sales">
+    <page name="InvoiceNewPage" url="/sales/order_invoice/new/order_id/" area="admin" module="Sales">
         <section name="InvoiceNewSection"/>
     </page>
-</config>
+</pages>
