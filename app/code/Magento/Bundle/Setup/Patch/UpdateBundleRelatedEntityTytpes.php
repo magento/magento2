@@ -6,38 +6,39 @@
 
 namespace Magento\Bundle\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\VersionedDataPatch;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 
 /**
- * Class PrepareInitialConfig
+ * Class UpdateBundleRelatedEntityTytpes
  * @package Magento\Bundle\Setup\Patch
  */
-class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
+class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * @var ModuleDataSetupInterface
+     * @var ResourceConnection
      */
-    private $moduleDataSetup;
+    private $resourceConnection;
+
     /**
-     * @var \Magento\Eav\Setup\EavSetupFactory
+     * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * PatchInitial constructor.
-     * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
+     * UpdateBundleRelatedEntityTytpes constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup,
+        ResourceConnection $resourceConnection,
         \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
     ) {
-
-        $this->moduleDataSetup = $moduleDataSetup;
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -47,7 +48,7 @@ class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
     public function apply()
     {
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
 
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $eavSetup->addAttributeGroup(
@@ -187,7 +188,7 @@ class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
      */
     public function getVersion()
     {
-        return '2.0.0';
+        return '2.0.2';
     }
 
     /**

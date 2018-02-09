@@ -7,29 +7,30 @@
 namespace Magento\Analytics\Setup\Patch;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
  * Initial patch.
- * 
+ *
  * @package Magento\Analytics\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * @var ModuleDataSetupInterface
+     * @var ResourceConnection
      */
-    private $moduleDataSetup;
+    private $resourceConnection;
 
     /**
-     * PatchInitial constructor.
-     * @param ModuleDataSetupInterface $moduleDataSetup
+     * PrepareInitialConfig constructor.
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
+        ResourceConnection $resourceConnection
     ) {
-
-        $this->moduleDataSetup = $moduleDataSetup;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -37,8 +38,8 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
      */
     public function apply()
     {
-        $this->moduleDataSetup->getConnection()->insertMultiple(
-            $this->moduleDataSetup->getTable('core_config_data'),
+        $this->resourceConnection->getConnection()->insertMultiple(
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             [
                 [
                     'scope' => 'default',
@@ -55,8 +56,8 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
 
-        $this->moduleDataSetup->getConnection()->insert(
-            $this->moduleDataSetup->getTable('flag'),
+        $this->resourceConnection->getConnection()->insert(
+            $this->resourceConnection->getConnection()->getTableName('flag'),
             [
                 'flag_code' => SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE,
                 'state' => 0,

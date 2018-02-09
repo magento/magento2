@@ -7,43 +7,54 @@
 namespace Magento\Catalog\Setup\Patch;
 
 use Magento\Catalog\Helper\DefaultCategory;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Catalog\Setup\CategorySetupFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InstallDefaultCategories data patch.
+ *
+ * @package Magento\Catalog\Setup\Patch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InstallDefaultCategories implements DataPatchInterface, VersionedDataPatch
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param CategorySetupFactory $categorySetupFactory
+     * @var CategorySetupFactory
      */
     private $categorySetupFactory;
 
     /**
+     * PatchInitial constructor.
+     * @param ResourceConnection $resourceConnection
      * @param CategorySetupFactory $categorySetupFactory
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CategorySetupFactory $categorySetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
-        $defaultCategoryId = $this->getDefaultCategory()->getId();
+        $defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(DefaultCategory::class);
+        $defaultCategoryId = $defaultCategory->getId();
 
         $categorySetup->installEntities();
         // Create Root Catalog Node
@@ -58,6 +69,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ->setName('Root Catalog')
             ->setInitialSetupFlag(true)
             ->save();
+
         // Create Default Catalog Node
         $category = $categorySetup->createCategory();
         $category->load($defaultCategoryId)
@@ -71,28 +83,38 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ->setInitialSetupFlag(true)
             ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->save();
+
         $data = [
             'scope' => 'default',
             'scope_id' => 0,
             'path' => \Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_ROOT_ID,
             'value' => $category->getId(),
         ];
-        $setup->getConnection()
-            ->insertOnDuplicate($setup->getTable('core_config_data'), $data, ['value']);
+        $this->resourceConnection->getConnection()->insertOnDuplicate(
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+            $data,
+            ['value']
+        );
+
         $categorySetup->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', 'Design', 6);
+
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Category::ENTITY);
         $attributeSetId = $categorySetup->getDefaultAttributeSetId($entityTypeId);
         $attributeGroupId = $categorySetup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
+
         // update General Group
         $categorySetup->updateAttributeGroup($entityTypeId, $attributeSetId, $attributeGroupId, 'sort_order', '10');
+
         $groups = [
             'display' => ['name' => 'Display Settings', 'code' => 'display-settings', 'sort' => 20, 'id' => null],
             'design' => ['name' => 'Custom Design', 'code' => 'custom-design', 'sort' => 30, 'id' => null],
         ];
+
         foreach ($groups as $k => $groupProp) {
             $categorySetup->addAttributeGroup($entityTypeId, $attributeSetId, $groupProp['name'], $groupProp['sort']);
             $groups[$k]['id'] = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $groupProp['code']);
         }
+
         // update attributes group and sort
         $attributes = [
             'custom_design' => ['group' => 'design', 'sort' => 10],
@@ -107,6 +129,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             'available_sort_by' => ['group' => 'display', 'sort' => 40],
             'default_sort_by' => ['group' => 'display', 'sort' => 50],
         ];
+
         foreach ($attributes as $attributeCode => $attributeProp) {
             $categorySetup->addAttributeToGroup(
                 $entityTypeId,
@@ -116,6 +139,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 $attributeProp['sort']
             );
         }
+
         /**
          * Install product link types
          */
@@ -124,10 +148,16 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ['link_type_id' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL, 'code' => 'up_sell'],
             ['link_type_id' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL, 'code' => 'cross_sell'],
         ];
+
         foreach ($data as $bind) {
-            $setup->getConnection()
-                ->insertForce($setup->getTable('catalog_product_link_type'), $bind);
+            $this->resourceConnection->getConnection()->insertForce(
+                $this->resourceConnection->getConnection()->getTableName(
+                    'catalog_product_link_type'
+                ),
+                $bind
+            );
         }
+
         /**
          * install product link attributes
          */
@@ -148,21 +178,28 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'data_type' => 'int'
             ],
         ];
-        $setup->getConnection()
-            ->insertMultiple($setup->getTable('catalog_product_link_attribute'), $data);
+
+        $this->resourceConnection->getConnection()->insertMultiple(
+            $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute'),
+            $data
+        );
+
         /**
          * Remove Catalog specified attribute options (columns) from eav/attribute table
          *
          */
-        $describe = $setup->getConnection()
-            ->describeTable($setup->getTable('catalog_eav_attribute'));
+        $describe = $this->resourceConnection->getConnection()
+            ->describeTable($this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'));
         foreach ($describe as $columnData) {
             if ($columnData['COLUMN_NAME'] == 'attribute_id') {
                 continue;
             }
-            $setup->getConnection()
-                ->dropColumn($setup->getTable('eav_attribute'), $columnData['COLUMN_NAME']);
+            $this->resourceConnection->getConnection()->dropColumn(
+                $this->resourceConnection->getConnection()->getTableName('eav_attribute'),
+                $columnData['COLUMN_NAME']
+            );
         }
+
         $newGeneralTabName = 'Product Details';
         $newPriceTabName = 'Advanced Pricing';
         $newImagesTabName = 'Image Management';
@@ -195,8 +232,10 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ],
             'Design' => ['attribute_group_code' => 'design', 'tab_group_code' => 'advanced', 'sort_order' => 50],
         ];
+
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         $attributeSetId = $categorySetup->getAttributeSetId($entityTypeId, 'Default');
+
         //Rename attribute tabs
         foreach ($tabNames as $tabName => $tab) {
             $groupId = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $tabName);
@@ -212,6 +251,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 }
             }
         }
+
         //Add new tab
         $categorySetup->addAttributeGroup($entityTypeId, $attributeSetId, $autosettingsTabName, 60);
         $categorySetup->updateAttributeGroup(
@@ -228,6 +268,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             'tab_group_code',
             'advanced'
         );
+
         //New attributes order and properties
         $properties = ['is_required', 'default_value', 'frontend_input_renderer'];
         $attributesOrder = [
@@ -252,6 +293,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             'news_to_date' => [$autosettingsTabName => 40],
             'country_of_manufacture' => [$autosettingsTabName => 50],
         ];
+
         foreach ($attributesOrder as $key => $value) {
             $attribute = $categorySetup->getAttribute($entityTypeId, $key);
             if ($attribute) {
@@ -275,6 +317,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 }
             }
         }
+
         foreach (['status', 'visibility'] as $attributeCode) {
             $categorySetup->updateAttribute(
                 \Magento\Catalog\Model\Product::ENTITY,
@@ -299,32 +342,26 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
-    private function getDefaultCategory()
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
     {
-        if ($this->defaultCategory === null) {
-            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(DefaultCategory::class);
-        }
-        return $this->defaultCategory;
-
+        return [];
     }
 }

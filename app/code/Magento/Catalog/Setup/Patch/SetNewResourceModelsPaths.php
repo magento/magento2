@@ -6,45 +6,49 @@
 
 namespace Magento\Catalog\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Catalog\Setup\CategorySetup;
+use Magento\Catalog\Setup\CategorySetupFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class SetNewResourceModelsPaths
+ * @package Magento\Catalog\Setup\Patch
  */
-class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
+class SetNewResourceModelsPaths implements DataPatchInterface, VersionedDataPatch
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param CategorySetupFactory $categorySetupFactory
+     * @var CategorySetupFactory
      */
     private $categorySetupFactory;
 
     /**
+     * PatchInitial constructor.
+     * @param ResourceConnection $resourceConnection
      * @param CategorySetupFactory $categorySetupFactory
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CategorySetupFactory $categorySetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
-        $setup->startSetup();
-
-
         // set new resource model paths
         /** @var CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $categorySetup->updateEntityType(
             \Magento\Catalog\Model\Category::ENTITY,
             'entity_model',
@@ -82,29 +86,29 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         );
 
-
-        $setup->endSetup();
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.2';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }

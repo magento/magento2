@@ -3,19 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Setup;
 
-use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Widget\Setup\LayoutUpdateConverter;
+namespace Magento\Catalog\Setup\Patch;
+
 use Magento\Eav\Setup\EavSetup;
-use Magento\Framework\DB\FieldToConvert;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Widget\Setup\LayoutUpdateConverter;
 
 /**
- * Convert serialized widget data for categories and products tables to JSON
+ * Class UpgradeWidgetData.
+ *
+ * @package Magento\Catalog\Setup\Patch
  */
-class UpgradeWidgetData
+class UpgradeWidgetData implements DataPatchInterface, VersionedDataPatch
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
     /**
      * @var EavSetup
      */
@@ -27,29 +39,33 @@ class UpgradeWidgetData
     private $queryModifierFactory;
 
     /**
-     * Constructor
-     *
-     * @param EavSetup $eavSetup
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldDataConverter;
+
+    /**
+     * PrepareInitialConfig constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param EavSetupFactory $eavSetupFactory
      * @param QueryModifierFactory $queryModifierFactory
      * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
-        EavSetup $eavSetup,
+        ResourceConnection $resourceConnection,
+        EavSetupFactory $eavSetupFactory,
         QueryModifierFactory $queryModifierFactory,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->eavSetup = $eavSetup;
+        $this->resourceConnection = $resourceConnection;
+        $this->eavSetup = $eavSetupFactory->create(['resourceConnection' => $resourceConnection]);
         $this->queryModifierFactory = $queryModifierFactory;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
     }
 
     /**
-     * Convert category and product layout update
-     *
-     * @return void
-     * @throws \InvalidArgumentException
+     * {@inheritdoc}
      */
-    public function upgrade()
+    public function apply()
     {
         $categoryTypeId = $this->eavSetup->getEntityTypeId(\Magento\Catalog\Model\Category::ENTITY);
         $categoryLayoutUpdateAttribute = $this->eavSetup->getAttribute($categoryTypeId, 'custom_layout_update');
@@ -116,5 +132,30 @@ class UpgradeWidgetData
             ],
             $this->eavSetup->getSetup()->getConnection()
         );
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.2.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

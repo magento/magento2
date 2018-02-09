@@ -4,22 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Setup;
+namespace Magento\Catalog\Setup\Patch;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
  * Class UpgradeWebsiteAttributes
- * @package Magento\Catalog\Setup
+ * @package Magento\Catalog\Setup\Patch
  *
  * IMPORTANT: This class const/methods can not be reused because it needs to be isolated
  */
-class UpgradeWebsiteAttributes
+class UpgradeWebsiteAttributes implements DataPatchInterface, VersionedDataPatch
 {
     /**
      * ATTENTION: These constants must not be reused anywhere outside
@@ -80,47 +82,54 @@ class UpgradeWebsiteAttributes
     private $linkFields = [];
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * UpgradeWebsiteAttributes constructor.
      * @param Generator $batchQueryGenerator
      * @param MetadataPool $metadataPool
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Generator $batchQueryGenerator, MetadataPool $metadataPool)
-    {
+    public function __construct(
+        Generator $batchQueryGenerator,
+        MetadataPool $metadataPool,
+        ResourceConnection $resourceConnection
+    ) {
         $this->batchQueryGenerator = $batchQueryGenerator;
         $this->metaDataPool = $metadataPool;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param ModuleDataSetupInterface $setup
-     * @return void
+     * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         foreach (array_keys($this->tableMetaDataClass) as $tableName) {
-            $this->upgradeTable($setup, $tableName);
+            $this->upgradeTable($tableName);
         }
     }
 
     /**
-     * @param ModuleDataSetupInterface $setup
      * @param string $tableName
      * @return void
      */
-    private function upgradeTable(ModuleDataSetupInterface $setup, $tableName)
+    private function upgradeTable($tableName)
     {
-        foreach ($this->fetchAttributeValues($setup, $tableName) as $attributeValueItems) {
-            $this->processAttributeValues($setup, $attributeValueItems, $tableName);
+        foreach ($this->fetchAttributeValues($tableName) as $attributeValueItems) {
+            $this->processAttributeValues($attributeValueItems, $tableName);
         }
     }
 
     /**
      * Aligns website attribute values
-     * @param ModuleDataSetupInterface $setup
      * @param array $attributeValueItems
      * @param string $tableName
      * @return void
      */
-    private function processAttributeValues(ModuleDataSetupInterface $setup, array $attributeValueItems, $tableName)
+    private function processAttributeValues(array $attributeValueItems, $tableName)
     {
         $this->resetProcessedAttributeValues();
 
@@ -129,9 +138,9 @@ class UpgradeWebsiteAttributes
                 continue;
             }
 
-            $insertions = $this->generateAttributeValueInsertions($setup, $attributeValueItem, $tableName);
+            $insertions = $this->generateAttributeValueInsertions($attributeValueItem, $tableName);
             if (!empty($insertions)) {
-                $this->executeInsertions($setup, $insertions, $tableName);
+                $this->executeInsertions($insertions, $tableName);
             }
 
             $this->markAttributeValueProcessed($attributeValueItem, $tableName);
@@ -141,32 +150,31 @@ class UpgradeWebsiteAttributes
     /**
      * Yields batch of AttributeValues
      *
-     * @param ModuleDataSetupInterface $setup
      * @param string $tableName
      * @yield array
-     * @return void
+     * @return \Generator
      */
-    private function fetchAttributeValues(ModuleDataSetupInterface $setup, $tableName)
+    private function fetchAttributeValues($tableName)
     {
-        $connection = $setup->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $batchSelectIterator = $this->batchQueryGenerator->generate(
             'value_id',
             $connection
                 ->select()
                 ->from(
-                    ['cpei' => $setup->getTable($tableName)],
+                    ['cpei' => $this->resourceConnection->getConnection()->getTableName($tableName)],
                     '*'
                 )
                 ->join(
                     [
-                        'cea' => $setup->getTable('catalog_eav_attribute'),
+                        'cea' => $this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'),
                     ],
                     'cpei.attribute_id = cea.attribute_id',
                     ''
                 )
                 ->join(
                     [
-                        'st' => $setup->getTable('store'),
+                        'st' => $this->resourceConnection->getConnection()->getTableName('store'),
                     ],
                     'st.store_id = cpei.store_id',
                     'st.website_id'
@@ -187,20 +195,19 @@ class UpgradeWebsiteAttributes
     }
 
     /**
-     * @param ModuleDataSetupInterface $setup
      * @return array
      */
-    private function getGroupedStoreViews(ModuleDataSetupInterface $setup)
+    private function getGroupedStoreViews()
     {
         if (!empty($this->groupedStoreViews)) {
             return $this->groupedStoreViews;
         }
 
-        $connection = $setup->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $query = $connection
             ->select()
             ->from(
-                $setup->getTable('store'),
+                $this->resourceConnection->getConnection()->getTableName('store'),
                 '*'
             );
 
@@ -274,17 +281,15 @@ class UpgradeWebsiteAttributes
     }
 
     /**
-     * @param ModuleDataSetupInterface $setup
      * @param array $attributeValue
      * @param string $tableName
      * @return array|null
      */
     private function generateAttributeValueInsertions(
-        ModuleDataSetupInterface $setup,
         array $attributeValue,
         $tableName
     ) {
-        $groupedStoreViews = $this->getGroupedStoreViews($setup);
+        $groupedStoreViews = $this->getGroupedStoreViews();
         if (empty($groupedStoreViews[$attributeValue['website_id']])) {
             return null;
         }
@@ -305,12 +310,11 @@ class UpgradeWebsiteAttributes
     }
 
     /**
-     * @param ModuleDataSetupInterface $setup
      * @param array $insertions
      * @param string $tableName
      * @return void
      */
-    private function executeInsertions(ModuleDataSetupInterface $setup, array $insertions, $tableName)
+    private function executeInsertions(array $insertions, $tableName)
     {
         $rawQuery = sprintf(
             'INSERT INTO 
@@ -318,12 +322,12 @@ class UpgradeWebsiteAttributes
             VALUES 
             %s
             ON duplicate KEY UPDATE `value` = VALUES(`value`)',
-            $setup->getTable($tableName),
+            $this->resourceConnection->getConnection()->getTableName($tableName),
             $this->getTableLinkField($tableName),
             $this->prepareInsertValuesStatement($insertions)
         );
 
-        $setup->getConnection()->query($rawQuery, $this->getPlaceholderValues($insertions));
+        $this->resourceConnection->getConnection()->query($rawQuery, $this->getPlaceholderValues($insertions));
     }
 
     /**
@@ -385,5 +389,29 @@ class UpgradeWebsiteAttributes
         }
 
         return $this->linkFields[$tableName];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.2.2';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
