@@ -3,64 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CurrencySymbol\Setup;
+
+namespace Magento\CurrencySymbol\Setup\Patch;
 
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Data upgrade script
- *
- * @codeCoverageIgnore
+ * Class ConvertSerializedCustomCurrencySymbolToJson
+ * @package Magento\CurrencySymbol\Setup\Patch
  */
-class UpgradeData implements UpgradeDataInterface
+class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * @var FieldDataConverterFactory
+     * @var ResourceConnection
      */
+    private $resourceConnection;
+    
+    /**
+    * @param FieldDataConverterFactory $fieldDataConverterFactory
+    */
     private $fieldDataConverterFactory;
 
     /**
-     * @var QueryModifierFactory
-     */
+    * @param QueryModifierFactory $queryModifierFactory
+    */
     private $queryModifierFactory;
 
     /**
-     * Constructor
-     *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
-        QueryModifierFactory $queryModifierFactory
+        QueryModifierFactory $queryModifierFactory,
+        ResourceConnection $resourceConnection
+
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-    {
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->convertSerializedCustomCurrencySymbolToJson($setup);
-        }
-    }
-
-    /**
-     * Converts custom currency symbol configuration in core_config_data table from serialized to JSON format
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @return void
-     */
-    private function convertSerializedCustomCurrencySymbolToJson(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
@@ -72,11 +66,35 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('core_config_data'),
+            $this->resourceConnection->getConnection(),
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             'config_id',
             'value',
             $queryModifier
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <data>
   <patches>
-    <patch name="Magento\CurrencySymbol\Setup\Patch\Patch201" sortOrder="1"/>
+    <patch name="Magento\CurrencySymbol\Setup\Patch\ConvertSerializedCustomCurrencySymbolToJson" sortOrder="1"/>
   </patches>
 </data>
