@@ -52,5 +52,4 @@ class GetSourceItemsIdsWithProductTypeIds
 
         return $sourceItemsIdsWithTypeIds;
     }
-
 }

@@ -74,5 +74,4 @@ class GetBundleSourceItemIdByChildSourceItemId
 
         return $bundleSourceItemId;
     }
-
 }
