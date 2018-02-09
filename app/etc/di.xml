@@ -1490,4 +1490,20 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="\Magento\Setup\Model\Patch\SchemaPatchReader" type="\Magento\Setup\Model\Patch\PatchReader">
+        <arguments>
+            <argument name="type" xsi:type="string">schema</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="\Magento\Setup\Model\Patch\DataPatchReader" type="\Magento\Setup\Model\Patch\PatchReader">
+        <arguments>
+            <argument name="type" xsi:type="string">data</argument>
+        </arguments>
+    </virtualType>
+    <type name="\Magento\Setup\Model\Patch\PatchApplier">
+        <arguments>
+            <argument name="dataPatchReader" xsi:type="object">\Magento\Setup\Model\Patch\DataPatchReader</argument>
+            <argument name="schemaPatchReader" xsi:type="object">\Magento\Setup\Model\Patch\SchemaPatchReader</argument>
+        </arguments>
+    </type>
 </config>

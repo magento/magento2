@@ -6,161 +6,146 @@
 
 namespace Magento\Setup\Model\Patch;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Exception;
 
 /**
- * Read, create and apply all patches in specific sequence
+ * Apply patches per specific module
  */
 class PatchApplier
 {
     /**
+     * @var PatchRegistryFactory
+     */
+    private $patchRegistryFactory;
+
+    /**
      * @var PatchReader
      */
-    private $patchReader;
+    private $dataPatchReader;
 
     /**
-     * @var PatchFactory
+     * @var PatchReader
      */
-    private $dataPatchFactory;
+    private $schemaPatchReader;
 
     /**
-     * @var SchemaPatchFactory
+     * @var ResourceConnection
      */
-    private $schemaPatchFactory;
+    private $resourceConnection;
 
     /**
-     * @var PatchHistory
-     */
-    private $patchHistory;
-
-    /**
-     * @param PatchReader $patchReader
-     * @param PatchFactory $dataPatchFactory
-     * @param SchemaPatchFactory $schemaPatchFactory
-     * @param PatchHistory $patchHistory
+     * PatchApplier constructor.
+     * @param PatchReader $dataPatchReader
+     * @param PatchReader $schemaPatchReader
+     * @param PatchRegistryFactory $patchRegistryFactory
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        PatchReader $patchReader,
-        PatchFactory $dataPatchFactory,
-        SchemaPatchFactory $schemaPatchFactory,
-        PatchHistory $patchHistory
-    )
-    {
-        $this->patchReader = $patchReader;
-        $this->dataPatchFactory = $dataPatchFactory;
-        $this->schemaPatchFactory = $schemaPatchFactory;
-        $this->patchHistory = $patchHistory;
+        PatchReader $dataPatchReader,
+        PatchReader $schemaPatchReader,
+        PatchRegistryFactory $patchRegistryFactory,
+        ResourceConnection $resourceConnection
+    ) {
+        $this->patchRegistryFactory = $patchRegistryFactory;
+        $this->dataPatchReader = $dataPatchReader;
+        $this->schemaPatchReader = $schemaPatchReader;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Apply patches by modules
+     * Apply all patches for one module
      *
-     * @param ModuleDataSetupInterface | SchemaSetupInterface $setup
-     * @param string $moduleName
+     * @param null | string $moduleName
+     * @throws Exception
      */
-    public function execute(
-        $setup,
-        $moduleName = null
-    )
+    public function applyDataPatch($moduleName = null)
     {
-        $patches = $this->patchReader->read($moduleName);
+        $dataPatches = $this->dataPatchReader->read($moduleName);
+        $registry = $this->prepareRegistry($dataPatches);
+        $adapter = $this->resourceConnection->getConnection();
 
-        if ($setup instanceof SchemaSetupInterface) {
-            $schemaPatchesToApply = $this->patchHistory->getDataPatchesToApply($patches['schema']);
-            //Apply schema patches
-            foreach ($schemaPatchesToApply as $patchInstanceName) {
-                $patch = $this->schemaPatchFactory->create($patchInstanceName);
-                $this->applySchemaPatches($patch, $setup);
-            }
-        } elseif ($setup instanceof ModuleDataSetupInterface) {
-            $dataPatchesToApply = $this->patchHistory->getDataPatchesToApply($patches['data']);
-
-            //Apply data patches
-            foreach ($dataPatchesToApply as $patchInstanceName) {
-                $patch = $this->dataPatchFactory->create($patchInstanceName);
-                $this->applyDataPatch($patch, $setup);
-            }
-        }
-    }
-
-    /**
-     * Revert data patch
-     *
-     * @param PatchInterface $dataPatch
-     * @param ModuleDataSetupInterface $dataSetup
-     * @throws LocalizedException
-     */
-    private function revertDataPatch(PatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
-    {
-        $connection = $dataSetup->getConnection();
-
-        try {
-            $connection->beginTransaction();
-            $dataPatch->revert($dataSetup);
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-            throw new LocalizedException($e->getMessage());
-        }
-    }
-
-    /**
-     * Revert schema patch
-     *
-     * @param SchemaPatchInterface $schemaPatch
-     * @param SchemaSetupInterface $schemaSetup
-     * @throws LocalizedException
-     */
-    private function revertSchemaPatch(SchemaPatchInterface $schemaPatch, SchemaSetupInterface $schemaSetup)
-    {
-        try {
-            $schemaPatch->revert($schemaSetup);
-        } catch (\Exception $e) {
-            $schemaPatch->apply($schemaSetup);
-            throw new LocalizedException($e->getMessage());
-        }
-    }
-
-    /**
-     * Apply data patches
-     *
-     * @param PatchInterface $dataPatch
-     * @param ModuleDataSetupInterface $dataSetup
-     * @throws LocalizedException
-     */
-    private function applyDataPatch(PatchInterface $dataPatch, ModuleDataSetupInterface $dataSetup)
-    {
-        if (!$dataPatch->isDisabled()) {
-            $connection = $dataSetup->getConnection();
-
+        /**
+         * @var DataPatchInterface $dataPatch
+         */
+        foreach ($registry as $dataPatch) {
             try {
-                $connection->beginTransaction();
-                $dataPatch->apply($dataSetup);
-                $connection->commit();
+                $adapter->beginTransaction();
+                $dataPatch->apply();
+                $adapter->commit();
             } catch (\Exception $e) {
-                $connection->rollBack();
-                throw new LocalizedException($e->getMessage());
+                $adapter->rollBack();
+                throw new Exception($e->getMessage());
             }
         }
     }
 
     /**
-     * Apply schema patches
+     * Register all patches in registry in order to manipulate chains and dependencies of patches
+     * of patches
      *
-     * @param SchemaPatchInterface $schemaPatch
-     * @param SchemaSetupInterface $schemaSetup
-     * @throws LocalizedException
+     * @param array $patchNames
+     * @return PatchRegistry
      */
-    private function applySchemaPatches(SchemaPatchInterface $schemaPatch, SchemaSetupInterface $schemaSetup)
+    private function prepareRegistry(array $patchNames)
     {
-        if (!$schemaPatch->isDisabled()) {
+        $registry = $this->patchRegistryFactory->create();
+
+        foreach ($patchNames as $patchName) {
+            $registry->registerPatch($patchName);
+        }
+
+        return $registry;
+    }
+
+    /**
+     * Apply all patches for one module
+     *
+     * @param null | string $moduleName
+     * @throws Exception
+     */
+    public function applySchemaPatch($moduleName = null)
+    {
+        $schemaPatches = $this->schemaPatchReader->read($moduleName);
+        $registry = $this->prepareRegistry($schemaPatches);
+
+        /**
+         * @var SchemaPatchInterface $schemaPatch
+         */
+        foreach ($registry as $schemaPatch) {
             try {
-                $schemaPatch->apply($schemaSetup);
+                $schemaPatch->apply();
             } catch (\Exception $e) {
-                $schemaPatch->revert($schemaSetup);
-                throw new LocalizedException($e->getMessage());
+                throw new Exception($e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Revert data patches for specific module
+     *
+     * @param null | string $moduleName
+     * @throws Exception
+     */
+    public function revertDataPatches($moduleName = null)
+    {
+        $dataPatches = $this->dataPatchReader->read($moduleName);
+        $registry = $this->prepareRegistry($dataPatches);
+        $adapter = $this->resourceConnection->getConnection();
+
+        /**
+         * @var DataPatchInterface $dataPatch
+         */
+        foreach ($registry->getReverseIterator() as $dataPatch) {
+            if ($dataPatch instanceof PatchRevertableInterface) {
+                try {
+                    $adapter->beginTransaction();
+                    $dataPatch->revert();
+                    $adapter->commit();
+                } catch (\Exception $e) {
+                    $adapter->rollBack();
+                    throw new Exception($e->getMessage());
+                }
             }
         }
     }

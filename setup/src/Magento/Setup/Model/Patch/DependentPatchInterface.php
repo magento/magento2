@@ -29,5 +29,5 @@ interface DependentPatchInterface
      *
      * @return string[]
      */
-    public function getDependencies();
+    public static function getDependencies();
 }

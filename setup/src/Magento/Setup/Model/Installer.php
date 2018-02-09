@@ -35,6 +35,10 @@ use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Setup\Model\Patch\PatchHistory;
+use Magento\Setup\Model\Patch\PatchReader;
+use Magento\Setup\Model\Patch\PatchRegistry;
+use Magento\Setup\Model\Patch\PatchRegistryFactory;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -587,7 +591,6 @@ class Installer
     {
         /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
         $connection = $setup->getConnection();
-
         $setup->startSetup();
 
         $this->setupSessionTable($setup, $connection);
@@ -897,6 +900,7 @@ class Installer
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
+
         foreach ($moduleNames as $moduleName) {
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
@@ -934,8 +938,15 @@ class Installer
                     $resource->setDataVersion($moduleName, $configVer);
                 }
             }
+            /**
+             * Applying data patches after old upgrade data scripts
+             */
+            if ($type === 'schema') {
+                $this->patchApplier->applySchemaPatch($moduleName);
+            } elseif ($type === 'data') {
+                $this->patchApplier->applyDataPatch($moduleName);
+            }
 
-            $this->patchApplier->execute($setup, $moduleName);
             $this->logProgress();
         }
 
