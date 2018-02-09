@@ -113,7 +113,6 @@
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
             <!--<deleteData createDataKey="createSimpleProduct2Image" stepKey="deleteSimpleProduct2Image"/>-->
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
 
             <!-- @TODO: MAGETWO-80272 Move to Configurable -->
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
