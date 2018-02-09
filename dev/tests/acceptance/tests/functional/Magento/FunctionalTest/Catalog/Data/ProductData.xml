@@ -66,4 +66,17 @@
         <data key="shareable">Yes</data>
         <data key="file">logo.png</data>
     </entity>
+    <entity name="ProductWithUnicode" type="product">
+        <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">&#38657;&#20135;&#21697;</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
 </entities>

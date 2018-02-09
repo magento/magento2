@@ -99,9 +99,9 @@
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading13" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading16" />
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad17"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaShortDescription}}" stepKey="assertMediaShortDescription"/>
         <after>
