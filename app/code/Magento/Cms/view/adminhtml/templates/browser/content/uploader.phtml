@@ -96,7 +96,7 @@ require([
                 $(tmpl).data('image', data).appendTo('#<?= $block->getHtmlId() ?>');
 
                 return true;
-            }.bind(this));
+            });
 
             if (data.files.length) {
                 $(this).fileupload('process', data).done(function () {
