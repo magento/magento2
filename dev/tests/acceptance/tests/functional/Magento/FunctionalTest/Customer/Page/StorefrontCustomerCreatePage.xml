@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontCustomerCreatePage" url="/customer/account/create/" module="Magento_Customer">
+    <page name="StorefrontCustomerCreatePage" url="/customer/account/create/" area="storefront" module="Magento_Customer">
         <section name="StorefrontCustomerCreateFormSection" />
     </page>
-</config>
+</pages>
