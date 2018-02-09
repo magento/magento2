@@ -9,28 +9,23 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
 
-use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
-use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
-
-class Image extends AbstractFrontend
+class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
      * Store manager
      *
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Construct
      *
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -47,9 +42,9 @@ class Image extends AbstractFrontend
         $image = $product->getData($this->getAttribute()->getAttributeCode());
         $url = false;
         if (!empty($image)) {
-            $url = $this->_storeManager
-                    ->getStore($product->getStore())
-                    ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . ltrim($image, '/');
+            $url = $this->_storeManager->getStore($product->getStore())
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+                . 'catalog/product/' . $image;
         }
         return $url;
     }
