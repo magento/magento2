@@ -6,41 +6,47 @@
 
 namespace Magento\Sales\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InstallOrderStatusesAndInitialSalesConfig
+ * @package Magento\Sales\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, PatchVersionInterface
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param SalesSetupFactory $salesSetupFactory
+     * @var SalesSetupFactory
      */
     private $salesSetupFactory;
 
     /**
+     * InstallOrderStatusesAndInitialSalesConfig constructor.
+     * @param ResourceConnection $resourceConnection
      * @param SalesSetupFactory $salesSetupFactory
      */
-    public function __construct(SalesSetupFactory $salesSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        SalesSetupFactory $salesSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->salesSetupFactory = $salesSetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
+        $salesSetup = $this->salesSetupFactory->create();
 
         /**
          * Install eav entity types to the eav/entity_type table
@@ -64,7 +70,8 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         foreach ($statuses as $code => $info) {
             $data[] = ['status' => $code, 'label' => $info];
         }
-        $setup->getConnection()->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $data);
+        $this->resourceConnection->getConnection()->insertArray(
+            $this->resourceConnection->getConnection()->getTableName('sales_order_status'), ['status', 'label'], $data);
         /**
          * Install order states from config
          */
@@ -121,8 +128,8 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 }
             }
         }
-        $setup->getConnection()->insertArray(
-            $setup->getTable('sales_order_status_state'),
+        $this->resourceConnection->getConnection()->insertArray(
+            $this->resourceConnection->getConnection()->getTableName('sales_order_status_state'),
             ['status', 'state', 'is_default'],
             $data
         );
@@ -142,33 +149,35 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         /** Update visibility for states */
         $states = ['new', 'processing', 'complete', 'closed', 'canceled', 'holded', 'payment_review'];
         foreach ($states as $state) {
-            $setup->getConnection()->update(
-                $setup->getTable('sales_order_status_state'),
+            $this->resourceConnection->getConnection()->update(
+                $this->resourceConnection->getConnection()->getTableName('sales_order_status_state'),
                 ['visible_on_front' => 1],
                 ['state = ?' => $state]
             );
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
