@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="EndToEndB2CUserCest">
+    <test name="EndToEndB2CGuestUserTest">
         <annotations>
             <features value="End to End scenarios"/>
             <stories value="End-to-end automation: B2C guest user - MAGETWO-75411"/>
@@ -41,11 +41,6 @@
                 <requiredEntity createDataKey="createSimpleProduct2"/>
             </createData>
             <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateSimpleProduct2" createDataKey="createSimpleProduct2"/>
-
-            <createData entity="ApiCategory" stepKey="createCategory1"/>
-            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct3">
-                <requiredEntity createDataKey="createCategory1"/>
-            </createData>
 
             <!-- @TODO: MAGETWO-80272 Move to Configurable -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
@@ -108,7 +103,6 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
 
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
             <!--<deleteData createDataKey="createSimpleProduct1Image" stepKey="deleteSimpleProduct1Image"/>-->
