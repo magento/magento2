@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Result;
 
 /**
@@ -105,7 +103,12 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      * @dataProvider renderResultDataProvider
      */
     public function testRenderResult(
-        $httpCode, $headerName, $headerValue, $replaceHeader, $setHttpResponseCodeCount, $setHeaderCount
+        $httpCode,
+        $headerName,
+        $headerValue,
+        $replaceHeader,
+        $setHttpResponseCodeCount,
+        $setHeaderCount
     ) {
         $layoutOutput = 'output';
 

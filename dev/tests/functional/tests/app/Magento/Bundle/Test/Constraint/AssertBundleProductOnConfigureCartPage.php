@@ -100,7 +100,7 @@ class AssertBundleProductOnConfigureCartPage extends AbstractAssertForm
                     'price' => number_format($price, 2),
                 ];
                 foreach ($cartItemOptions as $option) {
-                    if (strpos($option['value'], $title)) {
+                    if (strpos($option['value'], $title) !== false) {
                         $optionData['options'][$productKey]['selected'] = true;
                     }
                 }

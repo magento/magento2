@@ -9,6 +9,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test case for Web API functional tests for Graphql.
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
@@ -20,6 +22,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $graphQlClient;
 
     /**
+     * @var \Magento\Framework\App\Cache
+     */
+    private $appCache;
+
+    /**
      * Perform GraphQL call to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
@@ -28,9 +35,53 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $operationName
      * @return array|int|string|float|bool GraphQL call results
      */
-    public function graphQlQuery(string $query, array $variables = [], string $operationName = '')
+    public function graphQlQuery(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $this->getGraphQlClient()->postQuery(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function composeHeaders($headers)
     {
-        return $this->getGraphQlClient()->postQuery($query, $variables, $operationName);
+        $headersArray =[];
+        foreach ($headers as $key => $value) {
+            $headersArray[] = sprintf('%s: %s', $key, $value);
+        }
+        return $headersArray;
+    }
+
+    /**
+     * Clear cache so integration test can alter cached GraphQL schema
+     *
+     * @return bool
+     */
+    protected function cleanCache()
+    {
+        return $this->getAppCache()->clean(\Magento\Framework\App\Config::CACHE_TAG);
+    }
+
+    /**
+     * Return app cache setup.
+     *
+     * @return \Magento\Framework\App\Cache
+     */
+    private function getAppCache()
+    {
+        if (null === $this->appCache) {
+            $this->appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
+        }
+        return $this->appCache;
     }
 
     /**

@@ -164,7 +164,7 @@ class InvoiceCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('email', $result);
     }
 
-    public function testSetCusomerName()
+    public function testSetCustomerName()
     {
         $this->identity->setCustomerName('name');
         $result = $this->identity->getCustomerName();

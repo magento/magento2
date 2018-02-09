@@ -31,13 +31,24 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllBlocksReferencedInLayoutArePublic($layoutFile)
     {
+        // A block can be whitelisted and thus not be required to be public
+        $whiteListFiles = str_replace('\\', '/', realpath(__DIR__))
+            . '/_files/whitelist/public_code*.txt';
+        $whiteListBlocks = [];
+        foreach (glob($whiteListFiles) as $fileName) {
+            $whiteListBlocks = array_merge(
+                $whiteListBlocks,
+                file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+            );
+        }
+
         $nonPublishedBlocks = [];
         $xml = simplexml_load_file($layoutFile);
         $elements = $xml->xpath('//block | //referenceBlock') ?: [];
         /** @var $node \SimpleXMLElement */
         foreach ($elements as $node) {
             $class = (string) $node['class'];
-            if ($class && \class_exists($class)) {
+            if ($class && \class_exists($class) && !in_array($class, $whiteListBlocks)) {
                 $reflection = (new \ReflectionClass($class));
                 if (strpos($reflection->getDocComment(), '@api') === false) {
                     $nonPublishedBlocks[] = $class;

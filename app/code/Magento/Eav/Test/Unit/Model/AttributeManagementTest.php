@@ -18,7 +18,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 {
@@ -117,7 +116,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
             ->with($attributeSetId)
             ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException()));
 
-        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
+        $this->attributeManagement->assign(
+            $entityTypeCode,
+            $attributeSetId,
+            $attributeGroupId,
+            $attributeCode,
+            $sortOrder
+        );
     }
 
     /**
@@ -143,7 +148,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode+1);
 
-        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
+        $this->attributeManagement->assign(
+            $entityTypeCode,
+            $attributeSetId,
+            $attributeGroupId,
+            $attributeCode,
+            $sortOrder
+        );
     }
 
     /**
@@ -177,7 +188,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())->method('get')->willReturn($attributeGroup);
         $attributeGroup->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId + 1);
 
-        $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
+        $this->attributeManagement->assign(
+            $entityTypeCode,
+            $attributeSetId,
+            $attributeGroupId,
+            $attributeCode,
+            $sortOrder
+        );
     }
 
     public function testAssign()
@@ -226,7 +243,13 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             $attributeMock,
-            $this->attributeManagement->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
+            $this->attributeManagement->assign(
+                $entityTypeCode,
+                $attributeSetId,
+                $attributeGroupId,
+                $attributeCode,
+                $sortOrder
+            )
         );
     }
 

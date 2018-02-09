@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
@@ -250,7 +248,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
         $contextMock->expects($this->any())
@@ -342,11 +343,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::class
             );
 
-        $this->mediaGalleryEntryConverterPoolMock->expects($this->any())->method('getConverterByMediaType')->willReturn(
-            $this->converterMock
-        );
+        $this->mediaGalleryEntryConverterPoolMock->expects($this->any())->method('getConverterByMediaType')
+            ->willReturn($this->converterMock);
         $this->productLinkRepositoryMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class)
+            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
@@ -614,11 +615,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function getProductReindexProvider()
     {
-        return array(
+        return [
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
             'set 3' => [false, false, 1, 0]
-        );
+        ];
     }
 
     public function testPriceReindexCallback()
@@ -1242,7 +1243,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($imagesCollectionMock);
-        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)->willReturn($expectedImageDataObject);
+        $imagesCollectionMock->expects($this->at(2))
+            ->method('getItemById')
+            ->with(1)
+            ->willReturn($expectedImageDataObject);
         $this->mediaConfig->expects($this->at(0))
             ->method('getMediaUrl')
             ->willReturn('http://magento.dev/pub/imageFile.jpg');

@@ -89,6 +89,10 @@ class AccountManagement implements AccountManagementInterface
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
+    /**
+     * @deprecated
+     * @see AccountConfirmation::XML_PATH_IS_CONFIRM
+     */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
@@ -299,6 +303,11 @@ class AccountManagement implements AccountManagementInterface
     private $dateTimeFactory;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -323,7 +332,8 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param CredentialsValidator|null $credentialsValidator
-     * @param DateTimeFactory $dateTimeFactory
+     * @param DateTimeFactory|null $dateTimeFactory
+     * @param AccountConfirmation|null $accountConfirmation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -351,7 +361,8 @@ class AccountManagement implements AccountManagementInterface
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         CredentialsValidator $credentialsValidator = null,
-        DateTimeFactory $dateTimeFactory = null
+        DateTimeFactory $dateTimeFactory = null,
+        AccountConfirmation $accountConfirmation = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -379,6 +390,8 @@ class AccountManagement implements AccountManagementInterface
         $this->credentialsValidator =
             $credentialsValidator ?: ObjectManager::getInstance()->get(CredentialsValidator::class);
         $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
     }
 
     /**
@@ -460,7 +473,12 @@ class AccountManagement implements AccountManagementInterface
 
         $customer->setConfirmation(null);
         $this->customerRepository->save($customer);
-        $this->getEmailNotification()->newAccount($customer, 'confirmed', '', $this->storeManager->getStore()->getId());
+        $this->getEmailNotification()->newAccount(
+            $customer,
+            'confirmed',
+            '',
+            $this->storeManager->getStore()->getId()
+        );
         return $customer;
     }
 
@@ -531,12 +549,8 @@ class AccountManagement implements AccountManagementInterface
                     $this->getEmailNotification()->passwordResetConfirmation($customer);
                     break;
                 default:
-                    throw new InputException(
-                        __(
-                            'Invalid value of "%value" provided for the %fieldName field.',
-                            ['value' => $template, 'fieldName' => 'email type']
-                        )
-                    );
+                    $this->handleUnknownTemplate($template);
+                    break;
             }
             return true;
         } catch (MailException $e) {
@@ -544,6 +558,25 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
         return false;
+    }
+
+    /**
+     * Handle not supported template
+     *
+     * @param string $template
+     * @throws InputException
+     */
+    private function handleUnknownTemplate($template)
+    {
+        throw new InputException(__(
+            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+            [
+                'value' => $template,
+                'fieldName' => 'template',
+                'template1' => AccountManagement::EMAIL_REMINDER,
+                'template2' => AccountManagement::EMAIL_RESET
+            ]
+        ));
     }
 
     /**
@@ -1111,7 +1144,11 @@ class AccountManagement implements AccountManagementInterface
         $storeId = null,
         $email = null
     ) {
-        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        $templateId = $this->scopeConfig->getValue(
+            $template,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         if ($email === null) {
             $email = $customer->getEmail();
         }
@@ -1119,7 +1156,11 @@ class AccountManagement implements AccountManagementInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
-            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
+            ->setFrom($this->scopeConfig->getValue(
+                $sender,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
@@ -1133,17 +1174,15 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
     protected function isConfirmationRequired($customer)
     {
-        if ($this->canSkipConfirmation($customer)) {
-            return false;
-        }
-
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_IS_CONFIRM,
-            ScopeInterface::SCOPE_WEBSITES,
-            $customer->getWebsiteId()
+        return $this->accountConfirmation->isConfirmationRequired(
+            $customer->getWebsiteId(),
+            $customer->getId(),
+            $customer->getEmail()
         );
     }
 
@@ -1152,6 +1191,8 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation($customer)
     {
@@ -1313,8 +1354,10 @@ class AccountManagement implements AccountManagementInterface
         // No need to flatten the custom attributes or nested objects since the only usage is for email templates and
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerData =
-            $this->dataProcessor->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerData = $this->dataProcessor->buildOutputDataArray(
+            $customer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

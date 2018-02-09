@@ -6,8 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
-
 use Magento\GiftMessage\Model\CartRepository;
 
 class CartRepositoryTest extends \PHPUnit\Framework\TestCase
@@ -70,22 +68,31 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->messageFactoryMock = $this->createPartialMock(\Magento\GiftMessage\Model\MessageFactory::class, [
+        $this->messageFactoryMock = $this->createPartialMock(
+            \Magento\GiftMessage\Model\MessageFactory::class,
+            [
                 'create',
                 '__wakeup'
-            ]);
+            ]
+        );
         $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
-        $this->quoteItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
+        $this->quoteItemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            [
                 'getGiftMessageId',
                 '__wakeup'
-            ]);
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
+            ]
+        );
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            [
                 'getGiftMessageId',
                 'getItemById',
                 'getItemsCount',
                 'isVirtual',
                 '__wakeup',
-            ]);
+            ]
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->giftMessageManagerMock =
             $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);
@@ -108,9 +115,7 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGetWithOutMessageId()
     {
         $messageId = 0;
-
         $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
-
         $this->assertNull($this->cartRepository->get($this->cartId));
     }
 
@@ -134,7 +139,6 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveWithInputException()
     {
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
-
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 

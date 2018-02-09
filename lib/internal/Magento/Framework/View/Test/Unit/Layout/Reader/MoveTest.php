@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use Magento\Framework\View\Layout\ScheduledStructure;

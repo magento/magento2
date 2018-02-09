@@ -74,7 +74,7 @@ class FrontendDecorator implements CurlInterface
         ];
         $this->transport->write($url, $data, CurlInterface::POST, ['Set-Cookie:' . $this->cookies]);
         $response = $this->read();
-        if (strpos($response, 'customer/account/login')) {
+        if (strpos($response, 'customer/account/login') !== false) {
             throw new \Exception($customer->getFirstname() . ', cannot be logged in by curl handler!');
         }
     }

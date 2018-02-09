@@ -82,13 +82,13 @@ class InstallData implements InstallDataInterface
         $mapsOld = $conn->fetchAll($select);
         foreach ($mapsOld as $mapOld) {
             $mapNew = '';
-            if (stripos($mapOld['path'], 'packaging') && isset($codes['packaging'][$mapOld['value']])) {
+            if (stripos($mapOld['path'], 'packaging') !== false && isset($codes['packaging'][$mapOld['value']])) {
                 $mapNew = $codes['packaging'][$mapOld['value']];
-            } elseif (stripos($mapOld['path'], 'dropoff') && isset($codes['dropoff'][$mapOld['value']])) {
+            } elseif (stripos($mapOld['path'], 'dropoff') !== false && isset($codes['dropoff'][$mapOld['value']])) {
                 $mapNew = $codes['dropoff'][$mapOld['value']];
-            } elseif (stripos($mapOld['path'], 'free_method') && isset($codes['method'][$mapOld['value']])) {
+            } elseif (stripos($mapOld['path'], 'free_method') !== false && isset($codes['method'][$mapOld['value']])) {
                 $mapNew = $codes['method'][$mapOld['value']];
-            } elseif (stripos($mapOld['path'], 'allowed_methods')) {
+            } elseif (stripos($mapOld['path'], 'allowed_methods') !== false) {
                 foreach (explode(',', $mapOld['value']) as $shippingMethod) {
                     if (isset($codes['method'][$shippingMethod])) {
                         $mapNew[] = $codes['method'][$shippingMethod];

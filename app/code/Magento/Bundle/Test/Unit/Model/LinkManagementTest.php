@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Bundle\Model\LinkManagement;
@@ -136,9 +134,8 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectionCollection = $this->getMockBuilder(
-            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
+        )->disableOriginalConstructor()->getMock();
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getTypeInstance', 'getStoreId', 'getTypeId', '__wakeup', 'getId', 'getData'])
             ->disableOriginalConstructor()
@@ -150,9 +147,18 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleSelectionMock = $this->createPartialMock(\Magento\Bundle\Model\SelectionFactory::class, ['create']);
-        $this->bundleFactoryMock = $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\BundleFactory::class, ['create']);
-        $this->optionCollectionFactoryMock = $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory::class, ['create']);
+        $this->bundleSelectionMock = $this->createPartialMock(
+            \Magento\Bundle\Model\SelectionFactory::class,
+            ['create']
+        );
+        $this->bundleFactoryMock = $this->createPartialMock(
+            \Magento\Bundle\Model\ResourceModel\BundleFactory::class,
+            ['create']
+        );
+        $this->optionCollectionFactoryMock = $this->createPartialMock(
+            \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory::class,
+            ['create']
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
@@ -626,7 +632,8 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $productLink->expects($this->any())->method('getQty')->will($this->returnValue($qty));
         $productLink->expects($this->any())->method('getPriceType')->will($this->returnValue($priceType));
         $productLink->expects($this->any())->method('getPrice')->will($this->returnValue($price));
-        $productLink->expects($this->any())->method('getCanChangeQuantity')->will($this->returnValue($canChangeQuantity));
+        $productLink->expects($this->any())->method('getCanChangeQuantity')
+            ->will($this->returnValue($canChangeQuantity));
         $productLink->expects($this->any())->method('getIsDefault')->will($this->returnValue($isDefault));
         $productLink->expects($this->any())->method('getSelectionId')->will($this->returnValue($optionId));
 

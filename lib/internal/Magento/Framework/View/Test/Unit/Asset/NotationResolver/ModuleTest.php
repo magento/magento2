@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
 class ModuleTest extends \PHPUnit\Framework\TestCase
@@ -28,7 +26,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->assetRepo = $this->createPartialMock(\Magento\Framework\View\Asset\Repository::class, ['createUsingContext', 'createSimilar']);
+        $this->assetRepo = $this->createPartialMock(
+            \Magento\Framework\View\Asset\Repository::class,
+            ['createUsingContext', 'createSimilar']
+        );
         $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
     }
 
@@ -51,7 +52,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      * @dataProvider convertModuleNotationToPathModularSeparatorDataProvider
      */
     public function testConvertModuleNotationToPathModularSeparator(
-        $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
+        $assetRelPath,
+        $relatedFieldId,
+        $similarRelPath,
+        $expectedResult
     ) {
         $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $similarAsset->expects($this->any())

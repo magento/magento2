@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\System\Message\Notification;
 
 use Magento\Tax\Model\Config as TaxConfig;

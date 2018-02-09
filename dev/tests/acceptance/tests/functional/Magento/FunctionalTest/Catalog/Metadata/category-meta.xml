@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateCategory" dataType="category" type="create" auth="adminOauth" url="/V1/categories" method="POST">
         <contentType>application/json</contentType>
@@ -32,7 +32,6 @@
 
     <operation name="UpdateCategory" dataType="category" type="update" auth="adminOauth" url="/V1/categories/{id}" method="PUT">
         <contentType>application/json</contentType>
-        <param key="id" type="path">{id}</param>
         <object key="category" dataType="category">
             <field key="id">integer</field>
             <field key="parent_id">integer</field>
@@ -57,6 +56,5 @@
 
     <operation name="DeleteCategory" dataType="category" type="delete" auth="adminOauth" url="/V1/categories/{id}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="id" type="path">{id}</param>
     </operation>
-</config>
+</operations>

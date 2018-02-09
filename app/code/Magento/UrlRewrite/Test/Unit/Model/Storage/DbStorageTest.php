@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -51,7 +49,10 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect']);
+        $this->select = $this->createPartialMock(
+            \Magento\Framework\DB\Select::class,
+            ['from', 'where', 'deleteFromSelect']
+        );
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->resource->expects($this->any())
@@ -61,7 +62,8 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,

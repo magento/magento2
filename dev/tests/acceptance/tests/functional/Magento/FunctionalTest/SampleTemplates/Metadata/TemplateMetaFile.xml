@@ -6,11 +6,11 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="" dataType="" type="" auth="adminOauth" url="" method="">
-        <header param="">application/json</header>
-        <param key="" type="">{}</param>
+        <contentType>application/json</contentType>
+        <param key=""></param>
         <object dataType="" key="">
             <field key=""></field>
             <array key="">
@@ -19,4 +19,4 @@
         </object>
         <field key=""></field>
     </operation>
-</config>
+</operations>

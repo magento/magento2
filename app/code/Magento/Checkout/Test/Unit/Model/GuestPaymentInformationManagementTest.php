@@ -162,7 +162,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $email = 'email@magento.com';

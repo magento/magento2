@@ -803,7 +803,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     {
         $tableAlias = null;
         if (is_array($table)) {
-            list($tableAlias, $tableName) = each($table);
+            list($tableAlias, $tableName) = [key($table), current($table)];
         } else {
             $tableName = $table;
         }
@@ -920,6 +920,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         foreach ($this->_items as $item) {
             $item->setOrigData();
             $this->beforeAddLoadedItem($item);
+            $item->setDataChanges(false);
         }
         \Magento\Framework\Profiler::stop('set_orig_data');
 
@@ -1255,7 +1256,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
-     * Initialize entity ubject property value
+     * Initialize entity object property value
      *
      * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
      *

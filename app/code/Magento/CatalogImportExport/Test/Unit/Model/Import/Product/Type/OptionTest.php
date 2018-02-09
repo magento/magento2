@@ -19,7 +19,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
-     * Test store parametes
+     * Test store parameters
      *
      * @var array
      */

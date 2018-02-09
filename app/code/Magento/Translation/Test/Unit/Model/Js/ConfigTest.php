@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->dictionaryEnabled());
     }
 
-    public function testgetPatterns()
+    public function testGetPatterns()
     {
         $this->assertEquals($this->patterns, $this->model->getPatterns());
     }

@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -166,9 +164,14 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create', 'setData']);
+        $this->productFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ProductFactory::class,
+            ['create', 'setData']
+        );
 
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 'getId',
                 'getSku',
                 'setWebsiteIds',
@@ -177,9 +180,12 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setData',
                 'getStoreId',
                 'getMediaGalleryEntries'
-            ]);
+            ]
+        );
 
-        $this->initializedProductMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->initializedProductMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 'getWebsiteIds',
                 'setProductOptions',
                 'load',
@@ -199,11 +205,19 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('hasGalleryAttribute')
             ->willReturn(true);
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->initializationHelperMock = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class);
-        $this->collectionFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class, ['create']);
+        $this->initializationHelperMock = $this->createMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
+        );
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            ['create']
+        );
         $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
-        $this->searchResultsFactoryMock = $this->createPartialMock(\Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory::class, ['create']);
+        $this->searchResultsFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory::class,
+            ['create']
+        );
         $this->resourceModelMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->objectManager = new ObjectManager($this);
         $this->extensibleDataObjectConverterMock = $this
@@ -215,12 +229,19 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap::class)->getMock();
-        $this->contentFactoryMock = $this->createPartialMock(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class, ['create']);
+        $this->contentFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Api\Data\ImageContentInterfaceFactory::class,
+            ['create']
+        );
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->linkTypeProviderMock = $this->createPartialMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class, ['getLinkTypes']);
+        $this->linkTypeProviderMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\LinkTypeProvider::class,
+            ['getLinkTypes']
+        );
         $this->imageProcessorMock = $this->createMock(\Magento\Framework\Api\ImageProcessorInterface::class);
 
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)

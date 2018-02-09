@@ -43,25 +43,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->getConfig();
         $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
-        $this->assertStringMatchesFormat($publicPathPattern, $config->getPopupCss());
-        $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
-    }
-
-    /**
-     * Tests that config doesn't process incoming already prepared data
-     *
-     * @dataProvider getConfigNoProcessingDataProvider
-     */
-    public function testGetConfigNoProcessing($original)
-    {
-        $config = $this->_model->getConfig($original);
-        $actual = $config->getData();
-        foreach (array_keys($actual) as $key) {
-            if (!isset($original[$key])) {
-                unset($actual[$key]);
-            }
-        }
-        $this->assertEquals($original, $actual);
+        $tinyMce4Config = $config->getData('tinymce4');
+        $this->assertStringMatchesFormat($publicPathPattern, $tinyMce4Config['content_css']);
     }
 
     /**

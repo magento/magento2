@@ -19,6 +19,11 @@ class InstallData implements InstallDataInterface
     private $indexerFactory;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
      * @param IndexerInterfaceFactory $indexerFactory
      * @param ProductAttributeRepositoryInterface $attributeRepository
      */

@@ -6,11 +6,11 @@
 
 namespace Magento\GraphQl\Model;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Schema;
+use Magento\Framework\GraphQl\Type\SchemaFactory;
+use Magento\Framework\GraphQl\Config\FieldConfig;
 use Magento\GraphQl\Model\Type\Generator;
-use Magento\GraphQl\Model\ResolverFactory;
+use Magento\Framework\GraphQl\ArgumentFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Generate a query field and concrete types for GraphQL schema
@@ -23,18 +23,44 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $typeGenerator;
 
     /**
-     * @var ResolverFactory
+     * @var ArgumentFactory
      */
-    private $resolverFactory;
+    private $argumentFactory;
+
+    /**
+     * @var FieldConfig
+     */
+    private $fieldConfig;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var SchemaFactory
+     */
+    private $schemaFactory;
 
     /**
      * @param Generator $typeGenerator
-     * @param ResolverFactory $resolverFactory
+     * @param ArgumentFactory $argumentFactory
+     * @param FieldConfig $fieldConfig
+     * @param TypeFactory $typeFactory
+     * @param SchemaFactory $schemaFactory
      */
-    public function __construct(Generator $typeGenerator, ResolverFactory $resolverFactory)
-    {
+    public function __construct(
+        Generator $typeGenerator,
+        ArgumentFactory $argumentFactory,
+        FieldConfig $fieldConfig,
+        TypeFactory $typeFactory,
+        SchemaFactory $schemaFactory
+    ) {
         $this->typeGenerator = $typeGenerator;
-        $this->resolverFactory = $resolverFactory;
+        $this->argumentFactory = $argumentFactory;
+        $this->fieldConfig = $fieldConfig;
+        $this->typeFactory = $typeFactory;
+        $this->schemaFactory = $schemaFactory;
     }
 
     /**
@@ -43,16 +69,13 @@ class SchemaGenerator implements SchemaGeneratorInterface
      */
     public function generate()
     {
-        $schemaConfig = $this->typeGenerator->generateTypes('Query');
-        $config = new ObjectType([
+        $schemaConfig = $this->typeGenerator->generateTypes();
+
+        $config = $this->typeFactory->createObject([
             'name' => 'Query',
-            'fields' => $schemaConfig['fields'],
-            'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
-                $resolver = $this->resolverFactory->create(ucfirst($info->fieldName));
-                return $resolver->resolve($args, $info);
-            }
+            'fields' => $schemaConfig['fields']
         ]);
-        $schema = new Schema(['query' => $config, 'types' => $schemaConfig['types']]);
+        $schema = $this->schemaFactory->create(['query' => $config, 'types' => $schemaConfig['types']]);
         return $schema;
     }
 }

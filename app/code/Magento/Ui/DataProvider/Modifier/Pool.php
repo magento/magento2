@@ -33,7 +33,7 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
      */
     public function __construct(
         ModifierFactory $factory,
-        array $modifiers
+        array $modifiers = []
     ) {
         $this->factory = $factory;
         $this->modifiers = $this->sort($modifiers);

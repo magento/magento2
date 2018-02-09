@@ -10,5 +10,4 @@
         <link src="Magento_Backend::js/bootstrap/editor.js"/>
         <css src="prototype/windows/themes/default.css"/>
     </head>
-    <body/>
 </page>
