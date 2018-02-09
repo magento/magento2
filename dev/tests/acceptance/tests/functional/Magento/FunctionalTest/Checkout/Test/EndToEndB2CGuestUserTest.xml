@@ -499,8 +499,6 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$compareGrabSimpleProduct1PageImageSrc" stepKey="compareAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.one"/>
         </actionGroup>
 
         <!-- Add Simple Product 2 to comparison -->
