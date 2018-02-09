@@ -4,24 +4,33 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Fedex\Setup;
+namespace Magento\Fedex\Setup\Patch;
 
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-/**
- * Class InstallData
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @codeCoverageIgnore
- */
-class InstallData implements InstallDataInterface
+class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @var ResourceConnection
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    private $resourceConnection;
+
+    /**
+     * ConfigureFedexDefaults constructor.
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection
+    ) {
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply()
     {
         $codes = [
             'method' => [
@@ -64,10 +73,8 @@ class InstallData implements InstallDataInterface
             ],
         ];
 
-        $installer = $setup;
-        $configDataTable = $installer->getTable('core_config_data');
-        $conn = $installer->getConnection();
-
+        $conn = $this->resourceConnection->getConnection();
+        $configDataTable = $conn->getTableName('core_config_data');
         $select = $conn->select()->from(
             $configDataTable
         )->where(
@@ -100,11 +107,34 @@ class InstallData implements InstallDataInterface
             } else {
                 continue;
             }
-
             if (!empty($mapNew) && $mapNew != $mapOld['value']) {
                 $whereConfigId = $conn->quoteInto('config_id = ?', $mapOld['config_id']);
                 $conn->update($configDataTable, ['value' => $mapNew], $whereConfigId);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
