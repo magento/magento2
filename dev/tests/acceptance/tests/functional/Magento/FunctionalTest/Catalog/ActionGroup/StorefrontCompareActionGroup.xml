@@ -11,30 +11,30 @@
     <!-- Add Product to Compare from the category page and check message -->
     <actionGroup name="StorefrontAddCategoryProductToCompareActionGroup">
         <arguments>
-            <argument name="product"/>
+            <argument name="productVar"/>
         </arguments>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByName(product.name)}}" stepKey="clickAddProductToCompare"/>
-        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
-        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCompare(product.name)}}" time="30" stepKey="assertMessageProductAddedToCompare"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="moveMouseOverProduct" />
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByName(productVar.name)}}" stepKey="clickAddProductToCompare"/>
+        <waitForElement selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForAddCategoryProductToCompareSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added product {{productVar.name}} to the comparison list." stepKey="assertAddCategoryProductToCompareSuccessMessage"/>
     </actionGroup>
 
     <!-- Add Product to Compare from the product page and check message -->
     <actionGroup name="StorefrontAddProductToCompareActionGroup">
         <arguments>
-            <argument name="product"/>
+            <argument name="productVar"/>
         </arguments>
         <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare" />
-        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
-        <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCompare(product.name)}}" time="30" stepKey="assertMessageProductAddedToCompare"/>
+        <waitForElement selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForAddProductToCompareSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added product {{productVar.name}} to the comparison list." stepKey="assertAddProductToCompareSuccessMessage"/>
     </actionGroup>
 
     <!-- Check the product in compare sidebar -->
     <actionGroup name="StorefrontCheckCompareSidebarProductActionGroup">
         <arguments>
-            <argument name="product"/>
+            <argument name="productVar"/>
         </arguments>
-        <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName(product.name)}}" stepKey="waitForProduct"/>
+        <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
     </actionGroup>
 
     <!-- Open and check comparison page -->
@@ -48,13 +48,13 @@
     <!-- Check the simple product in comparison page -->
     <actionGroup name="StorefrontCheckCompareSimpleProductActionGroup">
         <arguments>
-            <argument name="product"/>
+            <argument name="productVar"/>
         </arguments>
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
-        <see userInput="${{product.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
-        <see userInput="{{product.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', product.name)}}" stepKey="assertProductPrice"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(productVar.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(productVar.name)}}" stepKey="assertProductPrice"/>
+        <see userInput="{{productVar.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', productVar.name)}}" stepKey="assertProductPrice"/>
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(product.name)}}" stepKey="assertProductAddToCart"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartByName(productVar.name)}}" stepKey="assertProductAddToCart"/>
     </actionGroup>
 
     <!-- Clear the compare list -->

@@ -505,7 +505,7 @@
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="compareGrabSimpleProduct1PageImageSrc"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$compareGrabSimpleProduct1PageImageSrc" stepKey="compareAssertSimpleProduct2PageImageNotDefault"/>
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
-            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.one"/>
         </actionGroup>
@@ -524,7 +524,7 @@
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrc"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrc" stepKey="compareAssertSimpleProduct2ImageNotDefault"/>
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
-            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
 
         <comment userInput="Add more products to comparision" stepKey="addMoreProductsToComparison" />
@@ -538,32 +538,32 @@
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrc" after="compareAssertConfigProduct"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrc" stepKey="compareAssertConfigProductImageNotDefault" after="compareGrabConfigProductImageSrc"/>
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddConfigProductToCompare" after="compareAssertConfigProductImageNotDefault">
-            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
 
         <!-- Check products in comparison sidebar -->
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct1InSidebar">
-            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct2InSidebar">
-            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <comment userInput="Check more products in comparision sidebar" stepKey="checkMoreProductsInComparisionSidebar" />
         <!-- @TODO: MAGETWO-80272 Move to Configurable -->
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareConfigProductInSidebar" after="checkMoreProductsInComparisionSidebar">
-            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
 
         <!-- Check products on comparison page -->
         <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="compareOpenComparePage"/>
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison">
-            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrcInComparison"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrcInComparison" stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison"/>
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
-            <argument name="product" value="$$createSimpleProduct2$$"/>
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct2ImageSrcInComparison"/>
