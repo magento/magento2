@@ -7,6 +7,16 @@
 // @codingStandardsIgnoreFile
 
 /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
+
+$filters = $block->getConfig()->getFilters() ?? [];
+$allowedExtensions = [];
+
+foreach ($filters as $media_type) {
+    $allowedExtensions = array_merge($allowedExtensions, array_map(function ($fileExt) use ($block) {
+        return $block->escapeHtml(ltrim($fileExt, '.*'));
+    }, $media_type['files']));
+}
+
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader">
@@ -35,7 +45,7 @@ require([
     'mage/translate'
 ], function ($, mageTemplate, validator, uiAlert) {
     var maxFileSize = <?= $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
-        allowedExtensions = 'gif jpg png jpeg';
+        allowedExtensions = '<?= implode(' ', $allowedExtensions) ?>';
 
     $('#<?= $block->getHtmlId() ?> .fileupload').fileupload({
         dataType: 'json',
