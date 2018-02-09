@@ -7,42 +7,54 @@
 namespace Magento\Eav\Setup\Patch;
 
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InitializeAttributeModels
+ * @package Magento\Eav\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InitializeAttributeModels implements DataPatchInterface, VersionedDataPatch
 {
-
-
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+    /**
+     * @var EavSetupFactory
      */
     private $eavSetupFactory;
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
 
     /**
+     * InitializeAttributeModels constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        EavSetupFactory $eavSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
-        $setup->startSetup();
+        $this->moduleDataSetup->startSetup();
         /** @var \Magento\Framework\Module\Setup\Migration $migrationSetup */
-        $migrationSetup = $setup->createMigrationSetup();
+        $migrationSetup = $this->moduleDataSetup->createMigrationSetup();
 
         $migrationSetup->appendClassAliasReplace(
             'eav_attribute',
@@ -102,34 +114,39 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $migrationSetup->doUpdateClassAliases();
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create([
+            'setup' => $this->moduleDataSetup,
+            'resourceConnection' => $this->resourceConnection
+        ]);
         $groups = $eavSetup->getAttributeGroupCollectionFactory();
         foreach ($groups as $group) {
-            /** @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+            /** @var $group \Magento\Eav\Model\Entity\Attribute\Group*/
             $group->save();
         }
-        $setup->endSetup();
-
+        $this->moduleDataSetup->endSetup();
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
