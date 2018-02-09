@@ -236,7 +236,9 @@ EOD;
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            CreateDefaultPages::class,
+        ];
     }
 
     /**

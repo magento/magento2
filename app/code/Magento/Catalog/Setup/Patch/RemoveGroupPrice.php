@@ -82,7 +82,9 @@ class RemoveGroupPrice implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            InstallDefaultCategories::class,
+        ];
     }
 
     /**

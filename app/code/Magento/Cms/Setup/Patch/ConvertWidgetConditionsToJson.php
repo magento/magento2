@@ -135,7 +135,9 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, VersionedData
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdatePrivacyPolicyPage::class,
+        ];
     }
 
     /**

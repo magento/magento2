@@ -68,7 +68,9 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, Versioned
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateDefaultAttributeValue::class,
+        ];
     }
 
     /**

@@ -71,7 +71,9 @@ class UpdateTierPriceAttribute implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            InstallInitialConfigurableAttributes::class,
+        ];
     }
 
     /**

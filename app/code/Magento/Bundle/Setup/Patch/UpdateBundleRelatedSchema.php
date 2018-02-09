@@ -139,7 +139,9 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, VersionedDataPatc
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateBundleRelatedEntityTytpes::class,
+        ];
     }
 
     /**

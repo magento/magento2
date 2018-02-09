@@ -72,7 +72,9 @@ class UpdateStockItemsWebsite implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            CreateDefaultStock::class,
+        ];
     }
 
     /**

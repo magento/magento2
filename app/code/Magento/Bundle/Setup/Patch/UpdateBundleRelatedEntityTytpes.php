@@ -180,7 +180,9 @@ class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, VersionedDa
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            ApplyAttributesUpdate::class,
+        ];
     }
 
     /**

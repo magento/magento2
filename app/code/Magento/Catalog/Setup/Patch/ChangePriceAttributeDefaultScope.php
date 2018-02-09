@@ -76,7 +76,9 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, VersionedD
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateProductMetaDescription::class,
+        ];
     }
 
     /**

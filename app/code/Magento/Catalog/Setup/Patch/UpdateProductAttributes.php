@@ -240,7 +240,9 @@ class UpdateProductAttributes implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateMediaAttributesBackendTypes::class,
+        ];
     }
 
     /**

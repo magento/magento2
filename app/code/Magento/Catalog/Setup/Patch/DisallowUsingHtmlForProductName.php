@@ -62,7 +62,9 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, VersionedDa
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            ChangePriceAttributeDefaultScope::class,
+        ];
     }
 
     /**

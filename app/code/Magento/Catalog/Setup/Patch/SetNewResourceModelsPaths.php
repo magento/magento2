@@ -93,7 +93,9 @@ class SetNewResourceModelsPaths implements DataPatchInterface, VersionedDataPatc
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            RemoveGroupPrice::class,
+        ];
     }
 
     /**

@@ -103,7 +103,9 @@ class ConvertSerializedDataToJson implements DataPatchInterface, VersionedDataPa
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateStockItemsWebsite::class,
+        ];
     }
 
     /**

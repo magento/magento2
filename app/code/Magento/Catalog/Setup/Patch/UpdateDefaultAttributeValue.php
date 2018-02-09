@@ -57,7 +57,9 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, VersionedDataPa
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            SetNewResourceModelsPaths::class,
+        ];
     }
 
     /**

@@ -396,7 +396,9 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpgradeWidgetData::class,
+        ];
     }
 
     /**

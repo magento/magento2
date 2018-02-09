@@ -140,7 +140,9 @@ class UpgradeWidgetData implements DataPatchInterface, VersionedDataPatch
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            DisallowUsingHtmlForProductName::class,
+        ];
     }
 
     /**

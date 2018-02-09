@@ -64,7 +64,9 @@ class UpdateProductMetaDescription implements DataPatchInterface, VersionedDataP
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateProductAttributes::class,
+        ];
     }
 
     /**
