@@ -22,7 +22,7 @@ class Save
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
      */
-    protected $categoryUrlRewriteGenerator;
+    private $categoryUrlRewriteGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
@@ -94,7 +94,7 @@ class Save
      * @param int|null $storeId
      * @return bool
      */
-    protected function isGlobalScope($storeId)
+    private function isGlobalScope($storeId)
     {
         return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
     }
@@ -105,7 +105,7 @@ class Save
      *
      * @return void
      */
-    protected function updateUrlPathForCategory(Category $category, $categoryResource)
+    private function updateUrlPathForCategory(Category $category, $categoryResource)
     {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
