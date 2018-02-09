@@ -6,79 +6,61 @@
 
 namespace Magento\Checkout\Setup\Patch;
 
-use Magento\Customer\Helper\Address;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class PrepareInitialCheckoutConfiguration
+ * @package Magento\Checkout\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class PrepareInitialCheckoutConfiguration implements DataPatchInterface, VersionedDataPatch
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * @var EavSetupFactory
      */
     private $eavSetupFactory;
+
     /**
-     * @param Address $customerAddress
-     */
-    private $customerAddress;
-    /**
-     * @param Address $customerAddress
-     */
-    private $customerAddress;
-    /**
-     * @param Address $customerAddress
-     */
-    private $customerAddress;
-    /**
-     * @param Address $customerAddress
-     */
-    private $customerAddress;
-    /**
-     * @param Address $customerAddress
+     * @var \Magento\Customer\Helper\Address
      */
     private $customerAddress;
 
     /**
-     * @param EavSetupFactory $eavSetupFactory @param Address $customerAddress@param Address $customerAddress@param Address $customerAddress@param Address $customerAddress@param Address $customerAddress
+     * PatchInitial constructor.
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(EavSetupFactory $eavSetupFactory, Address $customerAddress
-        , Address $customerAddress
-        , Address $customerAddress
-        , Address $customerAddress
-        , Address $customerAddress)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        EavSetupFactory $eavSetupFactory,
+        \Magento\Customer\Helper\Address $customerAddress
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->customerAddress = $customerAddress;
-        $this->customerAddress = $customerAddress;
-        $this->customerAddress = $customerAddress;
-        $this->customerAddress = $customerAddress;
         $this->customerAddress = $customerAddress;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
 
-        $setup->startSetup();
+        $this->resourceConnection->getConnection()->startSetup();
 
-        $connection = $setup->getConnection();
+        $connection = $this->resourceConnection->getConnection();
+
         $select = $connection->select()->from(
-            $setup->getTable('core_config_data'),
+            $connection->getTableName('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -89,8 +71,9 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $showPrefix = (bool)$this->customerAddress->getConfig('prefix_show')
             || $connection->fetchOne($select) > 0;
+
         $select = $connection->select()->from(
-            $setup->getTable('core_config_data'),
+            $connection->getTableName('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -104,8 +87,9 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ) || $connection->fetchOne(
                 $select
             ) > 0;
+
         $select = $connection->select()->from(
-            $setup->getTable('core_config_data'),
+            $connection->getTableName('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -116,8 +100,9 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $showSuffix = (bool)$this->customerAddress->getConfig('suffix_show')
             || $connection->fetchOne($select) > 0;
+
         $select = $connection->select()->from(
-            $setup->getTable('core_config_data'),
+            $connection->getTableName('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -128,8 +113,9 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $showDob = (bool)$this->customerAddress->getConfig('dob_show')
             || $connection->fetchOne($select) > 0;
+
         $select = $connection->select()->from(
-            $setup->getTable('core_config_data'),
+            $connection->getTableName('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -140,15 +126,18 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $showTaxVat = (bool)$this->customerAddress->getConfig('taxvat_show')
             || $connection->fetchOne($select) > 0;
+
         $customerEntityTypeId = $eavSetup->getEntityTypeId('customer');
         $addressEntityTypeId = $eavSetup->getEntityTypeId('customer_address');
+
         /**
          *****************************************************************************
          * checkout/onepage/register
          *****************************************************************************
          */
+
         $connection->insert(
-            $setup->getTable('eav_form_type'),
+            $connection->getTableName('eav_form_type'),
             [
                 'code' => 'checkout_onepage_register',
                 'label' => 'checkout_onepage_register',
@@ -157,19 +146,21 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($setup->getTable('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $customerEntityTypeId]
         );
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
+
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -179,7 +170,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -189,7 +180,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showMiddlename) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -199,7 +190,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -209,7 +200,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showSuffix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -219,7 +210,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -228,7 +219,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -237,7 +228,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -246,7 +237,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -255,7 +246,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -264,7 +255,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -273,7 +264,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -282,7 +273,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -291,7 +282,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -301,7 +292,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showDob) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -312,7 +303,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         }
         if ($showTaxVat) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -321,13 +312,15 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 ]
             );
         }
+
         /**
          *****************************************************************************
          * checkout/onepage/register_guest
          *****************************************************************************
          */
+
         $connection->insert(
-            $setup->getTable('eav_form_type'),
+            $connection->getTableName('eav_form_type'),
             [
                 'code' => 'checkout_onepage_register_guest',
                 'label' => 'checkout_onepage_register_guest',
@@ -336,19 +329,21 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($setup->getTable('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $customerEntityTypeId]
         );
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
+
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -358,7 +353,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -368,7 +363,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showMiddlename) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -378,7 +373,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -388,7 +383,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showSuffix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -398,7 +393,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -407,7 +402,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -416,7 +411,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -425,7 +420,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -434,7 +429,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -443,7 +438,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -452,7 +447,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -461,7 +456,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -470,7 +465,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -480,7 +475,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showDob) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -491,7 +486,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         }
         if ($showTaxVat) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -500,13 +495,15 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 ]
             );
         }
+
         /**
          *****************************************************************************
          * checkout/onepage/billing_address
          *****************************************************************************
          */
+
         $connection->insert(
-            $setup->getTable('eav_form_type'),
+            $connection->getTableName('eav_form_type'),
             [
                 'code' => 'checkout_onepage_billing_address',
                 'label' => 'checkout_onepage_billing_address',
@@ -515,15 +512,17 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($setup->getTable('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
+
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -533,7 +532,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -543,7 +542,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showMiddlename) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -553,7 +552,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -563,7 +562,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showSuffix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -573,7 +572,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -582,7 +581,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -591,7 +590,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -600,7 +599,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -609,7 +608,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -618,7 +617,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -627,7 +626,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -636,7 +635,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -644,13 +643,15 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'sort_order' => $elementSort++
             ]
         );
+
         /**
          *****************************************************************************
          * checkout/onepage/shipping_address
          *****************************************************************************
          */
+
         $connection->insert(
-            $setup->getTable('eav_form_type'),
+            $connection->getTableName('eav_form_type'),
             [
                 'code' => 'checkout_onepage_shipping_address',
                 'label' => 'checkout_onepage_shipping_address',
@@ -659,15 +660,17 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($setup->getTable('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+
         $connection->insert(
-            $setup->getTable('eav_form_type_entity'),
+            $connection->getTableName('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
+
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -677,7 +680,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -687,7 +690,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showMiddlename) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -697,7 +700,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -707,7 +710,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         if ($showSuffix) {
             $connection->insert(
-                $setup->getTable('eav_form_element'),
+                $connection->getTableName('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -717,7 +720,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             );
         }
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -726,7 +729,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -735,7 +738,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -744,7 +747,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -753,7 +756,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -762,7 +765,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -771,7 +774,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -780,7 +783,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
         $connection->insert(
-            $setup->getTable('eav_form_element'),
+            $connection->getTableName('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -788,7 +791,9 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 'sort_order' => $elementSort++
             ]
         );
-        $table = $setup->getTable('core_config_data');
+
+        $table = $connection->getTableName('core_config_data');
+
         $select = $connection->select()->from(
             $table,
             ['config_id', 'value']
@@ -796,43 +801,50 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             'path = ?',
             'checkout/options/onepage_checkout_disabled'
         );
+
         $data = $connection->fetchAll($select);
+
         if ($data) {
             try {
                 $connection->beginTransaction();
+
                 foreach ($data as $value) {
                     $bind = ['path' => 'checkout/options/onepage_checkout_enabled', 'value' => !(bool)$value['value']];
                     $where = 'config_id = ' . $value['config_id'];
                     $connection->update($table, $bind, $where);
                 }
+
                 $connection->commit();
             } catch (\Exception $e) {
                 $connection->rollback();
                 throw $e;
             }
         }
-        $setup->endSetup();
 
+        $connection->endSetup();
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }

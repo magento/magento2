@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <data>
-  <patches>
-    <patch name="Magento\Checkout\Setup\Patch\PatchInitial" sortOrder="1"/>
-  </patches>
+    <patches>
+        <patch name="Magento\Checkout\Setup\Patch\PrepareInitialCheckoutConfiguration" sortOrder="1"/>
+    </patches>
 </data>
