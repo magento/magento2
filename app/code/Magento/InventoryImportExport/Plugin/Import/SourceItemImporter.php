@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Plugin\Import;
 
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
-use Magento\Inventory\Model\SourceItemFactory;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
@@ -25,7 +25,7 @@ class SourceItemImporter
     /**
      * Source Item Interface Factory
      *
-     * @var SourceItemFactory $sourceItemFactory
+     * @var SourceItemInterfaceFactory $sourceItemFactory
      */
     private $sourceItemFactory;
 
@@ -40,12 +40,12 @@ class SourceItemImporter
      * StockItemImporter constructor
      *
      * @param SourceItemsSaveInterface $sourceItemsSave
-     * @param SourceItemFactory $sourceItemFactory
+     * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         SourceItemsSaveInterface $sourceItemsSave,
-        SourceItemFactory $sourceItemFactory,
+        SourceItemInterfaceFactory $sourceItemFactory,
         DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->sourceItemsSave = $sourceItemsSave;
@@ -54,19 +54,22 @@ class SourceItemImporter
     }
 
     /**
-     * Plugin around Import to import Stock Data to Source Item
+     * After plugin Import to import Stock Data to Source Items
      *
      * @param StockItemImporterInterface $subject
+     * @param null $result
      * @param array $stockData
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
      * @return void
      * @see StockItemImporterInterface::import()
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterImport(
         StockItemImporterInterface $subject,
+        $result,
         array $stockData
     ) {
         $sourceItems = [];
@@ -82,7 +85,7 @@ class SourceItemImporter
             $sourceItems[] = $sourceItem;
         }
         if (count($sourceItems) > 0) {
-            /** Magento\Inventory\Model\SourceItem[] $sourceItems */
+            /** SourceItemInterface[] $sourceItems */
             $this->sourceItemsSave->execute($sourceItems);
         }
     }

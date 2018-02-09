@@ -9,6 +9,8 @@ namespace Magento\CatalogImportExport\Model;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Psr\Log\LoggerInterface;
 
 class StockItemImporter implements StockItemImporterInterface
 {
@@ -20,14 +22,22 @@ class StockItemImporter implements StockItemImporterInterface
     private $stockResourceItemFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * StockItemImporter constructor
      *
      * @param ItemFactory $stockResourceItemFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ItemFactory $stockResourceItemFactory
+        ItemFactory $stockResourceItemFactory,
+        LoggerInterface $logger
     ) {
         $this->stockResourceItemFactory = $stockResourceItemFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -35,13 +45,18 @@ class StockItemImporter implements StockItemImporterInterface
      *
      * @param array $stockData
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws CouldNotSaveException
      */
     public function import(array $stockData)
     {
         /** @var $stockItemResource Item */
         $stockItemResource = $this->stockResourceItemFactory->create();
         $entityTable = $stockItemResource->getMainTable();
-        $stockItemResource->getConnection()->insertOnDuplicate($entityTable, array_values($stockData));
+        try {
+            $stockItemResource->getConnection()->insertOnDuplicate($entityTable, array_values($stockData));
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            throw new CouldNotSaveException(__('Invalid Stock data for insert'), $e);
+        }
     }
 }
