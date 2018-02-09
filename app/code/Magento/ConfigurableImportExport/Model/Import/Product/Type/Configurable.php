@@ -204,13 +204,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private $productEntityIdentifierField;
 
     /**
-     * Store view code column
-     *
-     * @var string
-     */
-    private $storeViewCodeColumn = 'store_view_code';
-
-    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -496,13 +489,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif(!empty($this->storeViewCodeColumn)) {
+        } elseif(!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
-                    sprintf(
-                        'Product with assigned super attributes should not have specified "%s" value',
-                        $this->storeViewCodeColumn
-                    )
+                    'Product with assigned super attributes should not have specified "%1" value',
+                    'store_view_code'
                 )
             );
         }
