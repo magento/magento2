@@ -23,7 +23,7 @@ class ResourceModelPool implements ResourceModelPoolInterface
         $this->objectManager = $objectManager;
     }
 
-    public function get($resourceClassName): AbstractResource
+    public function get(string $resourceClassName): AbstractResource
     {
         return $this->objectManager->get($resourceClassName);
     }
