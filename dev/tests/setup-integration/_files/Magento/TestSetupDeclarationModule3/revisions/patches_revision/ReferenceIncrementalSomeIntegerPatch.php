@@ -61,7 +61,7 @@ class ReferenceIncrementalSomeIntegerPatch implements
     public function revert()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['smallint = ?', 1]);
+        $adapter->delete('test_table', ['`smallint` = ?' => 1]);
     }
 
     /**
