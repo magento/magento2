@@ -204,6 +204,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private $productEntityIdentifierField;
 
     /**
+     * Store specific columns list
+     *
+     * @var array
+     */
+    private $storeSpecificColumns = [
+        'store_view_code' => 'store_view_code'
+    ];
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -489,9 +498,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif(!empty($rowData['store_view_code'])) {
+        } elseif(!empty($rowData[$this->storeSpecificColumns['store_view_code']])) {
             throw new LocalizedException(
-                __('Product with assigned super attributes should not have specified "store_view_code" value')
+                __(
+                    sprintf(
+                        'Product with assigned super attributes should not have specified "%s" value',
+                        $this->storeSpecificColumns['store_view_code']
+                    )
+                )
             );
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
