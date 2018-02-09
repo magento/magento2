@@ -8,61 +8,76 @@ namespace Magento\Indexer\Setup\Patch;
 
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\StateInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Indexer\StateFactory;
-use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InitializeIndexerState
+ * @package Magento\Indexer\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InitializeIndexerState implements DataPatchInterface, PatchVersionInterface
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param CollectionFactory $statesFactory
+     * @var CollectionFactory
      */
     private $statesFactory;
+
     /**
-     * @param ConfigInterface $config
-     */
-    private $config;
-    /**
-     * @param EncryptorInterface $encryptor
-     */
-    private $encryptor;
-    /**
-     * @param StateFactory $stateFactory
+     * @var StateFactory
      */
     private $stateFactory;
 
     /**
-     * @param CollectionFactory $statesFactory @param ConfigInterface $config@param EncryptorInterface $encryptor@param StateFactory $stateFactory
+     * @var ConfigInterface
      */
-    public function __construct(CollectionFactory $statesFactory,
-                                ConfigInterface $config,
-                                EncryptorInterface $encryptor,
-                                StateFactory $stateFactory)
-    {
+    private $config;
+
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
+     * @var EncoderInterface
+     */
+    private $encoder;
+
+    /**
+     * PatchInitial constructor.
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CollectionFactory $statesFactory,
+        StateFactory $stateFactory,
+        ConfigInterface $config,
+        EncryptorInterface $encryptor,
+        EncoderInterface $encoder
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->statesFactory = $statesFactory;
+        $this->stateFactory = $stateFactory;
         $this->config = $config;
         $this->encryptor = $encryptor;
-        $this->stateFactory = $stateFactory;
+        $this->encoder = $encoder;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var State[] $stateIndexers */
         $stateIndexers = [];
@@ -86,27 +101,29 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 $state->save();
             }
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.1.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
