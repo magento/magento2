@@ -190,6 +190,8 @@ class Data
     }
 
     /**
+     * Check is media attribute available
+     *
      * @param ModelProduct $product
      * @param string $attributeCode
      * @return bool
