@@ -236,7 +236,7 @@ define([
          * Checks if extension of provided file is allowed.
          *
          * @param {Object} file - File to be checked.
-         * @returns {Object} - validation result
+         * @returns {Boolean}
          */
         isExtensionAllowed: function (file) {
             return validator('validate-file-type', file.name, this.allowedExtensions);
@@ -265,7 +265,7 @@ define([
          * defined in configuration size limits.
          *
          * @param {Object} file - File to be checked.
-         * @returns {Object} - validation result
+         * @returns {Boolean}
          */
         isSizeExceeded: function (file) {
             return validator('validate-max-size', file.size, this.maxFileSize);
