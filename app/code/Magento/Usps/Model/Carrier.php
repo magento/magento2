@@ -826,7 +826,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_16', 'INT_24'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['MD FLAT RATE BOX'],
@@ -837,7 +837,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_9', 'INT_24'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['LG FLAT RATE BOX'],
@@ -848,7 +848,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_11', 'INT_24', 'INT_25'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['SM FLAT RATE ENVELOPE'],
@@ -859,7 +859,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_20'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['WINDOW FLAT RATE ENVELOPE'],
@@ -870,7 +870,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_19'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['GIFT CARD FLAT RATE ENVELOPE'],
@@ -881,7 +881,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_18'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['PADDED FLAT RATE ENVELOPE'],
@@ -892,7 +892,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_27', 'INT_23'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['LEGAL FLAT RATE ENVELOPE'],
@@ -903,7 +903,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_17', 'INT_22'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['FLAT RATE ENVELOPE'],
@@ -913,10 +913,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         ],
                         'from_us' => [
                             'method' => [
-                                'INT_10', 'INT_8', 'INT_14', 'INT_20', 'INT_17', 'INT_18', 'INT_19', 'INT_22', 'INT_27'
+                                'INT_10', 'INT_8', 'INT_14', 'INT_20', 'INT_17',
+                                'INT_18', 'INT_19', 'INT_22', 'INT_27',
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['RECTANGULAR'],
@@ -927,7 +928,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_12', 'INT_1', 'INT_2', 'INT_15'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['NONRECTANGULAR'],
@@ -938,7 +939,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INT_4', 'INT_1', 'INT_2', 'INT_15'],
                         ],
-                    ]
+                    ],
                 ],
             ],
             'size' => ['REGULAR' => __('Regular'), 'LARGE' => __('Large')],
