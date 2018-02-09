@@ -466,7 +466,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];
-            foreach ($imageTypes as $mediaType => $mediaFile) {
+            foreach (array_keys($imageTypes) as $mediaType) {
                 $mediaGalleryEntryMock = $this->getMockBuilder(
                     \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
                 )->getMock();
