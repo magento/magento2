@@ -38,7 +38,7 @@ class IncrementalSomeIntegerPatch implements
      */
     public function getVersion()
     {
-        return '0.0.5';
+        return '1.0.5';
     }
 
     /**
@@ -57,8 +57,12 @@ class IncrementalSomeIntegerPatch implements
         $adapter = $this->resourceConnection->getConnection();
         $select = $adapter->select()->from('test_table', 'varchar')
             ->where('`smallint` = ?', 1);
+        $refSelect = $adapter->select()->from('reference_table', 'for_patch_testing')
+            ->where('`tinyint_ref` = ?', 7);
         $varchar = $adapter->fetchOne($select);
-        $adapter->insert('test_table', ['varchar' => $varchar, 'varbinary' => 0101010]);
+        $varchar2 = $adapter->fetchOne($refSelect);
+        $adapter->insert('test_table', ['varchar' => $varchar . "_ref", 'varbinary' => 0101010]);
+        $adapter->insert('test_table', ['varchar' => $varchar2, 'varbinary' => 0]);
     }
 
     public function revert()
@@ -73,7 +77,8 @@ class IncrementalSomeIntegerPatch implements
     public static function getDependencies()
     {
         return [
-            ReferenceIncrementalSomeIntegerPatch::class
+            ReferenceIncrementalSomeIntegerPatch::class,
+            NextChainPatch::class
         ];
     }
 }

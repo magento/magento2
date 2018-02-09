@@ -70,7 +70,7 @@ class ReferenceIncrementalSomeIntegerPatch implements
     public static function getDependencies()
     {
         return [
-            FirstPatch::class
+            ZFirstPatch::class
         ];
     }
 }

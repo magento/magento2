@@ -23,7 +23,17 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $adapter = $setup->getConnection();
         $setup->startSetup();
+
+        if (version_compare($context->getVersion(), '0.0.2') < 0) {
+            $adapter->insertArray('reference_table', ['some_integer'], [6, 12]);
+        }
+
+        if (version_compare($context->getVersion(), '0.0.3') < 0) {
+            $adapter->delete('reference_table', 'some_integer = 7');
+        }
+
         $setup->endSetup();
     }
 }

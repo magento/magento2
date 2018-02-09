@@ -10,6 +10,7 @@
     <table name="reference_table" resource="default">
         <column xsi:type="tinyint" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false"/>
         <column xsi:type="int" name="some_integer" default="0" nullable="false" unsigned="false"/>
+        <column xsi:type="varchar" name="for_patch_testing" comment="For patch testing" />
         <constraint xsi:type="primary" name="tinyint_primary">
             <column name="tinyint_ref"/>
         </constraint>

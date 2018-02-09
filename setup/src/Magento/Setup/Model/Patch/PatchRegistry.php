@@ -43,6 +43,11 @@ class PatchRegistry implements \IteratorAggregate
     private $reverseIterator = null;
 
     /**
+     * @var array
+     */
+    private $cyclomaticStack = [];
+
+    /**
      * PatchRegistry constructor.
      * @param PatchFactory $patchFactory
      * @param PatchHistory $patchHistory
@@ -109,8 +114,13 @@ class PatchRegistry implements \IteratorAggregate
     {
         $depInstances = [];
         $deps = $patch::getDependencies();
+        $this->cyclomaticStack[get_class($patch)] = true;
 
         foreach ($deps as $dep) {
+            if (isset($this->cyclomaticStack[$dep])) {
+                throw new \LogicException("Cyclomatic dependency during patch installation");
+            }
+
             $depInstance = $this->registerPatch($dep);
             /**
              * If a patch already have applied dependency - than we definently know
@@ -120,10 +130,11 @@ class PatchRegistry implements \IteratorAggregate
                 continue;
             }
 
-            $depInstances[] = $depInstance;
-            $depInstances += $this->getDependencies($this->patchInstances[$dep]);
+            $depInstances = array_replace($depInstances, $this->getDependencies($this->patchInstances[$dep]));
+            $depInstances[get_class($depInstance)] = $depInstance;
         }
 
+        unset($this->cyclomaticStack[get_class($patch)]);
         return $depInstances;
     }
 
@@ -153,18 +164,6 @@ class PatchRegistry implements \IteratorAggregate
     }
 
     /**
-     * We collect stack with patches, but we do need to duplicate dependencies patches in this stack
-     *
-     * @param PatchInterface[] $deps
-     */
-    private function removeDepsFromRegistry(array $deps)
-    {
-        foreach ($deps as $dep) {
-            unset($this->patchInstances[get_class($dep)]);
-        }
-    }
-
-    /**
      * Retrieve iterator of all patch instances
      *
      * If patch have dependencies, than first of all dependencies should be installed and only then desired patch
@@ -175,13 +174,21 @@ class PatchRegistry implements \IteratorAggregate
     {
         if ($this->iterator === null) {
             $installPatches = [];
+            $patchInstances = $this->patchInstances;
 
-            while (!empty($this->patchInstances)) {
-                $firstPatch = array_shift($this->patchInstances);
+            while (!empty($patchInstances)) {
+                $firstPatch = array_shift($patchInstances);
                 $deps = $this->getDependencies($firstPatch);
-                $this->removeDepsFromRegistry($deps);
-                $installPatches += $deps;
-                $installPatches[] = $firstPatch;
+
+                /**
+                 * Remove deps from patchInstances
+                 */
+                foreach ($deps as $dep) {
+                    unset($patchInstances[get_class($dep)]);
+                }
+
+                $installPatches = array_replace($installPatches, $deps);
+                $installPatches[get_class($firstPatch)] = $firstPatch;
             }
 
             $this->iterator = new \ArrayIterator($installPatches);

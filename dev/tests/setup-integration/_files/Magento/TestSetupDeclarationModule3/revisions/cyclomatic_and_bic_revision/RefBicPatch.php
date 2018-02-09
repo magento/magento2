@@ -6,17 +6,16 @@
 namespace Magento\TestSetupDeclarationModule3\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Exception;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchRevertableInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Class InstallData
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class FirstPatch implements
+class RefBicPatch implements
     DataPatchInterface,
+    PatchRevertableInterface,
     PatchVersionInterface
 {
     /**
@@ -54,7 +53,11 @@ class FirstPatch implements
      */
     public function apply()
     {
-        throw new Exception('This patch should be covered by old script!');
+        throw new \Exception("This patch can`t be applied, as it was created to test BIC");
+    }
+
+    public function revert()
+    {
     }
 
     /**
@@ -62,6 +65,8 @@ class FirstPatch implements
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            BicPatch::class
+        ];
     }
 }

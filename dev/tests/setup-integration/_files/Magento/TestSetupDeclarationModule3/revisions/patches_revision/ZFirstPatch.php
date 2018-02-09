@@ -6,17 +6,17 @@
 namespace Magento\TestSetupDeclarationModule3\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Exception;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchRevertableInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Class ReferenceIncrementalSomeIntegerPatch
+ * Class InstallData
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class ReferenceIncrementalSomeIntegerPatch implements
+class ZFirstPatch implements
     DataPatchInterface,
-    PatchRevertableInterface,
     PatchVersionInterface
 {
     /**
@@ -38,7 +38,7 @@ class ReferenceIncrementalSomeIntegerPatch implements
      */
     public function getVersion()
     {
-        return '0.0.4';
+        return '0.0.3';
     }
 
     /**
@@ -54,14 +54,7 @@ class ReferenceIncrementalSomeIntegerPatch implements
      */
     public function apply()
     {
-        $adapter = $this->resourceConnection->getConnection();
-        $adapter->insert('test_table', ['varchar' => 'Ololo123', 'varbinary' => 0101010]);
-    }
-
-    public function revert()
-    {
-        $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['smallint = ?', 1]);
+        throw new Exception('This patch should be covered by old script!');
     }
 
     /**
@@ -69,8 +62,6 @@ class ReferenceIncrementalSomeIntegerPatch implements
      */
     public static function getDependencies()
     {
-        return [
-            ZFirstPatch::class
-        ];
+        return [];
     }
 }

@@ -92,7 +92,7 @@ class PatchReader implements ReaderInterface
 
         foreach (Glob::glob($patchesMask) as $patchPath) {
             $moduleName = $this->getModuleNameForNamespace($moduleName);
-            $patchClasses[] = '\\' . $moduleName . '\\Setup\\' .
+            $patchClasses[] = $moduleName . '\\Setup\\' .
                 self::SETUP_PATCH_FOLDER . '\\' .
                 $this->getTypeFolder() . '\\' .
                 basename($patchPath, '.php');

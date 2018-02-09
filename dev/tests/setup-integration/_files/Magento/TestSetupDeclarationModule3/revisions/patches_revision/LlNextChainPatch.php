@@ -11,10 +11,9 @@ use Magento\Setup\Model\Patch\PatchRevertableInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Class ReferenceIncrementalSomeIntegerPatch
  * @package Magento\TestSetupDeclarationModule3\Setup
  */
-class ReferenceIncrementalSomeIntegerPatch implements
+class LlNextChainPatch implements
     DataPatchInterface,
     PatchRevertableInterface,
     PatchVersionInterface
@@ -38,7 +37,7 @@ class ReferenceIncrementalSomeIntegerPatch implements
      */
     public function getVersion()
     {
-        return '0.0.4';
+        return '0.0.5';
     }
 
     /**
@@ -55,13 +54,13 @@ class ReferenceIncrementalSomeIntegerPatch implements
     public function apply()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->insert('test_table', ['varchar' => 'Ololo123', 'varbinary' => 0101010]);
+        $adapter->insertArray('reference_table', ['for_patch_testing'], ['very_secret_string']);
     }
 
     public function revert()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['smallint = ?', 1]);
+        $adapter->delete('test_table', ['varbinary = ?', 0101010]);
     }
 
     /**

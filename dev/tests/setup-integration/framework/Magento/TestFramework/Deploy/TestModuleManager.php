@@ -97,7 +97,15 @@ class TestModuleManager
         $revisionFile = MAGENTO_MODULES_PATH . $modulePath . "/revisions/" .
             $revisionName . DIRECTORY_SEPARATOR . $fileName;
 
-        if (file_exists($oldFile) && file_exists($revisionFile)) {
+        if (!file_exists($oldFile)) {
+            $dir = dirname($oldFile);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            touch($oldFile);
+        }
+
+        if (file_exists($revisionFile)) {
             unlink($oldFile);
             copy($revisionFile, $oldFile);
         } else {
