@@ -122,7 +122,7 @@ class Timezone implements TimezoneInterface
          * that works incorrectly with 'yyyy' value.
          * According to official doc of the ICU library
          * internally used in \Intl, 'yyyy' and 'y' formats are the same
-         * http://userguide.icu-project.org/formatparse/datetime
+         * @see http://userguide.icu-project.org/formatparse/datetime
          */
         $pattern = str_replace('yyyy', 'y', $pattern);
         return $pattern;
@@ -207,7 +207,9 @@ class Timezone implements TimezoneInterface
          * It depends on ICU lib version used by intl extension
          * For locales like fr_FR, ar_KW parse date with hyphen as separator
          */
-        $date = $this->appendTimeIfNeeded($date, $includeTime);
+        if ($includeTime) {
+            $date = $this->appendTimeIfNeeded($date);
+        }
         try {
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         } catch (\Exception $e) {
@@ -356,12 +358,11 @@ class Timezone implements TimezoneInterface
      * Add time in case if no time provided but required
      *
      * @param string $date
-     * @param bool $includeTime
      * @return string
      */
-    private function appendTimeIfNeeded(string $date, bool $includeTime) : string
+    private function appendTimeIfNeeded(string $date) : string
     {
-        if ($includeTime && !preg_match('/\d{1,2}:\d{2}/', $date)) {
+        if (!preg_match('/\d{1,2}:\d{2}/', $date)) {
             $date .= " 00:00";
         }
         return $date;
