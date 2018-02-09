@@ -587,5 +587,41 @@
             <argument name="productCount" value="CONST.three"/>
         </actionGroup>
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="compareClearCompare"/>
+
+        <!-- @TODO: MAGETWO-80272 Move to SalesRule -->
+        <!-- Step 6: User uses coupon codes -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="couponOpenCart"/>
+
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="couponApplyCoupon">
+            <argument name="coupon" value="$$createSalesRuleCoupon$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCheckCouponAppliedActionGroup" stepKey="couponCheckAppliedDiscount">
+            <argument name="rule" value="$$createSalesRule$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="discount" value="E2EB2CQuoteWith10PercentDiscount.discount"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="couponCheckCartWithDiscount">
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="subtotal" value="E2EB2CQuoteWith10PercentDiscount.subtotal"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="shipping" value="E2EB2CQuoteWith10PercentDiscount.shipping"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="shippingMethod" value="E2EB2CQuoteWith10PercentDiscount.shippingMethod"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="total" value="E2EB2CQuoteWith10PercentDiscount.total"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCancelCouponActionGroup" stepKey="couponCancelCoupon"/>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCartAfterCancelCoupon">
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="subtotal" value="E2EB2CQuote.subtotal"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="shipping" value="E2EB2CQuote.shipping"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="shippingMethod" value="E2EB2CQuote.shippingMethod"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="total" value="E2EB2CQuote.total"/>
+        </actionGroup>
     </test>
 </tests>
