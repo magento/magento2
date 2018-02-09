@@ -1,44 +1,51 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Reports\Setup;
+namespace Magento\Reports\Setup\Patch;
 
 use Magento\Cms\Model\PageFactory;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * @codeCoverageIgnore
+ * Class InitializeReportEntityTypesAndPages
+ * @package Magento\Reports\Setup\Patch
  */
-class InstallData implements \Magento\Framework\Setup\InstallDataInterface
+class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * Page factory
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @var PageFactory
      */
     private $pageFactory;
 
     /**
-     * Init
-     *
+     * InitializeReportEntityTypesAndPages constructor.
+     * @param ResourceConnection $resourceConnection
      * @param PageFactory $pageFactory
      */
-    public function __construct(PageFactory $pageFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        \Magento\Cms\Model\PageFactory $pageFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->pageFactory = $pageFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        $setup->startSetup();
+        $this->resourceConnection->getConnection()->startSetup();
         /*
          * Report Event Types default data
          */
@@ -64,33 +71,53 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
         ];
 
         foreach ($eventTypeData as $row) {
-            $setup->getConnection()
-                ->insertForce($setup->getTable('report_event_types'), $row);
+            $this->resourceConnection->getConnection()
+                ->insertForce($this->resourceConnection->getConnection()->getTableName('report_event_types'), $row);
         }
-
         /**
          * Prepare database after data upgrade
          */
-        $setup->endSetup();
-
+        $this->resourceConnection->getConnection()->endSetup();
         /**
          * Cms Page  with 'home' identifier page modification for report pages
          */
         /** @var $cms \Magento\Cms\Model\Page */
         $cms = $this->pageFactory->create();
         $cms->load('home', 'identifier');
-
         // @codingStandardsIgnoreStart
         $reportLayoutUpdate = '<!--
     <referenceContainer name="right">
         <referenceBlock name="catalog.compare.sidebar" remove="true" />
     </referenceContainer>-->';
         // @codingStandardsIgnoreEnd
-
         /*
          * Merge and save old layout update data with report layout data
          */
         $cms->setLayoutUpdateXml($cms->getLayoutUpdateXml() . $reportLayoutUpdate)
             ->save();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

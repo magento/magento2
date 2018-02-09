@@ -10,6 +10,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
@@ -47,11 +48,12 @@ class QuoteSetup extends EavSetup
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        ResourceConnection $resourceConnection = null
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();
-        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory);
+        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory, $resourceConnection);
     }
 
     /**
