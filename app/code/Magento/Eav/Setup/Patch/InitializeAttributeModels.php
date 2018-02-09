@@ -10,13 +10,13 @@ use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class InitializeAttributeModels
  * @package Magento\Eav\Setup\Patch
  */
-class InitializeAttributeModels implements DataPatchInterface, VersionedDataPatch
+class InitializeAttributeModels implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

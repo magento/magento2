@@ -8,7 +8,7 @@ namespace Magento\Bundle\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 
@@ -16,7 +16,7 @@ use Magento\Eav\Setup\EavSetupFactory;
  * Class ApplyAttributesUpdate
  * @package Magento\Bundle\Setup\Patch
  */
-class ApplyAttributesUpdate implements DataPatchInterface, VersionedDataPatch
+class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

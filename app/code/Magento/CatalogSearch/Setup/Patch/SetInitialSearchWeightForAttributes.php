@@ -7,7 +7,7 @@
 namespace Magento\CatalogSearch\Setup\Patch;
 
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
@@ -15,7 +15,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
  * Class SetInitialSearchWeightForAttributes
  * @package Magento\CatalogSearch\Setup\Patch
  */
-class SetInitialSearchWeightForAttributes implements DataPatchInterface, VersionedDataPatch
+class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var IndexerInterfaceFactory

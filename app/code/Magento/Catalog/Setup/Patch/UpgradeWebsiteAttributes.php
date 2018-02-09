@@ -13,7 +13,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpgradeWebsiteAttributes
@@ -21,7 +21,7 @@ use Magento\Setup\Model\Patch\VersionedDataPatch;
  *
  * IMPORTANT: This class const/methods can not be reused because it needs to be isolated
  */
-class UpgradeWebsiteAttributes implements DataPatchInterface, VersionedDataPatch
+class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * ATTENTION: These constants must not be reused anywhere outside

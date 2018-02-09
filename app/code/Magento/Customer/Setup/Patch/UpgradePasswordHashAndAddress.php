@@ -10,13 +10,13 @@ use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpgradePasswordHashAndAddress
  * @package Magento\Customer\Setup\Patch
  */
-class UpgradePasswordHashAndAddress implements DataPatchInterface, VersionedDataPatch
+class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

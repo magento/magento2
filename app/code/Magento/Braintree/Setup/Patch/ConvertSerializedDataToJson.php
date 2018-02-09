@@ -8,12 +8,12 @@ namespace Magento\Braintree\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Convert data fro php native serialized data to JSON.
  */
-class ConvertSerializedDataToJson implements DataPatchInterface, VersionedDataPatch
+class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

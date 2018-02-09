@@ -12,13 +12,13 @@ use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class DefaultCustomerGroupsAndAttributes
  * @package Magento\Customer\Setup\Patch
  */
-class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, VersionedDataPatch
+class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

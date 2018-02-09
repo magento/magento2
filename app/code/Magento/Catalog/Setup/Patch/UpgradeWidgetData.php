@@ -13,7 +13,7 @@ use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;
 
 /**
@@ -21,7 +21,7 @@ use Magento\Widget\Setup\LayoutUpdateConverter;
  *
  * @package Magento\Catalog\Setup\Patch
  */
-class UpgradeWidgetData implements DataPatchInterface, VersionedDataPatch
+class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

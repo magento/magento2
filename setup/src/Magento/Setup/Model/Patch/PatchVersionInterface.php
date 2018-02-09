@@ -6,6 +6,8 @@
 namespace Magento\Setup\Model\Patch;
 
 /**
+ * For backward compatibility with versioned style module installation. Deprecated since creation.
+ *
  * @deprecated
  */
 interface PatchVersionInterface

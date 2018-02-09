@@ -10,13 +10,13 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class PrepareShipmentDays
  * @package Magento\Dhl\Setup\Patch
  */
-class PrepareShipmentDays implements DataPatchInterface, VersionedDataPatch
+class PrepareShipmentDays implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

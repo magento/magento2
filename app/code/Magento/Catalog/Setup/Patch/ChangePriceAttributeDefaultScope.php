@@ -10,13 +10,13 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class ChangePriceAttributeDefaultScope
  * @package Magento\Catalog\Setup\Patch
  */
-class ChangePriceAttributeDefaultScope implements DataPatchInterface, VersionedDataPatch
+class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

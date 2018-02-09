@@ -12,13 +12,13 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class AddDataForCroatia
  * @package Magento\Directory\Setup\Patch
  */
-class AddDataForCroatia implements DataPatchInterface, VersionedDataPatch
+class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

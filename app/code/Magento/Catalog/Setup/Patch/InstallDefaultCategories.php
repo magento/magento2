@@ -10,7 +10,7 @@ use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class InstallDefaultCategories data patch.
@@ -18,7 +18,7 @@ use Magento\Setup\Model\Patch\VersionedDataPatch;
  * @package Magento\Catalog\Setup\Patch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallDefaultCategories implements DataPatchInterface, VersionedDataPatch
+class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

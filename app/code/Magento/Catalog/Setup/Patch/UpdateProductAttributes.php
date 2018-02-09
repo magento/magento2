@@ -9,13 +9,13 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateProductAttributes
  * @package Magento\Catalog\Setup\Patch
  */
-class UpdateProductAttributes implements DataPatchInterface, VersionedDataPatch
+class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

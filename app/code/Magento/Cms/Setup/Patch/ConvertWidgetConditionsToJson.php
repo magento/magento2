@@ -10,7 +10,7 @@ use Magento\Cms\Setup\ContentConverter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -22,7 +22,7 @@ use Magento\Cms\Api\Data\PageInterface;
  * Class ConvertWidgetConditionsToJson
  * @package Magento\Cms\Setup\Patch
  */
-class ConvertWidgetConditionsToJson implements DataPatchInterface, VersionedDataPatch
+class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

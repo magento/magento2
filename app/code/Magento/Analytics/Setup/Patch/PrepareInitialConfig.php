@@ -9,14 +9,14 @@ namespace Magento\Analytics\Setup\Patch;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Initial patch.
  *
  * @package Magento\Analytics\Setup\Patch
  */
-class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
+class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

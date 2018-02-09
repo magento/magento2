@@ -22,9 +22,9 @@ use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-class UpdateVATNumber implements DataPatchInterface, VersionedDataPatch
+class UpdateVATNumber implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

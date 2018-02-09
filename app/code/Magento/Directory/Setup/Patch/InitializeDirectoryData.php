@@ -9,13 +9,13 @@ namespace Magento\Directory\Setup\Patch;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class InitializeDirectoryData
  * @package Magento\Directory\Setup\Patch
  */
-class InitializeDirectoryData implements DataPatchInterface, VersionedDataPatch
+class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

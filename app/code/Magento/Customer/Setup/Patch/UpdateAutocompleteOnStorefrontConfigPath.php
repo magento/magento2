@@ -8,13 +8,13 @@ namespace Magento\Customer\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateAutocompleteOnStorefrontCOnfigPath
  * @package Magento\Customer\Setup\Patch
  */
-class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, VersionedDataPatch
+class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

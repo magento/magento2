@@ -8,7 +8,7 @@ namespace Magento\Authorization\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 
@@ -16,7 +16,7 @@ use Magento\Authorization\Model\UserContextInterface;
  * Class InitializeAuthRoles
  * @package Magento\Authorization\Setup\Patch
  */
-class InitializeAuthRoles implements DataPatchInterface, VersionedDataPatch
+class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

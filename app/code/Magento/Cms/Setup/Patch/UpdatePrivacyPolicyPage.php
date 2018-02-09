@@ -8,13 +8,13 @@ namespace Magento\Cms\Setup\Patch;
 
 use Magento\Cms\Model\PageFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdatePrivacyPolicyPage
  * @package Magento\Cms\Setup\Patch
  */
-class UpdatePrivacyPolicyPage implements DataPatchInterface, VersionedDataPatch
+class UpdatePrivacyPolicyPage implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var PageFactory

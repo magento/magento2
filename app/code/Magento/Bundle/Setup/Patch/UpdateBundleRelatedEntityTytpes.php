@@ -9,7 +9,7 @@ namespace Magento\Bundle\Setup\Patch;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 
@@ -17,7 +17,7 @@ use Magento\Eav\Setup\EavSetup;
  * Class UpdateBundleRelatedEntityTytpes
  * @package Magento\Bundle\Setup\Patch
  */
-class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, VersionedDataPatch
+class UpdateBundleRelatedEntityTytpes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

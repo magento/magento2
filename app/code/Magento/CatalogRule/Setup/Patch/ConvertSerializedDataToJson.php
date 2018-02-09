@@ -9,14 +9,14 @@ namespace Magento\CatalogRule\Setup\Patch;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 
 
-class ConvertSerializedDataToJson implements DataPatchInterface, VersionedDataPatch
+class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

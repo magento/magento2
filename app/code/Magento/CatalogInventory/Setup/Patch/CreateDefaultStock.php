@@ -10,13 +10,13 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class CreateDefaultStock
  * @package Magento\CatalogInventory\Setup\Patch
  */
-class CreateDefaultStock implements DataPatchInterface, VersionedDataPatch
+class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

@@ -11,9 +11,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, VersionedDataPatch
+class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

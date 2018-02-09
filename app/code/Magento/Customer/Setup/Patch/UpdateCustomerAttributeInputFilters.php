@@ -9,13 +9,13 @@ namespace Magento\Customer\Setup\Patch;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateCustomerAttributeInputFilters
  * @package Magento\Customer\Setup\Patch
  */
-class UpdateCustomerAttributeInputFilters implements DataPatchInterface, VersionedDataPatch
+class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

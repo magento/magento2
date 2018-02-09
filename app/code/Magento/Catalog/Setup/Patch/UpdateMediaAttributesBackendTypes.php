@@ -9,13 +9,13 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateMediaAttributesBackendTypes
  * @package Magento\Catalog\Setup\Patch
  */
-class UpdateMediaAttributesBackendTypes implements DataPatchInterface, VersionedDataPatch
+class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

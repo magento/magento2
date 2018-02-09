@@ -7,7 +7,7 @@
 namespace Magento\Cms\Setup\Patch;
 
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -15,7 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * Class CreateDefaultPages
  * @package Magento\Cms\Setup\Patch
  */
-class CreateDefaultPages implements DataPatchInterface, VersionedDataPatch
+class CreateDefaultPages implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var \Magento\Cms\Model\PageFactory

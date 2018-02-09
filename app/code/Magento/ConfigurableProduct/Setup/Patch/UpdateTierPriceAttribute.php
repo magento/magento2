@@ -10,14 +10,14 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Class UpdateTierPriceAttribute
  * @package Magento\ConfigurableProduct\Setup\Patch
  */
-class UpdateTierPriceAttribute implements DataPatchInterface, VersionedDataPatch
+class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

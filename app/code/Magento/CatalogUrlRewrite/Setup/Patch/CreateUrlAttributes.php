@@ -10,13 +10,13 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class CreateUrlAttributes
  * @package Magento\CatalogUrlRewrite\Setup\Patch
  */
-class CreateUrlAttributes implements DataPatchInterface, VersionedDataPatch
+class CreateUrlAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

@@ -10,13 +10,13 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class InstallDownloadableAttributes
  * @package Magento\Downloadable\Setup\Patch
  */
-class InstallDownloadableAttributes implements DataPatchInterface, VersionedDataPatch
+class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

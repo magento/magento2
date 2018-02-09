@@ -8,13 +8,13 @@ namespace Magento\CatalogRule\Setup\Patch;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateClassAliasesForCatalogRules
  * @package Magento\CatalogRule\Setup\Patch
  */
-class UpdateClassAliasesForCatalogRules implements DataPatchInterface, VersionedDataPatch
+class UpdateClassAliasesForCatalogRules implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface

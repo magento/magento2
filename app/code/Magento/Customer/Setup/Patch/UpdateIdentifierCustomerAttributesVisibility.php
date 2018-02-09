@@ -9,13 +9,13 @@ namespace Magento\Customer\Setup\Patch;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateIdentifierCustomerAttributesVisibility
  * @package Magento\Customer\Setup\Patch
  */
-class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface, VersionedDataPatch
+class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

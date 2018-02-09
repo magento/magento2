@@ -10,13 +10,13 @@ use Magento\Customer\Model\Customer;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class AddSecurityTrackingAttributes
  * @package Magento\Customer\Setup\Patch
  */
-class AddSecurityTrackingAttributes implements DataPatchInterface, VersionedDataPatch
+class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

@@ -8,9 +8,9 @@ namespace Magento\Directory\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-class AddDataForIndia implements DataPatchInterface, VersionedDataPatch
+class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

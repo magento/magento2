@@ -12,13 +12,13 @@ use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class ConvertSerializedCustomCurrencySymbolToJson
  * @package Magento\CurrencySymbol\Setup\Patch
  */
-class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface, VersionedDataPatch
+class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

@@ -22,13 +22,13 @@ use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class RemoveCheckoutRegisterAndUpdateAttributes
  * @package Magento\Customer\Setup\Patch
  */
-class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, VersionedDataPatch
+class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

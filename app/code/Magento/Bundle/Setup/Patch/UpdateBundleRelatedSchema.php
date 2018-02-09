@@ -8,14 +8,14 @@ namespace Magento\Bundle\Setup\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateBundleRelatedSchema
  *
  * @package Magento\Bundle\Setup\Patch
  */
-class UpdateBundleRelatedSchema implements DataPatchInterface, VersionedDataPatch
+class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

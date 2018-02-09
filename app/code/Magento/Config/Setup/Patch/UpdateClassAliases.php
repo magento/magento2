@@ -8,13 +8,13 @@ namespace Magento\Config\Setup\Patch;
 
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateClassAliases
  * @package Magento\Config\Setup\Patch
  */
-class UpdateClassAliases implements DataPatchInterface, VersionedDataPatch
+class UpdateClassAliases implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var \Magento\Framework\Setup\ModuleDataSetupInterface

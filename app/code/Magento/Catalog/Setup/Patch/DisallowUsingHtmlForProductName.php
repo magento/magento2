@@ -9,14 +9,14 @@ namespace Magento\Catalog\Setup\Patch;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class DisallowUsingHtmlForProductName.
  *
  * @package Magento\Catalog\Setup\Patch
  */
-class DisallowUsingHtmlForProductName implements DataPatchInterface, VersionedDataPatch
+class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

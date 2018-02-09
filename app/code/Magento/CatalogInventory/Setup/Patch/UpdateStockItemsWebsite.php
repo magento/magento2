@@ -7,13 +7,13 @@
 namespace Magento\CatalogInventory\Setup\Patch;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateStockItemsWebsite
  * @package Magento\CatalogInventory\Setup\Patch
  */
-class UpdateStockItemsWebsite implements DataPatchInterface, VersionedDataPatch
+class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

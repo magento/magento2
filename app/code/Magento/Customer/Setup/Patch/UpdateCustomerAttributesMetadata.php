@@ -10,13 +10,13 @@ use Magento\Customer\Setup\CustomerSetup;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateCustomerAttributesMetadata
  * @package Magento\Customer\Setup\Patch
  */
-class UpdateCustomerAttributesMetadata implements DataPatchInterface, VersionedDataPatch
+class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

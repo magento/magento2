@@ -10,14 +10,14 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateProductMetaDescription
  *
  * @package Magento\Catalog\Setup\Patch
  */
-class UpdateProductMetaDescription implements DataPatchInterface, VersionedDataPatch
+class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

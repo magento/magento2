@@ -11,13 +11,13 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class ConvertSerializedDataToJson
  * @package Magento\CatalogInventory\Setup\Patch
  */
-class ConvertSerializedDataToJson implements DataPatchInterface, VersionedDataPatch
+class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection

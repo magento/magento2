@@ -22,13 +22,13 @@ use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
  * Class AddNonSpecifiedGenderAttributeOption
  * @package Magento\Customer\Setup\Patch
  */
-class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, VersionedDataPatch
+class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ResourceConnection
