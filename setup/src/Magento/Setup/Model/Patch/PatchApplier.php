@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Patch;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Module\ModuleResource;
 use Magento\Setup\Exception;
 
 /**
@@ -35,22 +36,52 @@ class PatchApplier
     private $resourceConnection;
 
     /**
+     * @var ModuleResource
+     */
+    private $moduleResource;
+
+    /**
+     * @var PatchHistory
+     */
+    private $patchHistory;
+
+    /**
      * PatchApplier constructor.
      * @param PatchReader $dataPatchReader
      * @param PatchReader $schemaPatchReader
      * @param PatchRegistryFactory $patchRegistryFactory
      * @param ResourceConnection $resourceConnection
+     * @param ModuleResource $moduleResource
+     * @param PatchHistory $patchHistory
      */
     public function __construct(
         PatchReader $dataPatchReader,
         PatchReader $schemaPatchReader,
         PatchRegistryFactory $patchRegistryFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ModuleResource $moduleResource,
+        PatchHistory $patchHistory
     ) {
         $this->patchRegistryFactory = $patchRegistryFactory;
         $this->dataPatchReader = $dataPatchReader;
         $this->schemaPatchReader = $schemaPatchReader;
         $this->resourceConnection = $resourceConnection;
+        $this->moduleResource = $moduleResource;
+        $this->patchHistory = $patchHistory;
+    }
+
+    /**
+     * As we have old scripts and new one we need
+     *
+     * @param PatchInterface $patch
+     * @param string $moduleName
+     * @return bool
+     */
+    private function skipByBackwardIncompatability(PatchInterface $patch, $moduleName)
+    {
+        $dbVersion = $this->moduleResource->getDataVersion($moduleName);
+        return $patch instanceof PatchVersionInterface &&
+            version_compare($patch->getVersion(), $dbVersion) <= 0;
     }
 
     /**
@@ -69,9 +100,22 @@ class PatchApplier
          * @var DataPatchInterface $dataPatch
          */
         foreach ($registry as $dataPatch) {
+            if (!$dataPatch instanceof DataPatchInterface) {
+                throw new Exception(
+                    sprintf("Patch %s should implement DataPatchInterface", get_class($dataPatch))
+                );
+            }
+            /**
+             * Due to bacward compatabilities reasons some patches should be skipped
+             */
+            if ($this->skipByBackwardIncompatability($dataPatch, $moduleName)) {
+                continue;
+            }
+
             try {
                 $adapter->beginTransaction();
                 $dataPatch->apply();
+                $this->patchHistory->fixPatch($dataPatch);
                 $adapter->commit();
             } catch (\Exception $e) {
                 $adapter->rollBack();
@@ -115,6 +159,7 @@ class PatchApplier
         foreach ($registry as $schemaPatch) {
             try {
                 $schemaPatch->apply();
+                $this->patchHistory->fixPatch($schemaPatch);
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage());
             }
@@ -141,6 +186,7 @@ class PatchApplier
                 try {
                     $adapter->beginTransaction();
                     $dataPatch->revert();
+                    $this->patchHistory->revertPatchFromHistory($dataPatch);
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();

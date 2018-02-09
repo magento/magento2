@@ -21,7 +21,7 @@ class PatchHistory
     /**
      * Name of a patch
      */
-    const CLASS_NAME = "name";
+    const CLASS_NAME = "patch_name";
 
     /**
      * Patch type for schema patches
@@ -73,6 +73,42 @@ class PatchHistory
     }
 
     /**
+     * Fix patch in patch table in order to avoid reapplying of patch
+     *
+     * @param PatchInterface $patch
+     * @return void
+     */
+    public function fixPatch(PatchInterface $patch)
+    {
+        $patchName = get_class($patch);
+        if ($this->isApplied(get_class($patch))) {
+            throw new \LogicException(sprintf("Patch %s cannot be applied twice", $patchName));
+        }
+
+        $adapter = $this->resourceConnection->getConnection();
+        $adapter->insert(self::TABLE_NAME, [self::CLASS_NAME => $patchName]);
+    }
+
+    /**
+     * Revert patch from history
+     *
+     * @param PatchInterface $patch
+     * @return void
+     */
+    public function revertPatchFromHistory(PatchInterface $patch)
+    {
+        $patchName = get_class($patch);
+        if (!$this->isApplied(get_class($patch))) {
+            throw new \LogicException(
+                sprintf("Patch %s should be applied, before you can revert it", $patchName)
+            );
+        }
+
+        $adapter = $this->resourceConnection->getConnection();
+        $adapter->delete(self::TABLE_NAME, [self::CLASS_NAME . "= ?" => $patchName]);
+    }
+
+    /**
      * Check whether patch was applied on the system or not
      *
      * @param string $patchName
@@ -80,6 +116,6 @@ class PatchHistory
      */
     public function isApplied($patchName)
     {
-        return isset($this->getAppliedPatches()[$patchName]);
+        return in_array($patchName, $this->getAppliedPatches());
     }
 }
