@@ -135,7 +135,7 @@ class CompositeConfigProvider
      */
     private function getActiveEditorPath($config)
     {
-        if (!isset($this->activeEditorPath)) {
+        if (!isset($this->activeEditorPath) && $this->activeEditorPath == $config->getData('activeEditorPath')) {
             $this->activeEditorPath = $config->getData('activeEditorPath')
                 ? $config->getData('activeEditorPath')
                 : $this->activeEditor->getWysiwygAdapterPath();
