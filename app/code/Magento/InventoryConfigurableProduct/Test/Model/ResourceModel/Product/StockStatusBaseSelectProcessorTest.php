@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\ResourceModel\Product;
+namespace Magento\InventoryConfigurableProduct\Test\Integration\CatalogInventory\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -48,19 +48,21 @@ class StockStatusBaseSelectProcessorTest extends TestCase
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/product_configurable.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/product_configurable_out_of_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/product_configurable.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/product_configurable_out_of_stock.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_configurable.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProduct/Test/_files/source_items_configurable.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
      * @return void
      */
+    // @codingStandardsIgnoreEnd
     public function testProcess()
     {
         $this->storeManager->setCurrentStore('store_for_us_website');

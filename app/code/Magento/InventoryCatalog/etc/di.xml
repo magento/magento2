@@ -62,11 +62,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
-        <arguments>
-            <argument name="baseSelectProcessors" xsi:type="array">
-                <item name="stock_status" xsi:type="object">Magento\InventoryCatalog\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

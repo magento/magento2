@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\ResourceModel\Product;
+namespace Magento\InventoryConfigurableProduct\Test\Integration\CatalogInventory\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Framework\App\ResourceConnection;

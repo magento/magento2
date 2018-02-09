@@ -5,13 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\ResourceModel\Product;
+namespace Magento\InventoryConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DB\Select;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Add stock item filter to selects.
@@ -34,18 +37,34 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $getStockIdForCurrentWebsite;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param StockConfigurationInterface $stockConfig
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
+     * @param StoreManagerInterface $storeManager
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         StockConfigurationInterface $stockConfig,
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
+        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
+        StoreManagerInterface $storeManager,
+        StockResolverInterface $stockResolver
     ) {
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->stockConfig = $stockConfig;
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
+        $this->storeManager = $storeManager;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -55,7 +74,10 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     public function process(Select $select)
     {
         if (!$this->stockConfig->isShowOutOfStock()) {
-            $stockId = $this->getStockIdForCurrentWebsite->execute();
+            $websiteCode = $this->storeManager->getWebsite()->getCode();
+            $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+            $stockId = (int)$stock->getStockId();
+
             $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
 
             /** @var Select $select */
