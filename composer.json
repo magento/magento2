@@ -41,7 +41,7 @@
         "magento/zendframework1": "~1.13.0",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
-        "pelago/emogrifier": "1.2.0",
+        "pelago/emogrifier": "^2.0.0",
         "phpseclib/phpseclib": "2.0.*",
         "ramsey/uuid": "3.6.1",
         "sjparkinson/static-review": "~4.1",
