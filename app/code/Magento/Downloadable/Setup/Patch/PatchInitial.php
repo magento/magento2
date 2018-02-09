@@ -8,42 +8,46 @@ namespace Magento\Downloadable\Setup\Patch;
 
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InstallDownloadableAttributes
+ * @package Magento\Downloadable\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InstallDownloadableAttributes implements DataPatchInterface, VersionedDataPatch
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
+     * InstallDownloadableAttributes constructor.
+     * @param ResourceConnection $resourceConnection
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        EavSetupFactory $eavSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         /**
          * Add attributes to the eav/attribute table
          */
@@ -172,27 +176,29 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 );
             }
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
