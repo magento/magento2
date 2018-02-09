@@ -13,9 +13,9 @@ use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
-use Magento\TestSetupDeclarationModule3\Setup\Patch\Data\ZFirstPatch;
 use Magento\TestSetupDeclarationModule3\Setup\Patch\Data\IncrementalSomeIntegerPatch;
 use Magento\TestSetupDeclarationModule3\Setup\Patch\Data\ReferenceIncrementalSomeIntegerPatch;
+use Magento\TestSetupDeclarationModule3\Setup\Patch\Data\ZFirstPatch;
 
 /**
  * The purpose of this test is validating schema reader operations.
@@ -147,6 +147,30 @@ class DataPatchInstallationTest extends SetupTestCase
             'UpgradeData.php',
             'Setup'
         );
+
+        //Upgrade with UpgradeData
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule3',
+            'first_patch_revision',
+            'module.xml',
+            'etc'
+        );
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule3
+     */
+    public function testPatchesRevert()
+    {
+        $this->movePatches();
+        $this->cliCommad->install(['Magento_TestSetupDeclarationModule3']);
+        $this->cliCommad->uninstallModule('Magento_TestSetupDeclarationModule3');
+        $testTableData = $this->tableData->describeTableData('test_table');
+        $patchListTableData = $this->tableData->describeTableData('patch_list');
+        self::assertEmpty($patchListTableData);
+        self::assertEmpty($testTableData);
+        $refTableData = $this->tableData->describeTableData('reference_table');
+        self::assertEquals($this->getRefTableData(), $refTableData);
     }
 
     /**
@@ -172,6 +196,42 @@ class DataPatchInstallationTest extends SetupTestCase
                 'tinyint' => NULL,
                 'varchar' => 'changed__very_secret_string',
                 'varbinary' => '0',
+            ],
+        ];
+    }
+
+    /**
+     * Retrieve reference table data
+     *
+     * @return array
+     */
+    private function getRefTableData()
+    {
+        return [
+            [
+                'tinyint_ref' => '2',
+                'some_integer' => '2',
+                'for_patch_testing' => NULL,
+            ],
+            [
+                'tinyint_ref' => '3',
+                'some_integer' => '3',
+                'for_patch_testing' => NULL,
+            ],
+            [
+                'tinyint_ref' => '4',
+                'some_integer' => '5',
+                'for_patch_testing' => NULL,
+            ],
+            [
+                'tinyint_ref' => '5',
+                'some_integer' => '6',
+                'for_patch_testing' => NULL,
+            ],
+            [
+                'tinyint_ref' => '6',
+                'some_integer' => '12',
+                'for_patch_testing' => NULL,
             ],
         ];
     }

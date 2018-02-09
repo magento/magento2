@@ -28,6 +28,13 @@ class PatchRegistry implements \IteratorAggregate
     private $patchFactory;
 
     /**
+     * This instances need to do revert
+     *
+     * @var PatchInterface[]
+     */
+    private $appliedPatchInstances = [];
+
+    /**
      * @var PatchHistory
      */
     private $patchHistory;
@@ -59,6 +66,20 @@ class PatchRegistry implements \IteratorAggregate
     }
 
     /**
+     * Register all dependents to patch
+     *
+     * @param string | DependentPatchInterface $patchName
+     */
+    private function registerDependents(string $patchName)
+    {
+        $dependencies = $patchName::getDependencies();
+
+        foreach ($dependencies as $dependency) {
+            $this->dependents[$dependency][] = $patchName;
+        }
+    }
+
+    /**
      * Register patch and create chain of patches
      *
      * @param string $patchName
@@ -67,6 +88,8 @@ class PatchRegistry implements \IteratorAggregate
     public function registerPatch(string $patchName)
     {
         if ($this->patchHistory->isApplied($patchName)) {
+            $this->appliedPatchInstances[$patchName] = $this->patchFactory->create($patchName);
+            $this->registerDependents($patchName);
             return false;
         }
 
@@ -76,12 +99,6 @@ class PatchRegistry implements \IteratorAggregate
 
         $patch = $this->patchFactory->create($patchName);
         $this->patchInstances[$patchName] = $patch;
-        $dependencies = $patch::getDependencies();
-
-        foreach ($dependencies as $dependency) {
-            $this->dependents[$dependency][] = $patchName;
-        }
-
         return $patch;
     }
 
@@ -96,10 +113,17 @@ class PatchRegistry implements \IteratorAggregate
         $patches = [];
         $patchName = get_class($patch);
 
+        /**
+         * Let`s check if patch is dependency for other patches
+         */
         if (isset($this->dependents[$patchName])) {
-            foreach ($this->dependents[$patchName] as $dependentPatchName) {
-                $patches[] = $this->patchInstances[$dependentPatchName];
-                $patches += $this->getDependentPatches($this->patchInstances[$dependentPatchName]);
+            foreach ($this->dependents[$patchName] as $dependent) {
+                if (isset($this->appliedPatchInstances[$dependent])) {
+                    $dependent = $this->appliedPatchInstances[$dependent];
+                    $patches = array_replace($patches, $this->getDependentPatches($dependent));
+                    $patches[get_class($dependent)] = $dependent;
+                    unset($this->appliedPatchInstances[get_class($dependent)]);
+                }
             }
         }
 
@@ -151,10 +175,10 @@ class PatchRegistry implements \IteratorAggregate
         if ($this->reverseIterator === null) {
             $reversePatches = [];
 
-            while (!empty($this->patchInstances)) {
-                $lastPatch = array_pop($this->patchInstances);
-                $reversePatches += $this->getDependentPatches($lastPatch);
-                $reversePatches[] = $lastPatch;
+            while (!empty($this->appliedPatchInstances)) {
+                $patch = array_pop($this->appliedPatchInstances);
+                $reversePatches = array_replace($reversePatches, $this->getDependentPatches($patch));
+                $reversePatches[get_class($patch)] = $patch;
             }
 
             $this->reverseIterator = new \ArrayIterator($reversePatches);

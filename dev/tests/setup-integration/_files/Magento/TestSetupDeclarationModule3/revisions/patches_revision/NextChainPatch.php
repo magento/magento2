@@ -67,7 +67,14 @@ class NextChainPatch implements
     public function revert()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['varbinary = ?', 0101010]);
+        $refSelect = $adapter->select()->from('reference_table', 'for_patch_testing')
+            ->where('`tinyint_ref` = ?', 7);
+        $varchar2 = $adapter->fetchOne($refSelect);
+        $adapter->update(
+            'reference_table',
+            ['for_patch_testing' => str_replace('changed__', '', $varchar2)],
+            ['`tinyint_ref` = ?' => 7]
+        );
     }
 
     /**
