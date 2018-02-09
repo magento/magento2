@@ -2242,6 +2242,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         array_intersect_key($rowData, $this->defaultStockData),
                         $row
                     );
+                    $row['sku'] = $sku;
 
                     if ($this->stockConfiguration->isQty(
                         $this->skuProcessor->getNewSku($sku)['type_id']

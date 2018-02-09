@@ -53,7 +53,13 @@ class StockItemImporter implements StockItemImporterInterface
         $stockItemResource = $this->stockResourceItemFactory->create();
         $entityTable = $stockItemResource->getMainTable();
         try {
-            $stockItemResource->getConnection()->insertOnDuplicate($entityTable, array_values($stockData));
+            $stockImportData = array_map(
+                function ($stockItemData) {
+                    unset($stockItemData['sku']);
+                    return $stockItemData;
+                }, array_values($stockData)
+            );
+            $stockItemResource->getConnection()->insertOnDuplicate($entityTable, $stockImportData);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Invalid Stock data for insert'), $e);

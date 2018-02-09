@@ -73,12 +73,15 @@ class SourceItemImporter
         array $stockData
     ) {
         $sourceItems = [];
-        foreach ($stockData as $sku => $stockDatum) {
+        foreach ($stockData as $stockDatum) {
+            if (!isset($stockDatum['sku'])) {
+                continue;
+            }
             $inStock = (isset($stockDatum['is_in_stock'])) ? intval($stockDatum['is_in_stock']) : 0;
             $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSku($sku);
+            $sourceItem->setSku($stockDatum['sku']);
             $sourceItem->setSourceCode($this->defaultSource->getCode());
             $sourceItem->setQuantity($qty);
             $sourceItem->setStatus($inStock);
