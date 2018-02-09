@@ -9,39 +9,43 @@ namespace Magento\GroupedProduct\Setup\Patch;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InitializeGroupedProductLinks
+ * @package Magento\GroupedProduct\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionInterface
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
+     * InitializeGroupedProductLinks constructor.
+     * @param ResourceConnection $resourceConnection
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        EavSetupFactory $eavSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /**
          * Install grouped product link type
@@ -50,22 +54,24 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             'link_type_id' => \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
             'code' => 'super',
         ];
-        $setup->getConnection()
-            ->insertOnDuplicate($setup->getTable('catalog_product_link_type'), $data);
+        $this->resourceConnection->getConnection()->insertOnDuplicate(
+            $this->resourceConnection->getConnection()->getTableName('catalog_product_link_type'),
+            $data
+        );
 
         /**
          * Install grouped product link attributes
          */
-        $select = $setup->getConnection()
+        $select = $this->resourceConnection->getConnection()
             ->select()
             ->from(
-                ['c' => $setup->getTable('catalog_product_link_attribute')]
+                ['c' => $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute')]
             )
             ->where(
                 "c.link_type_id=?",
                 \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
             );
-        $result = $setup->getConnection()->fetchAll($select);
+        $result = $this->resourceConnection->getConnection()->fetchAll($select);
         if (!$result) {
             $data = [
                 [
@@ -79,37 +85,42 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                     'data_type' => 'decimal'
                 ],
             ];
-            $setup->getConnection()->insertMultiple($setup->getTable('catalog_product_link_attribute'), $data);
+            $this->resourceConnection->getConnection()->insertMultiple(
+                $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute'),
+                $data
+            );
         }
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $field = 'country_of_manufacture';
         $applyTo = explode(',', $eavSetup->getAttribute(Product::ENTITY, $field, 'apply_to'));
         if (!in_array('grouped', $applyTo)) {
             $applyTo[] = 'grouped';
             $eavSetup->updateAttribute(Product::ENTITY, $field, 'apply_to', implode(',', $applyTo));
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
