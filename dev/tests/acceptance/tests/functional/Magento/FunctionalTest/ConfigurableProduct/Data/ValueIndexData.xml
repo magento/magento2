@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ValueIndex1" type="ValueIndex">
         <var key="value_index" entityKey="value" entityType="ProductAttributeOption"/>
@@ -14,4 +14,4 @@
     <entity name="ValueIndex2" type="ValueIndex">
         <var key="value_index" entityKey="value" entityType="ProductAttributeOption"/>
     </entity>
-</config>
+</entities>
