@@ -108,9 +108,8 @@ class TemplateFile extends File
     private function getMinifiedTemplateInProduction($template)
     {
         if ($this->deploymentConfig->getConfigData(
-                ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION
-            )
-        ) {
+            ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION
+        )) {
             return $this->templateMinifier->getMinified($template);
         }
         return $this->templateMinifier->getPathToMinified($template);
