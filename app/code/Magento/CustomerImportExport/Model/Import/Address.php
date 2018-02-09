@@ -592,13 +592,13 @@ class Address extends AbstractCustomer
             if (array_key_exists($attributeAlias, $rowData)) {
                 $attributeParams = $this->adjustAttributeDataForWebsite($attributeParams, $websiteId);
 
-                if (!strlen($rowData[$attributeAlias])) {
+                if ('' === $rowData[$attributeAlias]) {
                     if ($newAddress) {
                         $value = null;
                     } else {
                         continue;
                     }
-                } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
+                } elseif ($newAddress && '' === $rowData[$attributeAlias]) {
                 } elseif (in_array($attributeParams['type'], ['select', 'boolean'])) {
                     $value = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($rowData[$attributeAlias]));
                 } elseif ('datetime' == $attributeParams['type']) {
@@ -816,7 +816,7 @@ class Address extends AbstractCustomer
                         if (in_array($attributeCode, $this->_ignoredAttributes)) {
                             continue;
                         }
-                        if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                        if (isset($rowData[$attributeCode]) && '' !== $rowData[$attributeCode]) {
                             $this->isAttributeValid(
                                 $attributeCode,
                                 $attributeParams,
@@ -882,7 +882,7 @@ class Address extends AbstractCustomer
             if ($customerId === false) {
                 $this->addRowError(self::ERROR_CUSTOMER_NOT_FOUND, $rowNumber);
             } else {
-                if (!strlen($addressId)) {
+                if ('' === $addressId) {
                     $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
                 } elseif (!in_array($addressId, $this->_addresses[$customerId])) {
                     $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);

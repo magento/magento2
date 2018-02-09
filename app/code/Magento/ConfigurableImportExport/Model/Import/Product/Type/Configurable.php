@@ -302,7 +302,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 // check attribute superity
                 $this->_entityModel->addRowError(self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER, $rowNum, $superAttrCode);
                 return false;
-            } elseif (isset($rowData['_super_attribute_option']) && strlen($rowData['_super_attribute_option'])) {
+            } elseif (isset($rowData['_super_attribute_option']) && '' !== $rowData['_super_attribute_option']) {
                 $optionKey = strtolower($rowData['_super_attribute_option']);
                 if (!isset($this->_superAttributes[$superAttrCode]['options'][$optionKey])) {
                     $this->_entityModel->addRowError(self::ERROR_INVALID_OPTION_VALUE, $rowNum, $superAttrCode);

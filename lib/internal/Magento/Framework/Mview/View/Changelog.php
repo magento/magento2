@@ -187,7 +187,7 @@ class Changelog implements ChangelogInterface
      */
     public function getName()
     {
-        if (strlen($this->viewId) == 0) {
+        if ('' === $this->viewId) {
             throw new \Exception("View's identifier is not set");
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;

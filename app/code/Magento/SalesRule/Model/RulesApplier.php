@@ -101,12 +101,12 @@ class RulesApplier
         if ($ruleLabel) {
             $label = $ruleLabel;
         } else {
-            if (strlen($address->getCouponCode())) {
+            if ('' !== $address->getCouponCode()) {
                 $label = $address->getCouponCode();
             }
         }
 
-        if (strlen($label)) {
+        if ('' !== $label) {
             $description[$rule->getId()] = $label;
         }
 

@@ -292,7 +292,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if ($dataChild instanceof \DOMElement) {
                 $data[$dataChild->attributes->getNamedItem('name')->nodeValue] = $this->_convertData($dataChild);
             } else {
-                if (strlen(trim($dataChild->nodeValue))) {
+                if ('' !== trim($dataChild->nodeValue)) {
                     $data = $dataChild->nodeValue;
                 }
             }

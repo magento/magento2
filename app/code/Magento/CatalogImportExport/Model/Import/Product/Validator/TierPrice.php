@@ -37,21 +37,13 @@ class TierPrice extends AbstractPrice implements RowValidatorInterface
         $this->_clearMessages();
         if (isset(
             $value['_tier_price_website']
-        ) && strlen(
-            $value['_tier_price_website']
-        ) || isset(
+        ) && '' !== $value['_tier_price_website'] || isset(
             $value['_tier_price_customer_group']
-        ) && strlen(
-            $value['_tier_price_customer_group']
-        ) || isset(
+        ) && '' !== $value['_tier_price_customer_group'] || isset(
             $value['_tier_price_qty']
-        ) && strlen(
-            $value['_tier_price_qty']
-        ) || isset(
+        ) && '' !== $value['_tier_price_qty'] || isset(
             $value['_tier_price_price']
-        ) && strlen(
-            $value['_tier_price_price']
-        )
+        ) && '' !== $value['_tier_price_price']
         ) {
             if (!isset(
                 $value['_tier_price_website']
@@ -61,15 +53,7 @@ class TierPrice extends AbstractPrice implements RowValidatorInterface
                 $value['_tier_price_qty']
             ) || !isset(
                 $value['_tier_price_price']
-            ) || !strlen(
-                $value['_tier_price_website']
-            ) || !strlen(
-                $value['_tier_price_customer_group']
-            ) || !strlen(
-                $value['_tier_price_qty']
-            ) || !strlen(
-                $value['_tier_price_price']
-            )
+            ) || '' === $value['_tier_price_website'] || '' === $value['_tier_price_customer_group'] || '' === $value['_tier_price_qty'] || '' === $value['_tier_price_price']
             ) {
                 $this->_addMessages([self::ERROR_TIER_DATA_INCOMPLETE]);
                 return false;

@@ -44,10 +44,8 @@ class Wsdl extends \Zend\Soap\Wsdl
                 $fault['message']
             ) && is_string(
                 $fault['message']
-            ) && strlen(
-                trim($fault['message'])
-            );
-            $isNameValid = isset($fault['name']) && is_string($fault['name']) && strlen(trim($fault['name']));
+            ) && '' !== trim($fault['message']);
+            $isNameValid = isset($fault['name']) && is_string($fault['name']) && '' !== trim($fault['name']);
 
             if ($isNameValid && $isMessageValid) {
                 $node = $this->toDomDocument()->createElement('fault');

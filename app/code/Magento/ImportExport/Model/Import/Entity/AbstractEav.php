@@ -227,7 +227,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                     $value = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($value as $innerOption) {
                         // skip ' -- Please Select -- ' option
-                        if (strlen($innerOption['value'])) {
+                        if ('' !== $innerOption['value']) {
                             $options[mb_strtolower($innerOption[$index])] = $innerOption['value'];
                         }
                     }

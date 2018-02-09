@@ -81,7 +81,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             return $this;
         }
         $text = $this->getOptionText($filter);
-        if ($filter && strlen($text)) {
+        if ($filter && '' !== $text) {
             $this->_getResource()->applyFilterToCollection($this, $filter);
             $this->getLayer()->getState()->addFilter($this->_createItem($text, $filter));
             $this->_items = [];

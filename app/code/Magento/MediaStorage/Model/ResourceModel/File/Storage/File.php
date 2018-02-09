@@ -90,11 +90,11 @@ class File
      */
     public function saveDir($dir)
     {
-        if (!isset($dir['name']) || !strlen($dir['name']) || !isset($dir['path'])) {
+        if (!isset($dir['name']) || '' === $dir['name'] || !isset($dir['path'])) {
             return false;
         }
 
-        $path = strlen($dir['path']) ? $dir['path'] . '/' . $dir['name'] : $dir['name'];
+        $path = '' !== $dir['path'] ? $dir['path'] . '/' . $dir['name'] : $dir['name'];
 
         try {
             $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA)->create($path);

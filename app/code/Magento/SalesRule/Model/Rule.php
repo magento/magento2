@@ -286,9 +286,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function afterSave()
     {
         $couponCode = trim($this->getCouponCode());
-        if (strlen(
-            $couponCode
-        ) && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC && !$this->getUseAutoGeneration()
+        if ('' !== $couponCode && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC && !$this->getUseAutoGeneration()
         ) {
             $this->getPrimaryCoupon()->setCode(
                 $couponCode

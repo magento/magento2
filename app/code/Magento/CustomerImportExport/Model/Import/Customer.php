@@ -379,7 +379,7 @@ class Customer extends AbstractCustomer
         }
 
         // password change/set
-        if (isset($rowData['password']) && strlen($rowData['password'])) {
+        if (isset($rowData['password']) && '' !== $rowData['password']) {
             $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
         $entityRow = ['entity_id' => $entityId];
@@ -544,9 +544,7 @@ class Customer extends AbstractCustomer
             // check password
             if (isset(
                 $rowData['password']
-            ) && strlen(
-                $rowData['password']
-            ) && $this->string->strlen(
+            ) && '' !== $rowData['password'] && $this->string->strlen(
                 $rowData['password']
             ) < self::MIN_PASSWORD_LENGTH
             ) {
@@ -557,7 +555,7 @@ class Customer extends AbstractCustomer
                 if (in_array($attributeCode, $this->_ignoredAttributes)) {
                     continue;
                 }
-                if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                if (isset($rowData[$attributeCode]) && '' !== $rowData[$attributeCode]) {
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,

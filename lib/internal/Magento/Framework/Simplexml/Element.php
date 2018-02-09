@@ -259,7 +259,7 @@ class Element extends \SimpleXMLElement
         if ($this->hasChildren()) {
             $out .= '>';
             $value = trim((string)$this);
-            if (strlen($value)) {
+            if ('' !== $value) {
                 $out .= $this->xmlentities($value);
             }
             $out .= $nl;
@@ -269,7 +269,7 @@ class Element extends \SimpleXMLElement
             $out .= $pad . '</' . $this->getName() . '>' . $nl;
         } else {
             $value = (string)$this;
-            if (strlen($value)) {
+            if ('' !== $value) {
                 $out .= '>' . $this->xmlentities($value) . '</' . $this->getName() . '>' . $nl;
             } else {
                 $out .= '/>' . $nl;

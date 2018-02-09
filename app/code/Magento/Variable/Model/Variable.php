@@ -111,7 +111,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         if ($type === null) {
             $type = self::TYPE_HTML;
         }
-        if ($type == self::TYPE_TEXT || !strlen((string)$this->getData('html_value'))) {
+        if ($type == self::TYPE_TEXT || '' === (string)$this->getData('html_value')) {
             $value = $this->getData('plain_value');
             //escape html if type is html, but html value is not defined
             if ($type == self::TYPE_HTML) {

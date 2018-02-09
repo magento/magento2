@@ -74,7 +74,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         $oldCouponCode = $cartQuote->getCouponCode();
 
         $codeLength = strlen($couponCode);
-        if (!$codeLength && !strlen($oldCouponCode)) {
+        if (!$codeLength && '' === $oldCouponCode) {
             return $this->_goBack();
         }
 

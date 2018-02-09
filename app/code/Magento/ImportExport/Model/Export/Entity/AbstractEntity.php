@@ -414,7 +414,7 @@ abstract class AbstractEntity
             try {
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
-                        if (strlen($innerOption['value'])) {
+                        if ('' !== $innerOption['value']) {
                             // skip ' -- Please Select -- ' option
                             $options[$innerOption['value']] = (string)$innerOption[$index];
                         }

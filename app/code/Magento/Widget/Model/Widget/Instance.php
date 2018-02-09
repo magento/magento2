@@ -597,7 +597,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             }
-            if ($name && strlen((string)$value)) {
+            if ($name && '' !== (string)$value) {
                 $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .

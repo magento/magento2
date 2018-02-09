@@ -227,7 +227,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
 
         $dateSingleton = $this->_date;
         foreach ($files as $file) {
-            if (!isset($file['filename']) || !strlen($file['filename']) || !isset($file['content'])) {
+            if (!isset($file['filename']) || '' === $file['filename'] || !isset($file['content'])) {
                 continue;
             }
 
@@ -235,9 +235,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
                 $file['update_time'] = $dateSingleton->date();
                 $file['directory_id'] = isset(
                     $file['directory']
-                ) && strlen(
-                    $file['directory']
-                ) ? $this->_directoryFactory->create(
+                ) && '' !== $file['directory'] ? $this->_directoryFactory->create(
                     ['connectionName' => $this->getConnectionName()]
                 )->loadByPath(
                     $file['directory']
