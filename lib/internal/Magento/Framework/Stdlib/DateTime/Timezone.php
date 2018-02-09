@@ -349,19 +349,4 @@ class Timezone implements TimezoneInterface
 
         return $date->format($format);
     }
-
-    /**
-     * Retrieve date with time
-     *
-     * @param string $date
-     * @param bool $includeTime
-     * @return string
-     */
-    private function appendTimeIfNeeded($date, $includeTime)
-    {
-        if ($includeTime && !preg_match('/\d{1}:\d{2}/', $date)) {
-            $date .= " 0:00am";
-        }
-        return $date;
-    }
 }
