@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="bundle_source_item_indexer"
+                type="Magento\InventoryBundleIndexer\Plugin\Indexer\SourceItem\BundleSourceItemIndexer" />
+    </type>
+    <type name="Magento\InventoryBundleIndexer\Model\ResourceModel\BundleIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+</config>

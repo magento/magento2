@@ -1,6 +1,8 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
 app/code/Magento/Inventory
 app/code/Magento/InventoryApi
+app/code/Magento/InventoryBundle
+app/code/Magento/InventoryBundleIndexer
 app/code/Magento/InventoryCatalog
 app/code/Magento/InventoryCatalogSearch
 app/code/Magento/InventoryConfiguration
