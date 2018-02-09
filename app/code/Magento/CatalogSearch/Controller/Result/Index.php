@@ -83,7 +83,7 @@ class Index extends \Magento\Framework\App\Action\Action
             $catalogSearchHelper = $this->_objectManager->get(\Magento\CatalogSearch\Helper\Data::class);
 
             $getAdditionalRequestParameters = $this->getRequest()->getParams();
-            unset($getAdditionalRequestParameters[$this->_queryFactory::QUERY_VAR_NAME]);
+            unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
 
             if (
                 empty($getAdditionalRequestParameters) &&

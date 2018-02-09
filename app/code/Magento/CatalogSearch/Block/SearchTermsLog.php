@@ -11,6 +11,8 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Block for logging search terms on cached pages
+ *
+ * @api
  */
 class SearchTermsLog extends Template
 {
