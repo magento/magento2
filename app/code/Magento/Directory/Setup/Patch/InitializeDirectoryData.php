@@ -4,40 +4,46 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Setup;
+namespace Magento\Directory\Setup\Patch;
 
 use Magento\Directory\Helper\Data;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * @codeCoverageIgnore
+ * Class InitializeDirectoryData
+ * @package Magento\Directory\Setup\Patch
  */
-class InstallData implements InstallDataInterface
+class InitializeDirectoryData implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * Directory data
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @var Data
      */
     private $directoryData;
 
     /**
-     * Init
-     *
+     * InitializeDirectoryData constructor.
+     * @param ResourceConnection $resourceConnection
      * @param Data $directoryData
      */
-    public function __construct(Data $directoryData)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        \Magento\Directory\Helper\Data $directoryData
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->directoryData = $directoryData;
     }
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
         /**
          * Fill table directory/country
@@ -291,8 +297,11 @@ class InstallData implements InstallDataInterface
         ];
 
         $columns = ['country_id', 'iso2_code', 'iso3_code'];
-        $setup->getConnection()->insertArray($setup->getTable('directory_country'), $columns, $data);
-
+        $this->resourceConnection->getConnection()->insertArray(
+            $this->resourceConnection->getConnection()->getTableName('directory_country'),
+            $columns,
+            $data
+        );
         /**
          * Fill table directory/country_region
          * Fill table directory/country_region_name for en_US locale
@@ -810,16 +819,21 @@ class InstallData implements InstallDataInterface
             ['BR', 'TO', 'Tocantins'],
             ['BR', 'DF', 'Distrito Federal'],
         ];
-
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
-            $setup->getConnection()->insert($setup->getTable('directory_country_region'), $bind);
-            $regionId = $setup->getConnection()->lastInsertId($setup->getTable('directory_country_region'));
-
+            $this->resourceConnection->getConnection()->insert(
+                $this->resourceConnection->getConnection()->getTableName('directory_country_region'),
+                $bind
+            );
+            $regionId = $this->resourceConnection->getConnection()->lastInsertId(
+                $this->resourceConnection->getConnection()->getTableName('directory_country_region')
+            );
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
-            $setup->getConnection()->insert($setup->getTable('directory_country_region_name'), $bind);
+            $this->resourceConnection->getConnection()->insert(
+                $this->resourceConnection->getConnection()->getTableName('directory_country_region_name'),
+                $bind
+            );
         }
-
         /**
          * Fill table directory/currency_rate
          */
@@ -829,12 +843,14 @@ class InstallData implements InstallDataInterface
             ['USD', 'EUR', 0.706700000000],
             ['USD', 'USD', 1],
         ];
-
         $columns = ['currency_from', 'currency_to', 'rate'];
-        $setup->getConnection()->insertArray($setup->getTable('directory_currency_rate'), $columns, $data);
-
-        $setup->getConnection()->insert(
-            $setup->getTable('core_config_data'),
+        $this->resourceConnection->getConnection()->insertArray(
+            $this->resourceConnection->getConnection()->getTableName('directory_currency_rate'),
+            $columns,
+            $data
+        );
+        $this->resourceConnection->getConnection()->insert(
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
@@ -842,10 +858,9 @@ class InstallData implements InstallDataInterface
                 'value' => 1
             ]
         );
-
         $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
-        $setup->getConnection()->insert(
-            $setup->getTable('core_config_data'),
+        $this->resourceConnection->getConnection()->insert(
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
@@ -853,5 +868,29 @@ class InstallData implements InstallDataInterface
                 'value' => implode(',', array_keys($countries))
             ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
