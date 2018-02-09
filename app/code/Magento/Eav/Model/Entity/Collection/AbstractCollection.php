@@ -920,6 +920,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         foreach ($this->_items as $item) {
             $item->setOrigData();
             $this->beforeAddLoadedItem($item);
+            $item->setDataChanges(false);
         }
         \Magento\Framework\Profiler::stop('set_orig_data');
 
