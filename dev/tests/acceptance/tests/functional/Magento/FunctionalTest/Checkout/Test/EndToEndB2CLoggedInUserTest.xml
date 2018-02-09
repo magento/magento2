@@ -18,7 +18,117 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87653"/>
         </annotations>
+        <before>
+            <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createSimpleProduct1Image">
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryMagentoLogo" stepKey="createSimpleProduct1Image1">
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateSimpleProduct1" createDataKey="createSimpleProduct1"/>
+
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createSimpleProduct2Image">
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </createData>
+            <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateSimpleProduct2" createDataKey="createSimpleProduct2"/>
+
+            <!-- @TODO: MAGETWO-80272 Move to Configurable -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createConfigChildProduct1Image">
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryMagentoLogo" stepKey="createConfigChildProduct2Image">
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createConfigProductImage">
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateConfigProduct" createDataKey="createConfigProduct"/>
+
+            <!-- @TODO: MAGETWO-80272 Move to SalesRule -->
+            <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
         <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createSimpleProduct1Image" stepKey="deleteSimpleProduct1Image"/>-->
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createSimpleProduct1Image1" stepKey="deleteSimpleProduct1Image1"/>-->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createSimpleProduct2Image" stepKey="deleteSimpleProduct2Image"/>-->
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+
+            <!-- @TODO: MAGETWO-80272 Move to Configurable -->
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigChildProduct1Image" stepKey="deleteConfigChildProduct1Image"/>-->
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigChildProduct2Image" stepKey="deleteConfigChildProduct2Image"/>-->
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <!-- @TODO: Uncomment once MQE-679 is fixed -->
+            <!--<deleteData createDataKey="createConfigProductImage" stepKey="deleteConfigProductImage"/>-->
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- @TODO: MAGETWO-80272 Move to SalesRule -->
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -26,5 +136,74 @@
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
+
+        <!-- Step 1: User browses catalog -->
+        <amOnPage url="{{StorefrontHomePage}}" stepKey="amOnHomePage"/>
+        <waitForPageLoad stepKey="homeWaitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
+        <see userInput="Welcome, {{CustomerEntityOne.firstname}} {{CustomerEntityOne.lastname}}!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
+
+        <!-- Open Category -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategory">
+            <argument name="category" value="$$createCategory$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productCount" value="CONST.three"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct1ImageSrc"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct1ImageSrc" stepKey="browseAssertSimpleProduct1ImageNotDefault"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct2ImageSrc"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct2ImageSrc" stepKey="browseAssertSimpleProduct2ImageNotDefault"/>
+        <!-- Check more products -->
+        <comment userInput="Check more products" stepKey="checkMoreProducts" />
+        <!-- @TODO: MAGETWO-80272 Move to Configurable -->
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="browseAssertCategoryConfigProduct" after="checkMoreProducts">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="browseGrabConfigProductImageSrc" after="browseAssertCategoryConfigProduct"/>
+        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabConfigProductImageSrc" stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc"/>
+
+        <!-- View Simple Product 1 -->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct1PageImageSrc"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct1PageImageSrc" stepKey="browseAssertSimpleProduct1PageImageNotDefault"/>
+
+        <!-- View Simple Product 2 -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory1"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabSimpleProduct2PageImageSrc"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct2PageImageSrc" stepKey="browseAssertSimpleProduct2PageImageNotDefault"/>
+
+        <!-- View more products -->
+        <comment userInput="View more products" stepKey="viewMoreProducts" />
+        <!-- @TODO: MAGETWO-80272 Move to Configurable -->
+        <!-- View Configurable Product -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory2" after="viewMoreProducts"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="browseClickCategoryConfigProductView" after="clickCategory2"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="browseAssertConfigProductPage" after="browseClickCategoryConfigProductView">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabConfigProductPageImageSrc" after="browseAssertConfigProductPage"/>
+        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabConfigProductPageImageSrc" stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc"/>
     </test>
 </tests>
