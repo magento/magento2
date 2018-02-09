@@ -81,7 +81,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
             \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class
-        )->setMethods(['filter'])->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['filter'])
+            ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMock();
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
@@ -132,34 +134,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;'
         ];
 
+        $params = [
+            ['page_id', null, $this->pageId],
+            ['back', null, false],
+        ];
+
         $this->dataProcessorMock->expects($this->any())
             ->method('filter')
             ->with($postData)
             ->willReturn($filteredPostData);
 
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['page_id', null, $this->pageId],
-                    ['back', null, false],
-                ]
-            );
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($page);
-
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
-        $page->expects($this->once())->method('setData');
+        $this->processRequest($postData, $params);
+        /** @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject $cmsPage */
+        $page = $this->getPageMock();
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
         $this->dataPersistorMock->expects($this->any())
@@ -184,39 +171,25 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAndContinue()
     {
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['page_id' => $this->pageId]);
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['page_id', null, $this->pageId],
-                    ['back', null, true],
-                ]
-            );
+        $postData = ['page_id' => $this->pageId];
+        $params = [
+            ['page_id', null, $this->pageId],
+            ['back', null, true],
+        ];
+
+        $this->processRequest($postData, $params);
 
         $this->dataProcessorMock->expects($this->any())
             ->method('filter')
             ->willReturnArgument(0);
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($page);
+        /** @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject $cmsPage */
+        $page = $this->getPageMock();
 
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
-        $page->expects($this->once())->method('setData');
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
             ->with(__('You saved the page.'));
-
         $this->dataPersistorMock->expects($this->any())
             ->method('clear')
             ->with('cms_page');
@@ -231,33 +204,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionThrowsException()
     {
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['page_id' => $this->pageId]);
-        $this->requestMock->expects($this->atLeastOnce())
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['page_id', null, $this->pageId],
-                    ['back', null, true],
-                ]
-            );
+        $postData = ['page_id' => $this->pageId];
+        $params = [
+            ['page_id', null, $this->pageId],
+            ['back', null, true],
+        ];
+
+        $this->processRequest($postData, $params);
 
         $this->dataProcessorMock->expects($this->any())
             ->method('filter')
             ->willReturnArgument(0);
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($page);
-
-        $page->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-        $page->expects($this->any())
-            ->method('getId')
-            ->willReturn(true);
-        $page->expects($this->once())->method('setData');
+        /** @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject $cmsPage */
+        $page = $this->getPageMock();
         $this->pageRepository->expects($this->once())
             ->method('save')
             ->with($page)
@@ -278,5 +237,45 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
+    }
+
+    /**
+     * Create Cms Page Mock.
+     *
+     * @return \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getPageMock()
+    {
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($page);
+
+        $page->expects($this->any())
+            ->method('load')
+            ->willReturnSelf();
+        $page->expects($this->any())
+            ->method('getId')
+            ->willReturn(true);
+        $page->expects($this->once())->method('setData');
+
+        return $page;
+    }
+
+    /**
+     * Process save page action request.
+     *
+     * @param array $postData
+     * @param array $params
+     * @return void
+     */
+    private function processRequest($postData, $params)
+    {
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->willReturnMap($params);
     }
 }

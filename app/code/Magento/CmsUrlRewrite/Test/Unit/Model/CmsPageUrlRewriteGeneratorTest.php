@@ -68,7 +68,6 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $cmsPage = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $cmsPage->expects($this->any())->method('getStores')->willReturn($initializesStores);
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->setMethods(['getStoreId'])
@@ -80,7 +79,9 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($urlRewrite);
         $cmsPage->expects($this->any())->method('getId')->willReturn($cmsPageId);
         $cmsPage->expects($this->any())->method('getIdentifier')->willReturn('request_path');
-        $this->urlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')->with($cmsPage)
+        $this->urlPathGenerator->expects($this->any())
+            ->method('getCanonicalUrlPath')
+            ->with($cmsPage)
             ->willReturn('cms/page/view/page_id/' . $cmsPageId);
 
         $urls = $this->urlRewriteGenerator->generate($cmsPage);
@@ -104,12 +105,14 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $secondStore = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->setMethods(['getStoreId'])
             ->getMockForAbstractClass();
-        $this->storeManager->expects($this->any())->method('getStores')->willReturn(
-            [
-                1 => $firstStore,
-                2 => $secondStore
-            ]
-        );
+        $this->storeManager->expects($this->any())
+            ->method('getStores')
+            ->willReturn(
+                [
+                    1 => $firstStore,
+                    2 => $secondStore,
+                ]
+            );
         $firstStore->expects($this->any())->method('getStoreId')->willReturn($initializesStores[0]);
         $secondStore->expects($this->any())->method('getStoreId')->willReturn($initializesStores[1]);
 
@@ -128,7 +131,7 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 $initializesStores[0],
-                $initializesStores[1]
+                $initializesStores[1],
             ],
             [
                 $urls[0]->getStoreId(),
