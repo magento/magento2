@@ -7,28 +7,38 @@
 namespace Magento\Analytics\Setup\Patch;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Initial patch.
+ * 
+ * @package Magento\Analytics\Setup\Patch
  */
 class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
 {
-
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * PatchInitial constructor.
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup
+    ) {
+
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply()
     {
-        $setup->getConnection()->insertMultiple(
-            $setup->getTable('core_config_data'),
+        $this->moduleDataSetup->getConnection()->insertMultiple(
+            $this->moduleDataSetup->getTable('core_config_data'),
             [
                 [
                     'scope' => 'default',
@@ -45,8 +55,8 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ]
         );
 
-        $setup->getConnection()->insert(
-            $setup->getTable('flag'),
+        $this->moduleDataSetup->getConnection()->insert(
+            $this->moduleDataSetup->getTable('flag'),
             [
                 'flag_code' => SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE,
                 'state' => 0,
@@ -57,23 +67,26 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }

@@ -6,46 +6,48 @@
 
 namespace Magento\Bundle\Setup\Patch;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
-use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class PrepareInitialConfig
+ * @package Magento\Bundle\Setup\Patch
  */
-class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
+class PrepareInitialConfig implements DataPatchInterface, VersionedDataPatch
 {
-
-
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+    /**
+     * @var \Magento\Eav\Setup\EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * @param EavSetupFactory $eavSetupFactory
+     * PatchInitial constructor.
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
+        \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
+    ) {
+
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
-        $setup->startSetup();
-
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $eavSetup->addAttributeGroup(
@@ -58,34 +60,15 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
         $this->upgradeSkuType($eavSetup);
         $this->upgradeWeightType($eavSetup);
         $this->upgradeShipmentType($eavSetup);
-
-
-        $setup->endSetup();
-
     }
 
     /**
-     * Do Revert
+     * Upgrade Dynamic Price attribute
      *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
+     * @param EavSetup $eavSetup
      * @return void
      */
-    public function revert(ModuleDataSetupInterface $setup)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDisabled()
-    {
-        return false;
-    }
-
-
-    private function upgradePriceType(EavSetup $eavSetup
-    )
+    private function upgradePriceType(EavSetup $eavSetup)
     {
         $eavSetup->updateAttribute(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -101,11 +84,15 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
             'Dynamic Price'
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'price_type', 'default_value', 0);
-
     }
 
-    private function upgradeSkuType(EavSetup $eavSetup
-    )
+    /**
+     * Upgrade Dynamic Sku attribute
+     *
+     * @param EavSetup $eavSetup
+     * @return void
+     */
+    private function upgradeSkuType(EavSetup $eavSetup)
     {
         $eavSetup->updateAttribute(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -122,11 +109,15 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'sku_type', 'default_value', 0);
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'sku_type', 'is_visible', 1);
-
     }
 
-    private function upgradeWeightType(EavSetup $eavSetup
-    )
+    /**
+     * Upgrade Dynamic Weight attribute
+     *
+     * @param EavSetup $eavSetup
+     * @return void
+     */
+    private function upgradeWeightType(EavSetup $eavSetup)
     {
         $eavSetup->updateAttribute(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -143,11 +134,15 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'weight_type', 'default_value', 0);
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'weight_type', 'is_visible', 1);
-
     }
 
-    private function upgradeShipmentType(EavSetup $eavSetup
-    )
+    /**
+     * Upgrade Ship Bundle Items attribute
+     *
+     * @param EavSetup $eavSetup
+     * @return void
+     */
+    private function upgradeShipmentType(EavSetup $eavSetup)
     {
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $eavSetup->addAttributeToGroup(
@@ -177,6 +172,29 @@ class Patch202 implements \Magento\Setup\Model\Patch\DataPatchInterface
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'default_value', 0);
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'is_visible', 1);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

@@ -4,60 +4,63 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Braintree\Setup;
+namespace Magento\Braintree\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
-class UpgradeData implements UpgradeDataInterface
+/**
+ *
+ *
+ * @package Magento\Analytics\Setup\Patch
+ */
+class ConvertSerializedDataToJson implements DataPatchInterface, VersionedDataPatch
 {
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
     /**
      * @var \Magento\Framework\DB\FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
-
     /**
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
     private $queryModifierFactory;
 
     /**
-     * UpgradeData constructor.
-     *
+     * PatchInitial constructor.
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
         \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
     ) {
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
     }
 
     /**
-     * Upgrades data for Braintree module
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->convertSerializedDataToJson($setup);
-        }
+        $this->convertSerializedDataToJson();
     }
 
     /**
      * Upgrade data to version 2.0.1, converts row data in the core_config_data table that uses the path
      * payment/braintree/countrycreditcard from serialized to JSON
      *
-     * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function convertSerializedDataToJson(ModuleDataSetupInterface $setup)
+    private function convertSerializedDataToJson()
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
             \Magento\Framework\DB\DataConverter\SerializedToJson::class
@@ -73,11 +76,35 @@ class UpgradeData implements UpgradeDataInterface
         );
 
         $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('core_config_data'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'config_id',
             'value',
             $queryModifier
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
