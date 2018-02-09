@@ -478,7 +478,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getUsedProducts')
             ->with($this->productMock)
             ->willReturn($simpleProducts);
-
     }
 
     protected function getAttributesFromConfigurable()

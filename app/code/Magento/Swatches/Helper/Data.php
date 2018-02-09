@@ -203,8 +203,7 @@ class Data
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
-                if (
-                    !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
+                if (!array_diff_assoc($requiredAttributes, $simpleProduct->getData())
                     && $this->isMediaAvailable($simpleProduct, $attributeCode)
                 ) {
                     return $simpleProduct;
