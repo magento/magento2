@@ -10,10 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontMessagesSection">
         <element name="test" type="input" selector=".test"/>
-        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
-        <element name="messageProductAddedToCompare" type="text"
-                 selector="//main//div[contains(@class, 'messages')]//div[contains(@class, 'message')]/div[contains(text(), 'You added product {{var1}} to the comparison list.')]"
-                 parameterized="true"
-        />
+        <element name="success" type="text" selector="div.message-success.success.message"/>
     </section>
 </sections>
