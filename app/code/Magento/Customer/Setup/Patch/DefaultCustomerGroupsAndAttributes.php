@@ -4,61 +4,76 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Setup;
+namespace Magento\Customer\Setup\Patch;
 
+use Magento\Customer\Setup\CustomerSetup;
+use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Module\Setup\Migration;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * @codeCoverageIgnore
+ * Class DefaultCustomerGroupsAndAttributes
+ * @package Magento\Customer\Setup\Patch
  */
-class InstallData implements InstallDataInterface
+class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * Customer setup factory
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @var CustomerSetupFactory
      */
     private $customerSetupFactory;
 
     /**
-     * Init
-     *
-     * @param CustomerSetupFactory $customerSetupFactory
+     * @var ModuleDataSetupInterface
      */
-    public function __construct(CustomerSetupFactory $customerSetupFactory)
-    {
+    private $moduleDataSetup;
+
+    /**
+     * DefaultCustomerGroupsAndAttributes constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param CustomerSetupFactory $customerSetupFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CustomerSetupFactory $customerSetupFactory,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->customerSetupFactory = $customerSetupFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
         /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
-        $setup->startSetup();
+        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
 
         // insert default customer groups
-        $setup->getConnection()->insertForce(
-            $setup->getTable('customer_group'),
+        $this->resourceConnection->getConnection()->insertForce(
+            $this->resourceConnection->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 0, 'customer_group_code' => 'NOT LOGGED IN', 'tax_class_id' => 3]
         );
-        $setup->getConnection()->insertForce(
-            $setup->getTable('customer_group'),
+        $this->resourceConnection->getConnection()->insertForce(
+            $this->resourceConnection->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 1, 'customer_group_code' => 'General', 'tax_class_id' => 3]
         );
-        $setup->getConnection()->insertForce(
-            $setup->getTable('customer_group'),
+        $this->resourceConnection->getConnection()->insertForce(
+            $this->resourceConnection->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 2, 'customer_group_code' => 'Wholesale', 'tax_class_id' => 3]
         );
-        $setup->getConnection()->insertForce(
-            $setup->getTable('customer_group'),
+        $this->resourceConnection->getConnection()->insertForce(
+            $this->resourceConnection->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 3, 'customer_group_code' => 'Retailer', 'tax_class_id' => 3]
         );
 
@@ -128,7 +143,7 @@ class InstallData implements InstallDataInterface
             \Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class
         );
 
-        $migrationSetup = $setup->createMigrationSetup();
+        $migrationSetup = $this->moduleDataSetup->createMigrationSetup();
 
         $migrationSetup->appendClassAliasReplace(
             'customer_eav_attribute',
@@ -138,7 +153,29 @@ class InstallData implements InstallDataInterface
             ['attribute_id']
         );
         $migrationSetup->doUpdateClassAliases();
+    }
 
-        $setup->endSetup();
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

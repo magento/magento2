@@ -6,70 +6,56 @@
 
 namespace Magento\Customer\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Customer\Setup\CustomerSetup;
+use Magento\Customer\Setup\CustomerSetupFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class UpdateCustomerAttributesMetadata
+ * @package Magento\Customer\Setup\Patch
  */
-class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
+class UpdateCustomerAttributesMetadata implements DataPatchInterface, VersionedDataPatch
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+    /**
+     * @var CustomerSetupFactory
+     */
+    private $customerSetupFactory;
 
     /**
-     * @param CustomerSetupFactory $customerSetupFactory @param \Magento\Eav\Model\Config $eavConfig
+     * UpdateCustomerAttributesMetadata constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param CustomerSetupFactory $customerSetupFactory
      */
-    public function __construct(CustomerSetupFactory $customerSetupFactory,
-                                \Magento\Eav\Model\Config $eavConfig)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CustomerSetupFactory $customerSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->customerSetupFactory = $customerSetupFactory;
-        $this->eavConfig = $eavConfig;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
-        $setup->startSetup();
         /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
-        $this->upgradeVersionTwoZeroOne($customerSetup);
-
-
-        $this->eavConfig->clear();
-        $setup->endSetup();
-
+        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $this->updateCustomerAttributesMetadata($customerSetup);
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
+     * @param CustomerSetup $customerSetup
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function revert(ModuleDataSetupInterface $setup)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDisabled()
-    {
-        return false;
-    }
-
-
-    private function upgradeVersionTwoZeroOne($customerSetup
-    )
+    private function updateCustomerAttributesMetadata($customerSetup)
     {
         $entityAttributes = [
             'customer' => [
@@ -185,22 +171,32 @@ class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
                 ],
             ],
         ];
-        $this->upgradeAttributes($entityAttributes, $customerSetup);
-
+        $customerSetup->upgradeAttributes($entityAttributes);
     }
 
-    private function upgradeAttributes(array $entityAttributes, CustomerSetup $customerSetup
-    )
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
     {
-        foreach ($entityAttributes as $entityType => $attributes) {
-            foreach ($attributes as $attributeCode => $attributeData) {
-                $attribute = $customerSetup->getEavConfig()->getAttribute($entityType, $attributeCode);
-                foreach ($attributeData as $key => $value) {
-                    $attribute->setData($key, $value);
-                }
-                $attribute->save();
-            }
-        }
+        return [
+            DefaultCustomerGroupsAndAttributes::class,
+        ];
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
