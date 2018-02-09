@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 ?>
-<?php if ($block->isAjaxInsert()):?>
+<?php if ($block->isAjaxInsert()): ?>
     <script type="text/x-magento-init">
     {
         "*": {
             "Magento_CatalogSearch/js/search_terms_log": {
-                "url": "<?= $block->getUrl('catalogsearch/searchTermsLog/save') ?>",
-                "query": "<?= $block->getQuery()->getQueryText() ?>"
+                "url": "<?= /* @escapeNotVerified */ $block->getUrl('catalogsearch/searchTermsLog/save') ?>",
+                "query": "<?= /* @escapeNotVerified */ $block->getQuery()->getQueryText() ?>"
             }
         }
     }

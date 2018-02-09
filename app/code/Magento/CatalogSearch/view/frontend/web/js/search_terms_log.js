@@ -9,8 +9,8 @@ define([
     'use strict';
 
     return function (data) {
-        var url = data.url;
-        var query = data.query;
+        var url = data.url,
+            query = data.query;
 
         $.ajax({
             method: 'GET',

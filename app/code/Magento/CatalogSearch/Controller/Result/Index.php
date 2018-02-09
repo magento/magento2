@@ -85,8 +85,7 @@ class Index extends \Magento\Framework\App\Action\Action
             $getAdditionalRequestParameters = $this->getRequest()->getParams();
             unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
 
-            if (
-                empty($getAdditionalRequestParameters) &&
+            if (empty($getAdditionalRequestParameters) &&
                 $this->_objectManager->get(PopularSearchTerms::class)->isCacheable($queryText, $storeId)
             ) {
                 $this->getCacheableResult($catalogSearchHelper, $query);

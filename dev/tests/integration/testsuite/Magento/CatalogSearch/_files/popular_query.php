@@ -21,5 +21,3 @@ $query->setQueryText(
 )->setIsProcessed(
     1
 )->save();
-
-

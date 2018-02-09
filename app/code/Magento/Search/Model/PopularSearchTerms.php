@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Model;
 
+namespace Magento\Search\Model;
 
 /**
  * Popular search terms
@@ -18,14 +18,14 @@ class PopularSearchTerms
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Catalog search data
      *
      * @var \Magento\Search\Model\ResourceModel\Query\Collection
      */
-    protected $queryCollection;
+    private $queryCollection;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -35,7 +35,7 @@ class PopularSearchTerms
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Search\Model\ResourceModel\Query\Collection $queryCollection
     ) {
-        $this->_scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->queryCollection = $queryCollection;
     }
 
@@ -65,7 +65,7 @@ class PopularSearchTerms
      */
     private function getMaxCountCacheableSearchTerms(int $storeId)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_MAX_COUNT_CACHEABLE_SEARCH_TERMS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
