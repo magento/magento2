@@ -21,7 +21,7 @@ class AssertCmsPageOnFrontend extends AbstractConstraint
      * @param CmsPage $cms
      * @param FrontCmsPage $frontCmsPage,
      * @param BrowserInterface $browser
-     * @param string $displayContent
+     * @param string|null $displayContent
      * @return void
      */
     public function processAssert(
