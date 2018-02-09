@@ -50,7 +50,6 @@ class WidgetGrid extends AbstractGrid
         ],
     ];
 
-
     /**
      * Returns values of theme_id filter.
      *
