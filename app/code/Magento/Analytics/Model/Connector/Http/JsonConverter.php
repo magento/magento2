@@ -22,6 +22,9 @@ class JsonConverter implements ConverterInterface
      */
     private $serializer;
 
+    /**
+     * @param Json $serializer
+     */
     public function __construct(Json $serializer)
     {
         $this->serializer = $serializer;

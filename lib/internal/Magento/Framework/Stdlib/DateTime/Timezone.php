@@ -5,11 +5,18 @@
  */
 namespace Magento\Framework\Stdlib\DateTime;
 
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Timezone library
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Timezone implements TimezoneInterface
 {
@@ -29,12 +36,12 @@ class Timezone implements TimezoneInterface
     protected $_scopeType;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
+     * @var ScopeResolverInterface
      */
     protected $_scopeResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $_dateTime;
 
@@ -44,28 +51,28 @@ class Timezone implements TimezoneInterface
     protected $_defaultTimezonePath;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeResolverInterface $scopeResolver
+     * @param ResolverInterface $localeResolver
+     * @param DateTime $dateTime
+     * @param ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
      */
     public function __construct(
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ScopeResolverInterface $scopeResolver,
+        ResolverInterface $localeResolver,
+        DateTime $dateTime,
+        ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
     ) {
@@ -174,6 +181,8 @@ class Timezone implements TimezoneInterface
                     $timeType,
                     new \DateTimeZone($timezone)
                 );
+
+                $date = $this->appendTimeIfNeeded($date, $includeTime);
                 $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
                 break;
         }
@@ -226,7 +235,7 @@ class Timezone implements TimezoneInterface
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
-        if (!$scope instanceof \Magento\Framework\App\ScopeInterface) {
+        if (!$scope instanceof ScopeInterface) {
             $scope = $this->_scopeResolver->getScope($scope);
         }
 
@@ -317,5 +326,20 @@ class Timezone implements TimezoneInterface
         $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date->format($format);
+    }
+
+    /**
+     * Retrieve date with time
+     *
+     * @param string $date
+     * @param bool $includeTime
+     * @return string
+     */
+    private function appendTimeIfNeeded($date, $includeTime)
+    {
+        if ($includeTime && !preg_match('/\d{1}:\d{2}/', $date)) {
+            $date .= " 0:00am";
+        }
+        return $date;
     }
 }
