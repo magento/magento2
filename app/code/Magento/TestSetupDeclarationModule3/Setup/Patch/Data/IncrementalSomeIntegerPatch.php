@@ -68,7 +68,14 @@ class IncrementalSomeIntegerPatch implements
     public function revert()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['varbinary = ?', 0101010]);
+        $select = $adapter->select()->from('test_table', 'varchar')
+            ->where('`smallint` = ?', 1);
+        $varchar = $adapter->fetchOne($select);
+        $refSelect = $adapter->select()->from('reference_table', 'for_patch_testing')
+            ->where('`tinyint_ref` = ?', 7);
+        $varchar2 = $adapter->fetchOne($refSelect);
+        $adapter->delete('test_table', ['`varchar` = ?' => $varchar . "_ref"]);
+        $adapter->delete('test_table', ['`varchar` = ?' => $varchar2]);
     }
 
     /**

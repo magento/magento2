@@ -60,7 +60,7 @@ class LlNextChainPatch implements
     public function revert()
     {
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete('test_table', ['varbinary = ?', 0101010]);
+        $adapter->delete('reference_table', ['for_patch_testing = ?' => 'very_secret_string']);
     }
 
     /**

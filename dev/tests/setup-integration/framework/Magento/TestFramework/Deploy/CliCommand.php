@@ -148,6 +148,21 @@ class CliCommand
     }
 
     /**
+     * Uninstall module
+     *
+     * @param string $moduleName
+     */
+    public function uninstallModule($moduleName)
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $command = 'php -f ' . BP . '/bin/magento module:uninstall ' . $moduleName . ' --remove-data ' .
+            ' -vvv --non-composer --magento-init-params=' .
+            $initParams['magento-init-params'];
+
+        $this->shell->execute($command);
+    }
+
+    /**
      * Convert from raw params to CLI arguments, like --admin-username.
      *
      * @param  array $params
