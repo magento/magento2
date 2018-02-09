@@ -202,9 +202,12 @@ class Timezone implements TimezoneInterface
             new \DateTimeZone($timezone)
         );
 
-        // IntlDateFormatter does not parse correctly date formats per some locales
-        // It depends on ICU lib version used by intl extension
-        // For locales like fr_FR, ar_KW parse date with hyphen as separator
+        /**
+         * IntlDateFormatter does not parse correctly date formats per some locales
+         * It depends on ICU lib version used by intl extension
+         * For locales like fr_FR, ar_KW parse date with hyphen as separator
+         */
+        $date = $this->appendTimeIfNeeded($date, $includeTime);
         try {
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         } catch (\Exception $e) {
@@ -347,5 +350,20 @@ class Timezone implements TimezoneInterface
         $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date->format($format);
+    }
+
+    /**
+     * Add time in case if no time provided but required
+     *
+     * @param string $date
+     * @param bool $includeTime
+     * @return string
+     */
+    private function appendTimeIfNeeded(string $date, bool $includeTime) : string
+    {
+        if ($includeTime && !preg_match('/\d{1,2}:\d{2}/', $date)) {
+            $date .= " 00:00";
+        }
+        return $date;
     }
 }
