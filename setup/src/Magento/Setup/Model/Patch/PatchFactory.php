@@ -33,7 +33,7 @@ class PatchFactory
      */
     public function create($instanceName)
     {
-        $patchInstance = $this->objectManager->create($instanceName, []);
+        $patchInstance = $this->objectManager->create('\\' . $instanceName, []);
         if (!$patchInstance instanceof PatchInterface) {
             throw new \InvalidArgumentException(
                 sprintf(

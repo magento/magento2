@@ -44,16 +44,36 @@ class PatchReader implements ReaderInterface
     }
 
     /**
-     * Prepare path to patch folder: schema or data
+     * Retrieve absolute path to modules patch folder
+     *
+     * @param string $modulePath
+     * @return string
+     */
+    private function getPatchFolder($modulePath)
+    {
+        return $modulePath . DIRECTORY_SEPARATOR . Dir::MODULE_SETUP_DIR .
+            DIRECTORY_SEPARATOR . self::SETUP_PATCH_FOLDER;
+    }
+
+    /**
+     * Retrieve module name prepared to usage in namespaces
      *
      * @param string $moduleName
      * @return string
      */
-    private function getPathToPatchFolder($moduleName)
+    private function getModuleNameForNamespace($moduleName)
     {
-        return str_replace('_', '\\', $moduleName) .
-            '\Setup\Patch' .
-            ucfirst($this->type) . '\\';
+        return str_replace('_', '\\', $moduleName);
+    }
+
+    /**
+     * Depends on type we want to handle schema and data patches in different folders
+     *
+     * @return string
+     */
+    private function getTypeFolder()
+    {
+        return ucfirst($this->type);
     }
 
     /**
@@ -66,12 +86,16 @@ class PatchReader implements ReaderInterface
     private function getPatchClassesPerModule($moduleName, $modulePath)
     {
         $patchClasses = [];
-        $patchesPath = $modulePath . DIRECTORY_SEPARATOR . Dir::MODULE_SETUP_DIR .
-            DIRECTORY_SEPARATOR . self::SETUP_PATCH_FOLDER;
-        $patchesPath = $patchesPath . $this->getPathToPatchFolder($moduleName);
+        $patchesPath = $this->getPatchFolder($modulePath);
+        $specificPatchPath = $patchesPath . DIRECTORY_SEPARATOR . $this->getTypeFolder();
+        $patchesMask = $specificPatchPath . DIRECTORY_SEPARATOR . '*.php';
 
-        foreach (Glob::glob($patchesPath) as $patchPath) {
-            $patchClasses[] = $modulePath . basename($patchPath, '.php');
+        foreach (Glob::glob($patchesMask) as $patchPath) {
+            $moduleName = $this->getModuleNameForNamespace($moduleName);
+            $patchClasses[] = $moduleName . '\\Setup\\' .
+                self::SETUP_PATCH_FOLDER . '\\' .
+                $this->getTypeFolder() . '\\' .
+                basename($patchPath, '.php');
         }
 
         return $patchClasses;
@@ -83,17 +107,14 @@ class PatchReader implements ReaderInterface
      */
     public function read($moduleName = null)
     {
-        $patches = [
-            $this->type => []
-        ];
-
+        $patches = [];
         if ($moduleName === null) {
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-                $patches[$this->type] += $this->getPatchClassesPerModule($moduleName, $modulePath);
+                $patches += $this->getPatchClassesPerModule($moduleName, $modulePath);
             }
         } else {
             $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
-            $patches[$this->type] += $this->getPatchClassesPerModule($moduleName, $modulePath);
+            $patches = $this->getPatchClassesPerModule($moduleName, $modulePath);
         }
 
         return $patches;

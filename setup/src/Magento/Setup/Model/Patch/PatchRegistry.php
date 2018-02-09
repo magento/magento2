@@ -33,6 +33,21 @@ class PatchRegistry implements \IteratorAggregate
     private $patchHistory;
 
     /**
+     * @var \Iterator
+     */
+    private $iterator = null;
+
+    /**
+     * @var \Iterator
+     */
+    private $reverseIterator = null;
+
+    /**
+     * @var array
+     */
+    private $cyclomaticStack = [];
+
+    /**
      * PatchRegistry constructor.
      * @param PatchFactory $patchFactory
      * @param PatchHistory $patchHistory
@@ -99,8 +114,13 @@ class PatchRegistry implements \IteratorAggregate
     {
         $depInstances = [];
         $deps = $patch::getDependencies();
+        $this->cyclomaticStack[get_class($patch)] = true;
 
         foreach ($deps as $dep) {
+            if (isset($this->cyclomaticStack[$dep])) {
+                throw new \LogicException("Cyclomatic dependency during patch installation");
+            }
+
             $depInstance = $this->registerPatch($dep);
             /**
              * If a patch already have applied dependency - than we definently know
@@ -110,10 +130,11 @@ class PatchRegistry implements \IteratorAggregate
                 continue;
             }
 
-            $depInstances[] = $depInstance;
-            $depInstances += $this->getDependencies($this->patchInstances[$dep]);
+            $depInstances = array_replace($depInstances, $this->getDependencies($this->patchInstances[$dep]));
+            $depInstances[get_class($depInstance)] = $depInstance;
         }
 
+        unset($this->cyclomaticStack[get_class($patch)]);
         return $depInstances;
     }
 
@@ -127,15 +148,19 @@ class PatchRegistry implements \IteratorAggregate
      */
     public function getReverseIterator()
     {
-        $reversePatches = [];
+        if ($this->reverseIterator === null) {
+            $reversePatches = [];
 
-        while (!empty($this->patchInstances)) {
-            $lastPatch = array_pop($this->patchInstances);
-            $reversePatches += $this->getDependentPatches($lastPatch);
-            $reversePatches[] = $lastPatch;
+            while (!empty($this->patchInstances)) {
+                $lastPatch = array_pop($this->patchInstances);
+                $reversePatches += $this->getDependentPatches($lastPatch);
+                $reversePatches[] = $lastPatch;
+            }
+
+            $this->reverseIterator = new \ArrayIterator($reversePatches);
         }
 
-        return new \ArrayIterator($reversePatches);
+        return $this->reverseIterator;
     }
 
     /**
@@ -147,14 +172,28 @@ class PatchRegistry implements \IteratorAggregate
      */
     public function getIterator()
     {
-        $installPatches = [];
+        if ($this->iterator === null) {
+            $installPatches = [];
+            $patchInstances = $this->patchInstances;
 
-        while (!empty($this->patchInstances)) {
-            $firstPatch = array_shift($this->patchInstances);
-            $installPatches = $this->getDependencies($firstPatch);
-            $installPatches[] = $firstPatch;
+            while (!empty($patchInstances)) {
+                $firstPatch = array_shift($patchInstances);
+                $deps = $this->getDependencies($firstPatch);
+
+                /**
+                 * Remove deps from patchInstances
+                 */
+                foreach ($deps as $dep) {
+                    unset($patchInstances[get_class($dep)]);
+                }
+
+                $installPatches = array_replace($installPatches, $deps);
+                $installPatches[get_class($firstPatch)] = $firstPatch;
+            }
+
+            $this->iterator = new \ArrayIterator($installPatches);
         }
 
-        return new \ArrayIterator($installPatches);
+        return $this->iterator;
     }
 }
