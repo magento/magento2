@@ -87,7 +87,7 @@
         <!--Delete Custom Variable-->
         <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
         <!--Refresh Storefront-->
-        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPageRefresh"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
