@@ -59,27 +59,26 @@ class Form extends AbstractComponent
     {
         $dataSource = [];
 
-		$dataProvider = $this->getContext()->getDataProvider();
-
-        if ($dataProvider->getCollection()) {
-            $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName(), null);
-            $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
-                ->setValue($id)
-                ->create();
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName(), null);
+        $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
+            ->setValue($id)
+            ->create();
+        $dataProvider = $this->getContext()->getDataProvider();
+        if (isset($dataProvider->collection)) {
             $this->getContext()->getDataProvider()
                 ->addFilter($filter);
+        }
 
-            $data = $this->getContext()->getDataProvider()->getData();
+        $data = $this->getContext()->getDataProvider()->getData();
 
-            if (isset($data[$id])) {
-                $dataSource = [
-                    'data' => $data[$id]
-                ];
-            } elseif (isset($data['items'])) {
-                foreach ($data['items'] as $item) {
-                    if ($item[$item['id_field_name']] == $id) {
-                        $dataSource = ['data' => ['general' => $item]];
-                    }
+        if (isset($data[$id])) {
+            $dataSource = [
+                'data' => $data[$id]
+            ];
+        } elseif (isset($data['items'])) {
+            foreach ($data['items'] as $item) {
+                if ($item[$item['id_field_name']] == $id) {
+                    $dataSource = ['data' => ['general' => $item]];
                 }
             }
         }
