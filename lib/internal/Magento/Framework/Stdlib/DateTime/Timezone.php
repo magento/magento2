@@ -111,11 +111,21 @@ class Timezone implements TimezoneInterface
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
-        return (new \IntlDateFormatter(
+        $pattern = (new \IntlDateFormatter(
             $this->_localeResolver->getLocale(),
             $type,
             \IntlDateFormatter::NONE
         ))->getPattern();
+
+        /**
+         * This replacement is a workaround to prevent bugs in some third party libraries,
+         * that works incorrectly with 'yyyy' value.
+         * According to official doc of the ICU library
+         * internally used in \Intl, 'yyyy' and 'y' formats are the same
+         * http://userguide.icu-project.org/formatparse/datetime
+         */
+        $pattern = str_replace('yyyy', 'y', $pattern);
+        return $pattern;
     }
 
     /**
