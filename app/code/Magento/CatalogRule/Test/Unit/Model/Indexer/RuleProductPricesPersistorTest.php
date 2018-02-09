@@ -7,7 +7,7 @@
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\CatalogRule\Api\IndexerTableSwapperInterface;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 
 class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
 {

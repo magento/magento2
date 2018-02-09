@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
-use Magento\CatalogRule\Api\IndexerTableSwapperInterface as TableSwapper;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 
