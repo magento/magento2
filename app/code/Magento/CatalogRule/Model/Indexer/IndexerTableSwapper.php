@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
-use Magento\CatalogRule\Api\IndexerTableSwapperInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**

@@ -12,7 +12,7 @@ use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
-use Magento\CatalogRule\Api\IndexerTableSwapperInterface as TableSwapper;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 
 /**
  * @api

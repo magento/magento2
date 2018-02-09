@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Api;
+namespace Magento\CatalogRule\Model\Indexer;
 
 /**
  * Manage additional tables used while building new index to preserve
