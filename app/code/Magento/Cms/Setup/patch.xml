@@ -1,8 +1,14 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <data>
-  <patches>
-    <patch name="Magento\Cms\Setup\Patch\Patch201" sortOrder="1"/>
-    <patch name="Magento\Cms\Setup\Patch\Patch202" sortOrder="2"/>
-    <patch name="Magento\Cms\Setup\Patch\PatchInitial" sortOrder="3"/>
-  </patches>
+    <patches>
+        <patch name="Magento\Cms\Setup\Patch\CreateDefaultPages" sortOrder="1"/>
+        <patch name="Magento\Cms\Setup\Patch\UpdatePrivacyPolicyPage" sortOrder="2"/>
+        <patch name="Magento\Cms\Setup\Patch\ConvertWidgetConditionsToJson" sortOrder="3"/>
+    </patches>
 </data>

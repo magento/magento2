@@ -6,40 +6,44 @@
 
 namespace Magento\Cms\Setup\Patch;
 
-use Magento\Cms\Model\PageFactory;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
 use Magento\Framework\Module\Setup\Migration;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class CreateDefaultPages
+ * @package Magento\Cms\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class CreateDefaultPages implements DataPatchInterface, VersionedDataPatch
 {
-
-
     /**
-     * @param PageFactory $pageFactory
+     * @var \Magento\Cms\Model\PageFactory
      */
     private $pageFactory;
 
     /**
-     * @param PageFactory $pageFactory
+     * @var ModuleDataSetupInterface
      */
-    public function __construct(PageFactory $pageFactory)
-    {
+    private $moduleDataSetup;
+
+    /**
+     * CreateDefaultPages constructor.
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     */
+    public function __construct(
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        \Magento\Cms\Model\PageFactory $pageFactory
+    ) {
         $this->pageFactory = $pageFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         $cmsPages = [
             [
@@ -336,8 +340,8 @@ EOD;
                 $footerLinksBlock->setContent($content)->save();
             }
         }
-        $installer = $setup->createMigrationSetup();
-        $setup->startSetup();
+        $installer = $this->moduleDataSetup->createMigrationSetup();
+        $this->moduleDataSetup->startSetup();
         $installer->appendClassAliasReplace(
             'cms_block',
             'content',
@@ -367,33 +371,40 @@ EOD;
             ['page_id']
         );
         $installer->doUpdateClassAliases();
-        $setup->endSetup();
-
+        $this->moduleDataSetup->endSetup();
     }
 
     /**
-     * Do Revert
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * Create page model instance
      *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * @return \Magento\Cms\Model\Page
      */
-    public function revert(ModuleDataSetupInterface $setup)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDisabled()
-    {
-        return false;
-    }
-
-
     private function createPage()
     {
         return $this->pageFactory->create();
-
     }
 }
