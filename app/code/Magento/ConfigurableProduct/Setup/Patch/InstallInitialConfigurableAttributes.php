@@ -4,44 +4,50 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Setup;
+namespace Magento\ConfigurableProduct\Setup\Patch;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\VersionedDataPatch;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * @codeCoverageIgnore
+ * Class InstallInitialConfigurableAttributes
+ * @package Magento\ConfigurableProduct\Setup\Patch
  */
-class InstallData implements InstallDataInterface
+class InstallInitialConfigurableAttributes implements DataPatchInterface, VersionedDataPatch
 {
     /**
-     * EAV setup factory
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+    /**
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * Init
-     *
+     * InstallInitialConfigurableAttributes constructor.
+     * @param ResourceConnection $resourceConnection
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        EavSetupFactory $eavSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $attributes = [
             'country_of_manufacture',
             'minimal_price',
@@ -70,5 +76,29 @@ class InstallData implements InstallDataInterface
                 );
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
