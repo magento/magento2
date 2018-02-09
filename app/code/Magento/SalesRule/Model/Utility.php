@@ -91,7 +91,7 @@ class Utility
          */
         if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
             $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
+            if ('' !== $couponCode) {
                 /** @var \Magento\SalesRule\Model\Coupon $coupon */
                 $coupon = $this->couponFactory->create();
                 $coupon->load($couponCode, 'code');

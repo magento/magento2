@@ -54,7 +54,7 @@ if (
     && isset($_SERVER['HTTP_ACCEPT'])
     && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false
 ) {
-    $profilerFlag = isset($_SERVER['MAGE_PROFILER']) && strlen($_SERVER['MAGE_PROFILER'])
+    $profilerFlag = isset($_SERVER['MAGE_PROFILER']) && '' !== $_SERVER['MAGE_PROFILER']
         ? $_SERVER['MAGE_PROFILER']
         : trim(file_get_contents(BP . '/var/profiler.flag'));
 

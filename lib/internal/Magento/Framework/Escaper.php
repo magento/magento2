@@ -52,7 +52,7 @@ class Escaper
             foreach ($data as $item) {
                 $result[] = $this->escapeHtml($item, $allowedTags);
             }
-        } elseif (strlen($data)) {
+        } elseif ('' !== $data) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
                 $notAllowedTags = array_intersect(
                     array_map('strtolower', $allowedTags),

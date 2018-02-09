@@ -58,7 +58,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $value = trim($this->getUserValue());
 
         // Check requires option to have some value
-        if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
+        if ('' === $value && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
             throw new LocalizedException(__('Please specify product\'s required option(s).'));
         }

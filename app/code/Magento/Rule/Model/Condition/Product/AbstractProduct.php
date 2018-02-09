@@ -554,7 +554,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             if ($attr && $attr->getFrontendInput() == 'multiselect') {
                 $value = $model->getData($attrCode);
-                $value = strlen($value) ? explode(',', $value) : [];
+                $value = '' !== $value ? explode(',', $value) : [];
                 return $this->validateAttribute($value);
             }
 
@@ -570,7 +570,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
                 } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
-                    $value = strlen($value) ? explode(',', $value) : [];
+                    $value = '' !== $value ? explode(',', $value) : [];
                 }
 
                 $model->setData($attrCode, $value);

@@ -401,9 +401,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         if (!isset($rowData[Customer::COLUMN_EMAIL])) {
             return self::SCOPE_ADDRESS;
         }
-        return strlen(
-            trim($rowData[Customer::COLUMN_EMAIL])
-        ) ? self::SCOPE_DEFAULT : self::SCOPE_ADDRESS;
+        return '' !== trim($rowData[Customer::COLUMN_EMAIL]) ? self::SCOPE_DEFAULT : self::SCOPE_ADDRESS;
     }
 
     /**

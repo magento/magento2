@@ -792,7 +792,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     protected function _verifyTxnId($txnId)
     {
-        if (null !== $txnId && 0 == strlen($txnId)) {
+        if (null !== $txnId && '' === $txnId) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a Transaction ID.'));
         }
     }

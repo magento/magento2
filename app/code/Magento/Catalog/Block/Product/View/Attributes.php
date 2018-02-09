@@ -89,7 +89,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
 
-                if (is_string($value) && strlen($value)) {
+                if (is_string($value) && '' !== $value) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
                         'value' => $value,

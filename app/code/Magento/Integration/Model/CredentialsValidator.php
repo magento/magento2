@@ -24,10 +24,10 @@ class CredentialsValidator
     public function validate($username, $password)
     {
         $exception = new InputException();
-        if (!is_string($username) || strlen($username) == 0) {
+        if (!is_string($username) || '' === $username) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'username']));
         }
-        if (!is_string($password) || strlen($password) == 0) {
+        if (!is_string($password) || '' === $password) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'password']));
         }
         if ($exception->wasErrorAdded()) {

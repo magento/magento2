@@ -191,7 +191,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
 
         $dateSingleton = $this->_date;
         foreach ($dirs as $dir) {
-            if (!is_array($dir) || !isset($dir['name']) || !strlen($dir['name'])) {
+            if (!is_array($dir) || !isset($dir['name']) || '' === $dir['name']) {
                 continue;
             }
 

@@ -39,7 +39,7 @@ class File extends \SplFileObject
         $this->_currentStatement = '';
         while (!$this->eof()) {
             $line = $this->fgets();
-            if (strlen(trim($line))) {
+            if ('' !== trim($line)) {
                 $this->_currentStatement .= $line;
                 if ($this->_isLineLastInCommand($line)) {
                     break;

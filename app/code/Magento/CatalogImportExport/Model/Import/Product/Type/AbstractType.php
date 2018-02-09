@@ -320,9 +320,7 @@ abstract class AbstractType
                     'is_static' => $attribute->isStatic(),
                     'apply_to' => $attribute->getApplyTo(),
                     'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
-                    'default_value' => strlen(
-                        $attribute->getDefaultValue()
-                    ) ? $attribute->getDefaultValue() : null,
+                    'default_value' => '' !== $attribute->getDefaultValue() ? $attribute->getDefaultValue() : null,
                     'options' => $this->_entityModel->getAttributeOptions(
                         $attribute,
                         $this->_indexValueAttributes
@@ -448,7 +446,7 @@ abstract class AbstractType
         ) {
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
-                if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
+                if (isset($rowData[$attrCode]) && '' !== $rowData[$attrCode]) {
                     $error |= !$this->_entityModel->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
                 } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
                     // For the default scope - if this is a new product or
@@ -503,7 +501,7 @@ abstract class AbstractType
             if ($attrParams['is_static']) {
                 continue;
             }
-            if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
+            if (isset($rowData[$attrCode]) && '' !== $rowData[$attrCode]) {
                 if (in_array($attrParams['type'], ['select', 'boolean'])) {
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {

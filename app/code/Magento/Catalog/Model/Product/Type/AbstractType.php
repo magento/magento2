@@ -632,7 +632,7 @@ abstract class AbstractType
             foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
-                    if (!$customOption || strlen($customOption->getValue()) == 0) {
+                    if (!$customOption || '' === $customOption->getValue()) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('The product has required options.')

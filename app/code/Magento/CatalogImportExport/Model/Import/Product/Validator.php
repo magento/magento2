@@ -150,7 +150,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $doCheck = true;
         }
 
-        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+        return $doCheck ? isset($rowData[$attrCode]) && '' !== trim($rowData[$attrCode]) : true;
     }
 
     /**
@@ -185,7 +185,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if (!strlen(trim($rowData[$attrCode]))) {
+        if ('' === trim($rowData[$attrCode])) {
             return true;
         }
         switch ($attrParams['type']) {

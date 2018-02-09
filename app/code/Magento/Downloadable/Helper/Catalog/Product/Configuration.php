@@ -66,7 +66,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     public function getLinksTitle($product)
     {
         $title = $product->getLinksTitle();
-        if (strlen($title)) {
+        if ('' !== $title) {
             return $title;
         }
         return $this->scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);

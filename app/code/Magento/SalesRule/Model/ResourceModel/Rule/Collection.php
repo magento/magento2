@@ -156,7 +156,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             $select = $this->getSelect();
 
             $connection = $this->getConnection();
-            if (strlen($couponCode)) {
+            if ('' !== $couponCode) {
                 $select->joinLeft(
                     ['rule_coupons' => $this->getTable('salesrule_coupon')],
                     $connection->quoteInto(

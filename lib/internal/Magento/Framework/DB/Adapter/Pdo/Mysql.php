@@ -1643,7 +1643,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $options['unsigned'] = true;
         }
         if ($columnData['NULLABLE'] === false
-            && !($type == Table::TYPE_TEXT && strlen($columnData['DEFAULT']) != 0)
+            && !($type == Table::TYPE_TEXT && '' !== $columnData['DEFAULT'])
         ) {
             $options['nullable'] = false;
         }
@@ -2437,7 +2437,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
          *  where default value can be quoted already.
          *  We need to avoid "double-quoting" here
          */
-        if ($cDefault !== null && is_string($cDefault) && strlen($cDefault)) {
+        if ($cDefault !== null && is_string($cDefault) && '' !== $cDefault) {
             $cDefault = str_replace("'", '', $cDefault);
         }
 

@@ -139,7 +139,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     {
         $isValid = false;
         foreach ($this->_tierPriceColumns as $column) {
-            if (isset($value[$column]) && strlen($value[$column])) {
+            if (isset($value[$column]) && '' !== $value[$column]) {
                 $isValid = true;
             }
         }
@@ -156,7 +156,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     {
         $hasEmptyValues = false;
         foreach ($this->_tierPriceColumns as $column) {
-            if (!strlen($value[$column])) {
+            if ('' === $value[$column]) {
                 $hasEmptyValues = true;
             }
         }

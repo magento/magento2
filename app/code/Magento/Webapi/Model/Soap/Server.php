@@ -197,7 +197,7 @@ class Server
     protected function _checkRequest($soapRequest)
     {
         $dom = new \DOMDocument();
-        if (strlen($soapRequest) == 0 || !$dom->loadXML($soapRequest)) {
+        if ('' === $soapRequest || !$dom->loadXML($soapRequest)) {
             throw new \Magento\Framework\Webapi\Exception(
                 __('Invalid XML'),
                 0,

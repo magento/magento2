@@ -2127,7 +2127,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $products = $this->_getResource()->getProductsSku($productIds);
         if (count($products)) {
             foreach ($products as $product) {
-                if (!strlen($product['sku'])) {
+                if ('' === $product['sku']) {
                     return false;
                 }
             }

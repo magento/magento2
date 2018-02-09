@@ -88,7 +88,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
         $this->_clearMessages();
         $valid = true;
         foreach ($this->mediaAttributes as $attribute) {
-            if (isset($value[$attribute]) && strlen($value[$attribute])) {
+            if (isset($value[$attribute]) && '' !== $value[$attribute]) {
                 if (!$this->checkPath($value[$attribute]) && !$this->validator->isValid($value[$attribute])) {
                     $this->_addMessages(
                         [
@@ -102,7 +102,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                 }
             }
         }
-        if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
+        if (isset($value[self::ADDITIONAL_IMAGES]) && '' !== $value[self::ADDITIONAL_IMAGES]) {
             foreach (explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES]) as $image) {
                 if (!$this->checkPath($image) && !$this->validator->isValid($image)) {
                     $this->_addMessages(

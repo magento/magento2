@@ -337,7 +337,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     public function deleteFolder($folderName = '')
     {
         $folderName = rtrim($folderName, '/');
-        if (!strlen($folderName)) {
+        if ('' === $folderName) {
             return;
         }
 

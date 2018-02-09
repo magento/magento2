@@ -1145,7 +1145,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $newAdditionalOptions = [];
 
         foreach (explode("\n", $additionalOptions) as $_additionalOption) {
-            if (strlen(trim($_additionalOption))) {
+            if ('' !== trim($_additionalOption)) {
                 try {
                     if (strpos($_additionalOption, ':') === false) {
                         throw new \Magento\Framework\Exception\LocalizedException(__('There is an error in one of the option rows.'));
