@@ -3,51 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Setup;
+
+namespace Magento\GiftMessage\Setup\Patch;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-class UpgradeData implements UpgradeDataInterface
+class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVersionInterface
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
     /**
      * @var CategorySetupFactory
      */
-    protected $categorySetupFactory;
+    private $categorySetupFactory;
 
     /**
-     * UpgradeData constructor
-     *
+     * MoveGiftMessageToGiftOptionsGroup constructor.
+     * @param ResourceConnection $resourceConnection
      * @param CategorySetupFactory $categorySetupFactory
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CategorySetupFactory $categorySetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        $setup->startSetup();
+        $this->resourceConnection->getConnection()->startSetup();
 
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
         $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $groupName = 'Gift Options';
 
             if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
                 $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
             }
-
             $categorySetup->addAttributeToGroup(
                 $entityTypeId,
                 $attributeSetId,
@@ -55,17 +65,32 @@ class UpgradeData implements UpgradeDataInterface
                 $attribute['attribute_id'],
                 10
             );
-        }
+        $this->resourceConnection->getConnection()->endSetup();
+    }
 
-        if (version_compare($context->getVersion(), '2.1.0', '<')) {
-            $categorySetup->updateAttribute(
-                $entityTypeId,
-                $attribute['attribute_id'],
-                'source_model',
-                \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class
-            );
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [
+            AddGiftMessageAttributes::class,
+        ];
+    }
 
-        $setup->endSetup();
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

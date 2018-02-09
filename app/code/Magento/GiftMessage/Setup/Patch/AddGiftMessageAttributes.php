@@ -7,55 +7,57 @@
 namespace Magento\GiftMessage\Setup\Patch;
 
 use Magento\Catalog\Setup\CategorySetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-
-/**
- * Patch is mechanism, that allows to do atomic upgrade data changes
- */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class AddGiftMessageAttributes implements DataPatchInterface, PatchVersionInterface
 {
-
-
     /**
-     * @param QuoteSetupFactory $quoteSetupFactory
+     * @var ResourceConnection
      */
-    private $quoteSetupFactory;
+    private $resourceConnection;
+
     /**
-     * @param SalesSetupFactory $salesSetupFactory
-     */
-    private $salesSetupFactory;
-    /**
-     * @param CategorySetupFactory $categorySetupFactory
+     * @var CategorySetupFactory
      */
     private $categorySetupFactory;
 
     /**
-     * @param QuoteSetupFactory $quoteSetupFactory @param SalesSetupFactory $salesSetupFactory@param CategorySetupFactory $categorySetupFactory
+     * @var QuoteSetupFactory
      */
-    public function __construct(QuoteSetupFactory $quoteSetupFactory,
-                                SalesSetupFactory $salesSetupFactory
+    private $quoteSetupFactory;
 
-        ,
-                                CategorySetupFactory $categorySetupFactory)
-    {
+    /**
+     * @var SalesSetupFactory
+     */
+    private $salesSetupFactory;
+
+    /**
+     * AddGiftMessageAttributes constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param CategorySetupFactory $categorySetupFactory
+     * @param QuoteSetupFactory $quoteSetupFactory
+     * @param SalesSetupFactory $salesSetupFactory
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        CategorySetupFactory $categorySetupFactory,
+        QuoteSetupFactory $quoteSetupFactory,
+        SalesSetupFactory $salesSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
+        $this->categorySetupFactory = $categorySetupFactory;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
-        $this->categorySetupFactory = $categorySetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /**
          * Add 'gift_message_id' attributes for entities
@@ -63,13 +65,13 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         $options = ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false];
         $entities = ['quote', 'quote_address', 'quote_item', 'quote_address_item'];
         /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
+        $quoteSetup = $this->quoteSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         foreach ($entities as $entity) {
             $quoteSetup->addAttribute($entity, 'gift_message_id', $options);
         }
 
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
+        $salesSetup = $this->salesSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $salesSetup->addAttribute('order', 'gift_message_id', $options);
         $salesSetup->addAttribute('order_item', 'gift_message_id', $options);
         /**
@@ -77,7 +79,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
          */
         $salesSetup->addAttribute('order_item', 'gift_message_available', $options);
         /** @var \Magento\Catalog\Setup\CategorySetup $catalogSetup */
-        $catalogSetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $catalogSetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
         $catalogSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'gift_message_available',
@@ -115,27 +117,29 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
                 60
             );
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
