@@ -12,6 +12,10 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\VersionedDataPatch;
 
+/**
+ * Class ChangePriceAttributeDefaultScope
+ * @package Magento\Catalog\Setup\Patch
+ */
 class ChangePriceAttributeDefaultScope implements DataPatchInterface, VersionedDataPatch
 {
     /**
@@ -25,7 +29,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, VersionedD
     private $categorySetupFactory;
 
     /**
-     * PatchInitial constructor.
+     * ChangePriceAttributeDefaultScope constructor.
      * @param ResourceConnection $resourceConnection
      * @param CategorySetupFactory $categorySetupFactory
      */

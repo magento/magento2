@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <data>
-  <patches>
-    <patch name="Magento\CatalogRule\Setup\Patch\Patch203" sortOrder="1"/>
-    <patch name="Magento\CatalogRule\Setup\Patch\PatchInitial" sortOrder="2"/>
-  </patches>
+    <patches>
+        <patch name="Magento\CatalogRule\Setup\Patch\UpdateClassAliasesForCatalogRules" sortOrder="1"/>
+        <patch name="Magento\CatalogRule\Setup\Patch\ConvertSerializedDataToJson" sortOrder="2"/>
+    </patches>
 </data>
