@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -911,7 +912,10 @@ class Installer
         if ($type === 'schema') {
             $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
         } elseif ($type === 'data') {
-            $patchApplier = $this->patchApplierFactory->create(['moduleDataSetup' => $setup]);
+            $patchApplier = $this->patchApplierFactory->create([
+                'moduleDataSetup' => $setup,
+                'objectManager' => $this->objectManagerProvider->get()
+            ]);
         }
 
         foreach ($moduleNames as $moduleName) {
@@ -927,6 +931,11 @@ class Installer
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                        if ($type === 'schema') {
+                            $resource->setDbVersion($moduleName, $configVer);
+                        } elseif ($type === 'data') {
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
                     }
                 }
             } elseif ($configVer) {
@@ -940,7 +949,16 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
+
+                if ($installer || $upgrader) {
+                    if ($type === 'schema') {
+                        $resource->setDbVersion($moduleName, $configVer);
+                    } elseif ($type === 'data') {
+                        $resource->setDataVersion($moduleName, $configVer);
+                    }
+                }
             }
+
             /**
              * Applying data patches after old upgrade data scripts
              */
@@ -948,12 +966,6 @@ class Installer
                 $patchApplier->applySchemaPatch($moduleName);
             } elseif ($type === 'data') {
                 $patchApplier->applyDataPatch($moduleName);
-            }
-
-            if ($type === 'schema') {
-                $resource->setDbVersion($moduleName, $configVer);
-            } elseif ($type === 'data') {
-                $resource->setDataVersion($moduleName, $configVer);
             }
 
             $this->logProgress();

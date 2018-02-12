@@ -8,6 +8,7 @@ namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
@@ -34,12 +35,12 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
      * MigrateStoresAllowedCountriesToWebsite constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param StoreManagerInterface $storeManager
-     * @param AllowedCountriesFactory $allowedCountries
+     * @param AllowedCountries $allowedCountries
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\AllowedCountriesFactory $allowedCountries
+        \Magento\Directory\Model\AllowedCountries $allowedCountries
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->storeManager = $storeManager;

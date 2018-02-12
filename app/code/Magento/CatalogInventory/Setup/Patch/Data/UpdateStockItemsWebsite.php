@@ -5,6 +5,7 @@
  */
 
 namespace Magento\CatalogInventory\Setup\Patch\Data;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
@@ -47,7 +48,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
         ModuleDataSetupInterface $moduleDataSetup,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Indexer\AbstractProcessor $indexerProcessor
+        Processor $indexerProcessor
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->stockConfiguration = $stockConfiguration;

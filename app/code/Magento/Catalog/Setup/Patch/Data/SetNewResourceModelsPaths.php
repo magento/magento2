@@ -86,7 +86,6 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
             'entity_attribute_collection',
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         );
-
     }
 
     /**
