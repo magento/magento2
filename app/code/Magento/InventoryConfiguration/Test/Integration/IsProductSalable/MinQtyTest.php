@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Stock;
+namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductSalableMinQtyTest extends TestCase
+class MinQtyTest extends TestCase
 {
     /**
      * @var IsProductSalableInterface

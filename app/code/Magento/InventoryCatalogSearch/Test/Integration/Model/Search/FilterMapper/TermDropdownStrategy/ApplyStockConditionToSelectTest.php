@@ -5,23 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration\CatalogInventory\Model\ResourceModel\Stock\Status;
+namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Search\FilterMapper\TermDropdownStrategy;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatus;
+use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test catalog search with different stocks
- */
-class AddStockDataToCollectionTest extends TestCase
+class ApplyStockConditionToSelectTest extends TestCase
 {
     /**
-     * @var StockStatus
+     * @var ApplyStockConditionToSelect
      */
-    private $stockStatus;
+    private $applyStockConditionToSelect;
 
     /**
      * @var StoreManagerInterface
@@ -34,16 +32,21 @@ class AddStockDataToCollectionTest extends TestCase
     private $storeCodeBefore;
 
     /**
+     * @var ResourceConnection $resource
+     */
+    private $resource;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->stockStatus = Bootstrap::getObjectManager()->get(StockStatus::class);
+        $this->applyStockConditionToSelect = Bootstrap::getObjectManager()->get(ApplyStockConditionToSelect::class);
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
+        $this->resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
     }
 
     /**
@@ -58,34 +61,33 @@ class AddStockDataToCollectionTest extends TestCase
      *
      * @param string $store
      * @param int $expectedSize
-     * @param bool $isFilterInStock
      * @return void
      *
-     * @dataProvider addStockDataToCollectionDataProvider
+     * @dataProvider executeDataProvider
      */
-    public function testAddStockDataToCollection(string $store, int $expectedSize, bool $isFilterInStock)
+    public function testExecute($store, $expectedSize)
     {
         $this->storeManager->setCurrentStore($store);
 
-        /** @var Collection $collection */
-        $collection = Bootstrap::getObjectManager()->create(Collection::class);
-        $this->stockStatus->addStockDataToCollection($collection, $isFilterInStock);
+        /** @var Select $select */
+        $select = $this->resource->getConnection()->select();
+        $select->from(['eav_index' => $this->resource->getTableName('catalog_product_index_eav')], 'entity_id');
+        $this->applyStockConditionToSelect->execute('eav_index', 'eav_index_stock', $select);
 
-        self::assertEquals($expectedSize, $collection->getSize());
+        $result = $select->query()->fetchAll();
+
+        self::assertEquals($expectedSize, count($result));
     }
 
     /**
      * @return array
      */
-    public function addStockDataToCollectionDataProvider(): array
+    public function executeDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 1, true],
-            ['store_for_us_website', 1, true],
-            ['store_for_global_website', 2, true],
-            ['store_for_eu_website', 2, false],
-            ['store_for_us_website', 1, false],
-            ['store_for_global_website', 3, false],
+            ['store_for_eu_website', 2],
+            ['store_for_us_website', 1],
+            ['store_for_global_website', 3],
         ];
     }
 
@@ -94,9 +96,10 @@ class AddStockDataToCollectionTest extends TestCase
      */
     protected function tearDown()
     {
+        parent::tearDown();
+
         if (null !== $this->storeCodeBefore) {
             $this->storeManager->setCurrentStore($this->storeCodeBefore);
         }
-        parent::tearDown();
     }
 }
