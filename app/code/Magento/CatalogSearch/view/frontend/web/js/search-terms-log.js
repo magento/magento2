@@ -32,15 +32,12 @@ define([
     }
 
     return function (data) {
-        var url = data.url;
-
         $.ajax({
             method: 'GET',
-            url: url,
+            url: data.url,
             data: {
                 'q': urlParameters().q
-            },
-            cache: false
+            }
         });
     };
 });
