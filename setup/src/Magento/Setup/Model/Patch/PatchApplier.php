@@ -129,7 +129,6 @@ class PatchApplier
     {
         $dataPatches = $this->dataPatchReader->read($moduleName);
         $registry = $this->prepareRegistry($dataPatches);
-        $adapter = $this->resourceConnection->getConnection();
         foreach ($registry as $dataPatch) {
             /**
              * Due to bacward compatabilities reasons some patches should be skipped
@@ -139,8 +138,11 @@ class PatchApplier
             }
 
             try {
-                $adapter->beginTransaction();
-                $dataPatch = $this->objectManager->create('\\' . $dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
+                $this->moduleDataSetup->getConnection()->beginTransaction();
+                $dataPatch = $this->objectManager->create(
+                    '\\' . $dataPatch,
+                    ['moduleDataSetup' => $this->moduleDataSetup]
+                );
                 if (!$dataPatch instanceof DataPatchInterface) {
                     throw new Exception(
                         sprintf("Patch %s should implement DataPatchInterface", $dataPatch)
@@ -148,9 +150,9 @@ class PatchApplier
                 }
                 $dataPatch->apply();
                 $this->patchHistory->fixPatch($dataPatch);
-                $adapter->commit();
+                $this->moduleDataSetup->getConnection()->commit();
             } catch (\Exception $e) {
-                $adapter->rollBack();
+                $this->moduleDataSetup->getConnection()->rollBack();
                 throw new Exception($e->getMessage());
             } finally {
                 unset($dataPatch);
@@ -187,11 +189,11 @@ class PatchApplier
         $schemaPatches = $this->schemaPatchReader->read($moduleName);
         $registry = $this->prepareRegistry($schemaPatches);
 
-        /**
-         * @var SchemaPatchInterface $schemaPatch
-         */
         foreach ($registry as $schemaPatch) {
             try {
+                /**
+                 * @var SchemaPatchInterface $schemaPatch
+                 */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch($schemaPatch);
@@ -215,9 +217,6 @@ class PatchApplier
         $registry = $this->prepareRegistry($dataPatches);
         $adapter = $this->resourceConnection->getConnection();
 
-        /**
-         * @var DataPatchInterface $dataPatch
-         */
         foreach ($registry->getReverseIterator() as $dataPatch) {
             if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
