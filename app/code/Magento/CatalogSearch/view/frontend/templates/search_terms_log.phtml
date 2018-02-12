@@ -7,7 +7,7 @@
 ?>
 <?php if ($block->getSearchTermsLog()->isPageCacheable()): ?>
     <script type="text/x-magento-init">
-    <?= json_encode([
+    <?= /* @escapeNotVerified */ json_encode([
             '*' => [
                   'Magento_CatalogSearch/js/search_terms_log' => [
                           'url' => $block->getUrl('catalogsearch/searchTermsLog/save')
