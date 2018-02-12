@@ -78,7 +78,7 @@ class Save
             && !$category->isInRootCategoryList()
             && !empty($parentCategoryId)) {
             foreach ($category->getStoreIds() as $storeId) {
-                if ($storeId != $this->isGlobalScope($currentStoreId)
+                if (!$this->isGlobalScope($storeId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
                     $storeId,
                     $parentCategoryId,
@@ -89,7 +89,6 @@ class Save
                     $this->urlPersist->replace($this->categoryUrlRewriteGenerator->generate($category));
                 }
             }
-            $category->setStoreId($currentStoreId);
         }
         return $result;
     }
