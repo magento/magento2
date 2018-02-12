@@ -13,12 +13,12 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 
 class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
 {
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
     private $getProductQtyInStock;
 
@@ -44,7 +44,7 @@ class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
 
     protected function setUp()
     {
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetSalableProductQtyInterface::class);
+        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);

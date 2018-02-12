@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
@@ -17,9 +17,9 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 class GetAssignedStocksDataBySku
 {
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
-    private $getSalableProductQty;
+    private $getProductSalableQty;
 
     /**
      * @var StockRepositoryInterface
@@ -32,16 +32,16 @@ class GetAssignedStocksDataBySku
     private $getAssignedStockIdsBySku;
 
     /**
-     * @param GetSalableProductQtyInterface $getSalableProductQty
+     * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param StockRepositoryInterface $stockRepository
      * @param GetAssignedStockIdsBySku $getAssignedStockIdsBySku
      */
     public function __construct(
-        GetSalableProductQtyInterface $getSalableProductQty,
+        GetProductSalableQtyInterface $getProductSalableQty,
         StockRepositoryInterface $stockRepository,
         GetAssignedStockIdsBySku $getAssignedStockIdsBySku
     ) {
-        $this->getSalableProductQty = $getSalableProductQty;
+        $this->getProductSalableQty = $getProductSalableQty;
         $this->stockRepository = $stockRepository;
         $this->getAssignedStockIdsBySku = $getAssignedStockIdsBySku;
     }
@@ -60,7 +60,7 @@ class GetAssignedStocksDataBySku
                 $stock = $this->stockRepository->get($stockId);
                 $stockInfo[] = [
                     'stock_name' => $stock->getName(),
-                    'qty' => $this->getSalableProductQty->execute($sku, $stockId),
+                    'qty' => $this->getProductSalableQty->execute($sku, $stockId),
                 ];
             }
         }

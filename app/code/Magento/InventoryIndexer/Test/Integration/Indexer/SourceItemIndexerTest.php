@@ -9,7 +9,7 @@ namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -21,9 +21,9 @@ class SourceItemIndexerTest extends TestCase
     private $sourceItemIndexer;
 
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
-    private $getSalableProductQty;
+    private $getProductSalableQty;
 
     /**
      * @var RemoveIndexData
@@ -39,8 +39,8 @@ class SourceItemIndexerTest extends TestCase
     {
         $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(SourceItemIndexer::class);
 
-        $this->getSalableProductQty = Bootstrap::getObjectManager()
-            ->get(GetSalableProductQtyInterface::class);
+        $this->getProductSalableQty = Bootstrap::getObjectManager()
+            ->get(GetProductSalableQtyInterface::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
@@ -67,8 +67,8 @@ class SourceItemIndexerTest extends TestCase
     {
         $this->sourceItemIndexer->executeRow($this->getSourceItemId->execute('SKU-1', 'eu-1'));
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
     }
 
     /**
@@ -85,11 +85,11 @@ class SourceItemIndexerTest extends TestCase
             $this->getSourceItemId->execute('SKU-2', 'us-1'),
         ]);
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
 
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 30));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 30));
     }
 
     /**
@@ -103,11 +103,11 @@ class SourceItemIndexerTest extends TestCase
     {
         $this->sourceItemIndexer->executeFull();
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
 
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 30));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 30));
     }
 
     /**
@@ -121,6 +121,6 @@ class SourceItemIndexerTest extends TestCase
     {
         $this->sourceItemIndexer->executeFull();
 
-        self::assertEquals(0, $this->getSalableProductQty->execute('SKU-3', 10));
+        self::assertEquals(0, $this->getProductSalableQty->execute('SKU-3', 10));
     }
 }

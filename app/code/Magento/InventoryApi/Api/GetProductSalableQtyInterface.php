@@ -12,7 +12,7 @@ namespace Magento\InventoryApi\Api;
  *
  * @api
  */
-interface GetSalableProductQtyInterface
+interface GetProductSalableQtyInterface
 {
     /**
      * Get Product Quantity for given SKU and Stock

@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
@@ -44,9 +44,9 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
     private $setDataToLegacyStockStatus;
 
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
-    private $getSalableProductQty;
+    private $getProductSalableQty;
 
     /**
      * @var IsProductSalableInterface
@@ -58,7 +58,7 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param SetDataToLegacyStockStatus $setDataToLegacyStockStatus
-     * @param GetSalableProductQtyInterface $getSalableProductQty
+     * @param GetProductSalableQtyInterface $getProductSalableQty
      * @param IsProductSalableInterface $isProductSalable
      */
     public function __construct(
@@ -66,14 +66,14 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
         DefaultStockProviderInterface $defaultStockProvider,
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
         SetDataToLegacyStockStatus $setDataToLegacyStockStatus,
-        GetSalableProductQtyInterface $getSalableProductQty,
+        GetProductSalableQtyInterface $getProductSalableQty,
         IsProductSalableInterface $isProductSalable
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->defaultStockProvider = $defaultStockProvider;
         $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->setDataToLegacyStockStatus = $setDataToLegacyStockStatus;
-        $this->getSalableProductQty = $getSalableProductQty;
+        $this->getProductSalableQty = $getProductSalableQty;
         $this->isProductSalable = $isProductSalable;
     }
 
@@ -93,7 +93,7 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
                 if ($this->defaultStockProvider->getId() !== $reservation->getStockId()) {
                     continue;
                 }
-                $qty = $this->getSalableProductQty->execute($reservation->getSku(), $reservation->getStockId());
+                $qty = $this->getProductSalableQty->execute($reservation->getSku(), $reservation->getStockId());
                 $status = (int)$this->isProductSalable->execute($reservation->getSku(), $reservation->getStockId());
 
                 $this->setDataToLegacyStockItem->execute($reservation->getSku(), $qty, $status);

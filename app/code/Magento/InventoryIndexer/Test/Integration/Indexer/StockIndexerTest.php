@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -20,9 +20,9 @@ class StockIndexerTest extends TestCase
     private $stockIndexer;
 
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
-    private $getSalableProductQty;
+    private $getProductSalableQty;
 
     /**
      * @var RemoveIndexData
@@ -33,8 +33,8 @@ class StockIndexerTest extends TestCase
     {
         $this->stockIndexer = Bootstrap::getObjectManager()->get(StockIndexer::class);
 
-        $this->getSalableProductQty = Bootstrap::getObjectManager()
-            ->get(GetSalableProductQtyInterface::class);
+        $this->getProductSalableQty = Bootstrap::getObjectManager()
+            ->get(GetProductSalableQtyInterface::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
@@ -59,7 +59,7 @@ class StockIndexerTest extends TestCase
     {
         $this->stockIndexer->executeRow(10);
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
     }
 
     /**
@@ -73,8 +73,8 @@ class StockIndexerTest extends TestCase
     {
         $this->stockIndexer->executeList([10, 20]);
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
     }
 
     /**
@@ -88,10 +88,10 @@ class StockIndexerTest extends TestCase
     {
         $this->stockIndexer->executeFull();
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
 
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 30));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 30));
     }
 }
