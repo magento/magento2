@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\Inventory\Model\ResourceModel\GetAssignedStockIdsBySku;
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
  * Get assigned stocks data by sku

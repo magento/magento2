@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
-use Magento\InventoryApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

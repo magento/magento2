@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
+use Magento\InventoryApi\Api\Data\ReservationInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
  * Apply inventory data changes  (qty, stock status) to legacy CatalogInventory (cataloginventory_stock_status and

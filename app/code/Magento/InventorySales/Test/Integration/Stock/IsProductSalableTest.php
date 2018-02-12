@@ -9,8 +9,8 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

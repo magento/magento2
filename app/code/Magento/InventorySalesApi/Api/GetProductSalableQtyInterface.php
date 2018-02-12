@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryApi\Api;
+namespace Magento\InventorySalesApi\Api;
 
 /**
  * Service which returns Quantity of products available to be sold by Product SKU and Stock Id

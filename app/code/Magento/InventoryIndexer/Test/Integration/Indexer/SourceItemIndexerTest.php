@@ -9,7 +9,7 @@ namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

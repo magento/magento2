@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryApi\Api;
+namespace Magento\InventorySalesApi\Api;
 
 /**
  * Service which detects whether Product is salable for a given Stock (stock data + reservations)

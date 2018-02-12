@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventorySales\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -13,7 +13,9 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemRepository;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
+use Magento\Inventory\Model\GetReservationsQuantityInterface;
+use Magento\Inventory\Model\GetStockItemDataInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * @inheritdoc

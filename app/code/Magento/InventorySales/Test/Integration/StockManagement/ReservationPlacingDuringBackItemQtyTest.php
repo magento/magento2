@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 class ReservationPlacingDuringBackItemQtyTest extends TestCase
 {

@@ -5,9 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventorySales\Model;
 
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
+use Magento\Inventory\Model\GetReservationsQuantityInterface;
+use Magento\Inventory\Model\GetStockItemDataInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
  * @inheritdoc

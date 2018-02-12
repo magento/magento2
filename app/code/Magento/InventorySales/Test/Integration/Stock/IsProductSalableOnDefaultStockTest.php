@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Stock;
+namespace Magento\InventorySales\Test\Integration\Stock;
 
 use Magento\InventoryCatalog\Model\DefaultStockProvider;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
 
 class IsProductSalableOnDefaultStockTest extends TestCase
 {

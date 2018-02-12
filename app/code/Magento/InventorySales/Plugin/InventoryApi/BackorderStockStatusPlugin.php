@@ -10,8 +10,8 @@ namespace Magento\InventorySales\Plugin\InventoryApi;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Adapt backorders to IsProductSalableInterface

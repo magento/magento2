@@ -100,8 +100,8 @@
     </type>
     <preference for="Magento\Inventory\Model\GetReservationsQuantityInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\GetReservationsQuantity"/>
     <!-- Query interfaces -->
-    <preference for="Magento\InventoryApi\Api\GetProductSalableQtyInterface" type="Magento\Inventory\Model\GetProductSalableQty"/>
-    <preference for="Magento\InventoryApi\Api\IsProductSalableInterface" type="Magento\Inventory\Model\IsProductSalable"/>
+    <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
+    <preference for="Magento\InventorySalesApi\Api\IsProductSalableInterface" type="Magento\InventorySales\Model\IsProductSalable"/>
     <!-- IsSalable -->
     <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
     <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">

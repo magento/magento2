@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
-use Magento\InventoryApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

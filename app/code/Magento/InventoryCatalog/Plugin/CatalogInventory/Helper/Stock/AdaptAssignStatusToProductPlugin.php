@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
-use Magento\InventoryApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 
 /**
