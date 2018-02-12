@@ -41,7 +41,7 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
     {
         // parent::beforeSave() is not called intentionally
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if ($object->hasData($attrCode) && !$this->isJsonEncoded((string)$object->getData($attrCode))) {
+        if ($object->hasData($attrCode) && !$this->isJsonEncoded($object->getData($attrCode))) {
             $object->setData($attrCode, $this->jsonSerializer->serialize($object->getData($attrCode)));
         }
         return $this;
@@ -65,16 +65,18 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
     /**
      * Returns true if given param is a valid json value else false.
      *
-     * @param string $value
+     * @param  $value
      * @return bool
      */
-    private function isJsonEncoded(string $value): bool
+    private function isJsonEncoded($value): bool
     {
-        $result = true;
-        try {
-            $this->jsonSerializer->unserialize($value);
-        } catch (\InvalidArgumentException $e) {
-            $result =  false;
+        $result = is_string($value);
+        if ($result) {
+            try {
+                $this->jsonSerializer->unserialize($value);
+            } catch (\InvalidArgumentException $e) {
+                $result = false;
+            }
         }
 
         return $result;
