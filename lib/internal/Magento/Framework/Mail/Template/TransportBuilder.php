@@ -111,7 +111,7 @@ class TransportBuilder
     }
 
     /**
-     * Add cc address
+     * Add cc address.
      *
      * @param array|string $address
      * @param string $name
@@ -124,7 +124,7 @@ class TransportBuilder
     }
 
     /**
-     * Add to address
+     * Add to address.
      *
      * @param array|string $address
      * @param string $name
@@ -137,7 +137,7 @@ class TransportBuilder
     }
 
     /**
-     * Add bcc address
+     * Add bcc address.
      *
      * @param array|string $address
      * @return $this
@@ -149,7 +149,7 @@ class TransportBuilder
     }
 
     /**
-     * Set Reply-To Header
+     * Set Reply-To Header.
      *
      * @param string $email
      * @param string|null $name
@@ -162,7 +162,7 @@ class TransportBuilder
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param int $scopeId
      * @return $this
@@ -175,7 +175,7 @@ class TransportBuilder
     }
 
     /**
-     * Set mail from address
+     * Set mail from address.
      *
      * @param string|array $from
      * @return $this
@@ -189,7 +189,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template identifier
+     * Set template identifier.
      *
      * @param string $templateIdentifier
      * @return $this
@@ -201,7 +201,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template model
+     * Set template model.
      *
      * @param string $templateModel
      * @return $this
@@ -213,7 +213,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template vars
+     * Set template vars.
      *
      * @param array $templateVars
      * @return $this
@@ -225,7 +225,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template options
+     * Set template options.
      *
      * @param array $templateOptions
      * @return $this
@@ -237,7 +237,7 @@ class TransportBuilder
     }
 
     /**
-     * Get mail transport
+     * Get mail transport.
      *
      * @return \Magento\Framework\Mail\TransportInterface
      */
@@ -251,7 +251,7 @@ class TransportBuilder
     }
 
     /**
-     * Reset object state
+     * Reset object state.
      *
      * @return $this
      */
@@ -267,7 +267,7 @@ class TransportBuilder
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return \Magento\Framework\Mail\TemplateInterface
      */
@@ -279,7 +279,7 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
      */

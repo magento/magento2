@@ -727,7 +727,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                             AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                             'default',
                             null,
-                            $minCharacterSetsNum
+                            $minCharacterSetsNum,
                         ],
                     ]
                 )
@@ -740,14 +740,14 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         if ($testNumber == 1) {
             $this->setExpectedException(
-                '\Magento\Framework\Exception\InputException',
+                \Magento\Framework\Exception\InputException::class,
                 'Please enter a password with at least ' . $minPasswordLength . ' characters.'
             );
         }
 
         if ($testNumber == 2) {
             $this->setExpectedException(
-                '\Magento\Framework\Exception\InputException',
+                \Magento\Framework\Exception\InputException::class,
                 'Minimum of different classes of characters in password is ' . $minCharacterSetsNum .
                 '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
             );
@@ -769,7 +769,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(iconv_strlen($password, 'UTF-8'));
 
         $this->setExpectedException(
-            '\Magento\Framework\Exception\InputException',
+            \Magento\Framework\Exception\InputException::class,
             'Please enter a password with at most 256 characters.'
         );
 
@@ -822,7 +822,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                         AccountManagement::XML_PATH_REGISTER_EMAIL_IDENTITY,
                         ScopeInterface::SCOPE_STORE,
                         1,
-                        $sender
+                        $sender,
                     ],
                 ]
             );
@@ -1397,7 +1397,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                         AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                         'default',
                         null,
-                        1
+                        1,
                     ],
                 ]
             );
@@ -1433,7 +1433,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exception);
 
         $this->setExpectedException(
-            '\Magento\Framework\Exception\InvalidEmailOrPasswordException',
+            \Magento\Framework\Exception\InvalidEmailOrPasswordException::class,
             'Invalid login or password.'
         );
 
@@ -1489,10 +1489,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 [
                     'customer_customer_authenticated',
-                    ['model' => $customerModel, 'password' => $password]
+                    ['model' => $customerModel, 'password' => $password],
                 ],
                 [
-                    'customer_data_object_login', ['customer' => $customerData]
+                    'customer_data_object_login', ['customer' => $customerData],
                 ]
             );
 
