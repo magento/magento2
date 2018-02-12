@@ -292,27 +292,34 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
-        $this->assignProductToWebsites($product);
+        $this->assignProductToWebsites($product, $createNew);
 
         return $product;
     }
 
     /**
      * @param \Magento\Catalog\Model\Product $product
+     * @param  bool $createNew
      * @return void
      */
-    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product, $createNew)
     {
-        if (!$this->storeManager->hasSingleStore()) {
+        $websiteIds = $product->getWebsiteIds();
 
-            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
-                $websiteIds = array_keys($this->storeManager->getWebsites());
-            } else {
-                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
-            }
-
-            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        if ($createNew && !$this->storeManager->hasSingleStore()) {
+            $websiteIds = array_unique(
+                array_merge(
+                    $websiteIds,
+                    [$this->storeManager->getStore()->getWebsiteId()]
+                )
+            );
         }
+
+        if ($createNew && $this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+            $websiteIds = array_keys($this->storeManager->getWebsites());
+        }
+
+        $product->setWebsiteIds($websiteIds);
     }
 
     /**
