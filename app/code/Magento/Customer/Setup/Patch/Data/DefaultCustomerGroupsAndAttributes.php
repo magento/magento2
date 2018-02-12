@@ -57,7 +57,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     public function apply()
     {
         /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         // insert default customer groups
         $this->resourceConnection->getConnection()->insertForce(

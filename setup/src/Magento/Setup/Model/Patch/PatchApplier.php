@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Setup\Exception;
@@ -63,6 +64,11 @@ class PatchApplier
     private $moduleDataSetup;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * PatchApplier constructor.
      * @param PatchReader $dataPatchReader
      * @param PatchReader $schemaPatchReader
@@ -71,6 +77,7 @@ class PatchApplier
      * @param ModuleResource $moduleResource
      * @param PatchHistory $patchHistory
      * @param PatchFactory $patchFactory
+     * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
@@ -82,6 +89,7 @@ class PatchApplier
         ModuleResource $moduleResource,
         PatchHistory $patchHistory,
         PatchFactory $patchFactory,
+        ObjectManagerInterface $objectManager,
         \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup = null,
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup = null
     ) {
@@ -94,6 +102,7 @@ class PatchApplier
         $this->patchFactory = $patchFactory;
         $this->schemaSetup = $schemaSetup;
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -121,9 +130,6 @@ class PatchApplier
         $dataPatches = $this->dataPatchReader->read($moduleName);
         $registry = $this->prepareRegistry($dataPatches);
         $adapter = $this->resourceConnection->getConnection();
-        /**
-         * @var DataPatchInterface $dataPatch
-         */
         foreach ($registry as $dataPatch) {
 
             /**
@@ -135,7 +141,7 @@ class PatchApplier
 
             try {
                 $adapter->beginTransaction();
-                $dataPatch = $this->patchFactory->create($dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
+                $dataPatch = $this->objectManager->create('\\' . $dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
                 if (!$dataPatch instanceof DataPatchInterface) {
                     throw new Exception(
                         sprintf("Patch %s should implement DataPatchInterface", $dataPatch)

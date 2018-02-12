@@ -7,6 +7,7 @@
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -34,12 +35,12 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
      * MigrateStoresAllowedCountriesToWebsite constructor.
      * @param ResourceConnection $resourceConnection
      * @param StoreManagerInterface $storeManager
-     * @param AllowedCountriesFactory $allowedCountries
+     * @param AllowedCountries $allowedCountries
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\AllowedCountriesFactory $allowedCountries
+        \Magento\Directory\Model\AllowedCountries $allowedCountries
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;

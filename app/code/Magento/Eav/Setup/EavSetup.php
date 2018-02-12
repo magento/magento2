@@ -578,7 +578,7 @@ class EavSetup
                 $data['attribute_group_code'] = $attributeGroupCode;
             }
             $this->resourceConnection->getConnection()->insert(
-                $this->resourceConnection->getTable('eav_attribute_group'),
+                $this->resourceConnection->getTableName('eav_attribute_group'),
                 $data
             );
         }
