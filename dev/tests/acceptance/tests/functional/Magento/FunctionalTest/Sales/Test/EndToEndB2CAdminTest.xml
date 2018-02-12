@@ -135,5 +135,8 @@
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="seeConfigurableProductInItemsRefunded"/>
+
+        <!--Delete store view created as prerequisites-->
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
     </test>
 </tests>
