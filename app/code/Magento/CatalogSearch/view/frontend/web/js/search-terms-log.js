@@ -14,14 +14,10 @@ define([
      */
     function urlParameters() {
         var params = {},
-            queryString = window.location.search,
-            queries,
+            queries = window.location.search.substring(1).split('&'),
             temp,
             i,
             l;
-
-        queryString = queryString.substring(1);
-        queries = queryString.split('&');
 
         for (i = 0, l = queries.length; i < l; i++) {
             temp = queries[i].split('=');
