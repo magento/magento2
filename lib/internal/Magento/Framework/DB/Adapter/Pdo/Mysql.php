@@ -1994,11 +1994,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         switch ($strategy) {
-            case self::INSERT_ON_DUPLICATE:
+            case self::REPLACE:
                 $query = $this->_getReplaceSqlQuery($table, $columns, $values);
                 break;
             default:
-                $query = $this->_getInsertSqlQuery($table, $columns, $values);
+                $query = $this->_getInsertSqlQuery($table, $columns, $values, $strategy);
         }
 
         // execute the statement and return the number of affected rows
@@ -3641,16 +3641,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param array $columns
      * @param array $values
+     * @param null|int $strategy
      * @return string
      */
-    protected function _getInsertSqlQuery($tableName, array $columns, array $values)
+    protected function _getInsertSqlQuery($tableName, array $columns, array $values, $strategy = null)
     {
         $tableName = $this->quoteIdentifier($tableName, true);
         $columns   = array_map([$this, 'quoteIdentifier'], $columns);
         $columns   = implode(',', $columns);
         $values    = implode(', ', $values);
+        $strategy = $strategy === self::INSERT_IGNORE ? 'IGNORE' : '';
 
-        $insertSql = sprintf('INSERT INTO %s (%s) VALUES %s', $tableName, $columns, $values);
+        $insertSql = sprintf('INSERT %s INTO %s (%s) VALUES %s', $strategy, $tableName, $columns, $values);
 
         return $insertSql;
     }

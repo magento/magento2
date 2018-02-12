@@ -124,6 +124,7 @@ class UpgradeSystemTest extends Injectable
 
         // Check info and press 'Upgrade' button
         $upgrade['version'] = $version;
+        $upgrade['selectedPackages'] = $this->setupWizard->getSelectVersion()->getSelectedPackages();
         $assertVersionAndEdition->processAssert($this->setupWizard, $upgrade);
         $this->setupWizard->getSystemUpgrade()->clickSystemUpgrade();
 
