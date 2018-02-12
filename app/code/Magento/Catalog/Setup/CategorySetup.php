@@ -83,18 +83,16 @@ class CategorySetup extends EavSetup
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param CategoryFactory $categoryFactory
-     * @param ResourceConnection|null $resourceConnection
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        CategoryFactory $categoryFactory,
-        ResourceConnection $resourceConnection = null
+        CategoryFactory $categoryFactory
     ) {
         $this->categoryFactory = $categoryFactory;
-        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory, $resourceConnection);
+        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory);
     }
 
     /**

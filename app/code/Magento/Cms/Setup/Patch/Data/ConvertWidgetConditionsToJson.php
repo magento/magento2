@@ -9,6 +9,7 @@ namespace Magento\Cms\Setup\Patch\Data;
 use Magento\Cms\Setup\ContentConverter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
@@ -25,9 +26,9 @@ use Magento\Cms\Api\Data\PageInterface;
 class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QueryModifierFactory
@@ -46,18 +47,18 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
 
     /**
      * ConvertWidgetConditionsToJson constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param QueryModifierFactory $queryModifierFactory
      * @param MetadataPool $metadataPool
      * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         QueryModifierFactory $queryModifierFactory,
         MetadataPool $metadataPool,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->metadataPool = $metadataPool;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
@@ -98,34 +99,34 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
             [
                 new FieldToConvert(
                     ContentConverter::class,
-                    $this->resourceConnection->getConnection()->getTableName('cms_block'),
+                    $this->moduleDataSetup->getConnection()->getTableName('cms_block'),
                     $blockMetadata->getIdentifierField(),
                     'content',
                     $queryModifier
                 ),
                 new FieldToConvert(
                     ContentConverter::class,
-                    $this->resourceConnection->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'content',
                     $queryModifier
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->resourceConnection->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'layout_update_xml',
                     $layoutUpdateXmlFieldQueryModifier
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->resourceConnection->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'custom_layout_update_xml',
                     $customLayoutUpdateXmlFieldQueryModifier
                 ),
             ],
-            $this->resourceConnection->getConnection()
+            $this->moduleDataSetup->getConnection()
         );
 
     }

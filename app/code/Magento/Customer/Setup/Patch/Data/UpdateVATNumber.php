@@ -27,9 +27,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateVATNumber implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CustomerSetupFactory
@@ -38,14 +38,14 @@ class UpdateVATNumber implements DataPatchInterface, PatchVersionInterface
 
     /**
      * UpdateVATNumber constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -54,7 +54,7 @@ class UpdateVATNumber implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->moduleDataSetup]);
         $customerSetup->updateAttribute('customer_address', 'vat_id', 'frontend_label', 'VAT Number');
     }
 

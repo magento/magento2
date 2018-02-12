@@ -47,8 +47,6 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     {
         $this->setWeight('sku', 6);
         $this->setWeight('name', 5);
-        //todo: reindex is a mandatory part of upgrade process, just set indexer to invalid state here
-        $this->getIndexer('catalogsearch_fulltext')->reindexAll();
     }
 
     /**

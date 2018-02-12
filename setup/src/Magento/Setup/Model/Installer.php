@@ -324,7 +324,6 @@ class Installer
             DeclarationInstaller::class
         );
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
-        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(PatchApplierFactory::class);
     }
 
     /**
@@ -902,6 +901,12 @@ class Installer
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
+        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(
+            PatchApplierFactory::class,
+            [
+                'objectManager' => $this->objectManagerProvider->get()
+            ]
+        );
         /** @var PatchApplier $patchApplier */
         if ($type === 'schema') {
             $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);

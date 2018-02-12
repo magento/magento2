@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -20,9 +21,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -36,16 +37,16 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
 
     /**
      * ConvertSerializedDataToJson constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
     }
@@ -55,15 +56,15 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
      */
     public function apply()
     {
-        $select = $this->resourceConnection->getConnection()
+        $select = $this->moduleDataSetup->getConnection()
             ->select()
             ->from(
-                $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+                $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
                 ['config_id', 'value']
             )
             ->where('path = ?', 'cataloginventory/item_options/min_sale_qty');
 
-        $rows = $this->resourceConnection->getConnection()->fetchAssoc($select);
+        $rows = $this->moduleDataSetup->getConnection()->fetchAssoc($select);
         $serializedRows = array_filter($rows, function ($row) {
             return $this->isSerialized($row['value']);
         });
@@ -79,8 +80,8 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
         );
 
         $fieldDataConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             'config_id',
             'value',
             $queryModifier

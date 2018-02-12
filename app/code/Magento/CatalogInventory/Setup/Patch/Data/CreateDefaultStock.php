@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Setup\Patch\Data;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
@@ -30,14 +31,14 @@ class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
 
     /**
      * PrepareInitialConfig constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $resourceConnection
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $resourceConnection,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -46,14 +47,14 @@ class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()
+        $this->moduleDataSetup->getConnection()
             ->insertForce(
-                $this->resourceConnection->getConnection()->getTableName('cataloginventory_stock'),
+                $this->moduleDataSetup->getConnection()->getTableName('cataloginventory_stock'),
                 ['stock_id' => 1, 'stock_name' => 'Default']
             );
 
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->moduleDataSetup]);
         $groupName = 'Product Details';
         $entityTypeId = $eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         $attributeSetId = $eavSetup->getAttributeSetId($entityTypeId, 'Default');

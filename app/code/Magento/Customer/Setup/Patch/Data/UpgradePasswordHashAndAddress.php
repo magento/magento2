@@ -9,6 +9,7 @@ namespace Magento\Customer\Setup\Patch\Data;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CustomerSetupFactory
@@ -30,14 +31,14 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
 
     /**
      * UpgradePasswordHashAndAddress constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -55,7 +56,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
                 ],
             ],
         ];
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $customerSetup->upgradeAttributes($entityAttributes);
 
     }
@@ -65,14 +66,14 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
      */
     private function upgradeHash()
     {
-        $customerEntityTable = $this->resourceConnection->getConnection()->getTableName('customer_entity');
+        $customerEntityTable = $this->moduleDataSetup->getConnection()->getTableName('customer_entity');
 
-        $select = $this->resourceConnection->getConnection()->select()->from(
+        $select = $this->moduleDataSetup->getConnection()->select()->from(
             $customerEntityTable,
             ['entity_id', 'password_hash']
         );
 
-        $customers = $this->resourceConnection->getConnection()->fetchAll($select);
+        $customers = $this->moduleDataSetup->getConnection()->fetchAll($select);
         foreach ($customers as $customer) {
             if ($customer['password_hash'] === null) {
                 continue;
@@ -88,7 +89,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
 
             $bind = ['password_hash' => $newHash];
             $where = ['entity_id = ?' => (int)$customer['entity_id']];
-            $this->resourceConnection->getConnection()->update($customerEntityTable, $bind, $where);
+            $this->moduleDataSetup->getConnection()->update($customerEntityTable, $bind, $where);
         }
     }
 

@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogInventory\Setup\Patch\Data;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -16,9 +17,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
@@ -37,18 +38,18 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * UpdateStockItemsWebsite constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Indexer\AbstractProcessor $indexerProcessor
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Indexer\AbstractProcessor $indexerProcessor
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->stockConfiguration = $stockConfiguration;
         $this->storeManager = $storeManager;
         $this->indexerProcessor = $indexerProcessor;
@@ -59,8 +60,8 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->update(
-            $this->resourceConnection->getConnection()->getTableName('cataloginventory_stock_item'),
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getConnection()->getTableName('cataloginventory_stock_item'),
             ['website_id' => $this->stockConfiguration->getDefaultScopeId()],
             ['website_id = ?' => $this->storeManager->getWebsite()->getId()]
         );

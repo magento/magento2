@@ -8,10 +8,10 @@ namespace Magento\Catalog\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;
@@ -24,9 +24,9 @@ use Magento\Widget\Setup\LayoutUpdateConverter;
 class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetup
@@ -45,19 +45,19 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
 
     /**
      * PrepareInitialConfig constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      * @param QueryModifierFactory $queryModifierFactory
      * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory,
         QueryModifierFactory $queryModifierFactory,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->resourceConnection = $resourceConnection;
-        $this->eavSetup = $eavSetupFactory->create(['resourceConnection' => $resourceConnection]);
+        $this->moduleDataSetup = $moduleDataSetup;
+        $this->eavSetup = $eavSetupFactory->create(['setup' => $moduleDataSetup]);
         $this->queryModifierFactory = $queryModifierFactory;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
     }

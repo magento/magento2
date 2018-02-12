@@ -8,6 +8,7 @@ namespace Magento\Catalog\Setup\Patch\Data;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -18,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -29,14 +30,14 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -48,7 +49,7 @@ class UpdateMediaAttributesBackendTypes implements DataPatchInterface, PatchVers
         $mediaBackendType = 'static';
         $mediaBackendModel = null;
         /** @var CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $categorySetup->updateAttribute(
             'catalog_product',
             'media_gallery',

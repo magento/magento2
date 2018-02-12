@@ -31,9 +31,10 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
+
     /**
      * @var CustomerSetupFactory
      */
@@ -41,14 +42,14 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
 
     /**
      * AddNonSpecifiedGenderAttributeOption constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -57,7 +58,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
      */
     public function apply()
     {
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
         $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
 

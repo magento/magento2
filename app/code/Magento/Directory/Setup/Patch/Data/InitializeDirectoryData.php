@@ -7,7 +7,7 @@
 namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Helper\Data;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var \Magento\Directory\Helper\DataFactory
@@ -29,14 +29,14 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * InitializeDirectoryData constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Helper\DataFactory $directoryDataFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Directory\Helper\DataFactory $directoryDataFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->directoryDataFactory = $directoryDataFactory;
     }
 
@@ -297,8 +297,8 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         ];
 
         $columns = ['country_id', 'iso2_code', 'iso3_code'];
-        $this->resourceConnection->getConnection()->insertArray(
-            $this->resourceConnection->getConnection()->getTableName('directory_country'),
+        $this->moduleDataSetup->getConnection()->insertArray(
+            $this->moduleDataSetup->getConnection()->getTableName('directory_country'),
             $columns,
             $data
         );
@@ -821,16 +821,16 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         ];
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
-            $this->resourceConnection->getConnection()->insert(
-                $this->resourceConnection->getConnection()->getTableName('directory_country_region'),
+            $this->moduleDataSetup->getConnection()->insert(
+                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region'),
                 $bind
             );
-            $regionId = $this->resourceConnection->getConnection()->lastInsertId(
-                $this->resourceConnection->getConnection()->getTableName('directory_country_region')
+            $regionId = $this->moduleDataSetup->getConnection()->lastInsertId(
+                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region')
             );
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
-            $this->resourceConnection->getConnection()->insert(
-                $this->resourceConnection->getConnection()->getTableName('directory_country_region_name'),
+            $this->moduleDataSetup->getConnection()->insert(
+                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region_name'),
                 $bind
             );
         }
@@ -844,13 +844,13 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
             ['USD', 'USD', 1],
         ];
         $columns = ['currency_from', 'currency_to', 'rate'];
-        $this->resourceConnection->getConnection()->insertArray(
-            $this->resourceConnection->getConnection()->getTableName('directory_currency_rate'),
+        $this->moduleDataSetup->getConnection()->insertArray(
+            $this->moduleDataSetup->getConnection()->getTableName('directory_currency_rate'),
             $columns,
             $data
         );
-        $this->resourceConnection->getConnection()->insert(
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+        $this->moduleDataSetup->getConnection()->insert(
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
@@ -861,8 +861,8 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         /** @var \Magento\Directory\Helper\Data $helper */
         $helper = $this->directoryDataFactory->create();
         $countries = $helper->getCountryCollection()->getCountriesWithRequiredStates();
-        $this->resourceConnection->getConnection()->insert(
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+        $this->moduleDataSetup->getConnection()->insert(
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,

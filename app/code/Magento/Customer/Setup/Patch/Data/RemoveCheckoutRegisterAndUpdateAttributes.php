@@ -31,9 +31,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CustomerSetupFactory
@@ -42,14 +42,14 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
 
     /**
      * RemoveCheckoutRegisterAndUpdateAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -58,11 +58,11 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->delete(
-            $this->resourceConnection->getConnection()->getTableName('customer_form_attribute'),
+        $this->moduleDataSetup->getConnection()->delete(
+            $this->moduleDataSetup->getConnection()->getTableName('customer_form_attribute'),
             ['form_code = ?' => 'checkout_register']
         );
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'entity_model',
