@@ -9,7 +9,6 @@ namespace Magento\Bundle\Pricing\Price;
 
 /**
  * Configured regular price model
- * @api
  */
 class ConfiguredRegularPrice extends ConfiguredPrice
 {
