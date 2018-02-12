@@ -84,6 +84,11 @@ class TransportBuilder
      */
     protected $mailTransportFactory;
 
+    /** 
+     * @var int|null
+     */
+    private $scopeId;
+
     /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
@@ -157,6 +162,19 @@ class TransportBuilder
     }
 
     /**
+     * Set scope
+     *
+     * @param int $scopeId
+     * @return $this
+     */
+    public function setScopeId($scopeId)
+    {
+        $this->scopeId = $scopeId;
+
+        return $this;
+    }
+
+    /**
      * Set mail from address
      *
      * @param string|array $from
@@ -164,8 +182,9 @@ class TransportBuilder
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
+        $result = $this->_senderResolver->resolve($from, $this->scopeId);
         $this->message->setFrom($result['email'], $result['name']);
+
         return $this;
     }
 
@@ -238,10 +257,12 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create('Magento\Framework\Mail\Message');
+        $this->message = $this->objectManager->create(Message::class);
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->scopeId = null;
+
         return $this;
     }
 
