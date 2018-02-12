@@ -56,12 +56,27 @@ class ProcessSourceItemsObserver implements ObserverInterface
         if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
+
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
-        $sources = $controller->getRequest()->getParam('sources', []);
-        $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
-            ? $sources['assigned_sources'] : [];
+        if (false) { // TODO: add check if multisource is enabled
+            $sources = $controller->getRequest()->getParam('sources', []);
+            $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
+                ? $sources['assigned_sources'] : [];
+        } else { // Process legacy stock status fields values
+            $productData = $controller->getRequest()->getParam('product', []);
+            $assignedSources[0] = [
+                'source_code' => 'default', // TODO: get default source code
+                'name' => 'default source', // TODO: get default source name
+                'position' => '1', // ???
+                'record_id' => 'default', // ???
+                'status' => $productData['quantity_and_stock_status']['is_in_stock'],
+                'quantity' => $productData['quantity_and_stock_status']['qty'],
+                'notify_stock_qty' => $productData['stock_data']['notify_stock_qty'],
+                'notify_stock_qty_use_default' => $productData['stock_data']['use_config_notify_stock_qty']
+            ];
+        }
 
         $this->sourceItemsProcessor->process(
             $product->getSku(),

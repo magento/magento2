@@ -105,9 +105,9 @@ class SourceItems extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $product = $this->locator->getProduct();
-
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
+        if ($this->isSourceManagementAllowed()) {
+            unset($meta['product-details']['children']['container_quantity_and_stock_status']);
+            unset($meta['product-details']['children']['quantity_and_stock_status_qty']);
             return $meta;
         }
 
@@ -121,5 +121,14 @@ class SourceItems extends AbstractModifier
             ],
         ];
         return $meta;
+    }
+
+    private function isSourceManagementAllowed(): bool
+    {
+        $product = $this->locator->getProduct();
+        //return ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) TODO: include in criteria
+        // TODO: check if multisource is enabled
+
+        return false;
     }
 }
