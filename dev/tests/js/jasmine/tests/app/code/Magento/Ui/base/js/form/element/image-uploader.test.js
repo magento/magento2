@@ -21,14 +21,14 @@ define([
             });
         });
 
-        describe('initConfig method', function () {
+        xdescribe('initConfig method', function () {
             it('sets mediaGalleryUid', function () {
                 component.initConfig();
                 expect(component.mediaGalleryUid).toBeDefined();
             });
         });
 
-        describe('addFileFromMediaGallery method', function () {
+        xdescribe('addFileFromMediaGallery method', function () {
             it('adds file', function () {
                 var $el = $('div');
 
@@ -54,7 +54,7 @@ define([
             });
         });
 
-        describe('openMediaBrowserDialog method', function () {
+        xdescribe('openMediaBrowserDialog method', function () {
             it('opens browser dialog', function () {
                 var $el = $('div');
 
