@@ -6,53 +6,58 @@
 
 namespace Magento\Weee\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class InitQuoteAndOrderAttributes
+ * @package Magento\Weee\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInterface
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * @param QuoteSetupFactory $quoteSetupFactory
+     * @var QuoteSetupFactory
      */
     private $quoteSetupFactory;
+
     /**
-     * @param SalesSetupFactory $salesSetupFactory
+     * @var SalesSetupFactory
      */
     private $salesSetupFactory;
 
     /**
-     * @param QuoteSetupFactory $quoteSetupFactory @param SalesSetupFactory $salesSetupFactory
+     * InitQuoteAndOrderAttributes constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param QuoteSetupFactory $quoteSetupFactory
+     * @param SalesSetupFactory $salesSetupFactory
      */
-    public function __construct(QuoteSetupFactory $quoteSetupFactory
-
-        ,
-                                SalesSetupFactory $salesSetupFactory)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        QuoteSetupFactory $quoteSetupFactory,
+        SalesSetupFactory $salesSetupFactory
+    ) {
+        $this->resourceConnection = $resourceConnection;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
+        $quoteSetup = $this->quoteSetupFactory->create();
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied', ['type' => 'text']);
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied_amount', ['type' => 'decimal']);
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied_row_amount', ['type' => 'decimal']);
@@ -64,7 +69,7 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         $quoteSetup->addAttribute('quote_item', 'base_weee_tax_row_disposition', ['type' => 'decimal']);
 
         /** @var SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
+        $salesSetup = $this->salesSetupFactory->create();
         $salesSetup->addAttribute('order_item', 'weee_tax_applied', ['type' => 'text']);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied_amount', ['type' => 'decimal']);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied_row_amount', ['type' => 'decimal']);
@@ -92,27 +97,29 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
         $salesSetup->addAttribute('creditmemo_item', 'base_weee_tax_applied_row_amnt', ['type' => 'decimal']);
         $salesSetup->addAttribute('creditmemo_item', 'base_weee_tax_disposition', ['type' => 'decimal']);
         $salesSetup->addAttribute('creditmemo_item', 'base_weee_tax_row_disposition', ['type' => 'decimal']);
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }

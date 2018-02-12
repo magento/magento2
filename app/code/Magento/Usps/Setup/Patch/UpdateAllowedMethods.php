@@ -6,57 +6,38 @@
 
 namespace Magento\Usps\Setup\Patch;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class UpdateAllowedMethods
+ * @package Magento\Usps\Setup\Patch
  */
-class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
+class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 {
-
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * UpdateAllowedMethods constructor.
+     * @param ResourceConnection $resourceConnection
      */
-    public function apply(ModuleDataSetupInterface $setup)
-    {
-        $this->updateAllowedMethods($setup);
-
+    public function __construct(
+        ResourceConnection $resourceConnection
+    ) {
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public function apply()
     {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDisabled()
-    {
-        return false;
-    }
-
-
-    private function updateAllowedMethods(ModuleDataSetupInterface $setup
-    )
-    {
-        $installer = $setup;
-        $configDataTable = $installer->getTable('core_config_data');
-        $connection = $installer->getConnection();
-
+        $connection = $this->resourceConnection->getConnection();
+        $configDataTable = $connection->getTableName('core_config_data');
         $oldToNewMethodCodesMap = [
             'First-Class' => '0_FCLE',
             'First-Class Mail International Large Envelope' => 'INT_14',
@@ -132,6 +113,29 @@ class Patch201 implements \Magento\Setup\Model\Patch\DataPatchInterface
                 $connection->update($configDataTable, ['value' => $newValue], $whereConfigId);
             }
         }
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
