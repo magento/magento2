@@ -54,6 +54,13 @@ class CreateCmsPageEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
+     * Configuration data.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
      * Inject pages.
      *
      * @param CmsPageIndex $cmsIndex
@@ -73,10 +80,18 @@ class CreateCmsPageEntityTest extends Injectable
      *
      * @param array $data
      * @param string $fixtureType
+     * @param string $configData
      * @return array
      */
-    public function test(array $data, $fixtureType)
+    public function test(array $data, $fixtureType, $configData = '')
     {
+        $this->configData = $configData;
+
+        // Preconditions
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         // Steps
         $cms = $this->fixtureFactory->createByCode($fixtureType, ['data' => $data]);
         $this->cmsIndex->open();
@@ -85,5 +100,20 @@ class CreateCmsPageEntityTest extends Injectable
         $this->cmsPageNew->getPageMainActions()->save();
 
         return ['cms' => $cms];
+    }
+
+    /**
+     * Disable single store mode on config level.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        if ($this->configData) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => 'enable_single_store_mode', 'rollback' => true]
+            )->run();
+        }
     }
 }
