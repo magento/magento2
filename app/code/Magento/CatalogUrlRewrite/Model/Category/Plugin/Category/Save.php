@@ -12,6 +12,9 @@ use \Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use \Magento\UrlRewrite\Model\UrlPersistInterface;
 use \Magento\Store\Model\Store;
 
+/**
+ * Generate and save url-rewrites for category if its parent have specified url-key for different store views
+ */
 class Save
 {
     /**
@@ -70,7 +73,7 @@ class Save
 
         $currentStoreId = $category->getStoreId();
         $parentCategory = $category->getParentCategory();
-        if ($parentCategory && $this->isGlobalScope($currentStoreId)) {
+        if ($category->isObjectNew() && $parentCategory && $this->isGlobalScope($currentStoreId)) {
             foreach ($category->getStoreIds() as $storeId) {
                 if ($storeId != $this->isGlobalScope($currentStoreId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
