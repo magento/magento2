@@ -104,5 +104,36 @@
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <click selector="{{AdminInvoiceOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnInvoice" after="seeConfigurableProductInInvoice"/>
+
+        <!--Create Credit Memo-->
+        <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment" after="clickOrderIdOnShipment"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage"/>
+        <!--Check Credit Memo Order Data-->
+        <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyOrderCreditMemoInformation" after="seeNewMemoInPageTitle">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <!--Submit credit memo-->
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline" after="verifyOrderCreditMemoInformation"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess" after="clickRefundOffline"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickOrderCreditMemosTab" after="seeCreditMemoSuccess"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderCreditMemoInTabGrid" after="clickOrderCreditMemosTab"/>
+        <click selector="{{AdminOrderCreditMemosTabSection.viewGridRow('1')}}" stepKey="clickToViewCreditMemoRow" after="seeOrderCreditMemoInTabGrid"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnCreditMemo" after="clickToViewCreditMemoRow"/>
+        <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyBasicCreditMemoInformation" after="seeOrderIdOnCreditMemo">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsRefunded" stepKey="seeSimpleProductInItemsRefunded" after="verifyBasicCreditMemoInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInItemsRefunded" stepKey="seeConfigurableProductInItemsRefunded" after="seeSimpleProductInItemsRefunded">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="seeConfigurableProductInItemsRefunded"/>
     </test>
 </tests>

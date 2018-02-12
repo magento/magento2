@@ -18,6 +18,6 @@
         <element name="appendComments" type="checkbox" selector=".order-totals-actions #notify_customer"/>
         <element name="emailCopy" type="checkbox" selector=".order-totals-actions #send_email"/>
         <element name="refundStoreCredit" type="checkbox" selector=".order-totals-actions #creditmemo_customerbalance_return_enable"/>
-        <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[data-ui-id='order-items-submit-button']"/>
+        <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[data-ui-id='order-items-submit-button']" timeout="30"/>
     </section>
 </sections>

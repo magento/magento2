@@ -24,4 +24,11 @@
         <see selector="{{AdminCreditMemoAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country_id}}" stepKey="seeShippingAddressCountry"/>
         <see selector="{{AdminCreditMemoAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
     </actionGroup>
+
+    <actionGroup name="seeProductInItemsRefunded">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <see selector="{{AdminCreditMemoItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+    </actionGroup>
 </actionGroups>
