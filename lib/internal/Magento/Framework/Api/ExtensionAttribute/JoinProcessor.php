@@ -9,6 +9,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -43,13 +44,13 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param TypeProcessor $typeProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param JoinProcessorHelper $joinProcessorHelper
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         TypeProcessor $typeProcessor,
         ExtensionAttributesFactory $extensionAttributesFactory,
         JoinProcessorHelper $joinProcessorHelper
@@ -100,7 +101,10 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {
         if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
-            /* do nothing as there are no extension attributes */
+            /* remove any extension attributes from source data as destination entity has no extension attributes */
+            if (array_key_exists(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $data)) {
+                unset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            }
             return $data;
         }
 
@@ -118,12 +122,6 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         if (!empty($extensionData)) {
             $extensionAttributes = $this->extensionAttributesFactory->create($extensibleEntityClass, $extensionData);
             $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
-        } elseif (array_key_exists(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $data)) {
-            $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY];
-            $extensionAttributeClass = $this->extensionAttributesFactory->getExtensibleInterfaceName($extensibleEntityClass);
-            if (!is_subclass_of($extensionAttributes, $extensionAttributeClass)) {
-                unset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
-            }
         }
         return $data;
     }
