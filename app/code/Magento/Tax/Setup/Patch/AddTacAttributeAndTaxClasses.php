@@ -7,47 +7,56 @@
 namespace Magento\Tax\Setup\Patch;
 
 use Magento\Directory\Model\RegionFactory;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Tax\Setup\TaxSetup;
+use Magento\Tax\Setup\TaxSetupFactory;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Class AddTacAttributeAndTaxClasses
+ * @package Magento\Tax\Setup\Patch
  */
-class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
+class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionInterface
 {
-
-
     /**
      * @param TaxSetupFactory $taxSetupFactory
      */
     private $taxSetupFactory;
+
     /**
      * @param RegionFactory $directoryRegionFactory
      */
     private $directoryRegionFactory;
 
     /**
-     * @param TaxSetupFactory $taxSetupFactory @param RegionFactory $directoryRegionFactory
+     * @var ResourceConnection
      */
-    public function __construct(TaxSetupFactory $taxSetupFactory,
-                                RegionFactory $directoryRegionFactory)
-    {
+    private $resourceConnection;
+
+    /**
+     * AddTacAttributeAndTaxClasses constructor.
+     * @param TaxSetupFactory $taxSetupFactory
+     * @param RegionFactory $directoryRegionFactory
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(
+        TaxSetupFactory $taxSetupFactory,
+        RegionFactory $directoryRegionFactory,
+        ResourceConnection $resourceConnection
+    ) {
         $this->taxSetupFactory = $taxSetupFactory;
         $this->directoryRegionFactory = $directoryRegionFactory;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Do Upgrade
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function apply(ModuleDataSetupInterface $setup)
+    public function apply()
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup']);
 
         /**
          * Add tax_class_id attribute to the 'eav_attribute' table
@@ -99,7 +108,10 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ],
         ];
         foreach ($data as $row) {
-            $setup->getConnection()->insertForce($setup->getTable('tax_class'), $row);
+            $this->resourceConnection->getConnection()->insertForce(
+                $this->resourceConnection->getConnection()->getTableName('tax_class'),
+                $row
+            );
         }
         /**
          * install tax calculation rates
@@ -125,29 +137,34 @@ class PatchInitial implements \Magento\Setup\Model\Patch\DataPatchInterface
             ],
         ];
         foreach ($data as $row) {
-            $setup->getConnection()->insertForce($setup->getTable('tax_calculation_rate'), $row);
+            $this->resourceConnection->getConnection()->insertForce(
+                $this->resourceConnection->getConnection()->getTableName('tax_calculation_rate'),
+                $row
+            );
         }
-
     }
 
     /**
-     * Do Revert
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
-    public function revert(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function isDisabled()
+    public function getVersion()
     {
-        return false;
+        return '2.0.0';
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
 }
