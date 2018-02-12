@@ -7,8 +7,8 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -55,10 +55,10 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->_reloadQuote();
-            $this->messageManager->addException($e, $e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
         $asJson = $request->getParam('json');

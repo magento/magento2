@@ -209,7 +209,7 @@ class CreatePasswordTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Exception.'));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Your password reset link has expired.'))
             ->willReturnSelf();
 

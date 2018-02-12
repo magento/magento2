@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Invoice\AbstractInvoice;
 
-use \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Email;
-
 use Magento\Framework\App\Action\Context;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Email;
 
 /**
  * Class EmailTest
@@ -196,7 +196,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($invoiceId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the message.');
 
         $this->resultRedirectFactory->expects($this->atLeastOnce())

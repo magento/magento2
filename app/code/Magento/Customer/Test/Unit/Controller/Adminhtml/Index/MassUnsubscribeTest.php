@@ -171,7 +171,7 @@ class MassUnsubscribeTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([[10, true], [11, true], [12, true]]);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) were updated.', count($customersIds)));
 
         $this->resultRedirectMock->expects($this->any())
@@ -195,7 +195,7 @@ class MassUnsubscribeTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Some message.'));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Some message.');
 
         $this->massAction->execute();

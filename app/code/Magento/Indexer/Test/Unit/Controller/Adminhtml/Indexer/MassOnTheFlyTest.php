@@ -150,7 +150,7 @@ class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
         $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->messageManager = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
-            ['addError', 'addSuccess'],
+            ['addErrorMessage', 'addSuccessMessage'],
             '',
             false
         );
@@ -184,7 +184,7 @@ class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
-                ->method('addError')->with(__('Please select indexers.'))
+                ->method('addErrorMessage')->with(__('Please select indexers.'))
                 ->will($this->returnValue(1));
         } else {
             $this->objectManager->expects($this->any())
@@ -208,14 +208,14 @@ class MassOnTheFlyTest extends \PHPUnit\Framework\TestCase
                     ->method('setScheduled')->with(false)->will($this->returnValue(1));
             }
 
-            $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
+            $this->messageManager->expects($this->any())->method('addSuccessMessage')->will($this->returnValue(1));
 
             if ($exception !== null) {
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[2]))
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($exception->getMessage());
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
-                    ->method('addException')
+                    ->method('addExceptionMessage')
                     ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }

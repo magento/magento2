@@ -146,7 +146,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
         if ($result instanceof \Magento\Framework\Phrase) {
             $this->messageManagerMock->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($result->getText());
             $this->layoutMock->expects($this->once())
                 ->method('initMessages');

@@ -9,13 +9,13 @@ namespace Magento\Contact\Controller\Index;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -73,7 +73,9 @@ class Post extends \Magento\Contact\Controller\Index
         try {
             $this->sendEmail($this->validatedParams());
             $this->messageManager->addSuccessMessage(
-                __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
+                __(
+                    'Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.'
+                )
             );
             $this->dataPersistor->clear('contact_us');
         } catch (LocalizedException $e) {

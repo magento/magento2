@@ -37,7 +37,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
     protected $urlBuilderMock;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $managerMock;
+    protected $messageManager;
 
     /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $redirectMock;
@@ -63,7 +63,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->managerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
             ->getMockForAbstractClass();
@@ -76,7 +76,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             $this->wishlistHelperMock,
             $this->cartHelperMock,
             $this->urlBuilderMock,
-            $this->managerMock,
+            $this->messageManager,
             $this->redirectMock
         );
     }
@@ -227,8 +227,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($productTwoName);
 
-        $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+        $this->messageManager->expects($this->once())
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productTwoName . '"'), null)
             ->willReturnSelf();
 
@@ -430,20 +430,18 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($productTwoName);
 
-        $this->managerMock->expects($this->at(0))
-            ->method('addError')
-            ->with(__('%1 for "%2".', 'Localized Exception', $productTwoName), null)
+        $this->messageManager->expects($this->at(0))
+            ->method('addComplexErrorMessage')
+            ->with('addUnescapedMessage', ['text' => __('%1 for "%2".', 'Localized Exception', $productTwoName)])
             ->willReturnSelf();
 
-        $this->managerMock->expects($this->at(1))
-            ->method('addError')
-            ->with(
-                __(
-                    'We couldn\'t add the following product(s) to the shopping cart: %1.',
-                    '"' . $productOneName . '"'
-                ),
-                null
-            )->willReturnSelf();
+        $this->messageManager->expects($this->at(1))
+            ->method('addComplexErrorMessage')
+            ->with('addUnescapedMessage', ['text' => __(
+                'We couldn\'t add the following product(s) to the shopping cart: %1.',
+                '"' . $productOneName . '"'
+            )])
+            ->willReturnSelf();
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('calculate')
@@ -579,9 +577,9 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception, []);
 
-        $this->managerMock->expects($this->at(0))
-            ->method('addError')
-            ->with(__('We can\'t add this item to your shopping cart right now.'), null)
+        $this->messageManager->expects($this->at(0))
+            ->method('addComplexErrorMessage')
+            ->with('addUnescapedMessage', ['text' => __('We can\'t add this item to your shopping cart right now.')])
             ->willReturnSelf();
 
         $this->wishlistHelperMock->expects($this->once())
@@ -602,8 +600,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willThrowException(new \Exception());
 
-        $this->managerMock->expects($this->at(1))
-            ->method('addError')
+        $this->messageManager->expects($this->at(1))
+            ->method('addErrorMessage')
             ->with(__('We can\'t update the Wish List right now.'), null)
             ->willReturnSelf();
 
@@ -614,8 +612,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->willReturn($productTwoName);
 
-        $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+        $this->messageManager->expects($this->once())
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productOneName . '"'), null)
             ->willReturnSelf();
 

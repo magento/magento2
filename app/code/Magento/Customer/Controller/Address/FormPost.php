@@ -197,17 +197,17 @@ class FormPost extends \Magento\Customer\Controller\Address
         try {
             $address = $this->_extractAddress();
             $this->_addressRepository->save($address);
-            $this->messageManager->addSuccess(__('You saved the address.'));
+            $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($error->getMessage());
+                $this->messageManager->addErrorMessage($error->getMessage());
             }
         } catch (\Exception $e) {
             $redirectUrl = $this->_buildUrl('*/*/index');
-            $this->messageManager->addException($e, __('We can\'t save the address.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t save the address.'));
         }
 
         $url = $redirectUrl;

@@ -5,29 +5,14 @@
  */
 namespace Magento\Framework\View\Element\Message\Renderer;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 
-class EscapeRenderer implements RendererInterface
+class DefaultRenderer implements RendererInterface
 {
     /**
      * complex_renderer
      */
-    const CODE = 'escape_renderer';
-
-    /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * @param Escaper $escaper
-     */
-    public function __construct(
-        Escaper $escaper
-    ) {
-        $this->escaper = $escaper;
-    }
+    const CODE = 'default_renderer';
 
     /**
      * Renders complex message
@@ -39,6 +24,6 @@ class EscapeRenderer implements RendererInterface
      */
     public function render(MessageInterface $message, array $initializationData)
     {
-        return $this->escaper->escapeHtml($message->getText());
+        return $message->getText();
     }
 }

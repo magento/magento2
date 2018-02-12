@@ -10,7 +10,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Cms\Model\Block;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Inspection\Exception;
 
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
@@ -57,7 +56,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             /** @var \Magento\Cms\Model\Block $model */
             $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class)->load($id);
             if (!$model->getId() && $id) {
-                $this->messageManager->addError(__('This block no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This block no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
 
@@ -65,7 +64,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
 
             try {
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the block.'));
+                $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
 
                 if ($this->getRequest()->getParam('back')) {
@@ -73,9 +72,9 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the block.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the block.'));
             }
 
             $this->dataPersistor->set('cms_block', $data);

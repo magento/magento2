@@ -20,7 +20,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
         if ($id) {
             $agreementModel->load($id);
             if (!$agreementModel->getId()) {
-                $this->messageManager->addError(__('This condition no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This condition no longer exists.'));
                 $this->_redirect('checkout/*/');
                 return;
             }

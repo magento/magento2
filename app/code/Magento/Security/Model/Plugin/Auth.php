@@ -43,7 +43,7 @@ class Auth
     {
         $this->sessionsManager->processLogin();
         if ($this->sessionsManager->getCurrentSession()->isOtherSessionsTerminated()) {
-            $this->messageManager->addWarning(__('All other open sessions for this account were terminated.'));
+            $this->messageManager->addWarningMessage(__('All other open sessions for this account were terminated.'));
         }
     }
 

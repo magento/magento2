@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 class MassUnhold extends AbstractMassAction
 {
@@ -52,15 +52,15 @@ class MassUnhold extends AbstractMassAction
         $countNonUnHoldOrder = $collection->count() - $countUnHoldOrder;
 
         if ($countNonUnHoldOrder && $countUnHoldOrder) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('%1 order(s) were not released from on hold status.', $countNonUnHoldOrder)
             );
         } elseif ($countNonUnHoldOrder) {
-            $this->messageManager->addError(__('No order(s) were released from on hold status.'));
+            $this->messageManager->addErrorMessage(__('No order(s) were released from on hold status.'));
         }
 
         if ($countUnHoldOrder) {
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('%1 order(s) have been released from on hold status.', $countUnHoldOrder)
             );
         }

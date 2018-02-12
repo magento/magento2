@@ -5,17 +5,16 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\Order\Pdf\Invoice;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Model\Order\Pdf\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
-use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,7 +79,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
     {
         $invoicesCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$invoicesCollection->getSize()) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(

@@ -12,9 +12,9 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\Message\Error;
-use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
+use Magento\Framework\Message\Error;
 
 /**
  * Class Index
@@ -311,7 +311,7 @@ abstract class Index extends \Magento\Backend\App\Action
     protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
     {
         if (!is_array($customerIds)) {
-            $this->messageManager->addError(__('Please select customer(s).'));
+            $this->messageManager->addErrorMessage(__('Please select customer(s).'));
             return 0;
         }
         $customersUpdated = 0;
@@ -320,7 +320,7 @@ abstract class Index extends \Magento\Backend\App\Action
                 $singleAction($customerId);
                 $customersUpdated++;
             } catch (\Exception $exception) {
-                $this->messageManager->addError($exception->getMessage());
+                $this->messageManager->addErrorMessage($exception->getMessage());
             }
         }
         return $customersUpdated;

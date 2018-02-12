@@ -9,13 +9,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
-use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
-use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
  * Class ShipmentLoader
@@ -118,21 +118,21 @@ class ShipmentLoader extends DataObject
              * Check order existing
              */
             if (!$order->getId()) {
-                $this->messageManager->addError(__('The order no longer exists.'));
+                $this->messageManager->addErrorMessage(__('The order no longer exists.'));
                 return false;
             }
             /**
              * Check shipment is available to create separate from invoice
              */
             if ($order->getForcedShipmentWithInvoice()) {
-                $this->messageManager->addError(__('Cannot do shipment for the order separately from invoice.'));
+                $this->messageManager->addErrorMessage(__('Cannot do shipment for the order separately from invoice.'));
                 return false;
             }
             /**
              * Check shipment create availability
              */
             if (!$order->canShip()) {
-                $this->messageManager->addError(__('Cannot do shipment for the order.'));
+                $this->messageManager->addErrorMessage(__('Cannot do shipment for the order.'));
                 return false;
             }
 

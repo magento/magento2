@@ -12,10 +12,10 @@ use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -182,7 +182,12 @@ class ItemCarrier
 
         if ($messages) {
             foreach ($messages as $message) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addComplexErrorMessage(
+                    'addUnescapedMessage',
+                    [
+                        'text' => $message,
+                    ]
+                );
             }
             $redirectUrl = $indexUrl;
         }
@@ -192,7 +197,7 @@ class ItemCarrier
             try {
                 $wishlist->save();
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t update the Wish List right now.'));
+                $this->messageManager->addErrorMessage(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }
 
@@ -202,7 +207,7 @@ class ItemCarrier
                 $products[] = '"' . $product->getName() . '"';
             }
 
-            $this->messageManager->addSuccess(
+            $this->messageManager->addSuccessMessage(
                 __('%1 product(s) have been added to shopping cart: %2.', count($addedProducts), join(', ', $products))
             );
 

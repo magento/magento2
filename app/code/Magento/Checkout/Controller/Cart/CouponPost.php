@@ -95,14 +95,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                 if (!$itemsCount) {
                     if ($isCodeLengthValid && $coupon->getId()) {
                         $this->_checkoutSession->getQuote()->setCouponCode($couponCode)->save();
-                        $this->messageManager->addSuccess(
+                        $this->messageManager->addSuccessMessage(
                             __(
                                 'You used coupon code "%1".',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
-                        $this->messageManager->addError(
+                        $this->messageManager->addErrorMessage(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
@@ -111,14 +111,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                     }
                 } else {
                     if ($isCodeLengthValid && $coupon->getId() && $couponCode == $cartQuote->getCouponCode()) {
-                        $this->messageManager->addSuccess(
+                        $this->messageManager->addSuccessMessage(
                             __(
                                 'You used coupon code "%1".',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
-                        $this->messageManager->addError(
+                        $this->messageManager->addErrorMessage(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
@@ -127,12 +127,12 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                     }
                 }
             } else {
-                $this->messageManager->addSuccess(__('You canceled the coupon code.'));
+                $this->messageManager->addSuccessMessage(__('You canceled the coupon code.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot apply the coupon code.'));
+            $this->messageManager->addErrorMessage(__('We cannot apply the coupon code.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

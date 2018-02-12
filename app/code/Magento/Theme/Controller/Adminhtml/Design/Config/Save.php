@@ -6,11 +6,11 @@
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
+use Magento\Theme\Model\DesignConfigRepository;
 
 /**
  * Save action controller
@@ -73,7 +73,7 @@ class Save extends Action
         try {
             $designConfigData = $this->configFactory->create($scope, $scopeId, $data);
             $this->designConfigRepository->save($designConfigData);
-            $this->messageManager->addSuccess(__('You saved the configuration.'));
+            $this->messageManager->addSuccessMessage(__('You saved the configuration.'));
 
             $this->dataPersistor->clear('theme_design_config');
 
@@ -86,10 +86,10 @@ class Save extends Action
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addError(__('%1', $message));
+                $this->messageManager->addErrorMessage(__('%1', $message));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()
             );

@@ -241,7 +241,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
-        
+
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
@@ -270,7 +270,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('We can\'t delete the item from Wish List right now because of an error: Message.')
             ->willReturn(true);
 
@@ -355,7 +355,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManager
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('We can\'t delete the item from the Wish List right now.')
             ->willReturn(true);
 

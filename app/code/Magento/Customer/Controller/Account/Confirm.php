@@ -6,18 +6,18 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Framework\Exception\StateException;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirm
@@ -163,13 +163,18 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
                 $metadata->setPath('/');
                 $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
             }
-            $this->messageManager->addSuccess($this->getSuccessMessage());
+            $this->messageManager->addComplexSuccessMessage(
+                'addUnescapedMessage',
+                [
+                    'text' => $this->getSuccessMessage(),
+                ]
+            );
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+            $this->messageManager->addExceptionMessage($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('There was an error confirming the account'));
+            $this->messageManager->addExceptionMessage($e, __('There was an error confirming the account'));
         }
 
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);

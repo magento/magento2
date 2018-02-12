@@ -138,7 +138,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->designConfig);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the configuration.'));
         $this->dataPersistor->expects($this->once())
             ->method('clear')
@@ -194,7 +194,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with($this->designConfig)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Exception message')));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Exception message')->render());
 
         $this->dataPersistor->expects($this->once())
@@ -249,7 +249,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with($this->designConfig)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'Something went wrong while saving this configuration: Exception message');
 
         $this->dataPersistor->expects($this->once())

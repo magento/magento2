@@ -6,10 +6,10 @@
 namespace Magento\Sales\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -154,11 +154,11 @@ abstract class Order extends \Magento\Backend\App\Action
         try {
             $order = $this->orderRepository->get($id);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         } catch (InputException $e) {
-            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }

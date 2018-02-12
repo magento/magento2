@@ -5,30 +5,30 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Customer\Model\Registration;
-use Magento\Framework\Escaper;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\InputException;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\Registration;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -279,6 +279,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
@@ -326,18 +327,26 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(
-                    __(
-                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
-                        $email
-                    )
+                $this->messageManager->addComplexSuccessMessage(
+                    'addUnescapedMessage',
+                    [
+                        'text' => __(
+                            'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
+                            $email
+                        ),
+                    ]
                 );
                 // @codingStandardsIgnoreEnd
                 $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
-                $this->messageManager->addSuccess($this->getSuccessMessage());
+                $this->messageManager->addComplexSuccessMessage(
+                    'addUnescapedMessage',
+                    [
+                        'text' => $this->getSuccessMessage(),
+                    ]
+                );
                 $requestedRedirect = $this->accountRedirect->getRedirectCookie();
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
@@ -361,16 +370,21 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 $url
             );
             // @codingStandardsIgnoreEnd
-            $this->messageManager->addError($message);
+            $this->messageManager->addComplexErrorMessage(
+                'addUnescapedMessage',
+                [
+                    'text' => $message,
+                ]
+            );
         } catch (InputException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
+                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t save the customer.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
         }
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());

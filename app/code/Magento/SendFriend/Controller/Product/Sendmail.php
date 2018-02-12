@@ -8,8 +8,8 @@
 
 namespace Magento\SendFriend\Controller\Product;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
@@ -93,23 +93,23 @@ class Sendmail extends \Magento\SendFriend\Controller\Product
             $validate = $this->sendFriend->validate();
             if ($validate === true) {
                 $this->sendFriend->send();
-                $this->messageManager->addSuccess(__('The link to a friend was sent.'));
+                $this->messageManager->addSuccessMessage(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $resultRedirect->setUrl($this->_redirect->success($url));
                 return $resultRedirect;
             } else {
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                 } else {
-                    $this->messageManager->addError(__('We found some problems with the data.'));
+                    $this->messageManager->addErrorMessage(__('We found some problems with the data.'));
                 }
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Some emails were not sent.'));
+            $this->messageManager->addExceptionMessage($e, __('Some emails were not sent.'));
         }
 
         // save form data

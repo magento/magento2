@@ -6,8 +6,8 @@
 namespace Magento\Cms\Test\Unit\Controller\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 
@@ -65,7 +65,7 @@ class PostDataProcessorTest extends \PHPUnit\Framework\TestCase
             'title' => ''
         ];
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('To apply changes you should fill in hidden required "%1" field', 'Page Title'));
 
         $this->assertFalse($this->postDataProcessor->validateRequireEntry($postData));

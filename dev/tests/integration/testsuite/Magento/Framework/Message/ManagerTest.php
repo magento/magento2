@@ -94,11 +94,101 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      */
-    public function testAddError()
+    public function testAddErrorMessage()
     {
         $customGroup = 'custom-group';
-        $this->model->addError('some text');
-        $this->model->addError('some text 2', $customGroup);
+        $this->model->addErrorMessage('some text');
+        $this->model->addErrorMessage('some text 2', $customGroup);
+        $this->assertEquals(1, $this->model->getMessages()->getCount());
+        $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
+        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
+
+        $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertEquals(
+            'some text 2',
+            $this->model->getMessages(false, $customGroup)->getLastAddedMessage()->getText()
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testAddWarningMessage()
+    {
+        $customGroup = 'custom-group';
+        $this->model->addWarningMessage('some text');
+        $this->model->addWarningMessage('some text 2', $customGroup);
+        $this->assertEquals(1, $this->model->getMessages()->getCount());
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
+        $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
+        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
+
+        $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertEquals(
+            'some text 2',
+            $this->model->getMessages(false, $customGroup)->getLastAddedMessage()->getText()
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testAddNoticeMessage()
+    {
+        $customGroup = 'custom-group';
+        $this->model->addNoticeMessage('some text');
+        $this->model->addNoticeMessage('some text 2', $customGroup);
+        $this->assertEquals(1, $this->model->getMessages()->getCount());
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
+        $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
+        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
+
+        $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertEquals(
+            'some text 2',
+            $this->model->getMessages(false, $customGroup)->getLastAddedMessage()->getText()
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testAddSuccessMessage()
+    {
+        $customGroup = 'custom-group';
+        $this->model->addSuccessMessage('some text');
+        $this->model->addSuccessMessage('some text 2', $customGroup);
+        $this->assertEquals(1, $this->model->getMessages()->getCount());
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));
+        $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_NOTICE));
+        $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_SUCCESS));
+        $this->assertEquals('some text', $this->model->getMessages()->getLastAddedMessage()->getText());
+
+        $this->assertEquals(1, $this->model->getMessages(false, $customGroup)->getCount());
+        $this->assertEquals(
+            'some text 2',
+            $this->model->getMessages(false, $customGroup)->getLastAddedMessage()->getText()
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testAddExceptionMessage()
+    {
+        $customGroup = 'custom-group';
+        $firstException = new \Exception('some text');
+        $secondException = new \Exception('some text 2');
+        $this->model->addExceptionMessage($firstException);
+        $this->model->addExceptionMessage($secondException, null, $customGroup);
         $this->assertEquals(1, $this->model->getMessages()->getCount());
         $this->assertEquals(1, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_ERROR));
         $this->assertEquals(0, $this->model->getMessages()->getCountByType(MessageInterface::TYPE_WARNING));

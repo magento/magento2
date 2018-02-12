@@ -196,11 +196,11 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) were not put on hold.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You have put 1 order(s) on hold.');
 
         $this->resultRedirectMock->expects($this->once())
@@ -240,7 +240,7 @@ class MassHoldTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('No order(s) were put on hold.');
 
         $this->resultRedirectMock->expects($this->once())

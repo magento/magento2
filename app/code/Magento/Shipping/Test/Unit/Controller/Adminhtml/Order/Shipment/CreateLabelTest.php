@@ -71,7 +71,7 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->messageManagerMock = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError', '__wakeup']
+            ['addSuccessMessage', 'addErrorMessage', '__wakeup']
         );
         $this->labelGenerator = $this->createPartialMock(
             \Magento\Shipping\Model\Shipping\LabelGenerator::class,
@@ -155,7 +155,7 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
             ->with($this->shipmentMock, $this->requestMock)
             ->will($this->returnValue(true));
         $this->shipmentMock->expects($this->once())->method('save')->will($this->returnSelf());
-        $this->messageManagerMock->expects($this->once())->method('addSuccess');
+        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());

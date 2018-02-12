@@ -41,7 +41,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Sorry, there was an error getting requested content. Please contact the store owner.')
                 );
             }

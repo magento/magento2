@@ -191,11 +191,11 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('1 order(s) cannot be canceled.');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('We canceled 1 order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -239,7 +239,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('You cannot cancel the order(s).');
 
         $this->resultRedirectMock->expects($this->once())
@@ -272,7 +272,7 @@ class MassCancelTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Can not cancel');
 
         $this->massAction->execute();

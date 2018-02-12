@@ -7,9 +7,9 @@ namespace Magento\Search\Controller\Adminhtml\Term;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Search\Model\QueryFactory;
-use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Search\Controller\Adminhtml\Term as TermController;
+use Magento\Search\Model\QueryFactory;
 
 class Save extends TermController
 {
@@ -45,12 +45,15 @@ class Save extends TermController
                 $model->addData($data);
                 $model->setIsProcessed(0);
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the search term.'));
+                $this->messageManager->addSuccessMessage(__('You saved the search term.'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->proceedToEdit($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the search query.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the search query.')
+                );
                 return $this->proceedToEdit($data);
             }
         }

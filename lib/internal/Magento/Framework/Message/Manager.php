@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Message;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Message manager model
@@ -164,54 +164,58 @@ class Manager implements ManagerInterface
 
     /**
      * @inheritdoc
+     * @deprecated 100.1.0
+     * @see \Magento\Framework\Message\ManagerInterface::addErrorMessage
      *
      * @param string $message
      * @param string|null $group
-     * @return $this
+     * @return ManagerInterface
      */
     public function addError($message, $group = null)
     {
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $message), $group);
-        return $this;
+        return $this->addErrorMessage($message, $group);
     }
 
     /**
      * @inheritdoc
+     * @deprecated 100.1.0
+     * @see \Magento\Framework\Message\ManagerInterface::addWarningMessage
      *
      * @param string $message
      * @param string|null $group
-     * @return $this
+     * @return ManagerInterface
      */
     public function addWarning($message, $group = null)
     {
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_WARNING, $message), $group);
-        return $this;
+        return $this->addWarningMessage($message, $group);
     }
 
     /**
      * @inheritdoc
+     * @deprecated 100.1.0
+     * @see \Magento\Framework\Message\ManagerInterface::addNoticeMessage
      *
      * @param string $message
      * @param string|null $group
-     * @return $this
+     * @return ManagerInterface
      */
     public function addNotice($message, $group = null)
     {
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_NOTICE, $message), $group);
-        return $this;
+        return $this->addNoticeMessage($message, $group);
     }
 
     /**
      * @inheritdoc
+     * @deprecated 100.1.0
+     * @see \Magento\Framework\Message\ManagerInterface::addSuccessMessage
      *
      * @param string $message
      * @param string|null $group
-     * @return $this
+     * @return ManagerInterface
      */
     public function addSuccess($message, $group = null)
     {
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_SUCCESS, $message), $group);
-        return $this;
+        return $this->addSuccessMessage($message, $group);
     }
 
     /**
@@ -236,30 +240,17 @@ class Manager implements ManagerInterface
 
     /**
      * @inheritdoc
+     * @deprecated 100.1.0
+     * @see \Magento\Framework\Message\ManagerInterface::addExceptionMessage
      *
      * @param \Exception $exception
      * @param string $alternativeText
      * @param string $group
-     * @return $this
+     * @return ManagerInterface
      */
     public function addException(\Exception $exception, $alternativeText = null, $group = null)
     {
-        $message = sprintf(
-            'Exception message: %s%sTrace: %s',
-            $exception->getMessage(),
-            "\n",
-            $exception->getTraceAsString()
-        );
-
-        $this->logger->critical($message);
-
-        if ($alternativeText) {
-            $this->addError($alternativeText, $group);
-        } else {
-            $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
-        }
-
-        return $this;
+        return $this->addExceptionMessage($exception, $alternativeText, $group);
     }
 
     /**
@@ -292,7 +283,13 @@ class Manager implements ManagerInterface
         $this->logger->critical($message);
 
         if ($alternativeText) {
-            $this->addErrorMessage($alternativeText, $group);
+            $this->addComplexErrorMessage(
+                'addUnescapedMessage',
+                [
+                    'text' => $alternativeText,
+                ],
+                $group
+            );
         } else {
             $this->addMessage($this->exceptionMessageFactory->createMessage($exception), $group);
         }
@@ -379,14 +376,7 @@ class Manager implements ManagerInterface
      */
     public function addComplexErrorMessage($identifier, array $data = [], $group = null)
     {
-        $this->assertNotEmptyIdentifier($identifier);
-        $this->addMessage(
-            $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
-                ->setData($data),
-            $group
-        );
-
-        return $this;
+        return $this->addComplexMessage(MessageInterface::TYPE_ERROR, $identifier, $data, $group);
     }
 
     /**
@@ -400,14 +390,7 @@ class Manager implements ManagerInterface
      */
     public function addComplexWarningMessage($identifier, array $data = [], $group = null)
     {
-        $this->assertNotEmptyIdentifier($identifier);
-        $this->addMessage(
-            $this->createMessage(MessageInterface::TYPE_WARNING, $identifier)
-                ->setData($data),
-            $group
-        );
-
-        return $this;
+        return $this->addComplexMessage(MessageInterface::TYPE_WARNING, $identifier, $data, $group);
     }
 
     /**
@@ -421,14 +404,7 @@ class Manager implements ManagerInterface
      */
     public function addComplexNoticeMessage($identifier, array $data = [], $group = null)
     {
-        $this->assertNotEmptyIdentifier($identifier);
-        $this->addMessage(
-            $this->createMessage(MessageInterface::TYPE_NOTICE, $identifier)
-                ->setData($data),
-            $group
-        );
-
-        return $this;
+        return $this->addComplexMessage(MessageInterface::TYPE_NOTICE, $identifier, $data, $group);
     }
 
     /**
@@ -442,12 +418,29 @@ class Manager implements ManagerInterface
      */
     public function addComplexSuccessMessage($identifier, array $data = [], $group = null)
     {
+        return $this->addComplexMessage(MessageInterface::TYPE_SUCCESS, $identifier, $data, $group);
+    }
+
+    /**
+     * Adds new complex identified message
+     *
+     * @param string $type
+     * @param string|null $identifier
+     * @param array $data
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    private function addComplexMessage($type, $identifier, array $data = [], $group = null)
+    {
         $this->assertNotEmptyIdentifier($identifier);
-        $this->addMessage(
-            $this->createMessage(MessageInterface::TYPE_SUCCESS, $identifier)
-                ->setData($data),
-            $group
-        );
+        $message = $this->createMessage($type, $identifier);
+
+        if (isset($data['text'])) {
+            $message->setText($data['text']);
+            unset($data['text']);
+        }
+        $message->setData($data);
+        $this->addMessage($message, $group);
 
         return $this;
     }

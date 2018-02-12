@@ -126,7 +126,7 @@ class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
             ->method('unsRpCustomerId');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You updated your password.'))
             ->willReturnSelf();
 
@@ -192,7 +192,7 @@ class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Exception.'));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Something went wrong while saving the new password.'))
             ->willReturnSelf();
 
@@ -261,7 +261,7 @@ class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\InputException(__('InputException.')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('InputException.'))
             ->willReturnSelf();
 
@@ -308,7 +308,7 @@ class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('New Password and Confirm New Password values didn\'t match.'))
             ->willReturnSelf();
 
@@ -355,7 +355,7 @@ class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Please enter a new password.'))
             ->willReturnSelf();
 

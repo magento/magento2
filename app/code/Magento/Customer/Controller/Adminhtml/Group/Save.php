@@ -7,7 +7,6 @@
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
 class Save extends \Magento\Customer\Controller\Adminhtml\Group
@@ -89,10 +88,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
 
                 $this->groupRepository->save($customerGroup);
 
-                $this->messageManager->addSuccess(__('You saved the customer group.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 if ($customerGroup != null) {
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(
