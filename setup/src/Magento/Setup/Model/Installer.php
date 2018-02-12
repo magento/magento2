@@ -915,11 +915,6 @@ class Installer
                         $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
-                    if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer);
-                    } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer);
-                    }
                 }
             } elseif ($configVer) {
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
@@ -932,11 +927,6 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
-                if ($type === 'schema') {
-                    $resource->setDbVersion($moduleName, $configVer);
-                } elseif ($type === 'data') {
-                    $resource->setDataVersion($moduleName, $configVer);
-                }
             }
             /**
              * Applying data patches after old upgrade data scripts
@@ -945,6 +935,12 @@ class Installer
                 $this->patchApplier->applySchemaPatch($moduleName);
             } elseif ($type === 'data') {
                 $this->patchApplier->applyDataPatch($moduleName);
+            }
+
+            if ($type === 'schema') {
+                $resource->setDbVersion($moduleName, $configVer);
+            } elseif ($type === 'data') {
+                $resource->setDataVersion($moduleName, $configVer);
             }
 
             $this->logProgress();
