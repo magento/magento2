@@ -404,7 +404,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.2.2';
     }

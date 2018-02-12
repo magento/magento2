@@ -187,7 +187,7 @@ class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersi
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.1';
     }

@@ -26,7 +26,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     private $storeManager;
 
     /**
-     * @var AllowedCountries
+     * @var AllowedCountriesFactory
      */
     private $allowedCountries;
 
@@ -34,12 +34,12 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
      * MigrateStoresAllowedCountriesToWebsite constructor.
      * @param ResourceConnection $resourceConnection
      * @param StoreManagerInterface $storeManager
-     * @param AllowedCountries $allowedCountries
+     * @param AllowedCountriesFactory $allowedCountries
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\AllowedCountries $allowedCountries
+        \Magento\Directory\Model\AllowedCountriesFactory $allowedCountries
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
@@ -161,7 +161,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.9';
     }

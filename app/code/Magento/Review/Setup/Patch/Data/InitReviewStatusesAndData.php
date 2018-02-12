@@ -109,7 +109,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.0';
     }

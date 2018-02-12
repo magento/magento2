@@ -115,7 +115,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.3';
     }

@@ -26,14 +26,17 @@ class PatchFactory
     {
         $this->objectManager = $objectManager;
     }
+
     /**
-     * Create new instance of
+     * Create new instance of patch
+     *
      * @param string $instanceName
+     * @param array $arguments
      * @return PatchInterface
      */
-    public function create($instanceName)
+    public function create($instanceName, $arguments = [])
     {
-        $patchInstance = $this->objectManager->create('\\' . $instanceName, []);
+        $patchInstance = $this->objectManager->create('\\' . $instanceName, $arguments);
         if (!$patchInstance instanceof PatchInterface) {
             throw new \InvalidArgumentException(
                 sprintf(

@@ -71,7 +71,7 @@ class UpdateEntityTypeModelForInvoice implements DataPatchInterface, PatchVersio
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.9';
     }

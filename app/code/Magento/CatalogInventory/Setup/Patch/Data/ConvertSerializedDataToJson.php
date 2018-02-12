@@ -111,7 +111,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.2.1';
     }

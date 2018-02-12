@@ -8,6 +8,7 @@ namespace Magento\Analytics\Setup\Patch\Data;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,18 +20,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * PrepareInitialConfig constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -38,8 +39,8 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->insertMultiple(
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+        $this->moduleDataSetup->getConnection()->insertMultiple(
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             [
                 [
                     'scope' => 'default',
@@ -56,8 +57,8 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
             ]
         );
 
-        $this->resourceConnection->getConnection()->insert(
-            $this->resourceConnection->getConnection()->getTableName('flag'),
+        $this->moduleDataSetup->getConnection()->insert(
+            $this->moduleDataSetup->getConnection()->getTableName('flag'),
             [
                 'flag_code' => SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE,
                 'state' => 0,
@@ -78,7 +79,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.0';
     }

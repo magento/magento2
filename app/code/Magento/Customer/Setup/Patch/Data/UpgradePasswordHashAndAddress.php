@@ -105,7 +105,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.5';
     }

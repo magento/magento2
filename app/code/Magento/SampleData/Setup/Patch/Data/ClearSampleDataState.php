@@ -59,7 +59,7 @@ class ClearSampleDataState implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.0';
     }

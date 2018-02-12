@@ -56,7 +56,7 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.8';
     }

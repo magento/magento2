@@ -72,7 +72,7 @@ class UpdateProductMetaDescription implements DataPatchInterface, PatchVersionIn
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.7';
     }

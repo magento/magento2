@@ -81,7 +81,7 @@ class UpdateProductRelations implements DataPatchInterface, PatchVersionInterfac
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.1';
     }

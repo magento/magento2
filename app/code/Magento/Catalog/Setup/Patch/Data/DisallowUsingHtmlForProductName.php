@@ -70,7 +70,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.1.5';
     }

@@ -89,7 +89,7 @@ class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.1.0';
     }

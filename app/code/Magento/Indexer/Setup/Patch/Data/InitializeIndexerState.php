@@ -114,7 +114,7 @@ class InitializeIndexerState implements DataPatchInterface, PatchVersionInterfac
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.1.0';
     }

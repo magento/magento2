@@ -22,5 +22,5 @@ interface PatchVersionInterface
      * @return string
      * @deprecated since appearance, required for backward compatibility
      */
-    public function getVersion();
+    public static function getVersion();
 }

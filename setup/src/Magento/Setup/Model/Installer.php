@@ -27,6 +27,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\PatchApplierInterface;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -240,9 +241,9 @@ class Installer
     private $schemaPersistor;
 
     /**
-     * @var PatchApplier
+     * @var PatchApplierFactory
      */
-    private $patchApplier;
+    private $patchApplierFactory;
 
     /**
      * Constructor
@@ -322,7 +323,7 @@ class Installer
             DeclarationInstaller::class
         );
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
-        $this->patchApplier = $this->objectManagerProvider->get()->create(PatchApplier::class);
+        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(PatchApplierFactory::class);
     }
 
     /**
@@ -931,10 +932,12 @@ class Installer
             /**
              * Applying data patches after old upgrade data scripts
              */
+            /** @var PatchApplier $patchApplier */
+            $patchApplier = $this->patchApplierFactory->create(['moduleDataSetup' => $setup]);
             if ($type === 'schema') {
-                $this->patchApplier->applySchemaPatch($moduleName);
+                $patchApplier->applySchemaPatch($moduleName);
             } elseif ($type === 'data') {
-                $this->patchApplier->applyDataPatch($moduleName);
+                $patchApplier->applyDataPatch($moduleName);
             }
 
             if ($type === 'schema') {

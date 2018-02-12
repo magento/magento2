@@ -80,7 +80,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.2.0';
     }

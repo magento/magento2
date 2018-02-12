@@ -74,7 +74,7 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.1';
     }

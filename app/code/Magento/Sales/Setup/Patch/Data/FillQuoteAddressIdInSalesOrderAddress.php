@@ -130,7 +130,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.0.8';
     }

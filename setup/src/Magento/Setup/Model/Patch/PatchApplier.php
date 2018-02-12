@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Patch;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Exception;
 
 /**
@@ -46,6 +47,19 @@ class PatchApplier
     private $patchHistory;
 
     /**
+     * @var PatchFactory
+     */
+    private $patchFactory;
+    /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+
+    /**
      * PatchApplier constructor.
      * @param PatchReader $dataPatchReader
      * @param PatchReader $schemaPatchReader
@@ -53,6 +67,8 @@ class PatchApplier
      * @param ResourceConnection $resourceConnection
      * @param ModuleResource $moduleResource
      * @param PatchHistory $patchHistory
+     * @param PatchFactory $patchFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         PatchReader $dataPatchReader,
@@ -60,7 +76,9 @@ class PatchApplier
         PatchRegistryFactory $patchRegistryFactory,
         ResourceConnection $resourceConnection,
         ModuleResource $moduleResource,
-        PatchHistory $patchHistory
+        PatchHistory $patchHistory,
+        PatchFactory $patchFactory,
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->patchRegistryFactory = $patchRegistryFactory;
         $this->dataPatchReader = $dataPatchReader;
@@ -68,20 +86,22 @@ class PatchApplier
         $this->resourceConnection = $resourceConnection;
         $this->moduleResource = $moduleResource;
         $this->patchHistory = $patchHistory;
+        $this->patchFactory = $patchFactory;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
      * As we have old scripts and new one we need
      *
-     * @param PatchInterface $patch
+     * @param string $patchClassName
      * @param string $moduleName
      * @return bool
      */
-    private function skipByBackwardIncompatability(PatchInterface $patch, $moduleName)
+    private function skipByBackwardIncompatability(string $patchClassName, $moduleName)
     {
         $dbVersion = $this->moduleResource->getDataVersion($moduleName);
-        return $patch instanceof PatchVersionInterface &&
-            version_compare($patch->getVersion(), $dbVersion) <= 0;
+        return $patchClassName instanceof PatchVersionInterface &&
+            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
     }
 
     /**
@@ -95,16 +115,11 @@ class PatchApplier
         $dataPatches = $this->dataPatchReader->read($moduleName);
         $registry = $this->prepareRegistry($dataPatches);
         $adapter = $this->resourceConnection->getConnection();
-
         /**
          * @var DataPatchInterface $dataPatch
          */
         foreach ($registry as $dataPatch) {
-            if (!$dataPatch instanceof DataPatchInterface) {
-                throw new Exception(
-                    sprintf("Patch %s should implement DataPatchInterface", get_class($dataPatch))
-                );
-            }
+
             /**
              * Due to bacward compatabilities reasons some patches should be skipped
              */
@@ -114,12 +129,20 @@ class PatchApplier
 
             try {
                 $adapter->beginTransaction();
+                $dataPatch = $this->patchFactory->create($dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
+                if (!$dataPatch instanceof DataPatchInterface) {
+                    throw new Exception(
+                        sprintf("Patch %s should implement DataPatchInterface", $dataPatch)
+                    );
+                }
                 $dataPatch->apply();
                 $this->patchHistory->fixPatch($dataPatch);
                 $adapter->commit();
             } catch (\Exception $e) {
                 $adapter->rollBack();
                 throw new Exception($e->getMessage());
+            } finally {
+                unset($dataPatch);
             }
         }
     }
@@ -158,10 +181,13 @@ class PatchApplier
          */
         foreach ($registry as $schemaPatch) {
             try {
+                $schemaPatch = $this->patchFactory->create($schemaPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch($schemaPatch);
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage());
+            } finally {
+                unset($schemaPatch);
             }
         }
     }
@@ -185,12 +211,16 @@ class PatchApplier
             if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
                     $adapter->beginTransaction();
+                    /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
+                    $dataPatch = $this->patchFactory->create($dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
                     $dataPatch->revert();
                     $this->patchHistory->revertPatchFromHistory($dataPatch);
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
                     throw new Exception($e->getMessage());
+                }finally {
+                    unset($dataPatch);
                 }
             }
         }

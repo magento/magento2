@@ -64,7 +64,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '2.1.3';
     }
