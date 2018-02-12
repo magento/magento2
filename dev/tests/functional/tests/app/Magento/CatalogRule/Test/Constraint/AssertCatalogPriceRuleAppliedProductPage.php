@@ -11,6 +11,8 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep;
+use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 
 /**
  * Assert that Catalog Price Rule is applied on Product page.
@@ -38,11 +40,11 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
     ) {
         if ($customer !== null) {
             $this->objectManager->create(
-                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
+                LoginCustomerOnFrontendStep::class,
                 ['customer' => $customer]
             )->run();
         } else {
-            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
+            $this->objectManager->create(LogoutCustomerOnFrontendStep::class)->run();
         }
 
         $cmsIndexPage->open();
@@ -52,7 +54,7 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
             $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->open();
 
             $catalogProductViewPage->getViewBlock()->waitLoader();
-            $productPriceBlock = $catalogProductViewPage->getViewBlock()->getPriceBlock();
+            $productPriceBlock = $catalogProductViewPage->getViewBlock()->getPriceBlock($product);
             $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
             if ($productPrice[$key]['regular'] !== 'No') {
                 $actualPrice['regular'] = $productPriceBlock->getOldPrice();

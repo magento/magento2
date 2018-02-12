@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormSection">
+        <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']"/>
+        <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
+    </section>
+    <section name="AdminProductFormConfigurationsSection">
+        <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="30"/>
+        <element name="currentVariationsRows" type="button" selector=".data-row"/>
+        <element name="currentVariationsNameCells" type="textarea" selector=".admin__control-fields[data-index='name_container']"/>
+        <element name="currentVariationsSkuCells" type="textarea" selector=".admin__control-fields[data-index='sku_container']"/>
+        <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
+        <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
+        <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+    </section>
+    <section name="AdminCreateProductConfigurationsPanel">
+        <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
+        <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
+        <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
+        <element name="attributeCode" type="input" selector=".admin__control-text[name='attribute_code']"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
+
+        <element name="selectAll" type="button" selector=".action-select-all"/>
+        <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
+        <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
+        <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
+
+        <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
+        <element name="selectAttribute" type="select" selector="#select-each-price" timeout="30"/>
+        <element name="attribute1" type="input" selector="#apply-single-price-input-0"/>
+        <element name="attribute2" type="input" selector="#apply-single-price-input-1"/>
+        <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
+
+        <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="quantity" type="input" selector="#apply-single-inventory-input"/>
+    </section>
+    <section name="AdminNewAttributePanel">
+        <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
+        <element name="newAttributeIFrame" type="iframe" selector="create_new_attribute_container"/>
+        <element name="defaultLabel" type="input" selector="#attribute_label"/>
+    </section>
+    <section name="AdminChooseAffectedAttributeSetPopup">
+        <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
+    </section>
+</config>

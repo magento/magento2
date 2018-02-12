@@ -49,12 +49,17 @@ if (empty($_SERVER['ENABLE_IIS_REWRITES']) || ($_SERVER['ENABLE_IIS_REWRITES'] !
     unset($_SERVER['ORIG_PATH_INFO']);
 }
 
-if (!empty($_SERVER['MAGE_PROFILER'])
+if (
+    (!empty($_SERVER['MAGE_PROFILER']) || file_exists(BP . '/var/profiler.flag'))
     && isset($_SERVER['HTTP_ACCEPT'])
     && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false
 ) {
+    $profilerFlag = isset($_SERVER['MAGE_PROFILER']) && strlen($_SERVER['MAGE_PROFILER'])
+        ? $_SERVER['MAGE_PROFILER']
+        : trim(file_get_contents(BP . '/var/profiler.flag'));
+
     \Magento\Framework\Profiler::applyConfig(
-        $_SERVER['MAGE_PROFILER'],
+        $profilerFlag,
         BP,
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     );

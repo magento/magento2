@@ -42,4 +42,7 @@
     <event name="admin_system_config_changed_section_cataloginventory">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver"/>
     </event>
+    <event name="sales_quote_item_collection_products_after_load">
+        <observer name="add_stock_items" instance="Magento\CatalogInventory\Observer\AddStockItemsObserver"/>
+    </event>
 </config>

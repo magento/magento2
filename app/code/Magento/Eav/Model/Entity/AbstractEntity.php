@@ -1656,7 +1656,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $this->_processAttributeValues();
             $connection->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw $e;
         }
 
