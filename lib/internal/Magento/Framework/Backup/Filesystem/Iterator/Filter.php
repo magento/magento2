@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\Backup\Filesystem\Iterator;
 
+use Iterator;
+
 class Filter extends \FilterIterator
 {
     /**
@@ -23,10 +25,10 @@ class Filter extends \FilterIterator
     /**
      * Constructor
      *
-     * @param \Iterator $iterator
+     * @param Iterator $iterator
      * @param array $filters list of files to skip
      */
-    public function __construct(\Iterator $iterator, array $filters)
+    public function __construct(Iterator $iterator, array $filters)
     {
         parent::__construct($iterator);
         $this->_filters = $filters;

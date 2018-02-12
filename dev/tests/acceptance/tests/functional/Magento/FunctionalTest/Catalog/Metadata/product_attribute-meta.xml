@@ -58,9 +58,8 @@
             </array>
         </object>
     </operation>
-    <operation name="UpdateProductAttribute" dataType="ProductAttribute" type="update" auth="adminOauth" url="/V1/products/attributes/{attributeCode}" method="PUT">
+    <operation name="UpdateProductAttribute" dataType="ProductAttribute" type="update" auth="adminOauth" url="/V1/products/attributes/{attribute_code}" method="PUT">
         <contentType>application/json</contentType>
-        <param key="attributeCode" type="path">{attributeCode}</param>
         <object dataType="ProductAttribute" key="attribute">
             <field key="attribute_code">string</field>
             <field key="attribute_id">string</field>
@@ -110,8 +109,7 @@
             </array>
         </object>
     </operation>
-    <operation name="DeleteProductAttribute" dataType="ProductAttribute" type="delete" auth="adminOauth" url="/V1/products/attributes/{attributeCode}" method="DELETE">
+    <operation name="DeleteProductAttribute" dataType="ProductAttribute" type="delete" auth="adminOauth" url="/V1/products/attributes/{attribute_code}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="attributeCode" type="path">{attributeCode}</param>
     </operation>
 </config>

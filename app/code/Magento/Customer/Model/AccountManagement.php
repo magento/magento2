@@ -460,7 +460,12 @@ class AccountManagement implements AccountManagementInterface
 
         $customer->setConfirmation(null);
         $this->customerRepository->save($customer);
-        $this->getEmailNotification()->newAccount($customer, 'confirmed', '', $this->storeManager->getStore()->getId());
+        $this->getEmailNotification()->newAccount(
+            $customer,
+            'confirmed',
+            '',
+            $this->storeManager->getStore()->getId()
+        );
         return $customer;
     }
 
@@ -531,12 +536,8 @@ class AccountManagement implements AccountManagementInterface
                     $this->getEmailNotification()->passwordResetConfirmation($customer);
                     break;
                 default:
-                    throw new InputException(
-                        __(
-                            'Invalid value of "%value" provided for the %fieldName field.',
-                            ['value' => $template, 'fieldName' => 'email type']
-                        )
-                    );
+                    $this->handleUnknownTemplate($template);
+                    break;
             }
             return true;
         } catch (MailException $e) {
@@ -544,6 +545,25 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
         return false;
+    }
+
+    /**
+     * Handle not supported template
+     *
+     * @param string $template
+     * @throws InputException
+     */
+    private function handleUnknownTemplate($template)
+    {
+        throw new InputException(__(
+            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+            [
+                'value' => $template,
+                'fieldName' => 'template',
+                'template1' => AccountManagement::EMAIL_REMINDER,
+                'template2' => AccountManagement::EMAIL_RESET
+            ]
+        ));
     }
 
     /**
@@ -1111,7 +1131,11 @@ class AccountManagement implements AccountManagementInterface
         $storeId = null,
         $email = null
     ) {
-        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        $templateId = $this->scopeConfig->getValue(
+            $template,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         if ($email === null) {
             $email = $customer->getEmail();
         }
@@ -1119,7 +1143,11 @@ class AccountManagement implements AccountManagementInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
-            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
+            ->setFrom($this->scopeConfig->getValue(
+                $sender,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            ))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
@@ -1313,8 +1341,10 @@ class AccountManagement implements AccountManagementInterface
         // No need to flatten the custom attributes or nested objects since the only usage is for email templates and
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerData =
-            $this->dataProcessor->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerData = $this->dataProcessor->buildOutputDataArray(
+            $customer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

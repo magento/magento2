@@ -281,6 +281,11 @@ return [
     ['canCreateUser', 'Magento\User\Model\ResourceModel\User'],
     ['canPrint', 'Magento\Checkout\Block\Onepage\Success'],
     [
+        'getAllServiceDataInterfaces',
+        'Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface',
+        'Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()'
+    ],
+    [
         'canTestHeaders',
         'Magento\TestFramework\Bootstrap',
         'Magento_TestFramework_Helper_Bootstrap::canTestHeaders',

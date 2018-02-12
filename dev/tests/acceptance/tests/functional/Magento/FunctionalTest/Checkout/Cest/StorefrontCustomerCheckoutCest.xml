@@ -14,16 +14,16 @@
             <stories value="Checkout via the Admin"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" mergeKey="simplecategory"/>
-            <createData entity="SimpleProduct" mergeKey="simpleproduct1">
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct1">
                 <required-entity createDataKey="simplecategory"/>
             </createData>
-            <createData entity="Simple_US_Customer" mergeKey="simpleuscustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
         </before>
         <after>
-            <deleteData createDataKey="simpleproduct1" mergeKey="deleteProduct1"/>
-            <deleteData createDataKey="simplecategory" mergeKey="deleteCategory"/>
-            <deleteData createDataKey="simpleuscustomer" mergeKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
         <test name="CustomerCheckoutTest">
             <annotations>
@@ -32,56 +32,54 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="#"/>
                 <group value="checkout"/>
-                <env value="chrome"/>
-                <env value="headless"/>
             </annotations>
 
-            <amOnPage mergeKey="s1"  url="customer/account/login/"/>
-            <fillField  mergeKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-            <fillField  mergeKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-            <click mergeKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-            <waitForPageLoad mergeKey="s9"/>
+            <amOnPage stepKey="s1"  url="customer/account/login/"/>
+            <fillField  stepKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  stepKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <click stepKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <waitForPageLoad stepKey="s9"/>
 
-            <amOnPage mergeKey="s11" url="/$$simplecategory.name$$.html" />
-            <moveMouseOver mergeKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
-            <click mergeKey="s17" selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" />
-            <waitForElementVisible mergeKey="s21" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" />
-            <see mergeKey="s23" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart."/>
-            <see mergeKey="s25" selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" />
-            <click mergeKey="s27" selector="{{StorefrontMiniCartSection.show}}" />
-            <click mergeKey="s31" selector="{{StorefrontMiniCartSection.goToCheckout}}" />
-            <waitForPageLoad mergeKey="s33"/>
-            <waitForLoadingMaskToDisappear mergeKey="s34"/>
-            <click mergeKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
-            <waitForElement mergeKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-            <click mergeKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
-            <waitForPageLoad mergeKey="s39"/>
-            <waitForElement mergeKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
-            <see mergeKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-            <click mergeKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
-            <waitForPageLoad mergeKey="s51"/>
-            <grabTextFrom mergeKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
-            <see mergeKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+            <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+            <moveMouseOver stepKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
+            <click stepKey="s17" selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" />
+            <waitForElementVisible stepKey="s21" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" />
+            <see stepKey="s23" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart."/>
+            <see stepKey="s25" selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" />
+            <click stepKey="s27" selector="{{StorefrontMiniCartSection.show}}" />
+            <click stepKey="s31" selector="{{StorefrontMiniCartSection.goToCheckout}}" />
+            <waitForPageLoad stepKey="s33"/>
+            <waitForLoadingMaskToDisappear stepKey="s34"/>
+            <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+            <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
+            <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
+            <waitForPageLoad stepKey="s39"/>
+            <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
+            <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+            <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
+            <waitForPageLoad stepKey="s51"/>
+            <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
+            <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
 
-            <amOnPage mergeKey="s59" url="{{AdminLoginPage.url}}" />
-            <fillField mergeKey="s61" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" />
-            <fillField mergeKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
-            <click mergeKey="s65" selector="{{AdminLoginFormSection.signIn}}" />
+            <amOnPage stepKey="s59" url="{{AdminLoginPage.url}}" />
+            <fillField stepKey="s61" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" />
+            <fillField stepKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
+            <click stepKey="s65" selector="{{AdminLoginFormSection.signIn}}" />
 
-            <amOnPage mergeKey="s67" url="{{OrdersPage.url}}"/>
-            <waitForPageLoad mergeKey="s75"/>
-            <fillField mergeKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
-            <waitForPageLoad mergeKey="s78"/>
+            <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
+            <waitForPageLoad stepKey="s75"/>
+            <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
+            <waitForPageLoad stepKey="s78"/>
 
-            <click mergeKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
-            <waitForPageLoad mergeKey="s831"/>
-            <click mergeKey="s84" selector="{{OrdersGridSection.firstRow}}" />
-            <see mergeKey="s85" selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
-            <see mergeKey="s87" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
-            <see mergeKey="s89" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
-            <see mergeKey="s91" selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-            <see mergeKey="s93" selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
-            <see mergeKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+            <click stepKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
+            <waitForPageLoad stepKey="s831"/>
+            <click stepKey="s84" selector="{{OrdersGridSection.firstRow}}" />
+            <see stepKey="s85" selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
+            <see stepKey="s87" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
+            <see stepKey="s89" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
+            <see stepKey="s91" selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+            <see stepKey="s93" selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+            <see stepKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
         </test>
     </cest>
 </config>

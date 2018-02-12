@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="ConfigurableProductAddChild" dataType="ConfigurableProductAddChild" type="create" auth="adminOauth" url="/V1/configurable-products/{sku}/child" method="POST">
         <contentType>application/json</contentType>
-        <param key="sku" type="path">{sku}</param>
         <field key="childSku">string</field>
     </operation>
 </config>

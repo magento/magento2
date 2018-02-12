@@ -167,7 +167,7 @@ class Bundle
         }
 
         $info = pathinfo($filePath);
-        if (strpos($filePath, '.min.') === true) {
+        if (strpos($filePath, '.min.') !== false) {
             $this->excludedCache[] = str_replace(".min.{$info['extension']}", ".{$info['extension']}", $filePath);
         } else {
             $pathToMinVersion = $info['dirname'] . '/' . $info['filename'] . '.min.' . $info['extension'];
@@ -216,7 +216,7 @@ class Bundle
      */
     private function prepareExcludePath($path)
     {
-        if (strpos($path, Repository::FILE_ID_SEPARATOR) > 0) {
+        if (strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
             list($excludedModule, $excludedPath) = explode(Repository::FILE_ID_SEPARATOR, $path);
             if ($excludedModule == 'Lib') {
                 return $excludedPath;

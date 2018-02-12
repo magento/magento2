@@ -46,8 +46,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation3" summary="Create product with special price and custom options(fixed price)">
-            <data name="tag" xsi:type="string">stable:no</data>
-            <data name="issue" xsi:type="string">MAGETWO-80353: PHP 7.1 compatibility: Jenkins Failures related to PHP 7.1 upgrade</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>

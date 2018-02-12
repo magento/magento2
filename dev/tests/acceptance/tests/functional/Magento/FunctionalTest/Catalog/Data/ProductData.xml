@@ -31,12 +31,11 @@
         <data key="status">1</data>
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
         <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
-        <!--required-entity type="custom_attribute">CustomAttributeProductUrlKey</required-entity-->
     </entity>
     <entity name="NewSimpleProduct" type="product">
         <data key="price">321.00</data>
     </entity>
-    <entity name="SimpleOne" type="product">
+    <entity name="SimpleOne" type="product2">
         <data key="sku" unique="suffix">SimpleOne</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
@@ -45,7 +44,6 @@
         <data key="visibility">4</data>
         <data key="status">1</data>
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
-        <!--required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity-->
         <required-entity type="custom_attribute">CustomAttributeProductAttribute</required-entity>
     </entity>
 </config>

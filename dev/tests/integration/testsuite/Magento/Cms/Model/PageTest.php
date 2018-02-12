@@ -12,11 +12,6 @@ use Magento\Cms\Api\PageRepositoryInterface;
  */
 class PageTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Cms\Model\Page
-     */
-    protected $model;
-
     protected function setUp()
     {
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -33,6 +28,37 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests the get by identifier command
+     * @param array $pageData
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @magentoDbIsolation enabled
+     * @dataProvider testGetByIdentifierDataProvider
+     */
+    public function testGetByIdentifier(array $pageData)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Cms\Model\GetPageByIdentifier $getPageByIdentifierCommand */
+        /** @var \Magento\Cms\Model\ResourceModel\Page $pageResource */
+        /** @var \Magento\Cms\Model\PageFactory $pageFactory */
+        $pageFactory = $objectManager->create(\Magento\Cms\Model\PageFactory::class);
+        $pageResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Page::class);
+        $getPageByIdentifierCommand = $objectManager->create(\Magento\Cms\Model\GetPageByIdentifier::class);
+
+        # Prepare and save the temporary page
+        $tempPage = $pageFactory->create();
+        $tempPage->setData($pageData);
+        $pageResource->save($tempPage);
+
+        # Load previously created block and compare identifiers
+        $storeId = reset($pageData['stores']);
+        $page = $getPageByIdentifierCommand->execute($pageData['identifier'], $storeId);
+        $this->assertEquals($pageData['identifier'], $page->getIdentifier());
+    }
+
+    /**
+     * @param array $data
+     * @param string $expectedIdentifier
      * @magentoDbIsolation enabled
      * @dataProvider generateIdentifierFromTitleDataProvider
      */
@@ -62,7 +88,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($updateTime, $page->getUpdateTime());
     }
 
-    public function generateIdentifierFromTitleDataProvider()
+    public function generateIdentifierFromTitleDataProvider() : array
     {
         return [
             ['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title'],
@@ -74,6 +100,24 @@ class PageTest extends \PHPUnit\Framework\TestCase
                 'data' => ['title' => 'Test title', 'identifier' => 'custom-identifier', 'stores' => [1]],
                 'expectedIdentifier' => 'custom-identifier'
             ]
+        ];
+    }
+
+    /**
+     * Data provider for "testGetByIdentifier" method
+     * @return array
+     */
+    public function testGetByIdentifierDataProvider() : array
+    {
+        return [
+            ['data' => [
+                'title' => 'Test title',
+                'identifier' => 'test-identifier',
+                'page_layout' => '1column',
+                'stores' => [1],
+                'content' => 'Test content',
+                'is_active' => 1
+            ]]
         ];
     }
 }

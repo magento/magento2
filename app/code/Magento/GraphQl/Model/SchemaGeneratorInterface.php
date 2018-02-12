@@ -14,7 +14,7 @@ interface SchemaGeneratorInterface
     /**
      * Generate GraphQL schema.
      *
-     * @return \GraphQL\Type\Schema
+     * @return \Magento\Framework\GraphQl\Type\Schema
      */
     public function generate();
 }

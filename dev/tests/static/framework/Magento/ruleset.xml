@@ -16,10 +16,14 @@
             <property name="absoluteLineLimit" value="120"/>
         </properties>
     </rule>
+    <rule ref="Magento.LanguageConstructs.LanguageConstructs">
+        <include-pattern>*/app/code/*\.(?!phtml)</include-pattern>
+    </rule>
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
 
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
     <rule ref="Generic.Functions.CallTimePassByReference"/>
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
 

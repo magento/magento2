@@ -67,7 +67,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
             $value = '0';
         }
         $isMultiple = false;
-        if (strpos($value, ',')) {
+        if (strpos($value, ',') !== false) {
             $isMultiple = true;
             $value = explode(',', $value);
         }

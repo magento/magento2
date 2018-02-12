@@ -10,7 +10,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateCoupon" dataType="coupon" type="create" auth="adminOauth" url="/rest/V1/coupons" method="POST">
-        <header param="Content-Type">application/json</header>
+        <contentType>application/json</contentType>
         <object key="coupon" dataType="coupon">
             <field key="rule_id" required="true">integer</field>
             <field key="times_used" required="true">integer</field>
@@ -25,8 +25,7 @@
         </object>
     </operation>
 
-    <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="adminOauth" url="/rest/V1/coupons/{couponId}" method="DELETE">
-        <header param="Content-Type">application/json</header>
-        <param key="couponId" type="path">{couponId}</param>
+    <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="adminOauth" url="/rest/V1/coupons/{coupon_id}" method="DELETE">
+        <contentType>application/json</contentType>
     </operation>
 </config>

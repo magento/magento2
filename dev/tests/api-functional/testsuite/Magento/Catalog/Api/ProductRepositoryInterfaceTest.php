@@ -617,6 +617,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function updateProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
@@ -986,6 +995,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function saveProduct($product, $storeCode = null)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,

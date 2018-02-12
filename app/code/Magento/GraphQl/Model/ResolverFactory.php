@@ -34,6 +34,7 @@ class ResolverFactory
      */
     public function create($resolverName)
     {
+        $resolverName = ucfirst($resolverName);
         $qualifiedName = __NAMESPACE__ . '\\Resolver\\' . $resolverName;
         if (!class_exists($qualifiedName)) {
             throw new \LogicException(sprintf('Resolver %s does not exist', $resolverName));

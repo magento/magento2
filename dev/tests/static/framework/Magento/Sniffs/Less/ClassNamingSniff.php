@@ -63,8 +63,8 @@ class ClassNamingSniff implements Sniff
             $phpcsFile->addError('Class name contains not allowed symbols', $stackPtr, 'NotAllowedSymbol', $matches);
         }
 
-        if (!empty(strpos($className, self::STRING_HELPER_CLASSES_PREFIX))
-            && empty(strpos($className, self::STRING_ALLOWED_UNDERSCORES))
+        if (strpos($className, self::STRING_HELPER_CLASSES_PREFIX) !== false
+            && strpos($className, self::STRING_ALLOWED_UNDERSCORES) === false
         ) {
             $phpcsFile->addError('"_" symbol allowed only for helper classes', $stackPtr, 'UnderscoreSymbol');
         }

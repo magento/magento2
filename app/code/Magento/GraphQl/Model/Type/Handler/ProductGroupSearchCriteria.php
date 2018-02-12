@@ -6,10 +6,9 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\InputObjectType;
-use GraphQL\Type\Definition\Type;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define ProductGroupSearchCriteria's GraphQL type
@@ -22,11 +21,18 @@ class ProductGroupSearchCriteria implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @param TypeGenerator $typeGenerator
+     * @var TypeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator)
+    private $typeFactory;
+
+    /**
+     * @param TypeGenerator $typeGenerator
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(TypeGenerator $typeGenerator, TypeFactory $typeFactory)
     {
         $this->typeGenerator = $typeGenerator;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -35,7 +41,7 @@ class ProductGroupSearchCriteria implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new InputObjectType(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields()
@@ -46,7 +52,7 @@ class ProductGroupSearchCriteria implements HandlerInterface
     /**
      * Retrieve Product base fields
      *
-     * @return Type[]
+     * @return array
      */
     private function getFields()
     {
