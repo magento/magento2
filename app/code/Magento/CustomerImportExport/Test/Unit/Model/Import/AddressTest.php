@@ -6,6 +6,7 @@
 
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
+use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\ImportExport\Model\Import\AbstractEntity;
 
@@ -112,6 +113,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $errorAggregator;
 
     /**
+     * @var AddressAttribute\Source\CountryWithWebsites|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $countryWithWebsites;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp()
@@ -125,6 +131,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->_storeManager->expects($this->any())
             ->method('getWebsites')
             ->will($this->returnCallback([$this, 'getWebsites']));
+        $this->countryWithWebsites = $this
+            ->getMockBuilder(AddressAttribute\Source\CountryWithWebsites::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->countryWithWebsites
+            ->expects($this->any())
+            ->method('getAllOptions')
+            ->willReturn([]);
         $this->_model = $this->_getModelMock();
         $this->errorAggregator = $this->createPartialMock(
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
@@ -433,7 +447,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory::class),
             new \Magento\Framework\Stdlib\DateTime(),
             $this->createMock(\Magento\Customer\Model\Address\Validator\Postcode::class),
-            $this->_getModelDependencies()
+            $this->_getModelDependencies(),
+            $this->countryWithWebsites
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
