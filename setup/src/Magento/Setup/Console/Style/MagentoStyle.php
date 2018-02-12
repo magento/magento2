@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,18 +22,56 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\OutputStyle;
 
+/**
+ * Magento console output decorator.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 {
+    /**
+     * Default console line max length(use for limitation in case terminal width greater than 120 characters).
+     */
     const MAX_LINE_LENGTH = 120;
 
+    /**
+     * Console input provider.
+     *
+     * @var InputInterface
+     */
     private $input;
+
+    /**
+     * Style Guide compliant question helper.
+     *
+     * @var SymfonyQuestionHelper
+     */
     private $questionHelper;
+
+    /**
+     * Progress output provider.
+     *
+     * @var ProgressBar
+     */
     private $progressBar;
+
+    /**
+     * Calculated output line length.
+     *
+     * @var int
+     */
     private $lineLength;
+
+    /**
+     * Console output buffer provider.
+     *
+     * @var BufferedOutput
+     */
     private $bufferedOutput;
 
     /**
-     * @param InputInterface  $input
+     * MagentoStyle constructor.
+     *
+     * @param InputInterface $input
      * @param OutputInterface $output
      */
     public function __construct(InputInterface $input, OutputInterface $output)
@@ -42,9 +79,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         $this->input = $input;
         $this->bufferedOutput = new BufferedOutput($output->getVerbosity(), false, clone $output->getFormatter());
         // Windows cmd wraps lines as soon as the terminal width is reached, whether there are following chars or not.
-        $currentLength = $this->getTerminalWidth() - (int) (DIRECTORY_SEPARATOR === '\\');
+        $currentLength = $this->getTerminalWidth() - (int)(DIRECTORY_SEPARATOR === '\\');
         $this->lineLength = min($currentLength, self::MAX_LINE_LENGTH);
-
         parent::__construct($output);
     }
 
@@ -52,17 +88,22 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * Formats a message as a block of text.
      *
      * @param string|array $messages The message to write in the block
-     * @param string|null  $type     The block type (added in [] on first line)
-     * @param string|null  $style    The style to apply to the whole block
-     * @param string       $prefix   The prefix for the block
-     * @param bool         $padding  Whether to add vertical padding
+     * @param string|null $type The block type (added in [] on first line)
+     * @param string|null $style The style to apply to the whole block
+     * @param string $prefix The prefix for the block
+     * @param bool $padding Whether to add vertical padding
+     * @return void
      */
-    public function block($messages, $type = null, $style = null, $prefix = ' ', $padding = false)
-    {
-        $messages = is_array($messages) ? array_values($messages) : array($messages);
-
+    public function block(
+        $messages,
+        string $type = null,
+        string $style = null,
+        string $prefix = ' ',
+        bool $padding = false
+    ) {
+        $messages = is_array($messages) ? array_values($messages) : [$messages];
         $this->autoPrependBlock();
-        $this->writeln($this->createBlock($messages, $type, $style, $prefix, $padding, true));
+        $this->writeln($this->createBlock($messages, $type, $style, $prefix, $padding));
         $this->newLine();
     }
 
@@ -73,10 +114,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     {
         $this->autoPrependBlock();
         $bar = str_repeat('=', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
-        $this->writeln(array(
+        $this->writeln([
             sprintf(' <options=bold>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf(' <options=bold>%s</>', $bar),
-        ));
+        ]);
         $this->newLine();
     }
 
@@ -87,10 +128,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     {
         $this->autoPrependBlock();
         $bar = str_repeat('-', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
-        $this->writeln(array(
+        $this->writeln([
             sprintf(' <fg=white>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
             sprintf(' <fg=white>%s</>', $bar),
-        ));
+        ]);
         $this->newLine();
     }
 
@@ -114,10 +155,9 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function text($message)
     {
         $this->autoPrependText();
-
-        $messages = is_array($message) ? array_values($message) : array($message);
-        foreach ($messages as $message) {
-            $this->writeln(sprintf(' %s', $message));
+        $messages = is_array($message) ? array_values($message) : [$message];
+        foreach ($messages as $singleMessage) {
+            $this->writeln(sprintf(' %s', $singleMessage));
         }
     }
 
@@ -125,6 +165,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * Formats a command comment.
      *
      * @param string|array $message
+     * @param bool $padding
+     * @return void
      */
     public function comment($message, $padding = false)
     {
@@ -190,6 +232,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function ask($question, $default = null, $validator = null, $maxAttempts = null)
     {
@@ -202,6 +245,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function askHidden($question, $validator = null)
     {
@@ -245,6 +289,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     public function progressAdvance($step = 1)
     {
@@ -253,6 +299,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     public function progressFinish()
     {
@@ -275,6 +322,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     }
 
     /**
+     * Ask user question.
+     *
      * @param Question $question
      *
      * @return string
@@ -293,7 +342,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
 
         if ($this->input->isInteractive()) {
             $this->newLine();
-            $this->bufferedOutput->write("\n");
+            $this->bufferedOutput->write(PHP_EOL);
         }
 
         return $answer;
@@ -302,74 +351,88 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * Ask for an missing argument.
      *
-     * @param string        $argument
-     * @param string        $question
-     * @param string|null   $default
+     * @param string $argument
+     * @param string $question
+     * @param string|null $default
      * @param callable|null $validator
-     * @param int|null      $maxAttempts
-     * @param bool          $comment
-     * @param string        $commentFormat
+     * @param int|null $maxAttempts
+     * @param bool $comment
+     * @param string $commentFormat
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function askForMissingArgument(
-        $argument,
-        $question,
-        $default = null,
-        $validator = null,
-        $maxAttempts = null,
-        $comment = null,
-        $commentFormat = "Argument [%s] set to: %s"
+        string $argument,
+        string $question,
+        string $default = null,
+        callable $validator = null,
+        int $maxAttempts = null,
+        bool $comment = null,
+        string $commentFormat = 'Argument [%s] set to: %s'
     ) {
         try {
-            if( is_null($this->input->getArgument($argument)) ) {
-                $this->input->setArgument($argument, $this->ask($question, $default, $validator, $maxAttempts) );
+            if ($this->input->getArgument($argument) === null) {
+                $this->input->setArgument($argument, $this->ask($question, $default, $validator, $maxAttempts));
             }
             $argumentValue = $this->input->getArgument($argument);
-            $validated = ( is_callable($validator) ? $validator($argumentValue) : $argumentValue );
-            if( (bool) ( is_null($comment) ? $this->isDebug() : $comment ) )
-            {
-                $this->comment( sprintf($commentFormat, $argument, $validated) );
+            $validated = (is_callable($validator) ? $validator($argumentValue) : $argumentValue);
+            if ((bool)($comment ?? $this->isDebug())) {
+                $this->comment(sprintf($commentFormat, $argument, $validated));
             }
-        } catch( InputValidationException $e ) {
-            $this->error("Validation Error: ".$e->getMessage());
-            $this->askForMissingArgument($argument, $question, $default, $validator,
-                $maxAttempts, $comment, $commentFormat);
+        } catch (InputValidationException $e) {
+            $this->error('Validation Error: ' . $e->getMessage());
+            $this->askForMissingArgument(
+                $argument,
+                $question,
+                $default,
+                $validator,
+                $maxAttempts,
+                $comment,
+                $commentFormat
+            );
         }
     }
 
     /**
      * Ask for an missing option.
      *
-     * @param string        $option
-     * @param string        $question
-     * @param string|null   $default
+     * @param string $option
+     * @param string $question
+     * @param string|null $default
      * @param callable|null $validator
-     * @param int|null      $maxAttempts
-     * @param bool          $comment
-     * @param string        $commentFormat
+     * @param int|null $maxAttempts
+     * @param bool $comment
+     * @param string $commentFormat
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function askForMissingOption(
-        $option,
-        $question,
-        $default = null,
-        $validator = null,
-        $maxAttempts = null,
-        $comment = null,
-        $commentFormat = "Option [%s] set to: %s"
+        string $option,
+        string $question,
+        string $default = null,
+        callable $validator = null,
+        int $maxAttempts = null,
+        bool $comment = null,
+        string $commentFormat = 'Option [%s] set to: %s'
     ) {
         try {
-            if( is_null($this->input->getOption($option)) ) {
-                $this->input->setOption($option, $this->ask($question, $default, $validator, $maxAttempts) );
+            if (null === $this->input->getOption($option)) {
+                $this->input->setOption($option, $this->ask($question, $default, $validator, $maxAttempts));
             }
             $optionValue = $this->input->getOption($option);
-            $validated = ( is_callable($validator) ? $validator($optionValue) : $optionValue );
-            if( (bool) ( is_null($comment) ? $this->isDebug() : $comment ) )
-            {
-                $this->comment( sprintf($commentFormat, $option, $validated) );
+            $validated = (is_callable($validator) ? $validator($optionValue) : $optionValue);
+            if ((bool)($comment ?? $this->isDebug())) {
+                $this->comment(sprintf($commentFormat, $option, $validated));
             }
-        } catch( InputValidationException $e ) {
-            $this->error("Validation Error: ".$e->getMessage());
-            $this->askForMissingOption($option, $question, $default, $validator,
-                $maxAttempts, $comment, $commentFormat);
+        } catch (InputValidationException $e) {
+            $this->error('Validation Error: ' . $e->getMessage());
+            $this->askForMissingOption(
+                $option,
+                $question,
+                $default,
+                $validator,
+                $maxAttempts,
+                $comment,
+                $commentFormat
+            );
         }
     }
 
@@ -397,11 +460,14 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function newLine($count = 1)
     {
         parent::newLine($count);
-        $this->bufferedOutput->write(str_repeat("\n", $count));
+        $this->bufferedOutput->write(str_repeat(PHP_EOL, $count));
     }
 
     /**
+     * Get progress bar instance.
+     *
      * @return ProgressBar
+     * @throws RuntimeException in case progress bar hasn't been instantiated yet.
      */
     private function getProgressBar()
     {
@@ -412,6 +478,9 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         return $this->progressBar;
     }
 
+    /**
+     * @return int
+     */
     private function getTerminalWidth()
     {
         $application = new Application();
@@ -420,22 +489,31 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         return $dimensions[0] ?: self::MAX_LINE_LENGTH;
     }
 
+    /**
+     * Add empty line before output element in case there were no empty lines before.
+     *
+     * @return void
+     */
     private function autoPrependBlock()
     {
-        $chars = substr(str_replace(PHP_EOL, "\n", $this->bufferedOutput->fetch()), -2);
-
+        $chars = substr($this->bufferedOutput->fetch(), -2);
         if (!isset($chars[0])) {
-            return $this->newLine(); //empty history, so we should start with a new line.
+            $this->newLine(); //empty history, so we should start with a new line.
         }
         //Prepend new line for each non LF chars (This means no blank line was output before)
-        $this->newLine(2 - substr_count($chars, "\n"));
+        $this->newLine(2 - substr_count($chars, PHP_EOL));
     }
 
+    /**
+     * Add empty line before text(listing) output element.
+     *
+     * @return void
+     */
     private function autoPrependText()
     {
         $fetched = $this->bufferedOutput->fetch();
         //Prepend new line if last char isn't EOL:
-        if ("\n" !== substr($fetched, -1)) {
+        if (PHP_EOL !== substr($fetched, -1)) {
             $this->newLine();
         }
     }
@@ -446,57 +524,47 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         // Preserve the last 4 chars inserted (PHP_EOL on windows is two chars) in the history buffer
         return array_map(function ($value) {
             return substr($value, -4);
-        }, array_merge(array($this->bufferedOutput->fetch()), (array) $messages));
+        }, array_merge([$this->bufferedOutput->fetch()], (array)$messages));
     }
 
+    /**
+     * Build output in block style.
+     *
+     * @param array $messages
+     * @param string|null $type
+     * @param string|null $style
+     * @param string $prefix
+     * @param bool $padding
+     * @return array
+     */
     private function createBlock(
-        $messages,
-        $type = null,
-        $style = null,
-        $prefix = ' ',
-        $padding = false,
-        $escape = false
+        array $messages,
+        string $type = null,
+        string $style = null,
+        string $prefix = ' ',
+        bool $padding = false
     ) {
         $indentLength = 0;
         $prefixLength = Helper::strlenWithoutDecoration($this->getFormatter(), $prefix);
-        $lines = array();
-
         if (null !== $type) {
             $type = sprintf('[%s] ', $type);
             $indentLength = strlen($type);
             $lineIndentation = str_repeat(' ', $indentLength);
         }
-
-        // wrap and add newlines for each element
-        foreach ($messages as $key => $message) {
-            if ($escape) {
-                $message = OutputFormatter::escape($message);
-            }
-
-            $wordwrap = wordwrap($message, $this->lineLength - $prefixLength - $indentLength, PHP_EOL, true);
-            $lines = array_merge($lines, explode(PHP_EOL, $wordwrap));
-
-            if (count($messages) > 1 && $key < count($messages) - 1) {
-                $lines[] = '';
-            }
-        }
-
+        $lines = $this->getBlockLines($messages, $prefixLength, $indentLength);
         $firstLineIndex = 0;
         if ($padding && $this->isDecorated()) {
             $firstLineIndex = 1;
             array_unshift($lines, '');
             $lines[] = '';
         }
-
         foreach ($lines as $i => &$line) {
             if (null !== $type) {
-                $line = $firstLineIndex === $i ? $type.$line : $lineIndentation.$line;
+                $line = $firstLineIndex === $i ? $type . $line : $lineIndentation . $line;
             }
-
-            $line = $prefix.$line;
+            $line = $prefix . $line;
             $multiplier = $this->lineLength - Helper::strlenWithoutDecoration($this->getFormatter(), $line);
             $line .= str_repeat(' ', $multiplier);
-
             if ($style) {
                 $line = sprintf('<%s>%s</>', $style, $line);
             }
@@ -505,4 +573,30 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         return $lines;
     }
 
+    /**
+     * Wrap and add new lines for each element.
+     *
+     * @param array $messages
+     * @param int $prefixLength
+     * @param int $indentLength
+     * @return array
+     */
+    private function getBlockLines(
+        array $messages,
+        int $prefixLength,
+        int $indentLength
+    ) {
+        $lines = [[]];
+        foreach ($messages as $key => $message) {
+            $message = OutputFormatter::escape($message);
+            $wordwrap = wordwrap($message, $this->lineLength - $prefixLength - $indentLength, PHP_EOL, true);
+            $lines[] = explode(PHP_EOL, $wordwrap);
+            if (count($messages) > 1 && $key < count($messages) - 1) {
+                $lines[][] = '';
+            }
+        }
+        $lines = array_merge(...$lines);
+
+        return $lines;
+    }
 }
