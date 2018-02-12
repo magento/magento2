@@ -4,20 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Theme\Setup;
+namespace Magento\Theme\Setup\Patch;
 
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 /**
- * @codeCoverageIgnore
+ * Class ConvertSerializedData
+ * @package Magento\Theme\Setup\Patch
  */
-class UpgradeData implements UpgradeDataInterface
+class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
     /**
      * @var FieldDataConverterFactory
      */
@@ -29,15 +35,17 @@ class UpgradeData implements UpgradeDataInterface
     private $queryModifierFactory;
 
     /**
-     * UpgradeData constructor
-     *
+     * ConvertSerializedData constructor.
+     * @param ResourceConnection $resourceConnection
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory
     ) {
+        $this->resourceConnection = $resourceConnection;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
     }
@@ -45,23 +53,43 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->upgradeToVersionTwoZeroTwo($setup);
-        }
-        $setup->endSetup();
+        $this->resourceConnection->getConnection()->startSetup();
+        $this->convertSerializedData();
+        $this->resourceConnection->getConnection()->endSetup();
     }
 
     /**
-     * Upgrade to version 2.0.2, convert data for `value` field in `core_config_data table`
-     * from php-serialized to JSON format
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @return void
+     * {@inheritdoc}
      */
-    private function upgradeToVersionTwoZeroTwo(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
+    {
+        return [
+            RegisterThemes::class
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.2';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * Convert native php serialized data to json.
+     */
+    private function convertSerializedData()
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
@@ -75,8 +103,8 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('core_config_data'),
+            $this->resourceConnection->getConnection(),
+            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             'config_id',
             'value',
             $queryModifier
