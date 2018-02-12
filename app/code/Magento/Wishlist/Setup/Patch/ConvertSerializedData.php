@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Wishlist\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+namespace Magento\Wishlist\Setup\Patch;
+
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\DB\Select\InQueryModifier;
-use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Patch\DataPatchInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
 
-class UpgradeData implements UpgradeDataInterface
+/**
+ * Class ConvertSerializedData
+ * @package Magento\Wishlist\Setup\Patch
+ */
+class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
     /**
      * @var FieldDataConverterFactory
      */
@@ -27,22 +36,25 @@ class UpgradeData implements UpgradeDataInterface
     private $queryModifierFactory;
 
     /**
-     * @var Generator
+     * @var QueryGenerator
      */
     private $queryGenerator;
 
     /**
-     * Constructor
-     *
+     * ConvertSerializedData constructor.
+     * @param ResourceConnection $resourceConnection
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @param Generator $queryGenerator
+     * @param QueryGenerator $queryGenerator
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory,
-        Generator $queryGenerator
+        QueryGenerator $queryGenerator
+
     ) {
+        $this->resourceConnection = $resourceConnection;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->queryGenerator = $queryGenerator;
@@ -51,22 +63,38 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->upgradeToVersionTwoZeroOne($setup);
-        }
+        $this->convertSerializedData();
     }
 
     /**
-     * Upgrade to version 2.0.1, convert data for `value` field in `wishlist_item_option table`
-     * from php-serialized to JSON format
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @return void
+     * {@inheritdoc}
      */
-    private function upgradeToVersionTwoZeroOne(ModuleDataSetupInterface $setup)
+    public static function getDependencies()
     {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '2.0.1';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+    
+    private function convertSerializedData()
+    {
+        $connection = $this->resourceConnection->getConnection();
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
             'in',
@@ -84,22 +112,22 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('wishlist_item_option'),
+            $connection,
+            $connection->getTableName('wishlist_item_option'),
             'option_id',
             'value',
             $queryModifier
         );
-        $select = $setup->getConnection()
+        $select = $connection
             ->select()
             ->from(
-                $setup->getTable('catalog_product_option'),
+                $connection->getTableName('catalog_product_option'),
                 ['option_id']
             )
             ->where('type = ?', 'file');
         $iterator = $this->queryGenerator->generate('option_id', $select);
         foreach ($iterator as $selectByRange) {
-            $codes = $setup->getConnection()->fetchCol($selectByRange);
+            $codes = $connection->fetchCol($selectByRange);
             $codes = array_map(
                 function ($id) {
                     return 'option_' . $id;
@@ -115,8 +143,8 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
             $fieldDataConverter->convert(
-                $setup->getConnection(),
-                $setup->getTable('wishlist_item_option'),
+                $connection,
+                $connection->getTableName('wishlist_item_option'),
                 'option_id',
                 'value',
                 $queryModifier
