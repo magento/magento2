@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GiftMessage\Setup\Patch;
+namespace Magento\GiftMessage\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Quote\Setup\QuoteSetupFactory;

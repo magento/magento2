@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Dhl\Setup\Patch;
+namespace Magento\Dhl\Setup\Patch\Data;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\ResolverInterface;

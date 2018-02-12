@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Setup\Patch;
+namespace Magento\Widget\Setup\Patch\Data;
 
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\FieldToConvert;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Reports\Setup\Patch;
+namespace Magento\Reports\Setup\Patch\Data;
 
 use Magento\Cms\Model\PageFactory;
 use Magento\Framework\App\ResourceConnection;

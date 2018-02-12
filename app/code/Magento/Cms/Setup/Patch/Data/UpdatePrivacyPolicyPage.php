@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Cms\Setup\Patch;
+namespace Magento\Cms\Setup\Patch\Data;
 
 use Magento\Cms\Model\PageFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;

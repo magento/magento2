@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Swatches\Setup\Patch;
+namespace Magento\Swatches\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\FieldDataConverterFactory;

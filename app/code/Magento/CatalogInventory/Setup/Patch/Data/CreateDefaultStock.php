@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Setup\Patch;
+namespace Magento\CatalogInventory\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;

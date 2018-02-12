@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Theme\Setup\Patch;
+namespace Magento\Theme\Setup\Patch\Data;
 
 use Magento\Theme\Model\Theme\Registration;
 use Magento\Framework\App\ResourceConnection;

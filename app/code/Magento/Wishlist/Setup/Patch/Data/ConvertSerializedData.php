@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Wishlist\Setup\Patch;
+namespace Magento\Wishlist\Setup\Patch\Data;
 
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;

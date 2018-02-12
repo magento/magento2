@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedProduct\Setup\Patch;
+namespace Magento\GroupedProduct\Setup\Patch\Data;
 
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;

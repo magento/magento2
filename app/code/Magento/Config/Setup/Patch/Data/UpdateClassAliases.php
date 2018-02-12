@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Config\Setup\Patch;
+namespace Magento\Config\Setup\Patch\Data;
 
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Setup\Model\Patch\DataPatchInterface;

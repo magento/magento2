@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Analytics\Setup\Patch;
+namespace Magento\Analytics\Setup\Patch\Data;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\ResourceConnection;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Setup\Patch;
+namespace Magento\CatalogRule\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;

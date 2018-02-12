@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Setup\Patch;
+namespace Magento\User\Setup\Patch\Data;
 
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\App\ResourceConnection;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Setup\Patch;
+namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Encryption\Encryptor;

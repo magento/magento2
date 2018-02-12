@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tax\Setup\Patch;
+namespace Magento\Tax\Setup\Patch\Data;
 
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\Search\SearchCriteriaFactory;

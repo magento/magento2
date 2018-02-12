@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Setup\Patch;
+namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;

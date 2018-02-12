@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Fedex\Setup\Patch;
+namespace Magento\Fedex\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Setup\Patch;
+namespace Magento\Quote\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Setup\ConvertSerializedDataToJsonFactory;

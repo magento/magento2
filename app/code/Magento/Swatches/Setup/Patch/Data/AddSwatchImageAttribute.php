@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Swatches\Setup\Patch;
+namespace Magento\Swatches\Setup\Patch\Data;
 
 use Magento\Catalog\Model\Product\Attribute\Frontend\Image;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;

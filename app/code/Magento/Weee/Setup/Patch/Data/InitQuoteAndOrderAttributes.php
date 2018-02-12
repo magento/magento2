@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Weee\Setup\Patch;
+namespace Magento\Weee\Setup\Patch\Data;
 
 use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CurrencySymbol\Setup\Patch;
+namespace Magento\CurrencySymbol\Setup\Patch\Data;
 
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
 use Magento\Framework\DB\DataConverter\SerializedToJson;

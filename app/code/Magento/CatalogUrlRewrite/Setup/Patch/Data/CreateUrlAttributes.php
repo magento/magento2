@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogUrlRewrite\Setup\Patch;
+namespace Magento\CatalogUrlRewrite\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesSequence\Setup\Patch;
+namespace Magento\SalesSequence\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\SalesSequence\Setup\SequenceCreator;

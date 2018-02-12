@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Msrp\Setup\Patch;
+namespace Magento\Msrp\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\Setup\ModuleContextInterface;

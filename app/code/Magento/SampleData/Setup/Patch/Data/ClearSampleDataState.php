@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SampleData\Setup\Patch;
+namespace Magento\SampleData\Setup\Patch\Data;
 
 use Magento\Framework\Setup;
 use Magento\Framework\App\ResourceConnection;
