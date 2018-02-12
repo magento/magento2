@@ -6,10 +6,7 @@
 
 namespace Magento\Directory\Setup\Patch\Data;
 
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Directory\Helper\Data;
+use Magento\Directory\Setup\DataInstaller;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
@@ -26,22 +23,22 @@ class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
     private $resourceConnection;
 
     /**
-     * @var \Magento\Directory\Setup\DatInstaller
+     * @var \Magento\Directory\Setup\DataInstallerFactory
      */
-    private $datInstaller;
+    private $dataInstallerFactory;
 
     /**
      * AddDataForCroatia constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param \Magento\Directory\Setup\DatInstaller $datInstaller
+     * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        \Magento\Directory\Setup\DatInstaller $datInstaller
+        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->datInstaller = $datInstaller;
+        $this->dataInstallerFactory = $dataInstallerFactory;
     }
 
     /**
@@ -49,7 +46,9 @@ class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->datInstaller->addCountryRegions(
+        /** @var DataInstaller $dataInstaller */
+        $dataInstaller = $this->dataInstallerFactory->create();
+        $dataInstaller->addCountryRegions(
             $this->resourceConnection->getConnection(),
             $this->getDataForCroatia()
         );

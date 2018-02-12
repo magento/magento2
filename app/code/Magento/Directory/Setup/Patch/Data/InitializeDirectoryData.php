@@ -23,21 +23,21 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
     private $resourceConnection;
 
     /**
-     * @var Data
+     * @var \Magento\Directory\Helper\DataFactory
      */
-    private $directoryData;
+    private $directoryDataFactory;
 
     /**
      * InitializeDirectoryData constructor.
      * @param ResourceConnection $resourceConnection
-     * @param Data $directoryData
+     * @param \Magento\Directory\Helper\DataFactory $directoryDataFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        \Magento\Directory\Helper\Data $directoryData
+        \Magento\Directory\Helper\DataFactory $directoryDataFactory
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->directoryData = $directoryData;
+        $this->directoryDataFactory = $directoryDataFactory;
     }
 
     /**
@@ -858,7 +858,9 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
                 'value' => 1
             ]
         );
-        $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
+        /** @var \Magento\Directory\Helper\Data $helper */
+        $helper = $this->directoryDataFactory->create();
+        $countries = $helper->getCountryCollection()->getCountriesWithRequiredStates();
         $this->resourceConnection->getConnection()->insert(
             $this->resourceConnection->getConnection()->getTableName('core_config_data'),
             [

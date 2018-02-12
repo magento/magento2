@@ -9,10 +9,10 @@ namespace Magento\Directory\Setup;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
- * Class DatInstaller
+ * Class DataInstaller
  * @package Magento\Directory\Setup
  */
-class DatInstaller
+class DataInstaller
 {
     /**
      * @var \Magento\Directory\Helper\Data
