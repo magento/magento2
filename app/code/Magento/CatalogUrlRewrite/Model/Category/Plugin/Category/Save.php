@@ -73,7 +73,10 @@ class Save
 
         $currentStoreId = $category->getStoreId();
         $parentCategory = $category->getParentCategory();
-        if ($category->isObjectNew() && $parentCategory && $this->isGlobalScope($currentStoreId)) {
+        if ($category->isObjectNew()
+            && $this->isGlobalScope($currentStoreId)
+            && $parentCategory
+            && !$parentCategory->isInRootCategoryList()) {
             foreach ($category->getStoreIds() as $storeId) {
                 if ($storeId != $this->isGlobalScope($currentStoreId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
