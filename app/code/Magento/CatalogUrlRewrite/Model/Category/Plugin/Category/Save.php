@@ -75,7 +75,7 @@ class Save
         $parentCategoryId = $category->getParentId();
         if ($category->isObjectNew()
             && $this->isGlobalScope($currentStoreId)
-            && $category->isInRootCategoryList()
+            && !$category->isInRootCategoryList()
             && !empty($parentCategoryId)) {
             foreach ($category->getStoreIds() as $storeId) {
                 if ($storeId != $this->isGlobalScope($currentStoreId)
