@@ -8,6 +8,7 @@ namespace Magento\Catalog\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -30,14 +31,14 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
 
     /**
      * DisallowUsingHtmlForProductName constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -46,14 +47,14 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
      */
     public function apply()
     {
-        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
 
-        $this->resourceConnection->getConnection()->update(
-            $this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'),
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
             ['is_html_allowed_on_front' => 0],
-            $this->resourceConnection->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            $this->moduleDataSetup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
         );
     }
 

@@ -7,6 +7,7 @@
 namespace Magento\Bundle\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -18,18 +19,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpdateBundleRelatedSchema constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -38,15 +39,15 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInter
     public function apply()
     {
         // Updating data of the 'catalog_product_bundle_option_value' table.
-        $tableName = $this->resourceConnection->getConnection()->getTableName('catalog_product_bundle_option_value');
+        $tableName = $this->moduleDataSetup->getConnection()->getTableName('catalog_product_bundle_option_value');
 
-        $select = $this->resourceConnection->getConnection()->select()
+        $select = $this->moduleDataSetup->getConnection()->select()
             ->from(
                 ['values' => $tableName],
                 ['value_id']
             )->joinLeft(
                 [
-                    'options' => $this->resourceConnection->getConnection()->getTableName(
+                    'options' => $this->moduleDataSetup->getConnection()->getTableName(
                         'catalog_product_bundle_option'
                     )
                 ],
@@ -54,8 +55,8 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInter
                 ['parent_product_id' => 'parent_id']
             );
 
-        $this->resourceConnection->getConnection()->query(
-            $this->resourceConnection->getConnection()->insertFromSelect(
+        $this->moduleDataSetup->getConnection()->query(
+            $this->moduleDataSetup->getConnection()->insertFromSelect(
                 $select,
                 $tableName,
                 ['value_id', 'parent_product_id'],
@@ -64,25 +65,25 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInter
         );
 
         // Updating data of the 'catalog_product_bundle_selection_price' table.
-        $tableName = $this->resourceConnection->getConnection()->getTableName(
+        $tableName = $this->moduleDataSetup->getConnection()->getTableName(
             'catalog_product_bundle_selection_price'
         );
-        $tmpTableName = $this->resourceConnection->getConnection()->getTableName(
+        $tmpTableName = $this->moduleDataSetup->getConnection()->getTableName(
             'catalog_product_bundle_selection_price_tmp'
         );
 
-        $existingForeignKeys = $this->resourceConnection->getConnection()->getForeignKeys($tableName);
+        $existingForeignKeys = $this->moduleDataSetup->getConnection()->getForeignKeys($tableName);
 
         foreach ($existingForeignKeys as $key) {
-            $this->resourceConnection->getConnection()->dropForeignKey($key['TABLE_NAME'], $key['FK_NAME']);
+            $this->moduleDataSetup->getConnection()->dropForeignKey($key['TABLE_NAME'], $key['FK_NAME']);
         }
 
-        $this->resourceConnection->getConnection()->createTable(
-            $this->resourceConnection->getConnection()->createTableByDdl($tableName, $tmpTableName)
+        $this->moduleDataSetup->getConnection()->createTable(
+            $this->moduleDataSetup->getConnection()->createTableByDdl($tableName, $tmpTableName)
         );
 
         foreach ($existingForeignKeys as $key) {
-            $this->resourceConnection->getConnection()->addForeignKey(
+            $this->moduleDataSetup->getConnection()->addForeignKey(
                 $key['FK_NAME'],
                 $key['TABLE_NAME'],
                 $key['COLUMN_NAME'],
@@ -92,32 +93,32 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInter
             );
         }
 
-        $this->resourceConnection->getConnection()->query(
-            $this->resourceConnection->getConnection()->insertFromSelect(
-                $this->resourceConnection->getConnection()->select()->from($tableName),
+        $this->moduleDataSetup->getConnection()->query(
+            $this->moduleDataSetup->getConnection()->insertFromSelect(
+                $this->moduleDataSetup->getConnection()->select()->from($tableName),
                 $tmpTableName
             )
         );
 
-        $this->resourceConnection->getConnection()->truncateTable($tableName);
+        $this->moduleDataSetup->getConnection()->truncateTable($tableName);
 
         $columnsToSelect = [];
 
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
-        foreach ($this->resourceConnection->getConnection()->describeTable($tmpTableName) as $column) {
+        foreach ($this->moduleDataSetup->getConnection()->describeTable($tmpTableName) as $column) {
             $alias = $column['COLUMN_NAME'] == 'parent_product_id' ? 'selections.' : 'prices.';
 
             $columnsToSelect[] = $alias . $column['COLUMN_NAME'];
         }
 
-        $select = $this->resourceConnection->getConnection()->select()
+        $select = $this->moduleDataSetup->getConnection()->select()
             ->from(
                 ['prices' => $tmpTableName],
                 []
             )->joinLeft(
                 [
-                    'selections' => $this->resourceConnection->getConnection()->getTableName(
+                    'selections' => $this->moduleDataSetup->getConnection()->getTableName(
                         'catalog_product_bundle_selection'
                     )
                 ],
@@ -125,13 +126,13 @@ class UpdateBundleRelatedSchema implements DataPatchInterface, PatchVersionInter
                 []
             )->columns($columnsToSelect);
 
-        $this->resourceConnection->getConnection()->query(
-            $this->resourceConnection->getConnection()->insertFromSelect($select, $tableName)
+        $this->moduleDataSetup->getConnection()->query(
+            $this->moduleDataSetup->getConnection()->insertFromSelect($select, $tableName)
         );
 
-        $this->resourceConnection->getConnection()->dropTable($tmpTableName);
+        $this->moduleDataSetup->getConnection()->dropTable($tmpTableName);
 
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

@@ -36,6 +36,7 @@ use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Setup\Model\Patch\PatchApplierFactory;
 use Magento\Setup\Model\Patch\PatchHistory;
 use Magento\Setup\Model\Patch\PatchReader;
 use Magento\Setup\Model\Patch\PatchRegistry;
@@ -901,6 +902,12 @@ class Installer
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
+        /** @var PatchApplier $patchApplier */
+        if ($type === 'schema') {
+            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
+        } elseif ($type === 'data') {
+            $patchApplier = $this->patchApplierFactory->create(['moduleDataSetup' => $setup]);
+        }
 
         foreach ($moduleNames as $moduleName) {
             $schemaListener->setModuleName($moduleName);
@@ -932,8 +939,6 @@ class Installer
             /**
              * Applying data patches after old upgrade data scripts
              */
-            /** @var PatchApplier $patchApplier */
-            $patchApplier = $this->patchApplierFactory->create(['moduleDataSetup' => $setup]);
             if ($type === 'schema') {
                 $patchApplier->applySchemaPatch($moduleName);
             } elseif ($type === 'data') {

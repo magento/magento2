@@ -9,6 +9,7 @@ namespace Magento\Setup\Model\Patch;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Setup\Exception;
 
 /**
@@ -50,10 +51,12 @@ class PatchApplier
      * @var PatchFactory
      */
     private $patchFactory;
+
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider
+     * @var \Magento\Framework\Setup\SetupInterface
      */
-    private $objectManagerProvider;
+    private $schemaSetup;
+
     /**
      * @var ModuleDataSetupInterface
      */
@@ -68,6 +71,7 @@ class PatchApplier
      * @param ModuleResource $moduleResource
      * @param PatchHistory $patchHistory
      * @param PatchFactory $patchFactory
+     * @param \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
@@ -78,7 +82,8 @@ class PatchApplier
         ModuleResource $moduleResource,
         PatchHistory $patchHistory,
         PatchFactory $patchFactory,
-        ModuleDataSetupInterface $moduleDataSetup
+        \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup = null,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup = null
     ) {
         $this->patchRegistryFactory = $patchRegistryFactory;
         $this->dataPatchReader = $dataPatchReader;
@@ -87,6 +92,7 @@ class PatchApplier
         $this->moduleResource = $moduleResource;
         $this->patchHistory = $patchHistory;
         $this->patchFactory = $patchFactory;
+        $this->schemaSetup = $schemaSetup;
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
@@ -181,7 +187,7 @@ class PatchApplier
          */
         foreach ($registry as $schemaPatch) {
             try {
-                $schemaPatch = $this->patchFactory->create($schemaPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
+                $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch($schemaPatch);
             } catch (\Exception $e) {

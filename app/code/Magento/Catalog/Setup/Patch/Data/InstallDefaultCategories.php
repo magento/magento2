@@ -9,6 +9,7 @@ namespace Magento\Catalog\Setup\Patch\Data;
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -21,9 +22,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -32,14 +33,14 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -50,7 +51,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     public function apply()
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(DefaultCategory::class);
@@ -90,8 +91,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'path' => \Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_ROOT_ID,
             'value' => $category->getId(),
         ];
-        $this->resourceConnection->getConnection()->insertOnDuplicate(
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+        $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             $data,
             ['value']
         );
@@ -150,8 +151,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         ];
 
         foreach ($data as $bind) {
-            $this->resourceConnection->getConnection()->insertForce(
-                $this->resourceConnection->getConnection()->getTableName(
+            $this->moduleDataSetup->getConnection()->insertForce(
+                $this->moduleDataSetup->getConnection()->getTableName(
                     'catalog_product_link_type'
                 ),
                 $bind
@@ -179,8 +180,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             ],
         ];
 
-        $this->resourceConnection->getConnection()->insertMultiple(
-            $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute'),
+        $this->moduleDataSetup->getConnection()->insertMultiple(
+            $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute'),
             $data
         );
 
@@ -188,14 +189,14 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
          * Remove Catalog specified attribute options (columns) from eav/attribute table
          *
          */
-        $describe = $this->resourceConnection->getConnection()
-            ->describeTable($this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'));
+        $describe = $this->moduleDataSetup->getConnection()
+            ->describeTable($this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'));
         foreach ($describe as $columnData) {
             if ($columnData['COLUMN_NAME'] == 'attribute_id') {
                 continue;
             }
-            $this->resourceConnection->getConnection()->dropColumn(
-                $this->resourceConnection->getConnection()->getTableName('eav_attribute'),
+            $this->moduleDataSetup->getConnection()->dropColumn(
+                $this->moduleDataSetup->getConnection()->getTableName('eav_attribute'),
                 $columnData['COLUMN_NAME']
             );
         }

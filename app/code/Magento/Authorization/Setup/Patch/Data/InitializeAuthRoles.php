@@ -7,6 +7,7 @@
 namespace Magento\Authorization\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
@@ -19,9 +20,9 @@ use Magento\Authorization\Model\UserContextInterface;
 class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var \Magento\Authorization\Setup\AuthorizationFactory
@@ -30,14 +31,14 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
 
     /**
      * InitializeAuthRoles constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->authFactory = $authorizationFactory;
     }
 
@@ -97,9 +98,9 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
         /**
          * Delete rows by condition from authorization_rule
          */
-        $tableName = $this->resourceConnection->getConnection()->getTableName('authorization_rule');
+        $tableName = $this->moduleDataSetup->getConnection()->getTableName('authorization_rule');
         if ($tableName) {
-            $this->resourceConnection->getConnection()->delete(
+            $this->moduleDataSetup->getConnection()->delete(
                 $tableName,
                 ['resource_id = ?' => 'admin/system/tools/compiler']
             );
