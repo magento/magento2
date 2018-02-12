@@ -94,7 +94,7 @@ class Save
     }
 
     /**
-     * Check is global scope
+     * Check that store id is in global scope
      *
      * @param int|null $storeId
      * @return bool
