@@ -15,6 +15,7 @@ define([
      */
     function urlParam(name) {
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+
         return results[1] || 0;
     }
 
@@ -28,6 +29,6 @@ define([
                 'q': urlParam('q')
             },
             cache: false
-        }).done();
+        });
     };
 });
