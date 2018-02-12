@@ -47,7 +47,7 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
     public function apply()
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup']);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $this->moduleDataSetup]);
 
         $this->moduleDataSetup->getConnection()->startSetup();
 

@@ -46,7 +46,7 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
     public function apply()
     {
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create();
+        $salesSetup = $this->salesSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         /**
          * Install eav entity types to the eav/entity_type table

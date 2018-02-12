@@ -54,7 +54,7 @@ class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
             );
 
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->moduleDataSetup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $groupName = 'Product Details';
         $entityTypeId = $eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         $attributeSetId = $eavSetup->getAttributeSetId($entityTypeId, 'Default');

@@ -8,7 +8,6 @@ namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetup;
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
@@ -38,7 +37,7 @@ class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersi
         ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->ModuleDataSetupInterface = $moduleDataSetup;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 

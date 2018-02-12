@@ -45,7 +45,7 @@ class InitializeMsrpAttributes implements DataPatchInterface, PatchVersionInterf
     public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create();
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         $productTypes = [
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
