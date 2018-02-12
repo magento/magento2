@@ -56,6 +56,13 @@ class UpdateSalesRuleEntityTest extends Injectable
     protected $salesRuleName;
 
     /**
+     * Replace array to fill in category id
+     *
+     * @var array
+     */
+    protected $replace;
+
+    /**
      * Create simple product with category.
      *
      * @param FixtureFactory $fixtureFactory
@@ -68,6 +75,13 @@ class UpdateSalesRuleEntityTest extends Injectable
             ['dataset' => 'simple_for_salesrule_1']
         );
         $productForSalesRule1->persist();
+        $this->replace = [
+            'actions' => [
+                'actions_serialized' => [
+                    '%category_id%' => $productForSalesRule1->getDataFieldConfig('category_ids')['source']->getIds()[0]
+                ]
+            ],
+        ];
         return [
             'productForSalesRule1' => $productForSalesRule1,
         ];
@@ -109,7 +123,7 @@ class UpdateSalesRuleEntityTest extends Injectable
         // Steps
         $this->promoQuoteIndex->open();
         $this->promoQuoteIndex->getPromoQuoteGrid()->searchAndOpen($filter);
-        $this->promoQuoteEdit->getSalesRuleForm()->fill($salesRule);
+        $this->promoQuoteEdit->getSalesRuleForm()->fill($salesRule, null, $this->replace);
         $this->promoQuoteEdit->getFormPageActions()->save();
     }
 

@@ -40,6 +40,9 @@ class AppIsolation
     {
         if ($this->_hasNonIsolatedTests) {
             $this->_application->reinitialize();
+            $_SESSION = [];
+            $_COOKIE = [];
+            session_write_close();
             $this->_hasNonIsolatedTests = false;
         }
     }

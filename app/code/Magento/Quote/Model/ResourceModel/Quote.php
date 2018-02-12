@@ -177,6 +177,8 @@ class Quote extends AbstractDb
      *
      * @param int $orderIncrementId
      * @return bool
+     * @deprecated
+     * @see \Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed()
      */
     public function isOrderIncrementIdUsed($orderIncrementId)
     {

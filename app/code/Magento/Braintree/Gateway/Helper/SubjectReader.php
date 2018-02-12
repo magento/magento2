@@ -6,10 +6,9 @@
 namespace Magento\Braintree\Gateway\Helper;
 
 use Braintree\Transaction;
-use Magento\Quote\Model\Quote;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class SubjectReader
@@ -118,5 +117,16 @@ class SubjectReader
         }
 
         return $transaction->paypal;
+    }
+
+    /**
+     * Reads store's ID, otherwise returns null.
+     *
+     * @param array $subject
+     * @return int|null
+     */
+    public function readStoreId(array $subject)
+    {
+        return !empty($subject['store_id']) ? $subject['store_id'] : null;
     }
 }

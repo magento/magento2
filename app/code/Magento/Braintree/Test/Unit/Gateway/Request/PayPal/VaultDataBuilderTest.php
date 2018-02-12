@@ -18,14 +18,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReader;
-
-    /**
      * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDataObject;
+    private $paymentDO;
 
     /**
      * @var InfoInterface|MockObject
@@ -39,16 +34,11 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDataObject = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
         $this->paymentInfo = $this->getMock(InfoInterface::class);
 
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readPayment'])
-            ->getMock();
-
-        $this->builder = new VaultDataBuilder($this->subjectReader);
+        $this->builder = new VaultDataBuilder(new SubjectReader());
     }
 
     /**
@@ -60,24 +50,17 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild(array $additionalInfo, array $expected)
     {
         $subject = [
-            'payment' => $this->paymentDataObject
+            'payment' => $this->paymentDO
         ];
 
-        $this->subjectReader->expects(static::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($this->paymentDataObject);
-
-        $this->paymentDataObject->expects(static::once())
-            ->method('getPayment')
+        $this->paymentDO->method('getPayment')
             ->willReturn($this->paymentInfo);
 
-        $this->paymentInfo->expects(static::once())
-            ->method('getAdditionalInformation')
+        $this->paymentInfo->method('getAdditionalInformation')
             ->willReturn($additionalInfo);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**

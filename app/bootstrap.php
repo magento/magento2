@@ -28,6 +28,9 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+// Sets default autoload mappings, may be overridden in Bootstrap::create
+\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
+
 require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */

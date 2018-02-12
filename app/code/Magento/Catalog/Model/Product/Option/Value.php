@@ -191,6 +191,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
+            $this->isDeleted(false);
             $this->setData(
                 $value
             )->setData(

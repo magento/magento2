@@ -80,7 +80,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
     {
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', true, $html);
+        self::assertSelectCount('.normal-price', true, $html);
         self::assertSelectCount('.old-price', true, $html);
     }
 
@@ -103,7 +103,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', $count, $html);
+        self::assertSelectCount('.normal-price', true, $html);
         self::assertSelectCount('.old-price', $count, $html);
     }
 
@@ -114,7 +114,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'is_not_product_list' => [false, true],
-            'is_product_list' => [true, 0],
+            'is_product_list' => [true, false],
         ];
     }
 }

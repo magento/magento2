@@ -124,7 +124,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getAddToCartUrl($product, $additional = [])
     {
-        if ($product->getTypeInstance()->hasRequiredOptions($product)) {
+        if (!$product->getTypeInstance()->isPossibleBuyFromList($product)) {
             if (!isset($additional['_escape'])) {
                 $additional['_escape'] = true;
             }

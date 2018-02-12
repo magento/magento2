@@ -146,6 +146,7 @@
         "magento/module-reports": "100.1.5",
         "magento/module-require-js": "100.1.3",
         "magento/module-review": "100.1.5",
+        "magento/module-robots": "100.1.0",
         "magento/module-rss": "100.1.3",
         "magento/module-rule": "100.1.6",
         "magento/module-sales": "100.1.9",
@@ -225,7 +226,9 @@
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
-            "": "app/code/"
+            "": [
+                "app/code/"
+            ]
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php"

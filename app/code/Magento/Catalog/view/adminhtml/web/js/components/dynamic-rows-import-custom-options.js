@@ -10,21 +10,6 @@ define([
 ], function (DynamicRows, _, utils) {
     'use strict';
 
-    var maxId = 0,
-
-    /**
-     * Stores max option_id value of the options from recordData once on initialization
-     * @param {Array} data - array with records data
-     */
-    initMaxId = function (data) {
-        if (data && data.length) {
-            maxId = _.max(data, function (record) {
-                return parseInt(record['option_id'], 10) || 0;
-            })['option_id'];
-            maxId = parseInt(maxId, 10) || 0;
-        }
-    };
-
     return DynamicRows.extend({
         defaults: {
             mappingSettings: {
@@ -39,18 +24,24 @@ define([
             identificationDRProperty: 'option_id'
         },
 
-        /** @inheritdoc */
-        initialize: function () {
-            this._super();
-            initMaxId(this.recordData());
-
-            return this;
+        /**
+         * Cleans options' values from IDs because otherwise wrong IDs will be assigned.
+         *
+         * @param {Array} values
+         * @private
+         */
+        __cleanOptionValuesUp: function (values) {
+            values.each(function (value) {
+                delete value['option_id'];
+                delete value['option_type_id'];
+            });
         },
 
         /** @inheritdoc */
         processingInsertData: function (data) {
             var options = [],
-                currentOption;
+                currentOption,
+                self = this;
 
             if (!data) {
                 return;
@@ -65,7 +56,14 @@ define([
                     if (currentOption.hasOwnProperty('sort_order')) {
                         delete currentOption['sort_order'];
                     }
-                    currentOption['option_id'] = ++maxId;
+
+                    if (currentOption.hasOwnProperty('option_id')) {
+                        delete currentOption['option_id'];
+                    }
+
+                    if (currentOption.values.length > 0) {
+                        self.__cleanOptionValuesUp(currentOption.values);
+                    }
                     options.push(currentOption);
                 });
             });
@@ -90,9 +88,7 @@ define([
 
         /** @inheritdoc */
         processingAddChild: function (ctx, index, prop) {
-            if (ctx && !_.isNumber(ctx['option_id'])) {
-                ctx['option_id'] = ++maxId;
-            } else if (!ctx) {
+            if (!ctx) {
                 this.showSpinner(true);
                 this.addChild(ctx, index, prop);
 

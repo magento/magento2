@@ -13,7 +13,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
 
-class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class AbstractEntityTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Abstract import entity model
@@ -399,6 +399,36 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
 
         $rowData[$attributeCode] = $data['invalid_value'];
         $this->assertFalse($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0));
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
+    }
+
+    /**
+     * Test for method isAttributeValid() for multiselect attribute with custom separator.
+     *
+     * @return void
+     */
+    public function testMultiSelectIsAttributeValidWithCustomSeparator()
+    {
+        $data = $this->_getDataSet(
+            'test3',
+            'select',
+            '1;3',
+            'custom',
+            null,
+            [1 => 'test1', 2 => 'test2', 3 => 'test3']
+        );
+        $attributeCode = $data['code'];
+        $attributeParams = [
+            'type' => $data['type'],
+            'options' => isset($data['options']) ? $data['options'] : null,
+            'is_unique' => isset($data['is_unique']) ? $data['is_unique'] : null,
+        ];
+
+        $rowData = [$attributeCode => $data['valid_value']];
+        $this->assertTrue($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0, ';'));
+
+        $rowData[$attributeCode] = $data['invalid_value'];
+        $this->assertFalse($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0, ';'));
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
     }
 

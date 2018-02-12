@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab4a3f5ae0ed14a2689221e2220758d2",
+    "content-hash": "241b6caeed7a009dd96c8ae0e02fdb19",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -527,7 +527,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/b53f7c8a037860b467083e94de7c17cfd323e365",
                 "reference": "b53f7c8a037860b467083e94de7c17cfd323e365",
-                "shasum": "2ca1c4e0d2d5e90fa1cd438e4a0775b6c7cbbe1a"
+                "shasum": ""
             },
             "require": {
                 "composer/composer": "1.0.0-beta1",

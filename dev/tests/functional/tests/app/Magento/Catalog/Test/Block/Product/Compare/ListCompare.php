@@ -17,6 +17,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class ListCompare extends Block
 {
     /**
+     * Price displaying format.
+     *
+     * @var int
+     */
+    protected $priceFormat = 2;
+
+    /**
      * Selector by product info.
      *
      * @var string
@@ -87,12 +94,12 @@ class ListCompare extends Block
     protected $messageBlock = '#messages';
 
     /**
-     * Get product info.
+     * Get Product info.
      *
      * @param int $index
      * @param string $attributeKey
      * @param string $currency
-     * @return string
+     * @return string|array
      */
     public function getProductInfo($index, $attributeKey, $currency = ' $')
     {

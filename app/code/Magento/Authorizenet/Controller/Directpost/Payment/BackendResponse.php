@@ -52,7 +52,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      * Response action.
      * Action for Authorize.net SIM Relay Request.
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -67,10 +67,11 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
             $paymentMethod->validateResponse();
         } catch (LocalizedException $e) {
             $this->logger->critical($e->getMessage());
-            $this->_redirect('noroute');
-            return;
+
+            return $this->_redirect('noroute');
         }
         $this->_responseAction('adminhtml');
-        $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }
