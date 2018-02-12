@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateGiftMessageAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -30,14 +30,14 @@ class UpdateGiftMessageAttribute implements DataPatchInterface, PatchVersionInte
 
     /**
      * UpdateGiftMessageAttribute constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -46,10 +46,10 @@ class UpdateGiftMessageAttribute implements DataPatchInterface, PatchVersionInte
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
             $categorySetup->updateAttribute(
@@ -58,7 +58,7 @@ class UpdateGiftMessageAttribute implements DataPatchInterface, PatchVersionInte
                 'source_model',
                 \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class
             );
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

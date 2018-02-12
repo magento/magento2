@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -31,14 +31,14 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
     /**
      * ConvertAdditionalDataToJson constructor.
      * @param FieldDataConverterFactory $fieldDataConverterFactory
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     )
     {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
@@ -47,9 +47,9 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->convertAddDataToJson();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -85,8 +85,8 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
     {
         $fieldConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
             'attribute_id',
             'additional_data'
         );

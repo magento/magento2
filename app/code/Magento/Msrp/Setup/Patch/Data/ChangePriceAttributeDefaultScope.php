@@ -17,9 +17,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -28,13 +28,13 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -45,10 +45,10 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create();
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         $this->changePriceAttributeDefaultScope($categorySetup, $entityTypeId);
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

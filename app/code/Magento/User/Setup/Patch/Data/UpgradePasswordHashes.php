@@ -18,18 +18,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -37,9 +37,9 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->upgradeHash();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -71,7 +71,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
      */
     private function upgradeHash()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $customerEntityTable = $connection->getTableName('admin_user');
 
         $select = $connection->select()->from(

@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class CreateSequence implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var SequenceCreator
@@ -29,14 +29,14 @@ class CreateSequence implements DataPatchInterface, PatchVersionInterface
 
     /**
      * CreateSequence constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param SequenceCreator $sequenceCreator
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         SequenceCreator $sequenceCreator
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->sequenceCreator = $sequenceCreator;
     }
 

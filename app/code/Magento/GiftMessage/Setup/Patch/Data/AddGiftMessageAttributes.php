@@ -16,9 +16,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddGiftMessageAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -37,18 +37,18 @@ class AddGiftMessageAttributes implements DataPatchInterface, PatchVersionInterf
 
     /**
      * AddGiftMessageAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory,
         QuoteSetupFactory $quoteSetupFactory,
         SalesSetupFactory $salesSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
@@ -65,13 +65,13 @@ class AddGiftMessageAttributes implements DataPatchInterface, PatchVersionInterf
         $options = ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false];
         $entities = ['quote', 'quote_address', 'quote_item', 'quote_address_item'];
         /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $this->moduleDataSetup]);
         foreach ($entities as $entity) {
             $quoteSetup->addAttribute($entity, 'gift_message_id', $options);
         }
 
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $salesSetup = $this->salesSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $salesSetup->addAttribute('order', 'gift_message_id', $options);
         $salesSetup->addAttribute('order_item', 'gift_message_id', $options);
         /**
@@ -79,7 +79,7 @@ class AddGiftMessageAttributes implements DataPatchInterface, PatchVersionInterf
          */
         $salesSetup->addAttribute('order_item', 'gift_message_available', $options);
         /** @var \Magento\Catalog\Setup\CategorySetup $catalogSetup */
-        $catalogSetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $catalogSetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $catalogSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'gift_message_available',

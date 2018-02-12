@@ -16,18 +16,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateQuoteShippingAddresses implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -36,37 +36,39 @@ class UpdateQuoteShippingAddresses implements DataPatchInterface, PatchVersionIn
     public function apply()
     {
         // setup default
-        $this->resourceConnection->getConnection()->startSetup();
-        $connection = $this->resourceConnection->getConnection();
+        $this->moduleDataSetup->getConnection()->startSetup();
+        $connection = $this->moduleDataSetup->getConnection();
+        $salesConnection = $this->moduleDataSetup->getConnection('sales');
+        $checkoutConnection = $this->moduleDataSetup->getConnection('checkout');
         $connection->update(
             $connection->getTableName('salesrule'),
             ['simple_free_shipping' => 0],
             [new \Zend_Db_Expr('simple_free_shipping IS NULL')]
         );
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
 
         // setup sales
-        $this->resourceConnection->getConnection('sales')->startSetup();
-        $this->resourceConnection->getConnection('sales')->update(
-            $this->resourceConnection->getConnection('sales')->getTableName('sales_order_item'),
+        $salesConnection->startSetup();
+        $salesConnection->update(
+            $salesConnection->getTableName('sales_order_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
-        $this->resourceConnection->getConnection('sales')->endSetup();
+        $salesConnection->endSetup();
 
         // setup checkout
-        $this->resourceConnection->getConnection('checkout')->startSetup();
-        $this->resourceConnection->getConnection('checkout')->update(
-            $this->resourceConnection->getConnection('checkout')->getTableName('quote_address'),
+        $checkoutConnection->startSetup();
+        $checkoutConnection->update(
+            $checkoutConnection->getTableName('quote_address'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
-        $this->resourceConnection->getConnection('checkout')->update(
-            $this->resourceConnection->getConnection('checkout')->getTableName('quote_item'),
+        $checkoutConnection->update(
+            $checkoutConnection->getTableName('quote_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
-        $this->resourceConnection->getConnection('checkout')->endSetup();
+        $checkoutConnection->endSetup();
     }
 
     /**

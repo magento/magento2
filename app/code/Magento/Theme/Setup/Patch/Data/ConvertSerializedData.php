@@ -20,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -36,16 +36,16 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 
     /**
      * ConvertSerializedData constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
     }
@@ -55,9 +55,9 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->convertSerializedData();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -103,8 +103,8 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
             ]
         );
         $fieldDataConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             'config_id',
             'value',
             $queryModifier

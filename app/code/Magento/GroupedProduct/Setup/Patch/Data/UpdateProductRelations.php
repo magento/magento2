@@ -20,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateProductRelations implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var Relation
@@ -31,13 +31,13 @@ class UpdateProductRelations implements DataPatchInterface, PatchVersionInterfac
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $relationProcessor
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->relationProcessor = $relationProcessor;
     }
 
@@ -46,9 +46,9 @@ class UpdateProductRelations implements DataPatchInterface, PatchVersionInterfac
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
-            $connection = $this->resourceConnection->getConnection();
+            $connection = $this->moduleDataSetup->getConnection();
             $select = $connection->select()
                 ->from(
                     $this->relationProcessor->getTable('catalog_product_link'),
@@ -65,7 +65,7 @@ class UpdateProductRelations implements DataPatchInterface, PatchVersionInterfac
                 )
             );
 
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

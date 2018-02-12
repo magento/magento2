@@ -23,9 +23,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallEntityTypes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QuoteSetupFactory
@@ -34,14 +34,14 @@ class InstallEntityTypes implements DataPatchInterface, PatchVersionInterface
 
     /**
      * InstallEntityTypes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QuoteSetupFactory $quoteSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->quoteSetupFactory = $quoteSetupFactory;
     }
 

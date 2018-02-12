@@ -21,9 +21,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QuoteSetupFactory
@@ -37,16 +37,16 @@ class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInt
 
     /**
      * InitQuoteAndOrderAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QuoteSetupFactory $quoteSetupFactory,
         SalesSetupFactory $salesSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
     }

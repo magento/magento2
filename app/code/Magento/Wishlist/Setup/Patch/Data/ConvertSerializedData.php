@@ -21,9 +21,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -42,19 +42,19 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 
     /**
      * ConvertSerializedData constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      * @param QueryGenerator $queryGenerator
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory,
         QueryGenerator $queryGenerator
 
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->queryGenerator = $queryGenerator;
@@ -94,7 +94,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
     
     private function convertSerializedData()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
             'in',

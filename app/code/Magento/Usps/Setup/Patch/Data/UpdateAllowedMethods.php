@@ -17,18 +17,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpdateAllowedMethods constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -36,7 +36,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $configDataTable = $connection->getTableName('core_config_data');
         $oldToNewMethodCodesMap = [
             'First-Class' => '0_FCLE',

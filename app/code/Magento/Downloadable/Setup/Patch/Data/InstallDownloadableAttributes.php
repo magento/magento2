@@ -20,7 +20,7 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 

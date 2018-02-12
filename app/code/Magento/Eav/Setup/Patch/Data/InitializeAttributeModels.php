@@ -19,30 +19,24 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitializeAttributeModels implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
     /**
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
 
     /**
      * InitializeAttributeModels constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->eavSetupFactory = $eavSetupFactory;
         $this->moduleDataSetup = $moduleDataSetup;
     }
@@ -115,8 +109,7 @@ class InitializeAttributeModels implements DataPatchInterface, PatchVersionInter
         $migrationSetup->doUpdateClassAliases();
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create([
-            'setup' => $this->moduleDataSetup,
-            'resourceConnection' => $this->resourceConnection
+            'setup' => $this->moduleDataSetup
         ]);
         $groups = $eavSetup->getAttributeGroupCollectionFactory();
         foreach ($groups as $group) {

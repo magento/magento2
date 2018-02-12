@@ -18,24 +18,17 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
-     * @var ModuleDataSetupInterface
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->moduleDataSetup = $moduleDataSetup;
     }
 

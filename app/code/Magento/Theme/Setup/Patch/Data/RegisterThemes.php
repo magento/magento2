@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class RegisterThemes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
     /**
      * @var Registration
      */
@@ -28,14 +28,14 @@ class RegisterThemes implements DataPatchInterface, PatchVersionInterface
 
     /**
      * RegisterThemes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param Registration $themeRegistration
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         Registration $themeRegistration
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->themeRegistration = $themeRegistration;
     }
 

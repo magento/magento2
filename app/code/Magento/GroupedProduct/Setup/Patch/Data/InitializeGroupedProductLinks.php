@@ -20,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
@@ -31,14 +31,14 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
 
     /**
      * InitializeGroupedProductLinks constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -54,24 +54,24 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
             'link_type_id' => \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
             'code' => 'super',
         ];
-        $this->resourceConnection->getConnection()->insertOnDuplicate(
-            $this->resourceConnection->getConnection()->getTableName('catalog_product_link_type'),
+        $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+            $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_type'),
             $data
         );
 
         /**
          * Install grouped product link attributes
          */
-        $select = $this->resourceConnection->getConnection()
+        $select = $this->moduleDataSetup->getConnection()
             ->select()
             ->from(
-                ['c' => $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute')]
+                ['c' => $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute')]
             )
             ->where(
                 "c.link_type_id=?",
                 \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
             );
-        $result = $this->resourceConnection->getConnection()->fetchAll($select);
+        $result = $this->moduleDataSetup->getConnection()->fetchAll($select);
         if (!$result) {
             $data = [
                 [
@@ -85,13 +85,13 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
                     'data_type' => 'decimal'
                 ],
             ];
-            $this->resourceConnection->getConnection()->insertMultiple(
-                $this->resourceConnection->getConnection()->getTableName('catalog_product_link_attribute'),
+            $this->moduleDataSetup->getConnection()->insertMultiple(
+                $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute'),
                 $data
             );
         }
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $field = 'country_of_manufacture';
         $applyTo = explode(',', $eavSetup->getAttribute(Product::ENTITY, $field, 'apply_to'));
         if (!in_array('grouped', $applyTo)) {

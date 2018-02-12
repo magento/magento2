@@ -22,9 +22,9 @@ use Magento\Widget\Setup\LayoutUpdateConverter;
 class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QueryModifierFactory
@@ -38,14 +38,14 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 
     /**
      * ConvertSerializedData constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QueryModifierFactory $queryModifierFactory,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
     }
@@ -99,19 +99,19 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
             [
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->resourceConnection->getConnection()->getTableName('widget_instance'),
+                    $this->moduleDataSetup->getConnection()->getTableName('widget_instance'),
                     'instance_id',
                     'widget_parameters'
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->resourceConnection->getConnection()->getTableName('layout_update'),
+                    $this->moduleDataSetup->getConnection()->getTableName('layout_update'),
                     'layout_update_id',
                     'xml',
                     $layoutUpdateQueryModifier
                 ),
             ],
-            $this->resourceConnection->getConnection()
+            $this->moduleDataSetup->getConnection()
         );
 
     }

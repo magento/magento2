@@ -19,18 +19,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class SetCreditCardAsDefaultTokenType implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * SetCreditCardAsDefaultTokenType constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -38,19 +38,19 @@ class SetCreditCardAsDefaultTokenType implements DataPatchInterface, PatchVersio
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         // data update for Vault module < 2.0.1
         // update sets credit card as default token type
-        $this->resourceConnection->getConnection()->update(
-            $this->resourceConnection->getConnection()->getTableName('vault_payment_token'),
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getConnection()->getTableName('vault_payment_token'),
             [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
             ],
             PaymentTokenInterface::TYPE . ' = ""'
         );
 
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

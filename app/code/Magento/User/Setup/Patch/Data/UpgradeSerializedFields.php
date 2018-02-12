@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -30,14 +30,14 @@ class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * UpgradeSerializedFields constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         FieldDataConverterFactory $fieldDataConverterFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
@@ -46,9 +46,9 @@ class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterfa
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->upgradeSerializedFields();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -84,8 +84,8 @@ class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterfa
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('admin_user'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('admin_user'),
             'user_id',
             'extra'
         );

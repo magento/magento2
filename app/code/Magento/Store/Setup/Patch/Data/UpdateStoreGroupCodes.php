@@ -17,18 +17,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpdateStoreGroupCodes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -44,7 +44,7 @@ class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
      */
     private function updateStoreGroupCodes()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $storeGroupTable = $connection->getTableName('store_group');
         $select = $connection->select()->from(
             $storeGroupTable,
