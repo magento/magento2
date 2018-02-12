@@ -57,7 +57,8 @@ class StockItemImporter implements StockItemImporterInterface
                 function ($stockItemData) {
                     unset($stockItemData['sku']);
                     return $stockItemData;
-                }, array_values($stockData)
+                },
+                array_values($stockData)
             );
             $stockItemResource->getConnection()->insertOnDuplicate($entityTable, $stockImportData);
         } catch (\Exception $e) {

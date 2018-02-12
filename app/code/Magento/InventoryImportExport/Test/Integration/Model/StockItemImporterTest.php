@@ -24,7 +24,7 @@ class StockItemImporterTest extends TestCase
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
-    
+
     /**
      * @var StockItemImporterInterface
      */
@@ -76,14 +76,15 @@ class StockItemImporterTest extends TestCase
      */
     public function testSourceItemImportWithDefaultSource()
     {
-        $productId  = $this->productIdBySku->execute(['SKU-1'])['SKU-1'];
+        $productId = $this->productIdBySku->execute(['SKU-1'])['SKU-1'];
         $stockData = [
-            'SKU-1' => [
+            [
+                'sku' => 'SKU-1',
                 'qty' => 1,
                 'is_in_stock' => SourceItemInterface::STATUS_IN_STOCK,
-                "product_id" => $productId,
-                "website_id"=> 0,
-                "stock_id"=> "1"
+                'product_id' => $productId,
+                'website_id' => 0,
+                'stock_id' => '1',
             ]
         ];
 
@@ -94,7 +95,7 @@ class StockItemImporterTest extends TestCase
             SourceItemInterface::SKU => 'SKU-1',
             SourceItemInterface::QUANTITY => '1.0000',
             SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK
+            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK,
         ];
 
         $this->assertArrayHasKey('SKU-1', $compareData);
@@ -123,6 +124,7 @@ class StockItemImporterTest extends TestCase
 
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $searchCriteriaBuilder->create();
+
         return $this->sourceItemRepository->getList($searchCriteria);
     }
 
@@ -138,9 +140,10 @@ class StockItemImporterTest extends TestCase
                 SourceItemInterface::SKU => $sourceItem->getSku(),
                 SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
                 SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
-                SourceItemInterface::STATUS => $sourceItem->getStatus()
+                SourceItemInterface::STATUS => $sourceItem->getStatus(),
             ];
         }
+
         return $comparableArray;
     }
 }
