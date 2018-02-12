@@ -82,7 +82,7 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     /**
      * Fill attribute table for sales rule
      */
-    private function fillSalesRuleProductAttributeTable()
+    public function fillSalesRuleProductAttributeTable()
     {
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
         $ruleCollection = $this->ruleColletionFactory->create();

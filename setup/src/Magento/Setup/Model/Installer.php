@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;

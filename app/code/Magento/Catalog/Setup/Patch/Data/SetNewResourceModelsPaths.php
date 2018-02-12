@@ -85,7 +85,6 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
             'entity_attribute_collection',
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         );
-
     }
 
     /**
@@ -94,7 +93,7 @@ class SetNewResourceModelsPaths implements DataPatchInterface, PatchVersionInter
     public static function getDependencies()
     {
         return [
-            RemoveGroupPrice::class,
+            InstallDefaultCategories::class,
         ];
     }
 

@@ -115,7 +115,7 @@ class PatchApplier
     private function skipByBackwardIncompatability(string $patchClassName, $moduleName)
     {
         $dbVersion = $this->moduleResource->getDataVersion($moduleName);
-        return $patchClassName instanceof PatchVersionInterface &&
+        return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
             version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
     }
 
@@ -131,7 +131,6 @@ class PatchApplier
         $registry = $this->prepareRegistry($dataPatches);
         $adapter = $this->resourceConnection->getConnection();
         foreach ($registry as $dataPatch) {
-
             /**
              * Due to bacward compatabilities reasons some patches should be skipped
              */
