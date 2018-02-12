@@ -897,7 +897,12 @@ class Checkout
     {
         // Exported data is more priority if we came from Express Checkout button
         $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
-        if (!$isButton) {
+
+        // Since country is required field for billing and shipping address,
+        // we consider the address information to be empty if country is empty.
+        $isEmptyAddress = ($address->getCountryId() === null);
+
+        if (!$isButton && !$isEmptyAddress) {
             return;
         }
 
