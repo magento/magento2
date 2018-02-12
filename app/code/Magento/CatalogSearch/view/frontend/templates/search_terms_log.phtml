@@ -5,15 +5,14 @@
  */
 // @codingStandardsIgnoreFile
 ?>
-<?php if ($block->isAjaxInsert()): ?>
+<?php if ($block->getSearchTermsLog()->isPageCacheable()): ?>
     <script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_CatalogSearch/js/search_terms_log": {
-                "url": "<?= /* @escapeNotVerified */ $block->getUrl('catalogsearch/searchTermsLog/save') ?>",
-                "query": "<?= /* @escapeNotVerified */ $block->getQuery()->getQueryText() ?>"
-            }
-        }
-    }
+    <?= json_encode([
+            '*' => [
+                  'Magento_CatalogSearch/js/search_terms_log' => [
+                          'url' => $block->getUrl('catalogsearch/searchTermsLog/save')
+                ]
+            ]
+    ]); ?>
 </script>
 <?php endif; ?>

@@ -8,15 +8,24 @@ define([
 ], function ($) {
     'use strict';
 
+    /**
+     * Return url param.
+     * @param {String} name
+     * @returns {String}
+     */
+    function urlParam(name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
     return function (data) {
-        var url = data.url,
-            query = data.query;
+        var url = data.url;
 
         $.ajax({
             method: 'GET',
             url: url,
             data: {
-                'q': query
+                'q': urlParam('q')
             },
             cache: false
         }).done();

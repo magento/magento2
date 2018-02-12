@@ -5,59 +5,34 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Search\Model\QueryFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Block for logging search terms on cached pages
- *
- * @api
+ * Class for logging search terms on cached pages
  */
-class SearchTermsLog extends Template
+class SearchTermsLog implements ArgumentInterface
 {
-    /**
-     * @var QueryFactory
-     */
-    private $queryFactory;
-
     /**
      * @var \Magento\Framework\App\ResponseInterface
      */
     private $response;
 
     /**
-     * @param Context $context
-     * @param QueryFactory $queryFactory
-     * @param array $data
+     * @param ResponseInterface $response
      */
     public function __construct(
-        Context $context,
-        QueryFactory $queryFactory,
-        \Magento\Framework\App\ResponseInterface $response,
-        array $data = []
+        ResponseInterface $response
     ) {
-        $this->queryFactory = $queryFactory;
         $this->response = $response;
-        parent::__construct($context, $data);
     }
 
     /**
-     * Retrieve query model object
-     *
-     * @return \Magento\Search\Model\Query
-     */
-    public function getQuery()
-    {
-        return $this->queryFactory->get();
-    }
-
-    /**
-     * Insert ajax block for logging search terms on cached pages
+     * Check is current page cacheable
      *
      * @return bool
      */
-    public function isAjaxInsert()
+    public function isPageCacheable()
     {
         $pragma = $this->response->getHeader('pragma')->getFieldValue();
         return ($pragma == 'cache');
