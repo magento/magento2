@@ -71,6 +71,16 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
+    <!--Search product grid with keyword search-->
+    <actionGroup name="searchProductGridByKeyword">
+        <arguments>
+            <argument name="keyword"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearch"/>
+    </actionGroup>
+
     <!--Filter product grid by name, sku, and type; and see expected product-->
     <actionGroup name="viewProductInAdminGrid">
         <arguments>
