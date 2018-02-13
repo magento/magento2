@@ -27,7 +27,7 @@
         "vlucas/phpdotenv": "~2.4"
     },
     "replace": {
-        "magento/magento2-functional-test-module-marketplace": "100.0.0-dev",
+        "magento/magento2-functional-test-framework": "100.0.0-dev",
         "magento/magento2-functional-test-module-admin-notification": "100.0.0-dev",
         "magento/magento2-functional-test-module-advanced-pricing-import-export": "100.0.0-dev",
         "magento/magento2-functional-test-module-authorization": "100.0.0-dev",
@@ -54,6 +54,7 @@
         "magento/magento2-functional-test-module-config": "100.0.0-dev",
         "magento/magento2-functional-test-module-configurable-import-export": "100.0.0-dev",
         "magento/magento2-functional-test-module-configurable-product": "100.0.0-dev",
+        "magento/magento2-functional-test-module-configurable-product-wishlist": "100.0.0-dev",
         "magento/magento2-functional-test-module-configurable-product-sales": "100.0.0-dev",
         "magento/magento2-functional-test-module-contact": "100.0.0-dev",
         "magento/magento2-functional-test-module-cookie": "100.0.0-dev",
@@ -83,6 +84,7 @@
         "magento/magento2-functional-test-module-instant-purchase": "100.0.0-dev",
         "magento/magento2-functional-test-module-integration": "100.0.0-dev",
         "magento/magento2-functional-test-module-layered-navigation": "100.0.0-dev",
+        "magento/magento2-functional-test-module-marketplace": "100.0.0-dev",
         "magento/magento2-functional-test-module-media-storage": "100.0.0-dev",
         "magento/magento2-functional-test-module-msrp": "100.0.0-dev",
         "magento/magento2-functional-test-module-multishipping": "100.0.0-dev",
