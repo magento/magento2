@@ -626,8 +626,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            var_dump($dir);
-            mkdir($dir);
+            mkdir($dir, 0777, true);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
