@@ -35,7 +35,7 @@ class NextChainPatch implements
     /**
      * @return string
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '0.0.6';
     }

@@ -36,7 +36,7 @@ class IncrementalSomeIntegerPatch implements
     /**
      * @return string
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '1.0.5';
     }

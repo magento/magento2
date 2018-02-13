@@ -218,18 +218,21 @@ class PatchApplier
         $adapter = $this->resourceConnection->getConnection();
 
         foreach ($registry->getReverseIterator() as $dataPatch) {
+            $dataPatch = $this->objectManager->create(
+                '\\' . $dataPatch,
+                ['moduleDataSetup' => $this->moduleDataSetup]
+            );
             if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
                     $adapter->beginTransaction();
                     /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
-                    $dataPatch = $this->patchFactory->create($dataPatch, ['moduleDataSetup' => $this->moduleDataSetup]);
                     $dataPatch->revert();
                     $this->patchHistory->revertPatchFromHistory($dataPatch);
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
                     throw new Exception($e->getMessage());
-                }finally {
+                } finally {
                     unset($dataPatch);
                 }
             }
