@@ -39,7 +39,7 @@ class RequestProcessorPool implements RequestProcessorInterface
         /**
          * @var RequestProcessorInterface $processor
          */
-        foreach ($this->requestProcessors as $name => $processor) {
+        foreach ($this->requestProcessors as $processor) {
             if (strpos(ltrim($request->getPathInfo(), '/'), $processor->getProcessorPath()) === 0) {
                 $processor->process($request);
                 $processed = true;
@@ -47,8 +47,11 @@ class RequestProcessorPool implements RequestProcessorInterface
             }
         }
         if (!$processed) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Specified request cannot be processed.'),
-                null, 400);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Specified request cannot be processed.'),
+                null,
+                400
+            );
         }
     }
 
@@ -67,6 +70,6 @@ class RequestProcessorPool implements RequestProcessorInterface
      */
     public function getProcessorPath()
     {
-        return;
+        return null;
     }
 }

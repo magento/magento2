@@ -165,9 +165,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList = $areaList;
         $this->paramsOverrider = $paramsOverrider;
         $this->storeManager = $storeManager;
-        $this->requestProcessorPool =
-            \Magento\Framework\App\ObjectManager::getInstance()
-                                                ->get(\Magento\Webapi\Controller\Rest\RequestProcessorInterface::class);
+        $this->requestProcessorPool = $requestProcessorPool;
     }
 
     /**
@@ -210,7 +208,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return Route
      * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
+     * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
     {
@@ -247,7 +245,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
      * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\RequestValidator::validate
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
     {
