@@ -555,6 +555,9 @@ class Application
             if ($file !== $targetFile) {
                 copy($file, $targetFile);
             }
+            #if (!file_exists($targetFile)) {
+                var_dump($targetFile, $this->_globalConfigDir, $file);
+            #}
         }
     }
 
