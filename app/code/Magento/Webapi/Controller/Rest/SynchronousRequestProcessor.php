@@ -115,5 +115,4 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     {
         return self::PROCESSOR_PATH;
     }
-
 }

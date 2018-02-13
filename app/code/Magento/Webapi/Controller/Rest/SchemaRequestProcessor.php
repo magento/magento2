@@ -67,5 +67,4 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     {
         return self::PROCESSOR_PATH;
     }
-
 }

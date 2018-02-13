@@ -190,7 +190,6 @@ class RestTest extends \PHPUnit\Framework\TestCase
                  ->disableOriginalConstructor()
                  ->getMock();
 
-
         $this->requestProcessorPool = $objectManager->getObject(
             \Magento\Webapi\Controller\Rest\RequestProcessorPool::class,
             [
@@ -276,7 +275,13 @@ class RestTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock->expects($this->any())
                            ->method('getParam')
                            ->will(
-                               $this->returnValueMap( [[\Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES, null, 'all'],])
+                               $this->returnValueMap([
+                                   [
+                                       \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES,
+                                       null,
+                                       'all',
+                                   ],
+                               ])
                            );
         $this->_requestMock->expects($this->any())
                            ->method('getParams')

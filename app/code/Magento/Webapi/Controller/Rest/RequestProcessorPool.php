@@ -47,7 +47,8 @@ class RequestProcessorPool implements RequestProcessorInterface
             }
         }
         if (!$processed) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Specified request cannot be processed.'), null, 400);
+            throw new \Magento\Framework\Exception\LocalizedException(__('Specified request cannot be processed.'),
+                null, 400);
         }
     }
 
@@ -68,5 +69,4 @@ class RequestProcessorPool implements RequestProcessorInterface
     {
         return;
     }
-
 }

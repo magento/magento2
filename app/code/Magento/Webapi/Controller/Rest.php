@@ -167,7 +167,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->storeManager = $storeManager;
         $this->requestProcessorPool =
             \Magento\Framework\App\ObjectManager::getInstance()
-                                                ->get('Magento\Webapi\Controller\Rest\RequestProcessorInterface');
+                                                ->get(\Magento\Webapi\Controller\Rest\RequestProcessorInterface::class);
     }
 
     /**
