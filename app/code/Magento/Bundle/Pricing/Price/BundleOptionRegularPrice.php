@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
@@ -12,28 +14,17 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 /**
  * Bundle option price model with final price
  */
-class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterface
+class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPriceInterface
 {
     /**
      * Price model code
      */
-    const PRICE_CODE = 'bundle_option';
+    const PRICE_CODE = 'bundle_option_regular_price';
 
     /**
      * @var BundleCalculatorInterface
      */
     protected $calculator;
-
-    /**
-     * @var BundleSelectionFactory
-     * @deprecated
-     */
-    protected $selectionFactory;
-
-    /**
-     * @var float|bool|null
-     */
-    protected $maximalPrice;
 
     /**
      * @var \Magento\Bundle\Pricing\Price\BundleOptions
@@ -45,22 +36,18 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param BundleSelectionFactory $bundleSelectionFactory
-     * @param BundleOptions|null $bundleOptions
+     * @param BundleOptions $bundleOptions
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        BundleSelectionFactory $bundleSelectionFactory,
-        BundleOptions $bundleOptions = null
+        BundleOptions $bundleOptions
     ) {
-        $this->selectionFactory = $bundleSelectionFactory;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
-        $this->bundleOptions = $bundleOptions ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Bundle\Pricing\Price\BundleOptions::class);
+        $this->bundleOptions = $bundleOptions;
     }
 
     /**
@@ -72,20 +59,6 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
             $this->value = $this->bundleOptions->calculateOptions($this->product);
         }
         return $this->value;
-    }
-
-    /**
-     * Getter for maximal price of options
-     *
-     * @return bool|float
-     * @deprecated
-     */
-    public function getMaxValue()
-    {
-        if (null === $this->maximalPrice) {
-            $this->maximalPrice = $this->bundleOptions->calculateOptions($this->product, false);
-        }
-        return $this->maximalPrice;
     }
 
     /**
@@ -109,19 +82,8 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         return $this->bundleOptions->getOptionSelectionAmount(
             $this->product,
             $selection,
-            false
+            true
         );
-    }
-
-    /**
-     * Calculate maximal or minimal options value
-     *
-     * @param bool $searchMin
-     * @return bool|float
-     */
-    protected function calculateOptions($searchMin = true)
-    {
-        return $this->bundleOptions->calculateOptions($this->product, $searchMin);
     }
 
     /**
