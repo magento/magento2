@@ -626,6 +626,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
+            var_dump($dir);
             mkdir($dir);
             umask($old);
         } elseif (!is_dir($dir)) {
