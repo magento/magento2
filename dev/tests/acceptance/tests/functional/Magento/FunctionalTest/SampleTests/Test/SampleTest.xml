@@ -56,7 +56,7 @@
         <dontSeeCookie userInput="cookieName" stepKey="dontSeeCookie1"/>
         <dontSeeCookie userInput="cookieName" parameterArray="['domainName' => 'stuff']" stepKey="dontSeeCookie2"/>
         <dontSeeCurrentUrlEquals url="/stuff" stepKey="dontSeeCurrentUrlEquals"/>
-        <dontSeeCurrentUrlMatches url="~$/users/(\d+)~" stepKey="dontSeeCurrentUrlMatches"/>
+        <dontSeeCurrentUrlMatches regex="~$/users/(\d+)~" stepKey="dontSeeCurrentUrlMatches"/>
         <dontSeeElement selector=".error" stepKey="dontSeeElement1"/>
         <dontSeeElement selector="input" parameterArray="['name' => 'login']" stepKey="dontSeeElement2"/>
         <dontSeeElementInDOM selector="#stuff" stepKey="dontSeeElementInDOM1"/>
@@ -79,7 +79,7 @@
         <fillField selectorArray="['name' => 'email']" userInput="stuff" stepKey="fillField2"/>
         <grabAttributeFrom selector="#target" userInput="title" stepKey="grabAttributeFrom"/>
         <grabCookie userInput="cookie" parameterArray="['domain' => 'www.google.com']" stepKey="grabCookie"/>
-        <grabFromCurrentUrl url="~$/user/(\d+)/~" stepKey="grabFromCurrentUrl"/>
+        <grabFromCurrentUrl regex="~$/user/(\d+)/~" stepKey="grabFromCurrentUrl"/>
         <grabMultiple selector="a" userInput="href" stepKey="grabMultiple"/>
         <grabPageSource stepKey="grabPageSource1"/>
         <grabTextFrom selector="h1" stepKey="grabTextFrom1"/>
@@ -119,7 +119,7 @@
         <seeCookie userInput="PHPSESSID" stepKey="seeCookie1"/>
         <seeCookie userInput="PHPSESSID" parameterArray="['domainName' => 'www.google.com']" stepKey="seeCookie2"/>
         <seeCurrentUrlEquals url="/" stepKey="seeCurrentUrlEquals"/>
-        <seeCurrentUrlMatches url="~$/users/(\d+)~" stepKey="seeCurrentUrlMatches"/>
+        <seeCurrentUrlMatches regex="~$/users/(\d+)~" stepKey="seeCurrentUrlMatches"/>
         <seeElement selector=".error" stepKey="seeElement1"/>
         <seeElement selectorArray="['css' => 'form input']" stepKey="seeElement2"/>
         <seeElement selector=".error" parameterArray="['name' => 'login']" stepKey="seeElement3"/>
@@ -217,7 +217,7 @@
         <dontSee userInput="{$randomStuff}" stepKey="dontSee1"/>
         <dontSeeCookie userInput="{$randomStuff}" stepKey="dontSeeCookie1"/>
         <dontSeeCurrentUrlEquals url="{$randomStuff}" stepKey="dontSeeCurrentUrlEquals1"/>
-        <dontSeeCurrentUrlMatches url="{$randomStuff}" stepKey="dontSeeCurrentUrlMatches1"/>
+        <dontSeeCurrentUrlMatches regex="{$randomStuff}" stepKey="dontSeeCurrentUrlMatches1"/>
         <dontSeeInCurrentUrl url="{$randomStuff}" stepKey="dontSeeInCurrentUrl1"/>
         <dontSeeInField selector="#stuff" userInput="{$randomStuff}" stepKey="dontSeeInField1"/>
         <dontSeeInPageSource userInput="{$randomStuff}" stepKey="dontSeeInPageSource1"/>
@@ -227,7 +227,7 @@
         <fillField userInput="{$randomStuff}" selector="#field" stepKey="fillField1"/>
         <grabAttributeFrom selector="#stuff" userInput="{$randomStuff}" stepKey="grabAttributeFrom1"/>
         <grabCookie userInput="{$randomStuff}" stepKey="grabValueFrom1"/>
-        <grabFromCurrentUrl url="{$randomStuff}" stepKey="grabFromCurrentUrl"/>
+        <grabFromCurrentUrl regex="{$randomStuff}" stepKey="grabFromCurrentUrl"/>
         <grabMultiple selector="a" userInput="{$randomStuff}" stepKey="grabMultiple1"/>
         <loadSessionSnapshot userInput="{$randomStuff}" stepKey="loadSessionSnapshot"/>
         <pressKey selector="a" userInput="{$randomStuff}" stepKey="pressKey1"/>
@@ -235,7 +235,7 @@
         <see userInput="{$randomStuff}" stepKey="see1"/>
         <seeCookie userInput="{$randomStuff}" stepKey="seeCookie1"/>
         <seeCurrentUrlEquals url="{$randomStuff}" stepKey="seeCurrentUrlEquals1"/>
-        <seeCurrentUrlMatches url="{$randomStuff}" stepKey="seeCurrentUrlMatches1"/>
+        <seeCurrentUrlMatches regex="{$randomStuff}" stepKey="seeCurrentUrlMatches1"/>
         <seeInCurrentUrl url="{$randomStuff}" stepKey="seeInCurrentUrl1"/>
         <seeInField selector="a" userInput="{$randomStuff}" stepKey="seeInField1"/>
         <seeInPopup userInput="{$randomStuff}" stepKey="seeInPopup"/>
@@ -245,9 +245,9 @@
         <seeOptionIsSelected selector="#stuff" userInput="{$randomStuff}" stepKey="seeOptionIsSelected1"/>
         <selectOption selector="#stuff" userInput="{$randomStuff}" stepKey="selectOption1"/>
         <switchToIFrame userInput="{$randomStuff}" stepKey="switchToIFrame1"/>
-        <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab1"/>
+        <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab2"/>
         <switchToPreviousTab userInput="{$randomStuff}" stepKey="switchToPreviousTab1"/>
-        <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab1"/>
+        <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab3"/>
         <switchToWindow userInput="{$randomStuff}" stepKey="switchToWindow1"/>
         <typeInPopup userInput="{$randomStuff}" stepKey="typeInPopup"/>
         <unselectOption selector="#option" userInput="{$randomStuff}" stepKey="unselectOption1"/>

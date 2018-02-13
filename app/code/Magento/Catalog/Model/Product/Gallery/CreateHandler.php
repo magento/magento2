@@ -245,12 +245,13 @@ class CreateHandler implements ExtensionInterface
             if (empty($image['removed'])) {
                 $data = $this->processNewImage($product, $image);
 
-                $this->resourceModel->deleteGalleryValueInStore(
-                    $image['value_id'],
-                    $product->getData($this->metadata->getLinkField()),
-                    $product->getStoreId()
-                );
-
+                if (!$product->isObjectNew()) {
+                    $this->resourceModel->deleteGalleryValueInStore(
+                        $image['value_id'],
+                        $product->getData($this->metadata->getLinkField()),
+                        $product->getStoreId()
+                    );
+                }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
