@@ -543,7 +543,7 @@ class Application
      *
      * @return void
      */
-    public function copyAppConfigFiles()
+    private function copyAppConfigFiles()
     {
         $globalConfigFiles = Glob::glob(
             $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
@@ -555,9 +555,6 @@ class Application
             if ($file !== $targetFile) {
                 copy($file, $targetFile);
             }
-            #if (!file_exists($targetFile)) {
-                var_dump($targetFile, $this->_globalConfigDir, $file);
-            #}
         }
     }
 

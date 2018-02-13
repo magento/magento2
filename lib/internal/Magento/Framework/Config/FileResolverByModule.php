@@ -7,6 +7,7 @@ namespace Magento\Framework\Config;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Oauth\Exception;
 
 /**
  * Application config file resolver.
@@ -54,10 +55,12 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
             $path .= DIRECTORY_SEPARATOR . Dir::MODULE_ETC_DIR . DIRECTORY_SEPARATOR . $filename;
             $iterator = isset($iterator[$path]) ? [$path => $iterator[$path]] : [];
         }
-
+        $primaryFile = parent::get($filename, 'primary')->toArray();
+        if (!file_exists(key($primaryFile))) {
+            throw  new Exception("Primary db_schema file doesn`t exists");
+        }
         /** Load primary configurations */
-        $iterator += parent::get($filename, 'primary')->toArray();
-
+        $iterator += $primaryFile;
         return $iterator;
     }
 }

@@ -73,7 +73,6 @@ try {
     if ($settings->getAsBoolean('TESTS_CLEANUP')) {
         $application->cleanup();
     }
-    $application->copyAppConfigFiles();
     if (!$application->isInstalled()) {
         $application->install($settings->getAsBoolean('TESTS_CLEANUP'));
     }
