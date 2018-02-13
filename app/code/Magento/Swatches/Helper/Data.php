@@ -176,7 +176,7 @@ class Data
      * @param string $attributeCode
      * @return bool
      */
-    private function isMediaAvailable(ModelProduct $product, string $attributeCode)
+    private function isMediaAvailable(ModelProduct $product, string $attributeCode): bool
     {
         $isAvailable = false;
 
