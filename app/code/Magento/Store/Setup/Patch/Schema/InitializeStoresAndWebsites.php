@@ -4,52 +4,56 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Store\Setup;
+namespace Magento\Store\Setup\Patch\Schema;
 
 use Magento\Catalog\Helper\DefaultCategory;
-use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Setup\Model\Patch\SchemaPatchInterface;
 
 /**
- * Recurring setup for Store module.
- *
- * @package Magento\Store\Setup
+ * Create stores and websites. Actually stores and websites are part of schema as
+ * other modules schema relies on store and website presence.
+ * @package Magento\Store\Setup\Patch\Schema
  */
-class Recurring implements InstallSchemaInterface
+class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionInterface
 {
+    /**
+     * @var SchemaSetupInterface
+     */
+    private $schemaSetup;
+
     /**
      * @var DefaultCategory
      */
     private $defaultCategory;
 
     /**
-     * Get default category.
-     *
-     * @deprecated 100.1.0
-     * @return DefaultCategory
+     * @var \Magento\Catalog\Helper\DefaultCategoryFactory
      */
-    private function getDefaultCategory()
-    {
-        if ($this->defaultCategory === null) {
-            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(DefaultCategory::class);
-        }
-        return $this->defaultCategory;
+    private $defaultCategoryFactory;
+
+    /**
+     * PatchInitial constructor.
+     * @param SchemaSetupInterface $schemaSetup
+     */
+    public function __construct(
+        SchemaSetupInterface $schemaSetup,
+        \Magento\Catalog\Helper\DefaultCategoryFactory $defaultCategoryFactory
+    ) {
+        $this->schemaSetup = $schemaSetup;
+        $this->defaultCategoryFactory = $defaultCategoryFactory;
     }
 
     /**
      * {@inheritdoc}
-     * @throws \Exception
      */
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
-        $installer = $setup;
-
-        $installer->startSetup();
-        $connection = $installer->getConnection();
+        $this->schemaSetup->startSetup();
+        $connection = $this->schemaSetup->getConnection();
         $select = $connection->select()
-            ->from($installer->getTable('store_website'))
+            ->from($this->schemaSetup->getTable('store_website'))
             ->where('website_id = ?', 0);
 
         if ($connection->fetchOne($select) === false) {
@@ -57,7 +61,7 @@ class Recurring implements InstallSchemaInterface
              * Insert websites
              */
             $connection->insertForce(
-                $installer->getTable('store_website'),
+                $this->schemaSetup->getTable('store_website'),
                 [
                     'website_id' => 0,
                     'code' => 'admin',
@@ -68,7 +72,7 @@ class Recurring implements InstallSchemaInterface
                 ]
             );
             $connection->insertForce(
-                $installer->getTable('store_website'),
+                $this->schemaSetup->getTable('store_website'),
                 [
                     'website_id' => 1,
                     'code' => 'base',
@@ -83,7 +87,7 @@ class Recurring implements InstallSchemaInterface
              * Insert store groups
              */
             $connection->insertForce(
-                $installer->getTable('store_group'),
+                $this->schemaSetup->getTable('store_group'),
                 [
                     'group_id' => 0,
                     'website_id' => 0,
@@ -93,7 +97,7 @@ class Recurring implements InstallSchemaInterface
                 ]
             );
             $connection->insertForce(
-                $installer->getTable('store_group'),
+                $this->schemaSetup->getTable('store_group'),
                 [
                     'group_id' => 1,
                     'website_id' => 1,
@@ -107,7 +111,7 @@ class Recurring implements InstallSchemaInterface
              * Insert stores
              */
             $connection->insertForce(
-                $installer->getTable('store'),
+                $this->schemaSetup->getTable('store'),
                 [
                     'store_id' => 0,
                     'code' => 'admin',
@@ -119,7 +123,7 @@ class Recurring implements InstallSchemaInterface
                 ]
             );
             $connection->insertForce(
-                $installer->getTable('store'),
+                $this->schemaSetup->getTable('store'),
                 [
                     'store_id' => 1,
                     'code' => 'default',
@@ -130,7 +134,46 @@ class Recurring implements InstallSchemaInterface
                     'is_active' => 1
                 ]
             );
-            $setup->endSetup();
+            $this->schemaSetup->endSetup();
         }
+    }
+
+    /**
+     * Get default category.
+     *
+     * @deprecated 100.1.0
+     * @return DefaultCategory
+     */
+    private function getDefaultCategory()
+    {
+        if ($this->defaultCategory === null) {
+            $this->defaultCategory = $this->defaultCategoryFactory->create();
+        }
+        return $this->defaultCategory;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getVersion()
+    {
+        return '2.0.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

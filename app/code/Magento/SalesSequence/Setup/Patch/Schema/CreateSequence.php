@@ -6,6 +6,7 @@
 
 namespace Magento\SalesSequence\Setup\Patch\Schema;
 
+use Magento\Framework\App\State;
 use Magento\SalesSequence\Setup\SequenceCreator;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Setup\Model\Patch\SchemaPatchInterface;
@@ -44,7 +45,9 @@ class CreateSequence implements SchemaPatchInterface, PatchVersionInterface
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            \Magento\Store\Setup\Patch\Schema\InitializeStoresAndWebsites::class
+        ];
     }
 
     /**
