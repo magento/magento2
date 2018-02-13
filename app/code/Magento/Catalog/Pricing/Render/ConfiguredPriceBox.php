@@ -28,13 +28,13 @@ class ConfiguredPriceBox extends FinalPriceBox
     private $configuredPriceSelection;
 
     /**
-     * @param Context                                                     $context
-     * @param SaleableInterface                                           $saleableItem
-     * @param PriceInterface                                              $price
-     * @param RendererPool                                                $rendererPool
-     * @param array                                                       $data
-     * @param SalableResolverInterface|null                               $salableResolver
-     * @param MinimalPriceCalculatorInterface|null                        $minimalPriceCalculator
+     * @param Context $context
+     * @param SaleableInterface $saleableItem
+     * @param PriceInterface $price
+     * @param RendererPool $rendererPool
+     * @param array $data
+     * @param SalableResolverInterface|null $salableResolver
+     * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
      * @param \Magento\Catalog\Pricing\Price\ConfiguredPriceSelection|null $configuredPriceSelection
      */
     public function __construct(

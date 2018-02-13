@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Price;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Configured price selection model
  */
@@ -47,14 +50,12 @@ class ConfiguredPriceSelection
     /**
      * Create Selection Price List
      *
-     * @param $option
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ExtensibleDataInterface $option
+     * @param Product $product
      * @return array
      */
-    private function createSelectionPriceList(
-        $option,
-        \Magento\Catalog\Model\Product $product
-    ) {
+    private function createSelectionPriceList(ExtensibleDataInterface $option, Product $product): array
+    {
         return $this->calculator->createSelectionPriceList($option, $product);
     }
 }
