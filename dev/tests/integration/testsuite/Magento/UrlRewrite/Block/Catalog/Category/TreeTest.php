@@ -58,7 +58,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotContains('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
         $this->assertEquals(
-            '&#39;Category 6&#39;',
+            '&#039;Category 6&#039;',
             $tree['children'][0]['children'][0]['children'][0]['name']
         );
     }
