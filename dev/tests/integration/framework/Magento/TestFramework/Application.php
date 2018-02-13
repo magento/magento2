@@ -543,10 +543,10 @@ class Application
      *
      * @return void
      */
-    private function copyAppConfigFiles()
+    public function copyAppConfigFiles()
     {
         $globalConfigFiles = Glob::glob(
-            $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,*/db_schema.xml,vendor_path.php}',
             Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
