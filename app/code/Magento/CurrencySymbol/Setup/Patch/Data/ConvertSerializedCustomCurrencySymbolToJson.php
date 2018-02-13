@@ -25,15 +25,15 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
-    
+
     /**
-    * @param FieldDataConverterFactory $fieldDataConverterFactory
-    */
+     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     */
     private $fieldDataConverterFactory;
 
     /**
-    * @param QueryModifierFactory $queryModifierFactory
-    */
+     * @param QueryModifierFactory $queryModifierFactory
+     */
     private $queryModifierFactory;
 
     /**

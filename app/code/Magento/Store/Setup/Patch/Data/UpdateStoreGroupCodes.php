@@ -75,7 +75,6 @@ class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
                 ['group_id = ?' => $groupId]
             );
         }
-
     }
 
     /**

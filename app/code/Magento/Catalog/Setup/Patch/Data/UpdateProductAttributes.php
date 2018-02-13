@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Catalog\Setup\Patch\Data;
+
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -43,6 +44,7 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {

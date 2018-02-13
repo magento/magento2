@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogRule\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
@@ -15,7 +14,6 @@ use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\CatalogRule\Api\Data\RuleInterface;
-
 
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {

@@ -50,7 +50,6 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
         /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $categorySetup->updateAttribute(3, 54, 'default_value', 1);
-
     }
 
     /**

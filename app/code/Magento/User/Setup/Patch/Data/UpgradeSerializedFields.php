@@ -89,6 +89,5 @@ class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterfa
             'user_id',
             'extra'
         );
-
     }
 }

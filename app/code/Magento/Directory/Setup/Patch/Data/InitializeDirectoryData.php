@@ -42,6 +42,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {

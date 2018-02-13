@@ -44,6 +44,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {

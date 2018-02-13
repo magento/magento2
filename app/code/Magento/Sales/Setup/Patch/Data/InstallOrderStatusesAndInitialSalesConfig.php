@@ -42,6 +42,8 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {
@@ -71,7 +73,10 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
             $data[] = ['status' => $code, 'label' => $info];
         }
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'), ['status', 'label'], $data);
+            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'),
+            ['status', 'label'],
+            $data
+        );
         /**
          * Install order states from config
          */

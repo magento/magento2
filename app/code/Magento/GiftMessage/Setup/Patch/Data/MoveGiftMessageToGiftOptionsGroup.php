@@ -53,18 +53,18 @@ class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVers
         $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
-            $groupName = 'Gift Options';
+        $groupName = 'Gift Options';
 
-            if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
-                $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
-            }
-            $categorySetup->addAttributeToGroup(
-                $entityTypeId,
-                $attributeSetId,
-                $groupName,
-                $attribute['attribute_id'],
-                10
-            );
+        if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
+            $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
+        }
+        $categorySetup->addAttributeToGroup(
+            $entityTypeId,
+            $attributeSetId,
+            $groupName,
+            $attribute['attribute_id'],
+            10
+        );
         $this->moduleDataSetup->getConnection()->endSetup();
     }
 

@@ -64,7 +64,6 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
                 implode(',', $relatedProductTypes)
             );
         }
-
     }
 
     /**
@@ -78,7 +77,7 @@ class UpdateTierPriceAttribute implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}\
      */
     public static function getVersion()
     {

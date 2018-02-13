@@ -83,7 +83,7 @@ class ChangePriceAttributeDefaultScope implements DataPatchInterface, PatchVersi
      * @param \Magento\Catalog\Setup\CategorySetup $categorySetup
      * @param int $entityTypeId
      */
-    private function changePriceAttributeDefaultScope($categorySetup,  $entityTypeId)
+    private function changePriceAttributeDefaultScope($categorySetup, $entityTypeId)
     {
         $attribute = $categorySetup->getAttribute($entityTypeId, 'msrp');
         $categorySetup->updateAttribute(

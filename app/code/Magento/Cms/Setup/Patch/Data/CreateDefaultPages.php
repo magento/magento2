@@ -42,6 +42,7 @@ class CreateDefaultPages implements DataPatchInterface, PatchVersionInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {

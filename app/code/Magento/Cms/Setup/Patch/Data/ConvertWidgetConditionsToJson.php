@@ -128,7 +128,6 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
             ],
             $this->moduleDataSetup->getConnection()
         );
-
     }
 
     /**

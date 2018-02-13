@@ -43,7 +43,6 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
         $this->removeTokensFromInactiveCustomers();
 
         $this->moduleDataSetup->getConnection()->endSetup();
-
     }
 
     /**
@@ -105,7 +104,6 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
                 $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }
-
     }
 
     /**
@@ -130,6 +128,5 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
                 $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }
-
     }
 }

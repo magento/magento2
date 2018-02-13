@@ -29,6 +29,7 @@ class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterfac
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function apply()
     {

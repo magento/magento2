@@ -148,7 +148,6 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
         return $countries;
     }
 
-
     /**
      * {@inheritdoc}
      */

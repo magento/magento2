@@ -152,7 +152,6 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
         return $this->defaultCategory;
     }
 
-
     /**
      * {@inheritdoc}
      */

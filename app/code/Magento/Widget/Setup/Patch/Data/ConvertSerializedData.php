@@ -113,6 +113,5 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
             ],
             $this->moduleDataSetup->getConnection()
         );
-
     }
 }

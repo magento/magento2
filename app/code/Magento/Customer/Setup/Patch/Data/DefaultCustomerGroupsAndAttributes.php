@@ -45,6 +45,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {

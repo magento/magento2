@@ -18,18 +18,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVersionInterface
 {
     /**
-    * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
-    */
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
+     */
     private $ruleColletionFactory;
 
     /**
-    * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-    */
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     */
     private $serializer;
 
     /**
-    * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-    */
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
+     */
     private $resourceModelRule;
 
     /**
@@ -76,7 +76,6 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
             );
             $this->fillSalesRuleProductAttributeTable();
         $this->moduleDataSetup->getConnection()->endSetup();
-
     }
 
     /**

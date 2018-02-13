@@ -210,6 +210,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -63,7 +63,6 @@ class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
             $eavSetup->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, $attribute['attribute_id'], 60);
             $eavSetup->updateAttribute($entityTypeId, $attribute['attribute_id'], 'default_value', 1);
         }
-
     }
 
     /**

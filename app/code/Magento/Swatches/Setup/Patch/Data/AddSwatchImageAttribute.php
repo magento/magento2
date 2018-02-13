@@ -30,7 +30,11 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
      */
     private $eavSetupFactory;
 
-
+    /**
+     * AddSwatchImageAttribute constructor.
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param EavSetupFactory $eavSetupFactory
+     */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory

@@ -887,6 +887,7 @@ class Installer
      * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function handleDBSchemaData($setup, $type)
     {

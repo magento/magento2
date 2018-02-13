@@ -50,6 +50,9 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function apply()
     {
@@ -83,11 +86,8 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             'value NOT LIKE ?',
             '0'
         );
-        $showMiddlename = (bool)$this->customerAddress->getConfig(
-                'middlename_show'
-            ) || $connection->fetchOne(
-                $select
-            ) > 0;
+        $showMiddlename = (bool)$this->customerAddress->getConfig('middlename_show')
+            || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
             $connection->getTableName('core_config_data'),

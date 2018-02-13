@@ -79,21 +79,10 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
      * @param $attributeCode
      * @param $weight
      */
-    private function setWeight($attributeCode,  $weight)
+    private function setWeight($attributeCode, $weight)
     {
         $attribute = $this->attributeRepository->get($attributeCode);
         $attribute->setSearchWeight($weight);
         $this->attributeRepository->save($attribute);
-    }
-
-    /**
-     * Get indexer.
-     *
-     * @param $indexerId
-     * @return mixed
-     */
-    private function getIndexer($indexerId)
-    {
-        return $this->indexerFactory->create()->load($indexerId);
     }
 }

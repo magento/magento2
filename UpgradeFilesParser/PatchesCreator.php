@@ -189,8 +189,13 @@ class PatchesCreator
                 $depndency = $matches[1];
                 if (isset($class[$depndency])) {
                     $methods[$depndency]['code'] = $class[$depndency]['data'];
-                    $methods[$depndency]['arguments'] = isset($class[$depndency]['arguments']) ? $class[$depndency]['arguments'] : [];
-                    $methods = array_merge($methods, $this->getAddtionalInformation($class[$depndency]['data'], $class));
+                    $methods[$depndency]['arguments'] = isset($class[$depndency]['arguments'])
+                        ? $class[$depndency]['arguments']
+                        : [];
+                    $methods = array_merge_recursive(
+                        $methods,
+                        $this->getAddtionalInformation($class[$depndency]['data'], $class)
+                    );
                 }
             }
         }
@@ -289,8 +294,13 @@ class PatchesCreator
                 $additionalContent = file_get_contents($this->methodsPath);
                 $additionalContent = rtrim($additionalContent);
                 $additionalContent = str_replace("%method%", $method, $additionalContent);
-                $additionalContent = str_replace("%arguments%", implode(", ", $methodData['arguments']), $additionalContent);
-                $additionalContent = str_replace("%method_body%", implode("", $methodData['code']), $additionalContent);
+                $additionalContent = str_replace(
+                    "%arguments%",
+                    implode(", ", $methodData['arguments']),
+                    $additionalContent
+                );
+                $methodDataCode = implode("", $methodData['code']);
+                $additionalContent = str_replace("%method_body%", $methodDataCode, $additionalContent);
                 $cData = $this->implementConstructor($methodData['code'], $constructor);
                 $cHead = array_replace_recursive($cHead, $cData['c_head']);
                 $cBody = array_replace_recursive($cBody, $cData['c_body']);

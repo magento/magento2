@@ -15,6 +15,7 @@ use Magento\Setup\Exception;
 
 /**
  * Apply patches per specific module
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PatchApplier
 {
@@ -80,6 +81,7 @@ class PatchApplier
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         PatchReader $dataPatchReader,

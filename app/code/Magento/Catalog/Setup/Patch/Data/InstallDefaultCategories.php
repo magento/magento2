@@ -47,6 +47,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function apply()
     {
@@ -339,7 +341,6 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'frontend_model',
             \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
-
     }
 
     /**

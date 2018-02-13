@@ -36,8 +36,7 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
-    )
-    {
+    ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }

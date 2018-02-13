@@ -64,7 +64,6 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
 
         $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
         $customerSetup->addAttributeOption($option);
-
     }
 
     /**

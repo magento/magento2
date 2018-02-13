@@ -35,7 +35,7 @@ class DataInstaller
      * @param AdapterInterface $adapter
      * @param array $data
      */
-    public function addCountryRegions(AdapterInterface $adapter,  array $data)
+    public function addCountryRegions(AdapterInterface $adapter, array $data)
     {
         /**
          * Fill table directory/country_region

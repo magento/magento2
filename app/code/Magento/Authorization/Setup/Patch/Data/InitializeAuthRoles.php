@@ -105,7 +105,6 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
                 ['resource_id = ?' => 'admin/system/tools/compiler']
             );
         }
-
     }
 
     /**

@@ -65,7 +65,6 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
                 'flag_data' => 24,
             ]
         );
-
     }
 
     /**

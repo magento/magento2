@@ -181,19 +181,19 @@ class DataPatchInstallationTest extends SetupTestCase
         return [
             [
                 'smallint' => '1',
-                'tinyint' => NULL,
+                'tinyint' => null,
                 'varchar' => 'Ololo123',
                 'varbinary' => '33288',
             ],
             [
                 'smallint' => '2',
-                'tinyint' => NULL,
+                'tinyint' => null,
                 'varchar' => 'Ololo123_ref',
                 'varbinary' => '33288',
             ],
             [
                 'smallint' => '3',
-                'tinyint' => NULL,
+                'tinyint' => null,
                 'varchar' => 'changed__very_secret_string',
                 'varbinary' => '0',
             ],
@@ -211,27 +211,27 @@ class DataPatchInstallationTest extends SetupTestCase
             [
                 'tinyint_ref' => '2',
                 'some_integer' => '2',
-                'for_patch_testing' => NULL,
+                'for_patch_testing' => null,
             ],
             [
                 'tinyint_ref' => '3',
                 'some_integer' => '3',
-                'for_patch_testing' => NULL,
+                'for_patch_testing' => null,
             ],
             [
                 'tinyint_ref' => '4',
                 'some_integer' => '5',
-                'for_patch_testing' => NULL,
+                'for_patch_testing' => null,
             ],
             [
                 'tinyint_ref' => '5',
                 'some_integer' => '6',
-                'for_patch_testing' => NULL,
+                'for_patch_testing' => null,
             ],
             [
                 'tinyint_ref' => '6',
                 'some_integer' => '12',
-                'for_patch_testing' => NULL,
+                'for_patch_testing' => null,
             ],
         ];
     }

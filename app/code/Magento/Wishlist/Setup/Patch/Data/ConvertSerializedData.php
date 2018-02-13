@@ -52,7 +52,6 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory,
         QueryGenerator $queryGenerator
-
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;

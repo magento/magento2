@@ -17,13 +17,13 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-    * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-    */
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     */
     private $metadataPool;
 
     /**
-    * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
-    */
+     * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
+     */
     private $aggregatedFieldConverter;
 
     /**

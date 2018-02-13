@@ -92,7 +92,6 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
          * Prepare database after install
          */
         $this->moduleDataSetup->getConnection()->endSetup();
-
     }
 
     /**

@@ -58,7 +58,6 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
         ];
         $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $customerSetup->upgradeAttributes($entityAttributes);
-
     }
 
     /**

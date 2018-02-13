@@ -33,6 +33,7 @@ class UpdatePrivacyPolicyPage implements DataPatchInterface, PatchVersionInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
     {
