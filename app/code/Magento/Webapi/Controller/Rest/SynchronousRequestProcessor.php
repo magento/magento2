@@ -53,12 +53,12 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * Initial dependencies
      *
-     * @param \Magento\Framework\Webapi\Rest\Response              $response
-     * @param \Magento\Webapi\Controller\Rest\InputParamsResolver  $inputParamsResolver
-     * @param \Magento\Framework\Webapi\ServiceOutputProcessor     $serviceOutputProcessor
+     * @param \Magento\Framework\Webapi\Rest\Response $response
+     * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $inputParamsResolver
+     * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Webapi\Rest\Response\FieldsFilter $fieldsFilter
-     * @param \Magento\Framework\App\DeploymentConfig              $deploymentConfig
-     * @param \Magento\Framework\ObjectManagerInterface            $objectManager
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         RestResponse $response,

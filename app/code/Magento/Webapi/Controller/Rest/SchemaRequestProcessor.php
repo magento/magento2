@@ -32,7 +32,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
      * Initial dependencies
      *
      * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
-     * @param \Magento\Framework\Webapi\Rest\Response      $response
+     * @param \Magento\Framework\Webapi\Rest\Response $response
      */
     public function __construct(
         Generator $swaggerGenerator,
