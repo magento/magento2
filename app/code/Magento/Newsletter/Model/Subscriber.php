@@ -604,14 +604,20 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
         $sendSubscription = $sendInformationEmail;
-        if ($sendSubscription === null xor $sendSubscription) {
+        if ($sendSubscription === null xor $sendSubscription && $this->isStatusChanged()) {
             try {
-                if ($isConfirmNeed) {
-                    $this->sendConfirmationRequestEmail();
-                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
-                    $this->sendUnsubscriptionEmail();
-                } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
-                    $this->sendConfirmationSuccessEmail();
+                switch ($status) {
+                    case self::STATUS_UNSUBSCRIBED:
+                        $this->sendUnsubscriptionEmail();
+                        break;
+                    case self::STATUS_SUBSCRIBED:
+                        $this->sendConfirmationSuccessEmail();
+                        break;
+                    case self::STATUS_NOT_ACTIVE:
+                        if ($isConfirmNeed) {
+                            $this->sendConfirmationRequestEmail();
+                        }
+                        break;
                 }
             } catch (MailException $e) {
                 // If we are not able to send a new account email, this should be ignored
@@ -633,6 +639,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $this->setStatus(self::STATUS_SUBSCRIBED)
                 ->setStatusChanged(true)
                 ->save();
+
+            $this->sendConfirmationSuccessEmail();
             return true;
         }
 

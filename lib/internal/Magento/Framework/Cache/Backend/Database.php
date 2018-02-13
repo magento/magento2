@@ -216,16 +216,15 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 $time = time();
                 $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
 
+                $idCol = $connection->quoteIdentifier('id');
                 $dataCol = $connection->quoteIdentifier('data');
+                $createCol = $connection->quoteIdentifier('create_time');
+                $updateCol = $connection->quoteIdentifier('update_time');
                 $expireCol = $connection->quoteIdentifier('expire_time');
-                $query = "INSERT INTO {$dataTable} (\n                    {$connection->quoteIdentifier(
-                'id'
-            )},\n                    {$dataCol},\n                    {$connection->quoteIdentifier(
-                'create_time'
-            )},\n                    {$connection->quoteIdentifier(
-                'update_time'
-            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n
-            {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
+
+                $query = "INSERT INTO {$dataTable} ({$idCol}, {$dataCol}, {$createCol}, {$updateCol}, {$expireCol}) " .
+                    "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE {$dataCol}=VALUES({$dataCol}), " .
+                    "{$updateCol}=VALUES({$updateCol}), {$expireCol}=VALUES({$expireCol})";
 
                 $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
             }

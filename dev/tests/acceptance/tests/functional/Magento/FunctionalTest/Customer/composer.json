@@ -1,60 +1,43 @@
 {
     "name": "magento/magento2-functional-test-module-customer",
-    "description": "Magento 2 Acceptance Test Module Customer",
-    "repositories": [
-        {
-            "type" : "composer",
-            "url" : "https://repo.magento.com/"
-        }
-    ],
-    "require": {
-        "php": "~7.0",
-        "codeception/codeception": "2.2|2.3",
-        "allure-framework/allure-codeception": "dev-master",
-        "consolidation/robo": "^1.0.0",
-        "henrikbjorn/lurker": "^1.2",
-        "vlucas/phpdotenv": "~2.4",
-        "magento/magento2-functional-testing-framework": "dev-develop",
-        "magento/magento2-functional-test-module-catalog": "dev-master"
-    },
-    "suggest": {
-        "magento/magento2-functional-test-module-store": "dev-master",
-        "magento/magento2-functional-test-module-eav": "dev-master",
-        "magento/magento2-functional-test-module-directory": "dev-master",
-        "magento/magento2-functional-test-module-newsletter": "dev-master",
-        "magento/magento2-functional-test-module-sales": "dev-master",
-        "magento/magento2-functional-test-module-checkout": "dev-master",
-        "magento/magento2-functional-test-module-wishlist": "dev-master",
-        "magento/magento2-functional-test-module-theme": "dev-master",
-        "magento/magento2-functional-test-module-backend": "dev-master",
-        "magento/magento2-functional-test-module-review": "dev-master",
-        "magento/magento2-functional-test-module-tax": "dev-master",
-        "magento/magento2-functional-test-module-authorization": "dev-master",
-        "magento/magento2-functional-test-module-integration": "dev-master",
-        "magento/magento2-functional-test-module-media-storage": "dev-master",
-        "magento/magento2-functional-test-module-ui": "dev-master",
-        "magento/magento2-functional-test-module-config": "dev-master",
-        "magento/magento2-functional-test-module-quote": "dev-master",
-        "magento/magento2-functional-test-module-page-cache": "dev-master"
-    },
+    "description": "Magento 2 Functional Test Module Customer",
     "type": "magento2-test-module",
-    "version": "dev-master",
+    "version": "100.0.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/magento2-functional-testing-framework": "1.0.0",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+    },
+    "suggest": {
+        "magento/magento2-functional-test-module-authorization": "100.0.0-dev",
+        "magento/magento2-functional-test-module-backend": "100.0.0-dev",
+        "magento/magento2-functional-test-module-catalog": "100.0.0-dev",
+        "magento/magento2-functional-test-module-checkout": "100.0.0-dev",
+        "magento/magento2-functional-test-module-config": "100.0.0-dev",
+        "magento/magento2-functional-test-module-directory": "100.0.0-dev",
+        "magento/magento2-functional-test-module-eav": "100.0.0-dev",
+        "magento/magento2-functional-test-module-integration": "100.0.0-dev",
+        "magento/magento2-functional-test-module-media-storage": "100.0.0-dev",
+        "magento/magento2-functional-test-module-newsletter": "100.0.0-dev",
+        "magento/magento2-functional-test-module-page-cache": "100.0.0-dev",
+        "magento/magento2-functional-test-module-quote": "100.0.0-dev",
+        "magento/magento2-functional-test-module-review": "100.0.0-dev",
+        "magento/magento2-functional-test-module-sales": "100.0.0-dev",
+        "magento/magento2-functional-test-module-store": "100.0.0-dev",
+        "magento/magento2-functional-test-module-tax": "100.0.0-dev",
+        "magento/magento2-functional-test-module-theme": "100.0.0-dev",
+        "magento/magento2-functional-test-module-ui": "100.0.0-dev",
+        "magento/magento2-functional-test-module-wishlist": "100.0.0-dev"
+    },
     "autoload": {
-        "psr-0": {
-            "Yandex": "vendor/allure-framework/allure-codeception/src/"
-        },
         "psr-4": {
-            "Magento\\FunctionalTestingFramework\\": [
-                "vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework"
-            ],
-            "Magento\\FunctionalTest\\": [
-                "tests/functional/Magento/FunctionalTest",
-                "generated/Magento/FunctionalTest"
-            ]
+            "Magento\\FunctionalTest\\Customer\\": ""
         }
     },
     "extra": {

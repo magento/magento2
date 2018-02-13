@@ -21,4 +21,18 @@ if (file_exists(PROJECT_ROOT . '/.env')) {
         defined($key) || define($key, $var);
     }
 }
+if (!defined('MAGENTO_CLI_COMMAND_PATH')) {
+    define('MAGENTO_CLI_COMMAND_PATH', 'dev/tests/acceptance/utils/command.php');
+    $env->setEnvironmentVariable('MAGENTO_CLI_COMMAND_PATH', 'dev/tests/acceptance/utils/command.php');
+}
+if (!defined('MAGENTO_CLI_COMMAND_PARAMETER')) {
+    define('MAGENTO_CLI_COMMAND_PARAMETER', 'command');
+    $env->setEnvironmentVariable('MAGENTO_CLI_COMMAND_PARAMETER', 'command');
+}
 defined('FW_BP') || define('FW_BP', PROJECT_ROOT . $RELATIVE_FW_PATH);
+
+// add the debug flag here
+$debug_mode = $_ENV['MFTF_DEBUG'] ?? false;
+if (!(bool)$debug_mode && extension_loaded('xdebug')) {
+    xdebug_disable();
+}
