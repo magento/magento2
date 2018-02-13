@@ -133,6 +133,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @var array
      */
     private $emptyStringTypes = [
+        'int',
+        'decimal',
         'datetime',
         'varchar',
         'text',

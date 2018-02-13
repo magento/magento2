@@ -220,6 +220,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation12" ticketId="MAGETWO-86225">
+            <data name="issue" xsi:type="string">MAGETWO-87569: [FAT] Fix unstable tests</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
