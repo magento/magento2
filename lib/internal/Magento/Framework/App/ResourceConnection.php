@@ -302,11 +302,9 @@ class ResourceConnection
      */
     private function getTablePrefix()
     {
-        if (null === $this->tablePrefix) {
-            $this->tablePrefix = (string)$this->deploymentConfig->get(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
-            );
-        }
+        $this->tablePrefix = (string)$this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
+        );
         return $this->tablePrefix;
     }
 }
