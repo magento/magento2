@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
@@ -21,20 +21,11 @@ class IsSingleStockMode implements IsSingleStockModeInterface
     private $sourceRepository;
 
     /**
-     * @var StockRepositoryInterface
-     */
-    private $stockRepository;
-
-    /**
      * @param SourceRepositoryInterface $sourceRepository
-     * @param StockRepositoryInterface $stockRepository
      */
-    public function __construct(
-        SourceRepositoryInterface $sourceRepository,
-        StockRepositoryInterface $stockRepository
-    ) {
+    public function __construct(SourceRepositoryInterface $sourceRepository)
+    {
         $this->sourceRepository = $sourceRepository;
-        $this->stockRepository = $stockRepository;
     }
 
     /**
@@ -42,7 +33,16 @@ class IsSingleStockMode implements IsSingleStockModeInterface
      */
     public function execute(): bool
     {
-        return !(count($this->sourceRepository->getList()->getItems()) > 1 ||
-            count($this->stockRepository->getList()->getItems() > 1));
+        $enabledSourcesCount = 0;
+        $availableSources = $this->sourceRepository->getList()->getItems();
+
+        /** @var SourceInterface $availableSource */
+        foreach ($availableSources as $availableSource) {
+            if ($availableSource->isEnabled()) {
+                $enabledSourcesCount++;
+            }
+        }
+
+        return ($enabledSourcesCount < 2);
     }
 }

@@ -15,7 +15,7 @@ namespace Magento\InventoryCatalog\Model;
 interface IsSingleStockModeInterface
 {
     /**
-     * Check if the system has multiple sources or stocks
+     * Check if system has more than one enabled Source configured
      *
      * @return bool
      */
