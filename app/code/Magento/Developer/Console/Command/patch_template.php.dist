@@ -10,7 +10,7 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\SchemaPatchInterface;
 use Magento\Setup\Model\Patch\PatchRevertableInterface;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
 * Patch is mechanism, that allows to do atomic upgrade data changes
@@ -20,16 +20,16 @@ class %class% implements
     PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface $moduleDataSetup
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
-    public function __construct(ResourceConnection $resourceConnection)
+    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
     {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -62,7 +62,7 @@ class %class% implements
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public static function getVersion()
     {
         return '';
     }
