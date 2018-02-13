@@ -14,6 +14,11 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     protected $resultRawFactory;
 
     /**
+     * @var \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    protected $imagesHelper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -21,9 +26,11 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper
     ) {
         $this->resultRawFactory = $resultRawFactory;
+        $this->imagesHelper = $imagesHelper;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -34,21 +41,32 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        $storeId = $this->getRequest()->getParam('store');
+        $imagesHelper = $this->imagesHelper;
+        $request = $this->getRequest();
 
-        $filename = $this->getRequest()->getParam('filename');
-        $filename = $helper->idDecode($filename);
-        $asIs = $this->getRequest()->getParam('as_is');
-        $forceStaticPath = $this->getRequest()->getParam('force_static_path');
+        $storeId = $request->getParam('store');
+
+        $filename = $request->getParam('filename');
+        $filename = $imagesHelper->idDecode($filename);
+
+        $asIs = $request->getParam('as_is');
+
+        $forceStaticPath = $request->getParam('force_static_path');
+
+        $node = $request->getParam('node');
+
+        if ($node) {
+            $node = $imagesHelper->idDecode($node);
+            $imagesHelper->setImageDirectorySubpath($node);
+        }
 
         $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
-        $helper->setStoreId($storeId);
+        $imagesHelper->setStoreId($storeId);
 
         if ($forceStaticPath) {
-            $image = parse_url($helper->getCurrentUrl() . $filename, PHP_URL_PATH);
+            $image = parse_url($imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
         } else {
-            $image = $helper->getImageHtmlDeclaration($filename, $asIs);
+            $image = $imagesHelper->getImageHtmlDeclaration($filename, $asIs);
         }
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */

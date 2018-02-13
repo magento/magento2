@@ -291,6 +291,22 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         return substr($filename, 0, $maxLength) . '...';
     }
 
+    /**
+     * Set Image directory subpath relative to media directory
+     *
+     * @var string $subpath
+     * @return void
+     */
+    public function setImageDirectorySubpath($subpath)
+    {
+        $this->imageDirectorySubpath = $subpath;
+    }
+
+    /**
+     * Get Image directory subpath relative to media directory
+     *
+     * @return string
+     */
     protected function getImageDirectorySubpath()
     {
         if (!isset($this->imageDirectorySubpath)) {
