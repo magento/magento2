@@ -21,24 +21,6 @@ $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::
 $sourcesItemsData = [
     [
         SourceItemInterface::SOURCE_CODE => 'us-1',
-        SourceItemInterface::SKU => 'configurable_out_of_stock',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'us-1',
-        SourceItemInterface::SKU => 'simple_30',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'us-1',
-        SourceItemInterface::SKU => 'simple_40',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'us-1',
         SourceItemInterface::SKU => 'configurable',
         SourceItemInterface::QUANTITY => 100,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,

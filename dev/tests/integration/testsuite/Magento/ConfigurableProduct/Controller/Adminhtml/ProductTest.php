@@ -21,8 +21,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testSaveActionAssociatedProductIds()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/456');
-
         $associatedProductIds = ['3', '14', '15', '92'];
         $associatedProductIdsJSON = json_encode($associatedProductIds);
         $this->getRequest()->setPostValue(

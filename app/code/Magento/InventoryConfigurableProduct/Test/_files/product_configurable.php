@@ -14,13 +14,11 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
-
-require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/ConfigurableProduct/'
-    . '_files/configurable_attribute.php';
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
@@ -32,6 +30,11 @@ $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 $website = Bootstrap::getObjectManager()->create(Website::class);
 $website->load('us_website', 'code');
 $websiteIds = [$website->getId()];
+
+/** @var Config $eavConfig */
+$eavConfig = Bootstrap::getObjectManager()->create(Config::class);
+$attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
+
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();

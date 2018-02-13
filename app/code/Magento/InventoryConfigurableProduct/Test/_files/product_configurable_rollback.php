@@ -30,9 +30,5 @@ foreach (['simple_10', 'simple_20', 'configurable'] as $sku) {
         //Product already removed
     }
 }
-
-require __DIR__ . '/../../../../../../dev/tests/integration/testsuite/Magento/ConfigurableProduct/'
-    . '_files/configurable_attribute_rollback.php';
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
