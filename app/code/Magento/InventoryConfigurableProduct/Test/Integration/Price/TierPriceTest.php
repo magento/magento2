@@ -63,7 +63,6 @@ class TierPriceTest extends TestCase
         $this->extensionAttributesFactory = Bootstrap::getObjectManager()->get(ProductTierPriceExtensionFactory::class);
         $this->tierPriceFactory = Bootstrap::getObjectManager()->get(ProductTierPriceInterfaceFactory::class);
 
-
         $this->configurablePriceResolver = Bootstrap::getObjectManager()->create(
             ConfigurablePriceResolver::class,
             ['priceResolver' => $finalPrice]
