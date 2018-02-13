@@ -20,4 +20,9 @@ interface RequestProcessorInterface
      * @throws \Magento\Framework\Webapi\Exception
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request);
+
+    /**
+     * @return string
+     */
+    public function getProcessorPath();
 }

@@ -14,42 +14,44 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
- * REST request processor for general synchronous requests
+ * REST request processor for synchronous requests
  */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
+    const PROCESSOR_PATH = 'V1';
+
     /**
      * @var RestResponse
      */
-    protected $_response;
+    private $response;
 
     /**
      * @var InputParamsResolver
      */
-    protected $inputParamsResolver;
+    private $inputParamsResolver;
 
     /**
      * @var ServiceOutputProcessor
      */
-    protected $serviceOutputProcessor;
+    private $serviceOutputProcessor;
 
     /**
      * @var FieldsFilter
      */
-    protected $fieldsFilter;
+    private $fieldsFilter;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
-    protected $deploymentConfig;
+    private $deploymentConfig;
 
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * SynchronousRequestProcessor constructor.
+     * Initial dependencies
      *
      * @param \Magento\Framework\Webapi\Rest\Response              $response
      * @param \Magento\Webapi\Controller\Rest\InputParamsResolver  $inputParamsResolver
@@ -66,12 +68,12 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         DeploymentConfig $deploymentConfig,
         ObjectManagerInterface $objectManager
     ) {
-        $this->_response              = $response;
-        $this->inputParamsResolver    = $inputParamsResolver;
+        $this->response = $response;
+        $this->inputParamsResolver = $inputParamsResolver;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->fieldsFilter           = $fieldsFilter;
-        $this->deploymentConfig       = $deploymentConfig;
-        $this->objectManager          = $objectManager;
+        $this->fieldsFilter = $fieldsFilter;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -81,14 +83,15 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     {
         $inputParams = $this->inputParamsResolver->resolve();
 
-        $route             = $this->inputParamsResolver->getRoute();
+        $route = $this->inputParamsResolver->getRoute();
         $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName  = $route->getServiceClass();
+        $serviceClassName = $route->getServiceClass();
 
         $service = $this->objectManager->get($serviceClassName);
+
         /**
- * @var \Magento\Framework\Api\AbstractExtensibleObject $outputData
-*/
+         * @var \Magento\Framework\Api\AbstractExtensibleObject $outputData
+         */
         $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
         $outputData = $this->serviceOutputProcessor->process(
             $outputData,
@@ -100,8 +103,17 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         }
         $header = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT);
         if ($header) {
-            $this->_response->setHeader('X-Frame-Options', $header);
+            $this->response->setHeader('X-Frame-Options', $header);
         }
-        $this->_response->prepareResponse($outputData);
+        $this->response->prepareResponse($outputData);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessorPath()
+    {
+        return self::PROCESSOR_PATH;
+    }
+
 }

@@ -11,22 +11,25 @@ use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
 
 /**
- * REST request processor for "schema" requests
+ * REST request processor for synchronous "schema" requests
  */
 class SchemaRequestProcessor implements RequestProcessorInterface
 {
+
+    const PROCESSOR_PATH = 'schema';
+
     /**
      * @var \Magento\Webapi\Model\Rest\Swagger\Generator
      */
-    private $_swaggerGenerator;
+    private $swaggerGenerator;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
      */
-    protected $_response;
+    private $response;
 
     /**
-     * SchemaRequestProcessor constructor.
+     * Initial dependencies
      *
      * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
      * @param \Magento\Framework\Webapi\Rest\Response      $response
@@ -35,8 +38,8 @@ class SchemaRequestProcessor implements RequestProcessorInterface
         Generator $swaggerGenerator,
         RestResponse $response
     ) {
-        $this->_swaggerGenerator = $swaggerGenerator;
-        $this->_response        = $response;
+        $this->swaggerGenerator = $swaggerGenerator;
+        $this->response = $response;
     }
 
     /**
@@ -46,14 +49,23 @@ class SchemaRequestProcessor implements RequestProcessorInterface
     {
         $requestedServices = $request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
-            ? $this->_swaggerGenerator->getListOfServices()
+            ? $this->swaggerGenerator->getListOfServices()
             : $requestedServices;
-        $responseBody      = $this->_swaggerGenerator->generate(
+        $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
             $request->getScheme(),
             $request->getHttpHost(),
             $request->getRequestUri()
         );
-        $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
+        $this->response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessorPath()
+    {
+        return self::PROCESSOR_PATH;
+    }
+
 }

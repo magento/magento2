@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
+use Magento\Webapi\Controller\Rest\RequestProcessorPool;
 
 /**
  * Front controller for WebAPI REST area.
@@ -33,9 +33,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Path for accessing REST API schema
      *
-     * @todo need to change logic in \Magento\Webapi\Model\Rest\Swagger\Generator::generateSchema()
-     *        $swagger->setBasePath(strstr($endpointUrl, Rest::SCHEMA_PATH, true));
-     *       to using by di.xml config
+     * @deprecated 100.3.0
      */
     const SCHEMA_PATH = '/schema';
 
@@ -110,7 +108,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $paramsOverrider;
 
     /**
-     * @var RequestProcessorInterface
+     * @var RequestProcessorPool
      */
     protected $requestProcessorPool;
 
@@ -123,19 +121,19 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Initialize dependencies
      *
-     * @param RestRequest                               $request
-     * @param RestResponse                              $response
-     * @param Router                                    $router
+     * @param RestRequest $request
+     * @param RestResponse $response
+     * @param Router $router
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\State              $appState
-     * @param Authorization                             $authorization
-     * @param ServiceInputProcessor                     $serviceInputProcessor
-     * @param ErrorProcessor                            $errorProcessor
-     * @param PathProcessor                             $pathProcessor
-     * @param \Magento\Framework\App\AreaList           $areaList
-     * @param ParamsOverrider                           $paramsOverrider
-     * @param StoreManagerInterface                     $storeManager
-     * @param RequestProcessorPool                      $requestProcessorPool
+     * @param \Magento\Framework\App\State $appState
+     * @param Authorization $authorization
+     * @param ServiceInputProcessor $serviceInputProcessor
+     * @param ErrorProcessor $errorProcessor
+     * @param PathProcessor $pathProcessor
+     * @param \Magento\Framework\App\AreaList $areaList
+     * @param ParamsOverrider $paramsOverrider
+     * @param StoreManagerInterface $storeManager
+     * @param RequestProcessorPool $requestProcessorPool
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -153,21 +151,23 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\AreaList $areaList,
         ParamsOverrider $paramsOverrider,
         StoreManagerInterface $storeManager,
-        RequestProcessorInterface $requestProcessorPool
+        RequestProcessorPool $requestProcessorPool
     ) {
-        $this->_router               = $router;
-        $this->_request              = $request;
-        $this->_response             = $response;
-        $this->_objectManager        = $objectManager;
-        $this->_appState             = $appState;
-        $this->authorization         = $authorization;
+        $this->_router = $router;
+        $this->_request = $request;
+        $this->_response = $response;
+        $this->_objectManager = $objectManager;
+        $this->_appState = $appState;
+        $this->authorization = $authorization;
         $this->serviceInputProcessor = $serviceInputProcessor;
-        $this->_errorProcessor       = $errorProcessor;
-        $this->_pathProcessor        = $pathProcessor;
-        $this->areaList              = $areaList;
-        $this->paramsOverrider       = $paramsOverrider;
-        $this->storeManager          = $storeManager;
-        $this->requestProcessorPool  = $requestProcessorPool;
+        $this->_errorProcessor = $errorProcessor;
+        $this->_pathProcessor = $pathProcessor;
+        $this->areaList = $areaList;
+        $this->paramsOverrider = $paramsOverrider;
+        $this->storeManager = $storeManager;
+        $this->requestProcessorPool =
+            \Magento\Framework\App\ObjectManager::getInstance()
+                                                ->get('Magento\Webapi\Controller\Rest\RequestProcessorInterface');
     }
 
     /**
@@ -210,7 +210,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return Route
      * @deprecated 100.1.0
-     * @see        \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
+     * @see Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
     {
@@ -227,7 +227,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
      * @deprecated 100.1.0
-     * @see        \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
      */
     protected function checkPermissions()
     {
@@ -247,7 +247,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
      * @deprecated 100.1.0
-     * @see        \Magento\Webapi\Controller\Rest\RequestValidator::validate
+     * @see Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
     {

@@ -12,43 +12,61 @@ namespace Magento\Webapi\Controller\Rest;
 class RequestProcessorPool implements RequestProcessorInterface
 {
 
-    /** @var array */
+    /**
+     * @var array 
+     */
     private $requestProcessors;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * RequestProcessorPool constructor.
+     * Initial dependencies
      *
      * @param array $requestProcessors
      */
     public function __construct($requestProcessors = [])
     {
         $this->requestProcessors = $requestProcessors;
-        $this->objectManager     = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
     /**
      * {@inheritdoc}
-     * @throws \Magento\Framework\Exception\NotFoundException
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
         $processed = false;
-        foreach ($this->requestProcessors as $path => $name) {
-            if (strpos(ltrim($request->getPathInfo(), '/'), $path) === 0) {
-                /**@var RequestProcessorInterface $processor */
-                $processor = $this->objectManager->get($name);
+
+        /**
+* @var RequestProcessorInterface $processor 
+*/
+        foreach ($this->requestProcessors as $name => $processor) {
+            if (strpos(ltrim($request->getPathInfo(), '/'), $processor->getProcessorPath()) === 0) {
                 $processor->process($request);
                 $processed = true;
                 break;
             }
         }
         if (!$processed) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('Specified request cannot be processed.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Specified request cannot be processed.'), null, 400);
         }
     }
+
+    /**
+     * Get array of rest processors from di.xml
+     *
+     * @return array
+     */
+    public function getProcessors()
+    {
+        return $this->requestProcessors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessorPath()
+    {
+        return;
+    }
+
 }
