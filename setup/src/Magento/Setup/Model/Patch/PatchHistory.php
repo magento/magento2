@@ -65,7 +65,7 @@ class PatchHistory
         if ($this->patchesRegistry === null) {
             $adapter = $this->resourceConnection->getConnection();
             $filterSelect = $adapter->select()
-                ->from($this->resourceConnection->getTableName(self::TABLE_NAME), self::CLASS_NAME);
+                ->from($adapter->getTableName(self::TABLE_NAME), self::CLASS_NAME);
             $this->patchesRegistry = $adapter->fetchCol($filterSelect);
         }
 
