@@ -52,7 +52,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testEnabledModuleIsAbleToModifyConfig()
     {
-        $config = $this->model->getConfig();
+        $objectManager = Bootstrap::getObjectManager();
+        $compositeConfigProvider = $objectManager->create(\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider::class);
+        $model = $objectManager->create(
+            \Magento\Cms\Model\Wysiwyg\Config::class,
+            ['configProvider' => $compositeConfigProvider]
+        );
+        $config = $model->getConfig();
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_HEIGHT, $config['height']);
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_CONTENT_CSS, $config['content_css']);
     }
