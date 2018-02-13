@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Backup\Factory;
@@ -40,13 +41,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     const INPUT_KEY_BACKUP_MEDIA = 'backup-media';
     const INPUT_KEY_BACKUP_DB = 'backup-db';
     const INPUT_KEY_NON_COMPOSER_MODULE = 'non-composer';
-
-    /**
-     * Maintenance mode
-     *
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
 
     /**
      * Deployment Configuration
@@ -112,6 +106,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $moduleRegistryUninstaller;
 
     /**
+     * @var MaintenanceModeEnabler
+     */
+    private $maintenanceModeEnabler;
+
+    /**
      * @var PatchApplier
      */
     private $patchApplier;
@@ -122,11 +121,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param FullModuleList $fullModuleList
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
      * @param ModuleUninstaller $moduleUninstaller
      * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
+     * @param MaintenanceModeEnabler $maintenanceModeEnabler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ComposerInformation $composer,
@@ -136,12 +138,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         ObjectManagerProvider $objectManagerProvider,
         UninstallCollector $collector,
         ModuleUninstaller $moduleUninstaller,
-        ModuleRegistryUninstaller $moduleRegistryUninstaller
+        ModuleRegistryUninstaller $moduleRegistryUninstaller,
+        MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
-        $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
         $this->packageInfo = $this->objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)->create();
         $this->collector = $collector;
@@ -149,6 +151,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->moduleUninstaller = $moduleUninstaller;
         $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
+        $this->maintenanceModeEnabler =
+            $maintenanceModeEnabler ?: $this->objectManager->get(MaintenanceModeEnabler::class);
         $this->patchApplier = $this->objectManager->get(PatchApplier::class);
     }
 
@@ -251,41 +255,48 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
-        try {
-            $output->writeln('<info>Enabling maintenance mode</info>');
-            $this->maintenanceMode->set(true);
-            $this->takeBackup($input, $output);
-            $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
-            if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
-                $this->removeData($modules, $output, $dbBackupOption);
-            } else {
-                if (!empty($this->collector->collectUninstall())) {
-                    $question = new ConfirmationQuestion(
-                        'You are about to remove a module(s) that might have database data. '
-                        . 'Do you want to remove the data from database?[y/N]',
-                        false
-                    );
-                    if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
+
+        $result = $this->maintenanceModeEnabler->executeInMaintenanceMode(
+            function () use ($input, $output, $modules, $helper) {
+                try {
+                    $this->takeBackup($input, $output);
+                    $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
+                    if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                         $this->removeData($modules, $output, $dbBackupOption);
+                    } else {
+                        if (!empty($this->collector->collectUninstall())) {
+                            $question = new ConfirmationQuestion(
+                                'You are about to remove a module(s) that might have database data. '
+                                . 'Do you want to remove the data from database?[y/N]',
+                                false
+                            );
+                            if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
+                                $this->removeData($modules, $output, $dbBackupOption);
+                            }
+                        } else {
+                            $output->writeln(
+                                '<info>You are about to remove a module(s) that might have database data. '
+                                . 'Remove the database data manually after uninstalling, if desired.</info>'
+                            );
+                        }
                     }
-                } else {
-                    $output->writeln(
-                        '<info>You are about to remove a module(s) that might have database data. '
-                        . 'Remove the database data manually after uninstalling, if desired.</info>'
-                    );
+                    $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
+                    $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
+                    $this->moduleUninstaller->uninstallCode($output, $modules);
+                    $this->cleanup($input, $output);
+
+                    return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+                } catch (\Exception $e) {
+                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
                 }
-            }
-            $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
-            $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
-            $this->moduleUninstaller->uninstallCode($output, $modules);
-            $this->cleanup($input, $output);
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-        }
+            },
+            $output,
+            true
+        );
+
+        return $result;
     }
 
     /**
