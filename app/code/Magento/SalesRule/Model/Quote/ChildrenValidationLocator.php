@@ -36,6 +36,7 @@ class ChildrenValidationLocator
 
     /**
      * Checks necessity to validate rule on item's children
+     *
      * @param QuoteItem $item
      * @return bool
      */
