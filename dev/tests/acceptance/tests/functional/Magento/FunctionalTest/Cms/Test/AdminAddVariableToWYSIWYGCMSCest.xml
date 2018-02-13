@@ -86,6 +86,7 @@
         <see userInput="{{customVariable.html}}" stepKey="seeCustomVariable2" />
         <!--Delete Custom Variable-->
         <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <!--Refresh Storefront-->
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPageRefresh"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
