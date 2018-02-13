@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogSearch\Setup;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -20,6 +21,10 @@ class RecurringData implements InstallDataInterface
      * @var IndexerInterfaceFactory
      */
     private $indexerInterfaceFactory;
+    /**
+     * @var State
+     */
+    private $state;
 
     /**
      * Init
@@ -27,10 +32,11 @@ class RecurringData implements InstallDataInterface
      * @param IndexerInterfaceFactory $indexerInterfaceFactory
      */
     public function __construct(
-        IndexerInterfaceFactory $indexerInterfaceFactory
-    )
-    {
+        IndexerInterfaceFactory $indexerInterfaceFactory,
+        State $state
+    ) {
         $this->indexerInterfaceFactory = $indexerInterfaceFactory;
+        $this->state = $state;
     }
 
     /**
@@ -38,17 +44,19 @@ class RecurringData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $this->getIndexer('catalogsearch_fulltext')->reindexAll();
+        $this->state->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_CRONTAB,
+            [$this, 'reindex']
+        );
     }
 
     /**
-     * Get indexer
+     * Run reindex.
      *
-     * @param string $indexerId
-     * @return \Magento\Framework\Indexer\IndexerInterface
+     * @return void
      */
-    private function getIndexer($indexerId)
+    public function reindex()
     {
-        return $this->indexerInterfaceFactory->create()->load($indexerId);
+        $this->indexerInterfaceFactory->create()->load('catalogsearch_fulltext')->reindexAll();
     }
 }
