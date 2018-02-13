@@ -21,9 +21,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
@@ -32,10 +32,10 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
 
 
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -45,7 +45,7 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
     public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create();
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         /**
          * Install eav entity types to the eav/entity_type table

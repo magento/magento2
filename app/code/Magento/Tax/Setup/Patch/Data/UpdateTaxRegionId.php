@@ -17,9 +17,9 @@ use Magento\Tax\Setup\TaxSetupFactory;
 class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var TaxRateRepositoryInterface
@@ -38,18 +38,18 @@ class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
 
     /**
      * UpdateTaxRegionId constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param SearchCriteriaFactory $searchCriteriaFactory
      * @param RegionFactory $regionFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         TaxRateRepositoryInterface $taxRateRepository,
         SearchCriteriaFactory $searchCriteriaFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->taxRateRepository = $taxRateRepository;
         $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->regionFactory = $regionFactory;
@@ -60,7 +60,7 @@ class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         //Update the tax_region_id
         $taxRateList = $this->taxRateRepository->getList($this->searchCriteriaFactory->create());
@@ -78,7 +78,7 @@ class UpdateTaxRegionId implements DataPatchInterface, PatchVersionInterface
                 $this->taxRateRepository->save($taxRateData);
             }
         }
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

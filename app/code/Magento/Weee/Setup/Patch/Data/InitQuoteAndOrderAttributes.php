@@ -10,7 +10,6 @@ use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -21,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QuoteSetupFactory
@@ -37,16 +36,16 @@ class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInt
 
     /**
      * InitQuoteAndOrderAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QuoteSetupFactory $quoteSetupFactory,
         SalesSetupFactory $salesSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
     }
@@ -57,7 +56,7 @@ class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInt
     public function apply()
     {
         /** @var QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create();
+        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied', ['type' => 'text']);
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied_amount', ['type' => 'decimal']);
         $quoteSetup->addAttribute('quote_item', 'weee_tax_applied_row_amount', ['type' => 'decimal']);
@@ -69,7 +68,7 @@ class InitQuoteAndOrderAttributes implements DataPatchInterface, PatchVersionInt
         $quoteSetup->addAttribute('quote_item', 'base_weee_tax_row_disposition', ['type' => 'decimal']);
 
         /** @var SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create();
+        $salesSetup = $this->salesSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied', ['type' => 'text']);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied_amount', ['type' => 'decimal']);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied_row_amount', ['type' => 'decimal']);

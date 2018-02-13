@@ -8,6 +8,7 @@ namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Setup\DataInstaller;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -18,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var \Magento\Directory\Setup\DataInstallerFactory
@@ -30,14 +31,14 @@ class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
     /**
      * AddDataForCroatia constructor.
      *
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
     }
 
@@ -49,7 +50,7 @@ class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
         /** @var DataInstaller $dataInstaller */
         $dataInstaller = $this->dataInstallerFactory->create();
         $dataInstaller->addCountryRegions(
-            $this->resourceConnection->getConnection(),
+            $this->moduleDataSetup->getConnection(),
             $this->getDataForIndia()
         );
     }

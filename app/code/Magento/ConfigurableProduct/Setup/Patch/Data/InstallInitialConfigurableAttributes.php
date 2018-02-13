@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Setup\Patch\Data;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -20,9 +21,9 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
     /**
      * @var EavSetupFactory
      */
@@ -30,14 +31,14 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
 
     /**
      * InstallInitialConfigurableAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -47,7 +48,7 @@ class InstallInitialConfigurableAttributes implements DataPatchInterface, PatchV
     public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $attributes = [
             'country_of_manufacture',
             'minimal_price',

@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
@@ -30,13 +30,13 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -45,10 +45,10 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create();
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(Product::ENTITY);
         $groupId = (int)$eavSetup->getAttributeGroupByCode(
             Product::ENTITY,
@@ -58,7 +58,7 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
         );
         $eavSetup->addAttributeToGroup(Product::ENTITY, $attributeSetId, $groupId, 'swatch_image');
 
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

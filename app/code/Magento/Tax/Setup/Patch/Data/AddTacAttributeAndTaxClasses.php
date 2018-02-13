@@ -30,24 +30,24 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
     private $directoryRegionFactory;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * AddTacAttributeAndTaxClasses constructor.
      * @param TaxSetupFactory $taxSetupFactory
      * @param RegionFactory $directoryRegionFactory
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         TaxSetupFactory $taxSetupFactory,
         RegionFactory $directoryRegionFactory,
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->taxSetupFactory = $taxSetupFactory;
         $this->directoryRegionFactory = $directoryRegionFactory;
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -56,7 +56,7 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
     public function apply()
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup']);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $this->moduleDataSetup]);
 
         /**
          * Add tax_class_id attribute to the 'eav_attribute' table
@@ -108,8 +108,8 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
             ],
         ];
         foreach ($data as $row) {
-            $this->resourceConnection->getConnection()->insertForce(
-                $this->resourceConnection->getConnection()->getTableName('tax_class'),
+            $this->moduleDataSetup->getConnection()->insertForce(
+                $this->moduleDataSetup->getConnection()->getTableName('tax_class'),
                 $row
             );
         }
@@ -137,8 +137,8 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
             ],
         ];
         foreach ($data as $row) {
-            $this->resourceConnection->getConnection()->insertForce(
-                $this->resourceConnection->getConnection()->getTableName('tax_calculation_rate'),
+            $this->moduleDataSetup->getConnection()->insertForce(
+                $this->moduleDataSetup->getConnection()->getTableName('tax_calculation_rate'),
                 $row
             );
         }

@@ -8,7 +8,7 @@ namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetup;
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +19,10 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
+
     /**
      * @var CustomerSetupFactory
      */
@@ -29,14 +30,14 @@ class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersi
 
     /**
      * UpdateCustomerAttributesMetadata constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -46,7 +47,7 @@ class UpdateCustomerAttributesMetadata implements DataPatchInterface, PatchVersi
     public function apply()
     {
         /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $this->updateCustomerAttributesMetadata($customerSetup);
     }
 

@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var SalesSetupFactory
@@ -29,14 +29,14 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
 
     /**
      * InstallOrderStatusesAndInitialSalesConfig constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         SalesSetupFactory $salesSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->salesSetupFactory = $salesSetupFactory;
     }
 
@@ -46,7 +46,7 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
     public function apply()
     {
         /** @var \Magento\Sales\Setup\SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create();
+        $salesSetup = $this->salesSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         /**
          * Install eav entity types to the eav/entity_type table
@@ -70,8 +70,8 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
         foreach ($statuses as $code => $info) {
             $data[] = ['status' => $code, 'label' => $info];
         }
-        $this->resourceConnection->getConnection()->insertArray(
-            $this->resourceConnection->getConnection()->getTableName('sales_order_status'), ['status', 'label'], $data);
+        $this->moduleDataSetup->getConnection()->insertArray(
+            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'), ['status', 'label'], $data);
         /**
          * Install order states from config
          */
@@ -128,8 +128,8 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
                 }
             }
         }
-        $this->resourceConnection->getConnection()->insertArray(
-            $this->resourceConnection->getConnection()->getTableName('sales_order_status_state'),
+        $this->moduleDataSetup->getConnection()->insertArray(
+            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status_state'),
             ['status', 'state', 'is_default'],
             $data
         );
@@ -149,8 +149,8 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
         /** Update visibility for states */
         $states = ['new', 'processing', 'complete', 'closed', 'canceled', 'holded', 'payment_review'];
         foreach ($states as $state) {
-            $this->resourceConnection->getConnection()->update(
-                $this->resourceConnection->getConnection()->getTableName('sales_order_status_state'),
+            $this->moduleDataSetup->getConnection()->update(
+                $this->moduleDataSetup->getConnection()->getTableName('sales_order_status_state'),
                 ['visible_on_front' => 1],
                 ['state = ?' => $state]
             );

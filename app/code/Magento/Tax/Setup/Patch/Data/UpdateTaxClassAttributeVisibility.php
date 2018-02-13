@@ -19,9 +19,9 @@ use Magento\Tax\Setup\TaxSetupFactory;
 class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var TaxSetupFactory
@@ -30,14 +30,14 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
 
     /**
      * UpdateTaxClassAttributeVisibility constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param TaxSetupFactory $taxSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         TaxSetupFactory $taxSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->taxSetupFactory = $taxSetupFactory;
     }
 
@@ -47,9 +47,9 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
     public function apply()
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup']);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $this->moduleDataSetup]);
 
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
          //Update the tax_class_id attribute in the 'catalog_eav_attribute' table
         $taxSetup->updateAttribute(
@@ -58,7 +58,7 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
             'is_visible_in_advanced_search',
             false
         );
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

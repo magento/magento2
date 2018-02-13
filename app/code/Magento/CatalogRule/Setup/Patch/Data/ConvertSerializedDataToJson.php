@@ -8,6 +8,7 @@ namespace Magento\CatalogRule\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
@@ -19,9 +20,9 @@ use Magento\CatalogRule\Api\Data\RuleInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var MetadataPool
@@ -35,16 +36,16 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
 
     /**
      * ConvertSerializedDataToJson constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param MetadataPool $metadataPool
      * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         MetadataPool $metadataPool,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->metadataPool = $metadataPool;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
     }
@@ -59,18 +60,18 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
             [
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->resourceConnection->getConnection()->getTableName('catalogrule'),
+                    $this->moduleDataSetup->getConnection()->getTableName('catalogrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->resourceConnection->getConnection()->getTableName('catalogrule'),
+                    $this->moduleDataSetup->getConnection()->getTableName('catalogrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'
                 ),
             ],
-            $this->resourceConnection->getConnection()
+            $this->moduleDataSetup->getConnection()
         );
     }
 

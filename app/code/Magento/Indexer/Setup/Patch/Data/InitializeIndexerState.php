@@ -25,9 +25,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitializeIndexerState implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CollectionFactory
@@ -56,17 +56,17 @@ class InitializeIndexerState implements DataPatchInterface, PatchVersionInterfac
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         CollectionFactory $statesFactory,
         StateFactory $stateFactory,
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->statesFactory = $statesFactory;
         $this->stateFactory = $stateFactory;
         $this->config = $config;

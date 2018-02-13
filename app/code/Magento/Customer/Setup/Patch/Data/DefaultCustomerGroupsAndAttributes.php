@@ -21,11 +21,6 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @var CustomerSetupFactory
      */
     private $customerSetupFactory;
@@ -37,16 +32,13 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
 
     /**
      * DefaultCustomerGroupsAndAttributes constructor.
-     * @param ResourceConnection $resourceConnection
      * @param CustomerSetupFactory $customerSetupFactory
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         CustomerSetupFactory $customerSetupFactory,
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->customerSetupFactory = $customerSetupFactory;
         $this->moduleDataSetup = $moduleDataSetup;
     }
@@ -60,20 +52,20 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
         $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         // insert default customer groups
-        $this->resourceConnection->getConnection()->insertForce(
-            $this->resourceConnection->getConnection()->getTableName('customer_group'),
+        $this->moduleDataSetup->getConnection()->insertForce(
+            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 0, 'customer_group_code' => 'NOT LOGGED IN', 'tax_class_id' => 3]
         );
-        $this->resourceConnection->getConnection()->insertForce(
-            $this->resourceConnection->getConnection()->getTableName('customer_group'),
+        $this->moduleDataSetup->getConnection()->insertForce(
+            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 1, 'customer_group_code' => 'General', 'tax_class_id' => 3]
         );
-        $this->resourceConnection->getConnection()->insertForce(
-            $this->resourceConnection->getConnection()->getTableName('customer_group'),
+        $this->moduleDataSetup->getConnection()->insertForce(
+            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 2, 'customer_group_code' => 'Wholesale', 'tax_class_id' => 3]
         );
-        $this->resourceConnection->getConnection()->insertForce(
-            $this->resourceConnection->getConnection()->getTableName('customer_group'),
+        $this->moduleDataSetup->getConnection()->insertForce(
+            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
             ['customer_group_id' => 3, 'customer_group_code' => 'Retailer', 'tax_class_id' => 3]
         );
 

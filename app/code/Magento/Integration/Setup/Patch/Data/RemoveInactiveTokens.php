@@ -17,18 +17,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -36,13 +36,13 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         $this->removeRevokedTokens();
         $this->removeTokensFromInactiveAdmins();
         $this->removeTokensFromInactiveCustomers();
 
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
 
     }
 
@@ -77,10 +77,10 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeRevokedTokens()
     {
-        $oauthTokenTable = $this->resourceConnection->getConnection()->getTableName('oauth_token');
+        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
 
         $where = ['revoked = ?' => 1];
-        $this->resourceConnection->getConnection()->delete($oauthTokenTable, $where);
+        $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
     }
 
     /**
@@ -90,19 +90,19 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeTokensFromInactiveAdmins()
     {
-        $oauthTokenTable = $this->resourceConnection->getConnection()->getTableName('oauth_token');
-        $adminUserTable = $this->resourceConnection->getConnection()->getTableName('admin_user');
+        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
+        $adminUserTable = $this->moduleDataSetup->getConnection()->getTableName('admin_user');
 
-        $select = $this->resourceConnection->getConnection()->select()->from(
+        $select = $this->moduleDataSetup->getConnection()->select()->from(
             $adminUserTable,
             ['user_id', 'is_active']
         );
 
-        $admins = $this->resourceConnection->getConnection()->fetchAll($select);
+        $admins = $this->moduleDataSetup->getConnection()->fetchAll($select);
         foreach ($admins as $admin) {
             if ($admin['is_active'] == 0) {
                 $where = ['admin_id = ?' => (int)$admin['user_id']];
-                $this->resourceConnection->getConnection()->delete($oauthTokenTable, $where);
+                $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }
 
@@ -115,19 +115,19 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeTokensFromInactiveCustomers()
     {
-        $oauthTokenTable = $this->resourceConnection->getConnection()->getTableName('oauth_token');
-        $adminUserTable = $this->resourceConnection->getConnection()->getTableName('customer_entity');
+        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
+        $adminUserTable = $this->moduleDataSetup->getConnection()->getTableName('customer_entity');
 
-        $select = $this->resourceConnection->getConnection()->select()->from(
+        $select = $this->moduleDataSetup->getConnection()->select()->from(
             $adminUserTable,
             ['entity_id', 'is_active']
         );
 
-        $admins = $this->resourceConnection->getConnection()->fetchAll($select);
+        $admins = $this->moduleDataSetup->getConnection()->fetchAll($select);
         foreach ($admins as $admin) {
             if ($admin['is_active'] == 0) {
                 $where = ['customer_id = ?' => (int)$admin['entity_id']];
-                $this->resourceConnection->getConnection()->delete($oauthTokenTable, $where);
+                $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
             }
         }
 

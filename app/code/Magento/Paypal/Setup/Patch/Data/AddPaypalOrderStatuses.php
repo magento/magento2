@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QuoteSetupFactory
@@ -35,16 +35,16 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
 
     /**
      * AddPaypalOrderStates constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QuoteSetupFactory $quoteSetupFactory,
         SalesSetupFactory $salesSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->quoteSetupFactory = $quoteSetupFactory;
         $this->salesSetupFactory = $salesSetupFactory;
     }
@@ -57,7 +57,7 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
         /**
          * Prepare database for install
          */
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         $quoteInstaller = $this->quoteSetupFactory->create();
         $salesInstaller = $this->salesSetupFactory->create();
@@ -83,15 +83,15 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
         foreach ($statuses as $code => $info) {
             $data[] = ['status' => $code, 'label' => $info];
         }
-        $this->resourceConnection->getConnection()->insertArray(
-            $this->resourceConnection->getConnection()->getTableName('sales_order_status'),
+        $this->moduleDataSetup->getConnection()->insertArray(
+            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'),
             ['status', 'label'],
             $data
         );
         /**
          * Prepare database after install
          */
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
 
     }
 

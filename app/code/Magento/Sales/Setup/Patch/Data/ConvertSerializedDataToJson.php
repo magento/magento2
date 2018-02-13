@@ -30,9 +30,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var SalesSetupFactory
@@ -51,15 +51,15 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         SalesSetupFactory $salesSetupFactory,
         \Magento\Eav\Model\Config $eavConfig,
         AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
         $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;

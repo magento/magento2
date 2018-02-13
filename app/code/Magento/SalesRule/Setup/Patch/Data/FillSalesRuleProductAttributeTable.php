@@ -33,9 +33,9 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
     private $resourceModelRule;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var State
@@ -47,20 +47,20 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
      * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param State $appState
      */
     public function __construct(
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule,
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         State $appState
     ) {
         $this->ruleColletionFactory = $ruleColletionFactory;
         $this->serializer = $serializer;
         $this->resourceModelRule = $resourceModelRule;
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->appState = $appState;
     }
 
@@ -69,13 +69,13 @@ class FillSalesRuleProductAttributeTable implements DataPatchInterface, PatchVer
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
             $this->appState->emulateAreaCode(
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                 [$this, 'fillSalesRuleProductAttributeTable']
             );
             $this->fillSalesRuleProductAttributeTable();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
 
     }
 

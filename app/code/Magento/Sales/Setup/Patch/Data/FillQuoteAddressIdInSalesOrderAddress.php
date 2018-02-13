@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var SalesSetupFactory
@@ -55,10 +55,10 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         SalesSetupFactory $salesSetupFactory,
         State $state,
         Config $eavConfig,
@@ -66,7 +66,7 @@ class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, Patch
         OrderFactory $orderFactory,
         QuoteFactory $quoteFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->salesSetupFactory = $salesSetupFactory;
         $this->state = $state;
         $this->eavConfig = $eavConfig;

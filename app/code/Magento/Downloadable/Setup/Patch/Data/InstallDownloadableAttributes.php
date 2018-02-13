@@ -9,6 +9,7 @@ namespace Magento\Downloadable\Setup\Patch\Data;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var EavSetupFactory
@@ -30,14 +31,14 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
 
     /**
      * InstallDownloadableAttributes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
     }
 
@@ -47,7 +48,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
     public function apply()
     {
         /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         /**
          * Add attributes to the eav/attribute table
          */

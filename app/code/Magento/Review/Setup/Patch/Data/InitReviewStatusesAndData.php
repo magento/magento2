@@ -13,18 +13,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -39,8 +39,8 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
             \Magento\Review\Model\Review::ENTITY_CATEGORY_CODE,
         ];
         foreach ($reviewEntityCodes as $entityCode) {
-            $this->resourceConnection->getConnection()->insert(
-                $this->resourceConnection->getConnection()->getTableName('review_entity'),
+            $this->moduleDataSetup->getConnection()->insert(
+                $this->moduleDataSetup->getConnection()->getTableName('review_entity'),
                 ['entity_code' => $entityCode]
             );
         }
@@ -52,8 +52,8 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
         ];
         foreach ($reviewStatuses as $k => $v) {
             $bind = ['status_id' => $k, 'status_code' => $v];
-            $this->resourceConnection->getConnection()->insertForce(
-                $this->resourceConnection->getConnection()->getTableName('review_status'),
+            $this->moduleDataSetup->getConnection()->insertForce(
+                $this->moduleDataSetup->getConnection()->getTableName('review_status'),
                 $bind
             );
         }
@@ -68,30 +68,30 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
         ];
         foreach ($data as $entityCode => $ratings) {
             //Fill table rating/rating_entity
-            $this->resourceConnection->getConnection()->insert(
-                $this->resourceConnection->getConnection()->getTableName('rating_entity'),
+            $this->moduleDataSetup->getConnection()->insert(
+                $this->moduleDataSetup->getConnection()->getTableName('rating_entity'),
                 ['entity_code' => $entityCode]
             );
-            $entityId = $this->resourceConnection->getConnection()->lastInsertId(
-                $this->resourceConnection->getConnection()->getTableName('rating_entity')
+            $entityId = $this->moduleDataSetup->getConnection()->lastInsertId(
+                $this->moduleDataSetup->getConnection()->getTableName('rating_entity')
             );
             foreach ($ratings as $bind) {
                 //Fill table rating/rating
                 $bind['entity_id'] = $entityId;
-                $this->resourceConnection->getConnection()->insert(
-                    $this->resourceConnection->getConnection()->getTableName('rating'),
+                $this->moduleDataSetup->getConnection()->insert(
+                    $this->moduleDataSetup->getConnection()->getTableName('rating'),
                     $bind
                 );
                 //Fill table rating/rating_option
-                $ratingId = $this->resourceConnection->getConnection()->lastInsertId(
-                    $this->resourceConnection->getConnection()->getTableName('rating')
+                $ratingId = $this->moduleDataSetup->getConnection()->lastInsertId(
+                    $this->moduleDataSetup->getConnection()->getTableName('rating')
                 );
                 $optionData = [];
                 for ($i = 1; $i <= 5; $i++) {
                     $optionData[] = ['rating_id' => $ratingId, 'code' => (string)$i, 'value' => $i, 'position' => $i];
                 }
-                $this->resourceConnection->getConnection()->insertMultiple(
-                    $this->resourceConnection->getConnection()->getTableName('rating_option'),
+                $this->moduleDataSetup->getConnection()->insertMultiple(
+                    $this->moduleDataSetup->getConnection()->getTableName('rating_option'),
                     $optionData
                 );
             }

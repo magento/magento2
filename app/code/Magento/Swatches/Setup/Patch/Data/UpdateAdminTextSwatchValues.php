@@ -21,18 +21,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpdateAdminTextSwatchValues constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -40,9 +40,9 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->updateAdminTextSwatchValues();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -76,7 +76,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
      */
     private function updateAdminTextSwatchValues()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $storeData = $connection
             ->select()
             ->from($connection->getTableName('store'))

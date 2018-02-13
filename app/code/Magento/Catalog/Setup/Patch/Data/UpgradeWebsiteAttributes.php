@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -82,24 +82,24 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
     private $linkFields = [];
 
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpgradeWebsiteAttributes constructor.
      * @param Generator $batchQueryGenerator
      * @param MetadataPool $metadataPool
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         Generator $batchQueryGenerator,
         MetadataPool $metadataPool,
-        ResourceConnection $resourceConnection
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->batchQueryGenerator = $batchQueryGenerator;
         $this->metaDataPool = $metadataPool;
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -156,25 +156,25 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
      */
     private function fetchAttributeValues($tableName)
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $batchSelectIterator = $this->batchQueryGenerator->generate(
             'value_id',
             $connection
                 ->select()
                 ->from(
-                    ['cpei' => $this->resourceConnection->getConnection()->getTableName($tableName)],
+                    ['cpei' => $this->moduleDataSetup->getConnection()->getTableName($tableName)],
                     '*'
                 )
                 ->join(
                     [
-                        'cea' => $this->resourceConnection->getConnection()->getTableName('catalog_eav_attribute'),
+                        'cea' => $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
                     ],
                     'cpei.attribute_id = cea.attribute_id',
                     ''
                 )
                 ->join(
                     [
-                        'st' => $this->resourceConnection->getConnection()->getTableName('store'),
+                        'st' => $this->moduleDataSetup->getConnection()->getTableName('store'),
                     ],
                     'st.store_id = cpei.store_id',
                     'st.website_id'
@@ -203,11 +203,11 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
             return $this->groupedStoreViews;
         }
 
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $query = $connection
             ->select()
             ->from(
-                $this->resourceConnection->getConnection()->getTableName('store'),
+                $this->moduleDataSetup->getConnection()->getTableName('store'),
                 '*'
             );
 
@@ -322,12 +322,12 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
             VALUES 
             %s
             ON duplicate KEY UPDATE `value` = VALUES(`value`)',
-            $this->resourceConnection->getConnection()->getTableName($tableName),
+            $this->moduleDataSetup->getConnection()->getTableName($tableName),
             $this->getTableLinkField($tableName),
             $this->prepareInsertValuesStatement($insertions)
         );
 
-        $this->resourceConnection->getConnection()->query($rawQuery, $this->getPlaceholderValues($insertions));
+        $this->moduleDataSetup->getConnection()->query($rawQuery, $this->getPlaceholderValues($insertions));
     }
 
     /**

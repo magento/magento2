@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var PageFactory
@@ -29,14 +29,14 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
 
     /**
      * InitializeReportEntityTypesAndPages constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param PageFactory $pageFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Cms\Model\PageFactory $pageFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->pageFactory = $pageFactory;
     }
 
@@ -45,7 +45,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         /*
          * Report Event Types default data
          */
@@ -71,13 +71,13 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
         ];
 
         foreach ($eventTypeData as $row) {
-            $this->resourceConnection->getConnection()
-                ->insertForce($this->resourceConnection->getConnection()->getTableName('report_event_types'), $row);
+            $this->moduleDataSetup->getConnection()
+                ->insertForce($this->moduleDataSetup->getConnection()->getTableName('report_event_types'), $row);
         }
         /**
          * Prepare database after data upgrade
          */
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
         /**
          * Cms Page  with 'home' identifier page modification for report pages
          */

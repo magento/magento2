@@ -27,23 +27,23 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     private $aggregatedFieldConverter;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter,
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->metadataPool = $metadataPool;
         $this->aggregatedFieldConverter = $aggregatedFieldConverter;
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -53,9 +53,9 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->convertSerializedDataToJson();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -96,18 +96,18 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
             [
                 new \Magento\Framework\DB\FieldToConvert(
                     \Magento\Framework\DB\DataConverter\SerializedToJson::class,
-                    $this->resourceConnection->getConnection()->getTableName('salesrule'),
+                    $this->moduleDataSetup->getConnection()->getTableName('salesrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
                 new \Magento\Framework\DB\FieldToConvert(
                     \Magento\Framework\DB\DataConverter\SerializedToJson::class,
-                    $this->resourceConnection->getConnection()->getTableName('salesrule'),
+                    $this->moduleDataSetup->getConnection()->getTableName('salesrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'
                 ),
             ],
-            $this->resourceConnection->getConnection()
+            $this->moduleDataSetup->getConnection()
         );
     }
 }

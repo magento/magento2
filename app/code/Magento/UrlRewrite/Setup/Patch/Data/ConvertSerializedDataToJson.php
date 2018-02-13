@@ -19,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var FieldDataConverterFactory
@@ -30,14 +30,14 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
 
     /**
      * ConvertSerializedDataToJson constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         FieldDataConverterFactory $fieldDataConverterFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
@@ -46,9 +46,9 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
         $this->convertSerializedDataToJson();
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**
@@ -82,8 +82,8 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('url_rewrite'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('url_rewrite'),
             'url_rewrite_id',
             'metadata'
         );

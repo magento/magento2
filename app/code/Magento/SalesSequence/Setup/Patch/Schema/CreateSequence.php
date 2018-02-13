@@ -4,24 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesSequence\Setup\Patch\Data;
+namespace Magento\SalesSequence\Setup\Patch\Schema;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\State;
 use Magento\SalesSequence\Setup\SequenceCreator;
-use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Setup\Model\Patch\SchemaPatchInterface;
 
 /**
  * Class CreateSequence
  * @package Magento\SalesSequence\Setup\Patch
  */
-class CreateSequence implements DataPatchInterface, PatchVersionInterface
+class CreateSequence implements SchemaPatchInterface, PatchVersionInterface
 {
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
     /**
      * @var SequenceCreator
      */
@@ -29,14 +24,11 @@ class CreateSequence implements DataPatchInterface, PatchVersionInterface
 
     /**
      * CreateSequence constructor.
-     * @param ResourceConnection $resourceConnection
      * @param SequenceCreator $sequenceCreator
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         SequenceCreator $sequenceCreator
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->sequenceCreator = $sequenceCreator;
     }
 
@@ -53,7 +45,9 @@ class CreateSequence implements DataPatchInterface, PatchVersionInterface
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            \Magento\Store\Setup\Patch\Schema\InitializeStoresAndWebsites::class
+        ];
     }
 
     /**

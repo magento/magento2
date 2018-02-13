@@ -13,18 +13,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * ConfigureFedexDefaults constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -73,7 +73,7 @@ class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterfac
             ],
         ];
 
-        $conn = $this->resourceConnection->getConnection();
+        $conn = $this->moduleDataSetup->getConnection();
         $configDataTable = $conn->getTableName('core_config_data');
         $select = $conn->select()->from(
             $configDataTable

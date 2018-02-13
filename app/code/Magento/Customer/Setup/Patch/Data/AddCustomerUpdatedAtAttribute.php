@@ -9,6 +9,7 @@ namespace Magento\Customer\Setup\Patch\Data;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -19,9 +20,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CustomerSetupFactory
@@ -30,14 +31,14 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
 
     /**
      * AddCustomerUpdatedAtAttribute constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         CustomerSetupFactory $customerSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->customerSetupFactory = $customerSetupFactory;
     }
 
@@ -46,7 +47,7 @@ class AddCustomerUpdatedAtAttribute implements DataPatchInterface, PatchVersionI
      */
     public function apply()
     {
-        $customerSetup = $this->customerSetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $customerSetup->addAttribute(
             Customer::ENTITY,
             'updated_at',

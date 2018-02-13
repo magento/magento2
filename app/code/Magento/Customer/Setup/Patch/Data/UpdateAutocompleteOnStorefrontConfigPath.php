@@ -7,6 +7,7 @@
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -17,18 +18,18 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * UpdateAutocompleteOnStorefrontCOnfigPath constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -36,8 +37,8 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->update(
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
             ['path = ?' => 'general/restriction/autocomplete_on_storefront']
         );

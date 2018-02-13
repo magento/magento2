@@ -18,9 +18,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var CategorySetupFactory
@@ -29,14 +29,14 @@ class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVers
 
     /**
      * MoveGiftMessageToGiftOptionsGroup constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         CategorySetupFactory $categorySetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -45,10 +45,10 @@ class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVers
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->startSetup();
+        $this->moduleDataSetup->getConnection()->startSetup();
 
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['resourceConnection' => $this->resourceConnection]);
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
         $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
@@ -65,7 +65,7 @@ class MoveGiftMessageToGiftOptionsGroup implements DataPatchInterface, PatchVers
                 $attribute['attribute_id'],
                 10
             );
-        $this->resourceConnection->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()->endSetup();
     }
 
     /**

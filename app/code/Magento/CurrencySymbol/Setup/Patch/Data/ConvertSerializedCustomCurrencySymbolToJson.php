@@ -11,6 +11,7 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -21,9 +22,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
     
     /**
     * @param FieldDataConverterFactory $fieldDataConverterFactory
@@ -38,17 +39,16 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
     /**
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory,
-        ResourceConnection $resourceConnection
-
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
@@ -66,8 +66,8 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
             ]
         );
         $fieldDataConverter->convert(
-            $this->resourceConnection->getConnection(),
-            $this->resourceConnection->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getConnection(),
+            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
             'config_id',
             'value',
             $queryModifier

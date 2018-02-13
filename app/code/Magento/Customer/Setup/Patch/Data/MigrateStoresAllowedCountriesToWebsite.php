@@ -7,19 +7,19 @@
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
 class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var StoreManagerInterface
@@ -33,16 +33,16 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
 
     /**
      * MigrateStoresAllowedCountriesToWebsite constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param StoreManagerInterface $storeManager
      * @param AllowedCountries $allowedCountries
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        ModuleDataSetupInterface $moduleDataSetup,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\AllowedCountries $allowedCountries
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->storeManager = $storeManager;
         $this->allowedCountries = $allowedCountries;
     }
@@ -52,13 +52,13 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
      */
     public function apply()
     {
-        $this->resourceConnection->getConnection()->beginTransaction();
+        $this->moduleDataSetup->getConnection()->beginTransaction();
 
         try {
             $this->migrateStoresAllowedCountriesToWebsite();
-            $this->resourceConnection->getConnection()->commit();
+            $this->moduleDataSetup->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->resourceConnection->getConnection()->rollBack();
+            $this->moduleDataSetup->getConnection()->rollBack();
             throw $e;
         }
     }
@@ -88,7 +88,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
             );
         }
 
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
 
         //Remove everything from stores scope
         $connection->delete(

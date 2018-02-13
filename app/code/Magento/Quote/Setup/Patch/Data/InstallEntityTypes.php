@@ -7,10 +7,6 @@
 namespace Magento\Quote\Setup\Patch\Data;
 
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Setup\Model\Patch\DataPatchInterface;
@@ -23,9 +19,9 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
 class InstallEntityTypes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $resourceConnection;
+    private $moduleDataSetup;
 
     /**
      * @var QuoteSetupFactory
@@ -34,14 +30,14 @@ class InstallEntityTypes implements DataPatchInterface, PatchVersionInterface
 
     /**
      * InstallEntityTypes constructor.
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param QuoteSetupFactory $quoteSetupFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
         QuoteSetupFactory $quoteSetupFactory
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->quoteSetupFactory = $quoteSetupFactory;
     }
 
@@ -51,7 +47,7 @@ class InstallEntityTypes implements DataPatchInterface, PatchVersionInterface
     public function apply()
     {
         /** @var QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create();
+        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $this->moduleDataSetup]);
 
         /**
          * Install eav entity types to the eav/entity_type table

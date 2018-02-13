@@ -71,12 +71,11 @@ class SalesSetup extends EavSetup
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        ScopeConfigInterface $config,
-        ResourceConnection $resourceConnection = null
+        ScopeConfigInterface $config
     ) {
         $this->config = $config;
         $this->encryptor = $context->getEncryptor();
-        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory, $resourceConnection);
+        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory);
     }
 
     /**
