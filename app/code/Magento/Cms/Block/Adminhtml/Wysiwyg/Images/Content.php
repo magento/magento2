@@ -92,7 +92,13 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getContentsUrl()
     {
-        return $this->getUrl('cms/*/contents', ['type' => $this->getRequest()->getParam('type')]);
+        return $this->getUrl(
+            'cms/*/contents',
+            [
+                'type' => $this->getRequest()->getParam('type'),
+                'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
+            ]
+        );
     }
 
     /**

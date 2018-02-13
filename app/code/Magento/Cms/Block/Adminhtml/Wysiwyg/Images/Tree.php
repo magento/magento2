@@ -86,7 +86,10 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('cms/*/treeJson');
+        return $this->getUrl(
+            'cms/*/treeJson',
+            ['use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root')]
+        );
     }
 
     /**

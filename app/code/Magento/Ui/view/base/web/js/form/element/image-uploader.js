@@ -65,7 +65,7 @@ define([
                 openDialogUrl = this.mediaGallery.openDialogUrl +
                 'target_element_id/' + $buttonEl.attr('id') +
                 '/store/' + this.mediaGallery.storeId +
-                '/type/image/?isAjax=true';
+                '/type/image/use_storage_root/1?isAjax=true';
 
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
         },
