@@ -13,7 +13,7 @@ class RequestProcessorPool implements RequestProcessorInterface
 {
 
     /**
-     * @var array 
+     * @var array
      */
     private $requestProcessors;
 
@@ -37,8 +37,8 @@ class RequestProcessorPool implements RequestProcessorInterface
         $processed = false;
 
         /**
-* @var RequestProcessorInterface $processor 
-*/
+         * @var RequestProcessorInterface $processor
+         */
         foreach ($this->requestProcessors as $name => $processor) {
             if (strpos(ltrim($request->getPathInfo(), '/'), $processor->getProcessorPath()) === 0) {
                 $processor->process($request);
