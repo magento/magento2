@@ -64,7 +64,6 @@ class DeclarationInstaller
     public function installSchema(array $requestData)
     {
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
-        var_dump($declarativeSchema->getTableByName('patch_list'));
         $dbSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $dbSchema);
         $diff->registerSchema($declarativeSchema);
