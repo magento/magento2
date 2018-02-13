@@ -58,8 +58,6 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
         $primaryFile = parent::get($filename, 'primary')->toArray();
         if (!file_exists(key($primaryFile))) {
             throw new \Exception("Primary db_schema file doesn`t exists");
-        } else {
-            var_dump(reset($primaryFile));
         }
         /** Load primary configurations */
         $iterator += $primaryFile;
