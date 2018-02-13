@@ -170,7 +170,7 @@ class Tree extends AbstractCategory
             'children_count' => (int)$node->getChildrenCount(),
             'is_active' => (bool)$node->getIsActive(),
             // Scrub names for raw js output
-            'name' => $this->escapeHtmlAttr($node->getName(), false),
+            'name' => $this->escapeHtml($node->getName()),
             'level' => (int)$node->getLevel(),
             'product_count' => (int)$node->getProductCount(),
         ];
