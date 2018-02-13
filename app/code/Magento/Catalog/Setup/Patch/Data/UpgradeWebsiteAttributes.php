@@ -162,19 +162,19 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
             $connection
                 ->select()
                 ->from(
-                    ['cpei' => $this->moduleDataSetup->getConnection()->getTableName($tableName)],
+                    ['cpei' => $this->moduleDataSetup->getTable($tableName)],
                     '*'
                 )
                 ->join(
                     [
-                        'cea' => $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
+                        'cea' => $this->moduleDataSetup->getTable('catalog_eav_attribute'),
                     ],
                     'cpei.attribute_id = cea.attribute_id',
                     ''
                 )
                 ->join(
                     [
-                        'st' => $this->moduleDataSetup->getConnection()->getTableName('store'),
+                        'st' => $this->moduleDataSetup->getTable('store'),
                     ],
                     'st.store_id = cpei.store_id',
                     'st.website_id'
@@ -207,7 +207,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
         $query = $connection
             ->select()
             ->from(
-                $this->moduleDataSetup->getConnection()->getTableName('store'),
+                $this->moduleDataSetup->getTable('store'),
                 '*'
             );
 
@@ -322,7 +322,7 @@ class UpgradeWebsiteAttributes implements DataPatchInterface, PatchVersionInterf
             VALUES 
             %s
             ON duplicate KEY UPDATE `value` = VALUES(`value`)',
-            $this->moduleDataSetup->getConnection()->getTableName($tableName),
+            $this->moduleDataSetup->getTable($tableName),
             $this->getTableLinkField($tableName),
             $this->prepareInsertValuesStatement($insertions)
         );

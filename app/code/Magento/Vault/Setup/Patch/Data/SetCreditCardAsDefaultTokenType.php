@@ -43,7 +43,7 @@ class SetCreditCardAsDefaultTokenType implements DataPatchInterface, PatchVersio
         // data update for Vault module < 2.0.1
         // update sets credit card as default token type
         $this->moduleDataSetup->getConnection()->update(
-            $this->moduleDataSetup->getConnection()->getTableName('vault_payment_token'),
+            $this->moduleDataSetup->getTable('vault_payment_token'),
             [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
             ],

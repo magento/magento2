@@ -49,7 +49,7 @@ class CreateDefaultStock implements DataPatchInterface, PatchVersionInterface
     {
         $this->moduleDataSetup->getConnection()
             ->insertForce(
-                $this->moduleDataSetup->getConnection()->getTableName('cataloginventory_stock'),
+                $this->moduleDataSetup->getTable('cataloginventory_stock'),
                 ['stock_id' => 1, 'stock_name' => 'Default']
             );
 

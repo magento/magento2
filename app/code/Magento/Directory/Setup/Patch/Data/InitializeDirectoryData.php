@@ -299,7 +299,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
 
         $columns = ['country_id', 'iso2_code', 'iso3_code'];
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('directory_country'),
+            $this->moduleDataSetup->getTable('directory_country'),
             $columns,
             $data
         );
@@ -823,15 +823,15 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
             $this->moduleDataSetup->getConnection()->insert(
-                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region'),
+                $this->moduleDataSetup->getTable('directory_country_region'),
                 $bind
             );
             $regionId = $this->moduleDataSetup->getConnection()->lastInsertId(
-                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region')
+                $this->moduleDataSetup->getTable('directory_country_region')
             );
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
             $this->moduleDataSetup->getConnection()->insert(
-                $this->moduleDataSetup->getConnection()->getTableName('directory_country_region_name'),
+                $this->moduleDataSetup->getTable('directory_country_region_name'),
                 $bind
             );
         }
@@ -846,12 +846,12 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         ];
         $columns = ['currency_from', 'currency_to', 'rate'];
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('directory_currency_rate'),
+            $this->moduleDataSetup->getTable('directory_currency_rate'),
             $columns,
             $data
         );
         $this->moduleDataSetup->getConnection()->insert(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
@@ -863,7 +863,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
         $helper = $this->directoryDataFactory->create();
         $countries = $helper->getCountryCollection()->getCountriesWithRequiredStates();
         $this->moduleDataSetup->getConnection()->insert(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,

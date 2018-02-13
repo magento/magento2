@@ -40,7 +40,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
         ];
         foreach ($reviewEntityCodes as $entityCode) {
             $this->moduleDataSetup->getConnection()->insert(
-                $this->moduleDataSetup->getConnection()->getTableName('review_entity'),
+                $this->moduleDataSetup->getTable('review_entity'),
                 ['entity_code' => $entityCode]
             );
         }
@@ -53,7 +53,7 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
         foreach ($reviewStatuses as $k => $v) {
             $bind = ['status_id' => $k, 'status_code' => $v];
             $this->moduleDataSetup->getConnection()->insertForce(
-                $this->moduleDataSetup->getConnection()->getTableName('review_status'),
+                $this->moduleDataSetup->getTable('review_status'),
                 $bind
             );
         }
@@ -69,29 +69,29 @@ class InitReviewStatusesAndData implements DataPatchInterface, PatchVersionInter
         foreach ($data as $entityCode => $ratings) {
             //Fill table rating/rating_entity
             $this->moduleDataSetup->getConnection()->insert(
-                $this->moduleDataSetup->getConnection()->getTableName('rating_entity'),
+                $this->moduleDataSetup->getTable('rating_entity'),
                 ['entity_code' => $entityCode]
             );
             $entityId = $this->moduleDataSetup->getConnection()->lastInsertId(
-                $this->moduleDataSetup->getConnection()->getTableName('rating_entity')
+                $this->moduleDataSetup->getTable('rating_entity')
             );
             foreach ($ratings as $bind) {
                 //Fill table rating/rating
                 $bind['entity_id'] = $entityId;
                 $this->moduleDataSetup->getConnection()->insert(
-                    $this->moduleDataSetup->getConnection()->getTableName('rating'),
+                    $this->moduleDataSetup->getTable('rating'),
                     $bind
                 );
                 //Fill table rating/rating_option
                 $ratingId = $this->moduleDataSetup->getConnection()->lastInsertId(
-                    $this->moduleDataSetup->getConnection()->getTableName('rating')
+                    $this->moduleDataSetup->getTable('rating')
                 );
                 $optionData = [];
                 for ($i = 1; $i <= 5; $i++) {
                     $optionData[] = ['rating_id' => $ratingId, 'code' => (string)$i, 'value' => $i, 'position' => $i];
                 }
                 $this->moduleDataSetup->getConnection()->insertMultiple(
-                    $this->moduleDataSetup->getConnection()->getTableName('rating_option'),
+                    $this->moduleDataSetup->getTable('rating_option'),
                     $optionData
                 );
             }

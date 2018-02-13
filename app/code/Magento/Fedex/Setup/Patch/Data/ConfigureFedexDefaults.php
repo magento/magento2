@@ -75,7 +75,7 @@ class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterfac
         ];
 
         $conn = $this->moduleDataSetup->getConnection();
-        $configDataTable = $conn->getTableName('core_config_data');
+        $configDataTable = $this->moduleDataSetup->getTable('core_config_data');
         $select = $conn->select()->from(
             $configDataTable
         )->where(

@@ -94,7 +94,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'value' => $category->getId(),
         ];
         $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             $data,
             ['value']
         );
@@ -154,7 +154,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
 
         foreach ($data as $bind) {
             $this->moduleDataSetup->getConnection()->insertForce(
-                $this->moduleDataSetup->getConnection()->getTableName(
+                $this->moduleDataSetup->getTable(
                     'catalog_product_link_type'
                 ),
                 $bind
@@ -183,7 +183,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         ];
 
         $this->moduleDataSetup->getConnection()->insertMultiple(
-            $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute'),
+            $this->moduleDataSetup->getTable('catalog_product_link_attribute'),
             $data
         );
 
@@ -192,13 +192,13 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
          *
          */
         $describe = $this->moduleDataSetup->getConnection()
-            ->describeTable($this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'));
+            ->describeTable($this->moduleDataSetup->getTable('catalog_eav_attribute'));
         foreach ($describe as $columnData) {
             if ($columnData['COLUMN_NAME'] == 'attribute_id') {
                 continue;
             }
             $this->moduleDataSetup->getConnection()->dropColumn(
-                $this->moduleDataSetup->getConnection()->getTableName('eav_attribute'),
+                $this->moduleDataSetup->getTable('eav_attribute'),
                 $columnData['COLUMN_NAME']
             );
         }

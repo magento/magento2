@@ -99,13 +99,13 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
             [
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('widget_instance'),
+                    $this->moduleDataSetup->getTable('widget_instance'),
                     'instance_id',
                     'widget_parameters'
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('layout_update'),
+                    $this->moduleDataSetup->getTable('layout_update'),
                     'layout_update_id',
                     'xml',
                     $layoutUpdateQueryModifier

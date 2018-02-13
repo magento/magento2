@@ -84,7 +84,7 @@ class AddPaypalOrderStatuses implements DataPatchInterface, PatchVersionInterfac
             $data[] = ['status' => $code, 'label' => $info];
         }
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'),
+            $this->moduleDataSetup->getTable('sales_order_status'),
             ['status', 'label'],
             $data
         );

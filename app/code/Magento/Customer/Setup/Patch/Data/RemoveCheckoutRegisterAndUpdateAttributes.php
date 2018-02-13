@@ -59,7 +59,7 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->delete(
-            $this->moduleDataSetup->getConnection()->getTableName('customer_form_attribute'),
+            $this->moduleDataSetup->getTable('customer_form_attribute'),
             ['form_code = ?' => 'checkout_register']
         );
         $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);

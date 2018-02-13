@@ -96,13 +96,13 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
             [
                 new \Magento\Framework\DB\FieldToConvert(
                     \Magento\Framework\DB\DataConverter\SerializedToJson::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('salesrule'),
+                    $this->moduleDataSetup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
                 new \Magento\Framework\DB\FieldToConvert(
                     \Magento\Framework\DB\DataConverter\SerializedToJson::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('salesrule'),
+                    $this->moduleDataSetup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'
                 ),

@@ -109,7 +109,7 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
         ];
         foreach ($data as $row) {
             $this->moduleDataSetup->getConnection()->insertForce(
-                $this->moduleDataSetup->getConnection()->getTableName('tax_class'),
+                $this->moduleDataSetup->getTable('tax_class'),
                 $row
             );
         }
@@ -138,7 +138,7 @@ class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionIn
         ];
         foreach ($data as $row) {
             $this->moduleDataSetup->getConnection()->insertForce(
-                $this->moduleDataSetup->getConnection()->getTableName('tax_calculation_rate'),
+                $this->moduleDataSetup->getTable('tax_calculation_rate'),
                 $row
             );
         }

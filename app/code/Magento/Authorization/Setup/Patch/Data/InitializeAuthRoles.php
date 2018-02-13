@@ -98,7 +98,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
         /**
          * Delete rows by condition from authorization_rule
          */
-        $tableName = $this->moduleDataSetup->getConnection()->getTableName('authorization_rule');
+        $tableName = $this->moduleDataSetup->getTable('authorization_rule');
         if ($tableName) {
             $this->moduleDataSetup->getConnection()->delete(
                 $tableName,

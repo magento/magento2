@@ -54,19 +54,19 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
 
         // insert default customer groups
         $this->moduleDataSetup->getConnection()->insertForce(
-            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
+            $this->moduleDataSetup->getTable('customer_group'),
             ['customer_group_id' => 0, 'customer_group_code' => 'NOT LOGGED IN', 'tax_class_id' => 3]
         );
         $this->moduleDataSetup->getConnection()->insertForce(
-            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
+            $this->moduleDataSetup->getTable('customer_group'),
             ['customer_group_id' => 1, 'customer_group_code' => 'General', 'tax_class_id' => 3]
         );
         $this->moduleDataSetup->getConnection()->insertForce(
-            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
+            $this->moduleDataSetup->getTable('customer_group'),
             ['customer_group_id' => 2, 'customer_group_code' => 'Wholesale', 'tax_class_id' => 3]
         );
         $this->moduleDataSetup->getConnection()->insertForce(
-            $this->moduleDataSetup->getConnection()->getTableName('customer_group'),
+            $this->moduleDataSetup->getTable('customer_group'),
             ['customer_group_id' => 3, 'customer_group_code' => 'Retailer', 'tax_class_id' => 3]
         );
 

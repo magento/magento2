@@ -79,7 +79,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
         $connection = $this->moduleDataSetup->getConnection();
         $storeData = $connection
             ->select()
-            ->from($connection->getTableName('store'))
+            ->from($this->moduleDataSetup->getTable('store'))
             ->where(Store::STORE_ID . "<> ? ", Store::DEFAULT_STORE_ID)
             ->order("sort_order desc")
             ->limit(1)
@@ -101,7 +101,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
             $select = $connection
                 ->select()
                 ->joinLeft(
-                    ["ls" => $connection->getTableName('eav_attribute_option_swatch')],
+                    ["ls" => $this->moduleDataSetup->getTable('eav_attribute_option_swatch')],
                     new Zend_Db_Expr("ls.option_id = s.option_id AND ls.store_id = " . $storeData[Store::STORE_ID]),
                     ["value"]
                 )
@@ -112,7 +112,7 @@ class UpdateAdminTextSwatchValues implements DataPatchInterface, PatchVersionInt
             $connection->query(
                 $connection->updateFromSelect(
                     $select,
-                    ["s" => $connection->getTableName('eav_attribute_option_swatch')]
+                    ["s" => $this->moduleDataSetup->getTable('eav_attribute_option_swatch')]
                 )
             );
         }

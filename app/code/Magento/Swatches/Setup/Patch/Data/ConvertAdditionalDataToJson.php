@@ -85,7 +85,7 @@ class ConvertAdditionalDataToJson implements DataPatchInterface, PatchVersionInt
         $fieldConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
+            $this->moduleDataSetup->getTable('catalog_eav_attribute'),
             'attribute_id',
             'additional_data'
         );

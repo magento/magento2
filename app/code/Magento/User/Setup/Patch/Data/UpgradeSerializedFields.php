@@ -85,7 +85,7 @@ class UpgradeSerializedFields implements DataPatchInterface, PatchVersionInterfa
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('admin_user'),
+            $this->moduleDataSetup->getTable('admin_user'),
             'user_id',
             'extra'
         );

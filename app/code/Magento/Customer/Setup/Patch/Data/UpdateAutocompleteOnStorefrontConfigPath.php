@@ -38,7 +38,7 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->update(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
             ['path = ?' => 'general/restriction/autocomplete_on_storefront']
         );

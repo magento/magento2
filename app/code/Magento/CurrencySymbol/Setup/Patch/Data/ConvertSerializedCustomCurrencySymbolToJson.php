@@ -67,7 +67,7 @@ class ConvertSerializedCustomCurrencySymbolToJson implements DataPatchInterface,
         );
         $fieldDataConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'config_id',
             'value',
             $queryModifier

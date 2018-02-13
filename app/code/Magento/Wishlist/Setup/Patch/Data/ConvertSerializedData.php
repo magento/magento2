@@ -112,7 +112,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
         );
         $fieldDataConverter->convert(
             $connection,
-            $connection->getTableName('wishlist_item_option'),
+            $this->moduleDataSetup->getTable('wishlist_item_option'),
             'option_id',
             'value',
             $queryModifier
@@ -120,7 +120,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
         $select = $connection
             ->select()
             ->from(
-                $connection->getTableName('catalog_product_option'),
+                $this->moduleDataSetup->getTable('catalog_product_option'),
                 ['option_id']
             )
             ->where('type = ?', 'file');
@@ -143,7 +143,7 @@ class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
             );
             $fieldDataConverter->convert(
                 $connection,
-                $connection->getTableName('wishlist_item_option'),
+                $this->moduleDataSetup->getTable('wishlist_item_option'),
                 'option_id',
                 'value',
                 $queryModifier

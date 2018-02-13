@@ -55,7 +55,7 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
             'code' => 'super',
         ];
         $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-            $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_type'),
+            $this->moduleDataSetup->getTable('catalog_product_link_type'),
             $data
         );
 
@@ -65,7 +65,7 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
         $select = $this->moduleDataSetup->getConnection()
             ->select()
             ->from(
-                ['c' => $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute')]
+                ['c' => $this->moduleDataSetup->getTable('catalog_product_link_attribute')]
             )
             ->where(
                 "c.link_type_id=?",
@@ -86,7 +86,7 @@ class InitializeGroupedProductLinks implements DataPatchInterface, PatchVersionI
                 ],
             ];
             $this->moduleDataSetup->getConnection()->insertMultiple(
-                $this->moduleDataSetup->getConnection()->getTableName('catalog_product_link_attribute'),
+                $this->moduleDataSetup->getTable('catalog_product_link_attribute'),
                 $data
             );
         }

@@ -65,7 +65,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
      */
     private function upgradeHash()
     {
-        $customerEntityTable = $this->moduleDataSetup->getConnection()->getTableName('customer_entity');
+        $customerEntityTable = $this->moduleDataSetup->getTable('customer_entity');
 
         $select = $this->moduleDataSetup->getConnection()->select()->from(
             $customerEntityTable,

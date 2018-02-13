@@ -89,7 +89,7 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
                 'system' => true,
             ]
         );
-        $configTable = $this->moduleDataSetup->getConnection()->getTableName('core_config_data');
+        $configTable = $this->moduleDataSetup->getTable('core_config_data');
 
         $this->moduleDataSetup->getConnection()->update(
             $configTable,

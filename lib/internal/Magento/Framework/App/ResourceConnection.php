@@ -300,7 +300,7 @@ class ResourceConnection
      *
      * @return string
      */
-    private function getTablePrefix()
+    public function getTablePrefix()
     {
         $this->tablePrefix = (string)$this->deploymentConfig->get(
             ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
