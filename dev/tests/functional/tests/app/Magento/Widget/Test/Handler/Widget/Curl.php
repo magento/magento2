@@ -28,6 +28,7 @@ class Curl extends AbstractCurl
         'code' => [
             'CMS Page Link' => 'cms_page_link',
             'Catalog New Products List' => 'new_products',
+            'Recently Viewed Products' => 'recently_viewed',
         ],
         'block' => [
             'Main Content Area' => 'content',
