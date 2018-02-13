@@ -44,7 +44,7 @@ class ProductIdentitiesExtender
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetIdentities(Product $subject, $identities): array
+    public function afterGetIdentities(Product $subject, array $identities): array
     {
         $identities = (array) $identities;
 
