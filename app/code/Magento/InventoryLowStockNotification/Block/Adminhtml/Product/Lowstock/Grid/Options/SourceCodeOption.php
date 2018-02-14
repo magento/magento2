@@ -11,7 +11,10 @@ use Magento\Framework\Option\ArrayInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
-class SourceCodeOptionHash implements ArrayInterface
+/**
+ * Source model for inventory sources list
+ */
+class SourceCodeOption implements ArrayInterface
 {
     /**
      * @var SourceRepositoryInterface
@@ -19,8 +22,6 @@ class SourceCodeOptionHash implements ArrayInterface
     protected $sourceRepository;
 
     /**
-     * SourceCodeOptionHash constructor.
-     *
      * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(

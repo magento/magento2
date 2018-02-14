@@ -15,18 +15,14 @@ use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\C
 use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
 /**
- * Adminhtml low stock products report grid block
- *
- * @api
- * @author      Magento Core Team <core@magentocommerce.com>
- * @since 100.0.2
+ *  Low stock products report grid block
  */
 class Grid extends GridWidget
 {
     /**
      * @var CollectionFactory
      */
-    protected $lowstockCollectionFactory;
+    private $lowstockCollectionFactory;
 
     /**
      * @param Context $context
@@ -40,9 +36,8 @@ class Grid extends GridWidget
         CollectionFactory $lowstockCollectionFactory,
         array $data = []
     ) {
-        $this->lowstockCollectionFactory = $lowstockCollectionFactory;
-
         parent::__construct($context, $backendHelper, $data);
+        $this->lowstockCollectionFactory = $lowstockCollectionFactory;
     }
 
     /**
@@ -50,31 +45,14 @@ class Grid extends GridWidget
      */
     protected function _prepareCollection(): GridWidget
     {
-        $website = $this->getRequest()->getParam('website');
-        $group = $this->getRequest()->getParam('group');
-        $store = $this->getRequest()->getParam('store');
-
-        if ($website) {
-            $storeIds = $this->_storeManager->getWebsite($website)->getStoreIds();
-            $storeId = array_pop($storeIds);
-        } elseif ($group) {
-            $storeIds = $this->_storeManager->getGroup($group)->getStoreIds();
-            $storeId = array_pop($storeIds);
-        } elseif ($store) {
-            $storeId = (int)$store;
-        } else {
-            $storeId = null;
-        }
-
         /** @var $collection LowstockCollection  */
         $collection = $this->lowstockCollectionFactory->create();
         $collection->addFieldToSelect(
             '*'
         )
-        ->joinInventoryConfiguration()
         ->joinCatalogProduct()
         ->filterByIsQtyProductTypes()
-        ->useNotifyStockQtyFilter($storeId)
+        ->useNotifyStockQtyFilter()
         ->setOrder(
             'quantity',
             DataCollection::SORT_ORDER_ASC

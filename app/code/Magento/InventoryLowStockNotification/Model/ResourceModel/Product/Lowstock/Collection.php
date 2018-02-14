@@ -23,9 +23,6 @@ use Magento\InventoryLowStockNotification\Setup\Operation\CreateSourceConfigurat
 use Magento\InventoryLowStockNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Collection extends SourceItemCollection
 {
     /**
@@ -119,25 +116,23 @@ class Collection extends SourceItemCollection
      *
      * @return Collection
      */
-    public function joinInventoryConfiguration(): Collection
+    private function joinInventoryConfiguration(): Collection
     {
-        /* Join by sku field */
-        $joinExpression = sprintf(
-            'main_table.%s = %s.' . SourceItemConfigurationInterface::SKU,
-            SourceItemInterface::SKU,
-            CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
-        );
-
-        /* Join by source_code field */
-        $joinExpression .= sprintf(
-            ' AND main_table.%s = %s.' . SourceItemConfigurationInterface::SOURCE_CODE,
-            SourceItemInterface::SOURCE_CODE,
+        $sourceItemConfigurationTable = $this->getTable(
             CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
         );
 
         $this->getSelect()->joinLeft(
-            CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION,
-            $joinExpression,
+            $sourceItemConfigurationTable,
+            sprintf(
+                'main_table.%s = %s.%s AND main_table.%s = %s.%s',
+                SourceItemInterface::SKU,
+                $sourceItemConfigurationTable,
+                SourceItemConfigurationInterface::SKU,
+                SourceItemInterface::SOURCE_CODE,
+                $sourceItemConfigurationTable,
+                SourceItemConfigurationInterface::SOURCE_CODE
+            ),
             []
         );
 
@@ -176,17 +171,18 @@ class Collection extends SourceItemCollection
     /**
      * Add Notify Stock Qty Condition to collection
      *
-     * @param null|int $storeId
      * @return Collection
      */
-    public function useNotifyStockQtyFilter($storeId = null): Collection
+    public function useNotifyStockQtyFilter(): Collection
     {
+        $this->joinInventoryConfiguration();
+
         $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
             '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;
 
         $notifyStockExpression = $this->getConnection()->getIfNullSql(
             $notifyQtyField,
-            (int)$this->stockConfiguration->getNotifyStockQty($storeId)
+            (int)$this->stockConfiguration->getNotifyStockQty()
         );
 
         $this->getSelect()->where(
