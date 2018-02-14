@@ -14,6 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +24,7 @@ class StockItemImporterTest extends TestCase
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
-    
+
     /**
      * @var StockItemImporterInterface
      */
@@ -38,6 +39,11 @@ class StockItemImporterTest extends TestCase
      * @var SourceItemRepositoryInterface
      */
     private $sourceItemRepository;
+
+    /**
+     * @var GetProductIdsBySkusInterface $productIdBySku
+     */
+    private $productIdBySku;
 
     /**
      * Setup Test for Stock Item Importer
@@ -56,30 +62,40 @@ class StockItemImporterTest extends TestCase
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(
             SourceItemRepositoryInterface::class
         );
+        $this->productIdBySku = Bootstrap::getObjectManager()->get(
+            GetProductIdsBySkusInterface::class
+        );
     }
 
     /**
-     * Tests Source Item Import of default source
+     * Tests Source Item Import of default source should use
+     * MSI Plugin on Magento\Catalog\ImportExport\Model\StockItemImporter::import()
      *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDbIsolation enabled
      */
     public function testSourceItemImportWithDefaultSource()
     {
+        $productId = $this->productIdBySku->execute(['SKU-1'])['SKU-1'];
         $stockData = [
-            'sku' => 'SKU-1',
-            'qty' => 1,
-            'is_in_stock' => SourceItemInterface::STATUS_IN_STOCK
+            [
+                'sku' => 'SKU-1',
+                'qty' => 1,
+                'is_in_stock' => SourceItemInterface::STATUS_IN_STOCK,
+                'product_id' => $productId,
+                'website_id' => 0,
+                'stock_id' => '1',
+            ]
         ];
 
-        $this->importer->import([$stockData]);
+        $this->importer->import($stockData);
 
         $compareData = $this->buildDataArray($this->getSourceItemList()->getItems());
         $expectedData = [
-            SourceItemInterface::SKU => $stockData['sku'],
+            SourceItemInterface::SKU => 'SKU-1',
             SourceItemInterface::QUANTITY => '1.0000',
             SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK
+            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK,
         ];
 
         $this->assertArrayHasKey('SKU-1', $compareData);
@@ -108,6 +124,7 @@ class StockItemImporterTest extends TestCase
 
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $searchCriteriaBuilder->create();
+
         return $this->sourceItemRepository->getList($searchCriteria);
     }
 
@@ -123,9 +140,10 @@ class StockItemImporterTest extends TestCase
                 SourceItemInterface::SKU => $sourceItem->getSku(),
                 SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
                 SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
-                SourceItemInterface::STATUS => $sourceItem->getStatus()
+                SourceItemInterface::STATUS => $sourceItem->getStatus(),
             ];
         }
+
         return $comparableArray;
     }
 }
