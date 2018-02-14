@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Setup\Patch\Data;
 
 use Magento\Catalog\Helper\DefaultCategory;
+use Magento\Catalog\Helper\DefaultCategoryFactory;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -32,16 +33,24 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     private $categorySetupFactory;
 
     /**
+     * @var DefaultCategoryFactory
+     */
+    private $defaultCategoryFactory;
+
+    /**
      * PatchInitial constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
+     * @param DefaultCategoryFactory $defaultCategoryFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        CategorySetupFactory $categorySetupFactory
+        CategorySetupFactory $categorySetupFactory,
+        \Magento\Catalog\Helper\DefaultCategoryFactory $defaultCategoryFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->categorySetupFactory = $categorySetupFactory;
+        $this->defaultCategoryFactory = $defaultCategoryFactory;
     }
 
     /**
@@ -55,8 +64,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
         $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
-        $defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(DefaultCategory::class);
+        $defaultCategory = $this->defaultCategoryFactory->create();
         $defaultCategoryId = $defaultCategory->getId();
 
         $categorySetup->installEntities();
