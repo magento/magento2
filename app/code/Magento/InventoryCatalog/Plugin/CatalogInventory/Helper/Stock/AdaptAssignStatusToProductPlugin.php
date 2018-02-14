@@ -53,6 +53,13 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
+        // TODO: https://github.com/magento-engcom/msi/issues/532
+        if ($product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+            || $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+        ) {
+            return;
+        }
+
         if (null === $product->getSku()) {
             return;
         }

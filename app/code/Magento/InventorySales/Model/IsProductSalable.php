@@ -87,12 +87,14 @@ class IsProductSalable implements IsProductSalableInterface
         }
 
         $isSalable = (bool)$stockItemData['is_salable'];
-        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
-        $globalMinQty = $this->configuration->getMinQty();
+
         $legacyStockItem = $this->getLegacyStockItem($sku);
         if (null === $legacyStockItem) {
-            return false;
+            return $isSalable;
         }
+
+        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
+        $globalMinQty = $this->configuration->getMinQty();
 
         if ($this->isManageStock($legacyStockItem)) {
             if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
