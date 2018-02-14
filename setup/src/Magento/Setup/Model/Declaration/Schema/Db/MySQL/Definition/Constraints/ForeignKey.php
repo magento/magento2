@@ -50,7 +50,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
         $adapter = $this->resourceConnection->getConnection(
             $foreignKey->getTable()->getResource()
         );
-        $referenceTable = $this->resourceConnection->getTableName(
+        $referenceTable = $adapter->getTableName(
             $foreignKey->getReferenceTable()->getName()
         );
         //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option

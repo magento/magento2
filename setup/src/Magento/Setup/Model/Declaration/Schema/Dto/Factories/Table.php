@@ -61,7 +61,7 @@ class Table implements FactoryInterface
             $data['engine'] = self::DEFAULT_ENGINE;
         }
         $data['nameWithoutPrefix'] = $data['name'];
-        $data['name'] = $this->resourceConnection->getTableName($data['name']);
+        $data['name'] = $this->resourceConnection->getConnection()->getTableName($data['name']);
         return $this->objectManager->create($this->className, $data);
     }
 }

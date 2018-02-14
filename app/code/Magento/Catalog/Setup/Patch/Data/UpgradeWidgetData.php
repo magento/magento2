@@ -132,7 +132,6 @@ class UpgradeWidgetData implements DataPatchInterface, PatchVersionInterface
             ],
             $this->eavSetup->getSetup()->getConnection()
         );
-
     }
 
     /**

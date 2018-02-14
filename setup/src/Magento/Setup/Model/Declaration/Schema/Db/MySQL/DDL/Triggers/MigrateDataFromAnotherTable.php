@@ -62,7 +62,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
             $select = $adapter->select()
                 ->setPart('disable_staging_preview', true)
                 ->from(
-                    $this->resourceConnection->getTableName($tableMigrateFrom),
+                    $this->resourceConnection->getConnection()->getTableName($tableMigrateFrom),
                     [$column->getName() => $columnMigrateFrom]
                 );
             //Update only if table exists
@@ -70,7 +70,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
                 $adapter->query(
                     $adapter->insertFromSelect(
                         $select,
-                        $this->resourceConnection->getTableName($tableName)
+                        $this->resourceConnection->getConnection()->getTableName($tableName)
                     )
                 );
             }

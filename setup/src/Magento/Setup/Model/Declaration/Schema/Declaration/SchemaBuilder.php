@@ -315,7 +315,7 @@ class SchemaBuilder
                 $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
                 //If we are referenced to the same table we need to specify it
                 //Get table name from resource connection regarding prefix settings
-                $refTableName = $this->resourceConnection->getTableName($referenceTableData['name']);
+                $refTableName = $this->resourceConnection->getConnection()->getTableName($referenceTableData['name']);
                 $referenceTable = $refTableName === $table->getName() ?
                     $table :
                     $this->processTable($schema, $referenceTableData);

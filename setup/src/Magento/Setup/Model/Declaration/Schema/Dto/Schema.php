@@ -70,7 +70,7 @@ class Schema
      */
     public function getTableByName($name)
     {
-        $name = $this->resourceConnection->getTableName($name);
+        $name = $this->resourceConnection->getConnection()->getTableName($name);
         return isset($this->tables[$name]) ? $this->tables[$name] : false;
     }
 }
