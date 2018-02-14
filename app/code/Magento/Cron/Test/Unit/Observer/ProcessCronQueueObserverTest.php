@@ -489,9 +489,13 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Cron\Test\Unit\Model\CronJobException(
                     $throwable
                 ),
-                '',
+                'Error when running a cron job',
                 2,
-                $throwable
+                new \RuntimeException(
+                    'Error when running a cron job',
+                    0,
+                    $throwable
+                )
             ],
         ];
     }
