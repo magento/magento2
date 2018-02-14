@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration\InventoryReservationsApi;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;

@@ -34,14 +34,14 @@ class GetProductSalableQtyTest extends TestCase
     /**
      * @var GetProductSalableQtyInterface
      */
-    private $getProductQtyInStock;
+    private $getProductSalableQty;
 
     protected function setUp()
     {
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
+        $this->getProductSalableQty = Bootstrap::getObjectManager()->get(
             GetProductSalableQtyInterface::class
         );
     }
@@ -64,7 +64,7 @@ class GetProductSalableQtyTest extends TestCase
      */
     public function testGetProductQuantity()
     {
-        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
     }
 
     /**
@@ -83,7 +83,7 @@ class GetProductSalableQtyTest extends TestCase
             // emulate partial order canceling (1.5 units)
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(1.5)->build(),
         ]);
-        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
 
         $this->appendReservations->execute([
             // unreserved 3.5 units for cleanup

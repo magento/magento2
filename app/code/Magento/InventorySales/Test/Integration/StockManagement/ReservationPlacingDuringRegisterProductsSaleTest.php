@@ -20,7 +20,7 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     /**
      * @var GetProductSalableQtyInterface
      */
-    private $getProductQtyInStock;
+    private $getProductSalableQty;
 
     /**
      * @var ProductRepositoryInterface
@@ -44,7 +44,7 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 
     protected function setUp()
     {
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
+        $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
@@ -63,12 +63,12 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
-        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
 
         $product = $this->productRepository->get('SKU-1');
         $website = $this->websiteRepository->get('eu_website');
         $this->stockManagement->registerProductsSale([$product->getId() => 3.5], $website->getId());
 
-        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
     }
 }

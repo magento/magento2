@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Stock;
+namespace Magento\InventorySales\Test\Integration\Stock;
 
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;

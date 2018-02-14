@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Integration;
+namespace Magento\InventoryCatalog\Test\Integration\InventoryReservationsApi;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
@@ -67,7 +67,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
 
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
     }

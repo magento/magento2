@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi;
+namespace Magento\InventoryCatalog\Plugin\InventoryReservationsApi;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
