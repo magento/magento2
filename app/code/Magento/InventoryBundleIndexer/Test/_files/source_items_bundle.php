@@ -35,43 +35,13 @@ $sourcesItemsData = [
         SourceItemInterface::SOURCE_CODE => 'eu-3',
         SourceItemInterface::SKU => 'SKU-3',
         SourceItemInterface::QUANTITY => 10,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'eu-1',
-        SourceItemInterface::SKU => 'SKU-4',
-        SourceItemInterface::QUANTITY => 0,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-2',
-        SourceItemInterface::SKU => 'SKU-5',
+        SourceItemInterface::SOURCE_CODE => 'eu-1',
+        SourceItemInterface::SKU => 'bundle-product-eu-website',
         SourceItemInterface::QUANTITY => 0,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'eu-3',
-        SourceItemInterface::SKU => 'SKU-6',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'eu-1',
-        SourceItemInterface::SKU => 'bundle-product-with-all-children-in-stock',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'eu-2',
-        SourceItemInterface::SKU => 'bundle-product-with-all-children-out-of-stock',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_CODE => 'eu-3',
-        SourceItemInterface::SKU => 'bundle-product-with-child-out-of-stock',
-        SourceItemInterface::QUANTITY => 0,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
     ],
 ];
 

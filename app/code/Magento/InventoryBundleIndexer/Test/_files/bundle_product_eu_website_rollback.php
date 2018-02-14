@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../InventoryApi/Test/_files/products_rollback.php';
-
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
@@ -18,7 +16,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
-    $product = $productRepository->get('bundle-product-with-child-out-of-stock');
+    $product = $productRepository->get('bundle-product-eu-website');
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed

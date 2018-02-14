@@ -5,16 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Model\ResourceModel;
+namespace Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Get bundle source item id by child source item id.
+ * Get bundle source item ids by source item ids.
+ * Two cases:
+ * - if product type is bundle;
+ * - if parent product type is bundle.
  */
-class GetBundleSourceItemIdByChildSourceItemId
+class GetBundleSourceItemsIds
 {
     /**
      * @var ResourceConnection
@@ -31,11 +35,10 @@ class GetBundleSourceItemIdByChildSourceItemId
     }
 
     /**
-     * @param int $sourceItemId
-     *
-     * @return null|int
+     * @param array $sourceItemsIds
+     * @return array
      */
-    public function execute(int $sourceItemId)
+    public function execute(array $sourceItemsIds): array
     {
         $inventorySourceItemTable = $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
         $productTable = $this->resourceConnection->getTableName('catalog_product_entity');
@@ -60,18 +63,17 @@ class GetBundleSourceItemIdByChildSourceItemId
             ['bundle_source_item' => $inventorySourceItemTable],
             'bundle_source_item.sku = bundle_product.sku',
             ['bundle_source_item.' . SourceItem::ID_FIELD_NAME]
-        )
-            ->where('source_item.' . SourceItem::ID_FIELD_NAME . '= ?', $sourceItemId)
-            ->where(
-                'bundle_source_item.' . SourceInterface::SOURCE_CODE . ' = source_item.' . SourceInterface::SOURCE_CODE
-            );
+        )->where(
+            '(source_item.' . SourceItem::ID_FIELD_NAME . ' in (?))',
+            $sourceItemsIds
+        )->orWhere(
+            '(bundle_source_item.' . SourceItem::ID_FIELD_NAME . ' in (?))' .
+            ' AND (bundle_product.' . ProductInterface::TYPE_ID . ' = "' . ProductType::TYPE_BUNDLE . '")',
+            $sourceItemsIds
+        )->group(SourceItem::ID_FIELD_NAME);
 
-        $bundleSourceItemId = $select->query()->fetch()[SourceItem::ID_FIELD_NAME] ?? null;
+        $bundleSourceItemIds = $select->query()->fetchAll();
 
-        if (null !== $bundleSourceItemId) {
-            $bundleSourceItemId = (int)$bundleSourceItemId;
-        }
-
-        return $bundleSourceItemId;
+        return $bundleSourceItemIds;
     }
 }

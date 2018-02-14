@@ -8,8 +8,6 @@ declare(strict_types=1);
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Website;
 
-require __DIR__ . '/../../../InventoryApi/Test/_files/products.php';
-
 $objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -26,8 +24,8 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds($websiteIds)
-    ->setName('Bundle Product With Child Out Of Stock')
-    ->setSku('bundle-product-with-child-out-of-stock')
+    ->setName('Bundle Product With All Children In Stock')
+    ->setSku('bundle-product-eu-website')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
@@ -57,18 +55,18 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 ],
                 [
                     'product_id' => $simpleSku2->getId(),
-                    'selection_qty' => 10,
+                    'selection_qty' => 15,
                     'selection_can_change_qty' => 0,
                     'delete' => '',
                     'option_id' => 1
                 ],
                 [
                     'product_id' => $simpleSku3->getId(),
-                    'selection_qty' => 10,
+                    'selection_qty' => 20,
                     'selection_can_change_qty' => 0,
                     'delete' => '',
                     'option_id' => 1
-                ]
+                ],
             ],
         ]
     );

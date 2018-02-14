@@ -5,21 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Model\ResourceModel;
+namespace Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer;
 
 use ArrayIterator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\InventoryBundleIndexer\Model\ResourceModel\BundleIndexer\GetBundlesIndexDataBySourceItemsSku;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 
 /**
  * Check bundle children => if one of them in_stock - make bundle in_stock.
  */
-class BundleIndexer
+class ReindexBySourceItemIds
 {
     /**
      * @var GetSkuListInStock

@@ -5,17 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Model\ResourceModel;
+namespace Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Fetch source items accordance to product type by source items ids.
+ * Get only bundle source items ids.
  */
-class GetSourceItemsIdsWithProductTypeIds
+class GetAllBundleSourceItemsIds
 {
     /**
      * @var ResourceConnection
@@ -32,11 +33,9 @@ class GetSourceItemsIdsWithProductTypeIds
     }
 
     /**
-     * @param array $sourceItemIds
-     *
      * @return array
      */
-    public function execute(array $sourceItemIds): array
+    public function execute(): array
     {
         $select = $this->resourceConnection->getConnection()->select();
         $select
@@ -46,10 +45,10 @@ class GetSourceItemsIdsWithProductTypeIds
             )->joinInner(
                 ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
                 'source_item.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
-                'product.' . ProductInterface::TYPE_ID
-            )->where('source_item.' . SourceItem::ID_FIELD_NAME . ' in (?)', $sourceItemIds);
-        $sourceItemsIdsWithTypeIds = $select->query()->fetchAll();
+                []
+            )->where('product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
+        $sourceItemsIds = $select->query()->fetchAll();
 
-        return $sourceItemsIdsWithTypeIds;
+        return $sourceItemsIds;
     }
 }
