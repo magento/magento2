@@ -69,7 +69,7 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                     basename($file),
                     'Recurring scripts are obsolete. Please create class Recurring in module\'s Setup folder'
                 );
-                if (preg_match('/.*\/(sql|data)/i', dirname($file))) {
+                if (preg_match('/.*\/(sql\/|data\/)/', dirname($file))) {
                     $this->fail(
                         "Invalid directory:\n"
                         . "- Create an UpgradeData class within module's Setup folder for data upgrades.\n"

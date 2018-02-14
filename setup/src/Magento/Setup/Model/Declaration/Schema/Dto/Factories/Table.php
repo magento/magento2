@@ -60,7 +60,7 @@ class Table implements FactoryInterface
         if ($data['engine'] === null) {
             $data['engine'] = self::DEFAULT_ENGINE;
         }
-        $tablePrefix = $this->resourceConnection->getTablePrefix($data['name'], $data['resource']);
+        $tablePrefix = $this->resourceConnection->getTablePrefix();
         $nameWithoutPrefix = $data['name'];
         if (!empty($tablePrefix) && strpos($nameWithoutPrefix, $tablePrefix) === 0) {
             $data['nameWithoutPrefix'] = str_replace($tablePrefix, "", $data['name']);
