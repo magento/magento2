@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model\ResourceModel\Reservation;
+namespace Magento\InventoryReservations\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryReservations\Setup\Operation\CreateReservationTable;

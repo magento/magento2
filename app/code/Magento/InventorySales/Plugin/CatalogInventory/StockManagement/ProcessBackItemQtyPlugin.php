@@ -9,7 +9,7 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;

@@ -5,15 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model\Reservation;
+namespace Magento\InventoryReservations\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryReservations\Model\SnakeToCamelCaseConverter;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 
 /**
  * @inheritdoc

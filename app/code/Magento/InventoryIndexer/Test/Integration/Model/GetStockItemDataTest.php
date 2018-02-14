@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Test\Integration\Model;
 
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\GetStockItemData;
 use Magento\TestFramework\Helper\Bootstrap;

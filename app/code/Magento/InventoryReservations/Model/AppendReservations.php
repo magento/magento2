@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Model\Reservation\Command;
+namespace Magento\InventoryReservations\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\InventoryReservations\Model\ResourceModel\Reservation\SaveMultiple;
+use Magento\InventoryReservations\Model\ResourceModel\SaveMultiple;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Psr\Log\LoggerInterface;

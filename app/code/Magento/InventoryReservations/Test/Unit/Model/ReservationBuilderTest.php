@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservations\Test\Unit\Model\Reservation;
+namespace Magento\InventoryReservations\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryReservations\Model\Reservation\ReservationBuilder;
+use Magento\InventoryReservations\Model\ReservationBuilder;
 use Magento\InventoryReservations\Model\SnakeToCamelCaseConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
@@ -115,9 +115,13 @@ class ReservationBuilderTest extends TestCase
     }
 
     /**
+     * @param array $firstSetter
+     * @param array $secondSetter
      * @dataProvider getSettersAndValues
+     * @expectedException \Magento\Framework\Validation\ValidationException
+     * @expectedExceptionMessage  Validation error
      */
-    public function testThrowValidationException($firstSetter, $secondSetter)
+    public function testThrowValidationException(array $firstSetter, array $secondSetter)
     {
         $this->validationResultFactory
             ->expects($this->once())
@@ -137,16 +141,13 @@ class ReservationBuilderTest extends TestCase
         $argument = $secondSetter['argument'];
         $this->reservationBuilder->$method($argument);
 
-        self::expectException(\Magento\Framework\Validation\ValidationException::class);
-        self::expectExceptionMessage((string) __('Validation error'));
-
         $this->reservationBuilder->build();
     }
 
     /**
      * @return array
      */
-    public function getSettersAndValues()
+    public function getSettersAndValues(): array
     {
         return [
             'with_missing_stock_id' => [

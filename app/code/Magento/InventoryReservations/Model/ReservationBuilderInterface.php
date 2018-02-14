@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryReservationsApi\Api;
+namespace Magento\InventoryReservations\Model;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 
 /**
- * Used to instantiate ReservationInterface objects
+ * Used to build ReservationInterface objects
  *
  * @api
  * @see ReservationInterface

@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
-use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use PHPUnit\Framework\TestCase;
