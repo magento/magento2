@@ -10,7 +10,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Setup\Exception;
 
 /**
@@ -139,25 +138,30 @@ class PatchApplier
                 continue;
             }
 
-            try {
-                $this->moduleDataSetup->getConnection()->beginTransaction();
-                $dataPatch = $this->objectManager->create(
-                    '\\' . $dataPatch,
-                    ['moduleDataSetup' => $this->moduleDataSetup]
+            $dataPatch = $this->objectManager->create(
+                '\\' . $dataPatch,
+                ['moduleDataSetup' => $this->moduleDataSetup]
+            );
+            if (!$dataPatch instanceof DataPatchInterface) {
+                throw new Exception(
+                    sprintf("Patch %s should implement DataPatchInterface", $dataPatch)
                 );
-                if (!$dataPatch instanceof DataPatchInterface) {
-                    throw new Exception(
-                        sprintf("Patch %s should implement DataPatchInterface", $dataPatch)
-                    );
-                }
+            }
+            if ($dataPatch instanceof NonTransactionableInterface) {
                 $dataPatch->apply();
                 $this->patchHistory->fixPatch($dataPatch);
-                $this->moduleDataSetup->getConnection()->commit();
-            } catch (\Exception $e) {
-                $this->moduleDataSetup->getConnection()->rollBack();
-                throw new Exception($e->getMessage());
-            } finally {
-                unset($dataPatch);
+            } else {
+                try {
+                    $this->moduleDataSetup->getConnection()->beginTransaction();
+                    $dataPatch->apply();
+                    $this->patchHistory->fixPatch($dataPatch);
+                    $this->moduleDataSetup->getConnection()->commit();
+                } catch (\Exception $e) {
+                    $this->moduleDataSetup->getConnection()->rollBack();
+                    throw new Exception($e->getMessage());
+                } finally {
+                    unset($dataPatch);
+                }
             }
         }
     }

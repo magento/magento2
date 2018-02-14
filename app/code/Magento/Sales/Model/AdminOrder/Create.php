@@ -2004,7 +2004,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $this->messageManager->addError($error);
             }
 
-//            throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));
         }
 
         return $this;
