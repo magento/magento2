@@ -35,7 +35,6 @@ class IsSingleStockModeTest extends TestCase
 
     public function testIsSingleStockModeOnCleanInstall()
     {
-        self::assertCount(1, $this->sourceRepository->getList()->getItems());
         self::assertTrue($this->isSingleStockMode->execute());
     }
 
