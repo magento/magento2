@@ -18,11 +18,18 @@ class ShippingAlgorithmResult implements ShippingAlgorithmResultInterface
     private $sourceSelections;
 
     /**
-     * @param SourceSelectionInterface[] $sourceSelections
+     * @var bool
      */
-    public function __construct(array $sourceSelections)
+    private $isShippable;
+
+    /**
+     * @param SourceSelectionInterface[] $sourceSelections
+     * @param bool $isShippable
+     */
+    public function __construct(array $sourceSelections, bool $isShippable)
     {
         $this->sourceSelections = $sourceSelections;
+        $this->isShippable = $isShippable;
     }
 
     /**
@@ -31,5 +38,13 @@ class ShippingAlgorithmResult implements ShippingAlgorithmResultInterface
     public function getSourceSelections(): array
     {
         return $this->sourceSelections;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isShippable(): bool
+    {
+        return $this->isShippable;
     }
 }

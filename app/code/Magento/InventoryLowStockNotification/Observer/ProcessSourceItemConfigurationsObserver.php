@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 
 /**
  * Save source relations (configuration) during product persistence via controller
@@ -21,16 +22,24 @@ use Magento\Framework\Event\Observer as EventObserver;
 class ProcessSourceItemConfigurationsObserver implements ObserverInterface
 {
     /**
+     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     */
+    private $isSourceItemsManagementAllowedForProductType;
+
+    /**
      * @var SourceItemsConfigurationProcessor
      */
     private $sourceItemsConfigurationProcessor;
 
     /**
+     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
      */
     public function __construct(
+        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
     ) {
+        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->sourceItemsConfigurationProcessor = $processSourceItemsConfigurationObserver;
     }
 
@@ -42,6 +51,10 @@ class ProcessSourceItemConfigurationsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
+        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+            return;
+        }
+
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 

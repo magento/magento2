@@ -18,4 +18,9 @@ interface ShippingAlgorithmResultInterface
      * @return SourceSelectionInterface[]
      */
     public function getSourceSelections(): array;
+
+    /**
+     * @return bool
+     */
+    public function isShippable() : bool;
 }

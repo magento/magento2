@@ -23,6 +23,7 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      */
     const STOCK_ID = 'stock_id';
     const SOURCE_CODE = 'source_code';
+    const PRIORITY = 'priority';
     /**#@-*/
 
     /**
@@ -55,6 +56,22 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setSourceCode($sourceCode);
+
+    /**
+     * Get priority of the link
+     *
+     * @return int|null
+     */
+    public function getPriority();
+
+    /**
+     * Set priority of the link
+     *
+     * @param int $priority
+     *
+     * @return void
+     */
+    public function setPriority($priority);
 
     /**
      * Retrieve existing extension attributes object

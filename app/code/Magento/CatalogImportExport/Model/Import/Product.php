@@ -2215,9 +2215,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
-        /** @var $stockResource \Magento\CatalogInventory\Model\ResourceModel\Stock\Item */
-        $stockResource = $this->_stockResItemFac->create();
-        $entityTable = $stockResource->getMainTable();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $stockData = [];
             $productIdsToReindex = [];
@@ -2245,6 +2242,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         array_intersect_key($rowData, $this->defaultStockData),
                         $row
                     );
+                    $row['sku'] = $sku;
 
                     if ($this->stockConfiguration->isQty(
                         $this->skuProcessor->getNewSku($sku)['type_id']
@@ -2272,8 +2270,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             // Insert rows
             if (!empty($stockData)) {
-                $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
-                $this->stockItemImporter->import($bunch);
+                $this->stockItemImporter->import($stockData);
             }
 
             $this->reindexProducts($productIdsToReindex);
