@@ -6,6 +6,7 @@
 
 namespace Magento\Directory\Setup;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
@@ -20,13 +21,21 @@ class DataInstaller
     private $data;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * DatInstaller constructor.
      * @param \Magento\Directory\Helper\Data $data
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $data
+        \Magento\Directory\Helper\Data $data,
+        ResourceConnection $resourceConnection
     ) {
         $this->data = $data;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -43,17 +52,17 @@ class DataInstaller
          */
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
-            $adapter->insert($adapter->getTableName('directory_country_region'), $bind);
-            $regionId = $adapter->lastInsertId($adapter->getTableName('directory_country_region'));
+            $adapter->insert($this->resourceConnection->getTableName('directory_country_region'), $bind);
+            $regionId = $adapter->lastInsertId($this->resourceConnection->getTableName('directory_country_region'));
             $bind = ['locale' => 'en_US', 'region_id' => $regionId, 'name' => $row[2]];
-            $adapter->insert($adapter->getTableName('directory_country_region_name'), $bind);
+            $adapter->insert($this->resourceConnection->getTableName('directory_country_region_name'), $bind);
         }
         /**
          * Upgrade core_config_data general/region/state_required field.
          */
         $countries = $this->data->getCountryCollection()->getCountriesWithRequiredStates();
         $adapter->update(
-            $adapter->getTableName('core_config_data'),
+            $this->resourceConnection->getTableName('core_config_data'),
             [
                 'value' => implode(',', array_keys($countries))
             ],

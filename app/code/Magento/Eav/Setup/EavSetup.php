@@ -204,7 +204,7 @@ class EavSetup
             $this->updateEntityType($code, $data);
         } else {
             $this->setup->getConnection()->insert(
-                $this->setup->getConnection()->getTableName('eav_entity_type'),
+                $this->setup->getTable('eav_entity_type'),
                 $data
             );
         }
@@ -306,7 +306,7 @@ class EavSetup
         if (!is_numeric($sortOrder)) {
             $bind = ['entity_type_id' => $this->getEntityTypeId($entityTypeId)];
             $select = $this->setup->getConnection()->select()->from(
-                $this->setup->getConnection()->getTableName('eav_attribute_set'),
+                $this->setup->getTable('eav_attribute_set'),
                 'MAX(sort_order)'
             )->where(
                 'entity_type_id = :entity_type_id'
@@ -344,7 +344,7 @@ class EavSetup
             $this->updateAttributeSet($entityTypeId, $setId, $data);
         } else {
             $this->setup->getConnection()->insert(
-                $this->setup->getConnection()->getTableName('eav_attribute_set'),
+                $this->setup->getTable('eav_attribute_set'),
                 $data
             );
 
@@ -458,7 +458,7 @@ class EavSetup
     public function getAllAttributeSetIds($entityTypeId = null)
     {
         $select = $this->setup->getConnection()->select()
-            ->from($this->setup->getConnection()->getTableName('eav_attribute_set'), 'attribute_set_id');
+            ->from($this->setup->getTable('eav_attribute_set'), 'attribute_set_id');
 
         $bind = [];
         if ($entityTypeId !== null) {
@@ -484,7 +484,7 @@ class EavSetup
             $where = 'entity_type_code = :entity_type';
         }
         $select = $this->setup->getConnection()->select()->from(
-            $this->setup->getConnection()->getTableName('eav_entity_type'),
+            $this->setup->getTable('eav_entity_type'),
             'default_attribute_set_id'
         )->where(
             $where
@@ -508,7 +508,7 @@ class EavSetup
         if (!is_numeric($sortOrder)) {
             $bind = ['attribute_set_id' => $this->getAttributeSetId($entityTypeId, $setId)];
             $select = $this->setup->getConnection()->select()->from(
-                $this->setup->getConnection()->getTableName('eav_attribute_group'),
+                $this->setup->getTable('eav_attribute_group'),
                 'MAX(sort_order)'
             )->where(
                 'attribute_set_id = :attribute_set_id'
@@ -558,7 +558,7 @@ class EavSetup
                 $data['attribute_group_code'] = $attributeGroupCode;
             }
             $this->setup->getConnection()->insert(
-                $this->setup->getConnection()->getTableName('eav_attribute_group'),
+                $this->setup->getTable('eav_attribute_group'),
                 $data
             );
         }
@@ -714,7 +714,7 @@ class EavSetup
         }
         $bind = ['attribute_set_id' => $attributeSetId];
         $select = $this->setup->getConnection()->select()->from(
-            $this->setup->getConnection()->getTableName('eav_attribute_group'),
+            $this->setup->getTable('eav_attribute_group'),
             'attribute_group_id'
         )->where(
             'attribute_set_id = :attribute_set_id'
@@ -739,7 +739,7 @@ class EavSetup
     public function getAttributesNumberInGroup($entityTypeId, $setId, $groupId)
     {
         $select = $this->setup->getConnection()->select()->from(
-            $this->setup->getConnection()->getTableName('eav_entity_attribute'),
+            $this->setup->getTable('eav_entity_attribute'),
             ['count' => 'COUNT(*)']
         )->where(
             'attribute_group_id = ?',
@@ -836,7 +836,7 @@ class EavSetup
 
         if (!empty($attr['group']) || empty($attr['user_defined'])) {
             $select = $this->setup->getConnection()->select()->from(
-                $this->setup->getConnection()->getTableName('eav_attribute_set')
+                $this->setup->getTable('eav_attribute_set')
             )->where(
                 'entity_type_id = :entity_type_id'
             );
@@ -882,8 +882,8 @@ class EavSetup
      */
     public function addAttributeOption($option)
     {
-        $optionTable = $this->setup->getConnection()->getTableName('eav_attribute_option');
-        $optionValueTable = $this->setup->getConnection()->getTableName('eav_attribute_option_value');
+        $optionTable = $this->setup->getTable('eav_attribute_option');
+        $optionValueTable = $this->setup->getTable('eav_attribute_option_value');
 
         if (isset($option['value'])) {
             foreach ($option['value'] as $optionId => $values) {
@@ -1035,13 +1035,13 @@ class EavSetup
             return $this;
         }
         $additionalTableExists = $this->setup->getConnection()->isTableExists(
-            $this->setup->getConnection()->getTableName($additionalTable)
+            $this->setup->getTable($additionalTable)
         );
         if (!$additionalTableExists) {
             return $this;
         }
         $attributeFields = $this->setup->getConnection()->describeTable(
-            $this->setup->getConnection()->getTableName($additionalTable)
+            $this->setup->getTable($additionalTable)
         );
         if (is_array($field)) {
             $bind = [];
@@ -1068,7 +1068,7 @@ class EavSetup
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
         }
         $this->setup->updateTableRow(
-            $this->setup->getConnection()->getTableName($additionalTable),
+            $this->setup->getTable($additionalTable),
             'attribute_id',
             $this->getAttributeId($entityTypeId, $id),
             $field,
@@ -1093,7 +1093,7 @@ class EavSetup
     private function updateCachedRow($field, $value, $attribute)
     {
         $setupCache = $this->setup->getSetupCache();
-        $mainTable = $this->setup->getConnection()->getTableName('eav_attribute');
+        $mainTable = $this->setup->getTable('eav_attribute');
         if (is_array($field)) {
             $oldRow = $setupCache->has($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) ?
                 $setupCache->get($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) :
@@ -1136,7 +1136,7 @@ class EavSetup
         $mainTable = $this->setup->getTable('eav_attribute');
         $setupCache = $this->setup->getSetupCache();
         if (!$setupCache->has($mainTable, $entityTypeId, $id)) {
-            $additionalTable = $this->setup->getConnection()->getTableName($additionalTable);
+            $additionalTable = $this->setup->getTable($additionalTable);
             $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
             $select = $this->setup->getConnection()->select()->from(
                 ['main' => $mainTable]
@@ -1198,10 +1198,10 @@ class EavSetup
 
         $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
         $select = $this->setup->getConnection()->select()->from(
-            ['entity_type' => $this->setup->getConnection()->getTableName('eav_entity_type')],
+            ['entity_type' => $this->setup->getTable('eav_entity_type')],
             ['entity_table']
         )->join(
-            ['attribute' => $this->setup->getConnection()->getTableName('eav_attribute')],
+            ['attribute' => $this->setup->getTable('eav_attribute')],
             'attribute.entity_type_id = entity_type.entity_type_id',
             ['backend_type']
         )->where(
@@ -1214,7 +1214,7 @@ class EavSetup
 
         $result = $this->setup->getConnection()->fetchRow($select, $bind);
         if ($result) {
-            $table = $this->setup->getConnection()->getTableName($result['entity_table']);
+            $table = $this->setup->getTable($result['entity_table']);
             if ($result['backend_type'] != 'static') {
                 $table .= '_' . $result['backend_type'];
             }
@@ -1233,7 +1233,7 @@ class EavSetup
      */
     public function removeAttribute($entityTypeId, $code)
     {
-        $mainTable = $this->setup->getConnection()->getTableName('eav_attribute');
+        $mainTable = $this->setup->getTable('eav_attribute');
         $attribute = $this->getAttribute($entityTypeId, $code);
         if ($attribute) {
             $this->setup->deleteTableRow('eav_attribute', 'attribute_id', $attribute['attribute_id']);
@@ -1259,7 +1259,7 @@ class EavSetup
         if (!is_numeric($sortOrder)) {
             $bind = ['attribute_group_id' => $this->getAttributeGroupId($entityTypeId, $setId, $groupId)];
             $select = $this->setup->getConnection()->select()->from(
-                $this->setup->getConnection()->getTableName('eav_entity_attribute'),
+                $this->setup->getTable('eav_entity_attribute'),
                 'MAX(sort_order)'
             )->where(
                 'attribute_group_id = :attribute_group_id'
@@ -1287,7 +1287,7 @@ class EavSetup
         $setId = $this->getAttributeSetId($entityTypeId, $setId);
         $groupId = $this->getAttributeGroupId($entityTypeId, $setId, $groupId);
         $attributeId = $this->getAttributeId($entityTypeId, $attributeId);
-        $table = $this->setup->getConnection()->getTableName('eav_entity_attribute');
+        $table = $this->setup->getTable('eav_entity_attribute');
 
         $bind = ['attribute_set_id' => $setId, 'attribute_id' => $attributeId];
         $select = $this->setup->getConnection()->select()->from(
@@ -1346,7 +1346,7 @@ class EavSetup
 
         $bind = ['entity_type_id' => $entityType, 'attribute_set_id' => $setId, 'attribute_id' => $attributeId];
         $select = $this->setup->getConnection()->select()->from(
-            $this->setup->getConnection()->getTableName('eav_entity_attribute')
+            $this->setup->getTable('eav_entity_attribute')
         )->where(
             'entity_type_id = :entity_type_id'
         )->where(
@@ -1362,14 +1362,14 @@ class EavSetup
             }
 
             $this->setup->getConnection()->update(
-                $this->setup->getConnection()->getTableName('eav_entity_attribute'),
+                $this->setup->getTable('eav_entity_attribute'),
                 $data,
                 $this->setup->getConnection()->quoteInto('entity_attribute_id=?', $row['entity_attribute_id'])
             );
         } else {
             if ($sortOrder === null) {
                 $select = $this->setup->getConnection()->select()->from(
-                    $this->setup->getConnection()->getTableName('eav_entity_attribute'),
+                    $this->setup->getTable('eav_entity_attribute'),
                     'MAX(sort_order)'
                 )->where(
                     'entity_type_id = :entity_type_id'
@@ -1384,7 +1384,7 @@ class EavSetup
             $sortOrder = is_numeric($sortOrder) ? $sortOrder : 1;
             $data['sort_order'] = $sortOrder;
             $this->setup->getConnection()->insert(
-                $this->setup->getConnection()->getTableName('eav_entity_attribute'),
+                $this->setup->getTable('eav_entity_attribute'),
                 $data
             );
         }
@@ -1468,7 +1468,7 @@ class EavSetup
     private function _getAttributeTableFields()
     {
         return $this->setup->getConnection()->describeTable(
-            $this->setup->getConnection()->getTableName('eav_attribute')
+            $this->setup->getTable('eav_attribute')
         );
     }
 
@@ -1494,11 +1494,11 @@ class EavSetup
         }
 
         $this->setup->getConnection()->insert(
-            $this->setup->getConnection()->getTableName('eav_attribute'),
+            $this->setup->getTable('eav_attribute'),
             $bind
         );
         $attributeId = $this->setup->getConnection()->lastInsertId(
-            $this->setup->getConnection()->getTableName('eav_attribute')
+            $this->setup->getTable('eav_attribute')
         );
         $this->_insertAttributeAdditionalData(
             $data['entity_type_id'],
@@ -1522,12 +1522,12 @@ class EavSetup
             return $this;
         }
         $additionalTableExists = $this->setup->getConnection()->isTableExists(
-            $this->setup->getConnection()->getTableName($additionalTable)
+            $this->setup->getTable($additionalTable)
         );
         if ($additionalTable && $additionalTableExists) {
             $bind = [];
             $fields = $this->setup->getConnection()->describeTable(
-                $this->setup->getConnection()->getTableName($additionalTable)
+                $this->setup->getTable($additionalTable)
             );
             foreach ($data as $k => $v) {
                 if (isset($fields[$k])) {
@@ -1538,7 +1538,7 @@ class EavSetup
                 return $this;
             }
             $this->setup->getConnection()->insert(
-                $this->setup->getConnection()->getTableName($additionalTable),
+                $this->setup->getTable($additionalTable),
                 $bind
             );
         }

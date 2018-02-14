@@ -99,28 +99,28 @@ class ConvertWidgetConditionsToJson implements DataPatchInterface, PatchVersionI
             [
                 new FieldToConvert(
                     ContentConverter::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('cms_block'),
+                    $this->moduleDataSetup->getTable('cms_block'),
                     $blockMetadata->getIdentifierField(),
                     'content',
                     $queryModifier
                 ),
                 new FieldToConvert(
                     ContentConverter::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getTable('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'content',
                     $queryModifier
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getTable('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'layout_update_xml',
                     $layoutUpdateXmlFieldQueryModifier
                 ),
                 new FieldToConvert(
                     LayoutUpdateConverter::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('cms_page'),
+                    $this->moduleDataSetup->getTable('cms_page'),
                     $pageMetadata->getIdentifierField(),
                     'custom_layout_update_xml',
                     $customLayoutUpdateXmlFieldQueryModifier

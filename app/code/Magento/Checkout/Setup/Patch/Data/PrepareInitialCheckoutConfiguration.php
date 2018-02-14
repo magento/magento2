@@ -64,7 +64,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         $connection = $this->moduleDataSetup->getConnection();
 
         $select = $connection->select()->from(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -77,7 +77,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -90,7 +90,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -103,7 +103,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -116,7 +116,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             || $connection->fetchOne($select) > 0;
 
         $select = $connection->select()->from(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'COUNT(*)'
         )->where(
             'path=?',
@@ -138,7 +138,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
          */
 
         $connection->insert(
-            $connection->getTableName('eav_form_type'),
+            $this->moduleDataSetup->getTable('eav_form_type'),
             [
                 'code' => 'checkout_onepage_register',
                 'label' => 'checkout_onepage_register',
@@ -147,21 +147,21 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($this->moduleDataSetup->getTable('eav_form_type'));
 
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $customerEntityTypeId]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
 
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -171,7 +171,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -181,7 +181,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showMiddlename) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -191,7 +191,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -201,7 +201,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showSuffix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -211,7 +211,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -220,7 +220,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -229,7 +229,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -238,7 +238,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -247,7 +247,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -256,7 +256,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -265,7 +265,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -274,7 +274,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -283,7 +283,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -293,7 +293,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showDob) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -304,7 +304,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         }
         if ($showTaxVat) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -321,7 +321,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
          */
 
         $connection->insert(
-            $connection->getTableName('eav_form_type'),
+            $this->moduleDataSetup->getTable('eav_form_type'),
             [
                 'code' => 'checkout_onepage_register_guest',
                 'label' => 'checkout_onepage_register_guest',
@@ -330,21 +330,21 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($this->moduleDataSetup->getTable('eav_form_type'));
 
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $customerEntityTypeId]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
 
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -354,7 +354,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -364,7 +364,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showMiddlename) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -374,7 +374,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -384,7 +384,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showSuffix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -394,7 +394,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -403,7 +403,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -412,7 +412,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -421,7 +421,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -430,7 +430,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -439,7 +439,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -448,7 +448,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -457,7 +457,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -466,7 +466,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -476,7 +476,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showDob) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -487,7 +487,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         }
         if ($showTaxVat) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -504,7 +504,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
          */
 
         $connection->insert(
-            $connection->getTableName('eav_form_type'),
+            $this->moduleDataSetup->getTable('eav_form_type'),
             [
                 'code' => 'checkout_onepage_billing_address',
                 'label' => 'checkout_onepage_billing_address',
@@ -513,17 +513,17 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($this->moduleDataSetup->getTable('eav_form_type'));
 
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
 
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -533,7 +533,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -543,7 +543,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showMiddlename) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -553,7 +553,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -563,7 +563,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showSuffix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -573,7 +573,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -582,7 +582,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -591,7 +591,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -600,7 +600,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -609,7 +609,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -618,7 +618,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -627,7 +627,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -636,7 +636,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -652,7 +652,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
          */
 
         $connection->insert(
-            $connection->getTableName('eav_form_type'),
+            $this->moduleDataSetup->getTable('eav_form_type'),
             [
                 'code' => 'checkout_onepage_shipping_address',
                 'label' => 'checkout_onepage_shipping_address',
@@ -661,17 +661,17 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
                 'store_id' => 0
             ]
         );
-        $formTypeId = $connection->lastInsertId($connection->getTableName('eav_form_type'));
+        $formTypeId = $connection->lastInsertId($this->moduleDataSetup->getTable('eav_form_type'));
 
         $connection->insert(
-            $connection->getTableName('eav_form_type_entity'),
+            $this->moduleDataSetup->getTable('eav_form_type_entity'),
             ['type_id' => $formTypeId, 'entity_type_id' => $addressEntityTypeId]
         );
 
         $elementSort = 0;
         if ($showPrefix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -681,7 +681,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -691,7 +691,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showMiddlename) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -701,7 +701,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -711,7 +711,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
         );
         if ($showSuffix) {
             $connection->insert(
-                $connection->getTableName('eav_form_element'),
+                $this->moduleDataSetup->getTable('eav_form_element'),
                 [
                     'type_id' => $formTypeId,
                     'fieldset_id' => null,
@@ -721,7 +721,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             );
         }
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -730,7 +730,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -739,7 +739,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -748,7 +748,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -757,7 +757,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -766,7 +766,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -775,7 +775,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -784,7 +784,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
         $connection->insert(
-            $connection->getTableName('eav_form_element'),
+            $this->moduleDataSetup->getTable('eav_form_element'),
             [
                 'type_id' => $formTypeId,
                 'fieldset_id' => null,
@@ -793,7 +793,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
             ]
         );
 
-        $table = $connection->getTableName('core_config_data');
+        $table = $this->moduleDataSetup->getTable('core_config_data');
 
         $select = $connection->select()->from(
             $table,

@@ -45,7 +45,7 @@ class UpdateStoreGroupCodes implements DataPatchInterface, PatchVersionInterface
     private function updateStoreGroupCodes()
     {
         $connection = $this->moduleDataSetup->getConnection();
-        $storeGroupTable = $connection->getTableName('store_group');
+        $storeGroupTable = $this->moduleDataSetup->getTable('store_group');
         $select = $connection->select()->from(
             $storeGroupTable,
             ['group_id', 'name']

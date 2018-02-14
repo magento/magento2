@@ -83,7 +83,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('url_rewrite'),
+            $this->moduleDataSetup->getTable('url_rewrite'),
             'url_rewrite_id',
             'metadata'
         );

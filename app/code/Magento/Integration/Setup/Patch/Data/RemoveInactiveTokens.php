@@ -76,7 +76,7 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeRevokedTokens()
     {
-        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
+        $oauthTokenTable = $this->moduleDataSetup->getTable('oauth_token');
 
         $where = ['revoked = ?' => 1];
         $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
@@ -89,8 +89,8 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeTokensFromInactiveAdmins()
     {
-        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
-        $adminUserTable = $this->moduleDataSetup->getConnection()->getTableName('admin_user');
+        $oauthTokenTable = $this->moduleDataSetup->getTable('oauth_token');
+        $adminUserTable = $this->moduleDataSetup->getTable('admin_user');
 
         $select = $this->moduleDataSetup->getConnection()->select()->from(
             $adminUserTable,
@@ -113,8 +113,8 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
      */
     private function removeTokensFromInactiveCustomers()
     {
-        $oauthTokenTable = $this->moduleDataSetup->getConnection()->getTableName('oauth_token');
-        $adminUserTable = $this->moduleDataSetup->getConnection()->getTableName('customer_entity');
+        $oauthTokenTable = $this->moduleDataSetup->getTable('oauth_token');
+        $adminUserTable = $this->moduleDataSetup->getTable('customer_entity');
 
         $select = $this->moduleDataSetup->getConnection()->select()->from(
             $adminUserTable,

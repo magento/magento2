@@ -92,7 +92,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
 
         //Remove everything from stores scope
         $connection->delete(
-            $connection->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             [
                 'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
                 'scope = ?' => ScopeInterface::SCOPE_STORES
@@ -102,7 +102,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
         //Update websites
         foreach ($allowedCountries as $scopeId => $countries) {
             $connection->update(
-                $connection->getTableName('core_config_data'),
+                $this->moduleDataSetup->getTable('core_config_data'),
                 [
                     'value' => implode(',', $countries)
                 ],

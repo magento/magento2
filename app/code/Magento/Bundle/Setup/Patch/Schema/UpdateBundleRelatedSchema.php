@@ -38,7 +38,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
     public function apply()
     {
         // Updating data of the 'catalog_product_bundle_option_value' table.
-        $tableName = $this->schemaSetup->getConnection()->getTableName('catalog_product_bundle_option_value');
+        $tableName = $this->schemaSetup->getTable('catalog_product_bundle_option_value');
 
         $select = $this->schemaSetup->getConnection()->select()
             ->from(
@@ -46,7 +46,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
                 ['value_id']
             )->joinLeft(
                 [
-                    'options' => $this->schemaSetup->getConnection()->getTableName(
+                    'options' => $this->schemaSetup->getTable(
                         'catalog_product_bundle_option'
                     )
                 ],
@@ -64,10 +64,10 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
         );
 
         // Updating data of the 'catalog_product_bundle_selection_price' table.
-        $tableName = $this->schemaSetup->getConnection()->getTableName(
+        $tableName = $this->schemaSetup->getTable(
             'catalog_product_bundle_selection_price'
         );
-        $tmpTableName = $this->schemaSetup->getConnection()->getTableName(
+        $tmpTableName = $this->schemaSetup->getTable(
             'catalog_product_bundle_selection_price_tmp'
         );
 
@@ -117,7 +117,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
                 []
             )->joinLeft(
                 [
-                    'selections' => $this->schemaSetup->getConnection()->getTableName(
+                    'selections' => $this->schemaSetup->getTable(
                         'catalog_product_bundle_selection'
                     )
                 ],

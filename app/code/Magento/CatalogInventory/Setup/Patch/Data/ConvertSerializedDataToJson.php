@@ -59,7 +59,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
         $select = $this->moduleDataSetup->getConnection()
             ->select()
             ->from(
-                $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+                $this->moduleDataSetup->getTable('core_config_data'),
                 ['config_id', 'value']
             )
             ->where('path = ?', 'cataloginventory/item_options/min_sale_qty');
@@ -81,7 +81,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
 
         $fieldDataConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             'config_id',
             'value',
             $queryModifier

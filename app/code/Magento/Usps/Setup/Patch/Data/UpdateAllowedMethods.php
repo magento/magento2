@@ -37,7 +37,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     public function apply()
     {
         $connection = $this->moduleDataSetup->getConnection();
-        $configDataTable = $connection->getTableName('core_config_data');
+        $configDataTable = $this->moduleDataSetup->getTable('core_config_data');
         $oldToNewMethodCodesMap = [
             'First-Class' => '0_FCLE',
             'First-Class Mail International Large Envelope' => 'INT_14',

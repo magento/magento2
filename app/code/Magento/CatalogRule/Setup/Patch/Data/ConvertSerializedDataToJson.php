@@ -58,13 +58,13 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
             [
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('catalogrule'),
+                    $this->moduleDataSetup->getTable('catalogrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
                 new FieldToConvert(
                     SerializedToJson::class,
-                    $this->moduleDataSetup->getConnection()->getTableName('catalogrule'),
+                    $this->moduleDataSetup->getTable('catalogrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'
                 ),

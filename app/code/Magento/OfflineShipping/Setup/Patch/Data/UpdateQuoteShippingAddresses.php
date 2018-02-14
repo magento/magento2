@@ -41,7 +41,7 @@ class UpdateQuoteShippingAddresses implements DataPatchInterface, PatchVersionIn
         $salesConnection = $this->moduleDataSetup->getConnection('sales');
         $checkoutConnection = $this->moduleDataSetup->getConnection('checkout');
         $connection->update(
-            $connection->getTableName('salesrule'),
+            $this->moduleDataSetup->getTable('salesrule'),
             ['simple_free_shipping' => 0],
             [new \Zend_Db_Expr('simple_free_shipping IS NULL')]
         );
@@ -50,7 +50,7 @@ class UpdateQuoteShippingAddresses implements DataPatchInterface, PatchVersionIn
         // setup sales
         $salesConnection->startSetup();
         $salesConnection->update(
-            $salesConnection->getTableName('sales_order_item'),
+            $this->moduleDataSetup->getTable('sales_order_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
@@ -59,12 +59,12 @@ class UpdateQuoteShippingAddresses implements DataPatchInterface, PatchVersionIn
         // setup checkout
         $checkoutConnection->startSetup();
         $checkoutConnection->update(
-            $checkoutConnection->getTableName('quote_address'),
+            $this->moduleDataSetup->getTable('quote_address'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );
         $checkoutConnection->update(
-            $checkoutConnection->getTableName('quote_item'),
+            $this->moduleDataSetup->getTable('quote_item'),
             ['free_shipping' => 0],
             [new \Zend_Db_Expr('free_shipping IS NULL')]
         );

@@ -52,7 +52,7 @@ class PrepareShipmentDays implements DataPatchInterface, PatchVersionInterface
         )['calendar']['gregorian']['dayNames']['format']['abbreviated'];
 
         $select = $this->moduleDataSetup->getConnection()->select()->from(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             ['config_id', 'value']
         )->where(
             'path = ?',
@@ -66,7 +66,7 @@ class PrepareShipmentDays implements DataPatchInterface, PatchVersionInterface
                 )
             ];
             $this->moduleDataSetup->getConnection()->update(
-                $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+                $this->moduleDataSetup->getTable('core_config_data'),
                 $row,
                 ['config_id = ?' => $configRow['config_id']]
             );

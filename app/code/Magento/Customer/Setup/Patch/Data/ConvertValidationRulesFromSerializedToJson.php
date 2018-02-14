@@ -50,7 +50,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
             $this->moduleDataSetup->getConnection(),
-            $this->moduleDataSetup->getConnection()->getTableName('customer_eav_attribute'),
+            $this->moduleDataSetup->getTable('customer_eav_attribute'),
             'attribute_id',
             'validate_rules'
         );

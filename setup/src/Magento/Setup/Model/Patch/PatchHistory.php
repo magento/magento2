@@ -64,8 +64,9 @@ class PatchHistory
     {
         if ($this->patchesRegistry === null) {
             $adapter = $this->resourceConnection->getConnection();
-            $filterSelect = $adapter->select()
-                ->from($adapter->getTableName(self::TABLE_NAME), self::CLASS_NAME);
+            $filterSelect = $adapter
+                ->select()
+                ->from($this->resourceConnection->getTableName(self::TABLE_NAME), self::CLASS_NAME);
             $this->patchesRegistry = $adapter->fetchCol($filterSelect);
         }
 
@@ -86,7 +87,7 @@ class PatchHistory
         }
 
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->insert(self::TABLE_NAME, [self::CLASS_NAME => $patchName]);
+        $adapter->insert($this->resourceConnection->getTableName(self::TABLE_NAME), [self::CLASS_NAME => $patchName]);
     }
 
     /**
@@ -105,7 +106,10 @@ class PatchHistory
         }
 
         $adapter = $this->resourceConnection->getConnection();
-        $adapter->delete(self::TABLE_NAME, [self::CLASS_NAME . "= ?" => $patchName]);
+        $adapter->delete(
+            $this->resourceConnection->getTableName(self::TABLE_NAME),
+            [self::CLASS_NAME . "= ?" => $patchName]
+        );
     }
 
     /**

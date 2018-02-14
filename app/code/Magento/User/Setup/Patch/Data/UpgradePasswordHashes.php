@@ -72,7 +72,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
     private function upgradeHash()
     {
         $connection = $this->moduleDataSetup->getConnection();
-        $customerEntityTable = $connection->getTableName('admin_user');
+        $customerEntityTable = $this->moduleDataSetup->getTable('admin_user');
 
         $select = $connection->select()->from(
             $customerEntityTable,

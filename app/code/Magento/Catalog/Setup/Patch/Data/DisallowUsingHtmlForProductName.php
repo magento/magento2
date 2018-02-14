@@ -52,7 +52,7 @@ class DisallowUsingHtmlForProductName implements DataPatchInterface, PatchVersio
         $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
 
         $this->moduleDataSetup->getConnection()->update(
-            $this->moduleDataSetup->getConnection()->getTableName('catalog_eav_attribute'),
+            $this->moduleDataSetup->getTable('catalog_eav_attribute'),
             ['is_html_allowed_on_front' => 0],
             $this->moduleDataSetup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
         );

@@ -72,7 +72,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
 
         foreach ($eventTypeData as $row) {
             $this->moduleDataSetup->getConnection()
-                ->insertForce($this->moduleDataSetup->getConnection()->getTableName('report_event_types'), $row);
+                ->insertForce($this->moduleDataSetup->getTable('report_event_types'), $row);
         }
         /**
          * Prepare database after data upgrade

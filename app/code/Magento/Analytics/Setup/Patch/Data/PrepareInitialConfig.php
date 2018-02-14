@@ -40,7 +40,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->insertMultiple(
-            $this->moduleDataSetup->getConnection()->getTableName('core_config_data'),
+            $this->moduleDataSetup->getTable('core_config_data'),
             [
                 [
                     'scope' => 'default',
@@ -58,7 +58,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
         );
 
         $this->moduleDataSetup->getConnection()->insert(
-            $this->moduleDataSetup->getConnection()->getTableName('flag'),
+            $this->moduleDataSetup->getTable('flag'),
             [
                 'flag_code' => SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE,
                 'state' => 0,

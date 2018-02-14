@@ -73,7 +73,7 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
             $data[] = ['status' => $code, 'label' => $info];
         }
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status'),
+            $this->moduleDataSetup->getTable('sales_order_status'),
             ['status', 'label'],
             $data
         );
@@ -134,7 +134,7 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
             }
         }
         $this->moduleDataSetup->getConnection()->insertArray(
-            $this->moduleDataSetup->getConnection()->getTableName('sales_order_status_state'),
+            $this->moduleDataSetup->getTable('sales_order_status_state'),
             ['status', 'state', 'is_default'],
             $data
         );
@@ -155,7 +155,7 @@ class InstallOrderStatusesAndInitialSalesConfig implements DataPatchInterface, P
         $states = ['new', 'processing', 'complete', 'closed', 'canceled', 'holded', 'payment_review'];
         foreach ($states as $state) {
             $this->moduleDataSetup->getConnection()->update(
-                $this->moduleDataSetup->getConnection()->getTableName('sales_order_status_state'),
+                $this->moduleDataSetup->getTable('sales_order_status_state'),
                 ['visible_on_front' => 1],
                 ['state = ?' => $state]
             );

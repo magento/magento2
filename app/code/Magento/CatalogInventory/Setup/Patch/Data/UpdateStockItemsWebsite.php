@@ -63,7 +63,7 @@ class UpdateStockItemsWebsite implements DataPatchInterface, PatchVersionInterfa
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->update(
-            $this->moduleDataSetup->getConnection()->getTableName('cataloginventory_stock_item'),
+            $this->moduleDataSetup->getTable('cataloginventory_stock_item'),
             ['website_id' => $this->stockConfiguration->getDefaultScopeId()],
             ['website_id = ?' => $this->storeManager->getWebsite()->getId()]
         );
