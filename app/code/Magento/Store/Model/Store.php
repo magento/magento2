@@ -531,8 +531,8 @@ class Store extends AbstractExtensibleModel implements
     public function getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data) {
-            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        if ($data === null) {
+            $data = $this->_config->getValue($path);
         }
         return $data === false ? null : $data;
     }
