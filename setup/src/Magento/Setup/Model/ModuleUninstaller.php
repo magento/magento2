@@ -56,7 +56,18 @@ class ModuleUninstaller
         $this->remove = $remove;
         $this->collector = $collector;
         $this->setupFactory = $setupFactory;
-        $this->patchApplier = $this->objectManager->create(PatchApplier::class);
+    }
+
+    /**
+     * @return PatchApplier
+     */
+    private function getPatchApplier()
+    {
+        if (!$this->patchApplier) {
+            $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+        }
+
+        return $this->patchApplier;
     }
 
     /**
@@ -80,7 +91,7 @@ class ModuleUninstaller
                 );
             }
 
-            $this->patchApplier->revertDataPatches($module);
+            $this->getPatchApplier()->revertDataPatches($module);
         }
     }
 

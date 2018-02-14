@@ -153,7 +153,18 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
         $this->maintenanceModeEnabler =
             $maintenanceModeEnabler ?: $this->objectManager->get(MaintenanceModeEnabler::class);
-        $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+    }
+
+    /**
+     * @return PatchApplier
+     */
+    private function getPatchApplier()
+    {
+        if (!$this->patchApplier) {
+            $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+        }
+
+        return $this->patchApplier;
     }
 
     /**
@@ -226,7 +237,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         if ($input->getOption(self::INPUT_KEY_NON_COMPOSER_MODULE)) {
             foreach ($modules as $moduleName) {
-                $this->patchApplier->revertDataPatches($moduleName);
+                $this->getPatchApplier()->revertDataPatches($moduleName);
             }
 
             return Cli::RETURN_SUCCESS;
