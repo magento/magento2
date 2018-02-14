@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-inventory-reservations",
+    "description": "N/A",
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "100.3.*",
+        "magento/module-inventory-reservations-api": "100.0.*"
+    },
+    "type": "magento2-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\InventoryReservations\\": ""
+        }
+    }
+}

@@ -24,7 +24,8 @@
     <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
     </type>
-    <type name="Magento\InventoryApi\Api\IsProductSalableInterface">
+    <!-- TODO: remove plugin on the same module -->
+    <type name="Magento\InventorySalesApi\Api\IsProductSalableInterface">
         <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\StockManagement">
@@ -32,4 +33,7 @@
         <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
         <plugin name="process_revert_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRevertProductsSalePlugin"/>
     </type>
+    <!-- Query interfaces -->
+    <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
+    <preference for="Magento\InventorySalesApi\Api\IsProductSalableInterface" type="Magento\InventorySales\Model\IsProductSalable"/>
 </config>
