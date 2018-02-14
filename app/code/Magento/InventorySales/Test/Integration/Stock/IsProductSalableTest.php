@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;

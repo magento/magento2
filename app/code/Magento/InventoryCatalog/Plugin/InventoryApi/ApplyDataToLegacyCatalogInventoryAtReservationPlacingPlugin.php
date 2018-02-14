@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\InventoryApi\Api\Data\ReservationInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;

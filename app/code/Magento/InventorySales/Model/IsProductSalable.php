@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemRepository;
-use Magento\Inventory\Model\GetReservationsQuantityInterface;
+use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 

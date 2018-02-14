@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Inventory\Model\CleanupReservationsInterface;
-use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservationsApi\Api\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
