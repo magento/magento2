@@ -135,7 +135,7 @@ class DbVersionInfo
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        $configVer = $module['setup_version'];
+        $configVer = isset($module['setup_version']) ? $module['setup_version'] : null;
 
         if (empty($configVer)) {
             /**

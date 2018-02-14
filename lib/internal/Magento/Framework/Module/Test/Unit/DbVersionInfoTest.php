@@ -142,20 +142,18 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
+     * Test is DB schema up to date for module with no schema
      */
     public function testIsDbSchemaUpToDateException()
     {
-        $this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema');
+        $this->assertTrue($this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema'));
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
+     * Test is DB Data up to date for module with no schema
      */
     public function testIsDbDataUpToDateException()
     {
-        $this->dbVersionInfo->isDataUpToDate('Module_No_Schema');
+        $this->assertTrue($this->dbVersionInfo->isDataUpToDate('Module_No_Schema'));
     }
 }
