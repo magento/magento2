@@ -232,6 +232,7 @@ class EmailNotification implements EmailNotificationInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)
+            ->setScopeId($storeId)
             ->setFrom($this->scopeConfig->getValue($sender, 'store', $storeId))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
