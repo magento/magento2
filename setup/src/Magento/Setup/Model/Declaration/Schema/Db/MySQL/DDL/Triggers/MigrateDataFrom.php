@@ -60,7 +60,7 @@ class MigrateDataFrom implements DDLTriggerInterface
             );
             $adapter
                 ->update(
-                    $this->resourceConnection->getConnection()->getTableName($tableName),
+                    $this->resourceConnection->getTableName($tableName),
                     [
                         $column->getName() => new Expression($matches[1])
                     ]
