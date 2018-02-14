@@ -70,7 +70,6 @@ class ModuleUninstaller
         return $this->patchApplier;
     }
 
-
     /**
      * Invoke remove data routine in each specified module
      *
