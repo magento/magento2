@@ -129,8 +129,10 @@ class Importer implements ImporterInterface
 
                 // Invoke saving of new values.
                 $this->saveProcessor->process($changedData);
-                $this->flagManager->saveFlag(static::FLAG_CODE, $data);
             });
+
+            $this->scope->setCurrentScope($currentScope);
+            $this->flagManager->saveFlag(static::FLAG_CODE, $data);
         } catch (\Exception $e) {
             throw new InvalidTransitionException(__('%1', $e->getMessage()), $e);
         } finally {
