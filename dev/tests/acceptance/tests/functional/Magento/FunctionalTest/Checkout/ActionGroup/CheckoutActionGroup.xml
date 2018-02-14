@@ -8,35 +8,134 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <!-- Guest checkout with Check/Money Order payment -->
-    <actionGroup name="GuestCheckoutWithCheckMoneyOrderPaymentActionGroup">
-        <arguments>
-            <argument name="product"/>
-        </arguments>
+    <!-- Go to checkout from minicart -->
+    <actionGroup name="GoToCheckoutFromMinicartActionGroup">
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <fillField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
-        <fillField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
-        <fillField selector="{{GuestCheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
-        <fillField selector="{{GuestCheckoutShippingSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
-        <fillField selector="{{GuestCheckoutShippingSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
-        <selectOption selector="{{GuestCheckoutShippingSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
-        <fillField selector="{{GuestCheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
-        <fillField selector="{{GuestCheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Guest checkout filling shipping section -->
+    <actionGroup name="GuestCheckoutFillingShippingSectionActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <click selector="{{GuestCheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <waitForElement selector="{{GuestCheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{GuestCheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForElement selector="{{GuestCheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <conditionalClick selector="{{GuestCheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{GuestCheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!-- Check product in checkout cart items -->
+    <actionGroup name="CheckProductInCheckoutCartItemsActionGroup">
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
-        <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{product.name}}" stepKey="seeProductInCart"/>
-        <conditionalClick selector="{{GuestCheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{GuestCheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
-        <see selector="{{GuestCheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAddress"/>
-        <click selector="{{GuestCheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" stepKey="seeOrderNumber"/>
-        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeEmailYou"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
+    </actionGroup>
+
+    <!-- Check configurable product in checkout cart items -->
+    <actionGroup name="CheckConfigurableProductInCheckoutCartItemsActionGroup">
+        <arguments>
+            <argument name="productVar" />
+            <argument name="optionLabel" />
+            <argument name="optionValue" />
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName(productVar.name)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" visible="false" stepKey="exposeProductOptions"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionLabel}}" stepKey="seeProductOptionLabel" />
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionValue}}" stepKey="seeProductOptionValue" />
+    </actionGroup>
+
+    <!-- Check order summary in checkout -->
+    <actionGroup name="CheckOrderSummaryInCheckoutActionGroup">
+        <arguments>
+            <argument name="subtotal"/>
+            <argument name="shippingTotal"/>
+            <argument name="shippingMethod"/>
+            <argument name="total"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="${{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="${{shippingTotal}}" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <see userInput="${{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
+   </actionGroup>
+
+    <!-- Check ship to information in checkout -->
+    <actionGroup name="CheckShipToInformationInCheckoutActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationFirstName"/>
+        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInfomation}}" stepKey="assertShipToInformationTelephone"/>
+    </actionGroup>
+
+    <!-- Check shipping method in checkout -->
+    <actionGroup name="CheckShippingMethodInCheckoutActionGroup">
+        <arguments>
+            <argument name="shippingMethod"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInfomation}}" stepKey="assertshippingMethodInfomation"/>
+    </actionGroup>
+
+    <!-- Checkout select Check/Money Order payment -->
+    <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
+    </actionGroup>
+
+    <!-- Check billing address in checkout -->
+    <actionGroup name="CheckBillingAddressInCheckoutActionGroup">
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressFirstName"/>
+        <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressTelephone"/>
+    </actionGroup>
+
+    <!-- Checkout place order -->
+    <actionGroup name="CheckoutPlaceOrderActionGroup">
+        <arguments>
+            <argument name="orderNumberMessage"/>
+            <argument name="emailYouMessage"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
     </actionGroup>
 
     <!-- Logged in user checkout with Check/Money Order payment -->
