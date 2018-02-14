@@ -37,8 +37,22 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
-        <actionGroup ref="GuestCheckoutWithCheckMoneyOrderPaymentActionGroup" stepKey="guestCheckoutWithCheckMoneyOrderPayment">
-            <argument name="product" value="_defaultProduct"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckProductInCartItems">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeAddress">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
@@ -55,6 +69,6 @@
         <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAdminOrderEmail"/>
         <see selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
-        <see selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="{{_defaultProduct.name}}" stepKey="seeAdminOrderProduct"/>
+        <see selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$createProduct.name$$" stepKey="seeAdminOrderProduct"/>
     </test>
 </tests>
