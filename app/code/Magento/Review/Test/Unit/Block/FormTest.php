@@ -5,7 +5,10 @@
  */
 namespace Magento\Review\Test\Unit\Block;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\ZendEscaper;
+use Magento\Review\Model\Rating;
 
 class FormTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,6 +45,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->reviewDataMock = $this->getMockBuilder(\Magento\Review\Helper\Data::class)
@@ -61,6 +65,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->storeManager)
         );
+        $escaper = new Escaper();
+        $zendEscaper = new ZendEscaper();
+        $this->objectManagerHelper->setBackwardCompatibleProperty($escaper, 'escaper', $zendEscaper);
+        $this->context->expects($this->any())
+            ->method('getEscaper')
+            ->willReturn($escaper);
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -69,7 +79,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
             \Magento\Review\Block\Form::class,
             [
@@ -153,5 +162,50 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())->method('serialize')
             ->will($this->returnValue(json_encode($jsLayout)));
         $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
+    }
+
+    /**
+     * Test getCode() will replace spaces with underscores in order to build proper unique element id.
+     *
+     * @dataProvider getCodeDataProvider
+     * @param string $expectedCode
+     * @param string $code
+     * @return void
+     */
+    public function testGetCode(string $expectedCode, string $code)
+    {
+        /** @var Rating|\PHPUnit_Framework_MockObject_MockObject $rating */
+        $rating = $this->getMockBuilder(Rating::class)
+            ->setMethods(['getRatingCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $rating->expects($this->once())
+            ->method('getRatingCode')
+            ->willReturn($code);
+
+        $this->assertSame($expectedCode, $this->object->getCode($rating));
+    }
+
+    /**
+     * Provide test data for testGetCode().
+     *
+     * @return array
+     */
+    public function getCodeDataProvider()
+    {
+        return [
+            [
+                'expected_code' => 'test',
+                'code' => 'test',
+            ],
+            [
+                'expected_code' => 'test_code_with_spaces',
+                'code' => 'test code with spaces',
+            ],
+            [
+                'expected_code' => '&lt;p&gt;test_code_with_spaces_and_tags&lt;&#x2F;p&gt;',
+                'code' => '<p>test code with spaces and tags</p>'
+            ]
+        ];
     }
 }

@@ -59,6 +59,21 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
+    /**
+     * Test getCode() will replace spaces with underscores.
+     *
+     * @magentoDataFixture Magento/Review/_files/rating_with_spaces.php
+     * @magentoAppArea frontend
+     * @return void
+     */
+    public function testGetCodeWithSpaces()
+    {
+        $rating = $this->objectManager->get(\Magento\Review\Model\Rating::class);
+        $rating->load('test rating with spaces', 'rating_code');
+        $form = $this->objectManager->create(\Magento\Review\Block\Form::class);
+        $this->assertSame('test_rating_with_spaces', $form->getCode($rating));
+    }
+
     public function getCorrectFlagDataProvider()
     {
         return [
