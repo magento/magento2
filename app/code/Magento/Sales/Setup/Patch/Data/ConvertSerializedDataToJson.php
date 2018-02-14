@@ -18,8 +18,10 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Sales\Setup\SalesOrderPaymentDataConverter;
 use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Sales\Setup\SerializedDataConverter;
 use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchVersionInterface;
 
@@ -123,6 +125,30 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
                 'tax_ratio'
             ),
         ];
+        $fieldsToUpdate[] = new FieldToConvert(
+            SerializedDataConverter::class,
+            $salesSetup->getTable('sales_order_item'),
+            'item_id',
+            'product_options'
+        );
+        $fieldsToUpdate[] = new FieldToConvert(
+            SerializedToJson::class,
+            $salesSetup->getTable('sales_shipment'),
+            'entity_id',
+            'packages'
+        );
+        $fieldsToUpdate[] = new FieldToConvert(
+            SalesOrderPaymentDataConverter::class,
+            $salesSetup->getTable('sales_order_payment'),
+            'entity_id',
+            'additional_information'
+        );
+        $fieldsToUpdate[] = new FieldToConvert(
+            SerializedToJson::class,
+            $salesSetup->getTable('sales_payment_transaction'),
+            'transaction_id',
+            'additional_information'
+        );
         $this->aggregatedFieldDataConverter->convert($fieldsToUpdate, $salesSetup->getConnection());
     }
 }
