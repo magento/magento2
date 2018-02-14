@@ -10,6 +10,9 @@ namespace Magento\InventorySales\Test\Integration\StockManagement;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -38,6 +41,21 @@ class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
     private $websiteRepository;
 
     /**
+     * @var ReservationBuilderInterface
+     */
+    private $reservationBuilder;
+
+    /**
+     * @var AppendReservationsInterface
+     */
+    private $appendReservations;
+
+    /**
+     * @var CleanupReservationsInterface
+     */
+    private $cleanupReservations;
+
+    /**
      * @var StockManagement
      */
     private $stockManagement;
@@ -48,7 +66,18 @@ class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
+        $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
+        $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->stockManagement = Bootstrap::getObjectManager()->get(StockManagement::class);
+    }
+
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
+    protected function tearDown()
+    {
+        $this->cleanupReservations->execute();
     }
 
     /**
@@ -70,5 +99,10 @@ class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
         $this->stockManagement->revertProductsSale([$product->getId() => 3.5], $website->getId());
 
         self::assertEquals(12, $this->getProductSalableQty->execute('SKU-1', 10));
+
+        $this->appendReservations->execute([
+            // reserved 3.5 units for cleanup
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-3.5)->build(),
+        ]);
     }
 }

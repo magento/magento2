@@ -56,10 +56,34 @@ class IsProductSalableTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param bool $isSalable
+     *
+     * @dataProvider productIsSalableDataProvider
      */
-    public function testProductIsSalable()
+    public function testProductIsSalable(string $sku, int $stockId, bool $isSalable)
     {
-        self::assertTrue($this->isProductSalable->execute('SKU-1', 10));
+        self::assertEquals($isSalable, $this->isProductSalable->execute($sku, $stockId));
+    }
+
+    /**
+     * @return array
+     */
+    public function productIsSalableDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, false],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, false],
+        ];
     }
 
     /**
@@ -83,39 +107,5 @@ class IsProductSalableTest extends TestCase
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.5)->build(),
         ]);
         $this->cleanupReservations->execute();
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     *
-     * @param int $stockId
-     * @param array $expectedResults
-     * @return void
-     *
-     * @dataProvider executeWithDifferentQtyDataProvider
-     */
-    public function testExecuteWithDifferentQty(int $stockId, array $expectedResults)
-    {
-        foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isSalable = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isSalable);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function executeWithDifferentQtyDataProvider(): array
-    {
-        return [
-            ['10', [true, false, false]],
-            ['20', [false, true, false]],
-            ['30', [true, true, false]],
-        ];
     }
 }

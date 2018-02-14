@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
+use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSourceItemId;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
-use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventoryIndexer\Model\GetStockItemData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -21,31 +22,28 @@ class SourceItemIndexerTest extends TestCase
     private $sourceItemIndexer;
 
     /**
-     * @var GetProductSalableQtyInterface
+     * @var GetStockItemData
      */
-    private $getProductSalableQty;
-
-    /**
-     * @var RemoveIndexData
-     */
-    private $removeIndexData;
+    private $getStockItemData;
 
     /**
      * @var GetSourceItemId
      */
     private $getSourceItemId;
 
+    /**
+     * @var RemoveIndexData
+     */
+    private $removeIndexData;
+
     protected function setUp()
     {
         $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(SourceItemIndexer::class);
-
-        $this->getProductSalableQty = Bootstrap::getObjectManager()
-            ->get(GetProductSalableQtyInterface::class);
+        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemData::class);
+        $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
-
-        $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
     /**
@@ -57,70 +55,127 @@ class SourceItemIndexerTest extends TestCase
     }
 
     /**
+     * Source 'eu-1' is assigned on EU-stock(id:10) and Global-stock(id:30)
+     * Thus these stocks stocks be reindexed only for SKU-1
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexRowDataProvider
      */
-    public function testReindexRow()
+    public function testReindexRow(string $sku, int $stockId, $expectedData)
     {
         $this->sourceItemIndexer->executeRow($this->getSourceItemId->execute('SKU-1', 'eu-1'));
 
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
+     * @return array
+     */
+    public function reindexRowDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 30, null],
+            ['SKU-3', 10, null],
+            ['SKU-3', 30, null],
+        ];
+    }
+
+    /**
+     * Source 'eu-1' and 'us-1' are assigned on EU-stock(id:10), US-stock(id:20) and Global-stock(id:30)
+     * Thus these stocks should be reindexed only for SKU-1 and for SKU-2
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexListDataProvider
      */
-    public function testReindexList()
+    public function testReindexList(string $sku, int $stockId, $expectedData)
     {
         $this->sourceItemIndexer->executeList([
             $this->getSourceItemId->execute('SKU-1', 'eu-1'),
             $this->getSourceItemId->execute('SKU-2', 'us-1'),
         ]);
 
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
-
-        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
+     * @return array
+     */
+    public function reindexListDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 20, null],
+            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-3', 10, null],
+            ['SKU-3', 20, null],
+            ['SKU-3', 30, null],
+        ];
+    }
+
+    /**
+     * All of stocks should be reindexed for all of skus
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexAllDataProvider
      */
-    public function testReindexAll()
+    public function testReindexAll(string $sku, int $stockId, $expectedData)
     {
         $this->sourceItemIndexer->executeFull();
 
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 30));
-
-        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-2', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @return array
      */
-    public function testStockItemsHasZeroQuantityIfSourceItemsAreOutOfStock()
+    public function reindexAllDataProvider(): array
     {
-        $this->sourceItemIndexer->executeFull();
-
-        self::assertEquals(0, $this->getProductSalableQty->execute('SKU-3', 10));
+        return [
+            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 20, null],
+            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-3', 10, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0]],
+            ['SKU-3', 20, null],
+            ['SKU-3', 30, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0]],
+        ];
     }
 }

@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock\Item as LegacyStockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository as LegacyStockItemRepository;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
@@ -43,9 +43,9 @@ class IsProductSalable implements IsProductSalableInterface
     private $legacyStockItemRepository;
 
     /**
-     * @var ProductResourceModel
+     * @var GetProductIdsBySkusInterface
      */
-    private $productResource;
+    private $getProductIdsBySkus;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
@@ -57,7 +57,7 @@ class IsProductSalable implements IsProductSalableInterface
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      * @param Configuration $configuration
      * @param LegacyStockItemRepository $legacyStockItemRepository
-     * @param ProductResourceModel $productResource
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      */
     public function __construct(
@@ -65,14 +65,14 @@ class IsProductSalable implements IsProductSalableInterface
         GetReservationsQuantityInterface $getReservationsQuantity,
         Configuration $configuration,
         LegacyStockItemRepository $legacyStockItemRepository,
-        ProductResourceModel $productResource,
+        GetProductIdsBySkusInterface $getProductIdsBySkus,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
     ) {
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
         $this->configuration = $configuration;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
-        $this->productResource = $productResource;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
     }
 
@@ -132,9 +132,10 @@ class IsProductSalable implements IsProductSalableInterface
      */
     private function getLegacyStockItem(string $sku)
     {
-        $productIds = $this->productResource->getProductsIdsBySkus([$sku]);
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+
         $searchCriteria = $this->stockItemCriteriaFactory->create();
-        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productIds[$sku]);
+        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
 
         $legacyStockItem = $this->legacyStockItemRepository->getList($searchCriteria);
         $items = $legacyStockItem->getItems();

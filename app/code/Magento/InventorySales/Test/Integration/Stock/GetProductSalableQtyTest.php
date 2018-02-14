@@ -61,10 +61,34 @@ class GetProductSalableQtyTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param float $qty
+     *
+     * @dataProvider getProductQuantityProvider
      */
-    public function testGetProductQuantity()
+    public function testGetProductQuantity(string $sku, int $stockId, float $qty)
     {
-        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
+        self::assertEquals($qty, $this->getProductSalableQty->execute($sku, $stockId));
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductQuantityProvider(): array
+    {
+        return [
+            ['SKU-1', 10, 8.5],
+            ['SKU-1', 20, 0],
+            ['SKU-1', 30, 8.5],
+            ['SKU-2', 10, 0],
+            ['SKU-2', 20, 5],
+            ['SKU-2', 30, 5],
+            ['SKU-3', 10, 0],
+            ['SKU-3', 20, 0],
+            ['SKU-3', 30, 0],
+        ];
     }
 
     /**
