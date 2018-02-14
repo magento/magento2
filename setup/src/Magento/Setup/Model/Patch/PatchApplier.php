@@ -147,8 +147,12 @@ class PatchApplier
                     sprintf("Patch %s should implement DataPatchInterface", $dataPatch)
                 );
             }
-            if (!$dataPatch instanceof NonTransactionableInterface) {
+            if ($dataPatch instanceof NonTransactionableInterface) {
+                $dataPatch->apply();
+                $this->patchHistory->fixPatch($dataPatch);
+            } else {
                 try {
+                    $this->moduleDataSetup->getConnection()->beginTransaction();
                     $dataPatch->apply();
                     $this->patchHistory->fixPatch($dataPatch);
                     $this->moduleDataSetup->getConnection()->commit();
@@ -158,9 +162,6 @@ class PatchApplier
                 } finally {
                     unset($dataPatch);
                 }
-            } else {
-                $dataPatch->apply();
-                $this->patchHistory->fixPatch($dataPatch);
             }
         }
     }
