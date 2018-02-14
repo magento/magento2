@@ -5,16 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryImportExport\Model;
+namespace Magento\InventoryImportExport\Plugin\Import;
 
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
-use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\Inventory\Model\SourceItemFactory;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
-class StockItemImporter implements StockItemImporterInterface
+class SourceItemImporter
 {
     /**
      * Source Items Save Interface for saving multiple source items
@@ -26,7 +25,7 @@ class StockItemImporter implements StockItemImporterInterface
     /**
      * Source Item Interface Factory
      *
-     * @var SourceItemFactory $sourceItemFactory
+     * @var SourceItemInterfaceFactory $sourceItemFactory
      */
     private $sourceItemFactory;
 
@@ -41,12 +40,12 @@ class StockItemImporter implements StockItemImporterInterface
      * StockItemImporter constructor
      *
      * @param SourceItemsSaveInterface $sourceItemsSave
-     * @param SourceItemFactory $sourceItemFactory
+     * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         SourceItemsSaveInterface $sourceItemsSave,
-        SourceItemFactory $sourceItemFactory,
+        SourceItemInterfaceFactory $sourceItemFactory,
         DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->sourceItemsSave = $sourceItemsSave;
@@ -55,29 +54,41 @@ class StockItemImporter implements StockItemImporterInterface
     }
 
     /**
-     * Handle Import of Stock Item Data
+     * After plugin Import to import Stock Data to Source Items
      *
+     * @param StockItemImporterInterface $subject
+     * @param null $result
      * @param array $stockData
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      * @return void
+     * @see StockItemImporterInterface::import()
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function import(array $stockData)
-    {
+    public function afterImport(
+        StockItemImporterInterface $subject,
+        $result,
+        array $stockData
+    ) {
         $sourceItems = [];
         foreach ($stockData as $stockDatum) {
-            if (isset($stockDatum[Product::COL_SKU])) {
-                $inStock = (isset($stockDatum['is_in_stock'])) ? $stockDatum['is_in_stock'] : 0;
-                $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
-                /** @var SourceItemInterface $sourceItem */
-                $sourceItem = $this->sourceItemFactory->create();
-                $sourceItem->setSku($stockDatum[Product::COL_SKU]);
-                $sourceItem->setSourceCode($this->defaultSource->getCode());
-                $sourceItem->setQuantity($qty);
-                $sourceItem->setStatus($inStock);
-                $sourceItems[] = $sourceItem;
+            if (!isset($stockDatum['sku'])) {
+                continue;
             }
+            $inStock = (isset($stockDatum['is_in_stock'])) ? intval($stockDatum['is_in_stock']) : 0;
+            $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
+            /** @var SourceItemInterface $sourceItem */
+            $sourceItem = $this->sourceItemFactory->create();
+            $sourceItem->setSku($stockDatum['sku']);
+            $sourceItem->setSourceCode($this->defaultSource->getCode());
+            $sourceItem->setQuantity($qty);
+            $sourceItem->setStatus($inStock);
+            $sourceItems[] = $sourceItem;
         }
         if (count($sourceItems) > 0) {
-            /** Magento\Inventory\Model\SourceItem[] $sourceItems */
+            /** SourceItemInterface[] $sourceItems */
             $this->sourceItemsSave->execute($sourceItems);
         }
     }
