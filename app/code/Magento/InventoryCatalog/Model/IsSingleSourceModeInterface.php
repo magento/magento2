@@ -12,7 +12,7 @@ namespace Magento\InventoryCatalog\Model;
  *
  * @api
  */
-interface IsSingleStockModeInterface
+interface IsSingleSourceModeInterface
 {
     /**
      * Check if system has more than one enabled Source configured

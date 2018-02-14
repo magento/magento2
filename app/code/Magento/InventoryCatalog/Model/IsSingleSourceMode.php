@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 /**
  * @inheritdoc
  */
-class IsSingleStockMode implements IsSingleStockModeInterface
+class IsSingleSourceMode implements IsSingleSourceModeInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -48,8 +48,6 @@ class IsSingleStockMode implements IsSingleStockModeInterface
             ->create();
 
         $searchResult = $this->sourceRepository->getList($searchCriteria);
-        $availableSources = $searchResult->getItems();
-
-        return count($availableSources) < 2;
+        return $searchResult->getTotalCount() < 2;
     }
 }

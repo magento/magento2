@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryCatalog\Model\IsSingleStockModeInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsSingleStockModeTest extends TestCase
+class IsSingleSourceModeTest extends TestCase
 {
     /**
-     * @var IsSingleStockModeInterface
+     * @var IsSingleSourceModeInterface
      */
-    protected $isSingleStockMode;
+    protected $isSingleSourcekMode;
 
     /**
      * @var SourceRepositoryInterface
@@ -29,34 +29,32 @@ class IsSingleStockModeTest extends TestCase
      */
     protected function setUp()
     {
-        $this->isSingleStockMode = Bootstrap::getObjectManager()->get(IsSingleStockModeInterface::class);
+        $this->isSingleSourcekMode = Bootstrap::getObjectManager()->get(IsSingleSourceModeInterface::class);
         $this->sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
     }
 
-    public function testIsSingleStockModeOnCleanInstall()
+    public function testExecuteOnCleanInstall()
     {
-        self::assertTrue($this->isSingleStockMode->execute());
+        self::assertTrue($this->isSingleSourcekMode->execute());
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      */
-    public function testIsSingleStockOnTwoSourcesOneDisabled()
+    public function testExecuteWithTwoSourcesOneDisabled()
     {
         $sourceToDisable = $this->sourceRepository->get('source-code-1');
         $sourceToDisable->setEnabled(false);
         $this->sourceRepository->save($sourceToDisable);
 
-        self::assertCount(2, $this->sourceRepository->getList()->getItems());
-        self::assertTrue($this->isSingleStockMode->execute());
+        self::assertTrue($this->isSingleSourcekMode->execute());
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      */
-    public function testIsMultiStock()
+    public function testExecuteWithEnabledSources()
     {
-        self::assertTrue(count($this->sourceRepository->getList()->getItems()) > 1);
-        self::assertFalse($this->isSingleStockMode->execute());
+        self::assertFalse($this->isSingleSourcekMode->execute());
     }
 }
