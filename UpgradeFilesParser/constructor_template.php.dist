@@ -1,7 +1,0 @@
-/**
-    * %dep%
-    */
-    public function __construct(%c_head%)
-    {
-%c_body%
-    }

@@ -1,6 +1,0 @@
-
-    private function %method%(%arguments%)
-    {
-        %method_body%
-    }
-
