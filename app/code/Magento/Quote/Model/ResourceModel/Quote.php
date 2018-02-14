@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,6 +62,10 @@ class Quote extends AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
+        if ($this->getIdFieldName() === $field) {
+            return $select;
+        }
+
         $storeIds = $object->getSharedStoreIds();
         if ($storeIds) {
             if ($storeIds != ['*']) {

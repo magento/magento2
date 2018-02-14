@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Helper;
@@ -305,6 +305,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'items' => nl2br($items),
                     'total' => $total,
                 ]
+            )->setScopeId(
+                $checkout->getStoreId()
             )->setFrom(
                 $this->scopeConfig->getValue(
                     'checkout/payment_failed/identity',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -40,42 +40,49 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     protected $sampleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelperMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\linkFactory
      */
     protected $linkFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Sample\Builder
+     */
+    private $sampleBuilder;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link\Builder
+     */
+    private $linkBuilder;
+
     protected function setUp()
     {
-        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['setDownloadableData', 'getExtensionAttributes', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['setDownloadableData', 'getExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->subjectMock = $this->getMockBuilder(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
+        )->disableOriginalConstructor()->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
             ->getMockForAbstractClass();
-        $this->sampleFactoryMock = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleInterfaceFactory')
+        $this->sampleFactoryMock = $this->getMockBuilder(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->linkFactoryMock = $this->getMockBuilder('\Magento\Downloadable\Api\Data\LinkInterfaceFactory')
+        $this->sampleBuilder = $this->getMockBuilder(\Magento\Downloadable\Model\Sample\Builder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->linkFactory = $this->getMockBuilder(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->linkBuilder = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Builder::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -83,8 +90,9 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             new \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable(
                 $this->requestMock,
                 $this->sampleFactoryMock,
-                $this->linkFactoryMock,
-                $this->jsonHelperMock
+                $this->sampleBuilder,
+                $this->linkFactory,
+                $this->linkBuilder
             );
     }
 
