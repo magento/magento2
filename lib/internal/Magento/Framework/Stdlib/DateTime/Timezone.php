@@ -153,7 +153,7 @@ class Timezone implements TimezoneInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
+    public function date($date = null, $locale = null, $useTimezone = true)
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
@@ -165,12 +165,10 @@ class Timezone implements TimezoneInterface
         } elseif ($date instanceof \DateTime) {
             return $date->setTimezone(new \DateTimeZone($timezone));
         } elseif (!is_numeric($date)) {
-            $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
             $formatter = new \IntlDateFormatter(
                 $locale,
                 \IntlDateFormatter::SHORT,
-                $timeType,
-                new \DateTimeZone($timezone)
+                \IntlDateFormatter::NONE
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
