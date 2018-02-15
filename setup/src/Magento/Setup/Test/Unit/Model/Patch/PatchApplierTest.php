@@ -23,6 +23,7 @@ use Magento\Setup\Model\Patch\PatchRegistryFactory;
 /**
  * Class PatchApplierTest
  * @package Magento\Setup\Test\Unit\Model\Patch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PatchApplierTest extends \PHPUnit\Framework\TestCase
 {

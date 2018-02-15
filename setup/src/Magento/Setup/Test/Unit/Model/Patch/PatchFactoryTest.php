@@ -34,8 +34,6 @@ class PatchFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-
-
         $this->patchFactory = $objectManager->getObject(
             PatchFactory::class,
             [

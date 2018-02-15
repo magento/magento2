@@ -32,8 +32,6 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        
-
         $this->patchHistory = $objectManager->getObject(
             PatchHistory::class,
             [
@@ -85,5 +83,4 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
         $adapterMock->expects($this->never())->method('insert');
         $this->patchHistory->fixPatch(get_class($patch1));
     }
-
 }
