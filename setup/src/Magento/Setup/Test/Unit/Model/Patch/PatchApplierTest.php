@@ -23,6 +23,7 @@ use Magento\Setup\Model\Patch\PatchRegistryFactory;
 /**
  * Class PatchApplierTest
  * @package Magento\Setup\Test\Unit\Model\Patch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PatchApplierTest extends \PHPUnit\Framework\TestCase
 {
@@ -117,8 +118,8 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                 'moduleDataSetup' => $this->moduleDataSetupMock,
             ]
         );
-        require_once '../_files/data_patch_classes.php';
-        require_once '../_files/schema_patch_classes.php';
+        require_once __DIR__ . '/../_files/data_patch_classes.php';
+        require_once __DIR__ . '/../_files/schema_patch_classes.php';
     }
 
     /**
@@ -365,7 +366,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->never())->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
         $this->connectionMock->expects($this->never())->method('rollback');
-        $this->patchHistoryMock->expects($this->once())->method('fixPatch')->with($patch1);
+        $this->patchHistoryMock->expects($this->once())->method('fixPatch')->with(get_class($patch1));
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
                 [

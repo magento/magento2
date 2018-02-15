@@ -67,7 +67,7 @@ class UpdateTaxClassAttributeVisibility implements DataPatchInterface, PatchVers
     public static function getDependencies()
     {
         return [
-            AddTacAttributeAndTaxClasses::class
+            AddTaxAttributeAndTaxClasses::class
         ];
     }
 

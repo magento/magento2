@@ -130,7 +130,6 @@ class DbVersionInfo
      * @param string $moduleName
      * @param string|bool $version
      * @return bool
-     * @throws \UnexpectedValueException
      */
     private function isModuleVersionEqual($moduleName, $version)
     {

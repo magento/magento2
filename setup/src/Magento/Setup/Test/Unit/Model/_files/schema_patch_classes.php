@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile - as of namespace absence
+
 class OtherSchemaPatch implements \Magento\Setup\Model\Patch\SchemaPatchInterface
 {
     /**
