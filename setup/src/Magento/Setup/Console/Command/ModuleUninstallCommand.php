@@ -161,7 +161,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private function getPatchApplier()
     {
         if (!$this->patchApplier) {
-            $this->patchApplier = $this->objectManager->get(PatchApplier::class);
+            $this->patchApplier = $this
+                ->objectManager->get(PatchApplier::class);
         }
 
         return $this->patchApplier;
