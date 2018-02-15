@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Admin"/>
+            <title value="Customer Checkout"/>
+            <description value="Should be able to place an order as a customer."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="#"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct1">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+        </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <amOnPage stepKey="s1"  url="customer/account/login/"/>
+        <fillField  stepKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <click stepKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <waitForPageLoad stepKey="s9"/>
+
+        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+        <moveMouseOver stepKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
+        <click stepKey="s17" selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" />
+        <waitForElementVisible stepKey="s21" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" />
+        <see stepKey="s23" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart."/>
+        <see stepKey="s25" selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" />
+        <click stepKey="s27" selector="{{StorefrontMiniCartSection.show}}" />
+        <click stepKey="s31" selector="{{StorefrontMiniCartSection.goToCheckout}}" />
+        <waitForPageLoad stepKey="s33"/>
+        <waitForLoadingMaskToDisappear stepKey="s34"/>
+        <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+        <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
+        <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
+        <waitForPageLoad stepKey="s39"/>
+        <waitForElement stepKey="s41" selector="{{CheckoutPaymentSection.placeOrder}}" time="30" />
+        <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
+        <waitForPageLoad stepKey="s51"/>
+        <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}"/>
+        <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+        <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
+        <waitForPageLoad stepKey="s75"/>
+        <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
+        <waitForPageLoad stepKey="s78"/>
+
+        <click stepKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
+        <waitForPageLoad stepKey="s831"/>
+        <click stepKey="s84" selector="{{OrdersGridSection.firstRow}}" />
+        <see stepKey="s85" selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
+        <see stepKey="s87" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
+        <see stepKey="s89" selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
+        <see stepKey="s91" selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s93" selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
+        <see stepKey="s95" selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="$$simpleproduct1.name$$" />
+        <amOnPage stepKey="s96" url="{{AdminCustomerPage.url}}"/>
+        <waitForPageLoad stepKey="s97"/>
+        <click stepKey="s98" selector="{{AdminCustomerFiltersSection.filtersButton}}"/>
+        <fillField stepKey="s99" selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$simpleuscustomer.email$$"/>
+        <click stepKey="s100" selector="{{AdminCustomerFiltersSection.apply}}"/>
+        <click stepKey="s101" selector="{{AdminCustomerGridSection.firstRowEditLink}}"/>
+        <click stepKey="s102" selector="{{AdminEditCustomerInformationSection.orders}}"/>
+        <see stepKey="s103" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="{$s53}" />
+        <see stepKey="s104" selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$simpleuscustomer.firstname$$ $$simpleuscustomer.lastname$$" />
+    </test>
+</tests>
