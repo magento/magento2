@@ -55,7 +55,7 @@ class AdaptAssignStatusToProductPlugin
     ) {
         // TODO: https://github.com/magento-engcom/msi/issues/532
         if ($product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-            || $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
         ) {
             return;
         }
