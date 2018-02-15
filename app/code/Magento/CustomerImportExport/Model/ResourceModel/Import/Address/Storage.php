@@ -5,9 +5,11 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Address;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator as CollectionIterator;
+use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
 
 /**
  * Storage to check existing addresses.
@@ -22,33 +24,27 @@ class Storage
     private $addresses = [];
 
     /**
-     * @var AddressRepositoryInterface
+     * @var AddressCollectionFactory
      */
-    private $addressRepository;
+    private $addressCollectionFactory;
 
     /**
-     * @var SearchCriteriaBuilder
+     * For iterating over large number of addresses.
+     *
+     * @var CollectionIterator
      */
-    private $searchCriteriaBuilder;
+    protected $collectionIterator;
 
     /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @param AddressRepositoryInterface $addressRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FilterBuilder $filterBuilder
+     * @param AddressCollectionFactory $addressCollectionFactory
+     * @param CollectionIterator $byPagesIterator
      */
     public function __construct(
-        AddressRepositoryInterface $addressRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        AddressCollectionFactory $addressCollectionFactory,
+        CollectionIterator $byPagesIterator
     ) {
-        $this->addressRepository = $addressRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
+        $this->addressCollectionFactory = $addressCollectionFactory;
+        $this->collectionIterator = $byPagesIterator;
     }
 
     /**
@@ -73,6 +69,33 @@ class Storage
         if (!in_array($addressId, $this->addresses[$customerId], true)) {
             $this->addresses[$customerId][] = $addressId;
         }
+    }
+
+    /**
+     * Load addresses IDs for given customers.
+     *
+     * @param string[] $customerIds
+     *
+     * @return void
+     */
+    private function loadAddresses(array $customerIds)
+    {
+        /** @var AddressCollection $collection */
+        $collection = $this->addressCollectionFactory->create();
+        $collection->removeAttributeToSelect();
+        $select = $collection->getSelect();
+        $tableId = array_keys($select->getPart(Select::FROM))[0];
+        $select->where($tableId .'.parent_id in (?)', $customerIds);
+
+        $this->collectionIterator->iterate(
+            $collection,
+            5000,
+            [
+                function (DataObject $record) {
+                    $this->addRecord($record->getParentId(), $record->getId());
+                }
+            ]
+        );
     }
 
     /**
@@ -104,24 +127,14 @@ class Storage
             return;
         }
 
-        $filters = [];
+        $forCustomersIds = array_unique($forCustomersIds);
+        $customerIdsToUse = [];
         foreach ($forCustomersIds as $customerId) {
             if (!array_key_exists((string)$customerId, $this->addresses)) {
-                $filters[] = $this->filterBuilder
-                    ->setField('parent_id')
-                    ->setValue($customerId)
-                    ->setConditionType('eq')
-                    ->create();
+                $customerIdsToUse[] = $customerId;
             }
         }
-        $this->searchCriteriaBuilder->addFilters($filters);
 
-        //Adding addresses that we found.
-        $found = $this->addressRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        );
-        foreach ($found->getItems() as $address) {
-            $this->addRecord($address->getCustomerId(), $address->getId());
-        }
+        $this->loadAddresses($customerIdsToUse);
     }
 }
