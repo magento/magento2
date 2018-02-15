@@ -15,8 +15,8 @@ use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\C
 use Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
 /**
- *  Low stock products report grid block
- *  @api
+ * Low stock products report grid block
+ * @api
  */
 class Grid extends GridWidget
 {
