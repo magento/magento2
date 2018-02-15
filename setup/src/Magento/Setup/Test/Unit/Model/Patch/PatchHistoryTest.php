@@ -61,7 +61,7 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(PatchHistory::TABLE_NAME);
         $adapterMock->expects($this->once())->method('insert')
             ->with(PatchHistory::TABLE_NAME, [PatchHistory::CLASS_NAME => get_class($patch1)]);
-        $this->patchHistory->fixPatch($patch1);
+        $this->patchHistory->fixPatch(get_class($patch1));
     }
 
     /**
@@ -83,7 +83,7 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->willReturn(PatchHistory::TABLE_NAME);
         $adapterMock->expects($this->never())->method('insert');
-        $this->patchHistory->fixPatch($patch1);
+        $this->patchHistory->fixPatch(get_class($patch1));
     }
 
 }

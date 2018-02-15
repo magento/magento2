@@ -17,7 +17,7 @@ use Magento\Tax\Setup\TaxSetupFactory;
  * Class AddTacAttributeAndTaxClasses
  * @package Magento\Tax\Setup\Patch
  */
-class AddTacAttributeAndTaxClasses implements DataPatchInterface, PatchVersionInterface
+class AddTaxAttributeAndTaxClasses implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @param TaxSetupFactory $taxSetupFactory
