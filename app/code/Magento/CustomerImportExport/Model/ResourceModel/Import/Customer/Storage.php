@@ -208,28 +208,24 @@ class Storage
                 || !array_key_exists($websiteId, $this->_customerIds[$email])
             ) {
                 //Only looking for customers we don't already have ID for.
+                //We need unique identifiers.
                 $uniqueKey = $email .'_' .$websiteId;
                 $identifiers[$uniqueKey] = [
                     'email' => $email,
                     'website_id' => $websiteId
                 ];
+                //Recording that we've searched for a customer.
+                if (!array_key_exists($email, $this->_customerIds)) {
+                    $this->_customerIds[$email] = [];
+                }
+                $this->_customerIds[$email][$websiteId] = null;
             }
         }
         if (!$identifiers) {
             return;
         }
+
         //Loading customers data.
         $this->loadCustomersData($identifiers);
-
-        //Adding customers that don't exist.
-        foreach ($identifiers as $customerIdentity) {
-            $email = $customerIdentity['email'];
-            $websiteId = $customerIdentity['website_id'];
-            if (!array_key_exists($email, $this->_customerIds)
-                || !array_key_exists($websiteId, $this->_customerIds[$email])
-            ) {
-                $this->_customerIds[$email][$websiteId] = null;
-            }
-        }
     }
 }
