@@ -15,6 +15,7 @@ use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * @inheritdoc
@@ -42,21 +43,29 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     private $logger;
 
     /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param SortOrderBuilder $sortOrderBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
         GetStockSourceLinksInterface $getStockSourceLinks,
+        SortOrderBuilder $sortOrderBuilder,
         LoggerInterface $logger
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->logger = $logger;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -88,8 +97,13 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      */
     private function getAssignedSourceCodes(int $stockId): array
     {
+        $sortOrder = $this->sortOrderBuilder
+            ->setField(StockSourceLinkInterface::PRIORITY)
+            ->setAscendingDirection()
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->addSortOrder($sortOrder)
             ->create();
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
 

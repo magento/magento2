@@ -9,6 +9,7 @@
     <module name="Magento_InventoryShipping" setup_version="1.0.0">
         <sequence>
             <module name="Magento_Inventory"/>
+            <module name="Magento_InventorySalesApi"/>
         </sequence>
     </module>
 </config>
