@@ -12,6 +12,5 @@
         <element name="addNewBlock" type="button" selector="#add" timeout="30"/>
         <element name="select" type="button" selector="//div[text()='{{var1}}']//parent::td//following-sibling::td//button[text()='Select']" parameterized="true"/>
         <element name="edit" type="button" selector="//div[text()='{{var1}}']//parent::td//following-sibling::td//a[text()='Edit']" parameterized="true"/>
-        <element name="idColumn" type="button" selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]"/>
     </section>
 </sections>
