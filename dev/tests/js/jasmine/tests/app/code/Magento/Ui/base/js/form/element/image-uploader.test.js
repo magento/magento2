@@ -12,7 +12,7 @@ define([
 ], function ($, ImageUploader, browser) {
     'use strict';
 
-    describe('Magento_Ui/js/form/element/file-uploader', function () {
+    describe('Magento_Ui/js/form/element/image-uploader', function () {
         var component;
 
         beforeEach(function () {
