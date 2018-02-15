@@ -84,10 +84,9 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_backendData = $backendData;
         $this->_storeManager = $storeManager;
         $this->escaper = $escaper;
-        $this->imageDirectorySubpath = $this->getImageDirectorySubpath();
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->_directory->create($this->imageDirectorySubpath);
+        $this->_directory->create($this->getStorageRoot());
     }
 
     /**
@@ -109,7 +108,19 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getStorageRoot()
     {
-        return $this->_directory->getAbsolutePath($this->imageDirectorySubpath);
+        return $this->_directory->getAbsolutePath($this->getStorageRootSubpath());
+    }
+
+    /**
+     * Get image storage root subpath.  User is unable to traverse outside of this subpath in media gallery
+     *
+     * @return string
+     */
+    public function getStorageRootSubpath()
+    {
+        return $this->_getRequest()->getParam('use_storage_root')
+            ? ''
+            : \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY;
     }
 
     /**
@@ -212,7 +223,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCurrentPath()
     {
         if (!$this->_currentPath) {
-            $currentPath = $this->_directory->getAbsolutePath() . $this->imageDirectorySubpath;
+            $currentPath = $this->getStorageRoot();
             $path = $this->_getRequest()->getParam($this->getTreeNodeName());
             if ($path) {
                 $path = $this->convertIdToPath($path);
@@ -248,7 +259,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             )->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             );
-            $this->_currentUrl = $mediaUrl . $this->_directory->getRelativePath($path) . '/';
+            $this->_currentUrl = rtrim($mediaUrl . $this->_directory->getRelativePath($path), '/') . '/';
         }
         return $this->_currentUrl;
     }
@@ -292,7 +303,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Set Image directory subpath relative to media directory
+     * Set user-traversable image directory subpath relative to media directory and relative to nested storage root
      *
      * @var string $subpath
      * @return void
@@ -300,21 +311,5 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     public function setImageDirectorySubpath($subpath)
     {
         $this->imageDirectorySubpath = $subpath;
-    }
-
-    /**
-     * Get Image directory subpath relative to media directory
-     *
-     * @return string
-     */
-    protected function getImageDirectorySubpath()
-    {
-        if (!isset($this->imageDirectorySubpath)) {
-            $this->imageDirectorySubpath = $this->_getRequest()->getParam('use_storage_root')
-                ? ''
-                : \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY;
-        }
-
-        return $this->imageDirectorySubpath;
     }
 }

@@ -53,13 +53,6 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 
         $forceStaticPath = $request->getParam('force_static_path');
 
-        $node = $request->getParam('node');
-
-        if ($node) {
-            $node = $imagesHelper->idDecode($node);
-            $imagesHelper->setImageDirectorySubpath($node);
-        }
-
         $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
         $imagesHelper->setStoreId($storeId);
 

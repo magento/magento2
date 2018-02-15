@@ -92,13 +92,10 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getContentsUrl()
     {
-        return $this->getUrl(
-            'cms/*/contents',
-            [
-                'type' => $this->getRequest()->getParam('type'),
-                'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
-            ]
-        );
+        return $this->getUrl('cms/*/contents', [
+            'type' => $this->getRequest()->getParam('type'),
+            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
+        ]);
     }
 
     /**
@@ -166,7 +163,9 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getOnInsertUrl()
     {
-        return $this->getUrl('cms/*/onInsert');
+        return $this->getUrl('cms/*/onInsert', [
+            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
+        ]);
     }
 
     /**
