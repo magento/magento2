@@ -76,13 +76,12 @@ class PatchHistory
     /**
      * Fix patch in patch table in order to avoid reapplying of patch
      *
-     * @param PatchInterface $patch
+     * @param $patchName
      * @return void
      */
-    public function fixPatch(PatchInterface $patch)
+    public function fixPatch($patchName)
     {
-        $patchName = get_class($patch);
-        if ($this->isApplied(get_class($patch))) {
+        if ($this->isApplied($patchName)) {
             throw new \LogicException(sprintf("Patch %s cannot be applied twice", $patchName));
         }
 

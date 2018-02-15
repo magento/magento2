@@ -135,6 +135,7 @@ class PatchApplier
              * Due to bacward compatabilities reasons some patches should be skipped
              */
             if ($this->skipByBackwardIncompatability($dataPatch, $moduleName)) {
+                $this->patchHistory->fixPatch($dataPatch);
                 continue;
             }
 
