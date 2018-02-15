@@ -76,8 +76,7 @@ class View extends \Magento\Catalog\Controller\Product
         $productId = (int) $this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
-        if (
-            !$this->_request->getParam('___from_store')
+        if (!$this->_request->getParam('___from_store')
             && $this->_request->isPost()
             && $this->_request->getParam(self::PARAM_NAME_URL_ENCODED)
         ) {
