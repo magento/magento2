@@ -11,6 +11,16 @@ define([
 
     describe('mageUtils', function () {
 
+        it('Check getUrlParameters function', function () {
+            var url = 'http://example.com/catalogsearch/result/?q=+Simple+99%2C+8%2F%3F&cat=3',
+                urlParameters = {
+                    q: ' Simple 99, 8/?',
+                    cat: '3'
+                };
+
+            expect(utils.getUrlParameters(url)).toEqual(urlParameters);
+        });
+
         it('Check convertToMomentFormat function', function () {
             var format, momentFormat;
 
