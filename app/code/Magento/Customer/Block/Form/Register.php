@@ -6,7 +6,9 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
-use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Model\ResourceModel\Address as CustomerAddress;
+use Magento\Customer\Model\ResourceModel\Attribute as CustomerAttribute;
 
 /**
  * Customer register form block
@@ -40,17 +42,18 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address
+     * @var CustomerAddress
      */
-    private $_addressResource;
+    private $addressResource;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Entity\Attribute
+     * @var CustomerAttribute
      */
-    private $_customerAttribute;
+    private $customerAttribute;
 
     /**
-     * Register constructor.
+     * Initialize dependencies.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -58,11 +61,11 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Customer\Model\ResourceModel\Address $addressResource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Customer\Model\ResourceModel\Attribute $customerAttribute
      * @param array $data
+     * @param CustomerAddress|null $addressResource
+     * @param CustomerAttribute|null $customerAttribute
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -74,17 +77,17 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Customer\Model\ResourceModel\Address $addressResource,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Customer\Model\ResourceModel\Attribute $customerAttribute,
-        array $data = []
+        array $data = [],
+        CustomerAddress $addressResource = null,
+        CustomerAttribute $customerAttribute = null
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->_addressResource = $addressResource;
-        $this->_customerAttribute = $customerAttribute;
+        $this->addressResource = $addressResource ?: ObjectManager::getInstance()->get(CustomerAddress::class);
+        $this->customerAttribute = $customerAttribute ?: ObjectManager::getInstance()->get(CustomerAttribute::class);
         parent::__construct(
             $context,
             $directoryHelper,
@@ -262,7 +265,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function isAddressFieldUsedInForm($attributeCode, $formCode = 'customer_register_address')
     {
-        $attribute = $this->_addressResource->getAttribute($attributeCode);
-        return (in_array($formCode, $this->_customerAttribute->getUsedInForms($attribute)));
+        $attribute = $this->addressResource->getAttribute($attributeCode);
+        return (in_array($formCode, $this->customerAttribute->getUsedInForms($attribute)));
     }
 }
