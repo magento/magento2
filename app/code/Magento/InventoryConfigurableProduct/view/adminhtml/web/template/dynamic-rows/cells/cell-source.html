@@ -1,0 +1,31 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="control-table-text" attr="'data-tooltip-trigger': ++ko.uid">
+    <!-- ko foreach: { data: value, as: 'item' } -->
+    <div><span text="item.source"></span>: <span text="item.quantity"></span></div>
+    <!-- /ko -->
+</div>
+<div tooltip="
+    trigger: '[data-tooltip-trigger=' + ko.uid + ']',
+    action: 'click',
+    delay: 0,
+    position: 'top',
+    step: 30,
+    track: false,
+    strict: false,
+    closeButton: true">
+    <div>
+        <div class="data-tooltip-title">Tooltip</div>
+            <div class="data-tooltip-content">
+            <!-- ko foreach: { data: value, as: 'item' } -->
+                <div><span text="item.source"></span>: <span text="item.quantity"></span></div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+
