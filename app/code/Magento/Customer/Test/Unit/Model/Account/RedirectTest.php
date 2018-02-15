@@ -11,9 +11,9 @@ namespace Magento\Customer\Test\Unit\Model\Account;
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\HostChecker;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -300,79 +300,16 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
          */
         return [
             // Logged In, Redirect by Referer
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'referer',
-                'base_url' => 'base',
-                'before_auth_url' => '',
-                'after_auth_url' => '',
-                'account_url' => 'account',
-                'login_url' => '',
-                'logout_url' => '',
-                'dashboard_url' => '',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => false,
-            ],
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'http://referer.com/',
-                'base_url' => 'http://base.com/',
-                'before_auth_url' => '',
-                'after_auth_url' => '',
-                'account_url' => 'account',
-                'login_url' => '',
-                'logout_url' => '',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => false,
-            ],
+            [1, 2, 'referer', 'base', '', '', 'account', '', '', '', true, false],
+            [1, 2, 'http://referer.com/', 'http://base.com/', '', '', 'account', '', '', 'dashboard', true, false],
             // Logged In, Redirect by AfterAuthUrl
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'referer',
-                'base_url' => 'base',
-                'before_auth_url' => '',
-                'after_auth_url' => 'defined',
-                'account_url' => 'account',
-                'login_url' => '',
-                'logout_url' => '',
-                'dashboard_url' => '',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => true,
-            ],
+            [1, 2, 'referer', 'base', '', 'defined', 'account', '', '', '', true, true],
             // Not logged In, Redirect by LoginUrl
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'referer',
-                'base_url' => 'base',
-                'before_auth_url' => '',
-                'after_auth_url' => '',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => '',
-                'dashboard_url' => '',
-                'is_customer_logged_id_flag' => false,
-                'redirect_to_dashboard_flag' => true,
-            ],
+            [1, 2, 'referer', 'base', '', '', 'account', 'login', '', '', false, true],
             // Logout, Redirect to Dashboard
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'referer',
-                'base_url' => 'base',
-                'before_auth_url' => 'logout',
-                'after_auth_url' => '',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => 'logout',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => false,
-                'redirect_to_dashboard_flag' => true,
-            ],
+            [1, 2, 'referer', 'base', 'logout', '', 'account', 'login', 'logout', 'dashboard', false, true],
+            // Default redirect
+            [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
             // Logout, Without Redirect to Dashboard
             [
                 'customer_id' => 1,
@@ -387,21 +324,6 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
                 'dashboard_url' => 'dashboard',
                 'is_customer_logged_id_flag' => true,
                 'redirect_to_dashboard_flag' => false,
-            ],
-            // Default redirect
-            [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
-                'referer' => 'referer',
-                'base_url' => 'base',
-                'before_auth_url' => 'defined',
-                'after_auth_url' => '',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => 'logout',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => true,
             ],
         ];
     }
