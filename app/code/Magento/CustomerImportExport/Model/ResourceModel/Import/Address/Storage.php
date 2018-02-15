@@ -8,8 +8,10 @@ namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Address;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
+use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator as CollectionIterator;
 use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Storage to check existing addresses.
@@ -36,15 +38,23 @@ class Storage
     protected $collectionIterator;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
      * @param AddressCollectionFactory $addressCollectionFactory
      * @param CollectionIterator $byPagesIterator
+     * @param ScopeConfigInterface $config
      */
     public function __construct(
         AddressCollectionFactory $addressCollectionFactory,
-        CollectionIterator $byPagesIterator
+        CollectionIterator $byPagesIterator,
+        ScopeConfigInterface $config
     ) {
         $this->addressCollectionFactory = $addressCollectionFactory;
         $this->collectionIterator = $byPagesIterator;
+        $this->config = $config;
     }
 
     /**
@@ -89,7 +99,7 @@ class Storage
 
         $this->collectionIterator->iterate(
             $collection,
-            5000,
+            $this->config->getValue(AbstractEntity::XML_PATH_PAGE_SIZE),
             [
                 function (DataObject $record) {
                     $this->addRecord($record->getParentId(), $record->getId());
