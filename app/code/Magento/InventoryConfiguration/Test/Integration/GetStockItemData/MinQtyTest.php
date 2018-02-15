@@ -20,11 +20,6 @@ class MinQtyTest extends TestCase
     private $getStockItemData;
 
     /**
-     * @var array
-     */
-    private $skus = ['SKU-1', 'SKU-2', 'SKU-3'];
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -43,20 +38,18 @@ class MinQtyTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
      *
+     * @param string $sku
      * @param int $stockId
-     * @param array $expectedQty
-     * @param array $expectedIsSalable
+     * @param $expectedData
      * @return void
      *
      * @dataProvider executeWithMinQtyDataProvider
      */
-    public function testExecuteWithMinQty(int $stockId, array $expectedQty, array $expectedIsSalable)
+    public function testExecuteWithMinQty(string $sku, int $stockId, $expectedData)
     {
-        foreach ($this->skus as $key => $sku) {
-            $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY] ?? null);
-            self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE] ?? null);
-        }
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
@@ -65,9 +58,15 @@ class MinQtyTest extends TestCase
     public function executeWithMinQtyDataProvider(): array
     {
         return [
-            ['10', [8.5, null, 0], [1, null, 0]],
-            ['20', [null, 5, null], [null, 0, null]],
-            ['30', [8.5, 5, 0], [1, 0, 0]],
+            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 20, null],
+            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 0]],
+            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 0]],
+            ['SKU-3', 10, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0]],
+            ['SKU-3', 20, null],
+            ['SKU-3', 30, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 0]],
         ];
     }
 
@@ -81,20 +80,18 @@ class MinQtyTest extends TestCase
      * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
+     * @param string $sku
      * @param int $stockId
-     * @param array $expectedQty
-     * @param array $expectedIsSalable
+     * @param $expectedData
      * @return void
      *
      * @dataProvider executeWithManageStockFalseAndMinQty
      */
-    public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedQty, array $expectedIsSalable)
+    public function testExecuteWithManageStockFalseAndMinQty(string $sku, int $stockId, $expectedData)
     {
-        foreach ($this->skus as $key => $sku) {
-            $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-            self::assertEquals($expectedQty[$key], $stockItemData[IndexStructure::QUANTITY] ?? null);
-            self::assertEquals($expectedIsSalable[$key], $stockItemData[IndexStructure::IS_SALABLE] ?? null);
-        }
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
@@ -103,9 +100,15 @@ class MinQtyTest extends TestCase
     public function executeWithManageStockFalseAndMinQty(): array
     {
         return [
-            ['10', [8.5, null, 0], [1, null, 1]],
-            ['20', [null, 5, null], [null, 1, null]],
-            ['30', [8.5, 5, 0], [1, 1, 1]],
+            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 20, null],
+            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-3', 10, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-3', 20, null],
+            ['SKU-3', 30, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
         ];
     }
 }
