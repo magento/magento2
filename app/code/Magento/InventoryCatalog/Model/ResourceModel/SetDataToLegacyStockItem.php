@@ -46,8 +46,12 @@ class SetDataToLegacyStockItem
      */
     public function execute(string $sku, float $quantity, int $status)
     {
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-
+        $productIds = $this->getProductIdsBySkus->execute([$sku]);
+        if (isset($productIds[$sku])) {
+            $productId = $productIds[$sku];
+        } else {
+            $productId = $productIds[strtolower($sku)];
+        }
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_item'),
