@@ -164,7 +164,7 @@ class PatchApplier
             }
             if ($dataPatch instanceof NonTransactionableInterface) {
                 $dataPatch->apply();
-                $this->patchHistory->fixPatch($dataPatch);
+                $this->patchHistory->fixPatch(get_class($dataPatch));
             } else {
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();

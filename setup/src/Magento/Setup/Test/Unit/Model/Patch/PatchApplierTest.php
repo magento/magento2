@@ -366,7 +366,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->never())->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
         $this->connectionMock->expects($this->never())->method('rollback');
-        $this->patchHistoryMock->expects($this->once())->method('fixPatch')->with($patch1);
+        $this->patchHistoryMock->expects($this->once())->method('fixPatch')->with(get_class($patch1));
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
                 [
