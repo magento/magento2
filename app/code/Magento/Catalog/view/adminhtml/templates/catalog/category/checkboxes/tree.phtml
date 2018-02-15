@@ -76,6 +76,16 @@ jQuery(function()
        dataUrl: '<?= /* @escapeNotVerified */ $block->getLoadTreeUrl() ?>'
     });
 
+    categoryLoader.processResponse = function (response, parent, callback) {
+        var config = JSON.parse(response.responseText);
+
+        this.buildCategoryTree(parent, config);
+
+        if (typeof callback == "function") {
+            callback(this, parent);
+        }
+    };
+
     categoryLoader.createNode = function(config) {
         config.uiProvider = Ext.tree.CheckboxNodeUI;
         var node;
