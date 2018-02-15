@@ -32,7 +32,7 @@ define([
             method: 'GET',
             url: data.url,
             data: {
-                'q': urlParameters().q
+                'q': decodeURIComponent(urlParameters().q.replace(/\+/g, '%20'))
             }
         });
     };
