@@ -1641,11 +1641,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "4ecb0ae9e6ac43e56d8a93c44406ccf7accdc21d"
+                "reference": "22c803fc16024d417d920d03fdd95dea84779dd6"
             },
             "require": {
                 "codeception/codeception": "~2.3.4",
@@ -1659,6 +1659,7 @@
                 "brainmaestro/composer-git-hooks": "^2.3",
                 "codacy/coverage": "^1.4",
                 "codeception/aspect-mock": "^2.0",
+                "goaop/framework": "2.1.2",
                 "phpmd/phpmd": "^2.6.0",
                 "rregeer/phpunit-coverage-check": "^0.1.4",
                 "sebastian/phpcpd": "~3.0",
