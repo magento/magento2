@@ -7,10 +7,15 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Declaration\Schema\DataSavior\DataSaviorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
+use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
+use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
  * Schema operations executor.
@@ -50,6 +55,11 @@ class OperationsExecutor
     private $statementAggregatorFactory;
 
     /**
+     * @var DataSaviorInterface[]
+     */
+    private $dataSaviorsCollection;
+
+    /**
      * Constructor.
      *
      * @param array $operations
@@ -58,9 +68,11 @@ class OperationsExecutor
      * @param StatementFactory $statementFactory
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param StatementAggregatorFactory $statementAggregatorFactory
+     * @param array $dataSaviorsCollection
      */
     public function __construct(
         array $operations,
+        array $dataSaviorsCollection,
         Sharding $sharding,
         ResourceConnection $resourceConnection,
         StatementFactory $statementFactory,
@@ -73,6 +85,7 @@ class OperationsExecutor
         $this->statementFactory = $statementFactory;
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->statementAggregatorFactory = $statementAggregatorFactory;
+        $this->dataSaviorsCollection = $dataSaviorsCollection;
     }
 
     /**
@@ -126,8 +139,21 @@ class OperationsExecutor
     }
 
     /**
+     * Check if during this operation we need to restore data
+     *
+     * @param OperationInterface $operation
+     * @return bool
+     */
+    private function operationIsOppositeToDestructive(OperationInterface $operation)
+    {
+        return $operation instanceof AddColumn ||
+            $operation instanceof CreateTable ||
+            $operation instanceof ReCreateTable;
+    }
+
+    /**
      * Loop through all operations that are configured in di.xml
-     * and execute them with elements from ChangeRegistry.
+     * and execute them with elements from Diff.
      *
      * @see    OperationInterface
      * @param  DiffInterface $diff
@@ -141,22 +167,71 @@ class OperationsExecutor
         $tableHistories = $diff->getAll();
         if (is_array($tableHistories)) {
             foreach ($tableHistories as $tableHistory) {
+                $destructiveElements = [];
+                $oppositeToDestructiveElements = [];
                 $statementAggregator = $this->statementAggregatorFactory->create();
 
                 foreach ($this->operations as $operation) {
                     if (isset($tableHistory[$operation->getOperationName()])) {
                         /** @var ElementHistory $elementHistory */
                         foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
-                            $statementAggregator->addStatements(
-                                $operation->doOperation($elementHistory)
-                            );
+                            $statementAggregator->addStatements($operation->doOperation($elementHistory));
+
+                            if ($operation->isOperationDestructive()) {
+                                $destructiveElements[] = $elementHistory->getOld();
+                            } elseif ($this->operationIsOppositeToDestructive($operation)) {
+                                $oppositeToDestructiveElements[] = $elementHistory->getNew();
+                            }
                         }
                     }
                 }
+
+                $this->doDump($destructiveElements);
                 $this->dbSchemaWriter->compile($statementAggregator);
+                $this->doRestore($oppositeToDestructiveElements);
             }
         }
 
         $this->endSetupForAllConnections();
+    }
+
+    /**
+     * Do restore of destructive operations
+     *
+     * @param array $elements
+     */
+    private function doRestore(array $elements)
+    {
+        /**
+         * @var ElementInterface $element
+         */
+        foreach ($elements as $element) {
+            foreach ($this->dataSaviorsCollection as $dataSavior) {
+                if ($dataSavior->isAcceptable($element)) {
+                    $dataSavior->restore($element);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Do dump of destructive operations
+     *
+     * @param array $elements
+     */
+    private function doDump(array $elements)
+    {
+        /**
+         * @var ElementInterface $element
+         */
+        foreach ($elements as $element) {
+            foreach ($this->dataSaviorsCollection as $dataSavior) {
+                if ($dataSavior->isAcceptable($element)) {
+                    $dataSavior->dump($element);
+                    break;
+                }
+            }
+        }
     }
 }

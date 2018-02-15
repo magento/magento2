@@ -177,6 +177,7 @@
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface" type="Magento\Setup\Model\Declaration\Schema\SchemaConfig" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Setup\Model\Declaration\Schema\FileSystem\Csv" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1446,6 +1447,10 @@
                 <item name="drop_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropElement</item>
                 <item name="add_complex_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement</item>
                 <item name="modify_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyTable</item>
+            </argument>
+            <argument name="dataSaviorsCollection" xsi:type="array">
+                <item name="table_savior" xsi:type="object">Magento\Setup\Model\Declaration\Schema\DataSavior\TableSavior</item>
+                <item name="column_savior" xsi:type="object">Magento\Setup\Model\Declaration\Schema\DataSavior\ColumnSavior</item>
             </argument>
         </arguments>
     </type>
