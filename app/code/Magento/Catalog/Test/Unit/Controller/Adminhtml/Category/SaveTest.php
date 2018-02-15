@@ -279,7 +279,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'setParentId',
                 'setData',
                 'addData',
-                'getAttributes',
                 'setAttributeSetId',
                 'getDefaultAttributeSetId',
                 'getProductsReadonly',
@@ -470,9 +469,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($categoryId));
-        $categoryMock->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
         if (!$parentId) {
             if ($storeId) {
                 $storeManagerMock->expects($this->once())

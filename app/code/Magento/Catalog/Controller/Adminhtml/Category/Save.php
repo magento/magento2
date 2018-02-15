@@ -129,7 +129,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
         $categoryPostData = $this->imagePreprocessing($categoryPostData);
-        $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
         $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
