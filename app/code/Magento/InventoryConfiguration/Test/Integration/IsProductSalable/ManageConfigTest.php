@@ -37,18 +37,17 @@ class ManageConfigTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
+     * @param string $sku
      * @param int $stockId
-     * @param array $expectedResults
+     * @param bool $expectedResult
      * @return void
      *
      * @dataProvider executeWithManageStockFalseDataProvider
      */
-    public function testExecuteWithManageStockFalse(int $stockId, array $expectedResults)
+    public function testExecuteWithManageStockFalse(string $sku, int $stockId, bool $expectedResult)
     {
-        foreach (['SKU-1', 'SKU-2', 'SKU-3'] as $key => $sku) {
-            $isSalable = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isSalable);
-        }
+        $isSalable = $this->isProductSalable->execute($sku, $stockId);
+        self::assertEquals($expectedResult, $isSalable);
     }
 
     /**
@@ -57,9 +56,15 @@ class ManageConfigTest extends TestCase
     public function executeWithManageStockFalseDataProvider(): array
     {
         return [
-            ['10', [true, false, true]],
-            ['20', [false, true, false]],
-            ['30', [true, true, true]],
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, true],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, true],
         ];
     }
 }
