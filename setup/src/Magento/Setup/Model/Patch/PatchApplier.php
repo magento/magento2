@@ -107,15 +107,29 @@ class PatchApplier
     }
 
     /**
-     * As we have old scripts and new one we need
+     * Check is patch skipable by data setup version in DB
      *
      * @param string $patchClassName
      * @param string $moduleName
      * @return bool
      */
-    private function skipByBackwardIncompatability(string $patchClassName, $moduleName)
+    private function isSkipableByDataSetupVersion(string $patchClassName, $moduleName)
     {
         $dbVersion = $this->moduleResource->getDataVersion($moduleName);
+        return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
+            version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
+    }
+
+    /**
+     * Check is patch skipable by schema setup version in DB
+     *
+     * @param string $patchClassName
+     * @param string $moduleName
+     * @return bool
+     */
+    private function isSkipableBySchemaSetupVersion(string $patchClassName, $moduleName)
+    {
+        $dbVersion = $this->moduleResource->getDbVersion($moduleName);
         return in_array(PatchVersionInterface::class, class_implements($patchClassName)) &&
             version_compare(call_user_func([$patchClassName, 'getVersion']), $dbVersion) <= 0;
     }
@@ -134,7 +148,7 @@ class PatchApplier
             /**
              * Due to bacward compatabilities reasons some patches should be skipped
              */
-            if ($this->skipByBackwardIncompatability($dataPatch, $moduleName)) {
+            if ($this->isSkipableByDataSetupVersion($dataPatch, $moduleName)) {
                 $this->patchHistory->fixPatch($dataPatch);
                 continue;
             }
@@ -199,6 +213,13 @@ class PatchApplier
         foreach ($registry as $schemaPatch) {
             try {
                 /**
+                 * Skip patches that were applied in old style
+                 */
+                if ($this->isSkipableBySchemaSetupVersion($schemaPatch, $moduleName)) {
+                    $this->patchHistory->fixPatch($schemaPatch);
+                    continue;
+                }
+                /**
                  * @var SchemaPatchInterface $schemaPatch
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
@@ -222,7 +243,7 @@ class PatchApplier
     {
         $dataPatches = $this->dataPatchReader->read($moduleName);
         $registry = $this->prepareRegistry($dataPatches);
-        $adapter = $this->resourceConnection->getConnection();
+        $adapter = $this->moduleDataSetup->getConnection();
 
         foreach ($registry->getReverseIterator() as $dataPatch) {
             $dataPatch = $this->objectManager->create(

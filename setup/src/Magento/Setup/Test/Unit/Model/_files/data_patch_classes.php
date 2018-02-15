@@ -30,7 +30,9 @@ class OtherDataPatch implements \Magento\Setup\Model\Patch\DataPatchInterface
     }
 }
 
-class SomeDataPatch implements \Magento\Setup\Model\Patch\DataPatchInterface
+class SomeDataPatch implements
+    \Magento\Setup\Model\Patch\DataPatchInterface,
+    \Magento\Setup\Model\Patch\PatchVersionInterface
 {
     /**
      * {@inheritdoc}
@@ -56,5 +58,77 @@ class SomeDataPatch implements \Magento\Setup\Model\Patch\DataPatchInterface
     public function apply()
     {
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getVersion()
+    {
+        return '2.0.0';
+    }
+}
+
+class NonTransactionableDataPatch implements
+    \Magento\Setup\Model\Patch\DataPatchInterface,
+    \Magento\Setup\Model\Patch\NonTransactionableInterface
+{
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply()
+    {
+    }
+}
+
+class RevertableDataPatch implements
+    \Magento\Setup\Model\Patch\DataPatchInterface,
+    \Magento\Setup\Model\Patch\PatchRevertableInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function revert()
+    {
     }
 }
