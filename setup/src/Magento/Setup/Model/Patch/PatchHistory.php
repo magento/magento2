@@ -76,7 +76,7 @@ class PatchHistory
     /**
      * Fix patch in patch table in order to avoid reapplying of patch
      *
-     * @param $patchName
+     * @param string $patchName
      * @return void
      */
     public function fixPatch($patchName)
