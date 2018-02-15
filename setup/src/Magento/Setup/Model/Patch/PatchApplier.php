@@ -91,8 +91,8 @@ class PatchApplier
         PatchHistory $patchHistory,
         PatchFactory $patchFactory,
         ObjectManagerInterface $objectManager,
-        \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup = null,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup = null
+        \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->patchRegistryFactory = $patchRegistryFactory;
         $this->dataPatchReader = $dataPatchReader;
