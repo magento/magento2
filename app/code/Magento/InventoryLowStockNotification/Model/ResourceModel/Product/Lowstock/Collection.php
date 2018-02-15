@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowStockNotification\Model\ResourceModel\Product\Lowstock;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
@@ -16,7 +15,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowStockNotification\Setup\Operation\CreateSourceConfigurationTable;
@@ -28,26 +26,23 @@ class Collection extends SourceItemCollection
     /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfiguration;
+    private $stockConfiguration;
 
     /**
      * @var AttributeRepositoryInterface
      */
-    protected $attributeRepositoryInterface;
+    private $attributeRepository;
 
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        AttributeRepositoryInterface $attributeRepositoryInterface,
+        AttributeRepositoryInterface $attributeRepository,
         StockConfigurationInterface $stockConfiguration,
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
-        $this->attributeRepositoryInterface = $attributeRepositoryInterface;
-        // TODO: use stock configuration from InventoryConfiguration when the logic is ready
-        $this->stockConfiguration = $stockConfiguration;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -56,12 +51,15 @@ class Collection extends SourceItemCollection
             $connection,
             $resource
         );
+        $this->attributeRepository = $attributeRepository;
+        // TODO: use stock configuration from InventoryConfiguration when the logic is ready
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _initSelect(): AbstractCollection
+    protected function _initSelect()
     {
         $this->addFilterToMap('inventory_source_code', 'main_table.source_code');
         $this->addFilterToMap('source_item_sku', 'main_table.sku');
@@ -79,13 +77,13 @@ class Collection extends SourceItemCollection
     {
         $productEntityTable = $this->getTable('catalog_product_entity');
         $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
-        $nameAttribute = $this->attributeRepositoryInterface->get('catalog_product', 'name');
+        $nameAttribute = $this->attributeRepository->get('catalog_product', 'name');
 
         $this->getSelect()->joinLeft(
             $productEntityTable,
             sprintf(
                 'main_table.%s = %s.' . SourceItemInterface::SKU,
-                ProductInterface::SKU,
+                SourceItemInterface::SKU,
                 $productEntityTable
             ),
             []
