@@ -21,14 +21,14 @@ define([
             });
         });
 
-        xdescribe('initConfig method', function () {
+        describe('initConfig method', function () {
             it('sets mediaGalleryUid', function () {
                 component.initConfig();
                 expect(component.mediaGalleryUid).toBeDefined();
             });
         });
 
-        xdescribe('addFileFromMediaGallery method', function () {
+        describe('addFileFromMediaGallery method', function () {
             it('adds file', function () {
                 var $el = $('div');
 
@@ -54,7 +54,7 @@ define([
             });
         });
 
-        xdescribe('openMediaBrowserDialog method', function () {
+        describe('openMediaBrowserDialog method', function () {
             it('opens browser dialog', function () {
                 var $el = $('div');
 
@@ -73,7 +73,8 @@ define([
                 });
 
                 expect(browser.openDialog).toHaveBeenCalledWith(
-                    'http://example.com/target_element_id/theTargetId/store/3/type/image/?isAjax=true',
+                    'http://example.com/target_element_id/theTargetId/store/3/type/image/' +
+                        'use_storage_root/1?isAjax=true',
                     null,
                     null,
                     'Hello world'
