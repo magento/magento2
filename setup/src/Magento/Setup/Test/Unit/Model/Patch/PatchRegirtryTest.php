@@ -7,7 +7,6 @@
 namespace Magento\Setup\Test\Unit\Model\Patch;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Setup\Model\Patch\DataPatchInterface;
 use Magento\Setup\Model\Patch\PatchFactory;
 use Magento\Setup\Model\Patch\PatchHistory;
 use Magento\Setup\Model\Patch\PatchRegistry;
@@ -51,26 +50,27 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
                 'patchFactory' => $this->patchFactoryMock,
             ]
         );
+        require_once '../_files/data_patch_classes.php';
     }
 
     public function testRegisterAppliedPatch()
     {
         $this->patchHistoryMock->expects($this->once())
             ->method('isApplied')
-            ->with(SomeDataPatch::class)
+            ->with(\SomeDataPatch::class)
             ->willReturn(false);
 
-        $this->assertEquals(SomeDataPatch::class, $this->patchRegistry->registerPatch(SomeDataPatch::class));
+        $this->assertEquals(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testRegisterNonAplliedPatch()
     {
         $this->patchHistoryMock->expects($this->once())
             ->method('isApplied')
-            ->with(SomeDataPatch::class)
+            ->with(\SomeDataPatch::class)
             ->willReturn(true);
 
-        $this->assertEquals(false, $this->patchRegistry->registerPatch(SomeDataPatch::class));
+        $this->assertEquals(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testGetIterator()
@@ -79,12 +79,12 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
             ->method('isApplied')
             ->willReturnMap(
                 [
-                    [SomeDataPatch::class, false],
-                    [OtherDataPatch::class, false]
+                    [\SomeDataPatch::class, false],
+                    [\OtherDataPatch::class, false]
                 ]
             );
 
-        $this->assertEquals(SomeDataPatch::class, $this->patchRegistry->registerPatch(SomeDataPatch::class));
+        $this->assertEquals(\SomeDataPatch::class, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
 
         $actualPatches = [];
         foreach ($this->patchRegistry->getIterator() as $patch) {
@@ -92,64 +92,9 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
         }
         // assert that all dependencies are present and placed in valid sequence
         $this->assertEquals(
-            [OtherDataPatch::class, SomeDataPatch::class],
+            [\OtherDataPatch::class, \SomeDataPatch::class],
             $actualPatches,
             'Failed to assert that actual non-apllied patches sequence is valid.'
         );
-    }
-}
-
-class OtherDataPatch implements DataPatchInterface
-{
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDependencies()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAliases()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function apply()
-    {
-    }
-}
-
-class SomeDataPatch implements DataPatchInterface
-{
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDependencies()
-    {
-        return [
-            OtherDataPatch::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAliases()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function apply()
-    {
-        return $this;
     }
 }
