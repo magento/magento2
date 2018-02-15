@@ -118,8 +118,8 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                 'moduleDataSetup' => $this->moduleDataSetupMock,
             ]
         );
-        require_once '../_files/data_patch_classes.php';
-        require_once '../_files/schema_patch_classes.php';
+        require_once __DIR__ . '/../_files/data_patch_classes.php';
+        require_once __DIR__ . '/../_files/schema_patch_classes.php';
     }
 
     /**
