@@ -9,10 +9,10 @@ namespace Magento\Eav\Model\Entity;
 
 use Magento\Framework\Api\MetadataServiceInterface;
 
-class GetCustomAttributeCodes
+class GetCustomAttributeCodes implements GetCustomAttributeCodesInterface
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $customAttributesCodes;
 
@@ -20,25 +20,15 @@ class GetCustomAttributeCodes
      * Receive a list of custom EAV attributes using provided metadata service. The results are cached per entity type
      *
      * @param MetadataServiceInterface $metadataService Custom attribute metadata service to be used
-     * @param string[] $interfaceAttributes Attribute codes that are part of the interface and should not be
-     *                                      considered custom
-     * @param string|null $entityType Entity type (class name), only needed if metadata service handles different
-     *                                entities
      * @return string[]
      */
-    public function execute(
-        MetadataServiceInterface $metadataService,
-        array $interfaceAttributes,
-        string $entityType = null
-    ): array {
-        $cacheKey = get_class($metadataService) . '|' . $entityType;
+    public function execute(MetadataServiceInterface $metadataService): array
+    {
+        $cacheKey = get_class($metadataService);
         if (!isset($this->customAttributesCodes[$cacheKey])) {
-            $customAttributesCodes = $this->getEavAttributesCodes($metadataService, $entityType);
-            $this->customAttributesCodes[$cacheKey] = array_values(
-                array_diff($customAttributesCodes, $interfaceAttributes)
-            );
+            $this->customAttributesCodes[$cacheKey] = $this->getEavAttributesCodes($metadataService);
         }
-        return $this->customAttributesCodes;
+        return $this->customAttributesCodes[$cacheKey];
     }
 
     /**

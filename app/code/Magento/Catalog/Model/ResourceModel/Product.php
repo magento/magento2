@@ -86,16 +86,6 @@ class Product extends AbstractResource
     private $productCategoryLink;
 
     /**
-     * @var ProductAttributeRepositoryInterface
-     */
-    private $metadataService;
-
-    /**
-     * @var string[]
-     */
-    private $customAttributesCodes;
-
-    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -106,7 +96,6 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
-     * @param ProductAttributeRepositoryInterface|null $metadataService
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -120,8 +109,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        $data = [],
-        ProductAttributeRepositoryInterface $metadataService = null
+        $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -129,9 +117,6 @@ class Product extends AbstractResource
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
         $this->defaultAttributes = $defaultAttributes;
-        $this->metadataService = $metadataService ?? ObjectManager::getInstance()->get(
-            ProductAttributeRepositoryInterface::class
-        );
         parent::__construct(
             $context,
             $storeManager,
@@ -247,17 +232,6 @@ class Product extends AbstractResource
     {
         $result = $this->getProductCategoryLink()->getCategoryLinks($product);
         return array_column($result, 'category_id');
-    }
-
-    public function getCustomAttributesCodes()
-    {
-        if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
-            $this->customAttributesCodes = array_values(
-                array_diff($this->customAttributesCodes, ProductInterface::ATTRIBUTES)
-            );
-        }
-        return $this->customAttributesCodes;
     }
 
     /**

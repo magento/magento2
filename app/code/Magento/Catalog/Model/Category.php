@@ -7,8 +7,11 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Entity\GetCategoryCustomAttributeCodes;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -205,10 +208,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
-     * @deprecated not used anymore, related functionality has been moved to resource model
      * @var \Magento\Framework\Api\MetadataServiceInterface
      */
     protected $metadataService;
+
+    /**
+     * @var GetCustomAttributeCodesInterface
+     */
+    private $getCustomAttributeCodes;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -255,7 +262,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        GetCustomAttributeCodesInterface $getCustomAttributeCodes = null
     ) {
         $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
@@ -270,6 +278,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $this->urlFinder = $urlFinder;
         $this->indexerRegistry = $indexerRegistry;
         $this->categoryRepository = $categoryRepository;
+        $this->getCustomAttributeCodes = $getCustomAttributeCodes ?? ObjectManager::getInstance()->get(
+            GetCategoryCustomAttributeCodes::class
+        );
         parent::__construct(
             $context,
             $registry,
@@ -303,7 +314,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        return $this->_getResource()->getCustomAttributesCodes();
+        return $this->getCustomAttributeCodes->execute($this->metadataService);
     }
 
     /**
