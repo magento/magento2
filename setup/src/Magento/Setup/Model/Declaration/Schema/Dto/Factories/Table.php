@@ -66,7 +66,7 @@ class Table implements FactoryInterface
             $data['nameWithoutPrefix'] = str_replace($tablePrefix, "", $data['name']);
         } else {
             $data['name'] = $tablePrefix . $data['name'];
-            $data['nameWithoutPrefix'] = $data['name'];
+            $data['nameWithoutPrefix'] = $nameWithoutPrefix;
         }
 
         return $this->objectManager->create($this->className, $data);

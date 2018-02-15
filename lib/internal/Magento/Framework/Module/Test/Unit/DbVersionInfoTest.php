@@ -65,6 +65,12 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
             ->method('getDbVersion')
             ->with($moduleName)
             ->will($this->returnValue($dbVersion));
+        $this->moduleList->expects(self::once())
+            ->method('getOne')
+            ->with($moduleName)
+            ->willReturn(
+                ['setup_version' => $dbVersion]
+            );
         $this->assertEquals(
             $expectedResult,
             $this->dbVersionInfo->isSchemaUpToDate($moduleName)
@@ -84,6 +90,12 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
             ->method('getDataVersion')
             ->with($moduleName)
             ->will($this->returnValue($dbVersion));
+        $this->moduleList->expects(self::once())
+            ->method('getOne')
+            ->with($moduleName)
+            ->willReturn(
+                ['setup_version' => $dbVersion]
+            );
         $this->assertEquals(
             $expectedResult,
             $this->dbVersionInfo->isDataUpToDate($moduleName)
