@@ -92,13 +92,12 @@ class PatchHistory
     /**
      * Revert patch from history
      *
-     * @param PatchInterface $patch
+     * @param $patchName
      * @return void
      */
-    public function revertPatchFromHistory(PatchInterface $patch)
+    public function revertPatchFromHistory($patchName)
     {
-        $patchName = get_class($patch);
-        if (!$this->isApplied(get_class($patch))) {
+        if (!$this->isApplied($patchName)) {
             throw new \LogicException(
                 sprintf("Patch %s should be applied, before you can revert it", $patchName)
             );

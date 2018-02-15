@@ -920,6 +920,8 @@ class Installer
         }
 
         foreach ($moduleNames as $moduleName) {
+            $installer = false;
+            $upgrader = false;
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
@@ -950,13 +952,13 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
+            }
 
-                if ($installer || $upgrader) {
-                    if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer);
-                    } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer);
-                    }
+            if ($installer || $upgrader) {
+                if ($type === 'schema') {
+                    $resource->setDbVersion($moduleName, $configVer);
+                } elseif ($type === 'data') {
+                    $resource->setDataVersion($moduleName, $configVer);
                 }
             }
 

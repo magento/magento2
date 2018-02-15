@@ -155,7 +155,7 @@ class PatchApplier
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();
                     $dataPatch->apply();
-                    $this->patchHistory->fixPatch($dataPatch);
+                    $this->patchHistory->fixPatch(get_class($dataPatch));
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -203,7 +203,7 @@ class PatchApplier
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
                 $schemaPatch->apply();
-                $this->patchHistory->fixPatch($schemaPatch);
+                $this->patchHistory->fixPatch(get_class($schemaPatch));
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage());
             } finally {
@@ -234,7 +234,7 @@ class PatchApplier
                     $adapter->beginTransaction();
                     /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
                     $dataPatch->revert();
-                    $this->patchHistory->revertPatchFromHistory($dataPatch);
+                    $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();

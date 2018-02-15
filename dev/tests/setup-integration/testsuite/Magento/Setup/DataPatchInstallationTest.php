@@ -86,7 +86,7 @@ class DataPatchInstallationTest extends SetupTestCase
         );
         self::assertTrue($this->patchList->isApplied(IncrementalSomeIntegerPatch::class));
         self::assertTrue($this->patchList->isApplied(ReferenceIncrementalSomeIntegerPatch::class));
-        self::assertFalse($this->patchList->isApplied(ZFirstPatch::class));
+        self::assertTrue($this->patchList->isApplied(ZFirstPatch::class));
         $tableData = $this->tableData->describeTableData('test_table');
         self::assertEquals($this->getTestTableData(), $tableData);
     }

@@ -17,7 +17,8 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
  */
 class ZFirstPatch implements
     DataPatchInterface,
-    PatchVersionInterface
+    PatchVersionInterface,
+    PatchRevertableInterface
 {
     /**
      * @var ResourceConnection
@@ -47,6 +48,10 @@ class ZFirstPatch implements
     public function getAliases()
     {
         return [];
+    }
+
+    public function revert()
+    {
     }
 
     /**
