@@ -50,7 +50,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
                 'patchFactory' => $this->patchFactoryMock,
             ]
         );
-        require_once '../_files/data_patch_classes.php';
+        require_once __DIR__ . '/../_files/data_patch_classes.php';
     }
 
     public function testRegisterAppliedPatch()
