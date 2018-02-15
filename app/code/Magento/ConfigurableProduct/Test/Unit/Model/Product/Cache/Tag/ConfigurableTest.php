@@ -56,13 +56,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getIdentities')
             ->willReturn($identities);
 
-        $parentId = 4;
-        $this->typeResource->expects($this->once())
-            ->method('getParentIdsByChild')
-            ->willReturn([$parentId]);
-
-        $expected = array_merge($identities, [\Magento\Catalog\Model\Product::CACHE_TAG . '_' . $parentId]);
-
-        $this->assertEquals($expected, $this->model->getTags($product));
+        $this->assertEquals($identities, $this->model->getTags($product));
     }
 }
