@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerAddressSimple" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">12</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">USA</data>
+        <array key="street">
+            <item>7700 W Parmer Ln</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">78729</data>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+    </entity>
+    <entity name="US_Address_TX" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="country_id">US</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
+</entities>

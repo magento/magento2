@@ -130,9 +130,17 @@ class EavAttribute
             $swatchesArray = $attribute->getData('swatchtext');
         }
         if ($canReplace == true) {
-            $attribute->setData('option', $optionsArray);
-            $attribute->setData('default', $defaultValue);
-            $attribute->setData('swatch', $swatchesArray);
+            if (!empty($optionsArray)) {
+                $attribute->setData('option', $optionsArray);
+            }
+            if (!empty($defaultValue)) {
+                $attribute->setData('default', $defaultValue);
+            } else {
+                $attribute->setData('default', [0 => $attribute->getDefaultValue()]);
+            }
+            if (!empty($swatchesArray)) {
+                $attribute->setData('swatch', $swatchesArray);
+            }
         }
     }
 
@@ -424,7 +432,7 @@ class EavAttribute
             $options = $attribute->getData('optiontext');
         }
         if ($options && !$this->isOptionsValid($options, $attribute)) {
-            throw new InputException(__('Admin is a required field in the each row'));
+            throw new InputException(__('Admin is a required field in each row'));
         }
         return true;
     }

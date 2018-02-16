@@ -9,7 +9,7 @@
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Model\Calculation\RowbaseCalculator;
+use Magento\Tax\Model\Calculation\RowBaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
 
 /**

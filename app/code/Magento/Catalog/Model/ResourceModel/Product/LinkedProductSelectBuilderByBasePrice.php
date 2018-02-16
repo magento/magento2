@@ -95,6 +95,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
             ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->order('t.value ' . Select::SQL_ASC)
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 

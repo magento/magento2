@@ -144,6 +144,31 @@ class AttributePersistor
             return;
         }
         $metadata = $this->metadataPool->getMetadata($entityType);
+        $insertData = $this->prepareInsertDataForMultipleSave($entityType, $context);
+
+        foreach ($insertData as $table => $tableData) {
+            foreach ($tableData as $data) {
+                $metadata->getEntityConnection()->insertArray(
+                    $table,
+                    $data['columns'],
+                    $data['data'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
+                );
+            }
+        }
+    }
+
+    /**
+     * Prepare data for insert multiple rows
+     *
+     * @param string $entityType
+     * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
+     * @return array
+     */
+    private function prepareInsertDataForMultipleSave($entityType, $context)
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $insertData = [];
         foreach ($this->insert[$entityType] as $link => $data) {
             foreach ($data as $attributeCode => $attributeValue) {
                 /** @var AbstractAttribute $attribute */
@@ -151,19 +176,21 @@ class AttributePersistor
                     $metadata->getEavEntityType(),
                     $attributeCode
                 );
-
+                $attributeTable = $attribute->getBackend()->getTable();
                 $conditions = $this->buildInsertConditions($attribute, $metadata, $context, $link);
                 $value = $this->prepareValue($entityType, $attributeValue, $attribute);
 
                 foreach ($conditions as $condition) {
                     $condition['value'] = $value;
-                    $metadata->getEntityConnection()->insertOnDuplicate(
-                        $attribute->getBackend()->getTable(),
-                        $condition
-                    );
+                    $columns = array_keys($condition);
+                    $columnsHash = implode('', $columns);
+                    $insertData[$attributeTable][$columnsHash]['columns'] = $columns;
+                    $insertData[$attributeTable][$columnsHash]['data'][] = array_values($condition);
                 }
             }
         }
+
+        return $insertData;
     }
 
     /**
