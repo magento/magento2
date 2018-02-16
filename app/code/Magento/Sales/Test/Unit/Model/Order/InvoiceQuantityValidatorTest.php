@@ -136,7 +136,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateNoInvoiceItems()
     {
-        $expectedResult = [__('You can\'t create an invoice without products.')];
+        $expectedResult = [__("The invoice can't be created without products. Add products and try again.")];
         $orderItemId = 1;
         $invoiceItemMock = $this->getInvoiceItemMock($orderItemId, 0);
         $this->invoiceMock->expects($this->once())

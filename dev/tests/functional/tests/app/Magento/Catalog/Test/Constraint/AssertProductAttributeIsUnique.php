@@ -25,7 +25,7 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
     /**
      * Expected message.
      */
-    const UNIQUE_MESSAGE = 'The value of attribute "%s" must be unique';
+    const UNIQUE_MESSAGE = 'The value of the "%s" attribute isn\'t unique. Set a unique value and try again.';
 
     /**
      * Fixture factory.

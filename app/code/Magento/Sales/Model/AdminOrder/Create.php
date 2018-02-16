@@ -1977,12 +1977,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
-                $this->_errors[] = __('Please specify a shipping method.');
+                $this->_errors[] = __('The shipping method is missing. Select the shipping method and try again.');
             }
         }
 
         if (!$this->getQuote()->getPayment()->getMethod()) {
-            $this->_errors[] = __('Please specify a payment method.');
+            $this->_errors[] = __("The payment method isn't selected. Enter the payment method and try again.");
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
             if (!$method->isAvailable($this->getQuote())) {

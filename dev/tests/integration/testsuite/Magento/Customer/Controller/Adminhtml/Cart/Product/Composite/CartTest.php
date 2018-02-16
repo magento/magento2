@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
 /**
@@ -26,7 +27,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testConfigureActionNoCustomerId()
     {
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
-        $this->assertEquals('{"error":true,"message":"No customer ID defined."}', $this->getResponse()->getBody());
+        $this->assertEquals(
+            '{"error":true,"message":"The customer ID isn\'t defined."}',
+            $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -38,7 +42,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setParam('website_id', 1);
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
         $this->assertEquals(
-            '{"error":true,"message":"Please correct the quote items and try again."}',
+            '{"error":true,"message":"The quote items are incorrect. Verify the quote items and try again."}',
             $this->getResponse()->getBody()
         );
     }

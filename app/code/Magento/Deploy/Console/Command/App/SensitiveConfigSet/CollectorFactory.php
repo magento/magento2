@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -64,7 +65,9 @@ class CollectorFactory
     public function create($type)
     {
         if (!isset($this->types[$type])) {
-            throw new LocalizedException(__('Class for type "%1" was not declared', $type));
+            throw new LocalizedException(
+                __('The class for "%1" type wasn\'t declared. Enter the class and try again.', $type)
+            );
         }
 
         $object = $this->objectManager->create($this->types[$type]);

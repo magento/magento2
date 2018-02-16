@@ -220,7 +220,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot execute multiple queries
+     * @expectedExceptionMessage Multiple queries can't be executed. Run a single query and try again.
      */
     public function testMultipleQueryException()
     {

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\TestFramework\Bootstrap;
@@ -82,7 +83,11 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ]
         );
         $this->dispatch('backend/admin/user/save');
-        $this->assertSessionMessages($this->equalTo(['You have entered an invalid password for current user.']));
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['The password entered for the current user is invalid. Verify the password and try again.']
+            )
+        );
         $this->assertRedirect($this->stringContains('backend/admin/user/edit'));
     }
 
