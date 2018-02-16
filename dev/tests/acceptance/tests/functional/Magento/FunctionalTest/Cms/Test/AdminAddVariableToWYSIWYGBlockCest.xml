@@ -32,7 +32,7 @@
         <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
         <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
         <!--Main test-->
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="amOnNewBlockPage"/>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
