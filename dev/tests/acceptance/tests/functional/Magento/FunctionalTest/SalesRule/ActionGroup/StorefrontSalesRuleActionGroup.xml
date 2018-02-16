@@ -13,7 +13,7 @@
         <arguments>
             <argument name="coupon"/>
         </arguments>
-        <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" stepKey="clickCouponHeader" />
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
         <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
         <fillField userInput="{{coupon.code}}" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="fillCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
@@ -21,7 +21,7 @@
 
     <!-- Cancel Sales Rule Coupon applied to the cart -->
     <actionGroup name="StorefrontCancelCouponActionGroup">
-        <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" stepKey="clickCouponHeader" />
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
         <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
         <click selector="{{StorefrontSalesRuleCartCouponSection.cancelButton}}" stepKey="clickCancelButton"/>
     </actionGroup>
