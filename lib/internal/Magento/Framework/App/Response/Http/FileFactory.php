@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response\Http;
@@ -99,19 +99,7 @@ class FileFactory
             if (!empty($content['rm'])) {
                 $dir->delete($file);
             }
-            $this->callExit();
         }
         return $this->_response;
-    }
-
-    /**
-     * Call exit
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
-     */
-    protected function callExit()
-    {
-        exit(0);
     }
 }

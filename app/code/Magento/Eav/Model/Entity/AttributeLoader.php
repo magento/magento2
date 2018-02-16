@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,7 +70,7 @@ class AttributeLoader implements AttributeLoaderInterface
         $attributes = $this->cache->getAttributes($typeCode, $suffix);
         if ($attributes) {
             foreach ($attributes as $attribute) {
-                $resource->addAttribute($attribute);
+                $resource->addAttributeByScope($attribute, $suffix);
             }
             return $resource;
         }

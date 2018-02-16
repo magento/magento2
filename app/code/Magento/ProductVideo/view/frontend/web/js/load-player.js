@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -317,7 +317,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             if (this._loop) {
                 additionalParams += '&loop=1';
             }
-            src = 'http://player.vimeo.com/video/' +
+            src = 'https://player.vimeo.com/video/' +
                 this._code + '?api=1&player_id=vimeo' +
                 this._code +
                 timestamp +

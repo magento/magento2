@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -137,8 +137,8 @@ class SampleDataDeployCommand extends Command
         if (function_exists('ini_set')) {
             @ini_set('display_errors', 1);
             $memoryLimit = trim(ini_get('memory_limit'));
-            if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 768 * 1024 * 1024) {
-                @ini_set('memory_limit', '768M');
+            if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 756 * 1024 * 1024) {
+                @ini_set('memory_limit', '756M');
             }
         }
     }

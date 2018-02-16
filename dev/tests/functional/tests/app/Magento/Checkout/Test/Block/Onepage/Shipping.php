@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,13 @@ class Shipping extends Form
      * @var string
      */
     private $newAddressButton = '[data-bind*="isNewAddressAdded"]';
+
+    /**
+     * CSS Selector for "Edit" button.
+     *
+     * @var string
+     */
+    private $editAddressButton = '.edit-address-link';
 
     /**
      * Wait element.
@@ -107,6 +114,23 @@ class Shipping extends Form
     }
 
     /**
+     * Get address block.
+     *
+     * @param String $address
+     * @return void
+     */
+    public function editAddress($address)
+    {
+        $addresses = $this->_rootElement->getElements($this->shippingAddressBlock);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0) {
+                $addressBlock->find($this->editAddressButton)->click();
+                break;
+            }
+        }
+    }
+
+    /**
      * Select address.
      *
      * @param string $address
@@ -156,5 +180,15 @@ class Shipping extends Form
     public function clickPopupNewAddressButton()
     {
         $this->_rootElement->find($this->popupSelector)->click();
+    }
+
+    /**
+     * Returns form's required elements.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getRequiredFields()
+    {
+        return $this->_rootElement->getElements("div .field._required");
     }
 }

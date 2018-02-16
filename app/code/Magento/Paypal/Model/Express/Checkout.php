@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
@@ -70,7 +70,7 @@ class Checkout
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\Nvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
     /**
      * Payment method type
@@ -538,6 +538,12 @@ class Checkout
             }
             $this->_api->setSuppressShipping(true);
         } else {
+            $billingAddress = $this->_quote->getBillingAddress();
+
+            if ($billingAddress) {
+                $this->_api->setBillingAddress($billingAddress);
+            }
+
             $address = $this->_quote->getShippingAddress();
             $isOverridden = 0;
             if (true === $address->validate()) {
@@ -668,6 +674,7 @@ class Checkout
         $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
         $billingAddress->setCustomerNote($exportedBillingAddress->getData('note'));
         $quote->setBillingAddress($billingAddress);
+        $quote->setCheckoutMethod($this->getCheckoutMethod());
 
         // import payment info
         $payment = $quote->getPayment();

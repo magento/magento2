@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,5 +17,15 @@
         <number>
             <selector>[name$='[number]']</selector>
         </number>
+        <carrier>
+            <selector>[name$='carrier']</selector>
+            <input>select</input>
+        </carrier>
+        <carrier_title>
+            <selector>[name$='title']</selector>
+        </carrier_title>
+        <tracking_number>
+            <selector>[name$='number']</selector>
+        </tracking_number>
     </fields>
 </mapping>

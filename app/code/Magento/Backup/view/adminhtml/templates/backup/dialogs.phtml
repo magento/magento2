@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,7 +73,7 @@
         <fieldset class="admin__fieldset password-box-container">
             <div class="admin__field field _required">
                 <label for="password" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('User Password')?></span></label>
-                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="off"></div>
+                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="new-password"></div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container">
@@ -119,7 +119,7 @@
                         <span><?php /* @escapeNotVerified */ echo __('FTP Password') ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="off">
+                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="new-password">
                     </div>
                 </div>
                 <div class="admin__field field">

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller\Adminhtml\PageCache;
@@ -10,6 +10,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class ExportVarnishConfig extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::system';
+
     /**
      * @var \Magento\Backend\App\Response\Http\FileFactory
      */

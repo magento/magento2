@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -213,7 +213,7 @@ define([
         ],
         "mobileUK": [
             function(value) {
-                return value.length > 9 && value.match(/^((0|\+44)7(5|6|7|8|9){1}\d{2}\s?\d{6})$/);
+                return value.length > 9 && value.match(/^((0|\+44)7\d{3}\s?\d{6})$/);
             },
             $.mage.__('Please specify a valid mobile number')
         ],
@@ -430,10 +430,10 @@ define([
                 var pass = $.trim(v);
                 var result = pass.length >= passwordMinLength;
                 if (result == false) {
-                    validator.passwordErrorMessage = $.mage.__(
-                        "Minimum length of this field must be equal or greater than %1 symbols." +
-                        " Leading and trailing spaces will be ignored."
-                    ).replace('%1', passwordMinLength);
+                    /*eslint-disable max-len*/
+                    validator.passwordErrorMessage = $.mage.__('Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.').replace('%1', passwordMinLength);
+
+                    /*eslint-enable max-len*/
                     return result;
                 }
                 if (pass.match(/\d+/)) {
@@ -450,10 +450,11 @@ define([
                 }
                 if (counter < passwordMinCharacterSets) {
                     result = false;
-                    validator.passwordErrorMessage = $.mage.__(
-                        "Minimum of different classes of characters in password is %1." +
-                        " Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
-                    ).replace('%1', passwordMinCharacterSets);
+
+                    /*eslint-disable max-len*/
+                    validator.passwordErrorMessage = $.mage.__('Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.').replace('%1', passwordMinCharacterSets);
+
+                    /*eslint-enable max-len*/
                 }
                 return result;
             }, function () {
@@ -741,7 +742,8 @@ define([
                     }
                 }
                 return true;
-            }, "Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com."
+            },
+            $.mage.__('Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.')
         ],
         "validate-cc-number": [
             /**

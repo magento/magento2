@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model;
@@ -176,7 +176,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if ($scope == \Magento\Framework\App\Area::AREA_ADMINHTML) {
             return \Magento\Security\Model\Config::XML_PATH_ADMIN_AREA;
         }
-        return \Magento\Security\Model\Config::XML_PATH_FRONTED_AREA;
+        return \Magento\Security\Model\Config::XML_PATH_FRONTEND_AREA;
     }
 
     /**

@@ -1,10 +1,14 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define([], function () {
+define([
+    'underscore'
+], function (_) {
+    'use strict';
+
     /**
      * @param {Object} addressData
      * Returns new address object
@@ -26,11 +30,11 @@ define([], function () {
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
             customerId: addressData.customer_id || addressData.customerId,
-            street: addressData.street,
+            street: addressData.street ? _.compact(addressData.street) : addressData.street,
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode,
+            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

@@ -34,3 +34,4 @@ Image,Image
 "Example format: 200x300.","Example format: 200x300."
 "Image Position","Image Position"
 "The value of Admin must be unique.","The value of Admin must be unique."
+"Description","Description"

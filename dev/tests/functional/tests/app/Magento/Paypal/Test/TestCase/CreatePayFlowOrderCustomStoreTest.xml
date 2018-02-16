@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Paypal\Test\TestCase\CreatePayFlowOrderCustomStoreTest"
+              summary="Place order using PayPal Payflow Pro from different store-view with non base currency"
+              ticketId="MAGETWO-61668">
+        <variation name="CreatePayFlowOrderCustomStoreTestVariation1"
+                   summary="Place order using PayPal Payflow Pro from different store-view with non base currency">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">default</data>
+            <data name="saveAddress" xsi:type="string">No</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">10.60</item>
+                <item name="grandTotalBase" xsi:type="string">15</item>
+            </data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="creditCardClass" xsi:type="string">credit_card</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_payflow</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">payflowpro</data>
+            <data name="storeConfig" xsi:type="string">config_allow_and_default_currency_eur</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotalBase" />
+        </variation>
+    </testCase>
+</config>

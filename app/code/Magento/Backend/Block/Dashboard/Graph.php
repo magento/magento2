@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -421,6 +421,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
 
                     $valueBuffer[] = $indexid . ":|" . $tmpstring;
+                } elseif ($idx == 'y') {
+                    $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
                 }
                 $indexid++;
             }

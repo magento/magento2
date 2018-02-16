@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -299,10 +299,16 @@ define([
          */
         onBeforeFileUpload: function (e, data) {
             var file     = data.files[0],
-                allowed  = this.isFileAllowed(file);
+                allowed  = this.isFileAllowed(file),
+                target   = $(e.target);
 
             if (allowed.passed) {
-                $(e.target).fileupload('process', data).done(function () {
+                target.on('fileuploadsend', function (event, postData) {
+                    postData.data.set('param_name', this.paramName);
+                    $(event.currentTarget).off('fileuploadsend');
+                }.bind(data));
+
+                target.fileupload('process', data).done(function () {
                     data.submit();
                 });
             } else {

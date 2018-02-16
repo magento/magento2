@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -44,9 +44,9 @@ define([
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
-            } else {
-                return node;
             }
+
+            return node;
         });
 
         return {
@@ -119,7 +119,7 @@ define([
             this._super();
 
             if (this.customEntry) {
-                this.initInput();
+                registry.get(this.name, this.initInput.bind(this));
             }
 
             if (this.filterBy) {
@@ -287,6 +287,19 @@ define([
             this.value(value);
 
             return this;
+        },
+
+        /**
+         * Initializes observable properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialValue: function () {
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
+            return this._super();
         }
     });
 });

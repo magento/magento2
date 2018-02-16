@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,6 +65,8 @@ class BackendDecorator implements CurlInterface
     {
         // Perform GET to backend url so form_key is set
         $url = $_ENV['app_backend_url'];
+
+        $this->transport->addOption(CURLOPT_SSL_VERIFYPEER, false);
         $this->transport->write($url, [], CurlInterface::GET);
         $this->read();
 

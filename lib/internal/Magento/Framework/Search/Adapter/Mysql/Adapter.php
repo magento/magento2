@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -70,7 +70,13 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Process Search Request.
+     *
+     * @param RequestInterface $request
+     *
+     * @return \Magento\Framework\Search\Response\QueryResponse
+     *
+     * @throws \LogicException
      */
     public function query(RequestInterface $request)
     {

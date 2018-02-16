@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -171,8 +171,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'The account is locked. Please wait and try again or contact %1.',
-                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                        'Invalid login or password.'
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);

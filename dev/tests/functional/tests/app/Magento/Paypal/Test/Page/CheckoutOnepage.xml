@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CheckoutOnepage" mca="checkout/index">
+    <block name="paymentBlock" class="Magento\Checkout\Test\Block\Onepage\Payment" locator="#checkout-step-payment" strategy="css selector" />
+    <block name="payflowAdvancedCcBlock" class="Magento\Paypal\Test\Block\Form\PayflowAdvanced\CcAdvanced" locator="body" strategy="css selector"/>
+    <block name="payflowLinkCcBlock" class="Magento\Paypal\Test\Block\Form\PayflowAdvanced\CcLink" locator="body" strategy="css selector"/>
+  </page>
+</config>

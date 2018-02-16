@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -347,7 +347,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
             ],
-            'subscription' => 'false'
+            'subscription' => '0'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);

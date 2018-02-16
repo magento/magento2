@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @deprecated No more used
+ * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
  */
 class IndexIterator implements \Iterator
 {
@@ -130,9 +132,10 @@ class IndexIterator implements \Iterator
         $this->statusIds = $statusIds;
     }
 
-
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Since class is deprecated
      */
     public function current()
     {
@@ -141,6 +144,8 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Since class is deprecated
      */
     public function next()
     {
@@ -237,6 +242,8 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Since class is deprecated
      */
     public function key()
     {
@@ -245,6 +252,8 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Since class is deprecated
      */
     public function valid()
     {
@@ -253,6 +262,8 @@ class IndexIterator implements \Iterator
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Since class is deprecated
      */
     public function rewind()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -191,6 +191,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
+            $this->isDeleted(false);
             $this->setData(
                 $value
             )->setData(
@@ -200,7 +201,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 'store_id',
                 $this->getOption()->getStoreId()
             );
-            $this->unsetData('option_type_id');
+
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());

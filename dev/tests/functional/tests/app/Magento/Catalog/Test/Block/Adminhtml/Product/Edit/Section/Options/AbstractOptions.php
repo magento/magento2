@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,6 +23,10 @@ abstract class AbstractOptions extends Section
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
+        if (isset($fields['action_type'])) {
+            unset($fields['action_type']);
+        }
+
         $element = $element === null ? $this->_rootElement : $element;
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping, $element);

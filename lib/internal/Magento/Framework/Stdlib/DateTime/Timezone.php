@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime;
@@ -168,8 +168,7 @@ class Timezone implements TimezoneInterface
             $formatter = new \IntlDateFormatter(
                 $locale,
                 \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::SHORT,
-                new \DateTimeZone($timezone)
+                \IntlDateFormatter::NONE
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }

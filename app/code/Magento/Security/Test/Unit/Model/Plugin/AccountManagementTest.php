@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
+use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\Area;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\PasswordResetRequestEvent;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\AccountManagement testing
@@ -19,19 +22,24 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager
+     * @var \Magento\Security\Model\SecurityManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $securityManager;
 
     /**
-     * @var \Magento\Customer\Model\AccountManagement
+     * @var AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $accountManagement;
+
+    /**
+     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scope;
 
     /**
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -46,50 +54,49 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->getMock(
-            '\Magento\Framework\App\RequestInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->securityManager = $this->getMock(
-            '\Magento\Security\Model\SecurityManager',
-            ['performSecurityCheck'],
-            [],
-            '',
-            false
-        );
+        $this->securityManager = $this->getMockBuilder(
+            \Magento\Security\Model\SecurityManager::class
+        )->setMethods(
+            ['performSecurityCheck']
+        )->disableOriginalConstructor()->getMock();
 
-        $this->accountManagement =  $this->getMock(
-            '\Magento\Customer\Model\AccountManagement',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->accountManagement = $this->getMockBuilder(
+            AccountManagement::class
+        )->disableOriginalConstructor()->getMock();
 
-        $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\Plugin\AccountManagement',
-            [
-                'request' => $this->request,
-                'securityManager' => $this->securityManager
-            ]
-        );
+        $this->scope = $this->getMock(ScopeInterface::class);
     }
 
     /**
-     * @return void
+     * @param $area
+     * @param $passwordRequestEvent
+     * @param $expectedTimes
+     * @dataProvider beforeInitiatePasswordResetDataProvider
      */
-    public function testBeforeInitiatePasswordReset()
+    public function testBeforeInitiatePasswordReset($area, $passwordRequestEvent, $expectedTimes)
     {
         $email = 'test@example.com';
-        $template = \Magento\Customer\Model\AccountManagement::EMAIL_RESET;
+        $template = AccountManagement::EMAIL_RESET;
 
-        $this->securityManager->expects($this->once())
+        $this->model = $this->objectManager->getObject(
+            \Magento\Security\Model\Plugin\AccountManagement::class,
+            [
+                'passwordRequestEvent' => $passwordRequestEvent,
+                'request' => $this->request,
+                'securityManager' => $this->securityManager,
+                'scope' => $this->scope
+            ]
+        );
+
+        $this->scope->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn($area);
+
+        $this->securityManager->expects($this->exactly($expectedTimes))
             ->method('performSecurityCheck')
-            ->with(\Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, $email)
+            ->with($passwordRequestEvent, $email)
             ->willReturnSelf();
 
         $this->model->beforeInitiatePasswordReset(
@@ -97,5 +104,19 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             $email,
             $template
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeInitiatePasswordResetDataProvider()
+    {
+        return [
+            [Area::AREA_ADMINHTML, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 0],
+            [Area::AREA_ADMINHTML, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
+            [Area::AREA_FRONTEND, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 1],
+            // This should never happen, but let's cover it with tests
+            [Area::AREA_FRONTEND, PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, 1],
+        ];
     }
 }
