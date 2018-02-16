@@ -391,7 +391,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithNoRate()
     {
@@ -429,7 +429,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage percentage_rate is a required field.
+     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithWrongRate()
     {

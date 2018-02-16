@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand;
@@ -103,7 +104,7 @@ class SimpleCollector implements CollectorInterface
         ]);
         $configValueQuestion->setValidator(function ($interviewer) {
             if (empty($interviewer)) {
-                throw new LocalizedException(new Phrase('Value can\'t be empty'));
+                throw new LocalizedException(new Phrase("The value can't be empty. Enter the value and try again."));
             }
             return $interviewer;
         });

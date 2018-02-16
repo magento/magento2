@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
@@ -269,7 +270,7 @@ class EavSetup
             $entityTypeId = $this->getEntityType($entityTypeId, 'entity_type_id');
         }
         if (!is_numeric($entityTypeId)) {
-            throw new LocalizedException(__('Wrong entity ID'));
+            throw new LocalizedException(__('The entity ID is incorrect. Verify the ID and try again.'));
         }
 
         return $entityTypeId;
@@ -411,7 +412,7 @@ class EavSetup
             $setId = $this->getAttributeSet($entityTypeId, $setId, 'attribute_set_id');
         }
         if (!is_numeric($setId)) {
-            throw new LocalizedException(__('Wrong attribute set ID'));
+            throw new LocalizedException(__('The attribute set ID is incorrect. Verify the ID and try again.'));
         }
 
         return $setId;
@@ -676,7 +677,7 @@ class EavSetup
         }
 
         if (!is_numeric($groupId)) {
-            throw new LocalizedException(__('Wrong attribute group ID'));
+            throw new LocalizedException(__('The attribute group ID is incorrect. Verify the ID and try again.'));
         }
         return $groupId;
     }
@@ -917,7 +918,7 @@ class EavSetup
                 // Default value
                 if (!isset($values[0])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Default option value is not defined')
+                        __("The default option isn't defined. Set the option and try again.")
                     );
                 }
                 $condition = ['option_id =?' => $intOptionId];

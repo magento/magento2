@@ -17,7 +17,7 @@ class AssertAdvancedSearchEmptyTerm extends AbstractConstraint
     /**
      * Specify search term error message.
      */
-    const ERROR_MESSAGE = 'Please specify at least one search term.';
+    const ERROR_MESSAGE = 'Enter a search term and try again.';
 
     /**
      * Assert that error message is displayed after searching without entering any search terms.

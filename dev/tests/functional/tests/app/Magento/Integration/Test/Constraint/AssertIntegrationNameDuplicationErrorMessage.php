@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertIntegrationNameDuplicationErrorMessage extends AbstractConstraint
 {
-    const ERROR_DUPLICATE_INTEGRATION_NAME = "Integration with name '%s' exists.";
+    const ERROR_DUPLICATE_INTEGRATION_NAME = 'The integration with name "%s" exists.';
 
     /**
      * Assert error message is displayed in message block.
