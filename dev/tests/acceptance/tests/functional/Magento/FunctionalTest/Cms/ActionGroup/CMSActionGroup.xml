@@ -13,6 +13,8 @@
         </arguments>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish" />
         <!-- Conditional Click again in case it goes from default state to ascending on first click -->
@@ -20,8 +22,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish" />
         <click selector="{{CmsPagesPageActionsSection.select(CMSPage.identifier)}}" stepKey="clickSelectCreatedCMSPage" />
         <click selector="{{CmsPagesPageActionsSection.edit(CMSPage.identifier)}}" stepKey="navigateToCreatedCMSPage" />
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTab1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
     <actionGroup name="navigateToCreatedCMSBlockPage">
