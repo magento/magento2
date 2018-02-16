@@ -8,6 +8,12 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
+        <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct">
+                <argument name="product" value="GroupedProduct"/>
+            </actionGroup>
+        </after>
+
         <!--Create Grouped Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrouped" after="viewConfigurableProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadGrouped" after="visitAdminProductPageGrouped"/>
@@ -30,11 +36,6 @@
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts" after="checkFilterResult"/>
         <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct" after="clickAddSelectedGroupProducts"/>
         <actionGroup ref="viewGroupedProductInAdminGrid" stepKey="viewGroupedProductInGrid" after="saveGroupedProduct">
-            <argument name="product" value="GroupedProduct"/>
-        </actionGroup>
-
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>

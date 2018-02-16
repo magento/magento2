@@ -17,13 +17,22 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
         </annotations>
-        <before>
-            <!--Login to Admin Area-->
-            <actionGroup ref="LoginActionGroup" stepKey="loginToAdminArea"/>
-        </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Clean up categories-->
+            <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+
+            <!--Clean up products-->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+                <argument name="product" value="VirtualProduct"/>
+            </actionGroup>
         </after>
+        <!--Login to Admin Area-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
@@ -118,9 +127,9 @@
         <!--Filter by status-->
         <actionGroup ref="filterProductGridByEnabledStatus" stepKey="filterGridByEnabledProducts"/>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" parameterArray="[1,20]" stepKey="seeEnabledProductsNotEmpty"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Status')}}" userInput="Enabled" stepKey="seeFirstRowIsEnabledProduct"/>
+        <see selector="{{AdminProductGridSection.column('Status')}}" userInput="Enabled" stepKey="seeOnlyEnabledProducts"/>
         <actionGroup ref="filterProductGridByDisabledStatus" stepKey="filterGridByDisabledProducts"/>
-        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="0" stepKey="seeDisabledProductsIsEmpty"/>
+        <dontSee selector="{{AdminProductGridSection.column('Status')}}" userInput="Enabled" stepKey="dontSeeEnabledProducts"/>
 
         <!--Sorting works (By Price, by ID)-->
         <!--By Price-->
@@ -157,7 +166,7 @@
         <click selector="{{AdminProductGridFilterSection.resetGridColumns}}" stepKey="resetProductGridColumns"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownAfterReset"/>
         <!--Remove Price column-->
-        <seeElement selector="{{AdminProductGridSection.columnHeader('Type')}}" stepKey="seeProductPriceColumn"/>
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="seeProductPriceColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdown"/>
         <uncheckOption selector="{{AdminProductGridFilterSection.viewColumnOption('Price')}}" stepKey="hidePriceColumn"/>
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
@@ -166,8 +175,8 @@
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownWeight"/>
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Weight')}}" stepKey="showWeightColumn"/>
-        <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownWeight"/>
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridToCheckWeightColumn">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
@@ -211,21 +220,6 @@
         <waitForPageLoad stepKey="waitForCategoryPageDelete"/>
         <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
-        </actionGroup>
-
-        <!--Clean up categories-->
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
-            <argument name="categoryEntity" value="SimpleSubCategory"/>
-        </actionGroup>
-
-        <!--Clean up products-->
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
-            <argument name="product" value="SimpleProduct"/>
-        </actionGroup>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
-            <argument name="product" value="VirtualProduct"/>
         </actionGroup>
     </test>
 </tests>

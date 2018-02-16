@@ -8,6 +8,12 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
         <test name="EndToEndB2CAdminTest">
+            <after>
+                <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProduct">
+                    <argument name="product" value="BundleProduct"/>
+                </actionGroup>
+            </after>
+
             <!--Create Bundle Product-->
             <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageBundle" after="viewVirtualProductInGrid"/>
             <waitForPageLoad stepKey="waitForProductPageLoadBundle" after="visitAdminProductPageBundle"/>
@@ -35,9 +41,6 @@
             <argument name="product" value="BundleProduct"/>
             </actionGroup>
 
-            <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProduct" after="deleteVirtualProduct">
-                <argument name="product" value="BundleProduct"/>
-            </actionGroup>
+
         </test>
 </tests>

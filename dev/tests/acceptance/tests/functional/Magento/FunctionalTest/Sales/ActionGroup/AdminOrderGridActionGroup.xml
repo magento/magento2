@@ -19,17 +19,44 @@
         </arguments>
         <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage"/>
         <waitForPageLoad stepKey="waitForOrderGridLoad"/>
-        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
-        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
-        <fillField selector="{{AdminOrdersGridSection.billToNameFilter}}" userInput="{{customer.lastname}}" stepKey="fillBillToNameFilter"/>
-        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('billing_name')}}" userInput="{{customer.fullname}}" stepKey="fillBillToNameFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
     </actionGroup>
 
-    <!--Reset order grid to default view-->
-    <actionGroup name="resetOrderGridToDefault">
-        <seeInCurrentUrl url="{{AdminOrdersPage}}" stepKey="onOrderGridPage"/>
-        <click selector="{{AdminOrdersGridSection.viewBookmarkDropdown}}" stepKey="openViewBookmarkDropdown"/>
-        <click selector="{{AdminOrdersGridSection.viewBookmark('Default View')}}" stepKey="selectDefaultView"/>
-        <see selector="{{AdminOrdersGridSection.viewBookmarkDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+    <!--Filter order grid by order total range-->
+    <actionGroup name="filterOrderGridByBaseTotalRange">
+        <arguments>
+            <argument name="from"/>
+            <argument name="to"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('base_grand_total[from]')}}" userInput="{{from}}" stepKey="fillOrderTotalFrom"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('base_grand_total[to]')}}" userInput="{{to}}" stepKey="fillOrderTotalTo"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+    
+    <actionGroup name="filterOrderGridByPurchaseDate">
+        <arguments>
+            <argument name="from"/>
+            <argument name="to"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" userInput="{{from}}" stepKey="fillOrderPurchaseDateFrom"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[to]')}}" userInput="{{to}}" stepKey="fillOrderPurchaseDateTo"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+
+    <actionGroup name="filterOrderGridByStatus">
+        <arguments>
+            <argument name="status"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
+        <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{status}}" stepKey="fillOrderStatusFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 </actionGroups>

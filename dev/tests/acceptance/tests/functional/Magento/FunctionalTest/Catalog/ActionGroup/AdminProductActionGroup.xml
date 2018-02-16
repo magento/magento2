@@ -59,5 +59,6 @@
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
         <waitForAjaxLoad stepKey="waitForAjaxUpload"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
     </actionGroup>
 </actionGroups>

@@ -8,6 +8,12 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
+        <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+        </after>
+
         <!--Create Downloadable Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitProductPageDownloadable" after="viewBundleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
@@ -47,11 +53,6 @@
         <!--Save Product-->
         <actionGroup ref="saveProductForm" stepKey="saveDownloadableProduct" after="addDownloadableSampleUrl"/>
         <actionGroup ref="viewProductInAdminGrid" stepKey="viewDownloadableProductInGrid" after="saveDownloadableProduct">
-            <argument name="product" value="DownloadableProduct"/>
-        </actionGroup>
-
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
     </test>

@@ -8,6 +8,12 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
+        <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+        </after>
+
         <!--Create configurable product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageConfigurable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadConfigurable" after="visitAdminProductPageConfigurable"/>
@@ -64,11 +70,6 @@
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet" after="waitForAttributeSetConfirmation"/>
         <see selector="You saved the product" stepKey="seeConfigurableSaveConfirmation" after="clickConfirmAttributeSet"/>
         <actionGroup ref="viewConfigurableProductInAdminGrid" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
-            <argument name="product" value="BaseConfigurableProduct"/>
-        </actionGroup>
-
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
     </test>
