@@ -55,7 +55,7 @@
         <fillField stepKey="fillUsernameNoReport" selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$"/>
         <fillField stepKey="fillPasswordNoReport" selector="{{AdminLoginFormSection.password}}" userInput="$$noReportUser.password$$"/>
         <click stepKey="clickOnSignIn2" selector="{{AdminLoginFormSection.signIn}}"/>
-        <waitForPageLoad stepKey="wait3" time="10"/>
+        <waitForPageLoad stepKey="wait5" time="10"/>
         <amOnPage stepKey="amOnAdminConfig2" url="{{AdminConfigPage.url}}"/>
         <dontSee stepKey="dontSeeAdvancedReportingConfigMenuItem" selector="{{AdminConfigSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>
     </test>

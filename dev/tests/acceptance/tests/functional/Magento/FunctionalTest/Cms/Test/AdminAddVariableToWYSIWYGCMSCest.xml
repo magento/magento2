@@ -79,7 +79,7 @@
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
-        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage1"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <!--see Default Variable on Storefront-->
         <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
         <!--see Custom Variable on Storefront-->
@@ -88,7 +88,7 @@
         <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <!--Refresh Storefront-->
-        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPageRefresh"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
