@@ -37,6 +37,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
      */
     public function apply()
     {
+        $this->schemaSetup->startSetup();
         // Updating data of the 'catalog_product_bundle_option_value' table.
         $tableName = $this->schemaSetup->getTable('catalog_product_bundle_option_value');
 
@@ -103,8 +104,6 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
 
         $columnsToSelect = [];
 
-        $this->schemaSetup->getConnection()->startSetup();
-
         foreach ($this->schemaSetup->getConnection()->describeTable($tmpTableName) as $column) {
             $alias = $column['COLUMN_NAME'] == 'parent_product_id' ? 'selections.' : 'prices.';
 
@@ -131,7 +130,7 @@ class UpdateBundleRelatedSchema implements SchemaPatchInterface, PatchVersionInt
 
         $this->schemaSetup->getConnection()->dropTable($tmpTableName);
 
-        $this->schemaSetup->getConnection()->endSetup();
+        $this->schemaSetup->endSetup();
     }
 
     /**

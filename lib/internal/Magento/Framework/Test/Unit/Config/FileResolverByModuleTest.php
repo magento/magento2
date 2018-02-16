@@ -11,25 +11,39 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Config\FileResolverByModule */
-    protected $model;
+    /**
+     * @var \Magento\Framework\Config\FileResolverByModule
+     */
+    private $model;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
-    protected $readerMock;
+    /**
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readerMock;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
-    protected $filesystemMock;
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystemMock;
 
-    /** @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $fileIteratorFactoryMock;
+    /**
+     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileIteratorFactoryMock;
 
-    /** @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $componentRegistrarMock;
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrarMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $fileDriver;
 
     protected function setUp()
@@ -46,7 +60,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrarMock = $this->getMockBuilder(\Magento\Framework\Component\ComponentRegistrar::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileDriver = $this->getMockBuilder(DriverInterface::class)
+        $this->fileDriver = $this->getMockBuilder(\Magento\Framework\Filesystem\Driver\File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
