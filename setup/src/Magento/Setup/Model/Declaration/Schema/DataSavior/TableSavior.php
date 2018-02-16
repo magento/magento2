@@ -57,6 +57,7 @@ class TableSavior implements DataSaviorInterface
         $adapter = $this->resourceConnection->getConnection($table->getResource());
         $select = $adapter
             ->select()
+            ->setPart('disable_staging_preview', true)
             ->from($table->getName());
 
         return $select;
@@ -108,7 +109,7 @@ class TableSavior implements DataSaviorInterface
     {
         $columns = $this->getTableColumnNames($table);
         $adapter = $this->resourceConnection->getConnection($table->getResource());
-        $adapter->insertArray($table, $columns, $data);
+        $adapter->insertArray($table->getName(), $columns, $data);
     }
 
     /**

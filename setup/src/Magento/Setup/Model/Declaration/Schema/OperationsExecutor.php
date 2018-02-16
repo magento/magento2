@@ -22,6 +22,7 @@ use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
  * Schema operations executor.
  *
  * Go through all available SQL operations and execute each one with data from change registry.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OperationsExecutor
 {

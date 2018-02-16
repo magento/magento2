@@ -67,6 +67,7 @@ class ColumnSavior implements DataSaviorInterface
         $adapter = $this->resourceConnection->getConnection($column->getTable()->getResource());
         $select = $adapter
             ->select()
+            ->setPart('disable_staging_preview', true)
             ->from($column->getTable()->getName(), $fieldsToDump);
 
         return $select;

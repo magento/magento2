@@ -20,6 +20,7 @@ use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
  * Add column to table operation.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddColumn implements OperationInterface
 {

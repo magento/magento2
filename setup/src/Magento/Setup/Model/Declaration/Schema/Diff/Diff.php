@@ -9,12 +9,10 @@ namespace Magento\Setup\Model\Declaration\Schema\Diff;
 use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
-use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
  * Holds information about all changes between 2 schemas: db and declaration XML.
@@ -40,16 +38,6 @@ class Diff implements DiffInterface
      * @var array
      */
     private $whiteListTables = [];
-
-    /**
-     * @var Schema
-     */
-    private $schema;
-
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * @var ComponentRegistrar
