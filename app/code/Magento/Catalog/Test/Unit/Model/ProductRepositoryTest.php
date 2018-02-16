@@ -16,6 +16,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Tests \Magento\Catalog\Model\ProductRepositoryTest
@@ -1288,6 +1289,45 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
         $this->model->save($this->productMock);
+    }
+
+    public function testSaveWithDifferentWebsites()
+    {
+        $getWebsitesResultData = [
+            1 => ['first'],
+            2 => ['second'],
+            3 => ['third']
+        ];
+        $getWebsiteIdsResultData = [1,2,3];
+        $setWebsiteIdsResultData = [2,3];
+        $getIdBySkuResultData = 100;
+        $storeMock = $this->getMock(StoreInterface::class);
+        $this->resourceModelMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue(null));
+        $this->resourceModelMock
+            ->expects($this->at(3))
+            ->method('getIdBySku')
+            ->will($this->returnValue($getIdBySkuResultData));
+        $this->productFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
+        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn($getWebsitesResultData);
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn($getWebsiteIdsResultData);
+        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn($setWebsiteIdsResultData);
+
+        $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
     public function testSaveExistingWithMediaGalleryEntries()

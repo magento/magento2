@@ -52,7 +52,7 @@
                             <argument name="header" xsi:type="string" translate="true">Design Theme</argument>
                             <argument name="index" xsi:type="string">theme_id</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\ResourceModel\Widget\Instance\Options\ThemeId"/>
+                            <argument name="options" xsi:type="options" model="Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes"/>
                             <argument name="with_empty" xsi:type="string">1</argument>
                         </arguments>
                     </block>
