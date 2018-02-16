@@ -17,7 +17,7 @@
             <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">authorizenet, authorizenet_wrong_credentials</data>
-            <data name="expectedErrorMessage" xsi:type="string">An error occurred on the server. Please try to place the order again.</data>
+            <data name="expectedErrorMessage" xsi:type="string">A server error stopped your order from being placed. Please try to place your order again.</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>

@@ -91,8 +91,8 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             $this->taxClassRepository->save($taxClassDataObject);
         } catch (InputException $e) {
             $errors = $e->getErrors();
-            $this->assertEquals('class_name is a required field.', $errors[0]->getMessage());
-            $this->assertEquals('class_type is a required field.', $errors[1]->getMessage());
+            $this->assertEquals('"class_name" is required. Enter and try again.', $errors[0]->getMessage());
+            $this->assertEquals('"class_type" is required. Enter and try again.', $errors[1]->getMessage());
         }
     }
 
