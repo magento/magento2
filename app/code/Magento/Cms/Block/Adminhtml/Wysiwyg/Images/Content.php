@@ -143,7 +143,9 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     protected function getDeletefolderUrl()
     {
-        return $this->getUrl('cms/*/deleteFolder');
+        return $this->getUrl('cms/*/deleteFolder', [
+            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
+        ]);
     }
 
     /**
