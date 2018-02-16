@@ -108,6 +108,7 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
                     'create_table' => $this->createTableOperation,
                     'drop_element' => $this->dropElement
                 ],
+                'dataSaviorsCollection' => [],
                 'sharding' => $this->shardingMock,
                 'resourceConnection' => $this->resourceConnectionMock,
                 'statementFactory' => $this->statementFactoryMock,
@@ -178,6 +179,6 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($tablesHistories);
         $this->dropElement->expects(self::at(0))
             ->method('doOperation');
-        $this->model->execute($diff);
+        $this->model->execute($diff, []);
     }
 }
