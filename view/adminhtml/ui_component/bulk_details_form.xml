@@ -96,7 +96,7 @@
                 <validation>
                     <rule name="required-entry" xsi:type="array">
                         <item name="validate" xsi:type="boolean">true</item>
-                        <item name="message" xsi:type="string">Please select item(s) for retrying.</item>
+                        <item name="message" xsi:type="string">An item needs to be selected. Select and try again.</item>
                     </rule>
                 </validation>
                 <elementTmpl/>
