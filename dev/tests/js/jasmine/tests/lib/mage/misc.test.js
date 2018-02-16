@@ -17,20 +17,20 @@ define([
                 getParameters;
 
             fixture = {
-                'not valid url' : {},
-                'http://example.com/catalogsearch/result/' : {},
-                'http://example.com/catalogsearch/result/?' : {},
-                'http://example.com/catalogsearch/result/?q' : {
+                'not valid url': {},
+                'http://example.com/catalogsearch/result/': {},
+                'http://example.com/catalogsearch/result/?': {},
+                'http://example.com/catalogsearch/result/?q': {
                     q: ''
                 },
-                'http://example.com/catalogsearch/result/?q=' : {
+                'http://example.com/catalogsearch/result/?q=': {
                     q: ''
                 },
-                'http://example.com/catalogsearch/result/?q=+Simple+99%2C+8%2F%3F&cat=3' : {
+                'http://example.com/catalogsearch/result/?q=+Simple+99%2C+8%2F%3F&cat=3': {
                     q: ' Simple 99, 8/?',
                     cat: '3'
                 },
-                'http://example.com/catalogsearch/result/?q=Simple&cat=3&p=1' : {
+                'http://example.com/catalogsearch/result/?q=Simple&cat=3&p=1': {
                     q: 'Simple',
                     cat: '3',
                     p: '1'
