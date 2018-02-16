@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,9 +62,9 @@ interface TimezoneInterface
     /**
      * Create \DateTime object for current locale
      *
-     * @param mixed              $date
+     * @param mixed $date
      * @param string $locale
-     * @param bool               $useTimezone
+     * @param bool $useTimezone
      * @return \DateTime
      */
     public function date($date = null, $locale = null, $useTimezone = true);

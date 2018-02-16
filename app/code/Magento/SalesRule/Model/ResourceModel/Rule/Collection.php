@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -203,6 +203,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 );
             }
             $this->setOrder('sort_order', self::SORT_ORDER_ASC);
+            $this->setOrder('main_table.rule_id', self::SORT_ORDER_ASC);
             $this->setFlag('validation_filter', true);
         }
 

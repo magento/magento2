@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Response\Http;
@@ -244,7 +244,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $modelMock = $this->getMock(
             'Magento\Framework\App\Response\Http\FileFactory',
-            ['callExit'],
+            null,
             [
                 'response' => $this->responseMock,
                 'filesystem' => $this->fileSystemMock,

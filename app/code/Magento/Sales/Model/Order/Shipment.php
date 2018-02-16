@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -257,8 +257,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
-            } else {
-                $item->isDeleted(true);
             }
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -131,6 +131,11 @@
         <dataset name="bundle_dynamic_with_category">
             <field name="price_from" xsi:type="string">100.00</field>
             <field name="price_to" xsi:type="string">100.00</field>
+        </dataset>
+
+        <dataset name="fixed_two_options-100">
+            <field name="price_from" xsi:type="string">120.00</field>
+            <field name="price_to" xsi:type="string">200.00</field>
         </dataset>
     </repository>
 </config>

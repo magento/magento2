@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -99,7 +99,7 @@ class FinalPriceBox extends BasePriceBox
      *
      * @return bool
      */
-    private function isMsrpPriceApplicable()
+    protected function isMsrpPriceApplicable()
     {
         $moduleManager = $this->getModuleManager();
 

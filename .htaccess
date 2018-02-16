@@ -1,13 +1,13 @@
 # All explanations you could find in .htaccess.sample file
 DirectoryIndex index.php
 <IfModule mod_php5.c>
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
     php_flag session.auto_start off
     php_flag suhosin.session.cryptua off
 </IfModule>
 <IfModule mod_php7.c>
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
     php_flag session.auto_start off
     php_flag suhosin.session.cryptua off
@@ -105,6 +105,10 @@ DirectoryIndex index.php
     <Files README.md>
         order allow,deny
         deny from all
+    </Files>
+    <Files auth.json>
+       order allow,deny
+       deny from all
     </Files>
     <Files magento_umask>
         order allow,deny

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -55,7 +55,7 @@ define([
                 this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
                 priceBox.priceBox('setDefault', this.options.optionConfig.prices);
             }
-            this._applyQtyFix();
+
             this._applyOptionNodeFix(options);
 
             options.on('change', this._onBundleOptionChanged.bind(this));

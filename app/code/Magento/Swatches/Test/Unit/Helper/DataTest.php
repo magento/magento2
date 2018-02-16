@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Helper;
@@ -48,6 +48,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\SwatchAttributesProvider */
     private $swatchAttributesProviderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Unserialize\SecureUnserializer
+     */
+    protected $secureUnserializerMock;
 
     protected function setUp()
     {
@@ -120,6 +125,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->secureUnserializerMock = $this->getMock(
+            \Magento\Framework\Unserialize\SecureUnserializer::class,
+            ['unserializer'],
+            [],
+            '',
+            false
+        );
+
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
             [
@@ -130,6 +143,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
                 'imageHelper' => $this->imageHelperMock,
                 'swatchAttributesProvider' => $this->swatchAttributesProviderMock,
+                'unserializer' => $this->secureUnserializerMock,
             ]
         );
     }
@@ -817,7 +831,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 serialize($additionalData),
                 [
                     'getData' => 1,
-                    'setData' => 3,
+                    'setData' => 0,
                 ],
                 'visual',
                 true,
@@ -874,7 +888,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 serialize($additionalData),
                 [
                     'getData' => 1,
-                    'setData' => 3,
+                    'setData' => 0,
                 ],
                 'text',
                 true,

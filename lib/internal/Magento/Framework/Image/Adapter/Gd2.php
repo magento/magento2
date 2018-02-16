@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -737,8 +737,8 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _createImageFromTtfText($text, $font)
     {
         $boundingBox = imagettfbbox($this->_fontSize, 0, $font, $text);
-        $width = abs($boundingBox[4]) + abs($boundingBox[0]);
-        $height = abs($boundingBox[5]) + abs($boundingBox[1]);
+        $width = abs($boundingBox[4] - $boundingBox[0]);
+        $height = abs($boundingBox[5] - $boundingBox[1]);
 
         $this->_createEmptyImage($width, $height);
 
@@ -748,7 +748,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_fontSize,
             0,
             0,
-            $height - abs($boundingBox[1]),
+            $height - $boundingBox[1],
             $black,
             $font,
             $text

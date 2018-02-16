@@ -3,7 +3,7 @@
 /**
  * Import entity of bundle product type
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
@@ -171,6 +171,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function parseSelections($rowData, $entityId)
     {
+        if (empty($rowData['bundle_values'])) {
+            return [];
+        }
+
         $rowData['bundle_values'] = str_replace(
             self::BEFORE_OPTION_VALUE_DELIMITER,
             $this->_entityModel->getMultipleValueSeparator(),

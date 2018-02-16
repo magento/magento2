@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -303,7 +303,7 @@ define([
                     additionalParams += '&autoplay=1';
                 }
 
-                src = window.location.protocol + '//player.vimeo.com/video/' +
+                src = 'https://player.vimeo.com/video/' +
                     this._code + '?api=1&player_id=vimeo' +
                     this._code +
                     timestamp +
@@ -526,7 +526,7 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
                         dataType: 'jsonp',
                         data: {
                             format: 'json'

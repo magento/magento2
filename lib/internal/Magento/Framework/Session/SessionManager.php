@@ -2,7 +2,7 @@
 /**
  * Magento session manager
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -470,8 +470,18 @@ class SessionManager implements SessionManagerInterface
         if (headers_sent()) {
             return $this;
         }
+        //@see http://php.net/manual/en/function.session-regenerate-id.php#53480 workaround
         if ($this->isSessionExists()) {
-            session_regenerate_id(false);
+            $oldSessionId = session_id();
+            session_regenerate_id();
+            $newSessionId = session_id();
+            session_id($oldSessionId);
+            session_destroy();
+
+            $oldSession = $_SESSION;
+            session_id($newSessionId);
+            session_start();
+            $_SESSION = $oldSession;
         } else {
             session_start();
         }

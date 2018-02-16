@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -225,7 +225,8 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $label = __('Edit');
             }
             $url = $this->getUrl('sales/order/address', ['address_id' => $address->getId()]);
-            return '<a href="' . $url . '">' . $label . '</a>';
+            
+            return '<a href="' . $this->escapeUrl($url) . '">' . $this->escapeHtml($label) . '</a>';
         }
 
         return '';

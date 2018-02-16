@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -8,6 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 
 class ImageTest extends AbstractFormTestCase
 {
@@ -40,6 +41,11 @@ class ImageTest extends AbstractFormTestCase
      * @var FileProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileProcessorMock;
+
+    /**
+     * @var FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileProcessorFactory;
 
     /**
      * @var \Magento\Framework\Api\Data\ImageContentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -76,6 +82,11 @@ class ImageTest extends AbstractFormTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->fileProcessorFactory = $this->getMockBuilder('Magento\Customer\Model\FileProcessorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->imageContentFactory = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -88,6 +99,8 @@ class ImageTest extends AbstractFormTestCase
      */
     private function initialize(array $data)
     {
+        $this->fileProcessorFactory->expects($this->any())->method('create')
+            ->willReturn($this->fileProcessorMock);
         $model = new \Magento\Customer\Model\Metadata\Form\Image(
             $this->localeMock,
             $this->loggerMock,
@@ -99,18 +112,8 @@ class ImageTest extends AbstractFormTestCase
             $this->urlEncode,
             $this->fileValidatorMock,
             $this->fileSystemMock,
-            $this->uploaderFactoryMock
-        );
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $model,
-            'fileProcessor',
-            $this->fileProcessorMock
-        );
-        $objectManager->setBackwardCompatibleProperty(
-            $model,
-            'imageContentFactory',
+            $this->uploaderFactoryMock,
+            $this->fileProcessorFactory,
             $this->imageContentFactory
         );
 
@@ -124,11 +127,11 @@ class ImageTest extends AbstractFormTestCase
             'name' => 'realFileName',
         ];
 
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])
             ->willReturn(true);
@@ -149,11 +152,11 @@ class ImageTest extends AbstractFormTestCase
             'name' => 'logo.gif',
         ];
 
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -186,14 +189,13 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxFileSize);
 
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
-
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -225,14 +227,13 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxImageWidth);
 
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
-
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -264,14 +265,14 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxImageHeight);
 
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
-        $this->attributeMetadataMock->expects($this->once())
+        $this->attributeMetadataMock->expects($this->atLeastOnce())
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -310,7 +311,7 @@ class ImageTest extends AbstractFormTestCase
             'file' => 'filename.ext2',
         ];
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('moveTemporaryFile')
             ->with($value['file'])
             ->willReturn(true);
@@ -336,35 +337,35 @@ class ImageTest extends AbstractFormTestCase
 
         $base64EncodedData = 'encoded_data';
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturn(true);
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('getBase64EncodedData')
             ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturn($base64EncodedData);
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('removeUploadedFile')
             ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturnSelf();
 
         $imageContentMock = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
             ->getMockForAbstractClass();
-        $imageContentMock->expects($this->once())
+        $imageContentMock->expects($this->atLeastOnce())
             ->method('setName')
             ->with($value['name'])
             ->willReturnSelf();
-        $imageContentMock->expects($this->once())
+        $imageContentMock->expects($this->atLeastOnce())
             ->method('setBase64EncodedData')
             ->with($base64EncodedData)
             ->willReturnSelf();
-        $imageContentMock->expects($this->once())
+        $imageContentMock->expects($this->atLeastOnce())
             ->method('setType')
             ->with($value['type'])
             ->willReturnSelf();
 
-        $this->imageContentFactory->expects($this->once())
+        $this->imageContentFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($imageContentMock);
 
@@ -387,7 +388,7 @@ class ImageTest extends AbstractFormTestCase
             'type' => 'image',
         ];
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->atLeastOnce())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['file'])
             ->willReturn(false);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
@@ -142,6 +142,29 @@ define([
         setInputFieldEmailValue: function (email) {
             var obj = getData();
             obj.inputFieldEmailValue = email;
+            saveData(obj);
+        },
+
+        /**
+         * Pulling the checked email value from persistence storage.
+         *
+         * @returns {*}
+         */
+        getCheckedEmailValue: function () {
+            var obj = getData();
+
+            return obj.checkedEmailValue ? obj.checkedEmailValue : '';
+        },
+
+        /**
+         * Setting the checked email value pulled from persistence storage.
+         *
+         * @param {String} email
+         */
+        setCheckedEmailValue: function (email) {
+            var obj = getData();
+
+            obj.checkedEmailValue = email;
             saveData(obj);
         }
     }
