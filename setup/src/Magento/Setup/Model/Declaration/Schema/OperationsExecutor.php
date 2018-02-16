@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Model\Declaration\Schema\DataSavior\DataSaviorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\StatementAggregatorFactory;
@@ -157,11 +158,12 @@ class OperationsExecutor
      *
      * @see    OperationInterface
      * @param  DiffInterface $diff
+     * @param array $requestData
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute(DiffInterface $diff)
+    public function execute(DiffInterface $diff, array $requestData)
     {
         $this->startSetupForAllConnections();
         $tableHistories = $diff->getAll();
@@ -186,9 +188,9 @@ class OperationsExecutor
                     }
                 }
 
-                $this->doDump($destructiveElements);
+                $this->doDump($destructiveElements, $requestData);
                 $this->dbSchemaWriter->compile($statementAggregator);
-                $this->doRestore($oppositeToDestructiveElements);
+                $this->doRestore($oppositeToDestructiveElements, $requestData);
             }
         }
 
@@ -199,17 +201,23 @@ class OperationsExecutor
      * Do restore of destructive operations
      *
      * @param array $elements
+     * @param array $requestData
      */
-    private function doRestore(array $elements)
+    private function doRestore(array $elements, array $requestData)
     {
-        /**
-         * @var ElementInterface $element
-         */
-        foreach ($elements as $element) {
-            foreach ($this->dataSaviorsCollection as $dataSavior) {
-                if ($dataSavior->isAcceptable($element)) {
-                    $dataSavior->restore($element);
-                    break;
+        $restoreMode = isset($requestData[InstallCommand::INPUT_KEY_DATA_RESTORE]) &&
+            $requestData[InstallCommand::INPUT_KEY_DATA_RESTORE];
+
+        if ($restoreMode) {
+            /**
+             * @var ElementInterface $element
+             */
+            foreach ($elements as $element) {
+                foreach ($this->dataSaviorsCollection as $dataSavior) {
+                    if ($dataSavior->isAcceptable($element)) {
+                        $dataSavior->restore($element);
+                        break;
+                    }
                 }
             }
         }
@@ -219,17 +227,23 @@ class OperationsExecutor
      * Do dump of destructive operations
      *
      * @param array $elements
+     * @param array $requestData
      */
-    private function doDump(array $elements)
+    private function doDump(array $elements, array $requestData)
     {
-        /**
-         * @var ElementInterface $element
-         */
-        foreach ($elements as $element) {
-            foreach ($this->dataSaviorsCollection as $dataSavior) {
-                if ($dataSavior->isAcceptable($element)) {
-                    $dataSavior->dump($element);
-                    break;
+        $safeMode = isset($requestData[InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE]) &&
+            $requestData[InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE];
+
+        if ($safeMode) {
+            /**
+             * @var ElementInterface $element
+             */
+            foreach ($elements as $element) {
+                foreach ($this->dataSaviorsCollection as $dataSavior) {
+                    if ($dataSavior->isAcceptable($element)) {
+                        $dataSavior->dump($element);
+                        break;
+                    }
                 }
             }
         }

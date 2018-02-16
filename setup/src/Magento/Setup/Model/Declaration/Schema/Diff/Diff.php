@@ -178,17 +178,6 @@ class Diff implements DiffInterface
     }
 
     /**
-     * Register request for installation.
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function registerInstallationRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
      * Register DTO object.
      *
      * @param TableElementInterface $dtoObject
@@ -214,35 +203,5 @@ class Diff implements DiffInterface
         $this->changes[$tableKey][$operation][] = $history;
         $this->debugChanges[$operation][] = $history;
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function registerSchema(Schema $schema)
-    {
-        $this->schema = $schema;
-    }
-
-    /**
-     * Retrieve current schema.
-     * This function needs for rollback functionality.
-     *
-     * @return Schema
-     */
-    public function getCurrentSchemaState()
-    {
-        return $this->schema;
-    }
-
-    /**
-     * Request holds some information from cli command or UI
-     * like: save mode or dry-run mode.
-     *
-     * @return Request
-     */
-    public function getCurrentInstallationRequest()
-    {
-        return $this->request;
     }
 }
