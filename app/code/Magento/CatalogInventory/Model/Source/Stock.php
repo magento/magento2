@@ -43,6 +43,6 @@ class Stock extends AbstractSource
             []
         );
         $collection->getSelect()->order("stock_item_table.qty $dir");
-        return $this
+        return $this;
     }
 }
