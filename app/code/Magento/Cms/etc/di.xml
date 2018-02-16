@@ -60,6 +60,10 @@
                         <item name="regexp" xsi:type="boolean">true</item>
                         <item name="name" xsi:type="string">pub[/\\]+media[/\\]+captcha[/\\]*$</item>
                     </item>
+                    <item name="catalog/product" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                    </item>
                     <item name="customer" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
                         <item name="name" xsi:type="string">pub[/\\]+media[/\\]+customer[/\\]*$</item>
@@ -72,13 +76,17 @@
                         <item name="regexp" xsi:type="boolean">true</item>
                         <item name="name" xsi:type="string">pub[/\\]+media[/\\]+import[/\\]*$</item>
                     </item>
+                    <item name="theme" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme[/\\]*$</item>
+                    </item>
                     <item name="theme_customization" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
                         <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme_customization[/\\]*$</item>
                     </item>
-                    <item name="catalog/product" xsi:type="array">
+                    <item name="tmp" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+tmp[/\\]*$</item>
                     </item>
                 </item>
                 <item name="include" xsi:type="array"/>
