@@ -76,6 +76,10 @@
                         <item name="regexp" xsi:type="boolean">true</item>
                         <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme_customization[/\\]*$</item>
                     </item>
+                    <item name="catalog/product" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                    </item>
                 </item>
                 <item name="include" xsi:type="array"/>
             </argument>
