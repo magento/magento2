@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
@@ -243,7 +244,7 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__('Website was not found'));
+        throw new NotFoundException(__("The website wasn't found. Verify the website and try again."));
     }
 
     /**
@@ -266,7 +267,7 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__('Group was not found'));
+        throw new NotFoundException(__("The group wasn't found. Verify the group and try again."));
     }
 
     /**
@@ -289,6 +290,6 @@ class Create implements ProcessorInterface
             }
         }
 
-        throw new NotFoundException(__('Store was not found'));
+        throw new NotFoundException(__("The store wasn't found. Verify the store and try again."));
     }
 }

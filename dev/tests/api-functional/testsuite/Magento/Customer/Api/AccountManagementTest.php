@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
@@ -322,7 +323,7 @@ class AccountManagementTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Reset password token mismatch.';
+        $expectedMessage = 'The password token is mismatched. Reset and try again.';
 
         try {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
@@ -366,13 +367,13 @@ class AccountManagementTest extends WebapiAbstract
                 'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -575,8 +576,14 @@ class AccountManagementTest extends WebapiAbstract
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
 
-        $this->assertEquals('The value of attribute "First Name" must be set', $validationResponse['messages'][0]);
-        $this->assertEquals('The value of attribute "Last Name" must be set', $validationResponse['messages'][1]);
+        $this->assertEquals(
+            'The "First Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][0]
+        );
+        $this->assertEquals(
+            'The "Last Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][1]
+        );
     }
 
     public function testIsReadonly()

@@ -87,7 +87,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
         if (sizeof($e) < 5 || sizeof($e) > 6) {
-            throw new CronException(__('Invalid cron expression: %1', $expr));
+            throw new CronException(__('The "%1" cron expression is invalid. Verify and try again.', $expr));
         }
 
         $this->setCronExprArr($e);
@@ -184,7 +184,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($from === false || $to === false) {
-            throw new CronException(__('Invalid cron expression: %1', $expr));
+            throw new CronException(__('The "%1" cron expression is invalid. Verify and try again.', $expr));
         }
 
         return $num >= $from && $num <= $to && $num % $mod === 0;

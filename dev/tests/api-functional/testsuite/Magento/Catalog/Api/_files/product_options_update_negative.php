@@ -17,6 +17,6 @@ return [
                 'sku' => 'sku1',
                 'max_characters' => 10,
             ],
-            'ProductSku should be specified',
+            'The ProductSku is empty. Set the ProductSku and try again.',
         ]
 ];

@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -115,19 +116,24 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
         $childrenIds = array_values($this->configurableType->getChildrenIds($product->getId())[0]);
         if (in_array($child->getId(), $childrenIds)) {
-            throw new StateException(__('Product has been already attached'));
+            throw new StateException(__('The product is already attached.'));
         }
 
         $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
         if (empty($configurableProductOptions)) {
-            throw new StateException(__('Parent product does not have configurable product options'));
+            throw new StateException(__("The parent product doesn't have configurable product options."));
         }
 
         $attributeIds = [];
         foreach ($configurableProductOptions as $configurableProductOption) {
             $attributeCode = $configurableProductOption->getProductAttribute()->getAttributeCode();
             if (!$child->getData($attributeCode)) {
-                throw new StateException(__('Child product does not have attribute value %1', $attributeCode));
+                throw new StateException(
+                    __(
+                        'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.',
+                        $attributeCode
+                    )
+                );
             }
             $attributeIds[] = $configurableProductOption->getAttributeId();
         }
@@ -152,7 +158,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             throw new InputException(
-                __('Product with specified sku: %1 is not a configurable product', $sku)
+                __('The product with the "%1" SKU isn\'t a configurable product.', $sku)
             );
         }
 
@@ -165,7 +171,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $ids[] = $option->getId();
         }
         if (count($options) == count($ids)) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+            throw new NoSuchEntityException(
+                __("The option that was requested doesn't exist. Verify the entity and try again.")
+            );
         }
         $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
         $this->productRepository->save($product);
