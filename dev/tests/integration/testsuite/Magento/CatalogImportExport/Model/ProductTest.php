@@ -97,10 +97,16 @@ class ProductTest extends AbstractProductExportImportTestCase
             'simple-product-image' => [
                 [
                     'Magento/CatalogImportExport/Model/Import/_files/media_import_image.php',
-                    'Magento/Catalog/_files/product_with_image.php'
+                    'Magento/Catalog/_files/product_with_image.php',
                 ],
                 [
                     'simple',
+                ],
+                [
+                    "image",
+                    "small_image",
+                    "thumbnail",
+                    "media_gallery"
                 ]
             ],
             'simple-product-crosssell' => [
