@@ -10,6 +10,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\ZendEscaper;
 use Magento\Review\Model\Rating;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Review\Block\Form */

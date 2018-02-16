@@ -220,6 +220,7 @@ class Form extends \Magento\Framework\View\Element\Template
     {
         return $this->escapeHtmlAttr(str_replace(' ', '_', $rating->getRatingCode()));
     }
+
     /**
      * Get review product id
      *
