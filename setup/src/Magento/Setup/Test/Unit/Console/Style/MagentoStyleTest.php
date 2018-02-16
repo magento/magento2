@@ -62,12 +62,12 @@ class MagentoStyleTest extends TestCase
         );
         // @codingStandardsIgnoreStart
         $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            '<testBlockStyle>testBlockPrefix[testBlockType] test first message                                                                       '
-            . PHP_EOL . '<testBlockStyle>testBlockPrefix                                                                                                         '
-            . PHP_EOL . '<testBlockStyle>testBlockPrefix                test second message                                                                      '
+            '\<testBlockStyle\>testBlockPrefix\[testBlockType\] test first message\s+'
+            . PHP_EOL . '\<testBlockStyle\>testBlockPrefix\s+'
+            . PHP_EOL . '\<testBlockStyle\>testBlockPrefix \s+ test second message\s+'
             . PHP_EOL . PHP_EOL;
         // @codingStandardsIgnoreEnd
-        $this->assertEquals($expected, $this->testOutput->output, 'Block does not match output');
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Block does not match output');
     }
 
     /**
@@ -79,7 +79,6 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->title('My Title');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' My Title' . PHP_EOL . ' ========' . PHP_EOL . PHP_EOL;
-
         $this->assertEquals($expected, $this->testOutput->output, 'Title does not match output');
     }
 
@@ -92,7 +91,6 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->section('My Section');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' My Section' . PHP_EOL . ' ----------' . PHP_EOL . PHP_EOL;
-
         $this->assertEquals($expected, $this->testOutput->output, 'Section does not match output');
     }
 
@@ -105,7 +103,6 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->listing(['test first element', 'test second element']);
         $expected = PHP_EOL . ' * test first element' . PHP_EOL . ' * test second element' . PHP_EOL . PHP_EOL;
-
         $this->assertEquals($expected, $this->testOutput->output, 'Listing does not match output');
     }
 
@@ -130,13 +127,8 @@ class MagentoStyleTest extends TestCase
     public function testCommentStyle()
     {
         $this->magentoStyle->comment('test comment');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' test comment                                                                                                           '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Comment does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+test comment\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Comment does not match output');
     }
 
     /**
@@ -147,13 +139,8 @@ class MagentoStyleTest extends TestCase
     public function testSuccessStyle()
     {
         $this->magentoStyle->success('test success message');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' [SUCCESS] test success message                                                                                         '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Success message does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' \[SUCCESS\] test success message\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Success message does not match output');
     }
 
     /**
@@ -164,13 +151,8 @@ class MagentoStyleTest extends TestCase
     public function testErrorStyle()
     {
         $this->magentoStyle->error('test error message');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' [ERROR] test error message                                                                                             '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Error message does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[ERROR\] test error message\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Error message does not match output');
     }
 
     /**
@@ -181,13 +163,8 @@ class MagentoStyleTest extends TestCase
     public function testWarningStyle()
     {
         $this->magentoStyle->warning('test warning message');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' [WARNING] test warning message                                                                                         '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Warning message does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[WARNING\] test warning message\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Warning message does not match output');
     }
 
     /**
@@ -198,13 +175,8 @@ class MagentoStyleTest extends TestCase
     public function testNoteStyle()
     {
         $this->magentoStyle->note('test note message');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' [NOTE] test note message                                                                                               '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Note message does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[NOTE\] test note message\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Note message does not match output');
     }
 
     /**
@@ -215,13 +187,8 @@ class MagentoStyleTest extends TestCase
     public function testCautionStyle()
     {
         $this->magentoStyle->caution('test caution message');
-        // @codingStandardsIgnoreStart
-        $expected = PHP_EOL . PHP_EOL . PHP_EOL .
-            ' ! [CAUTION] test caution message                                                                                       '
-            . PHP_EOL . PHP_EOL;
-        // @codingStandardsIgnoreEnd
-
-        $this->assertEquals($expected, $this->testOutput->output, 'Caution message does not match output');
+        $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+! \[CAUTION\] test caution message\s+' . PHP_EOL . PHP_EOL;
+        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Caution message does not match output');
     }
 
     /**
