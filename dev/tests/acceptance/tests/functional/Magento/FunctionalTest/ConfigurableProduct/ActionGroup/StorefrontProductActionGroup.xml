@@ -14,18 +14,14 @@
             <argument name="product"/>
             <argument name="optionProduct"/>
         </arguments>
-        <!-- @TODO: Change to product.custom_attributes[url_key] after MQE-654 is fixed -->
-        <!-- @TODO: Change to {{StorefrontProductPage.url(category.custom_attributes[4][value])}} after MQE-693 is fixed -->
-        <seeInCurrentUrl url="/{{product.custom_attributes[10][value]}}.html" stepKey="checkUrl"/>
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart" />
-        <!-- @TODO: Change to product.custom_attributes[desciption] after MQE-654 is fixed -->
-        <see userInput="{{product.custom_attributes[0][value]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
-        <!-- @TODO: Change to product.custom_attributes[short_desciption] after MQE-654 is fixed -->
-        <see userInput="{{product.custom_attributes[1][value]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
+        <see userInput="{{product.custom_attributes[description]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+        <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
     </actionGroup>
 </actionGroups>
