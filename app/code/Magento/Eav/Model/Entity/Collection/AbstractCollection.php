@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity\Collection;
 
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
@@ -246,7 +247,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         } elseif (is_string($entity) || $entity instanceof \Magento\Framework\App\Config\Element) {
             $this->_entity = $this->_eavEntityFactory->create()->setType($entity);
         } else {
-            throw new LocalizedException(__('Invalid entity supplied: %1', print_r($entity, 1)));
+            throw new LocalizedException(
+                __('The "%1" entity supplied is invalid. Verify the entity and try again.', print_r($entity, 1))
+            );
         }
         return $this;
     }
@@ -302,7 +305,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function addItem(\Magento\Framework\DataObject $object)
     {
         if (!$object instanceof $this->_itemObjectClass) {
-            throw new LocalizedException(__('Attempt to add an invalid object'));
+            throw new LocalizedException(
+                __("The object wasn't added because it's invalid. To continue, enter a valid object and try again.")
+            );
         }
         return parent::addItem($object);
     }
@@ -495,7 +500,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $attrInstance = $this->_eavConfig->getAttribute($this->getEntity()->getType(), $attribute);
             }
             if (empty($attrInstance)) {
-                throw new LocalizedException(__('Invalid attribute requested: %1', (string)$attribute));
+                throw new LocalizedException(
+                    __(
+                        'The "%1" attribute requested is invalid. Verify the attribute and try again.',
+                        (string)$attribute
+                    )
+                );
             }
             $this->_selectAttributes[$attrInstance->getAttributeCode()] = $attrInstance->getId();
         }
@@ -662,7 +672,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         if (!$bindAttribute || !$bindAttribute->isStatic() && !$bindAttribute->getId()) {
-            throw new LocalizedException(__('Invalid foreign key'));
+            throw new LocalizedException(__('The foreign key is invalid. Verify the foreign key and try again.'));
         }
 
         // try to explode combined entity/attribute if supplied
@@ -686,7 +696,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
         }
         if (!$entity || !$entity->getTypeId()) {
-            throw new LocalizedException(__('Invalid entity type'));
+            throw new LocalizedException(__('The entity type is invalid. Verify the entity type and try again.'));
         }
 
         // cache entity
@@ -699,7 +709,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attribute = $entity->getAttribute($attribute);
         }
         if (!$attribute) {
-            throw new LocalizedException(__('Invalid attribute type'));
+            throw new LocalizedException(__('The attribute type is invalid. Verify the attribute type and try again.'));
         }
 
         if (empty($filter)) {
@@ -819,7 +829,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
         foreach ($fields as $alias => $field) {
             if (isset($this->_joinFields[$alias])) {
-                throw new LocalizedException(__('A joint field with this alias (%1) is already declared.', $alias));
+                throw new LocalizedException(__('A joint field with a "%1" alias is already declared.', $alias));
             }
             $this->_joinFields[$alias] = ['table' => $tableAlias, 'field' => $field];
         }
@@ -1269,7 +1279,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $entityIdField = $this->getEntity()->getEntityIdField();
         $entityId = $valueInfo[$entityIdField];
         if (!isset($this->_itemsById[$entityId])) {
-            throw new LocalizedException(__('Data integrity: No header row found for attribute'));
+            throw new LocalizedException(
+                __('A header row is missing for an attribute. Verify the header row and try again.')
+            );
         }
         $attributeCode = array_search($valueInfo['attribute_id'], $this->_selectAttributes);
         if (!$attributeCode) {
@@ -1321,7 +1333,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         $attribute = $this->getAttribute($attributeCode);
         if (!$attribute) {
-            throw new LocalizedException(__('Invalid attribute name: %1', $attributeCode));
+            throw new LocalizedException(
+                __('The "%1" attribute name is invalid. Reset the name and try again.', $attributeCode)
+            );
         }
 
         if ($attribute->isStatic()) {
@@ -1380,7 +1394,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         if (!$attribute) {
-            throw new LocalizedException(__('Invalid attribute name: %1', $attributeCode));
+            throw new LocalizedException(
+                __('The "%1" attribute name is invalid. Reset the name and try again.', $attributeCode)
+            );
         }
 
         if ($attribute->getBackend()->isStatic()) {

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
@@ -105,7 +106,10 @@ class Validation
 
         if (!$this->agreementsValidator->isValid($agreements)) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Please agree to all the terms and conditions before placing the order.')
+                __(
+                    "The order wasn't placed. "
+                    . "First, agree to the terms and conditions, then try placing your order again."
+                )
             );
         }
     }
