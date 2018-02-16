@@ -32,45 +32,54 @@ class SafeInstallerTest extends SetupTestCase
     private $cliCommad;
 
     /**
-     * @var SchemaDiff
-     */
-    private $schemaDiff;
-
-    /**
-     * @var SchemaConfigInterface
-     */
-    private $schemaConfig;
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
-    /**
-     * @var DescribeTable
-     */
-    private $describeTable;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
-        $this->describeTable = $objectManager->get(DescribeTable::class);
-        $this->schemaDiff = $objectManager->get(SchemaDiff::class);
-        $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
         $this->resourceConnection = $objectManager->get(ResourceConnection::class);
     }
 
     /**
-     * @moduleName Magento_TestSetupDeclarationModule1
-     * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/installation.php
+     * @moduleName Magento_TestSetupDeclarationModule4
+     * @dataProviderFromFile Magento/TestSetupDeclarationModule4/fixture/safe_data_provider.php
      */
     public function testInstallation()
     {
+        $testTableData = $this->getData();
+        $row = reset($testTableData);
         $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule1']
+            ['Magento_TestSetupDeclarationModule4']
         );
-
+        $adapter = $this->resourceConnection->getConnection();
+        $testTableName = $this->resourceConnection->getTableName('test_table');
+        $adapter->insertArray(
+            $this->resourceConnection->getTableName('test_table'),
+            array_keys($row),
+            $this->getData()
+        );
+        //Move new db_schema.xml
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule4',
+            'remove_title_column',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        //Move new db_schema.xml with restored title field
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule4',
+            'restore_title_column',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommad->upgrade();
+        $testTableSelect = $adapter->select()->from($testTableName);
+        self::assertEquals($testTableData, $adapter->fetchAll($testTableSelect));
     }
 }
