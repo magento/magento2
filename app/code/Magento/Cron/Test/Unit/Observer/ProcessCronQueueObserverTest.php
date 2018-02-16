@@ -690,7 +690,16 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
         )->setMethods(
-            ['getJobCode', 'save', 'getScheduledAt', 'unsScheduleId', 'trySchedule', 'getCollection', 'getResource']
+            [
+                'getJobCode',
+                'save',
+                'getScheduledAt',
+                'unsScheduleId',
+                'trySchedule',
+                'getCollection',
+                'getResource',
+                'setCronExpr'
+            ]
         )->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('job_code1');
         $schedule->expects($this->once())->method('getScheduledAt')->willReturn('* * * * *');
@@ -699,6 +708,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->any())->method('getCollection')->willReturn($this->_collection);
         $schedule->expects($this->atLeastOnce())->method('save')->willReturnSelf();
         $schedule->expects($this->any())->method('getResource')->will($this->returnValue($this->scheduleResource));
+        $schedule->expects($this->any())->method('setCronExpr')->willReturnSelf();
 
         $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
@@ -817,7 +827,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(10));
         $this->_scopeConfig->expects($this->at(1))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/schedule_lifetime'))
-            ->will($this->returnValue(2*24*60));
+            ->will($this->returnValue(2 * 24 * 60));
         $this->_scopeConfig->expects($this->at(2))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/history_success_lifetime'))
             ->will($this->returnValue(0));

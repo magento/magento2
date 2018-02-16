@@ -5,170 +5,87 @@
  */
 namespace Magento\Cron\Test\Unit\Model;
 
+use Magento\Cron\Model\ResourceModel\Schedule\Expression\Validator as ExpressionValidator;
 use Magento\Cron\Model\Schedule;
 
 /**
- * Class \Magento\Cron\Test\Unit\Model\ObserverTest
+ * Class \Magento\Cron\Test\Unit\Model\ScheduleTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class ScheduleTest extends \PHPUnit\Framework\TestCase
+class ScheduleTest extends AbstractSchedule
 {
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $helper;
-
     protected $resourceJobMock;
 
     protected function setUp()
     {
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        parent::setUp();
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['trySetJobUniqueStatusAtomic', '__wakeup', 'getIdFieldName'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()->setMethods([
+                'trySetJobUniqueStatusAtomic',
+                '__wakeup',
+                'getIdFieldName'
+            ])->getMockForAbstractClass();
 
-        $this->resourceJobMock->expects($this->any())
-            ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+        $this->resourceJobMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
+    }
+
+    /**
+     * @param string $cronExpr
+     * @return Schedule
+     */
+    protected function getScheduleModel($cronExpr = '')
+    {
+        /** @var \Magento\Cron\Model\Schedule $model */
+        $model = $this->getHelper()->getObject(\Magento\Cron\Model\Schedule::class, [
+                'expressionFactory' => $this->getExpressionFactoryObject($cronExpr),
+                'partFactory' => $this->getExpressionPartFactoryObject($cronExpr),
+            ]);
+        return $model;
     }
 
     /**
      * @param string $cronExpression
-     * @param array $expected
-     * @dataProvider setCronExprDataProvider
+     * @dataProvider validCronExprDataProvider
      */
-    public function testSetCronExpr($cronExpression, $expected)
+    public function testSetCronExpr($cronExpression)
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
-
+        /** @var ExpressionValidator $expressionValidator */
+        $model = $this->getScheduleModel($cronExpression);
         // 2. Run tested method
         $model->setCronExpr($cronExpression);
-
-        // 3. Compare actual result with expected result
-        $result = $model->getCronExprArr();
-        $this->assertEquals($result, $expected);
-    }
-
-    /**
-     * Data provider
-     *
-     * Here is a list of allowed characters and values for Cron expression
-     * http://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
-     *
-     * @return array
-     */
-    public function setCronExprDataProvider()
-    {
-        return [
-            ['1 2 3 4 5', [1, 2, 3, 4, 5]],
-            ['1 2 3 4 5 6', [1, 2, 3, 4, 5, 6]],
-            ['a b c d e', ['a', 'b', 'c', 'd', 'e']],   //should fail if validation will be added
-            ['* * * * *', ['*', '*', '*', '*', '*']],
-
-            ['0 * * * *', ['0', '*', '*', '*', '*']],
-            ['59 * * * *', ['59', '*', '*', '*', '*']],
-            [', * * * *', [',', '*', '*', '*', '*']],
-            ['1-2 * * * *', ['1-2', '*', '*', '*', '*']],
-            ['0/5 * * * *', ['0/5', '*', '*', '*', '*']],
-
-            ['* 0 * * *', ['*', '0', '*', '*', '*']],
-            ['* 59 * * *', ['*', '59', '*', '*', '*']],
-            ['* , * * *', ['*', ',', '*', '*', '*']],
-            ['* 1-2 * * *', ['*', '1-2', '*', '*', '*']],
-            ['* 0/5 * * *', ['*', '0/5', '*', '*', '*']],
-
-            ['* * 0 * *', ['*', '*', '0', '*', '*']],
-            ['* * 23 * *', ['*', '*', '23', '*', '*']],
-            ['* * , * *', ['*', '*', ',', '*', '*']],
-            ['* * 1-2 * *', ['*', '*', '1-2', '*', '*']],
-            ['* * 0/5 * *', ['*', '*', '0/5', '*', '*']],
-
-            ['* * * 1 *', ['*', '*', '*', '1', '*']],
-            ['* * * 31 *', ['*', '*', '*', '31', '*']],
-            ['* * * , *', ['*', '*', '*', ',', '*']],
-            ['* * * 1-2 *', ['*', '*', '*', '1-2', '*']],
-            ['* * * 0/5 *', ['*', '*', '*', '0/5', '*']],
-            ['* * * ? *', ['*', '*', '*', '?', '*']],
-            ['* * * L *', ['*', '*', '*', 'L', '*']],
-            ['* * * W *', ['*', '*', '*', 'W', '*']],
-            ['* * * C *', ['*', '*', '*', 'C', '*']],
-
-            ['* * * * 0', ['*', '*', '*', '*', '0']],
-            ['* * * * 11', ['*', '*', '*', '*', '11']],
-            ['* * * * ,', ['*', '*', '*', '*', ',']],
-            ['* * * * 1-2', ['*', '*', '*', '*', '1-2']],
-            ['* * * * 0/5', ['*', '*', '*', '*', '0/5']],
-            ['* * * * JAN', ['*', '*', '*', '*', 'JAN']],
-            ['* * * * DEC', ['*', '*', '*', '*', 'DEC']],
-            ['* * * * JAN-DEC', ['*', '*', '*', '*', 'JAN-DEC']],
-
-            ['* * * * * 1', ['*', '*', '*', '*', '*', '1']],
-            ['* * * * * 7', ['*', '*', '*', '*', '*', '7']],
-            ['* * * * * ,', ['*', '*', '*', '*', '*', ',']],
-            ['* * * * * 1-2', ['*', '*', '*', '*', '*', '1-2']],
-            ['* * * * * 0/5', ['*', '*', '*', '*', '*', '0/5']],
-            ['* * * * * ?', ['*', '*', '*', '*', '*', '?']],
-            ['* * * * * L', ['*', '*', '*', '*', '*', 'L']],
-            ['* * * * * 6#3', ['*', '*', '*', '*', '*', '6#3']],
-            ['* * * * * SUN', ['*', '*', '*', '*', '*', 'SUN']],
-            ['* * * * * SAT', ['*', '*', '*', '*', '*', 'SAT']],
-            ['* * * * * SUN-SAT', ['*', '*', '*', '*', '*', 'SUN-SAT']],
-        ];
     }
 
     /**
      * @param string $cronExpression
      * @expectedException \Magento\Framework\Exception\CronException
-     * @dataProvider setCronExprExceptionDataProvider
+     * @dataProvider invalidCronExprDataProvider
      */
     public function testSetCronExprException($cronExpression)
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
-
+        /** @var ExpressionValidator $expressionValidator */
+        $model = $this->getScheduleModel($cronExpression);
         // 2. Run tested method
         $model->setCronExpr($cronExpression);
     }
 
     /**
-     * Here is a list of allowed characters and values for Cron expression
-     * http://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
-     *
-     * @return array
-     */
-    public function setCronExprExceptionDataProvider()
-    {
-        return [
-            [''],
-            [null],
-            [false],
-            ['1 2 3 4'],
-            ['1 2 3 4 5 6 7']
-        ];
-    }
-
-    /**
      * @param int $scheduledAt
-     * @param array $cronExprArr
+     * @param string $cronExpr
      * @param $expected
      * @dataProvider tryScheduleDataProvider
      */
-    public function testTrySchedule($scheduledAt, $cronExprArr, $expected)
+    public function testTrySchedule($scheduledAt, $cronExpr, $expected)
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class
-        );
+        /** @var ExpressionValidator $expressionValidator */
+        $model = $this->getScheduleModel($cronExpr);
 
         // 2. Set fixtures
         $model->setScheduledAt($scheduledAt);
-        $model->setCronExprArr($cronExprArr);
 
         // 3. Run tested method
         $result = $model->trySchedule();
@@ -179,25 +96,24 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
     public function testTryScheduleWithConversionToAdminStoreTime()
     {
-        $scheduledAt = '2011-12-13 14:15:16';
-        $cronExprArr = ['*', '*', '*', '*', '*'];
+        $cronExpr = '* * * * *';
 
         // 1. Create mocks
         $timezoneConverter = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $timezoneConverter->expects($this->once())
             ->method('date')
-            ->with($scheduledAt)
-            ->willReturn(new \DateTime($scheduledAt));
+            ->with($this->getScheduledtAt())
+            ->willReturn(new \DateTime($this->getScheduledtAt()));
 
         /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class,
-            ['timezoneConverter' => $timezoneConverter]
-        );
+        $model = $this->getHelper()->getObject(\Magento\Cron\Model\Schedule::class, [
+                'timezoneConverter' => $timezoneConverter,
+                'expressionFactory' => $this->getExpressionFactoryObject($cronExpr),
+                'partFactory' => $this->getExpressionPartFactoryObject($cronExpr),
+            ]);
 
         // 2. Set fixtures
-        $model->setScheduledAt($scheduledAt);
-        $model->setCronExprArr($cronExprArr);
+        $model->setScheduledAt($this->getScheduledtAt());
 
         // 3. Run tested method
         $result = $model->trySchedule();
@@ -213,18 +129,21 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     {
         $date = '2011-12-13 14:15:16';
         return [
-            [$date, [], false],
-            [$date, null, false],
-            [$date, false, false],
-            [$date, [], false],
-            [$date, null, false],
-            [$date, false, false],
-            [strtotime($date), ['*', '*', '*', '*', '*'], true],
-            [strtotime($date), ['15', '*', '*', '*', '*'], true],
-            [strtotime($date), ['*', '14', '*', '*', '*'], true],
-            [strtotime($date), ['*', '*', '13', '*', '*'], true],
-            [strtotime($date), ['*', '*', '*', '12', '*'], true],
-            [strtotime('Monday'), ['*', '*', '*', '*', '1'], true],
+            [strtotime($date), '', false],
+            [strtotime($date), '* * * * *', true],
+            [strtotime($date), '* * * * *', true],
+            [strtotime($date), '15 * * * *', true],
+            [strtotime($date), '* 14 * * *', true],
+            [strtotime($date), '* * 13 * *', true],
+            [strtotime($date), '* * * 12 *', true],
+            [strtotime($date), '*/15 * * * *', true],
+            [strtotime($date), '*/4 * * * *', false],
+            [strtotime($date), '15/15 * * * *', true],
+            [strtotime($date), '30/15 * * * *', false],
+            [strtotime($date), '* 30,*/7 * * *', false],
+            [strtotime($date), '* * 15,*/13 * *', true],
+            [strtotime($date), '* * * */6 *', true],
+            [strtotime('Monday'), '* * * * 1', true],
         ];
     }
 
@@ -237,9 +156,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function testMatchCronExpression($cronExpressionPart, $dateTimePart, $expectedResult)
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
-
+        /** @var ExpressionValidator $expressionValidator */
+        $model = $this->getScheduleModel($cronExpressionPart);
         // 2. Run tested method
         $result = $model->matchCronExpression($cronExpressionPart, $dateTimePart);
 
@@ -282,6 +200,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
             ['1/5', 5, false],
             ['5/5', 5, true],
+            ['10/5', 5, false],
             ['10/5', 10, true],
         ];
     }
@@ -296,8 +215,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $dateTimePart = 10;
 
         // 1 Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
+        $model = $this->getScheduleModel($cronExpressionPart);
 
         // 2. Run tested method
         $model->matchCronExpression($cronExpressionPart, $dateTimePart);
@@ -313,52 +231,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
             ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
-        ];
-    }
-
-    /**
-     * @param mixed $param
-     * @param int $expectedResult
-     * @dataProvider getNumericDataProvider
-     */
-    public function testGetNumeric($param, $expectedResult)
-    {
-        // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
-
-        // 2. Run tested method
-        $result = $model->getNumeric($param);
-
-        // 3. Compare actual result with expected result
-        $this->assertEquals($expectedResult, $result);
-    }
-
-    /**
-     * @return array
-     */
-    public function getNumericDataProvider()
-    {
-        return [
-            [null, false],
-            ['', false],
-            ['0', 0],
-            [0, 0],
-            [1, 1],
-            [PHP_INT_MAX, PHP_INT_MAX],
-            [1.1, 1.1],
-
-            ['feb', 2],
-            ['Feb', 2],
-            ['FEB', 2],
-            ['february', 2],
-            ['febXXX', 2],
-
-            ['wed', 3],
-            ['Wed', 3],
-            ['WED', 3],
-            ['Wednesday', 3],
-            ['wedXXX', 3],
+            ['2-1'],      //Invalid cron expression, expecting from <= to in 'from-to' structure: 2-1
         ];
     }
 
@@ -372,12 +245,9 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class,
-            [
+        $model = $this->getHelper()->getObject(\Magento\Cron\Model\Schedule::class, [
                 'resource' => $this->resourceJobMock
-            ]
-        );
+            ]);
         $model->setId($scheduleId);
         $this->assertEquals(0, $model->getStatus());
 
@@ -396,12 +266,9 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(false));
 
         /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class,
-            [
+        $model = $this->getHelper()->getObject(\Magento\Cron\Model\Schedule::class, [
                 'resource' => $this->resourceJobMock
-            ]
-        );
+            ]);
         $model->setId($scheduleId);
         $this->assertEquals(0, $model->getStatus());
 
