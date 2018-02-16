@@ -53,9 +53,7 @@ class SafeInstallerTest extends SetupTestCase
     {
         $testTableData = $this->getData();
         $row = reset($testTableData);
-        $this->cliCommad->install(
-            ['Magento_TestSetupDeclarationModule4']
-        );
+        $this->cliCommad->install(['Magento_TestSetupDeclarationModule4']);
         $adapter = $this->resourceConnection->getConnection();
         $testTableName = $this->resourceConnection->getTableName('test_table');
         $adapter->insertArray(
@@ -70,7 +68,11 @@ class SafeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade();
+        $this->cliCommad->upgrade(
+            [
+                '--safe-mode' => true,
+            ]
+        );
         //Move new db_schema.xml with restored title field
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule4',
@@ -78,7 +80,11 @@ class SafeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade();
+        $this->cliCommad->upgrade(
+            [
+                '--data-restore' => true,
+            ]
+        );
         $testTableSelect = $adapter->select()->from($testTableName);
         self::assertEquals($testTableData, $adapter->fetchAll($testTableSelect));
     }

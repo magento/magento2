@@ -72,14 +72,18 @@ class CliCommand
     /**
      * Execute upgrade magento command.
      *
+     * @param array $installParams
      * @return string
      */
-    public function upgrade()
+    public function upgrade($installParams = [])
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $enableModuleCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params='
+        $upgradeCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params='
             . $initParams['magento-init-params'];
-        return $this->shell->execute($enableModuleCommand);
+
+        $upgradeCommand .= ' ' . implode(" ", $this->toCliArguments(array_keys($installParams)));
+
+        return $this->shell->execute($upgradeCommand, array_values($installParams));
     }
 
     /**
