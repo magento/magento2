@@ -192,7 +192,7 @@ class AddColumn implements OperationInterface
          */
         $element = $elementHistory->getNew();
         $definition = $this->definitionAggregator->toDefinition($element);
-
+        
         $statement = $this->dbSchemaWriter->addElement(
             $element->getName(),
             $element->getTable()->getResource(),
