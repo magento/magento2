@@ -36,7 +36,6 @@ class SafeInstallerTest extends SetupTestCase
      */
     private $resourceConnection;
 
-
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
