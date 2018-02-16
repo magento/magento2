@@ -355,7 +355,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($parentAllStoresPath . '/test-category-100', $childCategory->getUrlPath());
         $this->assertEquals($parentSecondStoreKey . '/test-category-100', $childCategorySecondStore->getUrlPath());
-
     }
 
     protected function getCategoryByName($categoryName)

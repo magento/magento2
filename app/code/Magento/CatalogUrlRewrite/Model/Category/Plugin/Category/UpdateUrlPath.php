@@ -11,11 +11,12 @@ use \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use \Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use \Magento\UrlRewrite\Model\UrlPersistInterface;
 use \Magento\Store\Model\Store;
+use \Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 
 /**
  * Generate and save url-rewrites for category if its parent have specified url-key for different store views
  */
-class Save
+class UpdateUrlPath
 {
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
@@ -58,34 +59,31 @@ class Save
     /**
      * Perform url updating for different stores
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
-     * @param \Closure $proceed
-     * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\Category
+     * @param CategoryResource $subject
+     * @param CategoryResource $result
+     * @param Category $category
+     * @return CategoryResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Closure $proceed,
-        \Magento\Catalog\Model\Category $category
+    public function afterSave(
+        CategoryResource $subject,
+        CategoryResource $result,
+        Category $category
     ) {
-        $result = $proceed($category);
-
-        $currentStoreId = $category->getStoreId();
         $parentCategoryId = $category->getParentId();
         if ($category->isObjectNew()
-            && $this->isGlobalScope($currentStoreId)
             && !$category->isInRootCategoryList()
             && !empty($parentCategoryId)) {
             foreach ($category->getStoreIds() as $storeId) {
                 if (!$this->isGlobalScope($storeId)
                     && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
-                    $storeId,
-                    $parentCategoryId,
-                    Category::ENTITY
-                )) {
+                        $storeId,
+                        $parentCategoryId,
+                        Category::ENTITY
+                    )
+                ) {
                     $category->setStoreId($storeId);
-                    $this->updateUrlPathForCategory($category, $categoryResource);
+                    $this->updateUrlPathForCategory($category, $subject);
                     $this->urlPersist->replace($this->categoryUrlRewriteGenerator->generate($category));
                 }
             }
@@ -99,18 +97,16 @@ class Save
      * @param int|null $storeId
      * @return bool
      */
-    private function isGlobalScope($storeId)
+    private function isGlobalScope(int $storeId): bool
     {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+        return null === $storeId || $storeId === Store::DEFAULT_STORE_ID;
     }
 
     /**
      * @param Category $category
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
-     *
-     * @return void
      */
-    private function updateUrlPathForCategory(Category $category, $categoryResource)
+    private function updateUrlPathForCategory(Category $category, CategoryResource $categoryResource)
     {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));

@@ -6,9 +6,9 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
 /**
- * Unit test for Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Save class
+ * Unit test for Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\UpdateUrlPath class
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -46,9 +46,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     private $category;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Save
+     * @var \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\UpdateUrlPath
      */
-    private $categorySavePlugin;
+    private $updateUrlPathPlugin;
 
     /**
      * @inheritdoc
@@ -96,8 +96,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['replace'])
             ->getMockForAbstractClass();
 
-        $this->categorySavePlugin = $this->objectManager->getObject(
-            \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Save::class,
+        $this->updateUrlPathPlugin = $this->objectManager->getObject(
+            \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\UpdateUrlPath::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'categoryUrlRewriteGenerator' => $this->categoryUrlRewriteGenerator,
@@ -109,11 +109,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundSaveWithoutRootCategory()
     {
-        $proceed = function () {
-            return $this->categoryResource;
-        };
-
-        $this->category->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
         $this->category->expects($this->atLeastOnce())->method('getParentId')->willReturn(0);
         $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
         $this->category->expects($this->atLeastOnce())->method('isInRootCategoryList')->willReturn(false);
@@ -121,7 +116,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
        $this->assertEquals(
            $this->categoryResource,
-           $this->categorySavePlugin->aroundSave($this->categoryResource, $proceed, $this->category)
+           $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
        );
     }
 
@@ -130,13 +125,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $parentId = 1;
         $categoryStoreIds = [0,1,2];
         $generatedUrlPath = 'parent_category/child_category';
-        $proceed = function () {
-            return $this->categoryResource;
-        };
 
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')->with($this->category)
             ->willReturn($generatedUrlPath);
-        $this->category->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
         $this->category->expects($this->atLeastOnce())->method('getParentId')->willReturn($parentId);
         $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
         $this->category->expects($this->atLeastOnce())->method('isInRootCategoryList')->willReturn(false);
@@ -166,7 +157,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             $this->categoryResource,
-            $this->categorySavePlugin->aroundSave($this->categoryResource, $proceed, $this->category)
+            $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
         );
     }
 }
