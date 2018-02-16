@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AddWidgetToWYSIWYGWithTypeOfCatalogProductLink">
         <annotations>
-            <features value="Add Widget to WYSIWYG"/>
-            <stories value="Widgets in WYSIWYG"/>
-            <group value="productLink"/>
+            <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
+            <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
+            <group value="Cms"/>
             <title value="Create CMS Page With Widget Type: Catalog product link"/>
             <description value="Create CMS Page With Widget Type: Catalog product link"/>
             <severity value="CRITICAL"/>
@@ -32,10 +32,10 @@
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-        <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <waitForPageLoad stepKey="wait2"/>
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <waitForPageLoad stepKey="wait3"/>
@@ -68,6 +68,8 @@
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
         <see userInput="$$createPreReqProduct.name$$" stepKey="seeProductLink"/>
         <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
+            <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
