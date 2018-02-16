@@ -11,7 +11,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Timezone library
@@ -41,7 +40,7 @@ class Timezone implements TimezoneInterface
     protected $_scopeResolver;
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
@@ -63,7 +62,7 @@ class Timezone implements TimezoneInterface
     /**
      * @param ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
-     * @param DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -71,7 +70,7 @@ class Timezone implements TimezoneInterface
     public function __construct(
         ScopeResolverInterface $scopeResolver,
         ResolverInterface $localeResolver,
-        DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
