@@ -173,7 +173,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
+     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetAddressForVirtualProduct()
     {
@@ -195,12 +195,12 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please check input data.
+     * @expectedExceptionMessage The address failed to save. Verify the address and try again.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
         $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
-            new \Exception('Unable to save address. Please check input data.')
+            new \Exception('The address failed to save. Verify the address and try again.')
         );
 
         $customerAddressId = 150;
@@ -265,7 +265,7 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
+     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testGetAddressOfQuoteWithVirtualProducts()
     {

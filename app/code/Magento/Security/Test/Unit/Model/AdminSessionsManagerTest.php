@@ -370,7 +370,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ],
             [
-                'expectedResult' => __('Your account is temporarily disabled.'),
+                'expectedResult' => __('Your account is temporarily disabled. Please try again later.'),
                 'sessionStatus' => \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             ],
             [

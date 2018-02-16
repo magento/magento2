@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -43,7 +44,7 @@ class ExceptionHandlerBlock implements BlockInterface
     public function __call($method, $args)
     {
         throw new LocalizedException(
-            new Phrase('Block %1 throws exception and cannot be rendered.', [$this->blockName])
+            new Phrase('The "%1" block threw an exception, and it can\'t be rendered.', [$this->blockName])
         );
     }
 
@@ -56,7 +57,7 @@ class ExceptionHandlerBlock implements BlockInterface
     public function toHtml()
     {
         throw new LocalizedException(
-            new Phrase('Block %1 throws exception and cannot be rendered.', [$this->blockName])
+            new Phrase('The "%1" block threw an exception, and it can\'t be rendered.', [$this->blockName])
         );
     }
 }

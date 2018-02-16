@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ObjectManager;
@@ -581,7 +582,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function query($sql, $bind = [])
     {
         if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false && count($this->_splitMultiQuery($sql)) > 1) {
-            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new Phrase("Multiple queries can't be executed. Run a single query and try again.")
+            );
         }
         return $this->_query($sql, $bind);
     }
