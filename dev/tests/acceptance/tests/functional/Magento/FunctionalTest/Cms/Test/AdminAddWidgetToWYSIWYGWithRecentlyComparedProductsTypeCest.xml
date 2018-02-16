@@ -64,13 +64,13 @@
         <waitForPageLoad stepKey="waitForPage" />
         <click selector="{{WidgetSection.CompareBtn}}" stepKey="clickCompareBtn" />
         <amOnPage url="$$createPreReqCategory.name$$.html" stepKey="amOnCatalogPage" />
-        <waitForPageLoad stepKey="waitForPage" />
         <waitForPageLoad stepKey="waitForPage1" />
+        <waitForPageLoad stepKey="waitForPage2" />
         <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" stepKey="waitForClearBtn" />
         <click selector="{{WidgetSection.ClearCompare}}" stepKey="clickClearCompareBtn" />
         <waitForElementVisible selector="{{WidgetSection.AcceptClear}}" stepKey=""/>
         <click selector="{{WidgetSection.AcceptClear}}" stepKey="acceptClearCompare" />
-        <waitForPageLoad stepKey="waitForPage2" />
+        <waitForPageLoad stepKey="waitForPage3" />
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="wait5" />
         <!--see widget on Storefront-->
