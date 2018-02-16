@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -112,7 +113,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
         if (!$option || !$option->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+            throw new NoSuchEntityException(
+                __("The option that was requested doesn't exist. Verify the entity and try again.")
+            );
         }
 
         $productLinks = $this->linkList->getItems($product, $optionId);
@@ -159,7 +162,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                __('Cannot delete option with id %1', $option->getOptionId()),
+                __('The option with "%1" ID can\'t be deleted.', $option->getOptionId()),
                 $exception
             );
         }
@@ -208,7 +211,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             }
         } else {
             if (!$existingOption->getOptionId()) {
-                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The option that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
@@ -218,7 +223,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         try {
             $this->optionResource->save($option);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save option'), $e);
+            throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 
         /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
@@ -282,7 +287,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     {
         $product = $this->productRepository->get($sku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Only implemented for bundle product'));
+            throw new InputException(__('This is implemented for bundle products only.'));
         }
         return $product;
     }

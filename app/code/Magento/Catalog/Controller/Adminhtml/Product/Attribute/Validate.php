@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Framework\DataObject;
@@ -91,7 +92,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
                 $setName = $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($setName);
-                $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $setName));
+                $this->messageManager->addError(
+                    __('A "%1" attribute set name already exists. Create a new name and try again.', $setName)
+                );
 
                 $layout = $this->layoutFactory->create();
                 $layout->initMessages();

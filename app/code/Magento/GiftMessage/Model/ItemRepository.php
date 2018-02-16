@@ -85,7 +85,9 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
          */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$item = $quote->getItemById($itemId)) {
-            throw new NoSuchEntityException(__('There is no item with provided id in the cart'));
+            throw new NoSuchEntityException(
+                __('No item with the provided ID was found in the Cart. Verify the ID and try again.')
+            );
         };
         $messageId = $item->getGiftMessageId();
         if (!$messageId) {
@@ -114,16 +116,19 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
 
         if (!$item = $quote->getItemById($itemId)) {
             throw new NoSuchEntityException(
-                __('There is no product with provided  itemId: %1 in the cart', $itemId)
+                __(
+                    'No product with the "%1" itemId exists in the Cart. Verify your information and try again.',
+                    $itemId
+                )
             );
         };
 
         if ($item->getIsVirtual()) {
-            throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));
+            throw new InvalidTransitionException(__('Gift messages can\'t be used for virtual products.'));
         }
         $messageText = $giftMessage->getMessage();
         if ($messageText && !$this->helper->isMessagesAllowed('items', $quote, $this->storeManager->getStore())) {
-            throw new CouldNotSaveException(__('Gift Message is not available'));
+            throw new CouldNotSaveException(__("The gift message isn't available."));
         }
         $this->giftMessageManager->setMessage($quote, 'quote_item', $giftMessage, $itemId);
         return true;
