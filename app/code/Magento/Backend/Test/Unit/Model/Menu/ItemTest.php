@@ -56,9 +56,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         'title' => 'Item Title',
         'action' => '/system/config',
         'resource' => 'Magento_Config::config',
-        'depends_on_module' => 'Magento_Backend',
-        'depends_on_config' => 'system/config/isEnabled',
-        'tooltip' => 'Item tooltip',
+        'dependsOnModule' => 'Magento_Backend',
+        'dependsOnConfig' => 'system/config/isEnabled',
+        'toolTip' => 'Item tooltip',
     ];
 
     protected function setUp()

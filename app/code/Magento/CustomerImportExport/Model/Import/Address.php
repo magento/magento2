@@ -5,13 +5,18 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source as Sources;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Customer address import
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Address extends AbstractCustomer
 {
@@ -236,6 +241,18 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
+     * @var Sources\CountryWithWebsites
+     */
+    private $countryWithWebsites;
+
+    /**
+     * Options for certain attributes sorted by websites.
+     *
+     * @var array[][] With path as <attributeCode> => <websiteID> => options[].
+     */
+    private $optionsByWebsite = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -254,6 +271,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
+     * @param Sources\CountryWithWebsites|null $countryWithWebsites
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -276,7 +294,8 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
-        array $data = []
+        array $data = [],
+        Sources\CountryWithWebsites $countryWithWebsites = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -284,6 +303,9 @@ class Address extends AbstractCustomer
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->postcodeValidator = $postcodeValidator;
+        $this->countryWithWebsites = $countryWithWebsites ?
+            $countryWithWebsites
+            : ObjectManager::getInstance()->get(Sources\CountryWithWebsites::class);
 
         if (!isset($data['attribute_collection'])) {
             /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
@@ -328,6 +350,61 @@ class Address extends AbstractCustomer
 
         $this->_initAttributes();
         $this->_initAddresses()->_initCountryRegions();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeOptions(AbstractAttribute $attribute, array $indexAttributes = [])
+    {
+        $standardOptions = parent::getAttributeOptions($attribute, $indexAttributes);
+
+        if ($attribute->getAttributeCode() === 'country_id') {
+            //If we want to get available options for country field then we have to use alternative source
+            // to get actual data for each website.
+            $options = $this->countryWithWebsites->getAllOptions();
+            //Available country options now will be sorted by websites.
+            $code = $attribute->getAttributeCode();
+            $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];
+            //Sorting options by website.
+            foreach ($options as $option) {
+                if (array_key_exists('website_ids', $option)) {
+                    foreach ($option['website_ids'] as $websiteId) {
+                        if (!array_key_exists($websiteId, $websiteOptions)) {
+                            $websiteOptions[$websiteId] = [];
+                        }
+                        $optionId = mb_strtolower($option['value']);
+                        $websiteOptions[$websiteId][$optionId] = $option['value'];
+                    }
+                }
+            }
+            //Storing sorted
+            $this->optionsByWebsite[$code] = $websiteOptions;
+        }
+
+        return $standardOptions;
+    }
+
+    /**
+     * Attributes' data may vary depending on website settings,
+     * this method adjusts an attribute's data from $this->_attributes to
+     * website-specific data.
+     *
+     * @param array $attributeData Data from $this->_attributes.
+     * @param int $websiteId
+     *
+     * @return array Adjusted data in the same format.
+     */
+    private function adjustAttributeDataForWebsite(array $attributeData, $websiteId)
+    {
+        if ($attributeData['code'] === 'country_id') {
+            $attributeOptions = $this->optionsByWebsite[$attributeData['code']];
+            if (array_key_exists($websiteId, $attributeOptions)) {
+                $attributeData['options'] = $attributeOptions[$websiteId];
+            }
+        }
+
+        return $attributeData;
     }
 
     /**
@@ -442,14 +519,9 @@ class Address extends AbstractCustomer
             }
             $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
 
-            $this->_saveAddressEntities(
-                $newRows,
-                $updateRows
-            )->_saveAddressAttributes(
-                $attributes
-            )->_saveCustomerDefaults(
-                $defaults
-            );
+            $this->_saveAddressEntities($newRows, $updateRows)
+                ->_saveAddressAttributes($attributes)
+                ->_saveCustomerDefaults($defaults);
 
             $this->_deleteAddressEntities($deleteRowIds);
         }
@@ -514,8 +586,12 @@ class Address extends AbstractCustomer
             'parent_id' => $customerId,
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
+        $websiteId = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
+                $attributeParams = $this->adjustAttributeDataForWebsite($attributeParams, $websiteId);
+
                 if (!strlen($rowData[$attributeAlias])) {
                     if ($newAddress) {
                         $value = null;
@@ -734,6 +810,9 @@ class Address extends AbstractCustomer
                 } else {
                     // check simple attributes
                     foreach ($this->_attributes as $attributeCode => $attributeParams) {
+                        $websiteId = $this->_websiteCodeToId[$website];
+                        $attributeParams = $this->adjustAttributeDataForWebsite($attributeParams, $websiteId);
+
                         if (in_array($attributeCode, $this->_ignoredAttributes)) {
                             continue;
                         }

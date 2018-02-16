@@ -1,3 +1,3 @@
-# Magento 2 Acceptance Tests
+# Magento 2 Functional Tests
 
-The Acceptance Tests Module for **Magento_Shipping** Module.
+The Functional Tests Module for **Magento_Shipping** Module.

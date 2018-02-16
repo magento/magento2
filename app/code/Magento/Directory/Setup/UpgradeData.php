@@ -41,23 +41,21 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->addCroatia($setup);
+            $this->addCountryRegions($setup, $this->getDataForCroatia());
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $this->addCountryRegions($setup, $this->getDataForIndia());
         }
     }
 
     /**
-     * Add Croatia and it's states to appropriate tables.
+     * Croatian states data.
      *
-     * @param ModuleDataSetupInterface $setup
-     * @return void
+     * @return array
      */
-    private function addCroatia($setup)
+    private function getDataForCroatia()
     {
-        /**
-         * Fill table directory/country_region
-         * Fill table directory/country_region_name for en_US locale
-         */
-        $data = [
+        return [
             ['HR', 'HR-01', 'Zagrebačka županija'],
             ['HR', 'HR-02', 'Krapinsko-zagorska županija'],
             ['HR', 'HR-03', 'Sisačko-moslavačka županija'],
@@ -80,6 +78,68 @@ class UpgradeData implements UpgradeDataInterface
             ['HR', 'HR-20', 'Međimurska županija'],
             ['HR', 'HR-21', 'Grad Zagreb']
         ];
+    }
+
+    /**
+     * Indian states data.
+     *
+     * @return array
+     */
+    private function getDataForIndia()
+    {
+        return [
+            ['IN', 'AN', 'Andaman and Nicobar Islands'],
+            ['IN', 'AP', 'Andhra Pradesh'],
+            ['IN', 'AR', 'Arunachal Pradesh'],
+            ['IN', 'AS', 'Assam'],
+            ['IN', 'BR', 'Bihar'],
+            ['IN', 'CH', 'Chandigarh'],
+            ['IN', 'CT', 'Chhattisgarh'],
+            ['IN', 'DN', 'Dadra and Nagar Haveli'],
+            ['IN', 'DD', 'Daman and Diu'],
+            ['IN', 'DL', 'Delhi'],
+            ['IN', 'GA', 'Goa'],
+            ['IN', 'GJ', 'Gujarat'],
+            ['IN', 'HR', 'Haryana'],
+            ['IN', 'HP', 'Himachal Pradesh'],
+            ['IN', 'JK', 'Jammu and Kashmir'],
+            ['IN', 'JH', 'Jharkhand'],
+            ['IN', 'KA', 'Karnataka'],
+            ['IN', 'KL', 'Kerala'],
+            ['IN', 'LD', 'Lakshadweep'],
+            ['IN', 'MP', 'Madhya Pradesh'],
+            ['IN', 'MH', 'Maharashtra'],
+            ['IN', 'MN', 'Manipur'],
+            ['IN', 'ML', 'Meghalaya'],
+            ['IN', 'MZ', 'Mizoram'],
+            ['IN', 'NL', 'Nagaland'],
+            ['IN', 'OR', 'Odisha'],
+            ['IN', 'PY', 'Puducherry'],
+            ['IN', 'PB', 'Punjab'],
+            ['IN', 'RJ', 'Rajasthan'],
+            ['IN', 'SK', 'Sikkim'],
+            ['IN', 'TN', 'Tamil Nadu'],
+            ['IN', 'TG', 'Telangana'],
+            ['IN', 'TR', 'Tripura'],
+            ['IN', 'UP', 'Uttar Pradesh'],
+            ['IN', 'UT', 'Uttarakhand'],
+            ['IN', 'WB', 'West Bengal']
+        ];
+    }
+
+    /**
+     * Add country regions data to appropriate tables.
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param array $data
+     * @return void
+     */
+    private function addCountryRegions(ModuleDataSetupInterface $setup, array $data)
+    {
+        /**
+         * Fill table directory/country_region
+         * Fill table directory/country_region_name for en_US locale
+         */
         foreach ($data as $row) {
             $bind = ['country_id' => $row[0], 'code' => $row[1], 'default_name' => $row[2]];
             $setup->getConnection()->insert($setup->getTable('directory_country_region'), $bind);
