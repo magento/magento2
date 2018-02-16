@@ -25,8 +25,7 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="value">magento.jpg</data>
-        <data key="name">magento</data>
+        <data key="file">magento.jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
@@ -35,8 +34,7 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="value">magento2.jpg</data>
-        <data key="name">magento2</data>
+        <data key="file">magento2.jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
