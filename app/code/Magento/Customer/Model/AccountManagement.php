@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -417,7 +418,7 @@ class AccountManagement implements AccountManagementInterface
     {
         $customer = $this->customerRepository->get($email, $websiteId);
         if (!$customer->getConfirmation()) {
-            throw new InvalidTransitionException(__('No confirmation needed.'));
+            throw new InvalidTransitionException(__("Confirmation isn't needed."));
         }
 
         try {
@@ -464,11 +465,11 @@ class AccountManagement implements AccountManagementInterface
     {
         // check if customer is inactive
         if (!$customer->getConfirmation()) {
-            throw new InvalidTransitionException(__('Account already active'));
+            throw new InvalidTransitionException(__('The account is already active.'));
         }
 
         if ($customer->getConfirmation() !== $confirmationKey) {
-            throw new InputMismatchException(__('Invalid confirmation token'));
+            throw new InputMismatchException(__('The confirmation token is invalid. Verify the token and try again.'));
         }
 
         $customer->setConfirmation(null);
@@ -503,7 +504,7 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
-            throw new EmailNotConfirmedException(__('This account is not confirmed.'));
+            throw new EmailNotConfirmedException(__("This account isn't confirmed. Verify and try again."));
         }
 
         $customerModel = $this->customerFactory->create()->updateData($customer);
@@ -619,13 +620,15 @@ class AccountManagement implements AccountManagementInterface
         if ($length < $configMinPasswordLength) {
             throw new InputException(
                 __(
-                    'Please enter a password with at least %1 characters.',
+                    'The password needs at least %1 characters. Create a new password and try again.',
                     $configMinPasswordLength
                 )
             );
         }
         if ($this->stringHelper->strlen(trim($password)) != $length) {
-            throw new InputException(__('The password can\'t begin or end with a space.'));
+            throw new InputException(
+                __("The password can't begin or end with a space. Verify the password and try again.")
+            );
         }
 
         $requiredCharactersCheck = $this->makeRequiredCharactersCheck($password);
@@ -709,7 +712,9 @@ class AccountManagement implements AccountManagementInterface
             try {
                 $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             } catch (InputException $e) {
-                throw new LocalizedException(__('Password cannot be the same as email address.'));
+                throw new LocalizedException(
+                    __("The password can't be the same as the email address. Create a new password and try again.")
+                );
             }
             $hash = $this->createPasswordHash($password);
         } else {
@@ -766,7 +771,7 @@ class AccountManagement implements AccountManagementInterface
             $customer = $this->customerRepository->save($customer, $hash);
         } catch (AlreadyExistsException $e) {
             throw new InputMismatchException(
-                __('A customer with the same email already exists in an associated website.')
+                __('A customer with the same email address already exists in an associated website.')
             );
         } catch (LocalizedException $e) {
             throw $e;
@@ -880,7 +885,9 @@ class AccountManagement implements AccountManagementInterface
         try {
             $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
         } catch (InvalidEmailOrPasswordException $e) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+            throw new InvalidEmailOrPasswordException(
+                __("The password doesn't match this account. Verify the password and try again.")
+            );
         }
         $customerEmail = $customer->getEmail();
         $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
@@ -996,7 +1003,7 @@ class AccountManagement implements AccountManagementInterface
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
-            throw new InputException(__('%fieldName is a required field.', $params));
+            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
 
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
@@ -1004,9 +1011,9 @@ class AccountManagement implements AccountManagementInterface
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
 
         if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
-            throw new InputMismatchException(__('Reset password token mismatch.'));
+            throw new InputMismatchException(__('The password token is mismatched. Reset and try again.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
-            throw new ExpiredException(__('Reset password token expired.'));
+            throw new ExpiredException(__('The password token is expired. Reset and try again.'));
         }
 
         return true;
@@ -1048,7 +1055,9 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new LocalizedException(__('Please correct the transactional account email type.'));
+            throw new LocalizedException(
+                __('The transactional account email type is incorrect. Verify and try again.')
+            );
         }
 
         if (!$storeId) {

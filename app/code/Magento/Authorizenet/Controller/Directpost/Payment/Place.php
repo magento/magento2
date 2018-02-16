@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
 use Magento\Authorizenet\Controller\Directpost\Payment;
@@ -147,7 +148,7 @@ class Place extends Payment
             $result->setData('error', true);
             $result->setData(
                 'error_messages',
-                __('An error occurred on the server. Please try to place the order again.')
+                __('A server error stopped your order from being placed. Please try to place your order again.')
             );
         }
         if ($response instanceof Http) {
