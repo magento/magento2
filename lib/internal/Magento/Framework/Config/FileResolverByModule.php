@@ -61,7 +61,7 @@ class FileResolverByModule extends \Magento\Framework\App\Config\FileResolver
         $iterator = $this->_moduleReader->getConfigurationFiles($filename)->toArray();
         if ($scope !== self::ALL_MODULES) {
             $path = $this->componentRegistrar->getPath('module', $scope);
-            $path .= DIRECTORY_SEPARATOR . Dir::MODULE_ETC_DIR . DIRECTORY_SEPARATOR . $filename;
+            $path .= '/' . Dir::MODULE_ETC_DIR . '/'. $filename;
             $iterator = isset($iterator[$path]) ? [$path => $iterator[$path]] : [];
         }
         $primaryFile = parent::get($filename, 'primary')->toArray();
