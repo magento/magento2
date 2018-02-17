@@ -8,9 +8,6 @@
 
 /** @var Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection $block */
 ?>
-<?php if (!$block->isShippable()) : ?>
-    <div><?php echo __('Order items could not be shipped by the current shipping algorithm.'); ?></div>
-<?php endif; ?>
 <?php foreach ($block->getSourceSelections() as $sourceSelection) : ?>
     <table class="data-table admin__table-primary edit-order-table">
         <div class="admin__page-section-item-title">

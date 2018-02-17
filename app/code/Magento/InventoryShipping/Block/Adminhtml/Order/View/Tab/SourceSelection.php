@@ -116,7 +116,7 @@ class SourceSelection extends Template implements TabInterface
      */
     public function canShowTab()
     {
-        return true;
+        return $this->isShippable();
     }
 
     /**
