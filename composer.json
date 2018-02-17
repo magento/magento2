@@ -154,6 +154,8 @@
         "magento/module-inventory-indexer": "100.0.0-dev",
         "magento/module-inventory-low-stock-notification": "100.0.0-dev",
         "magento/module-inventory-low-stock-notification-api": "100.0.0-dev",
+        "magento/module-inventory-reservations": "100.0.0-dev",
+        "magento/module-inventory-reservations-api": "100.0.0-dev",
         "magento/module-inventory-sales": "100.0.0-dev",
         "magento/module-inventory-sales-api": "100.0.0-dev",
         "magento/module-inventory-shipping": "100.0.0-dev",

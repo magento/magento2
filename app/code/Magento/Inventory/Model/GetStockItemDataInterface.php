@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model;
 
 /**
- * Responsible for retrieving StockItem Data (without reservation data).
+ * Responsible for retrieving StockItem Data
  *
  * @api
  */

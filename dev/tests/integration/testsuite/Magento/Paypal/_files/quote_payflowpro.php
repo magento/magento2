@@ -59,6 +59,7 @@ for ($i = 1; $i <= 3; $i++) {
             [
                 'qty' => 10,
                 'is_in_stock' => 10,
+                'manage_stock' => 1,
             ]
         )
         ->setPrice(5.69 + $i * 2)

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Test\Integration\IsProductSalable;
 
-use Magento\InventoryApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -17,11 +17,6 @@ class MinQtyTest extends TestCase
      * @var IsProductSalableInterface
      */
     private $isProductSalable;
-
-    /**
-     * @var array
-     */
-    private $skus = ['SKU-1', 'SKU-2', 'SKU-3'];
 
     /**
      * @inheritdoc
@@ -42,18 +37,17 @@ class MinQtyTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
      *
+     * @param string $sku
      * @param int $stockId
-     * @param array $expectedResults
+     * @param bool $expectedResult
      * @return void
      *
      * @dataProvider executeWithMinQtyDataProvider
      */
-    public function testExecuteWithMinQty(int $stockId, array $expectedResults)
+    public function testExecuteWithMinQty(string $sku, int $stockId, bool $expectedResult)
     {
-        foreach ($this->skus as $key => $sku) {
-            $isSalable = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isSalable);
-        }
+        $isSalable = $this->isProductSalable->execute($sku, $stockId);
+        self::assertEquals($expectedResult, $isSalable);
     }
 
     /**
@@ -62,9 +56,15 @@ class MinQtyTest extends TestCase
     public function executeWithMinQtyDataProvider(): array
     {
         return [
-            ['10', [true, false, false]],
-            ['20', [false, false, false]],
-            ['30', [true, false, false]],
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, false],
+            ['SKU-2', 30, false],
+            ['SKU-3', 10, false],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, false],
         ];
     }
 
@@ -78,18 +78,17 @@ class MinQtyTest extends TestCase
      * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
      * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
+     * @param string $sku
      * @param int $stockId
-     * @param array $expectedResults
+     * @param bool $expectedResult
      * @return void
      *
      * @dataProvider executeWithManageStockFalseAndMinQty
      */
-    public function testExecuteWithManageStockFalseAndMinQty(int $stockId, array $expectedResults)
+    public function testExecuteWithManageStockFalseAndMinQty(string $sku, int $stockId, bool $expectedResult)
     {
-        foreach ($this->skus as $key => $sku) {
-            $isSalable = $this->isProductSalable->execute($sku, $stockId);
-            self::assertEquals($expectedResults[$key], $isSalable);
-        }
+        $isSalable = $this->isProductSalable->execute($sku, $stockId);
+        self::assertEquals($expectedResult, $isSalable);
     }
 
     /**
@@ -98,9 +97,15 @@ class MinQtyTest extends TestCase
     public function executeWithManageStockFalseAndMinQty(): array
     {
         return [
-            ['10', [true, false, true]],
-            ['20', [false, true, false]],
-            ['30', [true, true, true]],
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, true],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, true],
         ];
     }
 }

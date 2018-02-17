@@ -13,6 +13,9 @@
     "magento/module-inventory-sales-api": "100.0.*",
     "magento/module-inventory-indexer": "100.0.*"
   },
+  "suggest": {
+    "magento/module-inventory-reservations-api": "100.0.*"
+  },
   "type": "magento2-module",
   "version": "100.0.0-dev",
   "license": [
