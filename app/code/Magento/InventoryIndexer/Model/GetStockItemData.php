@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
@@ -50,6 +51,13 @@ class GetStockItemData implements GetStockItemDataInterface
             ->from($stockItemTableName, [IndexStructure::QUANTITY, IndexStructure::IS_SALABLE])
             ->where(IndexStructure::SKU . ' = ?', $sku);
 
-        return $connection->fetchRow($select) ?: null;
+        try {
+            return $connection->fetchRow($select) ?: null;
+        } catch (\Exception $e) {
+            throw new LocalizedException(__(
+                'Product with sku "%sku" is not assigned to stock with id "%stock"',
+                ['sku' => $sku, 'stock' => $stockId]
+            ), $e);
+        }
     }
 }

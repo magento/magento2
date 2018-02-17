@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Responsible for retrieving StockItem Data
  *
@@ -20,6 +22,7 @@ interface GetStockItemDataInterface
      * @param string $sku
      * @param int $stockId
      * @return array|null
+     * @throws LocalizedException
      */
     public function execute(string $sku, int $stockId);
 }
