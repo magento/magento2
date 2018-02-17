@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryProductAlert\Model;
 
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use \Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use \Magento\InventorySalesApi\Api\StockResolverInterface;
 use \Magento\InventoryApi\Api\Data\StockInterface;
 use \Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
+ * Checks product saleability
+ *
  * Class ProductSaleability
  */
 class ProductSaleability
 {
-
     /**
      * @var StockResolverInterface
      */
@@ -32,10 +35,9 @@ class ProductSaleability
      * @param IsProductSalableInterface $isProductSalable
      */
     public function __construct(
-        \Magento\InventorySalesApi\Api\StockResolverInterface $stockResolver,
-        \Magento\InventorySalesApi\Api\IsProductSalableInterface $isProductSalable
-    )
-    {
+        StockResolverInterface $stockResolver,
+        IsProductSalableInterface $isProductSalable
+    ) {
         $this->stockResolver = $stockResolver;
         $this->isProductSalable = $isProductSalable;
     }
@@ -51,13 +53,10 @@ class ProductSaleability
     public function isSalable(
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Store\Model\Website $website
-    ) {
+    ) : bool {
         /** @var StockInterface $stock */
         $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
-        $result = false;
-        if ($stock->getStockId()) {
-            $result = $this->isProductSalable->execute($product->getSku(), $stock->getStockId());
-        }
+        $result = $this->isProductSalable->execute($product->getSku(), $stock->getStockId());
         return $result;
     }
 }
