@@ -16,12 +16,18 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 
 /**
  * Product form modifier. Add to form source data
  */
 class SourceItems extends AbstractModifier
 {
+    /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
     /**
      * @var IsSourceItemsManagementAllowedForProductTypeInterface
      */
@@ -47,17 +53,20 @@ class SourceItems extends AbstractModifier
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        IsSingleSourceModeInterface $isSingleSourceMode
     ) {
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
@@ -106,8 +115,13 @@ class SourceItems extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->isSourceManagementAllowed()) {
-            unset($meta['product-details']['children']['container_quantity_and_stock_status']);
-            unset($meta['product-details']['children']['quantity_and_stock_status_qty']);
+            $meta['product-details']['children']['quantity_and_stock_status_qty']
+                ['arguments']['data']['config']['visible'] = 0;
+
+            // FIXME: this one does not work
+            $meta['product-details']['children']['container_quantity_and_stock_status']['children']
+                ['quantity_and_stock_status']['arguments']['data']['config']['visible'] = 0;
+
             return $meta;
         }
 
@@ -123,12 +137,16 @@ class SourceItems extends AbstractModifier
         return $meta;
     }
 
+    /**
+     * Check that multisource is applicable in a scope of current product and configuration
+     *
+     * @return bool
+     */
     private function isSourceManagementAllowed(): bool
     {
         $product = $this->locator->getProduct();
-        //return ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) TODO: include in criteria
-        // TODO: check if multisource is enabled
 
-        return false;
+        return $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) &&
+            !$this->isSingleSourceMode->execute();
     }
 }
