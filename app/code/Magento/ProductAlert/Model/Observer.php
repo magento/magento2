@@ -114,6 +114,11 @@ class Observer
     protected $inlineTranslation;
 
     /**
+     * @var \Magento\ProductAlert\Model\ProductSaleability
+     */
+    protected $productSaleability;
+
+    /**
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -138,7 +143,8 @@ class Observer
         \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory $stockColFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\ProductAlert\Model\EmailFactory $emailFactory,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\ProductAlert\Model\ProductSaleability $productSaleability = null
     ) {
         $this->_catalogData = $catalogData;
         $this->_scopeConfig = $scopeConfig;
@@ -151,6 +157,9 @@ class Observer
         $this->_transportBuilder = $transportBuilder;
         $this->_emailFactory = $emailFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->productSaleability = $productSaleability ?:
+            $objectManager->get(\Magento\ProductAlert\Model\ProductSaleability::class);
     }
 
     /**
@@ -326,7 +335,7 @@ class Observer
 
                     $product->setCustomerGroupId($customer->getGroupId());
 
-                    if ($product->isSalable()) {
+                    if ($this->productSaleability->isSalable($product, $website)) {
                         $email->addStockProduct($product);
 
                         $alert->setSendDate($this->_dateFactory->create()->gmtDate());
