@@ -133,6 +133,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             $itemSku = $orderItem->getSku();
             $qtyToDeliver = $orderItem->getQtyOrdered();
 
+            //check if order item is not delivered yet
             if ($orderItem->isDeleted() || $orderItem->getParentItemId() || $this->isZero($qtyToDeliver)) {
                 continue;
             }
@@ -142,6 +143,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
+                // check if source has some qty of SKU, so it's possible to take them into account
                 if ($this->isZero($sourceItemQty)) {
                     continue;
                 }
@@ -158,6 +160,8 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                 $qtyToDeliver -= $qtyToDeduct;
             }
 
+            // if we go throw all sources from the stock and there is still some qty to delivery,
+            // then it doesn't have enough items to delivery
             if (!$this->isZero($qtyToDeliver)) {
                 $isShippable = false;
             }
