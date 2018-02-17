@@ -10,7 +10,7 @@ namespace Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\GetData as GetDataResourceModel;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\GetData as GetDataModel;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 class Get implements GetSourceItemConfigurationInterface
 {
     /**
-     * @var GetDataResourceModel
+     * @var GetDataModel
      */
     private $getDataResourceModel;
 
@@ -47,14 +47,14 @@ class Get implements GetSourceItemConfigurationInterface
     private $logger;
 
     /**
-     * @param GetDataResourceModel $getDataResourceModel
+     * @param GetDataModel $getDataResourceModel
      * @param GetDefaultValues $getDefaultValues
      * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetDataResourceModel $getDataResourceModel,
+        GetDataModel $getDataResourceModel,
         GetDefaultValues $getDefaultValues,
         SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory,
         DataObjectHelper $dataObjectHelper,
