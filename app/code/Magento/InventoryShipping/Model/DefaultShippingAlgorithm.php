@@ -217,6 +217,6 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
      */
     private function isZero(float $floatNumber): bool
     {
-        return $floatNumber < 0.0001;
+        return $floatNumber < 0.0000001;
     }
 }
