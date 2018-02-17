@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Test\Integration;
 
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryShipping\Model\DefaultShippingAlgorithm;
+use Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class DefaultShippingAlgorithmTest extends TestCase
+class PriorityShippingAlgorithmTest extends TestCase
 {
     /**
      * @var DefaultSourceProviderInterface
@@ -33,13 +33,16 @@ class DefaultShippingAlgorithmTest extends TestCase
     private $orderFactory;
 
     /**
-     * @var DefaultShippingAlgorithm
+     * @var PriorityShippingAlgorithm
      */
     private $shippingAlgorithm;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->shippingAlgorithm = Bootstrap::getObjectManager()->get(DefaultShippingAlgorithm::class);
+        $this->shippingAlgorithm = Bootstrap::getObjectManager()->get(PriorityShippingAlgorithm::class);
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $this->orderFactory = Bootstrap::getObjectManager()->get(OrderInterfaceFactory::class);
         $this->orderItemFactory = Bootstrap::getObjectManager()->get(OrderItemInterfaceFactory::class);

@@ -33,6 +33,6 @@ class ShippingAlgorithmProvider implements ShippingAlgorithmProviderInterface
      */
     public function execute(): ShippingAlgorithmInterface
     {
-        return $this->objectManager->get(DefaultShippingAlgorithm::class);
+        return $this->objectManager->get(PriorityShippingAlgorithm::class);
     }
 }

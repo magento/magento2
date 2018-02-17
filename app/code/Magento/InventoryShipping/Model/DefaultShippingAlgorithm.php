@@ -29,9 +29,9 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * {@inheritdoc}
  *
- * This shipping algorithm just iterates over all the sources one by one in particular order
+ * This shipping algorithm just iterates over all the sources one by one in priority order
  */
-class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
+class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
 {
     /**
      * @var SourceSelectionInterfaceFactory
@@ -162,7 +162,6 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
                 $isShippable = false;
             }
         }
-
 
         return $this->shippingAlgorithmResultFactory->create([
             'sourceSelections' => $sourceSelections,
