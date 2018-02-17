@@ -194,11 +194,13 @@ class AdvancedInventory extends AbstractModifier
                 $this->meta,
                 [
                     'label' => __('Stock Status'),
+                    'component' => 'Magento_CatalogInventory/js/components/stock-status',
                     'value' => '1',
                     'dataScope' => $fieldCode . '.is_in_stock',
                     'scopeLabel' => '[GLOBAL]',
                     'imports' => [
                         'visible' => '${$.provider}:data.product.stock_data.manage_stock',
+
                     ],
                 ]
             );
