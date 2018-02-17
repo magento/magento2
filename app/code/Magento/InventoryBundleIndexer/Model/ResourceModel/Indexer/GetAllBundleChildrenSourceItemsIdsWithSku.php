@@ -16,7 +16,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * Get only bundle source items ids.
  */
-class GetAllBundleSourceItemsIds
+class GetAllBundleChildrenSourceItemsIdsWithSku
 {
     /**
      * @var ResourceConnection
@@ -46,9 +46,23 @@ class GetAllBundleSourceItemsIds
                 ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
                 'source_item.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
                 []
-            )->where('product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
-        $sourceItemsIds = $select->query()->fetchAll();
+            )->joinInner(
+                ['relation' => $this->resourceConnection->getTableName('catalog_product_relation')],
+                'relation.child_id = product.entity_id',
+                []
+            )->joinInner(
+                ['bundle_product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                'bundle_product.entity_id = relation.parent_id',
+                ['bundle_product.sku']
+            )->where('bundle_product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
 
-        return $sourceItemsIds;
+        $bundleChildren = $select->query()->fetchAll();
+        $bundleChildrenSourceItemsIdsBySku = [];
+
+        foreach ($bundleChildren as $bundleChild) {
+            $bundleChildrenSourceItemsIdsBySku[$bundleChild['sku']][] = $bundleChild[SourceItem::ID_FIELD_NAME];
+        }
+
+        return $bundleChildrenSourceItemsIdsBySku;
     }
 }

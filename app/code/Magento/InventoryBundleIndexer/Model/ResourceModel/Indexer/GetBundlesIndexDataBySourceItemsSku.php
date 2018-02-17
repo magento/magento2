@@ -42,39 +42,28 @@ class GetBundlesIndexDataBySourceItemsSku
     /**
      * @param array $bundleSourceItemsSkus
      * @param int $stockId
+     * @param string $bundleSku
      * @return array
      */
-    public function execute(array $bundleSourceItemsSkus, int $stockId): array
+    public function execute(array $bundleSourceItemsSkus, int $stockId, string $bundleSku): array
     {
         $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
         $select = $this->resourceConnection->getConnection()->select();
         $select->from(
             ['stock' => $stockTable],
-            []
+            ['is_salable' => 'MAX(stock.' . IndexStructure::IS_SALABLE . ')']
         )->joinInner(
             ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
             'stock.sku = source_item.sku',
             []
-        )->joinInner(
-            ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            'source_item.sku = product.sku',
-            ['product.sku', 'stock.quantity']
-        )->joinInner(
-            ['relation' => $this->resourceConnection->getTableName('catalog_product_relation')],
-            'product.entity_id = relation.parent_id',
-            []
-        )->joinInner(
-            ['child_product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            'child_product.entity_id = relation.child_id',
-            []
-        )->joinInner(
-            ['child_stock' => $stockTable],
-            'child_stock.sku = child_product.sku',
-            ['is_salable' => 'MAX(child_stock.' . IndexStructure::IS_SALABLE . ')']
-        )
-            ->where('source_item.' . IndexStructure::SKU . ' in (?)', $bundleSourceItemsSkus)
-            ->group(IndexStructure::SKU);
+        )->where(
+            'source_item.' . IndexStructure::SKU . ' in (?)', $bundleSourceItemsSkus
+        );
 
-        return $select->query()->fetchAll();
+        $indexData[IndexStructure::SKU] = $bundleSku;
+        $indexData[IndexStructure::QUANTITY] = 0;
+        $indexData = array_merge($indexData, $select->query()->fetch());
+
+        return $indexData;
     }
 }

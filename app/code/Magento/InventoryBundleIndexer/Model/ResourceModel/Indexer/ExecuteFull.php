@@ -15,20 +15,20 @@ class ExecuteFull
     private $reindexBySourceItemIds;
 
     /**
-     * @var GetAllBundleSourceItemsIds
+     * @var GetAllBundleChildrenSourceItemsIdsWithSku
      */
-    private $getAllBundleSourceItemsIds;
+    private $getAllBundleChildrenSourceItemsIdsWithSku;
 
     /**
      * @param ReindexBySourceItemIds $reindexBySourceItemIds
-     * @param GetAllBundleSourceItemsIds $getAllBundleSourceItemsIds
+     * @param GetAllBundleChildrenSourceItemsIdsWithSku $getAllBundleChildrenSourceItemsIdsWithSku
      */
     public function __construct(
         ReindexBySourceItemIds $reindexBySourceItemIds,
-        GetAllBundleSourceItemsIds $getAllBundleSourceItemsIds
+        GetAllBundleChildrenSourceItemsIdsWithSku $getAllBundleChildrenSourceItemsIdsWithSku
     ) {
         $this->reindexBySourceItemIds = $reindexBySourceItemIds;
-        $this->getAllBundleSourceItemsIds = $getAllBundleSourceItemsIds;
+        $this->getAllBundleChildrenSourceItemsIdsWithSku = $getAllBundleChildrenSourceItemsIdsWithSku;
     }
 
     /**
@@ -36,7 +36,7 @@ class ExecuteFull
      */
     public function execute()
     {
-        $bundleSourceItemsIds = $this->getAllBundleSourceItemsIds->execute();
-        $this->reindexBySourceItemIds->execute($bundleSourceItemsIds);
+        $bundleChildrenSourceItemsIdsBySku = $this->getAllBundleChildrenSourceItemsIdsWithSku->execute();
+        $this->reindexBySourceItemIds->execute($bundleChildrenSourceItemsIdsBySku);
     }
 }

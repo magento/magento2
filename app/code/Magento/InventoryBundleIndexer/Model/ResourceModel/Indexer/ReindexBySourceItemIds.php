@@ -59,34 +59,36 @@ class ReindexBySourceItemIds
     }
 
     /**
-     * @param array $bundleSourceItemsIds
+     * @param array $bundleChildrenSourceItemsIdsBySku
      * @return void
      */
-    public function execute(array $bundleSourceItemsIds)
+    public function execute(array $bundleChildrenSourceItemsIdsBySku)
     {
-        $skuListInStockList = $this->getSkuListInStock->execute($bundleSourceItemsIds);
-        foreach ($skuListInStockList as $skuListInStock) {
-            $stockId = $skuListInStock->getStockId();
-            $bundlesIndexData = $this->getBundlesIndexDataBySourceItemsSku
-                ->execute($skuListInStock->getSkuList(), $stockId);
+        foreach ($bundleChildrenSourceItemsIdsBySku as $bundleSku => $bundleChildrenSourceItemsIds) {
+            $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIds);
+            foreach ($skuListInStockList as $skuListInStock) {
+                $stockId = $skuListInStock->getStockId();
+                $skuList = $skuListInStock->getSkuList();
+                $bundlesIndexData = $this->getBundlesIndexDataBySourceItemsSku->execute($skuList, $stockId, $bundleSku);
 
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(InventoryIndexer::INDEXER_ID)
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
+                $mainIndexName = $this->indexNameBuilder
+                    ->setIndexId(InventoryIndexer::INDEXER_ID)
+                    ->addDimension('stock_', (string)$stockId)
+                    ->setAlias(Alias::ALIAS_MAIN)
+                    ->build();
 
-            $this->indexHandler->cleanIndex(
-                $mainIndexName,
-                new \ArrayIterator($skuListInStock->getSkuList()),
-                ResourceConnection::DEFAULT_CONNECTION
-            );
+                $this->indexHandler->cleanIndex(
+                    $mainIndexName,
+                    new \ArrayIterator([$bundleSku]),
+                    ResourceConnection::DEFAULT_CONNECTION
+                );
 
-            $this->indexHandler->saveIndex(
-                $mainIndexName,
-                new ArrayIterator($bundlesIndexData),
-                ResourceConnection::DEFAULT_CONNECTION
-            );
+                $this->indexHandler->saveIndex(
+                    $mainIndexName,
+                    new ArrayIterator([$bundlesIndexData]),
+                    ResourceConnection::DEFAULT_CONNECTION
+                );
+            }
         }
     }
 }
