@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterfffface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
@@ -18,21 +21,18 @@ use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmRes
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterfaceFactory;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * {@inheritdoc}
  *
- * This shipping algorithm just iterates over all the sources one by one in no particular order
+ * This shipping algorithm just iterates over all the sources one by one in particular order
  */
 class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
 {
-    /**
-     * @var GetSourceItemsBySkuInterface
-     */
-    private $getSourceItemsBySku;
-
     /**
      * @var SourceSelectionInterfaceFactory
      */
@@ -47,11 +47,6 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
      * @var ShippingAlgorithmResultInterfaceFactory
      */
     private $shippingAlgorithmResultFactory;
-
-    /**
-     * @var bool
-     */
-    private $isShippable;
 
     /**
      * @var StoreManagerInterface
@@ -74,7 +69,20 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
     private $getAssignedSourcesForStock;
 
     /**
-     * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var SourceItemInterfaceFactory
+     */
+    private $sourceItemFactory;
+
+    /**
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
      * @param ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
@@ -82,18 +90,22 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param StockResolverInterface $stockResolver
      * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SourceItemInterfaceFactory $sourceItemFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        GetSourceItemsBySkuInterface $getSourceItemsBySku,
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
         SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory,
         ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory,
         StoreManagerInterface $storeManager,
         WebsiteRepositoryInterface $websiteRepository,
         StockResolverInterface $stockResolver,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
+        SourceItemRepositoryInterface $sourceItemRepository,
+        SourceItemInterfaceFactory $sourceItemFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->getSourceItemsBySku = $getSourceItemsBySku;
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceSelectionFactory = $sourceSelectionFactory;
         $this->sourceItemSelectionFactory = $sourceItemSelectionFactory;
@@ -101,6 +113,9 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
         $this->websiteRepository = $websiteRepository;
         $this->stockResolver = $stockResolver;
         $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
+        $this->sourceItemRepository = $sourceItemRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->sourceItemFactory = $sourceItemFactory;
     }
 
     /**
@@ -108,80 +123,102 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
      */
     public function execute(OrderInterface $order): ShippingAlgorithmResultInterface
     {
-        $this->isShippable = true;
-        $sourceItemSelectionsData = $this->getSourceItemSelectionsData($order);
-
+        $isShippable = true;
         $sourceSelections = [];
-        foreach ($sourceItemSelectionsData as $sourceCode => $sourceItemSelections) {
-            $sourceSelections[] = $this->sourceSelectionFactory->create([
-                'sourceCode' => $sourceCode,
-                'sourceItemSelections' => $sourceItemSelections,
-            ]);
-        }
+        $storeId = $order->getStoreId();
+        $sources = $this->getSourcesByStoreId($storeId);
 
-        $shippingResult = $this->shippingAlgorithmResultFactory->create([
-            'sourceSelections' => $sourceSelections,
-            'isShippable' => $this->isShippable
-        ]);
-        return $shippingResult;
-    }
-
-    /**
-     * Key is source code, value is list of SourceItemSelectionInterface related to this source
-     * @param OrderInterface $order
-     * @return array
-     */
-    private function getSourceItemSelectionsData(OrderInterface $order): array
-    {
-        $sourceItemSelections = [];
-
+        /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {
-            if ($orderItem->isDeleted() || $orderItem->getParentItemId()) {
+            $qtyToDeliver = $orderItem->getQtyOrdered();
+
+            if ($orderItem->isDeleted() || $orderItem->getParentItemId() || $this->isZero($qtyToDeliver)) {
                 continue;
             }
 
             $itemSku = $orderItem->getSku();
-            $sourceItems = $this->getSourceItemsBySku->execute($orderItem->getSku());
+            foreach ($sources as $source) {
+                $sourceItem = $this->getStockItemBySku($source->getSourceCode(), $itemSku);
+                $sourceItemQty = $sourceItem->getQuantity();
 
-            $qtyToDeliver = $orderItem->getQtyOrdered();
-            foreach ($sourceItems as $sourceItem) {
-                if ($qtyToDeliver < 0.0001) {
-                    break;
+                if ($this->isZero($sourceItemQty)) {
+                    continue;
                 }
 
-                $sourceItemQty = $sourceItem->getQuantity();
-                if ($sourceItemQty > 0) {
-                    $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
+                $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
-                    $sourceItemSelections[$sourceItem->getSourceCode()][] = $this->sourceItemSelectionFactory->create([
+                $sourceSelections[] = $this->sourceSelectionFactory->create([
+                    'sourceCode' => $sourceItem->getSourceCode(),
+                    'sourceItemSelections' => $this->sourceItemSelectionFactory->create([
                         'sku' => $itemSku,
                         'qty' => $qtyToDeduct,
                         'qtyAvailable' => $sourceItemQty,
-                    ]);
+                    ]),
+                ]);
 
-                    $qtyToDeliver -= $qtyToDeduct;
-                }
+                $qtyToDeliver -= $qtyToDeduct;
             }
 
-            if ($qtyToDeliver > 0.0001) {
-                $this->isShippable = false;
+            if (!$this->isZero($qtyToDeliver)) {
+                $isShippable = false;
             }
         }
 
-        return $sourceItemSelections;
+
+        return $this->shippingAlgorithmResultFactory->create([
+            'sourceSelections' => $sourceSelections,
+            'isShippable' => $isShippable
+        ]);
     }
 
     /**
+     * Retrieve sources are related to current stock that are ordered by priority
+     *
      * @param int $storeId
      *
-     * @return SourceItemInterface[]
+     * @return SourceInterface[]
      */
-    private function getSourcesByStoreId($storeId)
+    private function getSourcesByStoreId(int $storeId): array
     {
         $store = $this->storeManager->getStore($storeId);
-        $webstore = $this->websiteRepository->getById($store->getId());
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $webstore->getCode());
+        $website = $this->websiteRepository->getById($store->getId());
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
 
        return $this->getAssignedSourcesForStock->execute($stock->getStockId());
+    }
+
+    /**
+     * Retrieve stock item from specific source by SKU
+     *
+     * @param string $stockCode
+     * @param string $sku
+     *
+     * @return SourceItemInterface
+     */
+    private function getStockItemBySku(string $stockCode, string $sku): SourceItemInterface
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $stockCode)
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->create();
+        $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
+
+        if ($sourceItemsResult->getTotalCount() > 0) {
+            return reset($sourceItemsResult->getItems());
+        }
+
+        return $this->sourceItemFactory->create();
+    }
+
+    /**
+     * Compare float number with some epsilon
+     *
+     * @param float $floatNumber
+     *
+     * @return bool
+     */
+    private function isZero(float $floatNumber): bool
+    {
+        return $floatNumber < 0.0001;
     }
 }
