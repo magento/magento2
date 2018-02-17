@@ -11,6 +11,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -32,6 +33,11 @@ class SourceDataProvider extends DataProvider
     private $searchResultFactory;
 
     /**
+     * @var SessionManagerInterface
+     */
+    private $sessionManagerInterface;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -41,6 +47,7 @@ class SourceDataProvider extends DataProvider
      * @param FilterBuilder $filterBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchResultFactory $searchResultFactory
+     * @param SessionManagerInterface $sessionManagerInterface
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -55,6 +62,7 @@ class SourceDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         SourceRepositoryInterface $sourceRepository,
         SearchResultFactory $searchResultFactory,
+        SessionManagerInterface $sessionManagerInterface,
         array $meta = [],
         array $data = []
     ) {
@@ -71,6 +79,7 @@ class SourceDataProvider extends DataProvider
         );
         $this->sourceRepository = $sourceRepository;
         $this->searchResultFactory = $searchResultFactory;
+        $this->sessionManagerInterface = $sessionManagerInterface;
     }
 
     /**
@@ -92,7 +101,12 @@ class SourceDataProvider extends DataProvider
                 ];
                 $data = $dataForSingle;
             } else {
-                $data = [];
+                $sessionData = $this->sessionManagerInterface->getFormData(true);
+                if ($sessionData) {
+                    $data[null] = $sessionData;
+                } else {
+                    $data = [];
+                }
             }
         }
         return $data;
