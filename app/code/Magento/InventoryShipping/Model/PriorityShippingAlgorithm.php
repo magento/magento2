@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterfffface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
