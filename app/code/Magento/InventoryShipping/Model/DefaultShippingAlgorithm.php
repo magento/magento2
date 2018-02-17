@@ -130,22 +130,21 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
 
         /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {
+            $itemSku = $orderItem->getSku();
             $qtyToDeliver = $orderItem->getQtyOrdered();
 
             if ($orderItem->isDeleted() || $orderItem->getParentItemId() || $this->isZero($qtyToDeliver)) {
                 continue;
             }
 
-            $itemSku = $orderItem->getSku();
             foreach ($sources as $source) {
                 $sourceItem = $this->getStockItemBySku($source->getSourceCode(), $itemSku);
                 $sourceItemQty = $sourceItem->getQuantity();
+                $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
                 if ($this->isZero($sourceItemQty)) {
                     continue;
                 }
-
-                $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
                 $sourceSelections[] = $this->sourceSelectionFactory->create([
                     'sourceCode' => $sourceItem->getSourceCode(),
