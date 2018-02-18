@@ -35,7 +35,7 @@ class SourceDataProvider extends DataProvider
     /**
      * @var SessionManagerInterface
      */
-    private $sessionManagerInterface;
+    private $sessionManager;
 
     /**
      * @param string $name
@@ -47,7 +47,7 @@ class SourceDataProvider extends DataProvider
      * @param FilterBuilder $filterBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchResultFactory $searchResultFactory
-     * @param SessionManagerInterface $sessionManagerInterface
+     * @param SessionManagerInterface $sessionManager
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -62,7 +62,7 @@ class SourceDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         SourceRepositoryInterface $sourceRepository,
         SearchResultFactory $searchResultFactory,
-        SessionManagerInterface $sessionManagerInterface,
+        SessionManagerInterface $sessionManager,
         array $meta = [],
         array $data = []
     ) {
@@ -79,7 +79,7 @@ class SourceDataProvider extends DataProvider
         );
         $this->sourceRepository = $sourceRepository;
         $this->searchResultFactory = $searchResultFactory;
-        $this->sessionManagerInterface = $sessionManagerInterface;
+        $this->sessionManager = $sessionManager;
     }
 
     /**
@@ -101,7 +101,7 @@ class SourceDataProvider extends DataProvider
                 ];
                 $data = $dataForSingle;
             } else {
-                $sessionData = $this->sessionManagerInterface->getFormData(true);
+                $sessionData = $this->sessionManager->getFormData(true);
                 if ($sessionData) {
                     $data[null] = $sessionData;
                 } else {
