@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Test\Integration\Model;
 
 use Magento\InventoryIndexer\Indexer\IndexStructure;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

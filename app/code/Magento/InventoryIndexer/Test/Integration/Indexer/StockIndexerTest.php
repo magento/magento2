@@ -9,7 +9,7 @@ namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
-use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
