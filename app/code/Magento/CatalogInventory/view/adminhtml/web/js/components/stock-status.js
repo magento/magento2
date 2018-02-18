@@ -36,6 +36,7 @@ define([
         /** @inheritdoc */
         validate: function () {
             this._super();
+
             if (parseFloat(this.initialValue) !== parseFloat(this.value())) {
                 this.source.set(this.dataScope, this.value());
             } else {

@@ -200,7 +200,6 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                     'imports' => [
                         'visible' => '${$.provider}:data.product.stock_data.manage_stock',
-
                     ],
                 ]
             );
