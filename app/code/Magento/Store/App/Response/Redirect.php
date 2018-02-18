@@ -8,7 +8,6 @@
 namespace Magento\Store\App\Response;
 
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Backend\App\Area;
 
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
@@ -70,8 +69,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         \Magento\Framework\Encryption\UrlCoder $urlCoder,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\Backend\App\Area\FrontNameResolver $backendFrontNameResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Backend\App\Area\FrontNameResolver $backendFrontNameResolver,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -220,7 +219,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
             $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
             $backendUrl= $this->_backendFrontNameResolver->getBackEndUrl();
-            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0 || strpos($url, $backendUrl) === 0);
+            return (strpos($url, $unsecureBaseUrl) === 0) ||
+                (strpos($url, $secureBaseUrl) === 0) || (strpos($url, $backendUrl) === 0);
         }
         return false;
     }
