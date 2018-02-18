@@ -8,6 +8,7 @@
 namespace Magento\Store\App\Response;
 
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Backend\App\Area;
 
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
@@ -47,6 +48,11 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_urlBuilder;
 
     /**
+     * @var \Magento\Backend\App\Area\FrontNameResolver
+     */
+    protected $_backendFrontNameResolver;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -55,6 +61,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Backend\App\Area\FrontNameResolver $backendFrontNameResolver
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -63,6 +70,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         \Magento\Framework\Encryption\UrlCoder $urlCoder,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Backend\App\Area\FrontNameResolver $backendFrontNameResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
         $canUseSessionIdInParam = true
     ) {
@@ -72,6 +80,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $this->_urlCoder = $urlCoder;
         $this->_session = $session;
         $this->_sidResolver = $sidResolver;
+        $this->_backendFrontNameResolver = $backendFrontNameResolver;
         $this->_urlBuilder = $urlBuilder;
     }
 
@@ -210,7 +219,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
             $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
             $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
+            $backendUrl= $this->_backendFrontNameResolver->getBackEndUrl();
+            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0 || strpos($url, $backendUrl) === 0);
         }
         return false;
     }
