@@ -303,5 +303,4 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         }
         return $backendUrl;
     }
-
 }
