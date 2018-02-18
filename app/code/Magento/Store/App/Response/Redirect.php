@@ -7,10 +7,21 @@
  */
 namespace Magento\Store\App\Response;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
+    const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
+
+    const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
+
+    const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+
+    const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -47,6 +58,11 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_urlBuilder;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -55,6 +71,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param ScopeConfigInterface $scopeConfig
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -64,6 +81,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
+        ScopeConfigInterface $scopeConfig,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -73,6 +91,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $this->_session = $session;
         $this->_sidResolver = $sidResolver;
         $this->_urlBuilder = $urlBuilder;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -210,7 +229,11 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
             $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
             $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
+            $backendUrl = $this->getBackEndUrl();
+            return
+                (strpos($url, $unsecureBaseUrl) === 0) ||
+                (strpos($url, $secureBaseUrl) === 0) ||
+                (strpos($url, $backendUrl) === 0);
         }
         return false;
     }
@@ -266,4 +289,20 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 
         return $refererQuery;
     }
+
+    /**
+     * Set and return the backendUrl
+     *
+     * @return string
+     */
+    public function getBackEndUrl()
+    {
+        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
+            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
+        } else {
+            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+        }
+        return $backendUrl;
+    }
+
 }
