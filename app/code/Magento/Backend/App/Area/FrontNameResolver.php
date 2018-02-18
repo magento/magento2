@@ -43,6 +43,11 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     protected $defaultFrontName;
 
     /**
+     * @var string
+     */
+    protected $backendUrl;
+
+    /**
      * @var \Magento\Backend\App\ConfigInterface
      */
     protected $config;
@@ -99,11 +104,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     public function isHostBackend()
     {
-        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
-            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
-        } else {
-            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
-        }
+        $backendUrl = $this->getBackEndUrl();
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
         return stripos($this->getHostWithPort($backendUrl), $host) !== false;
     }
@@ -124,4 +125,24 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         }
         return isset($port) ? $host . ':' . $port : $host;
     }
+
+    /**
+     * Set and return the backendUrl
+     *
+     * @return string
+     */
+    public function getBackEndUrl()
+    {
+        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
+            $this->backendUrl = $this->scopeConfig->getValue(
+                self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE
+            );
+        } else {
+            $this->backendUrl = $this->scopeConfig->getValue(
+                Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE
+            );
+        }
+        return $this->backendUrl;
+    }
+
 }
