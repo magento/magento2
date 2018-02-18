@@ -44,6 +44,11 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_urlBuilderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_backendFrontNameResolverMock;
+
     protected function setUp()
     {
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -53,6 +58,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $this->_sessionMock = $this->createMock(\Magento\Framework\Session\SessionManagerInterface::class);
         $this->_sidResolverMock = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
         $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->_backendFrontNameResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
 
         $this->_model = new \Magento\Store\App\Response\Redirect(
             $this->_requestMock,
@@ -60,7 +66,8 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             $this->_urlCoderMock,
             $this->_sessionMock,
             $this->_sidResolverMock,
-            $this->_urlBuilderMock
+            $this->_urlBuilderMock,
+            $this->_backendFrontNameResolverMock
         );
     }
 
