@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Indexer;
+namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;

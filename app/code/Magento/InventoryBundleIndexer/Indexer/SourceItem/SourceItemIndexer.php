@@ -12,9 +12,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\InventoryBundleIndexer\Indexer\GetAllBundleChildrenSourceItemsIdsWithSku;
-use Magento\InventoryBundleIndexer\Indexer\GetBundleChildrenSourceItemsIdsWithSku;
-use Magento\InventoryBundleIndexer\Indexer\GetBundlesIndexDataBySourceItemsSku;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 
@@ -86,7 +83,7 @@ class SourceItemIndexer
     public function executeFull()
     {
         $bundleChildrenSourceItemsIdsBySku = $this->getAllBundleChildrenSourceItemsIdsWithSku->execute();
-        $this->execute($bundleChildrenSourceItemsIdsBySku);
+        $this->executeList($bundleChildrenSourceItemsIdsBySku);
     }
 
     /**
@@ -105,15 +102,7 @@ class SourceItemIndexer
     public function executeList(array $sourceItemIds)
     {
         $bundleChildrenSourceItemsIdsBySku = $this->getBundleChildrenSourceItemsIdsBySku->execute($sourceItemIds);
-        $this->execute($bundleChildrenSourceItemsIdsBySku);
-    }
 
-    /**
-     * @param array $bundleChildrenSourceItemsIdsBySku
-     * @return void
-     */
-    private function execute(array $bundleChildrenSourceItemsIdsBySku)
-    {
         foreach ($bundleChildrenSourceItemsIdsBySku as $bundleSku => $bundleChildrenSourceItemsIds) {
             $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIds);
             foreach ($skuListInStockList as $skuListInStock) {
