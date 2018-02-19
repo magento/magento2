@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Console\Cli;
@@ -237,7 +238,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private function validateSharedIndex($sharedIndex)
     {
         if (empty($sharedIndex)) {
-            throw new \InvalidArgumentException('sharedIndex must be a valid shared index identifier');
+            throw new \InvalidArgumentException(
+                'The sharedIndex is an invalid shared index identifier. Verify the identifier and try again.'
+            );
         }
         $indexerIds = $this->getIndexerIdsBySharedIndex($sharedIndex);
         if (empty($indexerIds)) {

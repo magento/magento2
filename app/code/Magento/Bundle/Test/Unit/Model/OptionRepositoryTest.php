@@ -116,7 +116,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for bundle product
+     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetThrowsExceptionIfProductIsSimple()
     {
@@ -134,7 +134,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested option doesn't exist
+     * @expectedExceptionMessage The option that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetThrowsExceptionIfOptionDoesNotExist()
     {
@@ -226,7 +226,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete option with id 1
+     * @expectedExceptionMessage The option with "1" ID can't be deleted.
      */
     public function testDeleteThrowsExceptionIfCannotDelete()
     {
@@ -382,7 +382,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save option
+     * @expectedExceptionMessage The option couldn't be saved.
      */
     public function testSaveCanNotSave()
     {
@@ -456,7 +456,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for bundle product
+     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetListException()
     {

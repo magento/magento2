@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -51,7 +52,7 @@ class Write extends Read implements WriteInterface
             $path = (!$this->driver->isFile($path))
                 ? $this->getAbsolutePath($this->path, $path)
                 : $this->getAbsolutePath($path);
-            throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable', [$path]));
+            throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable.', [$path]));
         }
     }
 
@@ -68,7 +69,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         if (!$this->driver->isFile($absolutePath)) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('The file "%1" doesn\'t exist or not a file', [$absolutePath])
+                new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$absolutePath])
             );
         }
     }

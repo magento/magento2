@@ -207,7 +207,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage frontend_label is a required field.
+     * @expectedExceptionMessage "frontend_label" is required. Enter and try again.
      */
     public function testSaveInputExceptionRequiredField()
     {

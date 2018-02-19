@@ -24,7 +24,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{BlocksPage.url}}" stepKey="amOnNewBlockPage"/>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
@@ -41,6 +41,8 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createPreReqCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />

@@ -105,7 +105,10 @@ class Reader
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$file, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$file, $e->getMessage()]
+                    )
                 );
             }
         }
