@@ -34,10 +34,10 @@ define([
         },
 
         /** @inheritdoc */
-        validate: function () {
+        setDifferedFromDefault: function () {
             this._super();
 
-            if (parseFloat(this.initialValue) !== parseFloat(this.value())) {
+            if (this.value() && this.initialValue !== this.value()) {
                 this.source.set(this.dataScope, this.value());
             } else {
                 this.source.remove(this.dataScope);

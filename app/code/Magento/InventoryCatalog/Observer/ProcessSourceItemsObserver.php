@@ -100,11 +100,11 @@ class ProcessSourceItemsObserver implements ObserverInterface
             $sources = $controller->getRequest()->getParam('sources', []);
             $assignedSources = $sources['assigned_sources'] ?? [];
             $this->sourceItemsProcessor->process($productData['sku'], $assignedSources);
-        } elseif (!empty($singleSourceData)) {
+        } elseif (!empty($singleSourceData) || !$product->getId()) {
             /** @var StockItemInterface $stockItem */
             $stockItem = $product->getExtensionAttributes()->getStockItem();
-            $qty = $singleSourceData['qty'] ?? $stockItem->getQty();
-            $isInStock = $singleSourceData['is_in_stock'] ?? (int)$stockItem->getIsInStock();
+            $qty = $singleSourceData['qty'] ?? (empty($stockItem) ? 0 : $stockItem->getQty());
+            $isInStock = $singleSourceData['is_in_stock'] ?? (empty($stockItem) ? 1 : (int)$stockItem->getIsInStock());
             $defaultSourceData = [
                 SourceItemInterface::SKU => $productData['sku'],
                 SourceItemInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
