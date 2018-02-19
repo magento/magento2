@@ -275,6 +275,7 @@ class DataGrid extends Grid
     {
         $this->search($filter);
         $rowItem = $this->getRow($filter);
+        $this->waitLoader();
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectItem)->click();
         } else {
