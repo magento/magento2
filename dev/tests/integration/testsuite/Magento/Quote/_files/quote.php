@@ -8,28 +8,25 @@ use Magento\TestFramework\Helper\Bootstrap;
 Bootstrap::getInstance()->loadArea(Magento\Framework\App\Area::AREA_FRONTEND);
 
 $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->setTypeId('simple')
-    ->setId(1)
+$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
-    ->setTaxClassId(0)
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(
-        [
-            'qty' => 100,
-            'is_in_stock' => 1,
-        ]
-    );
+    ->setStockData([
+        'use_config_manage_stock' => 1,
+        'qty' => 100,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 1,
+    ]);
 
 /** @var Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->save($product);
 
 $addressData = include __DIR__ . '/../../Sales/_files/address_data.php';

@@ -24,17 +24,16 @@ $productRepository = Bootstrap::getObjectManager()
 try {
     $product = $productRepository->get('simple', false, null, true);
     $productRepository->delete($product);
+
+    // Remove product stock registry data.
+    $stockRegistryStorage = Bootstrap::getObjectManager()->get(
+        \Magento\CatalogInventory\Model\StockRegistryStorage::class
+    );
+    $stockRegistryStorage->removeStockItem($product->getId());
+    $stockRegistryStorage->removeStockStatus($product->getId());
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
 }
-
-// Remove product stock registry data.
-/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = Bootstrap::getObjectManager()->get(
-    \Magento\CatalogInventory\Model\StockRegistryStorage::class
-);
-$stockRegistryStorage->removeStockItem(1);
-$stockRegistryStorage->removeStockStatus(1);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
