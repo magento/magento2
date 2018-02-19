@@ -5,21 +5,32 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Indexer;
+namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 
 use ArrayIterator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
+use Magento\InventoryBundleIndexer\Indexer\GetAllBundleChildrenSourceItemsIdsWithSku;
+use Magento\InventoryBundleIndexer\Indexer\GetBundleChildrenSourceItemsIdsWithSku;
+use Magento\InventoryBundleIndexer\Indexer\GetBundlesIndexDataBySourceItemsSku;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 
 /**
- * Check bundle children => if one of them in_stock - make bundle in_stock.
+ * Source Item indexer
+ * Check bundle children, if one of them in_stock - make bundle in_stock
+ *
+ * @api
  */
-class ReindexBySourceItemIds
+class SourceItemIndexer
 {
+    /**
+     * @var GetAllBundleChildrenSourceItemsIdsWithSku
+     */
+    private $getAllBundleChildrenSourceItemsIdsWithSku;
+
     /**
      * @var GetSkuListInStock
      */
@@ -29,6 +40,11 @@ class ReindexBySourceItemIds
      * @var GetBundlesIndexDataBySourceItemsSku
      */
     private $getBundlesIndexDataBySourceItemsSku;
+
+    /**
+     * @var GetBundleChildrenSourceItemsIdsWithSku
+     */
+    private $getBundleChildrenSourceItemsIdsBySku;
 
     /**
      * @var IndexNameBuilder
@@ -41,28 +57,62 @@ class ReindexBySourceItemIds
     private $indexHandler;
 
     /**
-     * @param GetBundlesIndexDataBySourceItemsSku $getBundlesIndexDataBySourceItemsSku
+     * @param GetAllBundleChildrenSourceItemsIdsWithSku $getAllBundleChildrenSourceItemsIdsWithSku
      * @param GetSkuListInStock $getSkuListInStock
+     * @param GetBundlesIndexDataBySourceItemsSku $getBundlesIndexDataBySourceItemsSku
+     * @param GetBundleChildrenSourceItemsIdsWithSku $getBundleChildrenSourceItemsIdsBySku
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexHandlerInterface $indexHandler
      */
     public function __construct(
-        GetBundlesIndexDataBySourceItemsSku $getBundlesIndexDataBySourceItemsSku,
+        GetAllBundleChildrenSourceItemsIdsWithSku $getAllBundleChildrenSourceItemsIdsWithSku,
         GetSkuListInStock $getSkuListInStock,
+        GetBundlesIndexDataBySourceItemsSku $getBundlesIndexDataBySourceItemsSku,
+        GetBundleChildrenSourceItemsIdsWithSku $getBundleChildrenSourceItemsIdsBySku,
         IndexNameBuilder $indexNameBuilder,
         IndexHandlerInterface $indexHandler
     ) {
-        $this->getBundlesIndexDataBySourceItemsSku = $getBundlesIndexDataBySourceItemsSku;
+        $this->getAllBundleChildrenSourceItemsIdsWithSku = $getAllBundleChildrenSourceItemsIdsWithSku;
         $this->getSkuListInStock = $getSkuListInStock;
+        $this->getBundlesIndexDataBySourceItemsSku = $getBundlesIndexDataBySourceItemsSku;
+        $this->getBundleChildrenSourceItemsIdsBySku = $getBundleChildrenSourceItemsIdsBySku;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexHandler = $indexHandler;
+    }
+
+    /**
+     * @return void
+     */
+    public function executeFull()
+    {
+        $bundleChildrenSourceItemsIdsBySku = $this->getAllBundleChildrenSourceItemsIdsWithSku->execute();
+        $this->execute($bundleChildrenSourceItemsIdsBySku);
+    }
+
+    /**
+     * @param int $sourceItemId
+     * @return void
+     */
+    public function executeRow(int $sourceItemId)
+    {
+        $this->executeList([$sourceItemId]);
+    }
+
+    /**
+     * @param array $sourceItemIds
+     * @return void
+     */
+    public function executeList(array $sourceItemIds)
+    {
+        $bundleChildrenSourceItemsIdsBySku = $this->getBundleChildrenSourceItemsIdsBySku->execute($sourceItemIds);
+        $this->execute($bundleChildrenSourceItemsIdsBySku);
     }
 
     /**
      * @param array $bundleChildrenSourceItemsIdsBySku
      * @return void
      */
-    public function execute(array $bundleChildrenSourceItemsIdsBySku)
+    private function execute(array $bundleChildrenSourceItemsIdsBySku)
     {
         foreach ($bundleChildrenSourceItemsIdsBySku as $bundleSku => $bundleChildrenSourceItemsIds) {
             $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIds);

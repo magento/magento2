@@ -7,60 +7,52 @@ declare(strict_types=1);
 
 namespace Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem;
 
-use Magento\InventoryBundleIndexer\Indexer\ExecuteFull;
-use Magento\InventoryBundleIndexer\Indexer\ExecuteList;
+use Magento\InventoryBundleIndexer\Indexer\SourceItem\SourceItemIndexer as BundleSourceItemIndexer;
+use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
 class AddBundleDataToIndex
 {
     /**
-     * @var ExecuteList
+     * @var BundleSourceItemIndexer
      */
-    private $executeList;
+    private $sourceItemIndexer;
 
     /**
-     * @var ExecuteFull
-     */
-    private $executeFull;
-
-    /**
-     * @param ExecuteList $executeList
-     * @param ExecuteFull $executeFull
+     * @param BundleSourceItemIndexer $sourceItemIndexer
      */
     public function __construct(
-        ExecuteList $executeList,
-        ExecuteFull $executeFull
+        BundleSourceItemIndexer $sourceItemIndexer
     ) {
-        $this->executeList = $executeList;
-        $this->executeFull = $executeFull;
+        $this->sourceItemIndexer = $sourceItemIndexer;
     }
 
     /**
-     * @param \Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer $sourceItemIndexer
-     * @param $result
-     *
+     * @param SourceItemIndexer $sourceItemIndexer
+     * @param void $result
      * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecuteFull(
-        \Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer $sourceItemIndexer,
+        SourceItemIndexer $sourceItemIndexer,
         $result
     ) {
-        $this->executeFull->execute();
+        $this->sourceItemIndexer->executeFull();
     }
 
     /**
-     * @param \Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer $subject
-     * @param $result
+     * @param SourceItemIndexer $subject
+     * @param void $result
      * @param array $sourceItemIds
-     *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecuteList(
-        \Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer $subject,
+        SourceItemIndexer $subject,
         $result,
         array $sourceItemIds
     ) {
-        $this->executeList->execute($sourceItemIds);
+        $this->sourceItemIndexer->executeList($sourceItemIds);
     }
 }
