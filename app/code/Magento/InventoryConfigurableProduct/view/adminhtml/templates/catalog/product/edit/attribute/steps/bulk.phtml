@@ -752,7 +752,7 @@
 
             <form data-role="attributes-values-form">
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
-                    <div data-bind="scope: 'quantity_single'">
+                    <div data-bind="scope: 'quantity_resolver'">
                         <!-- ko template: $data.getTemplate() --><!-- /ko -->
                     </div>
                 </fieldset>
@@ -775,7 +775,7 @@
                 </fieldset>
                 <form data-role="attributes-values-form">
                     <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
-                        <div data-bind="scope: 'quantity_each'">
+                        <div data-bind="scope: 'quantity_resolver'">
                             <!-- ko template: $data.getTemplate() --><!-- /ko -->
                         </div>
                     </fieldset>
@@ -797,24 +797,11 @@
                     "noImage": "<?= /* @noEscape */  $block->getNoImageUrl() ?>",
                     "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations",
                     "provider": "product_form.product_form_data_source",
-                    "quantityEachResolver": "quantity_each",
-                    "quantitySingleResolver": "quantity_single"
+                    "quantityResolver": "quantity_resolver"
                 },
-                "quantity_each": {
+                "quantity_resolver": {
                     "component": "Magento_InventoryConfigurableProduct/js/configurable-quantity-resolver",
-                    "name": "quantity_each",
-                    "childTemplate": <?= $block->getJsonConfig() ?>,
-                    "provider": "product_form.product_form_data_source",
-                    "insertListingComponent": "product_form.product_form.assign_sources_configurable_modal.assign_sources_configurable_grid",
-                    "imports": {
-                        "type": "${$.provider}:data.inventoryType",
-                        "attribute": "${$.provider}:data.inventoryAttribute"
-                    }
-                },
-                "quantity_single": {
-                    "component": "Magento_InventoryConfigurableProduct/js/configurable-quantity-resolver",
-                    "dataScope": "",
-                    "name": "quantity_single",
+                    "name": "quantity_resolver",
                     "childTemplate": <?= $block->getJsonConfig() ?>,
                     "provider": "product_form.product_form_data_source",
                     "insertListingComponent": "product_form.product_form.assign_sources_configurable_modal.assign_sources_configurable_grid",

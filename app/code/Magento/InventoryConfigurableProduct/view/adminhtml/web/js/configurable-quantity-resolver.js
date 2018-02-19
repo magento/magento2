@@ -9,8 +9,9 @@ define([
     'ko',
     'uiLayout',
     'mageUtils',
-    'underscore'
-], function (Collection, $, ko, layout, utils, _) {
+    'underscore',
+    'mage/translate'
+], function (Collection, $, ko, layout, utils, _, $t) {
     'use strict';
 
     return Collection.extend({
@@ -46,21 +47,6 @@ define([
         },
 
         /**
-         * @param {Array} firstArray
-         * @param {Array} secondArray
-         * @param {String} identifier
-         *
-         * @returns {Array}
-         */
-        getChanges: function (firstArray, secondArray, identifier) {
-            return firstArray.filter(function(item){
-                return !secondArray.filter(function(data){
-                    return data[identifier] === item[identifier]
-                }).length;
-            }.bind(this));
-        },
-
-        /**
          * Generates data for dynamic-rows records
          * @param {Array} data
          *
@@ -85,20 +71,19 @@ define([
          * @param {Array} data
          */
         handlerInsertValueChange: function (data) {
-            var items;
+            var items,
+                path = this.dynamicRowsName + '.' + this.currentDynamicRows;
 
             if (!this.currentDynamicRows) {
                 return;
             }
-
-            data = this.getChanges(data, this[this.currentDynamicRows](), this.identifier);
 
             if (!data.length) {
                 return;
             }
 
             items = this.generateDynamicRowsData(data);
-            this[this.currentDynamicRows](items);
+            this.source.set(path, items);
         },
 
         /**
@@ -181,19 +166,8 @@ define([
          * @param {String} id - dynamic-rows name that open modal
          */
         handleToggleSourcesModal: function (id) {
-            this.currentDynamicRows = id;
-            this.insertListing().value(this[id]())
-        },
-
-        /**
-         * @param {String} key - prop in current context.
-         */
-        makeObservable: function (key) {
-            if (typeof this[key] === 'function') {
-                delete this[key];
-            }
-
-            this.observe(key);
+            this.currentDynamicRows = this.type === 'each' ? this.currentAttribute.code + '.' + id : id;
+            this.insertListing().value(this.source.get(this.dynamicRowsName + '.' + this.currentDynamicRows))
         },
 
         /**
@@ -202,23 +176,35 @@ define([
          * @param {Object | Undefined} data - optional.
          */
         generateDynamicData: function (data) {
-            var key = data ? data.label : this.dynamicRowsName;
+            var key = data ? data.label : this.dynamicRowsName,
+                drExportTo = this.name + ':dynamicRowsCollection.',
+                drDataScope = 'data.' + this.name + '.',
+                drDataProvider = this.dynamicRowsName + '.';
+
+            if (this.type === 'each') {
+                drDataScope += this.currentAttribute.code + '.';
+                drExportTo += this.currentAttribute.code + '.';
+                drDataProvider += this.currentAttribute.code + '.';
+            }
+
+            drDataScope += key;
+            drExportTo += key;
+            drDataProvider +=key;
 
             return {
                 group: {
                     name: key
                 },
                 button: {
-                    label: data ? data.label : 'Quantity',
+                    label: data ? data.label : $t('Quantity'),
                     targetName: this.name,
                     param: key
                 },
                 dynamicRows: {
-                    dataScope: 'data.' + this.name + '.' + key,
-                    dataProvider: this.name + ':' + key,
+                    dataScope: drDataScope,
+                    dataProvider: drDataProvider,
                     name: this.dynamicRowsName,
-                    exportTo: this.name + ':dynamicRowsCollection.' +
-                    (this.type === 'each' ? this.currentAttribute.code + '.' : '') + key
+                    exportTo: drExportTo
                 }
             };
         },
@@ -233,8 +219,6 @@ define([
                 group = template[this.templateElementNames.group],
                 key = data ? data.label : this.dynamicRowsName,
                 dynamicData = this.generateDynamicData(data);
-
-            this.makeObservable(key);
 
             group.dynamicData = dynamicData.group;
             group.parent = this.name;

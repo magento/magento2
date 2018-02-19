@@ -17,8 +17,7 @@ define([
                 type: '${$.provider}:data.inventoryType'
             },
             modules: {
-                quantityEachResolver: '${$.quantityEachResolver}',
-                quantitySingleResolver : '${$.quantitySingleResolver}'
+                quantityResolver: '${$.quantityResolver}'
             }
         },
 
@@ -76,41 +75,24 @@ define([
         prepareDynamicRowsData: function () {
             var result = [],
                 data,
-                module;
+                module = this.quantityResolver();
 
             if (this.type() === 'each') {
-                module = this.quantityEachResolver();
-                data = this.quantityEachResolver().dynamicRowsCollection[this.attribute().code];
+                data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
                     item.sections()['quantity'] = data[item.label]
                 });
             } else if (this.type() === 'single') {
-                module = this.quantitySingleResolver();
-
                 data = module.dynamicRowsCollection[module.dynamicRowsName];
                 this.sections().quantity.value(data);
             }
         },
 
-        /**
-         * @returns {Object|Null} quantity module
-         */
-        getQuantityModule: function () {
-            switch (this.type()) {
-                case 'each':
-                    return this.quantityEachResolver();
-                case 'single':
-                    return this.quantitySingleResolver();
-            }
-
-            return null;
-        },
-
         /** @inheritdoc */
         validate: function () {
             var valid = true,
-                quantity = this.getQuantityModule();
+                quantity = this.quantityResolver();
 
             this._super();
 

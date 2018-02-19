@@ -38,12 +38,11 @@ class InventoryConfigurablePanel extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'text',
-                        'component' => 'Magento_Ui/js/form/element/abstract',
+                        'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity',
                         'template' => 'ui/form/field',
                         'dataScope' => 'qty',
                         'label' => __('Quantity'),
-                        'formElement' => Form\Element\Input::NAME,
-                        'elementTmpl' => 'Magento_InventoryConfigurableProduct/dynamic-rows/cells/cell-source'
+                        'formElement' => Form\Element\Input::NAME
                     ]
                 ]
             ]

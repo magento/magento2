@@ -49,27 +49,25 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="deleteButtonLabel" xsi:type="string">Remove</item>
-                <item name="identificationDRProperty" xsi:type="string">source</item>
+                <item name="identificationDRProperty" xsi:type="string">source_code</item>
                 <item name="dataProvider" xsi:type="string">${$.dynamicData.dataProvider}</item>
                 <item name="name" xsi:type="string">${$.dynamicData.name}</item>
                 <item name="map" xsi:type="array">
                     <item name="source" xsi:type="string">source</item>
+                    <item name="source_code" xsi:type="string">source_code</item>
                 </item>
             </item>
         </argument>
         <settings>
             <componentType>dynamicRows</componentType>
-            <identificationProperty>source</identificationProperty>
+            <identificationProperty>source_code</identificationProperty>
             <addButton>false</addButton>
             <dataScope>${$.dynamicData.dataScope}</dataScope>
             <dndConfig>
                 <param name="enabled" xsi:type="boolean">false</param>
             </dndConfig>
-            <listens>
-                <link name="recordData">initElements</link>
-            </listens>
             <links>
-                <link name="insertData">${$.dynamicData.dataProvider}</link>
+                <link name="insertData">${$.provider}:${$.dynamicData.dataProvider}</link>
             </links>
             <exports>
                 <link name="recordData">${$.dynamicData.exportTo}</link>
