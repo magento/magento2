@@ -28,7 +28,7 @@ class Stock extends AbstractSource
     }
 
     /**
-     * Add Value Sort To Collection Select
+     * Add Value Sort To Collection Select.
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir
