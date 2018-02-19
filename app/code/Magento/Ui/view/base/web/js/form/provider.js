@@ -16,6 +16,9 @@ define([
                     save: '${ $.submit_url }',
                     beforeSave: '${ $.validate_url }'
                 }
+            },
+            ignoreTmpls: {
+                data: true
             }
         },
 

@@ -20,7 +20,10 @@ define([
                 name: 'name',
                 indexField: 'id',
                 dataScope: 'scope',
-                provider: 'provider'
+                provider: 'provider',
+                columnsData: {
+                    provider: 'provider'
+                }
             });
             FakeElement = function(){
                 return this;

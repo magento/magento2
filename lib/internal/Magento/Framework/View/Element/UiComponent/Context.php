@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;

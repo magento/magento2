@@ -319,4 +319,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>

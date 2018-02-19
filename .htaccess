@@ -46,6 +46,10 @@ DirectoryIndex index.php
         order allow,deny
         deny from all
     </Files>
+    <Files auth.json>
+        order allow,deny
+        deny from all
+    </Files>
     <Files .gitignore>
         order allow,deny
         deny from all

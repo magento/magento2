@@ -10,7 +10,7 @@
 $track = $block->getData('track');
 ?>
 <div class="table-wrapper">
-    <table class="data table order tracking" id="track-history-table-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+    <table class="data table order tracking" id="track-history-table-<?php echo $block->escapeHtml($track->getTracking()); ?>">
         <caption class="table-caption"><?php echo $block->escapeHtml(__('Track history')); ?></caption>
         <thead>
         <tr>

@@ -136,7 +136,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
                 $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );
         }
-        return $value;
+        return parent::getEscapedValue($index);
     }
 
     /**

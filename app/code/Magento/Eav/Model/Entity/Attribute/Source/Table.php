@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
@@ -33,16 +34,27 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     private $storeManager;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param Escaper|null $escaper
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
+        Escaper $escaper = null
     ) {
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
+        if (!$escaper) {
+            $escaper = ObjectManager::getInstance()->get(Escaper::class);
+        }
+        $this->escaper = $escaper;
     }
 
     /**
@@ -145,25 +157,25 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         if (strpos($value, ',')) {
             $isMultiple = true;
             $value = explode(',', $value);
+        } else {
+            $value = [$value];
         }
 
         $options = $this->getSpecificOptions($value, false);
 
-        if ($isMultiple) {
-            $values = [];
-            foreach ($options as $item) {
-                if (in_array($item['value'], $value)) {
-                    $values[] = $item['label'];
-                }
+        $optionsText = [];
+        foreach ($options as $item) {
+            if (in_array($item['value'], $value)) {
+                $optionsText[] = $this->escaper->escapeHtml($item['label']);
             }
-            return $values;
         }
 
-        foreach ($options as $item) {
-            if ($item['value'] == $value) {
-                return $item['label'];
-            }
+        if ($isMultiple) {
+            return $optionsText;
+        } elseif ($optionsText) {
+            return $optionsText[0];
         }
+
         return false;
     }
 

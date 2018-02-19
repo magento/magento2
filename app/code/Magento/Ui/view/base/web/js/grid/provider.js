@@ -17,6 +17,9 @@ define([
         defaults: {
             listens: {
                 params: 'reload'
+            },
+            ignoreTmpls: {
+                data: true
             }
         },
 

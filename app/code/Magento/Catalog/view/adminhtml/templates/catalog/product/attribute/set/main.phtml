@@ -259,7 +259,7 @@
                                             }
 
                                             var newNode = new Ext.tree.TreeNode({
-                                                text : group_name,
+                                                text : group_name.escapeHTML(),
                                                 cls : 'folder',
                                                 allowDrop : true,
                                                 allowDrag : true
@@ -291,6 +291,7 @@
                                 result = true;
                             
                             name = name.strip();
+                            name = name.escapeHTML();
                             if (name === '') {
                                 result = false;
                             }

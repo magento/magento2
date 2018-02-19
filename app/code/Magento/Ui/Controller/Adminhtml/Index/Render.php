@@ -5,9 +5,8 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Index;
 
-use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
@@ -31,6 +30,10 @@ class Render extends AbstractAction
         }
 
         $this->prepareComponent($component);
+
+        if ($component->getContext()->getAcceptType() == 'json') {
+            $this->_response->setHeader('Content-Type', 'application/json');
+        }
 
         $this->_response->appendBody((string) $component->render());
     }

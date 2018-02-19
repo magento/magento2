@@ -57,6 +57,16 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      */
     private $helperMock;
 
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $uiComponentMock;
+
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $uiComponentContextMock;
+
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
@@ -82,6 +92,19 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->uiComponentContextMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class
+        );
+        $this->uiComponentMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Element\UiComponentInterface::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['render']
+        );
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -110,38 +133,23 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $name = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('namespace')
-            ->willReturn($name);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn([]);
-        $this->responseMock->expects($this->once())
-            ->method('appendBody')
-            ->with($renderedData);
+        $this->prepareComponent($name, $renderedData);
+        $this->responseMock->expects($this->never())->method('setHeader');
 
-        /**
-         * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $viewMock
-         */
-        $viewMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponentInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['render']
-        );
-        $viewMock->expects($this->once())
-            ->method('render')
-            ->willReturn($renderedData);
-        $viewMock->expects($this->once())
-            ->method('getChildComponents')
-            ->willReturn([]);
-        $this->uiFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($viewMock);
+        $this->render->executeAjaxRequest();
+    }
+
+    public function testExecuteAjaxJsonRequest()
+    {
+        $name = 'test-name';
+        $renderedData = '{"data": "test"}';
+        $acceptType = 'json';
+
+        $this->prepareComponent($name, $renderedData, $acceptType);
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Type', 'application/json')
+            ->willReturnSelf();
 
         $this->render->executeAjaxRequest();
     }
@@ -160,9 +168,6 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('namespace')
             ->willReturn($name);
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn([]);
         $this->responseMock->expects($this->any())
             ->method('appendBody')
             ->with($renderedData);
@@ -180,7 +185,13 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             true,
             ['render']
         );
-        $componentMock->expects($this->any())
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+	    $contextMock->expects($this->any())
+            ->method('getAcceptType')
+            ->willReturn('html');
+	    $componentMock->expects($this->any())
             ->method('render')
             ->willReturn($renderedData);
         $componentMock->expects($this->any())
@@ -190,6 +201,9 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('acl')
             ->willReturn($acl);
+        $componentMock->expects($this->any())
+            ->method('getContext')
+            ->willReturn($contextMock);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($componentMock);
@@ -207,5 +221,38 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ['Magento_Test::index_index', false],
             ['', null],
         ];
+    }
+    /**
+     * Prepare component mock.
+     *
+     * @param string $namespace
+     * @param string $renderedData
+     * @param string $acceptType
+     * @return void
+     */
+    private function prepareComponent($namespace, $renderedData, $acceptType = 'html')
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('namespace')
+            ->willReturn($namespace);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->once())
+            ->method('render')
+            ->willReturn($renderedData);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
+        $this->uiComponentMock->expects($this->once())
+            ->method('getContext')
+            ->willReturn($this->uiComponentContextMock);
+        $this->uiComponentContextMock->expects($this->once())
+            ->method('getAcceptType')
+            ->willReturn($acceptType);
+        $this->uiFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uiComponentMock);
     }
 }

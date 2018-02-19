@@ -67,29 +67,6 @@ define([
                 expect(type).toEqual('object');
             });
         });
-        describe('"initProperties" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('initProperties')).toBeDefined();
-            });
-            it('Check method type', function () {
-                var type = typeof obj.initProperties;
-
-                expect(type).toEqual('function');
-            });
-            it('Check returned value if method called without arguments', function () {
-                expect(obj.initProperties()).toBeDefined();
-            });
-            it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initProperties();
-
-                expect(type).toEqual('object');
-            });
-            it('Check this.selector property (is modify in initProperties method)', function () {
-                obj.selector = null;
-                obj.initProperties();
-                expect(typeof obj.selector).toEqual('string');
-            });
-        });
         describe('"hideLoader" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('hideLoader')).toBeDefined();

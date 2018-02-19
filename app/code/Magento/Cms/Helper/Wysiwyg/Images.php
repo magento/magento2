@@ -127,17 +127,25 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Decode HTML element id
+     * Decode HTML element id.
      *
      * @param string $id
      * @return string
+     * @throws \InvalidArgumentException When path contains restricted symbols.
      */
     public function convertIdToPath($id)
     {
         if ($id === \Magento\Theme\Helper\Storage::NODE_ROOT) {
             return $this->getStorageRoot();
         } else {
-            return $this->getStorageRoot() . $this->idDecode($id);
+            $path = $this->getStorageRoot() . $this->idDecode($id);
+            if (preg_match('/\.\.(\\\|\/)/', $path)) {
+                throw new \InvalidArgumentException(
+                    'Path is invalid'
+                );
+            }
+
+            return $path;
         }
     }
 
@@ -246,7 +254,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Revert opration to idEncode
+     * Revert operation to idEncode
      *
      * @param string $string
      * @return string

@@ -7,7 +7,7 @@ define([
 ], function (Search) {
     'use strict';
 
-    describe('Magento_Ui/js/search/search', function () {
+    describe('Magento_Ui/js/grid/search/search', function () {
         var searchObj,
             temp;
 
@@ -30,23 +30,6 @@ define([
             spyOn(searchObj, 'chips');
             searchObj.initChips();
             expect(searchObj.chips).toHaveBeenCalled();
-        });
-        it('has clear', function () {
-            spyOn(searchObj, 'value');
-            searchObj.clear();
-            expect(searchObj.value).toHaveBeenCalled();
-        });
-        it('has clear', function () {
-            spyOn(searchObj, 'inputValue');
-            searchObj.cancel();
-            expect(searchObj.inputValue).toHaveBeenCalled();
-        });
-        it('has apply', function () {
-            spyOn(searchObj, 'value');
-            spyOn(searchObj, 'inputValue');
-            searchObj.apply();
-            expect(searchObj.value).toHaveBeenCalled();
-            expect(searchObj.inputValue).toHaveBeenCalled();
         });
         it('has updatePreview', function () {
             spyOn(searchObj, 'updatePreview');

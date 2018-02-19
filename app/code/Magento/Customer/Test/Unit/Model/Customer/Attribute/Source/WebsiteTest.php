@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Framework\Escaper;
 
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,11 +36,19 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\System\Store')
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $escaper */
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->willReturnArgument(1);
 
         $this->model = new Website(
             $this->collectionFactoryMock,
             $this->optionFactoryMock,
-            $this->storeMock
+            $this->storeMock,
+            $escaper
         );
     }
 

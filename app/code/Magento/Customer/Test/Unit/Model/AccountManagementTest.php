@@ -103,6 +103,21 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $customerSecure;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
+     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory
+     */
+    private $visitorCollectionFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SaveHandlerInterface
+     */
+    private $saveHandler;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -126,7 +141,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerMetadata = $this->getMock('Magento\Customer\Api\CustomerMetadataInterface');
         $this->customerRegistry = $this->getMock('Magento\Customer\Model\CustomerRegistry', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
-        $this->encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
+        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
         $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
@@ -163,6 +180,15 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->saveHandler = $this->getMockBuilder(\Magento\Framework\Session\SaveHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->visitorCollectionFactory = $this->getMockBuilder(
+            \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
+        )->disableOriginalConstructor()->getMock();
         $this->accountManagement = $this->objectManagerHelper->getObject(
             'Magento\Customer\Model\AccountManagement',
             [
@@ -188,7 +214,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'dateTime' => $this->dateTime,
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
+                'sessionManager' => $this->sessionManager,
+                'saveHandler' => $this->saveHandler,
+                'visitorCollectionFactory' => $this->visitorCollectionFactory
             ]
         );
     }
@@ -1204,6 +1233,142 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->accountManagement->validateResetPasswordLinkToken(22, 'newStringToken'));
     }
 
+    public function testResetPassword()
+    {
+        $customerEmail = 'customer@example.com';
+        $customerId = '1';
+        $resetToken = 'newStringToken';
+        $newPassword = 'new_password';
+
+        $this->reInitModel();
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->any())->method('getId')->willReturn($customerId);
+        $this->customerRepository->expects($this->atLeastOnce())->method('get')->with($customerEmail)
+            ->willReturn($customer);
+        $this->customer->expects($this->atLeastOnce())->method('getResetPasswordLinkExpirationPeriod')
+            ->willReturn(3600);
+        $this->string->expects($this->any())->method('strlen')->willReturnCallback(
+            function ($string) {
+                return strlen($string);
+            }
+        );
+        $this->customerRegistry->expects($this->atLeastOnce())->method('retrieveSecureData')
+            ->willReturn($this->customerSecure);
+        $this->sessionManager->expects($this->atLeastOnce())->method('destroy');
+        $this->sessionManager->expects($this->atLeastOnce())->method('start');
+        $this->sessionManager->expects($this->atLeastOnce())->method('writeClose');
+        $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
+        $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getSessionId'])
+            ->getMock();
+        $visitor->expects($this->at(0))->method('getSessionId')->willReturn('session_id_1');
+        $visitor->expects($this->at(1))->method('getSessionId')->willReturn('session_id_2');
+        $visitorCollection = $this->getMockBuilder(
+            \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
+        )->disableOriginalConstructor()->setMethods(['addFieldToFilter', 'getItems'])->getMock();
+        $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
+        $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
+        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($visitorCollection);
+        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')
+            ->with(
+                \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(3600);
+        $this->saveHandler->expects($this->at(0))->method('destroy')->with('session_id_1');
+        $this->saveHandler->expects($this->at(1))->method('destroy')->with('session_id_2');
+        $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));
+    }
+
+    public function testChangePassword()
+    {
+        $customerEmail = 'customer@example.com';
+        $customerId = '1';
+        $storeId = '2';
+        $currentPassword = 'password';
+        $newPassword = 'new_password';
+
+        $this->reInitModel();
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->atLeastOnce())->method('getId')->willReturn($customerId);
+        $customer->expects($this->atLeastOnce())->method('getStoreId')->willReturn($storeId);
+        $this->customerRepository->expects($this->atLeastOnce())->method('get')->with($customerEmail)
+            ->willReturn($customer);
+        $this->customerRepository->expects($this->atLeastOnce())->method('save')->with($customer);
+        $this->string->expects($this->atLeastOnce())->method('strlen')->willReturnCallback(
+            function ($string) {
+                return strlen($string);
+            }
+        );
+        $this->customerSecure->expects($this->atLeastOnce())->method('getPasswordHash')
+            ->willReturn(md5($currentPassword));
+        $this->customerSecure->expects($this->atLeastOnce())->method('setPasswordHash')
+            ->with(md5($newPassword));
+        $this->customerRegistry->expects($this->atLeastOnce())->method('retrieveSecureData')
+            ->willReturn($this->customerSecure);
+        $this->encryptor->expects($this->atLeastOnce())->method('validateHash')
+            ->with($currentPassword, md5($currentPassword))->willReturn(true);
+        $this->encryptor->expects($this->atLeastOnce())->method('getHash')->with($newPassword)
+            ->willReturn(md5($newPassword));
+        $this->sessionManager->expects($this->atLeastOnce())->method('start');
+        $this->sessionManager->expects($this->atLeastOnce())->method('writeClose');
+        $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
+        $visitor = $this->getMockBuilder(\Magento\Customer\Model\Visitor::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getSessionId'])
+            ->getMock();
+        $visitor->expects($this->at(0))->method('getSessionId')->willReturn('session_id_1');
+        $visitor->expects($this->at(1))->method('getSessionId')->willReturn('session_id_2');
+        $visitorCollection = $this->getMockBuilder(
+            \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
+        )->disableOriginalConstructor()->setMethods(['addFieldToFilter', 'getItems'])->getMock();
+        $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
+        $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
+        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($visitorCollection);
+        $this->saveHandler->expects($this->at(0))->method('destroy')->with('session_id_1');
+        $this->saveHandler->expects($this->at(1))->method('destroy')->with('session_id_2');
+        $this->dataObjectProcessor->expects($this->atLeastOnce())->method('buildOutputDataArray')
+            ->with($customer, '\Magento\Customer\Api\Data\CustomerInterface')->willReturn([]);
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $this->storeManager->expects($this->atLeastOnce())->method('getStore')->with($storeId)->willReturn($store);
+        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->willReturnMap(
+            [
+                [
+                    \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    null,
+                    3600
+                ],
+                [
+                    AccountManagement::XML_PATH_RESET_PASSWORD_TEMPLATE,
+                    ScopeInterface::SCOPE_STORE,
+                    $storeId,
+                    'template_id'
+                ],
+                [
+                    AccountManagement::XML_PATH_FORGOT_EMAIL_IDENTITY,
+                    ScopeInterface::SCOPE_STORE,
+                    $storeId,
+                    'Sender'
+                ]
+            ]
+        );
+        $transport = $this->getMockBuilder('Magento\Framework\Mail\TransportInterface')->getMock();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('setTemplateIdentifier')->with('template_id')
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('setTemplateOptions')->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('setTemplateVars')->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('setScopeId')->with($storeId)->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('setFrom')->with('Sender')->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('addTo')->willReturnSelf();
+        $this->transportBuilder->expects($this->atLeastOnce())->method('getTransport')->willReturn($transport);
+        $transport->expects($this->atLeastOnce())->method('sendMessage');
+
+        $this->assertTrue($this->accountManagement->changePassword($customerEmail, $currentPassword, $newPassword));
+    }
+
     /**
      * reInit $this->accountManagement object
      */
@@ -1211,7 +1376,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
             ->disableOriginalConstructor()
-            ->setMethods(['getRpToken', 'getRpTokenCreatedAt'])
+            ->setMethods(['getRpToken', 'getRpTokenCreatedAt', 'getPasswordHash', 'setPasswordHash'])
             ->getMock();
 
         $this->customerSecure
@@ -1230,7 +1395,18 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getResetPasswordLinkExpirationPeriod'])
             ->getMock();
-
+        $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['destroy', 'start', 'writeClose'])
+            ->getMockForAbstractClass();
+        $this->visitorCollectionFactory = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->saveHandler = $this->getMockBuilder(\Magento\Framework\Session\SaveHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['destroy'])
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             'Magento\Customer\Model\AccountManagement',
@@ -1239,6 +1415,15 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerRegistry' => $this->customerRegistry,
                 'customerRepository' => $this->customerRepository,
                 'customerModel' => $this->customer,
+                'stringHelper' => $this->string,
+                'scopeConfig' => $this->scopeConfig,
+                'sessionManager' => $this->sessionManager,
+                'visitorCollectionFactory' => $this->visitorCollectionFactory,
+                'saveHandler' => $this->saveHandler,
+                'encryptor' => $this->encryptor,
+                'dataProcessor' => $this->dataObjectProcessor,
+                'storeManager' => $this->storeManager,
+                'transportBuilder' => $this->transportBuilder
             ]
         );
     }

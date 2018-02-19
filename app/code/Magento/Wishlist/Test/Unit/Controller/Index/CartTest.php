@@ -8,6 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 use Magento\Wishlist\Controller\Index\Cart;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -109,6 +110,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|FormKeyValidator
+     */
+    private $formKeyValidatorMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -215,6 +221,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
                     [ResultFactory::TYPE_JSON, [], $this->resultJsonMock]
                 ]
             );
+        $this->formKeyValidatorMock = $this->getMockBuilder(
+            FormKeyValidator::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->formKeyValidatorMock
+            ->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
 
 
         $this->model = new Cart(
@@ -227,7 +243,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
             $this->productHelperMock,
             $this->escaperMock,
             $this->helperMock,
-            $this->cartHelperMock
+            $this->cartHelperMock,
+            $this->formKeyValidatorMock
         );
     }
 

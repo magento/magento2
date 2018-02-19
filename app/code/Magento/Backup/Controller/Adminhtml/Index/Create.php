@@ -19,7 +19,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
+        if (!$this->getRequest()->isAjax() || !$this->getRequest()->isPost()) {
             return $this->_redirect('*/*/index');
         }
 

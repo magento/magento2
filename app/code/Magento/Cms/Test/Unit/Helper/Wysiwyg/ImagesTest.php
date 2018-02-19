@@ -234,6 +234,14 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConvertIdToPathInvalid()
+    {
+        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
+    }
+
+    /**
      * @param string $fileName
      * @param int $maxLength
      * @param string $expectedFilename

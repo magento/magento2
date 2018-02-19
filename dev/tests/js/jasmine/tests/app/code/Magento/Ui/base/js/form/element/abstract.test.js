@@ -6,7 +6,8 @@
 /*eslint max-nested-callbacks: 0*/
 
 define([
-    'Magento_Ui/js/form/element/abstract'
+    'Magento_Ui/js/form/element/abstract',
+    'Magento_Ui/js/lib/ko/initialize'
 ], function (Abstract) {
     'use strict';
 
@@ -43,12 +44,12 @@ define([
                 expect(model.validation).toEqual({});
             });
         });
-        describe('initProperties method', function () {
+        describe('initConfig method', function () {
             it('check for chainable', function () {
-                expect(model.initProperties()).toEqual(model);
+                expect(model.initConfig()).toEqual(model);
             });
             it('check for extend', function () {
-                model.initProperties();
+                model.initConfig();
                 expect(model.uid).toBeDefined();
                 expect(model.noticeId).toBeDefined();
                 expect(model.inputName).toBeDefined();
@@ -87,6 +88,7 @@ define([
                 var extendObject = {
                     simple: true,
                     required: model.required,
+                    _warn: model.warn,
                     _error: model.error,
                     _disabled: model.disabled
                 };
@@ -99,6 +101,7 @@ define([
                 var extendObject = {
                     simple: true,
                     required: model.required,
+                    _warn: model.warn,
                     _error: model.error,
                     _disabled: model.disabled
                 };
@@ -111,6 +114,7 @@ define([
                 var extendObject = {
                     simple: true,
                     example: true,
+                    _warn: model.warn,
                     required: model.required,
                     _error: model.error,
                     _disabled: model.disabled
@@ -125,6 +129,7 @@ define([
                     simple: true,
                     example: true,
                     required: model.required,
+                    _warn: model.warn,
                     _error: model.error,
                     _disabled: model.disabled
                 };

@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model\Customer\Attribute\Source;
 
+use Magento\Framework\Escaper;
+
 /**
  * Customer website attribute source
  *
@@ -21,13 +23,19 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Store\Model\System\Store $store
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Store\Model\System\Store $store
+        \Magento\Store\Model\System\Store $store,
+        Escaper $escaper = null
     ) {
-        parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
+        parent::__construct(
+            $attrOptionCollectionFactory,
+            $attrOptionFactory,
+            $escaper
+        );
         $this->_store = $store;
     }
 

@@ -16,7 +16,13 @@ require.config({
         ]
     },
     paths: {
-        'tests': 'dev/tests/js/jasmine'
+        'tests': 'dev/tests/js/jasmine',
+        'squire': 'node_modules/squirejs/src/Squire'
+    },
+    shim: {
+        squire: {
+            exports: 'squire'
+        }
     },
     config: {
         jsbuild: {

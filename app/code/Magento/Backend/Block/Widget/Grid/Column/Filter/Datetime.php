@@ -152,7 +152,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if ($value instanceof \DateTime) {
                 return $this->_localeDate->formatDateTime($value);
             }
-            return $value;
+            return parent::getEscapedValue($index);
         }
 
         return parent::getEscapedValue($index);

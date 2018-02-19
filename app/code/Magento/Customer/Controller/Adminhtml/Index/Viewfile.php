@@ -154,8 +154,8 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         $directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $fileName = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
-        if (!$directory->isFile($fileName)
-            && !$this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage')->processStorageFile($path)
+        if (mb_strpos($path, '..') !== false || (!$directory->isFile($fileName)
+                && !$this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage')->processStorageFile($path))
         ) {
             throw new NotFoundException(__('Page not found.'));
         }

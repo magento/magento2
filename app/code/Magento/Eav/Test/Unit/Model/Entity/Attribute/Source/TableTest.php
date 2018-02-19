@@ -6,6 +6,7 @@
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TableTest extends \PHPUnit_Framework_TestCase
@@ -19,6 +20,11 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     */
+    private $escaper;
 
     public function setUp()
     {
@@ -39,10 +45,16 @@ class TableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $objectManager->getObject(
             'Magento\Eav\Model\Entity\Attribute\Source\Table',
-            ['attrOptionCollectionFactory' => $this->collectionFactory]
+            [
+                'attrOptionCollectionFactory' => $this->collectionFactory,
+                'escaper' => $this->escaper
+            ]
         );
     }
 
@@ -210,6 +222,10 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
+        $this->escaper
+            ->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->assertEquals($expectedResult, $this->_model->getOptionText($value));
     }
@@ -220,11 +236,24 @@ class TableTest extends \PHPUnit_Framework_TestCase
             [
                 ['1', '2'],
                 '1,2',
-                [['label' => 'test label 1', 'value' => '1'], ['label' => 'test label 2', 'value' => '1']],
+                [
+                    ['label' => 'test label 1', 'value' => '1'],
+                    ['label' => 'test label 2', 'value' => '1'],
+                ],
                 ['test label 1', 'test label 2'],
             ],
-            ['1', '1', [['label' => 'test label', 'value' => '1']], 'test label'],
-            ['5', '5', [['label' => 'test label', 'value' => '5']], 'test label']
+            [
+                ['1'],
+                '1',
+                [['label' => 'test label', 'value' => '1']],
+                'test label',
+            ],
+            [
+                ['5'],
+                '5',
+                [['label' => 'test label', 'value' => '5']],
+                'test label',
+            ],
         ];
     }
 }

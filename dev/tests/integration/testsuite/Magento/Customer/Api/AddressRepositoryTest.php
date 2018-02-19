@@ -197,15 +197,59 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setId(null)
             ->setFirstname(null)
             ->setLastname(null)
-            ->setCustomerId(1);
+            ->setCustomerId(1)
+            ->setRegionId($invalidRegion = 10354);
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
-            $this->assertEquals(InputException::DEFAULT_MESSAGE, $exception->getMessage());
+            $this->assertEquals(
+                InputException::DEFAULT_MESSAGE,
+                $exception->getMessage()
+            );
             $errors = $exception->getErrors();
-            $this->assertCount(2, $errors);
-            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
-            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+            $this->assertCount(3, $errors);
+            $this->assertEquals(
+                'firstname is a required field.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                'lastname is a required field.',
+                $errors[1]->getLogMessage()
+            );
+            $this->assertEquals(
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName'=>'regionId', 'value' => $invalidRegion]
+                ),
+                $errors[2]->getLogMessage()
+            );
+        }
+
+        $address->setCountryId($invalidCountry = 'invalid_id');
+        try {
+            $this->repository->save($address);
+        } catch (InputException $exception) {
+            $this->assertEquals(
+                InputException::DEFAULT_MESSAGE,
+                $exception->getMessage()
+            );
+            $errors = $exception->getErrors();
+            $this->assertCount(3, $errors);
+            $this->assertEquals(
+                'firstname is a required field.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                'lastname is a required field.',
+                $errors[1]->getLogMessage()
+            );
+            $this->assertEquals(
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName'=>'countryId', 'value' => $invalidCountry]
+                ),
+                $errors[2]->getLogMessage()
+            );
         }
     }
 

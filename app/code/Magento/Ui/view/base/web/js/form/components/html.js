@@ -14,7 +14,10 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false,
-            template:       'ui/content/content'
+            template:       'ui/content/content',
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**

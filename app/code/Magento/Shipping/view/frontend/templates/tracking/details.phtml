@@ -19,7 +19,7 @@ $fields = [
     'Weight' => 'getWeight',
 ];
 ?>
-<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+<table class="data table order tracking" id="tracking-table-popup-<?php echo $block->escapeHtml($track->getTracking()); ?>">
     <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
     <tbody>
     <?php if (is_object($track)): ?>

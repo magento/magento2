@@ -297,15 +297,65 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode']));
         }
 
-        if (!\Zend_Validate::is($customerAddressModel->getCountryId(), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId']));
-        }
+        $countryId = (string)$customerAddressModel->getCountryId();
+        if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
+            $exception->addError(
+                __(
+                    InputException::REQUIRED_FIELD,
+                    ['fieldName' => 'countryId']
+                )
+            );
+        } else {
+            //Checking if such country exists.
+            if (!in_array(
+                    $countryId,
+                    $this->directoryData->getCountryCollection()->getAllIds(),
+                    true
+                )
+            ) {
+                $exception->addError(
+                    __(
+                        InputException::INVALID_FIELD_VALUE,
+                        [
+                            'fieldName' => 'countryId',
+                            'value'     => $countryId
+                        ]
+                    )
+                );
+            } else {
+                //If country is valid then validating selected region ID.
+                $countryModel = $customerAddressModel->getCountryModel();
+                $regionCollection = $countryModel->getRegionCollection();
+                $regionId = (string)$customerAddressModel->getRegionId();
+                $allowedRegions = $regionCollection->getAllIds();
+                if ($allowedRegions
+                    && $this->directoryData->isRegionRequired($countryId)
+                    && !\Zend_Validate::is($regionId, 'NotEmpty')
+                ) {
+                    //If country actually has regions and requires you to
+                    //select one then it must be selected.
+                    $exception->addError(
+                        __(
+                            InputException::REQUIRED_FIELD,
+                            ['fieldName' => 'regionId']
+                        )
+                    );
+                } elseif ($regionId
+                    && !in_array($regionId, $allowedRegions, true)
+                ) {
+                    //If a region is selected then checking if it exists.
+                    $exception->addError(
+                        __(
+                            InputException::INVALID_FIELD_VALUE,
+                            [
+                                'fieldName' => 'regionId',
+                                'value'     => $regionId,
+                            ]
+                        )
+                    );
+                }
 
-        if ($customerAddressModel->getCountryModel()->getRegionCollection()->getSize()
-            && !\Zend_Validate::is($customerAddressModel->getRegionId(), 'NotEmpty')
-            && $this->directoryData->isRegionRequired($customerAddressModel->getCountryId())
-        ) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId']));
+            }
         }
 
         return $exception;

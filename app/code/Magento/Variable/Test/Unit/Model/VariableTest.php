@@ -12,11 +12,14 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Variable\Model\Variable */
     private $model;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $escaperMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $resourceMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $resourceCollection;
 
     /** @var  \Magento\Framework\Phrase */
     private $validationFailedPhrase;
@@ -27,17 +30,21 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Variable\Model\ResourceModel\Variable')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resourceCollection = $this->getMockBuilder(
+            \Magento\Variable\Model\ResourceModel\Variable\Collection::class
+        )->disableOriginalConstructor()->getMock();
         $this->model = $this->objectManager->getObject(
             'Magento\Variable\Model\Variable',
             [
                 'escaper' => $this->escaperMock,
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'resourceCollection' => $this->resourceCollection
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -108,22 +115,14 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $transformedOptions = [
             ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
         ];
-
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollection->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMock(
-            'Magento\Variable\Model\Variable',
-            ['getCollection'],
-            $this->objectManager->getConstructArguments('Magento\Variable\Model\Variable')
-        );
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray());
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
     }
 
     public function testGetVariablesOptionArrayWithGroup()
@@ -138,22 +137,14 @@ class VariableTest extends \PHPUnit_Framework_TestCase
                 ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
             ]
         ];
-
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollection->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMock(
-            'Magento\Variable\Model\Variable',
-            ['getCollection'],
-            $this->objectManager->getConstructArguments('Magento\Variable\Model\Variable')
-        );
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
     }
 
     public function validateDataProvider()

@@ -30,6 +30,8 @@ matrix:
     - php: 5.6
       env: TEST_SUITE=static_annotation
 before_install:
+  # Workaround for the MongoDB GPG key expiry
+  - sudo rm /etc/apt/sources.list.d/mongodb-3.4.list
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
   - sh -c 'if [ "$CASHER_DIR" ]; then

@@ -79,8 +79,16 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     public function testEscapeJsQuote()
     {
-        $data = ["Don't do that.", 'lost_key' => "Can't do that."];
-        $expected = ["Don\\'t do that.", "Can\\'t do that."];
+        $data = [
+            "Don't do that.",
+            'lost_key' => "Can't do that.",
+            '</script><script>alert("1");</script>'
+        ];
+        $expected = [
+            "Don\\'t do that.",
+            "Can\\'t do that.",
+            "<' + '/script><' + 'script>alert(\"1\");<' + '/script>"
+        ];
         $this->assertEquals($expected, $this->_escaper->escapeJsQuote($data));
         $this->assertEquals($expected[0], $this->_escaper->escapeJsQuote($data[0]));
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "207385e8f694d9d643166a787b9ca808",
+    "content-hash": "d6e40cef25bc5b701734fbe26a5acbdc",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3969,6 +3969,7 @@
                 }
             ],
             "description": "An extendable framework for version control hooks.",
+            "abandoned": "phpro/grumphp",
             "time": "2014-09-22T08:40:36+00:00"
         },
         {

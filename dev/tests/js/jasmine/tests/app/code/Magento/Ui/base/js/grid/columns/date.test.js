@@ -12,30 +12,23 @@ define([
 
     describe('Ui/js/grid/columns/date', function () {
         var dateRaw = '2015-08-25 15:11:31',
-        dateFormat = 'MMM D, YYYY h:mm:ss A',
-        dateFormatted = 'Aug 25, 2015 3:11:31 PM',
-        date;
+            dateFormat = 'MMM D, YYYY h:mm:ss A',
+            dateFormatted = 'Aug 25, 2015 3:11:31 PM',
+            date;
 
         beforeEach(function () {
             date = new Date ({
-                    dataScope: 'abstract'
-                });
+                dataScope: 'abstract'
+            });
         });
 
-        describe('initProperties method', function () {
+        describe('initConfig method', function () {
             it('check for chainable', function () {
-                expect(date.initProperties()).toEqual(date);
+                expect(date.initConfig()).toEqual(date);
             });
             it('check for extend', function () {
-                date.initProperties();
+                date.initConfig();
                 expect(date.dateFormat).toBeDefined();
-            });
-        });
-
-        describe('getLabel method', function () {
-            it('check format', function () {
-                date.dateFormat = dateFormat;
-                expect(date.getLabel(dateRaw)).toBe(dateFormatted);
             });
         });
     });

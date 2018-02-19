@@ -7,7 +7,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -60,6 +62,11 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
     protected $helper;
 
     /**
+     * @var FormKeyValidator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
@@ -70,6 +77,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param FormKeyValidator|null $formKeyValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -82,7 +90,8 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         \Magento\Wishlist\Helper\Data $helper,
-        \Magento\Checkout\Helper\Cart $cartHelper
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        FormKeyValidator $formKeyValidator = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -93,6 +102,11 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
         $this->escaper = $escaper;
         $this->helper = $helper;
         $this->cartHelper = $cartHelper;
+        if (!$formKeyValidator) {
+            $formKeyValidator = ObjectManager::getInstance()
+                ->get(FormKeyValidator::class);
+        }
+        $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -108,6 +122,10 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      */
     public function execute()
     {
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $this->resultRedirectFactory->create()->setPath('*/*');
+        }
+
         $itemId = (int)$this->getRequest()->getParam('item');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
