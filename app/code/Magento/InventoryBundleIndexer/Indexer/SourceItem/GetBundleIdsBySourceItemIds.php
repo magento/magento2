@@ -55,7 +55,8 @@ class GetBundleIdsBySourceItemIds
             'source_item.' . SourceItem::ID_FIELD_NAME . ' in (?)',
             $sourceItemsIds
         )->where(
-            'bundle_product.' . ProductInterface::TYPE_ID . ' = "' . ProductType::TYPE_BUNDLE . '"'
+            'bundle_product.' . ProductInterface::TYPE_ID . ' = ?',
+            ProductType::TYPE_BUNDLE
         );
 
         $bundleIds = $select->query()->fetchAll();
