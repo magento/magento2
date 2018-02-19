@@ -40,8 +40,10 @@ class IsBackOrderAvailable implements StockItemConditionInterface
     public function match(string $sku, int $stockItem): bool
     {
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
-        if ($legacyStockItem->getBackorders() != Stock::BACKORDERS_NO)
+        if ($legacyStockItem->getBackorders() != Stock::BACKORDERS_NO) {
             return true;
+        }
+
         return false;
     }
 }

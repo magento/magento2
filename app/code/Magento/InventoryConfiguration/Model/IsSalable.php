@@ -47,7 +47,7 @@ class IsSalable implements StockItemConditionInterface
      */
     public function match(string $sku, int $stockItem): bool
     {
-        $stockItemData = $this->getStockItemData->execute($sku,$stockItem);
+        $stockItemData = $this->getStockItemData->execute($sku, $stockItem);
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
         $isSalable = (bool)$stockItemData['is_salable'];
         if (null === $legacyStockItem) {
