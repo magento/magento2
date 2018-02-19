@@ -172,54 +172,7 @@ class Editor extends Textarea
                 ' >' .
                 $this->getEscapedValue() .
                 '</textarea>' .
-                $js .
-                '
-                <script type="text/javascript">
-                //<![CDATA[
-                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
-                window.tinyMCE_GZ.loaded = true;
-                require([
-                "jquery", 
-                "mage/translate", 
-                "mage/adminhtml/events", 
-                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
-                "mage/adminhtml/wysiwyg/widget"
-                ], function(jQuery){' .
-                "\n" .
-                '  (function($) {$.mage.translate.add(' .
-                $this->serializer->serialize(
-                    $this->getButtonTranslations()
-                ) .
-                ')})(jQuery);' .
-                "\n" .
-                $jsSetupObject .
-                ' = new wysiwygSetup("' .
-                $this->getHtmlId() .
-                '", ' .
-                $this->getJsonConfig() .
-                ');' .
-                $forceLoad .
-                '
-                    editorFormValidationHandler = ' .
-                $jsSetupObject .
-                '.onFormValidation.bind(' .
-                $jsSetupObject .
-                ');
-                    Event.observe("toggle' .
-                $this->getHtmlId() .
-                '", "click", ' .
-                $jsSetupObject .
-                '.toggle.bind(' .
-                $jsSetupObject .
-                '));
-                    varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
-                $jsSetupObject .
-                '.openFileBrowser);
-                //]]>
-                });
-                </script>';
+                $js . $this->getInlineJs($jsSetupObject, $forceLoad);
 
             $html = $this->_wrapIntoContainer($html);
             $html .= $this->getAfterElementHtml();
@@ -515,5 +468,64 @@ class Editor extends Textarea
     protected function isToggleButtonVisible()
     {
         return !$this->getConfig()->hasData('toggle_button') || $this->getConfig('toggle_button');
+    }
+
+    /**
+     * Returns inline js to initialize wysiwyg adapter
+     *
+     * @param string $jsSetupObject
+     * @param string $forceLoad
+     * @return string
+     */
+    protected function getInlineJs($jsSetupObject, $forceLoad)
+    {
+        $jsString = '
+                <script type="text/javascript">
+                //<![CDATA[
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
+                window.tinyMCE_GZ.loaded = true;
+                require([
+                "jquery", 
+                "mage/translate", 
+                "mage/adminhtml/events", 
+                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
+                "mage/adminhtml/wysiwyg/widget"
+                ], function(jQuery){' .
+            "\n" .
+            '  (function($) {$.mage.translate.add(' .
+            $this->serializer->serialize(
+                $this->getButtonTranslations()
+            ) .
+            ')})(jQuery);' .
+            "\n" .
+            $jsSetupObject .
+            ' = new wysiwygSetup("' .
+            $this->getHtmlId() .
+            '", ' .
+            $this->getJsonConfig() .
+            ');' .
+            $forceLoad .
+            '
+                    editorFormValidationHandler = ' .
+            $jsSetupObject .
+            '.onFormValidation.bind(' .
+            $jsSetupObject .
+            ');
+                    Event.observe("toggle' .
+            $this->getHtmlId() .
+            '", "click", ' .
+            $jsSetupObject .
+            '.toggle.bind(' .
+            $jsSetupObject .
+            '));
+                    varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
+                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
+                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
+            $jsSetupObject .
+            '.openFileBrowser);
+                //]]>
+                });
+                </script>';
+        return $jsString;
     }
 }
