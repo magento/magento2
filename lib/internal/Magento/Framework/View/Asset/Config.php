@@ -6,14 +6,14 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
+use Magento\Framework\View\Asset\ConfigInterface as ViewAssetConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * View asset configuration interface
  */
-class Config implements \Magento\Framework\View\Asset\ConfigInterface
+class Config implements ViewAssetConfigInterface
 {
     /**
      * XML path for CSS files merge configuration
@@ -51,52 +51,68 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     /**
      * Check whether merging of CSS files is on
      *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     *
      * @return bool
      */
-    public function isMergeCssFiles()
+    public function isMergeCssFiles($scopeType = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MERGE_CSS_FILES,
-            ScopeInterface::SCOPE_STORE
+            $scopeType,
+            $scopeCode
         );
     }
 
     /**
      * Check whether bundling of JavScript files is on
      *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     *
      * @return bool
      */
-    public function isBundlingJsFiles()
+    public function isBundlingJsFiles($scopeType = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_JS_BUNDLING,
-            ScopeInterface::SCOPE_STORE
+            $scopeType,
+            $scopeCode
         );
     }
 
     /**
      * Check whether merging of JavScript files is on
      *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     *
      * @return bool
      */
-    public function isMergeJsFiles()
+    public function isMergeJsFiles($scopeType = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MERGE_JS_FILES,
-            ScopeInterface::SCOPE_STORE
+            $scopeType,
+            $scopeCode
         );
     }
 
     /**
      * Check whether minify of HTML is on
      *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     *
      * @return bool
      */
-    public function isMinifyHtml()
+    public function isMinifyHtml($scopeType = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MINIFICATION_HTML,
-            ScopeInterface::SCOPE_STORE
+            $scopeType,
+            $scopeCode
         );
     }
 }

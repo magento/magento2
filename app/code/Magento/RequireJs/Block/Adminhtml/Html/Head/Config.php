@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\RequireJs\Block\Html\Head;
+namespace Magento\RequireJs\Block\Adminhtml\Html\Head;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\View\Asset\ConfigInterface as ViewAssetConfigInterface;
-use Magento\Framework\View\Asset\File as ViewAssetFile;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context as ViewElementContext;
-use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\Page\Config as ViewPageConfig;
 use Magento\RequireJs\Model\FileManager as RequireJsFileManager;
 
 /**
- * Block responsible for including RequireJs config on the page
+ * Block responsible for including RequireJs config on backend pages
  *
  * @api
  * @since 100.0.2
@@ -34,7 +34,7 @@ class Config extends AbstractBlock
     protected $fileManager;
 
     /**
-     * @var PageConfig
+     * @var ViewPageConfig
      */
     protected $pageConfig;
 
@@ -54,7 +54,7 @@ class Config extends AbstractBlock
      * @param ViewElementContext $context
      * @param RequireJsConfig $config
      * @param RequireJsFileManager $fileManager
-     * @param PageConfig $pageConfig
+     * @param ViewPageConfig $pageConfig
      * @param ViewAssetConfigInterface $bundleConfig
      * @param Minification $minification
      * @param array $data
@@ -63,7 +63,7 @@ class Config extends AbstractBlock
         ViewElementContext $context,
         RequireJsConfig $config,
         RequireJsFileManager $fileManager,
-        PageConfig $pageConfig,
+        ViewPageConfig $pageConfig,
         ViewAssetConfigInterface $bundleConfig,
         Minification $minification,
         array $data = []
@@ -84,6 +84,7 @@ class Config extends AbstractBlock
     protected function _prepareLayout()
     {
         $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $assetCollection = $this->pageConfig->getAssetCollection();
 
         if ($this->minification->isEnabled('js')) {
@@ -114,11 +115,12 @@ class Config extends AbstractBlock
             $after = $requireJsMapConfig->getFilePath();
         }
 
-        if ($this->bundleConfig->isBundlingJsFiles()) {
+        if ($this->bundleConfig->isBundlingJsFiles($scopeType)) {
+
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
 
-            /** @var ViewAssetFile $bundleAsset */
+            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
                 $bundleAssets = array_reverse($bundleAssets);
                 foreach ($bundleAssets as $bundleAsset) {

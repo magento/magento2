@@ -3,55 +3,78 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\State;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\Merged;
+use Magento\Framework\View\Asset\Merged as MergedViewAsset;
 use Magento\Framework\View\Asset\MergeService;
 use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\MergeStrategy\Checksum;
 use Magento\Framework\View\Asset\MergeStrategy\FileExists;
+use Magento\Framework\View\Asset\Remote as RemoteViewAsset;
+use Magento\Store\Model\Resolver\Store as StoreResolver;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 
 /**
  * Class MergeServiceTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MergeServiceTest extends \PHPUnit\Framework\TestCase
+class MergeServiceTest extends TestCase
 {
     /**
      * @var MergeService
      */
-    private $object;
+    protected $object;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private $objectManagerMock;
+    protected $objectManagerMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private $configMock;
+    protected $configMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|PHPUnit_Framework_MockObject_MockObject
      */
-    private $filesystemMock;
+    protected $filesystemMock;
 
     /**
-     * @var Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryWrite|PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateMock;
 
+    /**
+     * @var StoreResolver|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeResolverMock;
+
+    /**
+     * @var AppScopeInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appScope;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -61,19 +84,29 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryMock = $this->getMockBuilder(Filesystem\Directory\Write::class)
+        $this->storeResolverMock = $this->getMockBuilder(StoreResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->directoryMock = $this->getMockBuilder(DirectoryWrite::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->appScope = $this->getMockBuilder(AppScopeInterface::class)
+            ->getMockForAbstractClass();
+
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryMock);
+        $this->storeResolverMock->expects($this->any())
+            ->method('getScope')
+            ->willReturn($this->appScope);
 
         $this->object = (new ObjectManager($this))->getObject(MergeService::class, [
             'objectManager' => $this->objectManagerMock,
             'config' => $this->configMock,
+            'scopeResolver' => $this->storeResolverMock,
             'filesystem' => $this->filesystemMock,
             'state' => $this->stateMock,
         ]);
@@ -93,6 +126,7 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
      * @param string $contentType
      * @param string $appMode
      * @param string $mergeStrategy
+     *
      * @dataProvider getMergedAssetsDataProvider
      */
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
@@ -121,12 +155,12 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
     public static function getMergedAssetsDataProvider()
     {
         $jsAssets = [
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/script_one.js'),
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/script_two.js'),
+            new RemoteViewAsset('http://127.0.0.1/magento/script_one.js'),
+            new RemoteViewAsset('http://127.0.0.1/magento/script_two.js'),
         ];
         $cssAssets = [
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/style_one.css'),
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/style_two.css'),
+            new RemoteViewAsset('http://127.0.0.1/magento/style_one.css'),
+            new RemoteViewAsset('http://127.0.0.1/magento/style_two.css'),
         ];
         return [
             'js production mode' => [
@@ -162,7 +196,7 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
             'css developer mode' => [
                 $cssAssets,
                 'css',
-                \Magento\Framework\App\State::MODE_DEVELOPER,
+                AppState::MODE_DEVELOPER,
                 Checksum::class,
             ]
         ];
@@ -170,7 +204,7 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testCleanMergedJsCss()
     {
-        $mergedDir = \Magento\Framework\View\Asset\Merged::getRelativeDir();
+        $mergedDir = MergedViewAsset::getRelativeDir();
 
         $this->directoryMock->expects($this->once())
             ->method('delete')
