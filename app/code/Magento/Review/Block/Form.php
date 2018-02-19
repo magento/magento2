@@ -7,7 +7,6 @@ namespace Magento\Review\Block;
 
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\Url;
-use Magento\Review\Model\Rating;
 use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 
 /**
@@ -208,17 +207,6 @@ class Form extends \Magento\Framework\View\Element\Template
     public function getRegisterUrl()
     {
         return $this->customerUrl->getRegisterUrl();
-    }
-
-    /**
-     * Replace spaces with underscores in order to build correct element id.
-     *
-     * @param Rating $rating
-     * @return string
-     */
-    public function getCode(Rating $rating)
-    {
-        return $this->escapeHtmlAttr(str_replace(' ', '_', $rating->getRatingCode()));
     }
 
     /**
