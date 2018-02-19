@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Plugin\Indexer\SourceItem;
+namespace Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem;
 
-use Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer\ExecuteFull;
-use Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer\ExecuteList;
+use Magento\InventoryBundleIndexer\Indexer\ExecuteFull;
+use Magento\InventoryBundleIndexer\Indexer\ExecuteList;
 
 class AddBundleDataToIndex
 {

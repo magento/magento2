@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="bundle_source_item_indexer"
-                type="Magento\InventoryBundleIndexer\Plugin\Indexer\SourceItem\AddBundleDataToIndex" />
+                type="Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem\AddBundleDataToIndex" />
     </type>
-    <type name="Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer\ReindexBySourceItemIds">
+    <type name="Magento\InventoryBundleIndexer\Indexer\ReindexBySourceItemIds">
         <arguments>
             <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
         </arguments>

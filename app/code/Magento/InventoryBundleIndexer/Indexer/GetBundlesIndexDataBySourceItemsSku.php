@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryBundleIndexer\Model\ResourceModel\Indexer;
+namespace Magento\InventoryBundleIndexer\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
