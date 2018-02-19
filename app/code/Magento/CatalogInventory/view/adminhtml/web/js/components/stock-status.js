@@ -37,7 +37,7 @@ define([
         setDifferedFromDefault: function () {
             this._super();
 
-            if (this.value() && this.initialValue !== this.value()) {
+            if (this.value() && parseFloat(this.initialValue) !== parseFloat(this.value())) {
                 this.source.set(this.dataScope, this.value());
             } else {
                 this.source.remove(this.dataScope);
