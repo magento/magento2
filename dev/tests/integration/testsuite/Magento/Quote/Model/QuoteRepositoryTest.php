@@ -72,7 +72,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests getting list of quotes according to search criteria.
-     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Quote/_files/quote.php
      */
     public function testGetList()
     {
@@ -83,7 +83,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests getting list of quotes according to different search criterias.
-     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Quote/_files/quote.php
      */
     public function testGetListDoubleCall()
     {
