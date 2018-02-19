@@ -213,6 +213,11 @@ define([
                     $.cookieStorage.set(privateContentVersion, privateContent);
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
+                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                    if (sectionData['data_persistence']) {
+                        buffer.notify(sectionName, sectionData);
+                    }
+                });
                 this.reload([], false);
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
