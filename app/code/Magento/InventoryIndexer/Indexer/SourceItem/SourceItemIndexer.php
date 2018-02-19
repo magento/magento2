@@ -79,7 +79,7 @@ class SourceItemIndexer
     }
 
     /**
-     * @inheritdoc
+     * @return void
      */
     public function executeFull()
     {
@@ -87,15 +87,17 @@ class SourceItemIndexer
     }
 
     /**
-     * @inheritdoc
+     * @param int $sourceItemId
+     * @return void
      */
-    public function executeRow($sourceItemId)
+    public function executeRow(int $sourceItemId)
     {
         $this->executeList([$sourceItemId]);
     }
 
     /**
-     * @inheritdoc
+     * @param array $sourceItemIds
+     * @return void
      */
     public function executeList(array $sourceItemIds)
     {
