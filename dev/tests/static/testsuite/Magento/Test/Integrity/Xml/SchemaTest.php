@@ -107,7 +107,8 @@ class SchemaTest extends \PHPUnit\Framework\TestCase
             '#conf/schema.xml$#',
             '#conf/solrconfig.xml$#',
             '#layout/swagger_index_index.xml$#',
-            '#Doc/etc/doc/vars.xml$#'
+            '#Doc/etc/doc/vars.xml$#',
+            '#phpunit.xml$#',
         ];
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {
