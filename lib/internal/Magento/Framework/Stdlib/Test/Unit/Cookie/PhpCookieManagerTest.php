@@ -234,7 +234,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             } catch (FailureToSendException $fse) {
                 $this->assertTrue(self::$isSetCookieInvoked);
                 $this->assertSame(
-                    'Unable to delete the cookie with cookieName = exception_cookie_name',
+                    'The cookie with "exception_cookie_name" cookieName couldn\'t be deleted.',
                     $fse->getMessage()
                 );
             }

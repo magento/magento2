@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -394,12 +395,13 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
             [
                 'testNumber' => 1,
                 'exceptionClass' => \Magento\Framework\Exception\InvalidEmailOrPasswordException::class,
-                'errorMessage' => __('The password doesn\'t match this account.')
+                'errorMessage' => __("The password doesn't match this account. Verify the password and try again.")
             ],
             [
                 'testNumber' => 2,
                 'exceptionClass' => \Magento\Framework\Exception\State\UserLockedException::class,
-                'errorMessage' => __('You did not sign in correctly or your account is temporarily disabled.')
+                'errorMessage' => __('The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.')
             ]
         ];
     }

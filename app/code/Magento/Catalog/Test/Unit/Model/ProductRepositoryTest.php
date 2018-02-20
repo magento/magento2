@@ -301,7 +301,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetAbsentProduct()
     {
@@ -367,7 +367,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetByIdAbsentProduct()
     {
@@ -592,7 +592,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Unable to save product
+     * @expectedExceptionMessage The product was unable to be saved. Please try again.
      */
     public function testSaveUnableToSaveException()
     {
@@ -707,7 +707,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Unable to remove product product-42
+     * @expectedExceptionMessage The "product-42" product couldn't be removed.
      */
     public function testDeleteException()
     {

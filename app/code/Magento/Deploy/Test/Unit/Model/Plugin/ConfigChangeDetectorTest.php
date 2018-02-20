@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
 use Magento\Deploy\Model\Plugin\ConfigChangeDetector;
@@ -63,7 +64,7 @@ class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage The configuration file has changed. Run app:config:import or setup:upgrade command to synchronize configuration.
+     * @expectedExceptionMessage The configuration file has changed. Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.
      * @codingStandardsIgnoreEnd
      */
     public function testBeforeDispatchWithException()

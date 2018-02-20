@@ -119,7 +119,7 @@ class ImageProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The image content is not valid.
+     * @expectedExceptionMessage The image content is invalid. Verify the content and try again.
      */
     public function testSaveInputException()
     {

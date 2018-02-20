@@ -162,7 +162,9 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                 };
 
                 expect(obj.validateShippingInformation()).toBeFalsy();
-                expect(obj.errorValidationMessage()).toBe('Please specify a shipping method.');
+                expect(obj.errorValidationMessage()).toBe(
+                    'The shipping method is missing. Select the shipping method and try again.'
+                );
                 spyOn(mocks['Magento_Checkout/js/model/quote'], 'shippingMethod').and.returnValue(true);
                 spyOn(mocks['Magento_Customer/js/model/customer'], 'isLoggedIn').and.returnValue(true);
                 expect(obj.validateShippingInformation()).toBeFalsy();

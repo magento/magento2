@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
@@ -289,12 +290,21 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
-            throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
+            throw new SerializationException(
+                new Phrase('An empty custom attribute is specified. Enter the attribute and try again.')
+            );
         } elseif (!$customAttributeCode) {
-            throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
+            throw new SerializationException(
+                new Phrase(
+                    'A custom attribute is specified with a missing attribute code. Verify the code and try again.'
+                )
+            );
         } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
-                new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
+                new Phrase(
+                    'The "' . $customAttributeCode .
+                    '" attribute code doesn\'t have a value set. Enter the value and try again.'
+                )
             );
         }
 
@@ -396,7 +406,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase('%fieldName is a required field.', ['fieldName' => $errorParamField]));
+                $exception->addError(
+                    new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $errorParamField])
+                );
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;
