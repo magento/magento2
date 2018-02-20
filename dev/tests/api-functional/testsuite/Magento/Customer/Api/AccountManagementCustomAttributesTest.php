@@ -103,7 +103,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 $this->assertTrue($response);
             }
         }
-        unset($this->accountManagement);
+        $this->accountManagement = null;
         $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
     }
