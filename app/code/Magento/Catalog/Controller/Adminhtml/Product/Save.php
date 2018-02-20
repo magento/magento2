@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
@@ -103,7 +104,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save product'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('The product was unable to be saved. Please try again.')
+                    );
                 }
 
                 $originalSku = $product->getSku();

@@ -138,7 +138,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
             $this->resourceModel->save($data);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Unable to save checkout agreement %1', $data->getAgreementId())
+                __('The "%1" checkout agreement couldn\'t be saved.', $data->getAgreementId())
             );
         }
         return $data;
@@ -153,7 +153,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
             $this->resourceModel->delete($data);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                __('Unable to remove checkout agreement %1', $data->getAgreementId())
+                __('The "%1" checkout agreement couldn\'t be removed.', $data->getAgreementId())
             );
         }
         return true;
@@ -178,7 +178,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $agreement = $this->agreementFactory->create();
         $this->resourceModel->load($agreement, $id);
         if (!$agreement->getId()) {
-            throw new NoSuchEntityException(__('Checkout agreement with specified ID "%1" not found.', $id));
+            throw new NoSuchEntityException(
+                __('A checkout agreement with the "%1" specified ID wasn\'t found. Verify the ID and try again.', $id)
+            );
         }
         return $agreement;
     }

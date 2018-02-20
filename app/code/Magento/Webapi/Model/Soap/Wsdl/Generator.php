@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Magento\Webapi\Model\AbstractSchemaGenerator;
@@ -375,7 +376,7 @@ class Generator extends AbstractSchemaGenerator
         if (!$allowedServicesMetadata) {
             throw new AuthorizationException(
                 __(
-                    'Consumer is not authorized to access %resources',
+                    "The consumer isn't authorized to access %resources.",
                     ['resources' => implode(', ', $requestedServices)]
                 )
             );

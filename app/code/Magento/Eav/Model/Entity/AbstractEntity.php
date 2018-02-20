@@ -365,7 +365,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
 
         if (!is_array($attributes)) {
-            throw new LocalizedException(__('Unknown parameter'));
+            throw new LocalizedException(__('This parameter is unknown. Verify and try again.'));
         }
 
         foreach ($attributes as $attrCode) {

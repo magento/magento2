@@ -80,7 +80,7 @@
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" stepKey="assertInfo25"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="assertInfo26"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" stepKey="assertInfo27"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo27"/>
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo28"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
