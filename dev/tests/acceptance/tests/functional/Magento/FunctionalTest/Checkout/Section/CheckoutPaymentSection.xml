@@ -11,7 +11,7 @@
     <section name="CheckoutPaymentSection">
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="cartItems" type="text" selector="ol.minicart-items"/>
-        <element name="cartItemsArea" type="textarea" selector=".items-in-cart"/>
+        <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
         <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
