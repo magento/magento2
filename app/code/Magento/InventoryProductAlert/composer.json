@@ -9,6 +9,9 @@
         "magento/module-inventory-api": "100.0.0-dev",
         "magento/module-inventory-sales-api": "100.0.0-dev"
     },
+    "suggest": {
+        "magento/module-product-alert": "100.3.0-dev"
+    },
     "type": "magento2-module",
     "version": "100.0.0-dev",
     "license": [

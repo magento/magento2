@@ -109,6 +109,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerMock;
 
+    /**
+     * @var \Magento\ProductAlert\Model\ProductSaleability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productSaleabilityMock;
+
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -170,6 +175,13 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 [
                     'setCustomerGroupId',
                     'getFinalPrice',
+                ]
+            )->getMock();
+
+        $this->productSaleabilityMock = $this->getMockBuilder(\Magento\ProductAlert\Model\ProductSaleability::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
                     'isSalable',
                 ]
             )->getMock();
@@ -187,7 +199,8 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 'priceColFactory' => $this->priceColFactoryMock,
                 'stockColFactory' => $this->stockColFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
-                'productRepository' => $this->productRepositoryMock
+                'productRepository' => $this->productRepositoryMock,
+                'productSaleability' => $this->productSaleabilityMock
             ]
         );
     }
@@ -391,7 +404,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
-        $this->productMock->expects($this->once())->method('isSalable')->willReturn(false);
+        $this->productSaleabilityMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
         $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());

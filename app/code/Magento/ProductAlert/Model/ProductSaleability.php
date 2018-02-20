@@ -26,5 +26,4 @@ class ProductSaleability
     ) : bool {
         return $product->isSalable();
     }
-
 }
