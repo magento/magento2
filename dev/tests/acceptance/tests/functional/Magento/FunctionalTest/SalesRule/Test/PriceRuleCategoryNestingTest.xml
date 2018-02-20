@@ -56,9 +56,9 @@
         <waitForAjaxLoad stepKey="ajaxLoad3"/>
 
         <waitForElement selector="{{PriceRuleConditionsSection.treeRoot}}" stepKey="wait3"/>
-        <click stepKey="openLatestTreeNode1" selector="{{PriceRuleConditionsSection.lastTreeNode" />
-        <click stepKey="openLatestTreeNode2" selector="{{PriceRuleConditionsSection.lastTreeNode" />
-        <click stepKey="openLatestTreeNode3" selector="{{PriceRuleConditionsSection.lastTreeNode" />
+        <click stepKey="openLatestTreeNode1" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
+        <click stepKey="openLatestTreeNode2" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
+        <click stepKey="openLatestTreeNode3" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
         <waitForAjaxLoad stepKey="ajaxLoad4"/>
         <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
         <click stepKey="openLatestTreeNode4" selector="{{PriceRuleConditionsSection.subcategory4level}}" />
