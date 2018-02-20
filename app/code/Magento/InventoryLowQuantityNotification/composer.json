@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-inventory-low-stock-notification",
+    "name": "magento/module-inventory-low-quantity-notification",
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
@@ -11,7 +11,7 @@
         "magento/module-catalog-inventory": "100.3.*",
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
-        "magento/module-inventory-low-quantity-notification": "100.0.*"
+        "magento/module-inventory-low-quantity-notification-api": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",
