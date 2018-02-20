@@ -10,7 +10,7 @@ namespace Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceI
 use Magento\InventoryBundleIndexer\Indexer\SourceItem\SourceItemIndexer as BundleSourceItemIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
-class AddBundleDataToIndex
+class AddBundleDataToIndexBySourceItemsIds
 {
     /**
      * @var BundleSourceItemIndexer
