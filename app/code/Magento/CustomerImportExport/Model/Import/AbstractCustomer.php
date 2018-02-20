@@ -28,7 +28,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
 
-
     /**#@-*/
 
     /**#@+
