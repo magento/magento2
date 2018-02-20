@@ -753,7 +753,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         if (!isset($this->categoryIdList[$productId])) {
             $this->categoryIdList[$productId] = $this->_productResource->getConnection()->fetchCol(
-                $this->getCategorySelect($productId, $this->category->getCategoryProductTable())
+                $this->getCategorySelect($productId)
             );
         }
 
@@ -764,13 +764,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Returns DB select.
      *
      * @param int $productId
-     * @param string $tableName
      * @return Select
      */
-    private function getCategorySelect($productId, $tableName)
+    private function getCategorySelect($productId)
     {
         return $this->_productResource->getConnection()->select()->from(
-            $tableName,
+            $this->category->getCategoryProductTable(),
             ['category_id']
         )->where(
             'product_id = ?',
