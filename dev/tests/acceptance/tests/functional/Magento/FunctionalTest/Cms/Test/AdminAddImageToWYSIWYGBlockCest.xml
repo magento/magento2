@@ -23,7 +23,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{BlocksPage.url}}" stepKey="amOnNewBlockPage"/>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
@@ -76,7 +76,7 @@
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading7" />
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
@@ -89,16 +89,16 @@
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <waitForPageLoad stepKey="waitForPageLoad8" />
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading7" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading8" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading8" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
         <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading10" />
         <waitForPageLoad stepKey="waitForPageLoad9" />
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <waitForPageLoad stepKey="waitForPageLoad10"/>
