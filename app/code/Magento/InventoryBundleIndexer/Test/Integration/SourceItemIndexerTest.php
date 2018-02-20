@@ -19,10 +19,7 @@ use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @magentoDbIsolation disabled
- */
-class AddBundleDataToIndexTest extends TestCase
+class SourceItemIndexerTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -86,40 +83,64 @@ class AddBundleDataToIndexTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
-     * @param int $qtyChildrenToOutOfStock
-     * @param bool $expectedResult
      * @return void
-     *
-     * @dataProvider executeDataProvider
      */
-    public function testExecute(int $qtyChildrenToOutOfStock, bool $expectedResult)
+    public function testReindexWithAllChildrenInStock()
     {
-        $bundleSku = 'bundle-product-eu-website';
-        if ($qtyChildrenToOutOfStock !== 0) {
-            $this->makeChildrenOutOfStock($qtyChildrenToOutOfStock, $bundleSku);
-        }
-        $bundleStockItemData = $this->getStockItemData->execute($bundleSku, 10);
+        $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals($expectedResult, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(true, (bool)$bundleStockItemData['is_salable']);
     }
 
-    public function executeDataProvider(): array
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/bundle_product_eu_website.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @return void
+     */
+    public function testReindexWithOneChildOutOfStock()
     {
-        return [
-            [0, true],
-            [1, true],
-            [3, false],
-        ];
+        $this->makeChildrenOutOfStock(1);
+        $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
+
+        self::assertEquals(true, (bool)$bundleStockItemData['is_salable']);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/bundle_product_eu_website.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @return void
+     */
+    public function testReindexWithAllChildrenOutOfStock()
+    {
+        $this->makeChildrenOutOfStock(3);
+        $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
+
+        self::assertEquals(false, (bool)$bundleStockItemData['is_salable']);
     }
 
     /**
      * @param int $qty
-     * @param string $parentSku
      * @return void
      */
-    private function makeChildrenOutOfStock(int $qty, string $parentSku)
+    private function makeChildrenOutOfStock(int $qty)
     {
-        $ids = $this->getProductIdsBySkusInterface->execute([$parentSku]);
+        $ids = $this->getProductIdsBySkusInterface->execute(['bundle-product-eu-website']);
         $id = reset($ids);
 
         $childrenIds = $this->selection->getChildrenIds($id)[0];

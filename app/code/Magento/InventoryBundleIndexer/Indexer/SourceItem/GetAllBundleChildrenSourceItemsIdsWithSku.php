@@ -14,7 +14,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Get only bundle source items ids.
+ * Get only bundle children source items ids.
  */
 class GetAllBundleChildrenSourceItemsIdsWithSku
 {
@@ -24,12 +24,20 @@ class GetAllBundleChildrenSourceItemsIdsWithSku
     private $resourceConnection;
 
     /**
+     * @var BundleChildrenSourceItemsIdsSelectProvider
+     */
+    private $bundleChildrenSourceItemsIdsSelectProvider;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param BundleChildrenSourceItemsIdsSelectProvider $bundleChildrenSourceItemsIdsSelectProvider
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        BundleChildrenSourceItemsIdsSelectProvider $bundleChildrenSourceItemsIdsSelectProvider
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->bundleChildrenSourceItemsIdsSelectProvider = $bundleChildrenSourceItemsIdsSelectProvider;
     }
 
     /**
@@ -37,24 +45,8 @@ class GetAllBundleChildrenSourceItemsIdsWithSku
      */
     public function execute(): array
     {
-        $select = $this->resourceConnection->getConnection()->select();
-        $select
-            ->from(
-                ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
-                [SourceItem::ID_FIELD_NAME]
-            )->joinInner(
-                ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                'source_item.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
-                []
-            )->joinInner(
-                ['relation' => $this->resourceConnection->getTableName('catalog_product_relation')],
-                'relation.child_id = product.entity_id',
-                []
-            )->joinInner(
-                ['bundle_product' => $this->resourceConnection->getTableName('catalog_product_entity')],
-                'bundle_product.entity_id = relation.parent_id',
-                ['bundle_product.sku']
-            )->where('bundle_product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
+        $select = $this->bundleChildrenSourceItemsIdsSelectProvider->execute();
+        $select->where('bundle_product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
 
         $bundleChildren = $select->query()->fetchAll();
         $bundleChildrenSourceItemsIdsBySku = [];

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 
+use ArrayIterator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
@@ -15,7 +16,7 @@ use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 /**
  * Prepare index data for bundle product.
  */
-class GetBundlesIndexDataBySourceItemsSku
+class BundleIndexDataProvider
 {
     /**
      * @var StockIndexTableNameResolver
@@ -40,12 +41,12 @@ class GetBundlesIndexDataBySourceItemsSku
     }
 
     /**
-     * @param array $bundleSourceItemsSkus
+     * @param array $bundleChildrenSourceItemsSkus
      * @param int $stockId
      * @param string $bundleSku
-     * @return array
+     * @return ArrayIterator
      */
-    public function execute(array $bundleSourceItemsSkus, int $stockId, string $bundleSku): array
+    public function execute(array $bundleChildrenSourceItemsSkus, int $stockId, string $bundleSku): ArrayIterator
     {
         $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
         $select = $this->resourceConnection->getConnection()->select();
@@ -57,13 +58,16 @@ class GetBundlesIndexDataBySourceItemsSku
             'stock.sku = source_item.sku',
             []
         )->where(
-            'source_item.' . IndexStructure::SKU . ' in (?)', $bundleSourceItemsSkus
+            'source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItemsSkus
         );
+
+        $data = $select->query()->fetch();
+        $isSalable = $data[IndexStructure::IS_SALABLE] ?: 0;
 
         $indexData[IndexStructure::SKU] = $bundleSku;
         $indexData[IndexStructure::QUANTITY] = 0;
-        $indexData = array_merge($indexData, $select->query()->fetch());
+        $indexData[IndexStructure::IS_SALABLE] = $isSalable;
 
-        return $indexData;
+        return new ArrayIterator($indexData);
     }
 }
