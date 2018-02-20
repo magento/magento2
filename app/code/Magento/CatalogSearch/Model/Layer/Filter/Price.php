@@ -174,7 +174,7 @@ class Price extends AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
-        $fromPrice *=  $this->getCurrencyRate();
+        $fromPrice *= $this->getCurrencyRate();
         if ($toPrice) {
             $toPrice *= $this->getCurrencyRate();
         }
@@ -216,7 +216,7 @@ class Price extends AbstractFilter
                 if (strpos($key, '_') === false) {
                     continue;
                 }
-                $data[] = $this->prepareData($key, $count, $data);
+                $data[] = $this->prepareData($key, $count);
             }
         }
 
@@ -267,7 +267,7 @@ class Price extends AbstractFilter
         }
         $label = $this->_renderRangeLabel(
             empty($from) ? 0 : $from,
-            empty($to) ? $to : $to
+            $to
         );
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
