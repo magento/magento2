@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category\Collection;
 
-class UrlRewriteTest extends \PHPUnit\Framework\TestCase
+class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
