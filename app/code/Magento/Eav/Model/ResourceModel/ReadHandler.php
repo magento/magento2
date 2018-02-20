@@ -125,22 +125,20 @@ class ReadHandler implements AttributeInterface
                     $select->where(
                         $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
-                    )->order('t.' . $scope->getIdentifier() . ' DESC');
+                    )->order('t.' . $scope->getIdentifier() . ' ASC');
                 }
                 $selects[] = $select;
             }
-            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
-                $selects,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
-            );
-            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
-                if (isset($attributesMap[$attributeValue['attribute_id']])) {
-                    $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
-                } else {
-                    $this->logger->warning(
-                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
+            foreach($selects as $select) {
+                foreach ($connection->fetchAll($select) as $attributeValue) {
+                    if (isset($attributesMap[$attributeValue['attribute_id']])) {
+                        $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                    } else {
+                        $this->logger->warning(
+                            "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
                         for entity type '$entityType'."
-                    );
+                        );
+                    }
                 }
             }
         }
