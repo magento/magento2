@@ -85,7 +85,7 @@
         </containers>
     </widget>
     <widget id="catalog_product_link"
-            class="Magento\Catalog\Block\Product\Widget\Link"
+            class="Magento\Catalog\Block\Widget\Link"
             is_email_compatible="true"
             placeholder_image="Magento_Catalog::images/product_widget_link.png">
         <label translate="true">Catalog Product Link</label>
@@ -124,7 +124,7 @@
         </parameters>
     </widget>
     <widget id="catalog_category_link"
-            class="Magento\Catalog\Block\Category\Widget\Link"
+            class="Magento\Catalog\Block\Widget\Link"
             is_email_compatible="true"
             placeholder_image="Magento_Catalog::images/category_widget_link.png">
         <label translate="true">Catalog Category Link</label>
