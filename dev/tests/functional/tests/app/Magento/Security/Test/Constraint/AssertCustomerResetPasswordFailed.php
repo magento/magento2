@@ -15,7 +15,8 @@ use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
 class AssertCustomerResetPasswordFailed extends AbstractConstraint
 {
     const TOO_MANY_RESET_REQUESTS_MESSAGE =
-        'Too many password reset requests. Please wait and try again or contact hello@example.com.';
+        'We received too many requests for password resets. '
+        . 'Please wait and try again later or contact hello@example.com.';
 
     /**
      * Assert that customer forgot password message is present on customer account forgot password page.

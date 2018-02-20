@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\DataProvider\Modifier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -63,11 +64,13 @@ class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
 
         foreach ($this->modifiers as $modifier) {
             if (empty($modifier['class'])) {
-                throw new LocalizedException(__('Parameter "class" must be present.'));
+                throw new LocalizedException(__('The parameter "class" is missing. Set the "class" and try again.'));
             }
 
             if (empty($modifier['sortOrder'])) {
-                throw new LocalizedException(__('Parameter "sortOrder" must be present.'));
+                throw new LocalizedException(
+                    __('The parameter "sortOrder" is missing. Set the "sortOrder" and try again.')
+                );
             }
 
             $this->modifiersInstances[$modifier['class']] = $this->factory->create($modifier['class']);

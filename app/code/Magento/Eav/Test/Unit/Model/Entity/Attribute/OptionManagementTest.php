@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
 class OptionManagementTest extends \PHPUnit\Framework\TestCase
@@ -85,7 +86,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Empty attribute code
+     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testAddWithEmptyAttributeCode()
     {
@@ -106,7 +107,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Attribute testAttribute doesn't work with options
+     * @expectedExceptionMessage The "testAttribute" attribute doesn't work with options.
      */
     public function testAddWithWrongOptions()
     {
@@ -139,7 +140,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot save attribute atrCde
+     * @expectedExceptionMessage The "atrCde" attribute can't be saved.
      */
     public function testAddWithCannotSaveException()
     {
@@ -225,7 +226,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot save attribute atrCode
+     * @expectedExceptionMessage The "atrCode" attribute can't be saved.
      */
     public function testDeleteWithCannotSaveException()
     {
@@ -261,7 +262,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Attribute atrCode does not contain option with Id option
+     * @expectedExceptionMessage The "atrCode" attribute doesn't include an option with "option" ID.
      */
     public function testDeleteWithWrongOption()
     {
@@ -290,7 +291,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Attribute atrCode doesn't have any option
+     * @expectedExceptionMessage The "atrCode" attribute has no option.
      */
     public function testDeleteWithAbsentOption()
     {
@@ -315,7 +316,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Empty attribute code
+     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testDeleteWithEmptyAttributeCode()
     {
@@ -348,7 +349,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot load options for attribute atrCode
+     * @expectedExceptionMessage The options for "atrCode" attribute can't be loaded.
      */
     public function testGetItemsWithCannotLoadException()
     {
@@ -371,7 +372,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Empty attribute code
+     * @expectedExceptionMessage The attribute code is empty. Enter the code and try again.
      */
     public function testGetItemsWithEmptyAttributeCode()
     {

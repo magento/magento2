@@ -65,7 +65,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Unable to save rule 1
+     * @expectedExceptionMessage The "1" rule was unable to be saved. Please try again.
      */
     public function testEnableSaveRule()
     {
@@ -106,7 +106,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Unable to remove rule 1
+     * @expectedExceptionMessage The "1" rule couldn't be removed.
      */
     public function testUnableDeleteRule()
     {
@@ -132,7 +132,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Rule with specified ID "1" not found.
+     * @expectedExceptionMessage The rule with the "1" ID wasn't found. Verify the ID and try again.
      */
     public function testGetNonExistentRule()
     {

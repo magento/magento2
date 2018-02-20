@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -114,7 +115,7 @@ class QuantityValidator
         /* @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
         $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
         if (!$stockItem instanceof StockItemInterface) {
-            throw new LocalizedException(__('The stock item for Product is not valid.'));
+            throw new LocalizedException(__('The Product stock item is invalid. Verify the stock item and try again.'));
         }
 
         /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
