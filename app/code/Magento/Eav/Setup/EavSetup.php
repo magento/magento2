@@ -10,6 +10,8 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -100,7 +102,7 @@ class EavSetup
 
     /**
      * Gets setup model
-     *
+     * @deprecated
      * @return ModuleDataSetupInterface
      */
     public function getSetup()
@@ -202,7 +204,10 @@ class EavSetup
         if ($this->getEntityType($code, 'entity_type_id')) {
             $this->updateEntityType($code, $data);
         } else {
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_type'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_entity_type'),
+                $data
+            );
         }
 
         if (isset($params['entity_type_id'])) {
@@ -339,7 +344,10 @@ class EavSetup
         if ($setId) {
             $this->updateAttributeSet($entityTypeId, $setId, $data);
         } else {
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_set'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_attribute_set'),
+                $data
+            );
 
             $this->addAttributeGroup($entityTypeId, $name, $this->_generalGroupName);
         }
@@ -550,7 +558,10 @@ class EavSetup
                 }
                 $data['attribute_group_code'] = $attributeGroupCode;
             }
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_group'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_attribute_group'),
+                $data
+            );
         }
 
         return $this;
@@ -897,7 +908,11 @@ class EavSetup
                     $data = [
                         'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
                     ];
-                    $this->setup->getConnection()->update($optionTable, $data, ['option_id=?' => $intOptionId]);
+                    $this->setup->getConnection()->update(
+                        $optionTable,
+                        $data,
+                        ['option_id=?' => $intOptionId]
+                    );
                 }
 
                 // Default value
@@ -971,7 +986,10 @@ class EavSetup
             $bind = [];
             foreach ($field as $k => $v) {
                 if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                        $attributeFields[$k],
+                        $v
+                    );
                 }
             }
             if (!$bind) {
@@ -1017,16 +1035,23 @@ class EavSetup
         if (!$additionalTable) {
             return $this;
         }
-        $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
+        $additionalTableExists = $this->setup->getConnection()->isTableExists(
+            $this->setup->getTable($additionalTable)
+        );
         if (!$additionalTableExists) {
             return $this;
         }
-        $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+        $attributeFields = $this->setup->getConnection()->describeTable(
+            $this->setup->getTable($additionalTable)
+        );
         if (is_array($field)) {
             $bind = [];
             foreach ($field as $k => $v) {
                 if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                        $attributeFields[$k],
+                        $v
+                    );
                 }
             }
             if (!$bind) {
@@ -1359,7 +1384,10 @@ class EavSetup
             }
             $sortOrder = is_numeric($sortOrder) ? $sortOrder : 1;
             $data['sort_order'] = $sortOrder;
-            $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_attribute'), $data);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable('eav_entity_attribute'),
+                $data
+            );
         }
 
         return $this;
@@ -1440,7 +1468,9 @@ class EavSetup
      */
     private function _getAttributeTableFields()
     {
-        return $this->setup->getConnection()->describeTable($this->setup->getTable('eav_attribute'));
+        return $this->setup->getConnection()->describeTable(
+            $this->setup->getTable('eav_attribute')
+        );
     }
 
     /**
@@ -1464,8 +1494,13 @@ class EavSetup
             return $this;
         }
 
-        $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute'), $bind);
-        $attributeId = $this->setup->getConnection()->lastInsertId($this->setup->getTable('eav_attribute'));
+        $this->setup->getConnection()->insert(
+            $this->setup->getTable('eav_attribute'),
+            $bind
+        );
+        $attributeId = $this->setup->getConnection()->lastInsertId(
+            $this->setup->getTable('eav_attribute')
+        );
         $this->_insertAttributeAdditionalData(
             $data['entity_type_id'],
             array_merge(['attribute_id' => $attributeId], $data)
@@ -1487,10 +1522,14 @@ class EavSetup
         if (!$additionalTable) {
             return $this;
         }
-        $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
+        $additionalTableExists = $this->setup->getConnection()->isTableExists(
+            $this->setup->getTable($additionalTable)
+        );
         if ($additionalTable && $additionalTableExists) {
             $bind = [];
-            $fields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+            $fields = $this->setup->getConnection()->describeTable(
+                $this->setup->getTable($additionalTable)
+            );
             foreach ($data as $k => $v) {
                 if (isset($fields[$k])) {
                     $bind[$k] = $this->setup->getConnection()->prepareColumnValue($fields[$k], $v);
@@ -1499,7 +1538,10 @@ class EavSetup
             if (!$bind) {
                 return $this;
             }
-            $this->setup->getConnection()->insert($this->setup->getTable($additionalTable), $bind);
+            $this->setup->getConnection()->insert(
+                $this->setup->getTable($additionalTable),
+                $bind
+            );
         }
 
         return $this;
