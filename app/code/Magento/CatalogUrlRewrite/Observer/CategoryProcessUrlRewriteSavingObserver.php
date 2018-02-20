@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
@@ -65,8 +66,8 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
         $dataUrlRewriteClassNames = [
-        DataCategoryUrlRewriteDatabaseMap::class,
-        DataProductUrlRewriteDatabaseMap::class
+            DataCategoryUrlRewriteDatabaseMap::class,
+            DataProductUrlRewriteDatabaseMap::class
         ],
         CollectionFactory $storeGroupFactory = null
     ) {
@@ -94,21 +95,8 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
             return;
         }
 
-        /** @var StoreGroupCollection $storeGroupCollection */
-        $storeGroupCollection = $this->storeGroupFactory->create();
-
-        // in case store_id is not set for category then we can assume that it was passed through product import.
-        // store group must have only one root category, so receiving category's path and checking if one of it parts
-        // is the root category for store group, we can set default_store_id value from it to category.
-        // it prevents urls duplication for different stores
-        // ("Default Category/category/sub" and "Default Category2/category/sub")
         if (!$category->hasData('store_id')) {
-            foreach ($storeGroupCollection as $storeGroup) {
-                /** @var \Magento\Store\Model\Group $storeGroup */
-                if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath()))) {
-                    $category->setStoreId($storeGroup->getDefaultStoreId());
-                }
-            }
+            $this->setCategoryStoreIds($category);
         }
 
         $mapsGenerated = false;
@@ -132,13 +120,38 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
     }
 
     /**
+     * in case store_id is not set for category then we can assume that it was passed through product import.
+     * store group must have only one root category, so receiving category's path and checking if one of it parts
+     * is the root category for store group, we can set default_store_id value from it to category.
+     * it prevents urls duplication for different stores
+     * ("Default Category/category/sub" and "Default Category2/category/sub")
+     *
+     * @param Category $category
+     * @return void
+     */
+    private function setCategoryStoreIds($category)
+    {
+        /** @var StoreGroupCollection $storeGroupCollection */
+        $storeGroupCollection = $this->storeGroupFactory->create();
+
+        foreach ($storeGroupCollection as $storeGroup) {
+            /** @var \Magento\Store\Model\Group $storeGroup */
+            if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath()))) {
+                $category->setStoreId($storeGroup->getDefaultStoreId());
+            }
+        }
+    }
+
+    /**
      * Resets used data maps to free up memory and temporary tables
      *
      * @param Category $category
      * @return void
      */
-    private function resetUrlRewritesDataMaps($category)
-    {
+    private
+    function resetUrlRewritesDataMaps(
+        $category
+    ) {
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
