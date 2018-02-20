@@ -194,7 +194,6 @@ class AdvancedInventory extends AbstractModifier
                 $this->meta,
                 [
                     'label' => __('Stock Status'),
-                    'component' => 'Magento_CatalogInventory/js/components/stock-status',
                     'value' => '1',
                     'dataScope' => $fieldCode . '.is_in_stock',
                     'scopeLabel' => '[GLOBAL]',
@@ -226,7 +225,7 @@ class AdvancedInventory extends AbstractModifier
                 ) - 1,
             ];
             $qty['arguments']['data']['config'] = [
-                'component' => 'Magento_CatalogInventory/js/components/qty',
+                'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
                 'group' => 'quantity_and_stock_status_qty',
                 'dataType' => 'number',
                 'formElement' => 'input',

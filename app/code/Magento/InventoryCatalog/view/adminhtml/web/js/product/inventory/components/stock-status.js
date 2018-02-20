@@ -4,14 +4,14 @@
  */
 
 define([
-    'Magento_CatalogInventory/js/components/qty-validator-changer'
+    'Magento_Ui/js/form/element/select'
 ], function (Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             links: {
-                value: false
+                value: null
             }
         },
 
