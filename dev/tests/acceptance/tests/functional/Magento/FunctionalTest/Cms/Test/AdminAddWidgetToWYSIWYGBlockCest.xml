@@ -47,6 +47,8 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />

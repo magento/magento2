@@ -48,6 +48,8 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
@@ -83,6 +85,10 @@
         <!--see image on Storefront-->
         <seeElement selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <after>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
