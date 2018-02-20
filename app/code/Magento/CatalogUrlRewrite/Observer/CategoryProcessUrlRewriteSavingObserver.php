@@ -148,10 +148,8 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param Category $category
      * @return void
      */
-    private
-    function resetUrlRewritesDataMaps(
-        $category
-    ) {
+    private function resetUrlRewritesDataMaps($category)
+    {
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
