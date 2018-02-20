@@ -42,7 +42,6 @@ class ProductSaleability
         $this->isProductSalable = $isProductSalable;
     }
 
-
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Store\Model\Website $website
