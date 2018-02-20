@@ -10,17 +10,20 @@ namespace Magento\InventorySales\Test\Integration\StockManagement;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryReservations\Model\CleanupReservationsInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
 {
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetProductSalableQtyInterface
      */
-    private $getProductQtyInStock;
+    private $getProductSalableQty;
 
     /**
      * @var ProductRepositoryInterface
@@ -38,17 +41,43 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
     private $websiteRepository;
 
     /**
+     * @var ReservationBuilderInterface
+     */
+    private $reservationBuilder;
+
+    /**
+     * @var AppendReservationsInterface
+     */
+    private $appendReservations;
+
+    /**
+     * @var CleanupReservationsInterface
+     */
+    private $cleanupReservations;
+
+    /**
      * @var StockManagement
      */
     private $stockManagement;
 
     protected function setUp()
     {
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetSalableProductQtyInterface::class);
+        $this->getProductSalableQty = Bootstrap::getObjectManager()->get(GetProductSalableQtyInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
+        $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
+        $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->stockManagement = Bootstrap::getObjectManager()->get(StockManagement::class);
+    }
+
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
+    protected function tearDown()
+    {
+        $this->cleanupReservations->execute();
     }
 
     /**
@@ -63,12 +92,17 @@ class ReservationPlacingDuringRegisterProductsSaleTest extends TestCase
      */
     public function testRegisterProductsSale()
     {
-        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductSalableQty->execute('SKU-1', 10));
 
         $product = $this->productRepository->get('SKU-1');
         $website = $this->websiteRepository->get('eu_website');
         $this->stockManagement->registerProductsSale([$product->getId() => 3.5], $website->getId());
 
-        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(5, $this->getProductSalableQty->execute('SKU-1', 10));
+
+        $this->appendReservations->execute([
+            // unreserved 3.5 units for cleanup
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
+        ]);
     }
 }

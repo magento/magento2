@@ -226,7 +226,8 @@ class AdvancedInventory extends AbstractModifier
                 ) - 1,
             ];
             $qty['arguments']['data']['config'] = [
-                'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                'component' => 'Magento_CatalogInventory/js/components/qty',
+                'group' => 'quantity_and_stock_status_qty',
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',
