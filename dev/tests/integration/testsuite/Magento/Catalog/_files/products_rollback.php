@@ -21,9 +21,6 @@ try {
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Product already removed
 }
-$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
-$stockRegistryStorage->removeStockItem(1);
 
 try {
     $customDesignProduct = $productRepository->get('custom-design-simple-product', false, null, true);
@@ -31,7 +28,11 @@ try {
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Product already removed
 }
-$stockRegistryStorage->removeStockItem(2);
+
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->clean();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
