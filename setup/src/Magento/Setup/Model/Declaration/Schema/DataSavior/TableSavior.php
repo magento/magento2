@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\DataSavior;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
@@ -31,19 +32,27 @@ class TableSavior implements DataSaviorInterface
     private $dumpAccessor;
 
     /**
+     * @var SelectFactory
+     */
+    private $selectFactory;
+
+    /**
      * TableDump constructor.
      * @param ResourceConnection $resourceConnection
      * @param SelectGeneratorFactory $selectGeneratorFactory
      * @param DumpAccessorInterface $dumpAccessor
+     * @param SelectFactory $selectFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SelectGeneratorFactory $selectGeneratorFactory,
-        DumpAccessorInterface $dumpAccessor
+        DumpAccessorInterface $dumpAccessor,
+        SelectFactory $selectFactory
     ) {
         $this->selectGeneratorFactory = $selectGeneratorFactory;
         $this->resourceConnection = $resourceConnection;
         $this->dumpAccessor = $dumpAccessor;
+        $this->selectFactory = $selectFactory;
     }
 
     /**
@@ -55,11 +64,8 @@ class TableSavior implements DataSaviorInterface
     private function prepareTableSelect(Table $table)
     {
         $adapter = $this->resourceConnection->getConnection($table->getResource());
-        $select = $adapter
-            ->select()
-            ->setPart('disable_staging_preview', true)
-            ->from($table->getName());
-
+        $select = $this->selectFactory->create($adapter);
+        $select->from($table->getName());
         return $select;
     }
 

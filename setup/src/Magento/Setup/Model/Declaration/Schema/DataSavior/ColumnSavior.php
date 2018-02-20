@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\DataSavior;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
@@ -37,22 +38,30 @@ class ColumnSavior implements DataSaviorInterface
     private $dumpAccessor;
 
     /**
+     * @var SelectFactory
+     */
+    private $selectFactory;
+
+    /**
      * TableDump constructor.
      * @param ResourceConnection $resourceConnection
      * @param SelectGeneratorFactory $selectGeneratorFactory
      * @param DumpAccessorInterface $dumpAccessor
      * @param UniqueConstraintsResolver $uniqueConstraintsResolver
+     * @param SelectFactory $selectFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SelectGeneratorFactory $selectGeneratorFactory,
         DumpAccessorInterface $dumpAccessor,
-        UniqueConstraintsResolver $uniqueConstraintsResolver
+        UniqueConstraintsResolver $uniqueConstraintsResolver,
+        SelectFactory $selectFactory
     ) {
         $this->selectGeneratorFactory = $selectGeneratorFactory;
         $this->resourceConnection = $resourceConnection;
         $this->uniqueConstraintsResolver = $uniqueConstraintsResolver;
         $this->dumpAccessor = $dumpAccessor;
+        $this->selectFactory = $selectFactory;
     }
 
     /**
@@ -65,11 +74,8 @@ class ColumnSavior implements DataSaviorInterface
     private function prepareColumnSelect(Column $column, array $fieldsToDump)
     {
         $adapter = $this->resourceConnection->getConnection($column->getTable()->getResource());
-        $select = $adapter
-            ->select()
-            ->setPart('disable_staging_preview', true)
-            ->from($column->getTable()->getName(), $fieldsToDump);
-
+        $select = $this->selectFactory->create($adapter);
+        $select->from($column->getTable()->getName(), $fieldsToDump);
         return $select;
     }
 
