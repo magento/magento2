@@ -31,10 +31,6 @@
         </before>
         <after>
             <deleteData createDataKey="subcategory1" stepKey="deleteCategory1" />
-            <deleteData createDataKey="subcategory2" stepKey="deleteCategory2" />
-            <deleteData createDataKey="subcategory3" stepKey="deleteCategory3" />
-            <deleteData createDataKey="subcategory4" stepKey="deleteCategory4" />
-            <deleteData createDataKey="subcategory5" stepKey="deleteCategory5" />
             <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage" />
         </after>
 
