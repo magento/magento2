@@ -8,7 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="BlocksPage" url="cms/block/new/" area="admin" module="Magento_Block">
+    <page name="CmsBlocksPage" url="cms/block" area="admin" module="Magento_Block">
         <section name="BlockPageActionsSection"/>
     </page>
 </pages>

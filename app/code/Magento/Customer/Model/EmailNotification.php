@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -356,7 +357,9 @@ class EmailNotification implements EmailNotificationInterface
         $types = self::TEMPLATE_TYPES;
 
         if (!isset($types[$type])) {
-            throw new LocalizedException(__('Please correct the transactional account email type.'));
+            throw new LocalizedException(
+                __('The transactional account email type is incorrect. Verify and try again.')
+            );
         }
 
         if (!$storeId) {

@@ -80,7 +80,10 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         } catch (\Exception $e) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
             throw new AuthenticationException(
-                __('You did not sign in correctly or your account is temporarily disabled.')
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
             );
         }
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
@@ -107,7 +110,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                 $token->delete();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('The tokens could not be revoked.'));
+            throw new LocalizedException(__("The tokens couldn't be revoked."));
         }
         return true;
     }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -105,7 +106,7 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('group', 0)->setPostValue('namespace', 'customer_listing');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
+            $this->equalTo(['An item needs to be selected. Select and try again.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

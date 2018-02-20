@@ -187,7 +187,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             } catch (NonExistingRequestNameException $e) {
                 $this->_logger->error($e->getMessage());
                 throw new LocalizedException(
-                    __('Sorry, something went wrong. You can find out more in the error log.')
+                    __('An error occurred. For details, see the error log.')
                 );
             }
             $temporaryStorage = $this->temporaryStorageFactory->create();
