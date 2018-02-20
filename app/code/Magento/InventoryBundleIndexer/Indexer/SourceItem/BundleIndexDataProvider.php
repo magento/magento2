@@ -57,9 +57,7 @@ class BundleIndexDataProvider
             ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
             'stock.sku = source_item.sku',
             []
-        )->where(
-            'source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItemsSkus
-        );
+        )->where('source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItemsSkus);
 
         $data = $select->query()->fetch();
         $isSalable = $data[IndexStructure::IS_SALABLE] ?: 0;
@@ -68,6 +66,6 @@ class BundleIndexDataProvider
         $indexData[IndexStructure::QUANTITY] = 0;
         $indexData[IndexStructure::IS_SALABLE] = $isSalable;
 
-        return new ArrayIterator($indexData);
+        return new ArrayIterator([$indexData]);
     }
 }
