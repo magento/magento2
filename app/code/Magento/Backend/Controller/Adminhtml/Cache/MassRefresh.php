@@ -12,6 +12,13 @@ use Magento\Framework\Controller\ResultFactory;
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::refresh_cache_type';
+
+    /**
      * Mass action for cache refresh
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

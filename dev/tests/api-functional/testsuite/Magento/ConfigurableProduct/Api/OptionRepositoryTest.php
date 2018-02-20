@@ -85,7 +85,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetUndefinedProduct()
     {
@@ -98,7 +98,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
      */
     public function testGetUndefinedOption()
     {
-        $expectedMessage = 'Requested option doesn\'t exist: %1';
+        $expectedMessage = 'The "%1" entity that was requested doesn\'t exist. Verify the entity and try again.';
         $productSku = 'configurable';
         $attributeId = -42;
         try {

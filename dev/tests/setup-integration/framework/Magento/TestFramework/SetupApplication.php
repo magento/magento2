@@ -6,10 +6,9 @@
 namespace Magento\TestFramework;
 
 /**
- * Encapsulates application installation, initialization and uninstall, add flag to skip database dump
+ * Encapsulates application installation, initialization and uninstall, add flag to skip database dump.
  *
- *
- * Allow installation and uninstallation
+ * Allow installation and uninstallation.
  */
 class SetupApplication extends Application
 {
@@ -17,6 +16,16 @@ class SetupApplication extends Application
      * {@inheritdoc}
      */
     protected $dumpDb = false;
+
+    /**
+     * @var bool
+     */
+    protected $canLoadArea = false;
+
+    /**
+     * @var bool
+     */
+    protected $canInstallSequence = false;
 
     /**
      * {@inheritdoc}

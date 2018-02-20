@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
 class AbstractCreateTest extends \PHPUnit\Framework\TestCase
@@ -66,5 +68,35 @@ class AbstractCreateTest extends \PHPUnit\Framework\TestCase
             ->with($price)
             ->willReturn($resultPrice);
         $this->assertEquals($resultPrice, $this->model->getItemPrice($this->productMock));
+    }
+
+    /**
+     * @param $item
+     *
+     * @dataProvider getProductDataProvider
+     */
+    public function testGetProduct($item)
+    {
+        $product = $this->model->getProduct($item);
+
+        self::assertInstanceOf(Product::class, $product);
+    }
+
+    /**
+     * DataProvider for testGetProduct.
+     *
+     * @return array
+     */
+    public function getProductDataProvider()
+    {
+        $productMock = $this->createMock(Product::class);
+
+        $itemMock = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+
+        return [
+            [$productMock],
+            [$itemMock],
+        ];
     }
 }

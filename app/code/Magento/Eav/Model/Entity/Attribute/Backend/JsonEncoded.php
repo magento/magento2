@@ -58,7 +58,7 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
     {
         parent::afterLoad($object);
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $object->setData($attrCode, $this->jsonSerializer->unserialize($object->getData($attrCode)));
+        $object->setData($attrCode, $this->jsonSerializer->unserialize($object->getData($attrCode) ?: '{}'));
         return $this;
     }
 }
