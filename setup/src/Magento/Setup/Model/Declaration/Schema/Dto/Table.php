@@ -140,7 +140,7 @@ class Table extends GenericElement implements
      * and can be only one for table
      * it name is allocated into it constraint
      *
-     * @return bool|Constraint
+     * @return bool|Internal
      */
     public function getPrimaryConstraint()
     {

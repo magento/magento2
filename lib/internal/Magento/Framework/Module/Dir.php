@@ -20,6 +20,7 @@ class Dir
     const MODULE_I18N_DIR = 'i18n';
     const MODULE_VIEW_DIR = 'view';
     const MODULE_CONTROLLER_DIR = 'Controller';
+    const MODULE_SETUP_DIR = 'Setup';
     /**#@-*/
 
     /**#@-*/
@@ -50,7 +51,8 @@ class Dir
                 self::MODULE_ETC_DIR,
                 self::MODULE_I18N_DIR,
                 self::MODULE_VIEW_DIR,
-                self::MODULE_CONTROLLER_DIR
+                self::MODULE_CONTROLLER_DIR,
+                self::MODULE_SETUP_DIR
             ])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
