@@ -39,6 +39,7 @@ class IsBackOrderAvailable implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
+
         if ($legacyStockItem->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO) {
             return true;
         }

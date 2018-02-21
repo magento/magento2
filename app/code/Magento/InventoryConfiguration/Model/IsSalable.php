@@ -48,6 +48,7 @@ class IsSalable implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
         $isSalable = (bool)$stockItemData['is_salable'];
         if (null === $legacyStockItem) {
