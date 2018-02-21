@@ -16,13 +16,15 @@
             <description value="You should be able to create a CMS Page via the Admin."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-25580"/>
-            <group value="cms"/>
+            <group value="Cms"/>
         </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        </before>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
-
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPage}}" stepKey="clickAddNewPage"/>
@@ -33,6 +35,7 @@
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillFieldContent"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="waitForSaveButtonVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>

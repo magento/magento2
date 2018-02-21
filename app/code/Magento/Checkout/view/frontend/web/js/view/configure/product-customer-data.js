@@ -1,6 +1,7 @@
 require([
     'jquery',
-    'Magento_Customer/js/customer-data'
+    'Magento_Customer/js/customer-data',
+    'domReady!'
 ], function ($, customerData) {
     'use strict';
 

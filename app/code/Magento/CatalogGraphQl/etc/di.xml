@@ -26,15 +26,4 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
-        <arguments>
-            <argument name="map" xsi:type="array">
-                <item name="catalog_product" xsi:type="array">
-                    <item name="product" xsi:type="string">ProductInterface</item>
-                    <item name="simple" xsi:type="string">SimpleProduct</item>
-                    <item name="configurable" xsi:type="string">ConfigurableProduct</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

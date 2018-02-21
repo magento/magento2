@@ -131,6 +131,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
         $customer = $this->customerFactory->create(['data' => $customerData]);
         $account = $this->accountManagement->createAccount($customer);
         $order->setCustomerId($account->getId());
+        $order->setCustomerIsGuest(0);
         $this->orderRepository->save($order);
 
         return $account;

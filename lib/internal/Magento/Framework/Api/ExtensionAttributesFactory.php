@@ -97,7 +97,7 @@ class ExtensionAttributesFactory
         }
         $modelReflection = new \ReflectionClass($extensibleClassName);
         if ($modelReflection->isInterface()
-            && $modelReflection->isSubClassOf(self::EXTENSIBLE_INTERFACE_NAME)
+            && $modelReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
             && $modelReflection->hasMethod('getExtensionAttributes')
         ) {
             $this->classInterfaceMap[$extensibleClassName] = $extensibleClassName;

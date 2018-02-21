@@ -14,6 +14,8 @@ use Magento\Framework\Phrase;
  */
 class GraphQlInputException extends InputException implements \GraphQL\Error\ClientAware
 {
+    const EXCEPTION_CATEGORY = 'graphql-input';
+
     /**
      * @var boolean
      */
@@ -46,6 +48,6 @@ class GraphQlInputException extends InputException implements \GraphQL\Error\Cli
      */
     public function getCategory()
     {
-        return 'graphql-input';
+        return self::EXCEPTION_CATEGORY;
     }
 }

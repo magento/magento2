@@ -8,7 +8,13 @@ namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 /**
  * Order create model
@@ -232,6 +238,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $serializer;
 
     /**
+     * @var ExtensibleDataObjectConverter
+     */
+    private $dataObjectConverter;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -261,6 +272,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -292,7 +304,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ExtensibleDataObjectConverter $dataObjectConverter = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -321,9 +334,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
+        $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
+            ->get(ExtensibleDataObjectConverter::class);
     }
 
     /**
@@ -510,9 +525,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $shippingAddress = $order->getShippingAddress();
         if ($shippingAddress) {
-            $addressDiff = array_diff_assoc($shippingAddress->getData(), $order->getBillingAddress()->getData());
-            unset($addressDiff['address_type'], $addressDiff['entity_id']);
-            $shippingAddress->setSameAsBilling(empty($addressDiff));
+            $shippingAddress->setSameAsBilling($this->isAddressesAreEqual($order));
         }
 
         $this->_initBillingAddressFromOrder($order);
@@ -1289,7 +1302,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Retrieve oreder quote shipping address
+     * Retrieve order quote shipping address
      *
      * @return \Magento\Quote\Model\Quote\Address
      */
@@ -1415,7 +1428,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Set shipping anddress to be same as billing
+     * Set shipping address to be same as billing
      *
      * @param bool $flag If true - don't save in address book and actually copy data across billing and shipping
      *                   addresses
@@ -1454,32 +1467,36 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function setBillingAddress($address)
     {
-        if (is_array($address)) {
-            $billingAddress = $this->_objectManager->create(
-                \Magento\Quote\Model\Quote\Address::class
-            )->setData(
-                $address
-            )->setAddressType(
-                \Magento\Quote\Model\Quote\Address::TYPE_BILLING
-            );
-            $this->_setQuoteAddress($billingAddress, $address);
-            /**
-             * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
-             * that is why it should be added after _setQuoteAddress call
-             */
-            $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
-            $billingAddress->setData('save_in_address_book', $saveInAddressBook);
-
-            if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
-                $shippingAddress = clone $billingAddress;
-                $shippingAddress->setSameAsBilling(true);
-                $shippingAddress->setSaveInAddressBook(false);
-                $address['save_in_address_book'] = 0;
-                $this->setShippingAddress($address);
-            }
-
-            $this->getQuote()->setBillingAddress($billingAddress);
+        if (!is_array($address)) {
+            return $this;
         }
+
+        $billingAddress = $this->_objectManager->create(Address::class)
+            ->setData($address)
+            ->setAddressType(Address::TYPE_BILLING);
+
+        $this->_setQuoteAddress($billingAddress, $address);
+
+        /**
+         * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
+         * that is why it should be added after _setQuoteAddress call
+         */
+        $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
+        $billingAddress->setData('save_in_address_book', $saveInAddressBook);
+
+        $quote = $this->getQuote();
+        if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+            $address['save_in_address_book'] = 0;
+            $this->setShippingAddress($address);
+        }
+
+        // not assigned billing address should be saved as new
+        // but if quote already has the billing address it won't be overridden
+        if (empty($billingAddress->getCustomerAddressId())) {
+            $billingAddress->setCustomerAddressId(null);
+            $quote->getBillingAddress()->setCustomerAddressId(null);
+        }
+        $quote->setBillingAddress($billingAddress);
 
         return $this;
     }
@@ -1782,6 +1799,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $address = $this->getShippingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
             $this->setShippingAddress($address);
         }
+        $this->getBillingAddress()->setCustomerId($customer->getId());
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 
         $customer = $this->getQuote()->getCustomer();
@@ -1858,7 +1876,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Prepare item otions
+     * Prepare item options
      *
      * @return $this
      */
@@ -1960,12 +1978,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
-                $this->_errors[] = __('Please specify a shipping method.');
+                $this->_errors[] = __('The shipping method is missing. Select the shipping method and try again.');
             }
         }
 
         if (!$this->getQuote()->getPayment()->getMethod()) {
-            $this->_errors[] = __('Please specify a payment method.');
+            $this->_errors[] = __("The payment method isn't selected. Enter the payment method and try again.");
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
             if (!$method->isAvailable($this->getQuote())) {
@@ -1979,9 +1997,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
         if (!empty($this->_errors)) {
+            /** @var LoggerInterface $logger */
+            $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             foreach ($this->_errors as $error) {
+                $logger->error($error);
                 $this->messageManager->addError($error);
             }
+
             throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));
         }
 
@@ -2009,5 +2031,27 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $email;
+    }
+
+    /**
+     * Checks id shipping and billing addresses are equal.
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function isAddressesAreEqual(Order $order)
+    {
+        $shippingAddress = $order->getShippingAddress();
+        $billingAddress = $order->getBillingAddress();
+        $shippingData = $this->dataObjectConverter->toFlatArray($shippingAddress, [], OrderAddressInterface::class);
+        $billingData = $this->dataObjectConverter->toFlatArray($billingAddress, [], OrderAddressInterface::class);
+        unset(
+            $shippingData['address_type'],
+            $shippingData['entity_id'],
+            $billingData['address_type'],
+            $billingData['entity_id']
+        );
+
+        return $shippingData == $billingData;
     }
 }

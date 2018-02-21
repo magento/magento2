@@ -79,10 +79,10 @@ class Robots extends AbstractBlock implements IdentityInterface
     protected function _toHtml()
     {
         $defaultStoreId = $this->storeResolver->getCurrentStoreId();
-        $defalutStore = $this->storeManager->getStore($defaultStoreId);
+        $defaultStore = $this->storeManager->getStore($defaultStoreId);
 
         /** @var \Magento\Store\Model\Website $website */
-        $website = $this->storeManager->getWebsite($defalutStore->getWebsiteId());
+        $website = $this->storeManager->getWebsite($defaultStore->getWebsiteId());
 
         $storeIds = [];
         foreach ($website->getStoreIds() as $storeId) {

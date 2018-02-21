@@ -15,6 +15,7 @@
         <element name="save" type="button" selector="button[data-role='template-save']"/>
     </section>
     <section name="NewsletterWYSIWYGSection">
+        <element name="TextArea" type="text" selector="#text" />
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="ShowHideBtn" type="button" selector="#toggletext"/>
