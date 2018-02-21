@@ -1,9 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright Â© Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Model\ResourceModel;
+namespace Magemojo\Cron\Model;
 
 /**
  * Schedule resource
@@ -18,8 +18,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      */
-    public function _construct()
-    {
+    public function _construct() {
         $this->_init('cron_schedule', 'schedule_id');
     }
 
@@ -67,29 +66,34 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         // this condition added to avoid cron jobs locking after incorrect termination of running job
-        $match = $connection->quoteInto(
-            'existing.job_code = current.job_code ' .
-            'AND (existing.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY OR existing.executed_at IS NULL) ' .
-            'AND existing.status = ?',
-            $newStatus
-        );
+
+        $match = $connection->select()
+          ->from(['schedule' => $this->getTable('cron_schedule')])
+          ->where('schedule.schedule_id = ?', $scheduleId);
+
+        $result = $connection->fetchAll($match);
 
         $selectIfUnlocked = $connection->select()
-            ->joinLeft(
-                ['existing' => $this->getTable('cron_schedule')],
-                $match,
-                ['status' => new \Zend_Db_Expr($connection->quote($newStatus))]
-            )
-            ->where('current.schedule_id = ?', $scheduleId)
-            ->where('current.status = ?', $currentStatus)
-            ->where('existing.schedule_id IS NULL');
+          ->from(['schedule' => $this->getTable('cron_schedule')])
+          ->where('schedule.job_code = ?', $result[0]["job_code"])
+          ->where('schedule.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY')
+          ->where('schedule.status = ? ', $newStatus);
+        $result = $connection->query($selectIfUnlocked)->rowCount();
 
-        $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
-        $result = $connection->query($update)->rowCount();
+        if ($result == 0) {
+          $where = $connection->quoteInto('schedule_id =?', $scheduleId);
+          $result = $connection->update(
+            $this->getTable('cron_schedule'),
+            array('status'=>$newStatus),
+            $where);
 
-        if ($result == 1) {
+          if ($result == 1) {
             return true;
+          } else {
+            return false;
+          }
         }
         return false;
     }
 }
+
