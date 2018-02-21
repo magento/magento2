@@ -58,8 +58,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
          */
         if ($this->currentLock) {
             throw new AlreadyExistsException(
-                new Phrase('This connection is already holding lock for $1',
-                    [$this->currentLock])
+                new Phrase('This connection is already holding lock for $1', [$this->currentLock])
             );
         }
 
