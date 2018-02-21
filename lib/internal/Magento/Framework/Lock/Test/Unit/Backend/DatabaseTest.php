@@ -83,7 +83,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testAcquireLockWithAlreadyAcquiredLockInSameSession()
     {
-        $this->statement->expects($this->at(2))
+        $this->statement->expects($this->any())
             ->method('fetchColumn')
             ->willReturn(true);
 
