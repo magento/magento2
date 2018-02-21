@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
  * Get bundle children source item ids by source item ids.
@@ -21,7 +22,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
  *
  * If source items is empty array so it returns all children source items.
  */
-class BundleChildrenSourceItemsIdsProvider
+class ChildrenSourceItemsIdsProvider
 {
     /**
      * @var ResourceConnection
@@ -29,22 +30,14 @@ class BundleChildrenSourceItemsIdsProvider
     private $resourceConnection;
 
     /**
-     * @var BundleChildrenSourceItemsIdsSelectProvider
-     */
-    private $bundleChildrenSourceItemsIdsSelectProvider;
-
-    /**
      * GetBundleChildrenSourceItemsIdsWithSku constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param BundleChildrenSourceItemsIdsSelectProvider $bundleChildrenSourceItemsIdsSelectProvider
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        BundleChildrenSourceItemsIdsSelectProvider $bundleChildrenSourceItemsIdsSelectProvider
+        ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->bundleChildrenSourceItemsIdsSelectProvider = $bundleChildrenSourceItemsIdsSelectProvider;
     }
 
     /**
@@ -54,7 +47,7 @@ class BundleChildrenSourceItemsIdsProvider
      */
     public function execute(array $sourceItemsIds = []): array
     {
-        $select = $this->bundleChildrenSourceItemsIdsSelectProvider->execute();
+        $select = $this->getChildrenSourceItemsIdsSelect();
         if ($sourceItemsIds) {
             $bundleIdsSelect = $this->getBundleIdsSelect($sourceItemsIds);
             $select->where('relation.parent_id in (?)', $bundleIdsSelect);
@@ -104,6 +97,33 @@ class BundleChildrenSourceItemsIdsProvider
             'bundle_product.' . ProductInterface::TYPE_ID . ' = ?',
             ProductType::TYPE_BUNDLE
         )->distinct(true);
+
+        return $select;
+    }
+
+    /**
+     * @return Select
+     */
+    public function getChildrenSourceItemsIdsSelect(): Select
+    {
+        $select = $this->resourceConnection->getConnection()->select();
+        $select
+            ->from(
+                ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
+                [SourceItem::ID_FIELD_NAME]
+            )->joinInner(
+                ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                'source_item.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
+                []
+            )->joinInner(
+                ['relation' => $this->resourceConnection->getTableName('catalog_product_relation')],
+                'relation.child_id = product.entity_id',
+                []
+            )->joinInner(
+                ['bundle_product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                'bundle_product.entity_id = relation.parent_id',
+                ['bundle_product.sku']
+            );
 
         return $select;
     }

@@ -16,7 +16,7 @@ use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 /**
  * Prepare index data for bundles products.
  */
-class BundlesIndexDataProvider
+class IndexDataProvider
 {
     /**
      * @var StockIndexTableNameResolver
@@ -59,7 +59,7 @@ class BundlesIndexDataProvider
                 ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
                 'stock.sku = source_item.sku',
                 []
-            )->where('source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItemsSkus);
+            )->where('source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItems);
 
             $data = $select->query()->fetch();
 
