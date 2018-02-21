@@ -1136,7 +1136,14 @@ class Store extends AbstractExtensibleModel implements
     public function getCurrentUrl($fromStore = true)
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
-        $requestString = $this->_url->escape(ltrim($this->_request->getRequestString(), '/'));
+        /** @var string $requestString Request path without query parameters */
+        $requestString = $this->_url->escape(
+            preg_replace(
+                '/\?.*?$/',
+                '',
+                ltrim($this->_request->getRequestString(), '/')
+            )
+        );
 
         $storeUrl = $this->getUrl('', ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]);
 

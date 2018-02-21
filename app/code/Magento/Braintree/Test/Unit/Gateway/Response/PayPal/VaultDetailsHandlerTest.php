@@ -7,7 +7,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response\PayPal;
 
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

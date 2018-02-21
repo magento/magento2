@@ -7,7 +7,6 @@
 namespace Magento\Customer\Test\Unit\Helper;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
 /**
@@ -36,9 +35,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Model\Address\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressConfig;
 
-    /** @var  \Magento\Customer\Model\Metadata\AttributeResolver|\PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeResolver;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|AddressMetadataInterface */
     private $addressMetadataService;
 
@@ -55,7 +51,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->customerMetadataService = $arguments['customerMetadataService'];
         $this->addressConfig = $arguments['addressConfig'];
         $this->addressMetadataService = $arguments['addressMetadataService'];
-        $this->attributeResolver = $arguments['attributeResolver'];
 
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
@@ -406,70 +401,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         return [
             ['fax', true],
             ['invalid_code', false],
-        ];
-    }
-
-    /**
-     * @dataProvider attributeOnFormDataProvider
-     * @param bool $isAllowed
-     * @param bool $isMetadataExists
-     * @param string $attributeCode
-     * @param string $formName
-     * @param array $attributeFormsList
-     */
-    public function testIsAttributeAllowedOnForm(
-        $isAllowed,
-        $isMetadataExists,
-        $attributeCode,
-        $formName,
-        array $attributeFormsList
-    ) {
-        $attributeMetadata = null;
-        if ($isMetadataExists) {
-            $attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
-                ->getMockForAbstractClass();
-            $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $this->attributeResolver->expects($this->once())
-                ->method('getModelByAttribute')
-                ->with(AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS, $attributeMetadata)
-                ->willReturn($attribute);
-            $attribute->expects($this->once())
-                ->method('getUsedInForms')
-                ->willReturn($attributeFormsList);
-        }
-        $this->addressMetadataService->expects($this->once())
-            ->method('getAttributeMetadata')
-            ->with($attributeCode)
-            ->willReturn($attributeMetadata);
-        $this->assertEquals($isAllowed, $this->helper->isAttributeAllowedOnForm($attributeCode, $formName));
-    }
-
-    public function attributeOnFormDataProvider()
-    {
-        return [
-            'metadata not exists' => [
-                'isAllowed' => false,
-                'isMetadataExists' => false,
-                'attributeCode' => 'attribute_code',
-                'formName' => 'form_name',
-                'attributeFormsList' => [],
-                ],
-            'form not in the list' => [
-                'isAllowed' => false,
-                'isMetadataExists' => true,
-                'attributeCode' => 'attribute_code',
-                'formName' => 'form_name',
-                'attributeFormsList' => ['form_1', 'form_2'],
-                ],
-            'allowed' => [
-                'isAllowed' => true,
-                'isMetadataExists' => true,
-                'attributeCode' => 'attribute_code',
-                'formName' => 'form_name',
-                'attributeFormsList' => ['form_name', 'form_1', 'form_2'],
-            ],
         ];
     }
 }

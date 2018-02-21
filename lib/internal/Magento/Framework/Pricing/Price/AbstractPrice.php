@@ -30,7 +30,7 @@ abstract class AbstractPrice implements PriceInterface
     protected $amount;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator
+     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface
      */
     protected $calculator;
 

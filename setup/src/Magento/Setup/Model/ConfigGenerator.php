@@ -47,7 +47,7 @@ class ConfigGenerator
 
     /**
      * @var Random
-     * @deprecated since 100.2.0
+     * @deprecated 100.2.0
      */
     protected $random;
 

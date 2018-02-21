@@ -7,6 +7,8 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
@@ -73,6 +75,16 @@ class OrderTest extends \PHPUnit\Framework\TestCase
      */
     protected $productCollectionFactoryMock;
 
+    /**
+     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $localeResolver;
+
+    /**
+     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $timezone;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -124,6 +136,8 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             true,
             ['round']
         );
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
+        $this->timezone = $this->createMock(TimezoneInterface::class);
         $this->incrementId = '#00000001';
         $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
         $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
@@ -138,7 +152,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 'historyCollectionFactory' => $this->historyCollectionFactoryMock,
                 'salesOrderCollectionFactory' => $this->salesOrderCollectionFactoryMock,
                 'priceCurrency' => $this->priceCurrency,
-                'productListFactory' => $this->productCollectionFactoryMock
+                'productListFactory' => $this->productCollectionFactoryMock,
+                'localeResolver' => $this->localeResolver,
+                'timezone' => $this->timezone,
             ]
         );
     }
@@ -1042,6 +1058,22 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $this->order->hasDataChanges()
         );
+    }
+
+    public function testGetCreatedAtFormattedUsesCorrectLocale()
+    {
+        $localeCode = 'nl_NL';
+
+        $this->localeResolver->expects($this->once())->method('getDefaultLocale')->willReturn($localeCode);
+        $this->timezone->expects($this->once())->method('formatDateTime')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                $this->anything(),
+                $localeCode
+            );
+
+        $this->order->getCreatedAtFormatted(\IntlDateFormatter::SHORT);
     }
 
     public function notInvoicingStatesProvider()

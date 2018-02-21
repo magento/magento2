@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Model\Json;
 
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProviderInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\App\AreaList;
-use Magento\Framework\TranslateInterface;
 
 /**
  * PreProcessor responsible for providing js translation dictionary
@@ -41,23 +44,30 @@ class PreProcessor implements PreProcessorInterface
      * @var TranslateInterface
      */
     protected $translate;
+    /**
+     * @var DesignInterface
+     */
+    private $viewDesign;
 
     /**
      * @param Config $config
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
      * @param TranslateInterface $translate
+     * @param DesignInterface|null $viewDesign
      */
     public function __construct(
         Config $config,
         DataProviderInterface $dataProvider,
         AreaList $areaList,
-        TranslateInterface $translate
+        TranslateInterface $translate,
+        DesignInterface $viewDesign = null
     ) {
         $this->config = $config;
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
+        $this->viewDesign = $viewDesign ?: ObjectManager::getInstance()->get(DesignInterface::class);
     }
 
     /**
@@ -65,6 +75,7 @@ class PreProcessor implements PreProcessorInterface
      *
      * @param Chain $chain
      * @return void
+     * @throws \Exception
      */
     public function process(Chain $chain)
     {
@@ -77,7 +88,12 @@ class PreProcessor implements PreProcessorInterface
             if ($context instanceof FallbackContext) {
                 $themePath = $context->getThemePath();
                 $areaCode = $context->getAreaCode();
-                $this->translate->setLocale($context->getLocale());
+
+                $this->viewDesign->setDesignTheme($themePath, $areaCode);
+
+                $this->translate
+                    ->setLocale($context->getLocale())
+                    ->loadData($areaCode);
             }
 
             $area = $this->areaList->getArea($areaCode);

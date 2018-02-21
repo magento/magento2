@@ -414,7 +414,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getProductAttributes()
     {
-        if (is_null($this->_productAttributes)) {
+        if ($this->_productAttributes === null) {
             $this->_productAttributes = array_keys($this->getAttributesUsedInProductListing());
         }
         return $this->_productAttributes;
@@ -437,7 +437,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getAttributesUsedInProductListing()
     {
-        if (is_null($this->_usedInProductListing)) {
+        if ($this->_usedInProductListing === null) {
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->setStoreId($this->getStoreId())->getAttributesUsedInListing();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);
@@ -464,7 +464,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getAttributesUsedForSortBy()
     {
-        if (is_null($this->_usedForSortBy)) {
+        if ($this->_usedForSortBy === null) {
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->getAttributesUsedForSortBy();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);

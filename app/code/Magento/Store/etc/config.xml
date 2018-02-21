@@ -115,6 +115,10 @@
             <file>
                 <protected_extensions>
                     <php>php</php>
+                    <php3>php3</php3>
+                    <php4>php4</php4>
+                    <php5>php5</php5>
+                    <php7>php7</php7>
                     <htaccess>htaccess</htaccess>
                     <jsp>jsp</jsp>
                     <pl>pl</pl>
