@@ -6,10 +6,10 @@
 
 namespace %moduleName%\Setup\Patch\%patchType%;
 
-use Magento\Setup\Model\Patch\PatchVersionInterface;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\SchemaPatchInterface;
-use Magento\Setup\Model\Patch\PatchRevertableInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**

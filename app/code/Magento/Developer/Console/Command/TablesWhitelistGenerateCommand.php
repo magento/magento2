@@ -9,7 +9,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Setup\JsonPersistor;
-use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

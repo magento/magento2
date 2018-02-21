@@ -9,14 +9,14 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Setup\SchemaListener;
-use Magento\Setup\Model\DeclarationInstaller;
+use Magento\Framework\Setup\DeclarationInstaller;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
-use Magento\Setup\Model\Patch\PatchApplier;
-use Magento\Setup\Model\Patch\PatchApplierFactory;
+use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplierFactory;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -141,7 +141,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     private $phpReadinessCheck;
 
     /**
-     * @var \Magento\Setup\Model\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
      */
     private $declarationInstallerMock;
 

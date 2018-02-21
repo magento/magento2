@@ -6,10 +6,10 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Timestamp;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Internal;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;

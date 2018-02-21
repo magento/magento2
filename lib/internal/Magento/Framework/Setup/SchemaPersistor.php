@@ -45,7 +45,7 @@ class SchemaPersistor
         return new \SimpleXMLElement(
             '<schema 
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                    xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd"></schema>'
+                    xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd"></schema>'
         );
     }
 

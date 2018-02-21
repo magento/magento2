@@ -7,7 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Symfony\Component\Console\Input\ArrayInput;
-use Magento\Setup\Model\Declaration\Schema\Request;
+use Magento\Framework\Setup\Declaration\Schema\Request;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;

@@ -70,7 +70,7 @@ class DeclarativeSchemaRuleTest extends \PHPUnit\Framework\TestCase
                 'any',
                 '/app/some/path/etc/db_schema.xml',
                 '<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+                    xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
                     <table name="some_table">
                         <constraint xsi:type="foreign" 
                         name="FK_NAME" 
