@@ -31,12 +31,12 @@ define([
                  * @param {Object} form
                  * @returns {Boolean}
                  */
-                submitHandler: function (form) {
+                submitHandler: function (form, event) {
                     var jqForm = $(form).catalogAddToCart({
                         bindSubmit: bindSubmit
                     });
 
-                    jqForm.catalogAddToCart('submitForm', jqForm);
+                    jqForm.catalogAddToCart('submitForm', jqForm, event);
 
                     return false;
                 }

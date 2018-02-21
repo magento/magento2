@@ -1391,21 +1391,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getOptionById(100));
     }
 
-    public function testCleanCache()
-    {
-        //Without an ID cleanCache won't clean anything because the entity is
-        //not identified and it will be called later exactly once.
-        $this->model->setId(null);
-        $this->cacheManagerMock
-            ->expects($this->once())
-            ->method('clean');
-        $this->model->cleanCache();
-
-        //Now that ID is set clean will be called.
-        $this->model->setId(1);
-        $this->model->cleanCache();
-    }
-
     public function testGetCacheTags()
     {
         //If entity is identified getCacheTags has to return the same values

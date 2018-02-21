@@ -23,6 +23,18 @@ if ($quote->getId()) {
     $quote->delete();
 }
 
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+try {
+    $product2 = $productRepository->get('simple-2', false, null, true);
+
+    // Remove product stock registry data.
+    $stockRegistryStorage = $objectManager->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+    $stockRegistryStorage->removeStockItem($product2->getId());
+    $stockRegistryStorage->removeStockStatus($product2->getId());
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    //Product already removed
+}
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
