@@ -10,7 +10,6 @@ namespace Magento\InventoryLowQuantityNotification\Block\Adminhtml\Product\Lowst
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid as GridWidget;
 use Magento\Backend\Helper\Data;
-use Magento\Framework\Data\Collection as DataCollection;
 use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock\Collection as LowstockCollection;
 use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
@@ -48,17 +47,6 @@ class Grid extends GridWidget
     {
         /** @var $collection LowstockCollection  */
         $collection = $this->lowstockCollectionFactory->create();
-        $collection->addFieldToSelect(
-            '*'
-        )
-        ->joinCatalogProduct()
-        ->filterByIsQtyProductTypes()
-        ->useNotifyStockQtyFilter()
-        ->setOrder(
-            'quantity',
-            DataCollection::SORT_ORDER_ASC
-        );
-
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

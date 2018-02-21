@@ -7,21 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
+use Magento\Inventory\Model\SourceItem as SourceItemModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
-class Collection extends SourceItemCollection
+class Collection extends AbstractCollection
 {
     /**
      * @var StockConfigurationInterface
@@ -33,6 +36,16 @@ class Collection extends SourceItemCollection
      */
     private $attributeRepository;
 
+    /**
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param AttributeRepositoryInterface $attributeRepository
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param AdapterInterface|null $connection
+     * @param AbstractDb|null $resource
+     */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
@@ -43,6 +56,9 @@ class Collection extends SourceItemCollection
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
+        $this->attributeRepository = $attributeRepository;
+        $this->stockConfiguration = $stockConfiguration;
+
         parent::__construct(
             $entityFactory,
             $logger,
@@ -51,143 +67,109 @@ class Collection extends SourceItemCollection
             $connection,
             $resource
         );
-        $this->attributeRepository = $attributeRepository;
-        // TODO: use stock configuration from InventoryConfiguration when the logic is ready
-        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init(SourceItemModel::class, SourceItemResourceModel::class);
+    }
+
+    /**
+     * @inheritdoc
      */
     protected function _initSelect()
     {
-        $this->addFilterToMap('inventory_source_code', 'main_table.source_code');
-        $this->addFilterToMap('source_item_sku', 'main_table.sku');
-        $this->addFilterToMap('product_name', 'catalog_product_entity_varchar.value');
+        parent::_initSelect();
 
-        return parent::_initSelect();
+        $this->addFilterToMap('source_code', 'main_table.source_code');
+        $this->addFilterToMap('sku', 'main_table.sku');
+        $this->addFilterToMap('product_name', 'product_entity_varchar.value');
+
+        $this->addFieldToSelect('*');
+
+        $this->joinCatalogProduct();
+        $this->joinInventoryConfiguration();
+
+        $this->addProductTypeFilter();
+        $this->addNotifyStockQtyFilter();
+
+        $this->setOrder(
+            SourceItemInterface::QUANTITY,
+            DataCollection::SORT_ORDER_ASC
+        );
+        return $this;
     }
 
     /**
-     * Join tables with product information
-     *
-     * @return Collection
+     * @return void
      */
-    public function joinCatalogProduct(): Collection
+    private function joinCatalogProduct()
     {
         $productEntityTable = $this->getTable('catalog_product_entity');
         $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
         $nameAttribute = $this->attributeRepository->get('catalog_product', 'name');
 
-        $this->getSelect()->joinLeft(
-            $productEntityTable,
-            sprintf(
-                'main_table.%s = %s.' . SourceItemInterface::SKU,
-                SourceItemInterface::SKU,
-                $productEntityTable
-            ),
+        $this->getSelect()->joinInner(
+            ['product_entity' => $productEntityTable],
+            'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
             []
         );
 
-        /* Join product name */
-        $joinExpression = sprintf(
-            $productEavVarcharTable . '.entity_id = %s.entity_id',
-            $productEntityTable
+        $this->getSelect()->joinInner(
+            ['product_entity_varchar' => $productEavVarcharTable],
+            'product_entity_varchar.entity_id = product_entity.entity_id AND product_entity_varchar.attribute_id = '
+                . $nameAttribute->getAttributeId(),
+            ['product_name' => 'value']
         );
-
-        $joinExpression .= sprintf(
-            ' AND ' . $productEavVarcharTable . '.attribute_id = %s',
-            $nameAttribute->getAttributeId()
-        );
-
-        $this->getSelect()->joinLeft(
-            $productEavVarcharTable,
-            $joinExpression,
-            ['value as name']
-        );
-
-        return $this;
     }
 
     /**
-     * Join inventory configuration table
-     *
-     * @return Collection
+     * @return void
      */
-    private function joinInventoryConfiguration(): Collection
+    private function joinInventoryConfiguration()
     {
         $sourceItemConfigurationTable = $this->getTable(
             CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
         );
 
-        $this->getSelect()->joinLeft(
-            $sourceItemConfigurationTable,
+        $this->getSelect()->joinInner(
+            ['notification_configuration' => $sourceItemConfigurationTable],
             sprintf(
-                'main_table.%s = %s.%s AND main_table.%s = %s.%s',
+                'main_table.%s = notification_configuration.%s AND main_table.%s = notification_configuration.%s',
                 SourceItemInterface::SKU,
-                $sourceItemConfigurationTable,
                 SourceItemConfigurationInterface::SKU,
                 SourceItemInterface::SOURCE_CODE,
-                $sourceItemConfigurationTable,
                 SourceItemConfigurationInterface::SOURCE_CODE
             ),
             []
         );
-
-        return $this;
     }
 
     /**
-     * Add filter by product type(s)
-     *
-     * @param array|string $typeFilter
-     * @throws LocalizedException
-     * @return Collection
+     * @return void
      */
-    public function filterByProductType($typeFilter): Collection
+    private function addProductTypeFilter()
     {
-        if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            throw new LocalizedException(__('The product type filter specified is incorrect.'));
-        }
-        $this->addFieldToFilter('type_id', $typeFilter);
-
-        return $this;
+        $types = array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds()));
+        $this->addFieldToFilter('type_id', $types);
     }
 
     /**
-     * Add filter by product types from config - only types which have QTY parameter
-     *
-     * @return Collection
+     * @return void
      */
-    public function filterByIsQtyProductTypes(): Collection
+    private function addNotifyStockQtyFilter()
     {
-        $this->filterByProductType(array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds())));
-
-        return $this;
-    }
-
-    /**
-     * Add Notify Stock Qty Condition to collection
-     *
-     * @return Collection
-     */
-    public function useNotifyStockQtyFilter(): Collection
-    {
-        $this->joinInventoryConfiguration();
-
-        $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
-            '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;
-
         $notifyStockExpression = $this->getConnection()->getIfNullSql(
-            $notifyQtyField,
-            (int)$this->stockConfiguration->getNotifyStockQty()
+            'notification_configuration.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY,
+            (float)$this->stockConfiguration->getNotifyStockQty()
         );
 
         $this->getSelect()->where(
             SourceItemInterface::QUANTITY . ' < ?',
             $notifyStockExpression
         );
-        
-        return $this;
     }
 }
