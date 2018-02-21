@@ -9,8 +9,8 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\SchemaPersistor;
-use Magento\Framework\Setup\DeclarationInstaller;
-use \Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\DeclarationInstaller;
+use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Module\ResourceFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
