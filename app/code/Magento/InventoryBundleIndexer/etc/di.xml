@@ -15,4 +15,9 @@
             <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryBundleIndexer\Indexer\SourceItem\GetSkuListInStock">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
 </config>

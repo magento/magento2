@@ -18,8 +18,10 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
  *
  * Find product by source item sku and try find parent bundle product. Then find all children source
  * items for this bundle and return them with bundle sku.
+ *
+ * If source items is empty array so it returns all children source items.
  */
-class GetBundleChildrenSourceItemsIdsWithSku
+class BundleChildrenSourceItemsIdsProvider
 {
     /**
      * @var ResourceConnection
@@ -50,12 +52,15 @@ class GetBundleChildrenSourceItemsIdsWithSku
      *
      * @return array
      */
-    public function execute(array $sourceItemsIds): array
+    public function execute(array $sourceItemsIds = []): array
     {
-        $bundleIdsSelect = $this->getBundleIdsSelect($sourceItemsIds);
-
         $select = $this->bundleChildrenSourceItemsIdsSelectProvider->execute();
-        $select->where('relation.parent_id in (?)', $bundleIdsSelect);
+        if ($sourceItemsIds) {
+            $bundleIdsSelect = $this->getBundleIdsSelect($sourceItemsIds);
+            $select->where('relation.parent_id in (?)', $bundleIdsSelect);
+        } else {
+            $select->where('bundle_product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
+        }
 
         $bundleChildren = $select->query()->fetchAll();
         $bundleChildrenSourceItemsIdsBySku = [];

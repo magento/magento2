@@ -79,7 +79,7 @@ class SourceItemIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_eu_stock_only.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
@@ -99,7 +99,7 @@ class SourceItemIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_eu_stock_only.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
@@ -120,7 +120,7 @@ class SourceItemIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryBundleIndexer/Test/_files/source_items_bundle.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_eu_stock_only.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      *
@@ -135,17 +135,17 @@ class SourceItemIndexerTest extends TestCase
     }
 
     /**
-     * @param int $qty
+     * @param int $childrenQty
      * @return void
      */
-    private function makeChildrenOutOfStock(int $qty)
+    private function makeChildrenOutOfStock(int $childrenQty)
     {
         $ids = $this->getProductIdsBySkusInterface->execute(['bundle-product-eu-website']);
         $id = reset($ids);
 
         $childrenIds = $this->selection->getChildrenIds($id)[0];
         foreach ($childrenIds as $childId) {
-            if ($qty === 0) {
+            if ($childrenQty === 0) {
                 break;
             }
             $child = $this->productRepository->getById($childId);
@@ -159,7 +159,7 @@ class SourceItemIndexerTest extends TestCase
             $sourceItem->setStatus(0);
 
             $this->sourceItemsSave->execute([$sourceItem]);
-            $qty--;
+            $childrenQty--;
         }
     }
 }
