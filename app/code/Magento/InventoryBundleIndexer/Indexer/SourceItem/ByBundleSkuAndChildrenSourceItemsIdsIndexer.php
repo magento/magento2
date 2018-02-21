@@ -17,7 +17,7 @@ use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 /**
  * Bundle indexer by [bundle sku => [bundle children source item ids]]
  */
-class BundleBySkuAndChildrenSourceItemsIdsIndexer
+class ByBundleSkuAndChildrenSourceItemsIdsIndexer
 {
     /**
      * @var GetSkuListInStock
@@ -25,9 +25,9 @@ class BundleBySkuAndChildrenSourceItemsIdsIndexer
     private $getSkuListInStock;
 
     /**
-     * @var BundlesIndexDataProvider
+     * @var IndexDataProvider
      */
-    private $bundlesIndexDataProvider;
+    private $indexDataProvider;
 
     /**
      * @var IndexNameBuilder
@@ -41,18 +41,18 @@ class BundleBySkuAndChildrenSourceItemsIdsIndexer
 
     /**
      * @param GetSkuListInStock $getSkuListInStock
-     * @param BundlesIndexDataProvider $bundlesIndexDataProvider
+     * @param IndexDataProvider $indexDataProvider
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexHandlerInterface $indexHandler
      */
     public function __construct(
         GetSkuListInStock $getSkuListInStock,
-        BundlesIndexDataProvider $bundlesIndexDataProvider,
+        IndexDataProvider $indexDataProvider,
         IndexNameBuilder $indexNameBuilder,
         IndexHandlerInterface $indexHandler
     ) {
         $this->getSkuListInStock = $getSkuListInStock;
-        $this->bundlesIndexDataProvider = $bundlesIndexDataProvider;
+        $this->indexDataProvider = $indexDataProvider;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexHandler = $indexHandler;
     }
@@ -68,7 +68,7 @@ class BundleBySkuAndChildrenSourceItemsIdsIndexer
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();
             $skuList = $skuListInStock->getSkuList();
-            $bundleIndexData = $this->bundlesIndexDataProvider->execute($skuList, $stockId);
+            $bundleIndexData = $this->indexDataProvider->execute($skuList, $stockId);
 
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(InventoryIndexer::INDEXER_ID)

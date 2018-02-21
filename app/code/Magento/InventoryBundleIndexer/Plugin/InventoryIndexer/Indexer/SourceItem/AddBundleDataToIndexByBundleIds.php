@@ -11,7 +11,7 @@ use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductRepository;
-use Magento\InventoryBundleIndexer\Indexer\SourceItem\BundleBySkuAndChildrenSourceItemsIdsIndexer;
+use Magento\InventoryBundleIndexer\Indexer\SourceItem\ByBundleSkuAndChildrenSourceItemsIdsIndexer;
 use Magento\InventoryBundleIndexer\Indexer\SourceItem\SourceItemsIdsByChildrenProductsIdsProvider;
 
 class AddBundleDataToIndexByBundleIds
@@ -22,7 +22,7 @@ class AddBundleDataToIndexByBundleIds
     private $productRepository;
 
     /**
-     * @var BundleBySkuAndChildrenSourceItemsIdsIndexer
+     * @var ByBundleSkuAndChildrenSourceItemsIdsIndexer
      */
     private $bundleBySkuAndChildrenSourceItemsIdsIndexer;
 
@@ -33,12 +33,12 @@ class AddBundleDataToIndexByBundleIds
 
     /**
      * @param ProductRepository $productRepository
-     * @param BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
+     * @param ByBundleSkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
      * @param SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
      */
     public function __construct(
         ProductRepository $productRepository,
-        BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer,
+        ByBundleSkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer,
         SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
     ) {
         $this->productRepository = $productRepository;

@@ -26,23 +26,23 @@ class SourceItemIndexer
     private $childrenSourceItemsIdsProvider;
 
     /**
-     * @var BundleBySkuAndChildrenSourceItemsIdsIndexer
+     * @var ByBundleSkuAndChildrenSourceItemsIdsIndexer
      */
-    private $bundleBySkuAndChildrenSourceItemsIdsIndexer;
+    private $byBundleSkuAndChildrenSourceItemsIdsIndexer;
 
     /**
      * @param IndexDataProvider $indexDataProvider
      * @param ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider
-     * @param BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
+     * @param ByBundleSkuAndChildrenSourceItemsIdsIndexer $byBundleSkuAndChildrenSourceItemsIdsIndexer
      */
     public function __construct(
         IndexDataProvider $indexDataProvider,
         ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider,
-        BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
+        ByBundleSkuAndChildrenSourceItemsIdsIndexer $byBundleSkuAndChildrenSourceItemsIdsIndexer
     ) {
         $this->indexDataProvider = $indexDataProvider;
         $this->childrenSourceItemsIdsProvider = $childrenSourceItemsIdsProvider;
-        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer = $bundleBySkuAndChildrenSourceItemsIdsIndexer;
+        $this->byBundleSkuAndChildrenSourceItemsIdsIndexer = $byBundleSkuAndChildrenSourceItemsIdsIndexer;
     }
 
     /**
@@ -52,7 +52,7 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute();
 
-        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
+        $this->byBundleSkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
 
     /**
@@ -72,6 +72,6 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute($sourceItemIds);
 
-        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
+        $this->byBundleSkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
 }

@@ -10,7 +10,7 @@
         <plugin name="bundle_source_item_indexer"
                 type="Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem\AddBundleDataToIndexBySourceItemsIds" />
     </type>
-    <type name="Magento\InventoryBundleIndexer\Indexer\SourceItem\BundleBySkuAndChildrenSourceItemsIdsIndexer">
+    <type name="Magento\InventoryBundleIndexer\Indexer\SourceItem\ByBundleSkuAndChildrenSourceItemsIdsIndexer">
         <arguments>
             <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
         </arguments>
