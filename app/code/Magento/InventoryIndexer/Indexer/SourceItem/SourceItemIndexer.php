@@ -123,9 +123,10 @@ class SourceItemIndexer
                 ResourceConnection::DEFAULT_CONNECTION
             );
 
+            $indexData = $this->indexDataBySkuListProvider->execute($stockId, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataBySkuListProvider->execute($stockId, $skuList),
+                $indexData,
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }

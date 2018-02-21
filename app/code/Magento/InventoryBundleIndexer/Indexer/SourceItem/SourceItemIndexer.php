@@ -27,9 +27,9 @@ class SourceItemIndexer
     private $getSkuListInStock;
 
     /**
-     * @var IndexDataProvider
+     * @var IndexDataBySkuListProvider
      */
-    private $indexDataProvider;
+    private $indexDataBySkuListProvider;
 
     /**
      * @var ChildrenSourceItemsIdsProvider
@@ -48,20 +48,20 @@ class SourceItemIndexer
 
     /**
      * @param GetSkuListInStock $getSkuListInStock
-     * @param IndexDataProvider $indexDataProvider
+     * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
      * @param ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexHandlerInterface $indexHandler
      */
     public function __construct(
         GetSkuListInStock $getSkuListInStock,
-        IndexDataProvider $indexDataProvider,
+        IndexDataBySkuListProvider $indexDataBySkuListProvider,
         ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider,
         IndexNameBuilder $indexNameBuilder,
         IndexHandlerInterface $indexHandler
     ) {
         $this->getSkuListInStock = $getSkuListInStock;
-        $this->indexDataProvider = $indexDataProvider;
+        $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
         $this->childrenSourceItemsIdsProvider = $childrenSourceItemsIdsProvider;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexHandler = $indexHandler;
@@ -104,10 +104,10 @@ class SourceItemIndexer
     private function executeByBundleChildrenSourceItemsIdsWithSku(array $bundleChildrenSourceItemsIdsWithSku)
     {
         $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIdsWithSku);
+
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();
             $skuList = $skuListInStock->getSkuList();
-            $bundleIndexData = $this->indexDataProvider->execute($skuList, $stockId);
 
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(InventoryIndexer::INDEXER_ID)
@@ -121,9 +121,10 @@ class SourceItemIndexer
                 ResourceConnection::DEFAULT_CONNECTION
             );
 
+            $indexData = $this->indexDataBySkuListProvider->execute($stockId, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $bundleIndexData,
+                $indexData,
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }

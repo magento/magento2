@@ -10,13 +10,14 @@ namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 use ArrayIterator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolver;
 
 /**
  * Prepare index data for bundles products.
  */
-class IndexDataProvider
+class IndexDataBySkuListProvider
 {
     /**
      * @var StockIndexTableNameResolver
@@ -41,32 +42,33 @@ class IndexDataProvider
     }
 
     /**
-     * @param array $bundleChildrenSourceItemsSkus
      * @param int $stockId
+     * @param array $bundleChildrenSourceItemsSkus
      * @return ArrayIterator
      */
-    public function execute(array $bundleChildrenSourceItemsSkus, int $stockId): ArrayIterator
+    public function execute(int $stockId, array $bundleChildrenSourceItemsSkus): ArrayIterator
     {
+        $stockIndexTable = $this->stockIndexTableNameResolver->execute($stockId);
+
         $indexData = [];
         foreach ($bundleChildrenSourceItemsSkus as $bundleSku => $bundleChildrenSourceItems) {
-            $indexDatum = [];
-            $stockTable = $this->stockIndexTableNameResolver->execute($stockId);
             $select = $this->resourceConnection->getConnection()->select();
             $select->from(
-                ['stock' => $stockTable],
-                ['is_salable' => 'MAX(stock.' . IndexStructure::IS_SALABLE . ')']
+                ['stock_index' => $stockIndexTable],
+                [IndexStructure::IS_SALABLE => 'MAX(stock_index.' . IndexStructure::IS_SALABLE . ')']
             )->joinInner(
                 ['source_item' => $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
-                'stock.sku = source_item.sku',
+                'stock_index.' . IndexStructure::SKU . ' = source_item.' . SourceItemInterface::SKU,
                 []
-            )->where('source_item.' . IndexStructure::SKU . ' in (?)', $bundleChildrenSourceItems);
+            )->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $bundleChildrenSourceItems);
 
-            $data = $select->query()->fetch();
+            $isSalable = $this->resourceConnection->getConnection()->fetchOne($select);
 
-            $indexDatum[IndexStructure::SKU] = $bundleSku;
-            $indexDatum[IndexStructure::QUANTITY] = 0;
-            $indexDatum[IndexStructure::IS_SALABLE] = $data[IndexStructure::IS_SALABLE];
-            $indexData[] = $indexDatum;
+            $indexData[] = [
+                IndexStructure::SKU => $bundleSku,
+                IndexStructure::QUANTITY => 0,
+                IndexStructure::IS_SALABLE => $isSalable,
+            ];
         }
         return new ArrayIterator($indexData);
     }
