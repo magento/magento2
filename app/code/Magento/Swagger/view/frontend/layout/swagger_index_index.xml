@@ -45,7 +45,11 @@
         <referenceContainer name="page.wrapper" remove="true"/>
         <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
-            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml"/>
+            <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml">
+                <arguments>
+                    <argument name="schema_types" xsi:type="object">Magento\Swagger\Api\Block\SchemaTypesInterface</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

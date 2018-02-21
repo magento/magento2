@@ -7,6 +7,7 @@ namespace Magento\Swagger\Controller\Index;
 
 /**
  * Class Index
+ *
  * @package Magento\Swagger\Controller\Index
  */
 class Index extends \Magento\Framework\App\Action\Action
@@ -22,8 +23,8 @@ class Index extends \Magento\Framework\App\Action\Action
     private $pageFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\App\Action\Context      $context
+     * @param \Magento\Framework\View\Page\Config        $pageConfig
      * @param \Magento\Framework\View\Result\PageFactory $pageFactory
      */
     public function __construct(
