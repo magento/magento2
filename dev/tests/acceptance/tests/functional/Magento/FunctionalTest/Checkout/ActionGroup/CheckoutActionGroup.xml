@@ -63,27 +63,11 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.cartItemsArea}}" time="30" stepKey="waitForCartItemsAreaLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
-    </actionGroup>
-
-    <!-- Check configurable product in checkout cart items -->
-    <actionGroup name="CheckConfigurableProductInCheckoutCartItemsActionGroup">
-        <arguments>
-            <argument name="productVar" />
-            <argument name="optionLabel" />
-            <argument name="optionValue" />
-        </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
-        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName(productVar.name)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" visible="false" stepKey="exposeProductOptions"/>
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionLabel}}" stepKey="seeProductOptionLabel" />
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" userInput="{{optionValue}}" stepKey="seeProductOptionValue" />
     </actionGroup>
 
     <!-- Check order summary in checkout -->
