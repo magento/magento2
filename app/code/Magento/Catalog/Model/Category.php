@@ -6,8 +6,12 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Entity\GetCategoryCustomAttributeCodes;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -69,23 +73,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
-    /**#@+
-     * Constants
-     */
-    const KEY_PARENT_ID = 'parent_id';
-    const KEY_NAME = 'name';
-    const KEY_IS_ACTIVE = 'is_active';
-    const KEY_POSITION = 'position';
-    const KEY_LEVEL = 'level';
-    const KEY_UPDATED_AT = 'updated_at';
-    const KEY_CREATED_AT = 'created_at';
-    const KEY_PATH = 'path';
-    const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
-    const KEY_INCLUDE_IN_MENU = 'include_in_menu';
-    const KEY_PRODUCT_COUNT = 'product_count';
-    const KEY_CHILDREN_DATA = 'children_data';
-    /**#@-*/
-
     /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
@@ -142,21 +129,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Attributes are that part of interface
      *
+     * @deprecated
+     * @see CategoryInterface::ATTRIBUTES
      * @var array
      */
-    protected $interfaceAttributes = [
-        'id',
-        self::KEY_PARENT_ID,
-        self::KEY_NAME,
-        self::KEY_IS_ACTIVE,
-        self::KEY_POSITION,
-        self::KEY_LEVEL,
-        self::KEY_UPDATED_AT,
-        self::KEY_CREATED_AT,
-        self::KEY_AVAILABLE_SORT_BY,
-        self::KEY_INCLUDE_IN_MENU,
-        self::KEY_CHILDREN_DATA,
-    ];
+    protected $interfaceAttributes = CategoryInterface::ATTRIBUTES;
 
     /**
      * Category tree model
@@ -231,6 +208,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /**
+     * @var GetCustomAttributeCodesInterface
+     */
+    private $getCustomAttributeCodes;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -252,6 +234,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param GetCustomAttributeCodesInterface|null $getCustomAttributeCodes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -275,7 +258,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        GetCustomAttributeCodesInterface $getCustomAttributeCodes = null
     ) {
         $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
@@ -290,6 +274,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $this->urlFinder = $urlFinder;
         $this->indexerRegistry = $indexerRegistry;
         $this->categoryRepository = $categoryRepository;
+        $this->getCustomAttributeCodes = $getCustomAttributeCodes ?? ObjectManager::getInstance()->get(
+            GetCategoryCustomAttributeCodes::class
+        );
         parent::__construct(
             $context,
             $registry,
@@ -323,11 +310,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function getCustomAttributesCodes()
     {
-        if ($this->customAttributesCodes === null) {
-            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
-            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
-        }
-        return $this->customAttributesCodes;
+        return $this->getCustomAttributeCodes->execute($this->metadataService);
     }
 
     /**
