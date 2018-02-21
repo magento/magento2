@@ -129,7 +129,7 @@ class ReadHandler implements AttributeInterface
                 }
                 $selects[] = $select;
             }
-            foreach($selects as $select) {
+            foreach ($selects as $select) {
                 foreach ($connection->fetchAll($select) as $attributeValue) {
                     if (isset($attributesMap[$attributeValue['attribute_id']])) {
                         $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
