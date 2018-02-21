@@ -920,8 +920,6 @@ class Installer
         }
 
         foreach ($moduleNames as $moduleName) {
-            $installer = false;
-            $upgrader = false;
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
@@ -954,7 +952,7 @@ class Installer
                 }
             }
 
-            if ($installer || $upgrader) {
+            if ($configVer) {
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
                 } elseif ($type === 'data') {
