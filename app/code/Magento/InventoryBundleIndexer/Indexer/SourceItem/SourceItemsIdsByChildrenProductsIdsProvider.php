@@ -46,6 +46,6 @@ class SourceItemsIdsByChildrenProductsIdsProvider
             $productIds
         );
 
-        return $select->query()->fetchAll();
+        return array_column($select->query()->fetchAll(), 'source_item_id');
     }
 }

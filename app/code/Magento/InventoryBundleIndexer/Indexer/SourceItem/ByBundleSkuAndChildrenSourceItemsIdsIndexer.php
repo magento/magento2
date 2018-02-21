@@ -12,7 +12,6 @@ use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 
 /**
  * Bundle indexer by [bundle sku => [bundle children source item ids]]
