@@ -10,6 +10,7 @@ namespace Magento\Framework\Lock\Backend;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
@@ -23,6 +24,9 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
 
     /** @var string Lock prefix */
     private $prefix;
+
+    /** @var string|false Holds current lock name if set, otherwise false */
+    private $currentLock = false;
 
     public function __construct(
         ResourceConnection $resource,
@@ -41,16 +45,34 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param int $timeout How long to wait lock acquisition in seconds, negative value means infinite timeout
      * @return bool
      * @throws InputException
+     * @throws AlreadyExistsException
      */
     public function acquireLock(string $name, int $timeout = -1): bool
     {
         $name = $this->addPrefix($name);
 
-        return (bool)$this->resource->getConnection()->query(
+        /**
+         * Before MySQL 5.7.5, only a single simultaneous lock per connection can be acquired.
+         * This limitation can be removed once MySQL minimum requirement has been raised,
+         * currently we support MySQL 5.6 way only.
+         */
+        if ($this->currentLock) {
+            throw new AlreadyExistsException(
+                new Phrase('This connection is already holding lock for $1',
+                    [$this->currentLock])
+            );
+        }
+
+        $result = (bool)$this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
             [(string)$name, (int)$timeout]
-        )
-            ->fetchColumn();
+        )->fetchColumn();
+
+        if ($result === true) {
+            $this->currentLock = $name;
+        }
+
+        return $result;
     }
 
     /**
@@ -64,10 +86,16 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $name = $this->addPrefix($name);
 
-        return (bool)$this->resource->getConnection()->query(
+        $result = (bool)$this->resource->getConnection()->query(
             "SELECT RELEASE_LOCK(?);",
             [(string)$name]
         )->fetchColumn();
+
+        if ($result === true) {
+            $this->currentLock = false;
+        }
+
+        return $result;
     }
 
     /**
@@ -101,7 +129,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         $name = $this->getPrefix() . '|' . $name;
 
         if (strlen($name) > 64) {
-            throw new InputException(new Phrase('Lock name too long'));
+            throw new InputException(new Phrase('Lock name too long: %1...', [substr($name, 0, 64)]));
         }
 
         return $name;

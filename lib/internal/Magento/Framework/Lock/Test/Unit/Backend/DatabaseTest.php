@@ -77,4 +77,17 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->database->acquireLock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     */
+    public function testAcquireLockWithAlreadyAcquiredLockInSameSession()
+    {
+        $this->statement->expects($this->at(2))
+            ->method('fetchColumn')
+            ->willReturn(true);
+
+        $this->database->acquireLock('testLock');
+        $this->database->acquireLock('differentLock');
+    }
 }
