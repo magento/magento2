@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
@@ -198,7 +199,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($productName, $product->getName());
             $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
         }
-
     }
 
     /**
