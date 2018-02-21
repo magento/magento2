@@ -131,7 +131,7 @@ class Config implements ConfigInterface
      */
     public function getBinds()
     {
-        return $this->queueConfigData->get(ConfigInterface::BINDS);
+        return $this->queueConfigData->get(ConfigInterface::BINDS, []);
     }
 
     /**
