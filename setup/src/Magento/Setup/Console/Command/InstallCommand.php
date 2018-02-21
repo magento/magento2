@@ -68,6 +68,16 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
 
     /**
+     * Parameter says that in this mode all destructive operations, like column removal will be dumped
+     */
+    const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
+
+    /**
+     * Parameter allows to restore data, that was dumped with safe mode before
+     */
+    const INPUT_KEY_DATA_RESTORE = 'data-restore';
+
+    /**
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -174,6 +184,18 @@ class InstallCommand extends AbstractSetupCommand
                 self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
                 InputOption::VALUE_NONE,
                 'Interactive Magento instalation'
+            ),
+            new InputOption(
+                self::INPUT_KEY_SAFE_INSTALLER_MODE,
+                null,
+                InputOption::VALUE_NONE,
+                'Safe installation of Magento with dumps on destructive operations, like column removal'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DATA_RESTORE,
+                null,
+                InputOption::VALUE_NONE,
+                'Restore removed data from dumps'
             ),
         ]);
         $this->setName('setup:install')
