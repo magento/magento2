@@ -74,7 +74,9 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute();
 
-        $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
+        if (count($bundleChildrenSourceItemsIdsWithSku)) {
+            $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
+        }
     }
 
     /**
@@ -94,7 +96,9 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute($sourceItemIds);
 
-        $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
+        if (count($bundleChildrenSourceItemsIdsWithSku)) {
+            $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
+        }
     }
 
     /**
