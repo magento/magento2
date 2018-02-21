@@ -21,24 +21,26 @@ class IsProductSalable implements IsProductSalableInterface
     private $conditions;
 
     /**
-     * IsProductSalable constructor.
-     *
-     * @param array $conditions
-     * @throws LocalizedException
+     * @param IsProductSalableInterface[] $conditions
      */
     public function __construct(
         array $conditions
     ) {
-        $this->conditions = $this->prepareConditions($conditions);
+        $this->conditions = $conditions;
     }
 
     /**
-     * @inheritdoc
+     * @param string $sku
+     * @param int $stockId
+     * @return bool
+     * @throws LocalizedException
      */
     public function execute(string $sku, int $stockId): bool
     {
-        foreach ($this->conditions as $condition) {
-            if ($condition->match($sku, $stockId) === true) {
+        /** @var IsProductSalableInterface $condition */
+        $conditions = $this->prepareConditions($this->conditions);
+        foreach ($conditions as $condition) {
+            if ($condition->execute($sku, $stockId) === true) {
                 return true;
             }
         }

@@ -1,16 +1,23 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: furman
- * Date: 21.02.18
- * Time: 12:00
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api;
 
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 
+/**
+ * Interface GetStockItemConfigurationInterface of Service that to return  stock item configuration interface object
+ */
 interface GetStockItemConfigurationInterface
 {
+    /**
+     * @param string $sku
+     * @param int $stockId
+     * @return StockItemConfigurationInterface
+     */
     public function execute(string $sku, int $stockId): StockItemConfigurationInterface;
 }

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model;
+namespace Magento\InventoryConfiguration\Model\IsProductSalable;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
@@ -28,8 +28,6 @@ class IsNotManageStock implements IsProductSalableInterface
     private $getStockItemConfiguration;
 
     /**
-     * IsNotManageStock constructor.
-     *
      * @param Configuration $configuration
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */

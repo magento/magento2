@@ -12,7 +12,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface StockItemConfiguration
  * @api
- * @since 100.0.0
  */
 interface StockItemConfigurationInterface extends ExtensibleDataInterface
 {

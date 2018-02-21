@@ -29,11 +29,11 @@
                 </item>
                 <item name="is_salable" xsi:type="array">
                     <item name="sort_order" xsi:type="number">30</item>
-                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsSalable</item>
+                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\IsSalable</item>
                 </item>
                 <item name="is_manage_stock" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
-                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsNotManageStock</item>
+                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\IsNotManageStock</item>
                 </item>
             </argument>
         </arguments>

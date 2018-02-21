@@ -22,8 +22,6 @@ class IsBackOrderAvailable implements IsProductSalableInterface
     private $getStockItemConfiguration;
 
     /**
-     * IsNotManageStock constructor.
-     *
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(

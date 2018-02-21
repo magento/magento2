@@ -35,7 +35,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $stockItemRepository;
 
     /**
-     * GetStockItemConfiguration constructor.
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param StockItemRepository $stockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
