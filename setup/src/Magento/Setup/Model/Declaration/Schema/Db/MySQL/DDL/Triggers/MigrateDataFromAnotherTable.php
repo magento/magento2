@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\DDL\Triggers;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Setup\Model\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
@@ -28,13 +29,22 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     private $resourceConnection;
 
     /**
+     * @var SelectFactory
+     */
+    private $selectFactory;
+
+    /**
      * Constructor.
      *
      * @param ResourceConnection $resourceConnection
+     * @param SelectFactory $selectFactory
      */
-    public function __construct(ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        SelectFactory $selectFactory
+    ) {
         $this->resourceConnection = $resourceConnection;
+        $this->selectFactory = $selectFactory;
     }
 
     /**
@@ -59,12 +69,11 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
             $adapter = $this->resourceConnection->getConnection(
                 $column->getTable()->getResource()
             );
-            $select = $adapter->select()
-                ->setPart('disable_staging_preview', true)
-                ->from(
-                    $this->resourceConnection->getTableName($tableMigrateFrom),
-                    [$column->getName() => $columnMigrateFrom]
-                );
+            $select = $this->selectFactory->create($adapter);
+            $select->from(
+                $this->resourceConnection->getTableName($tableMigrateFrom),
+                [$column->getName() => $columnMigrateFrom]
+            );
             //Update only if table exists
             if ($adapter->isTableExists($tableMigrateFrom)) {
                 $adapter->query(

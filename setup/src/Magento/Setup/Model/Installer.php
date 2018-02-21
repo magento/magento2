@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -27,6 +28,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\PatchApplierInterface;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -34,6 +36,12 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Setup\Model\Patch\PatchApplierFactory;
+use Magento\Setup\Model\Patch\PatchHistory;
+use Magento\Setup\Model\Patch\PatchReader;
+use Magento\Setup\Model\Patch\PatchRegistry;
+use Magento\Setup\Model\Patch\PatchRegistryFactory;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -233,6 +241,11 @@ class Installer
      * @var SchemaPersistor
      */
     private $schemaPersistor;
+
+    /**
+     * @var PatchApplierFactory
+     */
+    private $patchApplierFactory;
 
     /**
      * Constructor
@@ -580,7 +593,6 @@ class Installer
     {
         /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
         $connection = $setup->getConnection();
-
         $setup->startSetup();
 
         $this->setupSessionTable($setup, $connection);
@@ -875,6 +887,7 @@ class Installer
      * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function handleDBSchemaData($setup, $type)
     {
@@ -890,7 +903,25 @@ class Installer
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
+        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(
+            PatchApplierFactory::class,
+            [
+                'objectManager' => $this->objectManagerProvider->get()
+            ]
+        );
+        /** @var PatchApplier $patchApplier */
+        if ($type === 'schema') {
+            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
+        } elseif ($type === 'data') {
+            $patchApplier = $this->patchApplierFactory->create([
+                'moduleDataSetup' => $setup,
+                'objectManager' => $this->objectManagerProvider->get()
+            ]);
+        }
+
         foreach ($moduleNames as $moduleName) {
+            $installer = false;
+            $upgrader = false;
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
@@ -903,11 +934,11 @@ class Installer
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                    }
-                    if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer);
-                    } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer);
+                        if ($type === 'schema') {
+                            $resource->setDbVersion($moduleName, $configVer);
+                        } elseif ($type === 'data') {
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
                     }
                 }
             } elseif ($configVer) {
@@ -921,12 +952,25 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
+            }
+
+            if ($installer || $upgrader) {
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
                 } elseif ($type === 'data') {
                     $resource->setDataVersion($moduleName, $configVer);
                 }
             }
+
+            /**
+             * Applying data patches after old upgrade data scripts
+             */
+            if ($type === 'schema') {
+                $patchApplier->applySchemaPatch($moduleName);
+            } elseif ($type === 'data') {
+                $patchApplier->applyDataPatch($moduleName);
+            }
+
             $this->logProgress();
         }
 
