@@ -1,0 +1,27 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/inventory/source-item-configuration/:sourceCode/:sku" method="GET">
+        <service class="Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source-item-configuration" method="POST">
+        <service class="Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source-item-configuration" method="DELETE">
+        <service class="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+</routes>
