@@ -11,9 +11,9 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- * Product form modifier.
+ * Quantity And StockStatus modifier on CatalogInventory Product Editing Form
  */
-class CatalogInventory extends AbstractModifier
+class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
 {
     /**
      * @var ArrayManager
