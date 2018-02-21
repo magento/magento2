@@ -114,10 +114,10 @@ class UpdateUrlPathTest extends \PHPUnit\Framework\TestCase
         $this->category->expects($this->atLeastOnce())->method('isInRootCategoryList')->willReturn(false);
         $this->category->expects($this->never())->method('getStoreIds');
 
-       $this->assertEquals(
-           $this->categoryResource,
-           $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
-       );
+        $this->assertEquals(
+            $this->categoryResource,
+            $this->updateUrlPathPlugin->afterSave($this->categoryResource, $this->categoryResource, $this->category)
+        );
     }
 
     public function testAroundSaveWithRootCategory()

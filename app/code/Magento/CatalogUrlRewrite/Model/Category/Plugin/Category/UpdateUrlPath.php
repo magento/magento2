@@ -5,13 +5,14 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
-use \Magento\Catalog\Model\Category;
-use \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-use \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use \Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
-use \Magento\UrlRewrite\Model\UrlPersistInterface;
-use \Magento\Store\Model\Store;
-use \Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 
 /**
  * Generate and save url-rewrites for category if its parent have specified url-key for different store views
@@ -61,14 +62,14 @@ class UpdateUrlPath
      *
      * @param CategoryResource $subject
      * @param CategoryResource $result
-     * @param Category $category
+     * @param AbstractModel $category
      * @return CategoryResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
         CategoryResource $subject,
         CategoryResource $result,
-        Category $category
+        AbstractModel $category
     ) {
         $parentCategoryId = $category->getParentId();
         if ($category->isObjectNew()
