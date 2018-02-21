@@ -38,10 +38,11 @@
             <field key="uses_per_coupon" required="true">integer</field>
             <field key="simple_free_shipping" required="true">string</field>
             <field key="extension_attributes">empty_extension_attribute</field>
-            <array key="customer_group_ids">
+            <field key="description" required="true">string</field>
+            <array key="customer_group_ids" required="true">
                 <value>integer</value>
             </array>
-            <array key="website_ids">
+            <array key="website_ids" required="true">
                 <value>integer</value>
             </array>
         </object>
