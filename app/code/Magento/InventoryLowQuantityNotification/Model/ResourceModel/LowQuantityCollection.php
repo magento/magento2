@@ -5,12 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock;
+namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -24,7 +22,7 @@ use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigu
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
-class Collection extends AbstractCollection
+class LowQuantityCollection extends AbstractCollection
 {
     /**
      * @var StockConfigurationInterface
@@ -98,7 +96,7 @@ class Collection extends AbstractCollection
 
         $this->setOrder(
             SourceItemInterface::QUANTITY,
-            DataCollection::SORT_ORDER_ASC
+            self::SORT_ORDER_ASC
         );
         return $this;
     }
@@ -114,7 +112,7 @@ class Collection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity' => $productEntityTable],
-            'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
+            'main_table.' . SourceItemInterface::SKU . ' = product_entity.sku',
             []
         );
 

@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="id" xsi:type="string">gridLowstock</argument>
                     <argument name="use_ajax" xsi:type="string">0</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\LowQuantityCollection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.block.report.product.inventory.lowstock.export" as="grid.export">
                     <arguments>
@@ -67,7 +67,7 @@
                             <argument name="filter_index" xsi:type="string">source_code</argument>
                             <argument name="index" xsi:type="string">source_code</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\InventoryLowQuantityNotification\Block\Adminhtml\Product\Lowstock\Grid\Options\SourceCodeOption"/>
+                            <argument name="options" xsi:type="options" model="Magento\InventoryLowQuantityNotification\Model\OptionSource\SourceCode"/>
                             <argument name="header_css_class" xsi:type="string">col-source-code</argument>
                             <argument name="column_css_class" xsi:type="string">col-source-code</argument>
                         </arguments>
