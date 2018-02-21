@@ -11,12 +11,12 @@ use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryCatalog\Model\GetLegacyStockItem;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\CatalogInventory\Model\Configuration;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Class ConfigMinQty
- * @package Magento\InventoryConfiguration\Model
  */
-class ConfigMinQty implements StockItemConditionInterface
+class ConfigMinQty implements IsProductSalableInterface
 {
     /**
      * @var GetLegacyStockItem
@@ -59,15 +59,14 @@ class ConfigMinQty implements StockItemConditionInterface
 
     /**
      * @param string $sku
-     * @param int $stockItem
+     * @param int $stockId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function match(string $sku, int $stockItem): bool
+    public function execute(string $sku, int $stockId): bool
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockItem);
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
-        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockItem);
+        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
 
         if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)

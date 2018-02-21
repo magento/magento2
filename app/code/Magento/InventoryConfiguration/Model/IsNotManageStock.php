@@ -9,12 +9,12 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\InventoryCatalog\Model\GetLegacyStockItem;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Class IsNotManageStock
- * @package Magento\InventoryConfiguration\Model\ResourceModel
  */
-class IsNotManageStock implements StockItemConditionInterface
+class IsNotManageStock implements IsProductSalableInterface
 {
     /**
      * @var Configuration
@@ -28,6 +28,7 @@ class IsNotManageStock implements StockItemConditionInterface
 
     /**
      * IsNotManageStock constructor.
+     *
      * @param Configuration $configuration
      * @param GetLegacyStockItem $getLegacyStockItem
      */
@@ -41,11 +42,10 @@ class IsNotManageStock implements StockItemConditionInterface
 
     /**
      * @param string $sku
-     * @param int $stockItem
+     * @param int $stockId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function match(string $sku, int $stockItem): bool
+    public function execute(string $sku, int $stockId): bool
     {
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
         $globalManageStock = $this->configuration->getManageStock();

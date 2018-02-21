@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\InventoryConfiguration\Model\StockItemConditionInterface;
-use Magento\CatalogInventory\Model\Stock;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Class IsBackOrderAvailable
- * @package Magento\InventoryCatalog\Model
  */
-class IsBackOrderAvailable implements StockItemConditionInterface
+class IsBackOrderAvailable implements IsProductSalableInterface
 {
     /**
      * @var GetLegacyStockItem
@@ -23,6 +22,7 @@ class IsBackOrderAvailable implements StockItemConditionInterface
 
     /**
      * IsNotManageStock constructor.
+     *
      * @param GetLegacyStockItem $getLegacyStockItem
      */
     public function __construct(
@@ -33,15 +33,16 @@ class IsBackOrderAvailable implements StockItemConditionInterface
 
     /**
      * @param string $sku
-     * @param int $stockItem
+     * @param int $stockId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function match(string $sku, int $stockItem): bool
+    public function execute(string $sku, int $stockId): bool
     {
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
-        if ($legacyStockItem->getBackorders() != Stock::BACKORDERS_NO)
+        if ($legacyStockItem->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO) {
             return true;
+        }
+
         return false;
     }
 }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryConfiguration\Model\StockItemConditionInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -17,12 +16,13 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class IsProductSalable implements IsProductSalableInterface
 {
     /**
-     * @var StockItemConditionInterface[]
+     * @var IsProductSalableInterface[]
      */
     private $conditions;
 
     /**
      * IsProductSalable constructor.
+     *
      * @param array $conditions
      * @throws LocalizedException
      */
@@ -65,9 +65,9 @@ class IsProductSalable implements IsProductSalableInterface
 
         $conditionsList = [];
         foreach ($conditions as $item) {
-            if (!$item['condition'] instanceof StockItemConditionInterface) {
+            if (!$item['condition'] instanceof IsProductSalableInterface) {
                 throw new LocalizedException(
-                    __('Condition have to implement StockItemConditionInterface.')
+                    __('Condition have to implement IsProductSalableInterface.')
                 );
             } else {
                 $conditionsList[] = $item['condition'];

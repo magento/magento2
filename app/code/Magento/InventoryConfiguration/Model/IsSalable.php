@@ -9,12 +9,13 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryCatalog\Model\GetLegacyStockItem;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
  * Class IsSalable
  * @package Magento\InventoryConfiguration\Model
  */
-class IsSalable implements StockItemConditionInterface
+class IsSalable implements IsProductSalableInterface
 {
     /**
      * @var GetLegacyStockItem
@@ -41,13 +42,12 @@ class IsSalable implements StockItemConditionInterface
 
     /**
      * @param string $sku
-     * @param int $stockItem
+     * @param int $stockId
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function match(string $sku, int $stockItem): bool
+    public function execute(string $sku, int $stockId): bool
     {
-        $stockItemData = $this->getStockItemData->execute($sku,$stockItem);
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
         $legacyStockItem = $this->getLegacyStockItem->execute($sku);
         $isSalable = (bool)$stockItemData['is_salable'];
         if (null === $legacyStockItem) {

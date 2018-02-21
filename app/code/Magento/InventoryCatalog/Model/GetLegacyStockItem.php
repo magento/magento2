@@ -15,7 +15,6 @@ use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 
 /**
  * Service GetLegacyStockItem returns old inventory item data
- * @package Magento\InventoryCatalog\Model
  */
 class GetLegacyStockItem
 {
@@ -56,21 +55,15 @@ class GetLegacyStockItem
 
     /**
      * @param string $sku
-     * @return Item|null
-     * @throws LocalizedException
+     * @return StockItemInterface|Item[]
      */
     public function execute(string $sku)
     {
-        if (!$this->item) {
-            $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $searchCriteria = $this->stockItemCriteriaFactory->create();
+        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
+        $legacyStockItem = $this->stockItemRepository->getList($searchCriteria);
 
-            $searchCriteria = $this->stockItemCriteriaFactory->create();
-            $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-
-            $legacyStockItem = $this->stockItemRepository->getList($searchCriteria);
-            $this->item = $legacyStockItem->getItems()[0];
-        }
-
-        return $this->item;
+        return $legacyStockItem->getItems()[0];
     }
 }
