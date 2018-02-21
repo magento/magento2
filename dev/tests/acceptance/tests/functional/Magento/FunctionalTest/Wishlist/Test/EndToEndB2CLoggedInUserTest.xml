@@ -10,8 +10,9 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <!-- Step 5: Add products to wishlist -->
+        <comment userInput="Start of adding products to wishlist" stepKey="startOfAddingProductsToWishlist" after="endOfComparingProducts" />
         <!-- Add Simple Product 1 to wishlist -->
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="startAddingProductsToWishlist" stepKey="wishlistGotoCategory1"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="startOfAddingProductsToWishlist" stepKey="wishlistGotoCategory1"/>
         <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" after="wishlistGotoCategory1" stepKey="wishlistAddSimpleProduct1ToWishlist">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -34,7 +35,6 @@
         <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-
-        <comment userInput="Add more products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="addMoreProductsToWishlist" />
+        <comment userInput="End of adding products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="endOfAddingProductsToWishlist" />
     </test>
 </tests>
