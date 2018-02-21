@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
@@ -761,7 +761,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 return $this;
             }
 
-            $payment->setIsFraudDetected(true);
+            $fdsFilterAction = (string)$fraudDetailsResponse->getFdsFilterAction();
+            if ($this->fdsFilterActionIsReportOnly($fdsFilterAction) === false) {
+                $payment->setIsFraudDetected(true);
+            }
+
             $payment->setAdditionalInformation('fraud_details', $fraudData);
         } catch (\Exception $e) {
             //this request is optional
@@ -1034,5 +1038,17 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     private function getOrderIncrementId()
     {
         return $this->getResponse()->getXInvoiceNum();
+    }
+
+    /**
+     * Checks if filter action is Report Only. Transactions that trigger this filter are processed as normal,
+     * but are also reported in the Merchant Interface as triggering this filter.
+     *
+     * @param string $fdsFilterAction
+     * @return bool
+     */
+    private function fdsFilterActionIsReportOnly($fdsFilterAction)
+    {
+        return $fdsFilterAction === (string)$this->dataHelper->getFdsFilterActionLabel('report');
     }
 }

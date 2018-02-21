@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @deprecated robots.txt file is no longer stored in filesystem. It generates as response on request.
+ */
 class Robots extends \Magento\Framework\App\Config\Value
 {
     /**

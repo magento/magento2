@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -523,8 +523,13 @@ class AccountManagement implements AccountManagementInterface
                 default:
                     throw new InputException(
                         __(
-                            'Invalid value of "%value" provided for the %fieldName field.',
-                            ['value' => $template, 'fieldName' => 'email type']
+                            'Invalid value of "%value" provided for the %fieldName field. Possible values are %template1 or %template2.',
+                            [
+                                'value' => $template,
+                                'fieldName' => 'template',
+                                'template1' => AccountManagement::EMAIL_REMINDER,
+                                'template2' => AccountManagement::EMAIL_RESET
+                            ]
                         )
                     );
             }
@@ -1097,11 +1102,13 @@ class AccountManagement implements AccountManagementInterface
             $email = $customer->getEmail();
         }
 
-        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)->setTemplateOptions(
-            ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
-        )->setTemplateVars($templateParams)->setFrom(
-            $this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
-        )->addTo($email, $this->customerViewHelper->getCustomerName($customer))->getTransport();
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
+            ->setTemplateVars($templateParams)
+            ->setScopeId($storeId)
+            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
+            ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
+            ->getTransport();
 
         $transport->sendMessage();
 

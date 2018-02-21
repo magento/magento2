@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Swatches\Model\Swatch;
 use Magento\Framework\Exception\InputException;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -118,9 +118,17 @@ class EavAttribute
             $swatchesArray = $attribute->getData('swatchtext');
         }
         if ($canReplace == true) {
-            $attribute->setData('option', $optionsArray);
-            $attribute->setData('default', $defaultValue);
-            $attribute->setData('swatch', $swatchesArray);
+            if (!empty($optionsArray)) {
+                $attribute->setData('option', $optionsArray);
+            }
+            if (!empty($defaultValue)) {
+                $attribute->setData('default', $defaultValue);
+            } else {
+                $attribute->setData('default', [0 => $attribute->getDefaultValue()]);
+            }
+            if (!empty($swatchesArray)) {
+                $attribute->setData('swatch', $swatchesArray);
+            }
         }
     }
 
@@ -316,7 +324,7 @@ class EavAttribute
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
-        $isOptionForDelete = $attribute->getData('option/delete/'.$optionId);
+        $isOptionForDelete = $attribute->getData('option/delete/' . $optionId);
         return isset($isOptionForDelete) && $isOptionForDelete;
     }
 
@@ -333,7 +341,7 @@ class EavAttribute
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->addFieldToFilter('store_id', $storeId);
         $collection->setPageSize(1);
-        
+
         $loadedSwatch = $collection->getFirstItem();
         if ($loadedSwatch->getId()) {
             $this->isSwatchExists = true;
@@ -356,7 +364,6 @@ class EavAttribute
         if ($this->isSwatchExists) {
             $swatch->setData('type', $type);
             $swatch->setData('value', $value);
-
         } else {
             $swatch->setData('option_id', $optionId);
             $swatch->setData('store_id', $storeId);

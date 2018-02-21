@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,51 +28,41 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 
+    /** @var \Magento\Catalog\Model\ResourceModel\Category|\PHPUnit_Framework_MockObject_MockObject */
+    private $category;
+
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $connection;
+
+    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    private $dbSelect;
+
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
-        $this->productModel = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            [
-                '__wakeup',
-                'getAvailableInCategories',
-                'hasData',
-                'getData',
-                'getId',
-                'getStoreId',
-                'getResource',
-                'addAttributeToSelect',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->productResource = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product',
-            ['loadAllAttributes',
-                'getAttributesByCode',
-                'getAttribute'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->eavAttributeResource = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
-            [
-                '__wakeup',
-                'isAllowedForRuleCondition',
-                'getDataUsingMethod',
-                'getAttributeCode',
-                'getFrontendLabel',
-                'isScopeGlobal',
-                'getBackendType',
-                'getFrontendInput'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->config = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMock();
+        $this->productModel = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->setMethods(['loadAllAttributes', 'getAttributesByCode', 'getAttribute', 'getConnection', 'getTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->dbSelect = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where'])
+            ->getMock();
+        $this->eavAttributeResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')
             ->will($this->returnSelf());
@@ -89,11 +79,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(
-            'Magento\CatalogRule\Model\Rule\Condition\Product',
+            \Magento\CatalogRule\Model\Rule\Condition\Product::class,
             [
                 'config' => $this->config,
                 'product' => $this->productModel,
-                'productResource' => $this->productResource
+                'productResource' => $this->productResource,
+                'category' => $this->category
             ]
         );
     }
@@ -103,12 +94,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateMeetsCategory()
     {
+        $categoryIdList = [1, 2, 3];
+
+        $this->productResource->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($this->connection);
+        $this->connection->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($this->dbSelect);
+        $this->dbSelect->expects($this->atLeastOnce())
+            ->method('from')
+            ->willReturnSelf();
+        $this->dbSelect->expects($this->atLeastOnce())
+            ->method('where')
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchCol')
+            ->willReturn($categoryIdList);
         $this->product->setData('attribute', 'category_ids');
         $this->product->setData('value_parsed', '1');
-        $this->product->setData('operator', '>=');
+        $this->product->setData('operator', '{}');
 
-        $this->productModel->expects($this->once())->method('getAvailableInCategories')
-            ->will($this->returnValue('2'));
         $this->assertTrue($this->product->validate($this->productModel));
     }
 

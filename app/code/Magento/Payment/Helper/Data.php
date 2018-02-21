@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Helper;
@@ -290,6 +290,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
+                    $labelValues[$code]['value'] = null;
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
                     $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];

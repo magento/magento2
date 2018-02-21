@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -1058,8 +1058,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
-        return $this;
+        return $this->cleanModelCache();
     }
 
     /**
@@ -2278,13 +2277,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+        $identities = [];
+
+        if ($this->getId()) {
+            $identities[] = self::CACHE_TAG . '_' . $this->getId();
+        }
         if ($this->getIsChangedCategories()) {
             foreach ($this->getAffectedCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        
         if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
@@ -2633,5 +2635,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setAssociatedProductIds(array $productIds)
     {
         $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCacheTags()
+    {
+        //Preferring individual tags over broad ones.
+        $individualTags = $this->getIdentities();
+        if ($individualTags) {
+            return $individualTags;
+        }
+
+        return parent::getCacheTags();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -15,6 +15,7 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Quote\Api\Data\CartSearchResultsInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Api\Data\CartExtension;
+use Magento\Store\Model\Website;
 
 /**
  * QuoteRepository test.
@@ -43,17 +44,42 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $filterBuilder;
 
+    /**
+     * @var array
+     */
+    private $addressData;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->quoteRepository = $this->objectManager->create(QuoteRepository::class);
         $this->searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->filterBuilder = $this->objectManager->create(FilterBuilder::class);
+
+        $this->addressData = require __DIR__ . '/../../Sales/_files/address_data.php';
+    }
+
+    /**
+     * Tests getting quote.
+     * @magentoDataFixture Magento/Quote/_files/quote_on_second_website.php
+     */
+    public function testGet()
+    {
+        /** @var Website $website */
+        $website = $this->objectManager->create(Website::class);
+        $website->load('test', 'code');
+
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->setSharedStoreIds($website->getStoreIds());
+        $quote->load('test01', 'reserved_order_id');
+
+        $this->quoteRepository->get($quote->getId());
     }
 
     /**
      * Tests getting list of quotes according to search criteria.
-     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Quote/_files/quote.php
      */
     public function testGetList()
     {
@@ -64,7 +90,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests getting list of quotes according to different search criterias.
-     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Quote/_files/quote.php
      */
     public function testGetListDoubleCall()
     {
@@ -86,15 +112,13 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithNotExistingCustomerAddress()
     {
-        $addressData = include __DIR__ . '/../../Sales/_files/address_data.php';
-
         /** @var QuoteAddress $billingAddress */
-        $billingAddress = $this->objectManager->create(QuoteAddress::class, ['data' => $addressData]);
+        $billingAddress = $this->objectManager->create(QuoteAddress::class, ['data' => $this->addressData]);
         $billingAddress->setAddressType(QuoteAddress::ADDRESS_TYPE_BILLING)
             ->setCustomerAddressId('not_existing');
 
         /** @var QuoteAddress $shippingAddress */
-        $shippingAddress = $this->objectManager->create(QuoteAddress::class, ['data' => $addressData]);
+        $shippingAddress = $this->objectManager->create(QuoteAddress::class, ['data' => $this->addressData]);
         $shippingAddress->setAddressType(QuoteAddress::ADDRESS_TYPE_SHIPPING)
             ->setCustomerAddressId('not_existing');
 
@@ -130,6 +154,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->getAddress()
                 ->getCustomerAddressId()
         );
+
+        $this->quoteRepository->delete($quote);
     }
 
     /**
@@ -159,13 +185,9 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function performAssertions($searchResult)
     {
-        $expectedExtensionAttributes = [
-            'firstname' => 'firstname',
-            'lastname' => 'lastname',
-            'email' => 'admin@example.com'
-        ];
-
         $items = $searchResult->getItems();
+        $this->assertNotEmpty($items, 'Search result is empty.');
+
         /** @var CartInterface $actualQuote */
         $actualQuote = array_pop($items);
         /** @var UserInterface $testAttribute */
@@ -173,8 +195,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(CartInterface::class, $actualQuote);
         $this->assertEquals('test01', $actualQuote->getReservedOrderId());
-        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
-        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
-        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
+        $this->assertEquals($this->addressData['firstname'], $testAttribute->getFirstName());
+        $this->assertEquals($this->addressData['lastname'], $testAttribute->getLastName());
+        $this->assertEquals($this->addressData['email'], $testAttribute->getEmail());
     }
 }

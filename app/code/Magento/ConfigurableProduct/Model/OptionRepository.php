@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
@@ -279,7 +279,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $inputException->addError(__('Option values are not specified.'));
         } else {
             foreach ($option->getValues() as $optionValue) {
-                if (!$optionValue->getValueIndex()) {
+                if (null === $optionValue->getValueIndex()) {
                     $inputException->addError(__('Value index is not specified for an option.'));
                 }
             }

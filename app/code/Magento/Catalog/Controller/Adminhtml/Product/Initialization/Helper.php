@@ -1,16 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Backend\Helper\Js;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
+use Magento\Framework\Stdlib\DateTime\Filter\DateTime;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Helper
@@ -19,12 +26,12 @@ use Magento\Framework\App\ObjectManager;
 class Helper
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -34,12 +41,12 @@ class Helper
     protected $stockFilter;
 
     /**
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     protected $jsHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var Date
      *
      * @deprecated
      */
@@ -71,55 +78,89 @@ class Helper
     private $linkResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @var DateTime
      */
     private $dateTimeFilter;
     
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var LinkTypeProvider
      */
     private $linkTypeProvider;
 
     /**
      * Helper constructor.
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param RequestInterface $request
+     * @param StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param ProductLinks $productLinks
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param Js $jsHelper
+     * @param DateFilter $dateFilter
+     * @param LinkTypeProvider|null $linkTypeProvider
+     * @param CustomOptionFactory|null $customOptionFactory
+     * @param ProductLinkFactory|null $productLinkFactory
+     * @param ProductRepository|null $productRepository
+     * @param DateTime|null $dateTimeFilter
+     * @param LinkResolver|null $linkResolver
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        RequestInterface $request,
+        StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
-        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
-        \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
+        ProductLinks $productLinks,
+        Js $jsHelper,
+        DateFilter $dateFilter,
+        LinkTypeProvider $linkTypeProvider = null,
+        CustomOptionFactory $customOptionFactory = null,
+        ProductLinkFactory $productLinkFactory = null,
+        ProductRepository $productRepository = null,
+        DateTime $dateTimeFilter = null,
+        LinkResolver $linkResolver = null
     ) {
+        if (null === $linkTypeProvider) {
+            $linkTypeProvider = ObjectManager::getInstance()->get(LinkTypeProvider::class);
+        }
+        if (null === $customOptionFactory) {
+            $customOptionFactory = ObjectManager::getInstance()->get(CustomOptionFactory::class);
+        }
+        if (null === $productLinkFactory) {
+            $productLinkFactory = ObjectManager::getInstance()->get(ProductLinkFactory::class);
+        }
+        if (null === $productRepository) {
+            $productRepository = ObjectManager::getInstance()->get(ProductRepository::class);
+        }
+        if (null === $dateTimeFilter) {
+            $dateTimeFilter = ObjectManager::getInstance()->get(DateTime::class);
+        }
+        if (null === $linkResolver) {
+            $linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
+        $this->linkTypeProvider = $linkTypeProvider;
+        $this->customOptionFactory = $customOptionFactory;
+        $this->productLinkFactory = $productLinkFactory;
+        $this->productRepository = $productRepository;
+        $this->dateTimeFilter = $dateTimeFilter;
+        $this->linkResolver = $linkResolver;
     }
 
     /**
      * Initialize product from data
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array $productData
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
+    public function initializeFromData(Product $product, array $productData)
     {
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
@@ -158,7 +199,7 @@ class Helper
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
+                    $dateFieldFilters[$attrKey] = $this->dateTimeFilter;
                 }
             }
         }
@@ -195,36 +236,7 @@ class Helper
         }
 
         $product = $this->setProductLinks($product);
-
-        /**
-         * Initialize product options
-         */
-        if ($productOptions && !$product->getOptionsReadonly()) {
-            // mark custom options that should to fall back to default value
-            $options = $this->mergeProductOptions(
-                $productOptions,
-                $this->request->getPost('options_use_default')
-            );
-            $customOptions = [];
-            foreach ($options as $customOptionData) {
-                if (empty($customOptionData['is_delete'])) {
-                    if (empty($customOptionData['option_id'])) {
-                        $customOptionData['option_id'] = null;
-                    }
-
-                    if (isset($customOptionData['values'])) {
-                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                            return empty($valueData['is_delete']);
-                        });
-                    }
-
-                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
-                    $customOption->setProductSku($product->getSku());
-                    $customOptions[] = $customOption;
-                }
-            }
-            $product->setOptions($customOptions);
-        }
+        $product = $this->fillProductOptions($product, $productOptions);
 
         $product->setCanSaveCustomOptions(
             !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
@@ -236,10 +248,10 @@ class Helper
     /**
      * Initialize product before saving
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $product
+     * @return Product
      */
-    public function initialize(\Magento\Catalog\Model\Product $product)
+    public function initialize(Product $product)
     {
         $productData = $this->request->getPost('product', []);
         return $this->initializeFromData($product, $productData);
@@ -248,13 +260,14 @@ class Helper
     /**
      * Setting product links
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $product
+     * @return Product
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setProductLinks(\Magento\Catalog\Model\Product $product)
+    protected function setProductLinks(Product $product)
     {
-        $links = $this->getLinkResolver()->getLinks();
+        $links = $this->linkResolver->getLinks();
 
         $product->setProductLinks([]);
 
@@ -279,8 +292,8 @@ class Helper
                         continue;
                     }
 
-                    $linkProduct = $this->getProductRepository()->getById($linkData['id']);
-                    $link = $this->getProductLinkFactory()->create();
+                    $linkProduct = $this->productRepository->getById($linkData['id']);
+                    $link = $this->productLinkFactory->create();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)
@@ -389,69 +402,49 @@ class Helper
     }
 
     /**
-     * @return CustomOptionFactory
-     */
-    private function getCustomOptionFactory()
-    {
-        if (null === $this->customOptionFactory) {
-            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
-        }
-
-        return $this->customOptionFactory;
-    }
-
-    /**
-     * @return ProductLinkFactory
-     */
-    private function getProductLinkFactory()
-    {
-        if (null === $this->productLinkFactory) {
-            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
-        }
-
-        return $this->productLinkFactory;
-    }
-
-    /**
-     * @return ProductRepository
-     */
-    private function getProductRepository()
-    {
-        if (null === $this->productRepository) {
-            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
-        }
-
-        return $this->productRepository;
-    }
-
-    /**
-     * @deprecated
-     * @return LinkResolver
-     */
-    private function getLinkResolver()
-    {
-        if (!is_object($this->linkResolver)) {
-            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
-        }
-
-        return $this->linkResolver;
-    }
-
-    /**
-     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * Fills $product with options from $productOptions array
      *
-     * @deprecated
+     * @param Product $product
+     * @param array $productOptions
+     * @return Product
      */
-    private function getDateTimeFilter()
+    private function fillProductOptions(Product $product, array $productOptions)
     {
-        if ($this->dateTimeFilter === null) {
-            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        if ($product->getOptionsReadonly()) {
+            return $product;
+        }
+        if (empty($productOptions)) {
+            return $product->setOptions([]);
+        }
+        // mark custom options that should to fall back to default value
+        $options = $this->mergeProductOptions(
+            $productOptions,
+            $this->request->getPost('options_use_default')
+        );
+        $customOptions = [];
+        foreach ($options as $customOptionData) {
+            if (!empty($customOptionData['is_delete'])) {
+                continue;
+            }
+
+            if (empty($customOptionData['option_id'])) {
+                $customOptionData['option_id'] = null;
+            }
+            if (isset($customOptionData['values'])) {
+                $customOptionData['values'] = array_filter(
+                    $customOptionData['values'],
+                    function ($valueData) {
+                        return empty($valueData['is_delete']);
+                    }
+                );
+            }
+            $customOption = $this->customOptionFactory->create(
+                ['data' => $customOptionData]
+            );
+            $customOption->setProductSku($product->getSku());
+            $customOptions[] = $customOption;
         }
 
-        return $this->dateTimeFilter;
+        return $product->setOptions($customOptions);
     }
 }
