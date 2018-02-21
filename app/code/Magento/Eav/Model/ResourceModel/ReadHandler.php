@@ -102,7 +102,7 @@ class ReadHandler implements AttributeInterface
 
         $attributeTables = [];
         $attributesMap = [];
-        $selects = [];
+        $attributeValues = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($this->getAttributes($entityType) as $attribute) {
@@ -127,18 +127,17 @@ class ReadHandler implements AttributeInterface
                         $this->getContextVariables($scope)
                     )->order('t.' . $scope->getIdentifier() . ' ASC');
                 }
-                $selects[] = $select;
+                $attributeTablesValues = $connection->fetchAll($select);
+                $attributeValues = array_merge($attributeValues, $attributeTablesValues);
             }
-            foreach ($selects as $select) {
-                foreach ($connection->fetchAll($select) as $attributeValue) {
-                    if (isset($attributesMap[$attributeValue['attribute_id']])) {
-                        $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
-                    } else {
-                        $this->logger->warning(
-                            "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
-                        for entity type '$entityType'."
-                        );
-                    }
+            foreach ($attributeValues as $attributeValue) {
+                if (isset($attributesMap[$attributeValue['attribute_id']])) {
+                    $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                } else {
+                    $this->logger->warning(
+                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
+                    for entity type '$entityType'."
+                    );
                 }
             }
         }
