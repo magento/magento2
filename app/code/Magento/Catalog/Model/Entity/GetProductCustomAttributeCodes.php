@@ -26,7 +26,9 @@ class GetProductCustomAttributeCodes implements GetCustomAttributeCodesInterface
         $this->baseCustomAttributeCodes = $baseCustomAttributeCodes;
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function execute(MetadataServiceInterface $metadataService): array
     {
         $customAttributesCodes = $this->baseCustomAttributeCodes->execute($metadataService);

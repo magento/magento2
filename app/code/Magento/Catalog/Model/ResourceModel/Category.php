@@ -11,9 +11,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityManager;
 
 /**
@@ -95,7 +92,6 @@ class Category extends AbstractResource
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param CategoryAttributeRepositoryInterface|null $metaDataService
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -117,7 +113,7 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
-        $this->serializer = $serializer ?: ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
@@ -1064,7 +1060,7 @@ class Category extends AbstractResource
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
-            $this->entityManager = ObjectManager::getInstance()
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\EntityManager::class);
         }
         return $this->entityManager;
@@ -1076,7 +1072,7 @@ class Category extends AbstractResource
     private function getAggregateCount()
     {
         if (null === $this->aggregateCount) {
-            $this->aggregateCount = ObjectManager::getInstance()
+            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;

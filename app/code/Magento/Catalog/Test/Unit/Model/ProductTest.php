@@ -8,8 +8,8 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -144,6 +144,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $metadataServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $attributeValueFactory;
 
     /**
@@ -193,6 +198,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $extensionAttributes;
+
+    /**
+     * @var GetCustomAttributeCodesInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $getCustomAttributeCodes;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -270,7 +280,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $optionFactory->expects($this->any())->method('create')->willReturn($this->optionInstanceMock);
 
-        $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
@@ -322,6 +334,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->metadataServiceMock = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -362,6 +375,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($this->extensionAttributes);
+        $this->getCustomAttributeCodes = $this->getMockBuilder(GetCustomAttributeCodesInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['execute'])
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -384,14 +401,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'catalogProduct' => $this->_catalogProduct,
                 'imageCacheFactory' => $this->imageCacheFactory,
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
-                'metadataService' => $this->createMock(ProductAttributeRepositoryInterface::class),
+                'metadataService' => $this->metadataServiceMock,
                 'customAttributeFactory' => $this->attributeValueFactory,
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
                 'catalogProductMediaConfig' => $this->mediaConfig,
                 '_filesystem' => $this->filesystemMock,
                 '_collectionFactory' => $this->collectionFactoryMock,
-                'data' => ['id' => 1]
+                'data' => ['id' => 1],
+                'getCustomAttributeCodes' => $this->getCustomAttributeCodes
             ]
         );
     }
@@ -1260,40 +1278,31 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $interfaceAttributeCode = 'price';
-        $customAttributeCode = 'color';
-
-        $this->resource
-            ->method('getCustomAttributesCodes')
-            ->willReturn([$customAttributeCode]);
-        $this->model->setData($interfaceAttributeCode, 10);
+        $priceCode = 'price';
+        $colorAttributeCode = 'color';
+        $this->getCustomAttributeCodes->expects($this->exactly(3))
+            ->method('execute')
+            ->willReturn([$colorAttributeCode]);
+        $this->model->setData($priceCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
-        $initialCustomAttribueValue = "red";
-        $this->model->setData($customAttributeCode, $initialCustomAttribueValue);
+        $this->model->setData($colorAttributeCode, "red");
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
-            $initialCustomAttribueValue,
-            $this->model->getCustomAttribute($customAttributeCode)->getValue()
-        );
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $newCustomAttributeValue = "blue";
-        $this->model->setData($customAttributeCode, $newCustomAttributeValue);
+        $this->model->setData($colorAttributeCode, "blue");
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals(
-            $newCustomAttributeValue,
-            $this->model->getCustomAttribute($customAttributeCode)->getValue()
-        );
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
     }
 
     /**

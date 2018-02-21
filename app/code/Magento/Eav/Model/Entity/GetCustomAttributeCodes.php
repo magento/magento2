@@ -6,7 +6,6 @@
 
 namespace Magento\Eav\Model\Entity;
 
-
 use Magento\Framework\Api\MetadataServiceInterface;
 
 class GetCustomAttributeCodes implements GetCustomAttributeCodesInterface

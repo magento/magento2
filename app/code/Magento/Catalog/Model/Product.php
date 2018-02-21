@@ -121,11 +121,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_urlModel = null;
 
     /**
-     * @var ResourceModel\Product
-     */
-    protected $_resource;
-
-    /**
      * @var string
      */
     protected static $_url;
@@ -386,7 +381,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
-     *
+     * @param GetCustomAttributeCodesInterface|null $getCustomAttributeCodes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

@@ -6,18 +6,10 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataService;
-
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
@@ -46,20 +38,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ['create', '__wakeup']
         );
 
-        $this->metadataService = $this->createMock(ProductAttributeRepositoryInterface::class);
-
-        $entityTypeMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['getEntityModel']);
-        $entityTypeMock->method('getEntityModel')->willReturn(Product::class);
-        $eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
-        $eavConfigMock->method('getEntityType')->willReturn($entityTypeMock);
-
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product::class,
             [
                 'setFactory' => $this->setFactoryMock,
                 'typeFactory' => $this->typeFactoryMock,
-                'eavConfig' => $eavConfigMock,
-                'metadataService' => $this->metadataService,
             ]
         );
     }
@@ -94,26 +77,5 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $entityTypeMock->expects($this->once())->method('getId')->will($this->returnValue($productTypeId));
 
         $this->assertEquals($expectedErrorMessage, $this->model->validate($productMock));
-    }
-
-    public function testGetCustomAttributes()
-    {
-        $interfaceAttributeCode = 'price';
-        $customAttributeCode = 'color';
-        $interfaceAttribute = $this->createMock(MetadataObjectInterface::class);
-        $interfaceAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($interfaceAttributeCode);
-        $customAttribute = $this->createMock(MetadataObjectInterface::class);
-        $customAttribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($customAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $customAttribute];
-
-        $this->metadataService->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->willReturn($customAttributesMetadata);
-
-        $this->assertEquals([$customAttributeCode], $this->model->getCustomAttributesCodes());
     }
 }

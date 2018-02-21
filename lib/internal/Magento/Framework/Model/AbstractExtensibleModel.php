@@ -35,7 +35,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     protected $customAttributeFactory;
 
     /**
-     * @deprecated Attribute codes are the same for all entities of the same type and should be saved in resource model
      * @var string[]
      */
     protected $customAttributesCodes = null;
@@ -287,8 +286,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      *
      * Can be used in child classes, which represent EAV entities.
      *
-     * @deprecated attribute codes should be managed centrally in resource model
-     * @see \Magento\Eav\Model\Entity\AbstractEntity::getEavAttributesCodes()
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @return string[]
      */
