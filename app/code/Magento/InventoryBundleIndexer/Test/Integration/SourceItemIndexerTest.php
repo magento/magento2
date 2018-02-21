@@ -14,7 +14,6 @@ use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkus;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -37,9 +36,9 @@ class SourceItemIndexerTest extends TestCase
     private $selection;
 
     /**
-     * @var GetProductIdsBySkus
+     * @var GetProductIdsBySkusInterface
      */
-    private $getProductIdsBySkusInterface;
+    private $getProductIdsBySkus;
 
     /**
      * @var SourceItemRepositoryInterface
@@ -66,7 +65,7 @@ class SourceItemIndexerTest extends TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemDataInterface::class);
         $this->selection = Bootstrap::getObjectManager()->get(Selection::class);
-        $this->getProductIdsBySkusInterface = Bootstrap::getObjectManager()->get(GetProductIdsBySkusInterface::class);
+        $this->getProductIdsBySkus = Bootstrap::getObjectManager()->get(GetProductIdsBySkusInterface::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
@@ -89,7 +88,7 @@ class SourceItemIndexerTest extends TestCase
     {
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(true, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(1, $bundleStockItemData['is_salable']);
     }
 
     /**
@@ -110,7 +109,7 @@ class SourceItemIndexerTest extends TestCase
         $this->makeChildrenOutOfStock(1);
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(true, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(1, $bundleStockItemData['is_salable']);
     }
 
     /**
@@ -131,7 +130,7 @@ class SourceItemIndexerTest extends TestCase
         $this->makeChildrenOutOfStock(3);
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(false, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(0, $bundleStockItemData['is_salable']);
     }
 
     /**
@@ -140,7 +139,7 @@ class SourceItemIndexerTest extends TestCase
      */
     private function makeChildrenOutOfStock(int $childrenQty)
     {
-        $ids = $this->getProductIdsBySkusInterface->execute(['bundle-product-eu-website']);
+        $ids = $this->getProductIdsBySkus->execute(['bundle-product-eu-website']);
         $id = reset($ids);
 
         $childrenIds = $this->selection->getChildrenIds($id)[0];
