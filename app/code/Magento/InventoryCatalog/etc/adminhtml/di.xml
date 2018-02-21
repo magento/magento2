@@ -22,6 +22,10 @@
                     <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\Stocks</item>
                     <item name="sortOrder" xsi:type="number">300</item>
                 </item>
+                <item name="catalogInventory" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\CatalogInventoryQuantityAndStockStatus</item>
+                    <item name="sortOrder" xsi:type="number">400</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
