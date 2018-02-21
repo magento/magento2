@@ -22,7 +22,7 @@ define([
                  * Default action on button click
                  */
                 click: function (event) { //eslint-disable-line no-unused-vars
-                    deleteButton.form.submit();
+                    $(deleteButton.form).submit();
                 }
             }
         ];

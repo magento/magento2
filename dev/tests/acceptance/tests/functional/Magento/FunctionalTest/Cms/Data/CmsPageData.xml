@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultCmsPage" type="cms_page">
+        <data key="title">Test CMS Page</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">Sample page content. Yada yada yada.</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
+    <entity name="simpleCmsPage" type="cms_page">
+        <data key="title">Test CMS Page</data>
+        <data key="content_heading">Test Content Heading</data>
+        <data key="content">Sample page content. Yada yada yada.</data>
+        <data key="identifier" unique="suffix">test-page-</data>
+    </entity>
+    <entity name="ImageUpload" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento.jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+    </entity>
+    <entity name="ImageUpload1" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento2.jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+    </entity>
+    <entity name="ImageFolder" type="uploadImage">
+        <data key="name" unique="suffix">Test</data>
+    </entity>
+</entities>

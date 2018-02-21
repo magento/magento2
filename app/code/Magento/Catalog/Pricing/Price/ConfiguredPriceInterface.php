@@ -19,6 +19,11 @@ interface ConfiguredPriceInterface
     const CONFIGURED_PRICE_CODE = 'configured_price';
 
     /**
+     * Regular price type configured
+     */
+    const CONFIGURED_REGULAR_PRICE_CODE = 'configured_regular_price';
+
+    /**
      * @param ItemInterface $item
      * @return $this
      */

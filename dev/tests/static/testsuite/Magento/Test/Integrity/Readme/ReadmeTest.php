@@ -35,9 +35,9 @@ class ReadmeTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $dir
-         */
+            /**
+             * @param string $dir
+             */
             function ($dir) {
                 $file = $dir . DIRECTORY_SEPARATOR . self::README_FILENAME;
                 $this->assertFileExists(

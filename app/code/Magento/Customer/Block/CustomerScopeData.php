@@ -29,6 +29,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

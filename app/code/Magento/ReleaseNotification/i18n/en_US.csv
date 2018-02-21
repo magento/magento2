@@ -1,0 +1,112 @@
+"Next >","Next >"
+"< Back","< Back"
+"Done","Done"
+"What's new with Magento 2.2.2","What's new with Magento 2.2.2"
+"<p>Magento 2.2.2 offers advanced new features, including:</p>
+    <br />
+    <div class=""analytics-highlight"">
+    <h3>Advanced Reporting</h3>
+    <p>Gain valuable insights through a dynamic suite of product, order, and customer reports,
+    powered by Magento Business Intelligence.</p>
+    </div>
+    <div class=""instant-purchase-highlight"">
+    <h3>Instant Purchase</h3>
+    <p>Simplify ordering and boost conversion rates by allowing your customers to use stored
+    payment and shipping information to skip tedious checkout steps.</p>
+    </div>
+    <div class=""email-marketing-highlight"">
+    <h3>Email Marketing Automation</h3>
+    <p>Send smarter, faster email campaigns with marketing automation from dotmailer, powered by
+    your Magento store's live data.</p>
+    </div>
+    <p>Release notes and additional details can be found at
+    <a href=""http://devdocs.magento.com/"" target=""_blank"">Magento DevDocs</a>.
+    </p>","<p>Magento 2.2.2 offers advanced new features, including:</p>
+    <br />
+    <div class=""analytics-highlight"">
+    <h3>Advanced Reporting</h3>
+    <p>Gain valuable insights through a dynamic suite of product, order, and customer reports,
+    powered by Magento Business Intelligence.</p>
+    </div>
+    <div class=""instant-purchase-highlight"">
+    <h3>Instant Purchase</h3>
+    <p>Simplify ordering and boost conversion rates by allowing your customers to use stored
+    payment and shipping information to skip tedious checkout steps.</p>
+    </div>
+    <div class=""email-marketing-highlight"">
+    <h3>Email Marketing Automation</h3>
+    <p>Send smarter, faster email campaigns with marketing automation from dotmailer, powered by
+    your Magento store's live data.</p>
+    </div>
+    <p>Release notes and additional details can be found at
+    <a href=""http://devdocs.magento.com/"" target=""_blank"">Magento DevDocs</a>.
+    </p>"
+"Advanced Reporting","Advanced Reporting"
+"<p>Advanced Reporting
+    provides you with a dynamic suite of reports with rich insights about the health of your
+    business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+    data for such purposes as benchmarking, improving our products and services, and providing you
+    with new and improved analytics.</p><br /><p>By using Magento 2.2.2, you agree to the Advanced
+    Reporting <a href=""https://magento.com/legal/terms/privacy"" target=""_blank"">Privacy Policy</a> and
+    <a href=""https://magento.com/legal/terms/cloud-terms"" target=""_blank"">Terms
+    of Service</a>. You may opt out at any time from the Stores Configuration page.</p>
+    ","<p>Advanced Reporting
+    provides you with a dynamic suite of reports with rich insights about the health of your
+    business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+    data for such purposes as benchmarking, improving our products and services, and providing you
+    with new and improved analytics.</p><br /><p>By using Magento 2.2.2, you agree to the Advanced
+    Reporting <a href=""https://magento.com/legal/terms/privacy"" target=""_blank"">Privacy Policy</a> and
+    <a href=""https://magento.com/legal/terms/cloud-terms"" target=""_blank"">Terms
+    of Service</a>. You may opt out at any time from the Stores Configuration page.</p>"
+"Instant Purchase","Instant Purchase"
+"<p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
+    Logged-in customers can use previously-stored payment credentials and shipping information
+    to skip steps, making the process faster and easier, especially for mobile shoppers. Key
+    features include:
+    </p>
+    <ul>
+    <li><span>Configurable “Instant Purchase” button to place orders.</span></li>
+    <li><span>Support for all payment solutions using Braintree Vault, including Braintree Credit
+    Card, Braintree PayPal, and PayPal Payflow Pro.</span></li>
+    <li><span>Shipping to the customer’s default address using the lowest cost, available shipping
+    method.</span></li>
+    <li><span>Ability for developers to customize the Instant Purchase business logic to meet
+    merchant needs.</span></li>
+    </ul>","<p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
+    Logged-in customers can use previously-stored payment credentials and shipping information
+    to skip steps, making the process faster and easier, especially for mobile shoppers. Key
+    features include:
+    </p>
+    <ul>
+    <li><span>Configurable “Instant Purchase” button to place orders.</span></li>
+    <li><span>Support for all payment solutions using Braintree Vault, including Braintree Credit
+    Card, Braintree PayPal, and PayPal Payflow Pro.</span></li>
+    <li><span>Shipping to the customer’s default address using the lowest cost, available shipping
+    method.</span></li>
+    <li><span>Ability for developers to customize the Instant Purchase business logic to meet
+    merchant needs.</span></li>
+    </ul>"
+"Email Marketing Automation","Email Marketing Automation"
+"<p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
+    dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
+    ensures every customer’s journey is captured, segmented, and personalized, enabling you to
+    deliver customer-centric campaigns that beat your results over and over again. Benefits include:
+    </p>
+    <ul>
+    <li><span>No obligation 14-day trial.</span></li>
+    <li><span>Automation campaigns using your live Magento store data that drive revenue,
+    including abandoned cart, abandoned browse, product replenishment, and many more</span></li>
+    <li><span>Built-in solution for transactional emails.</span></li>
+    <li><span>Telephone support and advice from marketing experts included.</span></li>
+    </ul>","<p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
+    dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
+    ensures every customer’s journey is captured, segmented, and personalized, enabling you to
+    deliver customer-centric campaigns that beat your results over and over again. Benefits include:
+    </p>
+    <ul>
+    <li><span>No obligation 14-day trial.</span></li>
+    <li><span>Automation campaigns using your live Magento store data that drive revenue,
+    including abandoned cart, abandoned browse, product replenishment, and many more</span></li>
+    <li><span>Built-in solution for transactional emails.</span></li>
+    <li><span>Telephone support and advice from marketing experts included.</span></li>
+    </ul>"

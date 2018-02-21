@@ -148,7 +148,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new \StdClass();
+        $checkResult = new \stdClass();
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',
@@ -177,7 +177,14 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 $html = $fileurl; // $mediaPath;
             } else {
                 $directive = $this->urlEncoder->encode($directive);
-                $html = $this->_backendData->getUrl('cms/wysiwyg/directive', ['___directive' => $directive]);
+
+                $html = $this->_backendData->getUrl(
+                    'cms/wysiwyg/directive',
+                    [
+                        '___directive' => $directive,
+                        '_escape_params' => false,
+                    ]
+                );
             }
         }
         return $html;

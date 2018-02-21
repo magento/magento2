@@ -367,6 +367,15 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider getStreetFullDataProvider
+     */
+    public function testSetDataStreetAlwaysConvertedToString($expectedResult, $street)
+    {
+        $this->model->setData('street', $street);
+        $this->assertEquals($expectedResult, $this->model->getData('street'));
+    }
+
+    /**
      * @return array
      */
     public function getStreetFullDataProvider()

@@ -21,6 +21,7 @@ define([
     return Element.extend({
         defaults: {
             firstLoad: true,
+            lastError: false,
             storageConfig: {
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
@@ -120,7 +121,7 @@ define([
 
             request
                 .done(this.onReload)
-                .fail(this.onError);
+                .fail(this.onError.bind(this));
 
             return request;
         },
@@ -144,6 +145,10 @@ define([
                 return;
             }
 
+            this.set('lastError', true);
+
+            this.firstLoad = false;
+
             alert({
                 content: $t('Something went wrong.')
             });
@@ -156,6 +161,8 @@ define([
          */
         onReload: function (data) {
             this.firstLoad = false;
+
+            this.set('lastError', false);
 
             this.setData(data)
                 .trigger('reloaded');

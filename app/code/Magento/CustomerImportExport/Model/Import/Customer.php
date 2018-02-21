@@ -270,11 +270,27 @@ class Customer extends AbstractCustomer
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                $this->customerFields
+                $this->getCustomerEntityFieldsToUpdate($entitiesToUpdate)
             );
         }
 
         return $this;
+    }
+
+    /**
+     * Filter the entity that are being updated so we only change fields found in the importer file
+     *
+     * @param array $entitiesToUpdate
+     * @return array
+     */
+    private function getCustomerEntityFieldsToUpdate(array $entitiesToUpdate): array
+    {
+        $firstCustomer = reset($entitiesToUpdate);
+        $columnsToUpdate = array_keys($firstCustomer);
+        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
+            return in_array($field, $columnsToUpdate);
+        });
+        return $customerFieldsToUpdate;
     }
 
     /**
@@ -362,19 +378,11 @@ class Customer extends AbstractCustomer
             $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
         }
 
-        $entityRow = [
-            'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
-            'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
-            'created_at' => $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'entity_id' => $entityId,
-        ];
-
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
             $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
-
+        $entityRow = ['entity_id' => $entityId];
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             $attributeParameters = $this->_attributes[$attributeCode];
@@ -413,12 +421,21 @@ class Customer extends AbstractCustomer
 
         if ($newCustomer) {
             // create
+            $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
+            $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
+                ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
             // edit
+            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            if (!empty($rowData[self::COLUMN_STORE])) {
+                $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            }
             $entitiesToUpdate[] = $entityRow;
         }
 

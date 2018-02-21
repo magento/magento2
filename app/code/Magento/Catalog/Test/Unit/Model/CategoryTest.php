@@ -318,7 +318,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
 
         $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
-        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
+        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
         $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
@@ -505,5 +505,21 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $result = $model->getImageUrl();
 
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentities()
+    {
+        $category = $this->getCategoryModel();
+
+        //Without an ID no identities can be given.
+        $this->assertEmpty($category->getIdentities());
+
+        //Now because ID is set we can get some
+        $category->setId(42);
+        
+        $this->assertNotEmpty($category->getIdentities());
     }
 }

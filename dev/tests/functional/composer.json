@@ -1,7 +1,12 @@
 {
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "magento/mtf": "1.0.0-rc56",
         "php": "7.0.2|~7.0.6|~7.1.0",
+        "magento/mtf": "1.0.0-rc59",
+        "allure-framework/allure-phpunit": "~1.2.0",
+        "doctrine/annotations": "1.4.*",
         "phpunit/phpunit": "~4.8.0|~5.5.0",
         "phpunit/phpunit-selenium": ">=1.2"
     },

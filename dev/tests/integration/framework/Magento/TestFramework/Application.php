@@ -435,10 +435,11 @@ class Application
     /**
      * Install an application
      *
+     * @param bool $cleanup
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function install()
+    public function install($cleanup)
     {
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
@@ -453,8 +454,9 @@ class Application
         $installParams = $this->getInstallCliParams();
 
         // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
+        // do not restore from the database if the cleanup option is set to ensure we have a clean DB to test on
         $db = $this->getDbInstance();
-        if ($db->isDbDumpExists()) {
+        if ($db->isDbDumpExists() && !$cleanup) {
             $db->restoreFromDbDump();
         }
 
@@ -598,6 +600,7 @@ class Application
      *
      * @param string $areaCode
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadArea($areaCode)
     {
@@ -614,7 +617,13 @@ class Application
             )
         );
         $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class);
-        if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
+        $areasForPartialLoading = [
+            \Magento\Framework\App\Area::AREA_GLOBAL,
+            \Magento\Framework\App\Area::AREA_WEBAPI_REST,
+            \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
+            \Magento\Framework\App\Area::AREA_CRONTAB,
+        ];
+        if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($areaCode);

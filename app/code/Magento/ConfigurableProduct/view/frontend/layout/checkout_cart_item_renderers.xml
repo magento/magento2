@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.item.renderers">
-            <block class="Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Checkout::cart/item/default.phtml">
+            <block class="Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable" name="checkout.cart.item.renderers.configurable" as="configurable" template="Magento_Checkout::cart/item/default.phtml">
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.configurable.actions" as="actions">
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.configurable.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml"/>
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.configurable.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>

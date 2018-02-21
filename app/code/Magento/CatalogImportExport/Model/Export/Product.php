@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Export entity product model
@@ -161,7 +162,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Header columns for export file
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_headerColumns = [];
 
@@ -531,11 +532,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             ]
         )->joinLeft(
             ['mgv' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value')],
-            '(mg.value_id = mgv.value_id AND mgv.store_id = 0)',
+            '(mg.value_id = mgv.value_id)',
             [
                 'mgv.label',
                 'mgv.position',
-                'mgv.disabled'
+                'mgv.disabled',
+                'mgv.store_id'
             ]
         )->where(
             "mgvte.{$this->getProductEntityLinkField()} IN (?)",
@@ -551,6 +553,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 '_media_label' => $mediaRow['label'],
                 '_media_position' => $mediaRow['position'],
                 '_media_is_disabled' => $mediaRow['disabled'],
+                '_media_store_id' => $mediaRow['store_id'],
             ];
         }
 
@@ -699,7 +702,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -914,6 +917,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Load products' data from the collection
+     * and filter it (if needed).
+     *
+     * @return array Keys are product IDs, values arrays with keys as store IDs
+     *               and values as store-specific versions of Product entity.
+     */
+    protected function loadCollection(): array
+    {
+        $data = [];
+
+        $collection = $this->_getEntityCollection();
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setStoreId($storeId);
+            foreach ($collection as $itemId => $item) {
+                $data[$itemId][$storeId] = $item;
+            }
+            $collection->clear();
+        }
+
+        return $data;
+    }
+
+    /**
      * Collect export data for all products
      *
      * @return array
@@ -923,14 +949,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectRawData()
     {
         $data = [];
-        $collection = $this->_getEntityCollection();
-        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
-            $collection->setStoreId($storeId);
+        $items = $this->loadCollection();
+
+        foreach ($items as $itemId => $itemByStore) {
             /**
-             * @var int $itemId
-             * @var \Magento\Catalog\Model\Product $item
+             * @var int           $itemId
+             * @var ProductEntity $item
              */
-            foreach ($collection as $itemId => $item) {
+            foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+                $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
                 $productLinkId = $item->getData($this->getProductEntityLinkField());
                 foreach ($this->_getExportAttrCodes() as $code) {
@@ -999,18 +1026,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     unset($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES]);
                 }
 
-                if (!empty($data[$itemId][$storeId]) || $this->hasMultiselectData($item, $storeId)) {
-                    $attrSetId = $item->getAttributeSetId();
-                    $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
-                    $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
-                    $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                }
+                $attrSetId = $item->getAttributeSetId();
+                $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
+                $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
+                $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
                 $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
-            $collection->clear();
         }
 
         return $data;
@@ -1080,6 +1104,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
+     * @deprecated
      */
     protected function hasMultiselectData($item, $storeId)
     {
@@ -1138,20 +1163,23 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function appendMultirowData(&$dataRow, &$multiRawData)
+    private function appendMultirowData(&$dataRow, $multiRawData)
     {
         $productId = $dataRow['product_id'];
         $productLinkId = $dataRow['product_link_id'];
         $storeId = $dataRow['store_id'];
         $sku = $dataRow[self::COL_SKU];
+        $type = $dataRow[self::COL_TYPE];
+        $attributeSet = $dataRow[self::COL_ATTR_SET];
 
         unset($dataRow['product_id']);
         unset($dataRow['product_link_id']);
         unset($dataRow['store_id']);
         unset($dataRow[self::COL_SKU]);
-
+        unset($dataRow[self::COL_STORE]);
+        unset($dataRow[self::COL_ATTR_SET]);
+        unset($dataRow[self::COL_TYPE]);
         if (Store::DEFAULT_STORE_ID == $storeId) {
-            unset($dataRow[self::COL_STORE]);
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
                 $websiteCodes = [];
@@ -1167,11 +1195,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $additionalImageLabels = [];
                 $additionalImageIsDisabled = [];
                 foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
-                    $additionalImages[] = $mediaItem['_media_image'];
-                    $additionalImageLabels[] = $mediaItem['_media_label'];
+                    if ((int)$mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
+                        $additionalImages[] = $mediaItem['_media_image'];
+                        $additionalImageLabels[] = $mediaItem['_media_label'];
 
-                    if ($mediaItem['_media_is_disabled'] == true) {
-                        $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                        if ($mediaItem['_media_is_disabled'] == true) {
+                            $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                        }
                     }
                 }
                 $dataRow['additional_images'] =
@@ -1205,6 +1235,21 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             }
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
+        } else {
+            $additionalImageIsDisabled = [];
+            if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
+                foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
+                    if ((int)$mediaItem['_media_store_id'] === $storeId) {
+                        if ($mediaItem['_media_is_disabled'] == true) {
+                            $additionalImageIsDisabled[] = $mediaItem['_media_image'];
+                        }
+                    }
+                }
+            }
+            if ($additionalImageIsDisabled) {
+                $dataRow['hide_from_product_page'] =
+                    implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
+            }
         }
 
         if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
@@ -1232,6 +1277,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
         }
         $dataRow[self::COL_SKU] = $sku;
+        $dataRow[self::COL_ATTR_SET] = $attributeSet;
+        $dataRow[self::COL_TYPE] = $type;
+
         return $dataRow;
     }
 
@@ -1298,6 +1346,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Collect custom options data for products that will be exported.
+     *
+     * Option name and type will be collected for all store views, all other data (which can't be changed on store view
+     * level will be collected for DEFAULT_STORE_ID only.
+     * Store view specified data will be saved to the additional store view row.
+     *
      * @param int[] $productIds
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1308,13 +1362,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $customOptionsData = [];
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
-            if (Store::DEFAULT_STORE_ID != $storeId) {
-                continue;
-            }
             $options = $this->_optionColFactory->create();
             /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->addOrder('sort_order');
-            $options->reset()->addOrder('sort_order')->addTitleToResult(
+            $options->reset()->addOrder(
+                'sort_order',
+                \Magento\Catalog\Model\ResourceModel\Product\Option\Collection::SORT_ORDER_ASC
+            )->addTitleToResult(
                 $storeId
             )->addPriceToResult(
                 $storeId
@@ -1327,34 +1380,36 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($options as $option) {
                 $row = [];
                 $productId = $option['product_id'];
-
                 $row['name'] = $option['title'];
                 $row['type'] = $option['type'];
-                $row['required'] = $option['is_require'];
-                $row['price'] = $option['price'];
-                $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
-                $row['sku'] = $option['sku'];
-                if ($option['max_characters']) {
-                    $row['max_characters'] = $option['max_characters'];
-                }
-
-                foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
-                    if (!isset($option[$fileOptionKey])) {
-                        continue;
+                if (Store::DEFAULT_STORE_ID === $storeId) {
+                    $row['required'] = $option['is_require'];
+                    $row['price'] = $option['price'];
+                    $row['price_type'] = ($option['price_type'] === 'percent') ? 'percent' : 'fixed';
+                    $row['sku'] = $option['sku'];
+                    if ($option['max_characters']) {
+                        $row['max_characters'] = $option['max_characters'];
                     }
 
-                    $row[$fileOptionKey] = $option[$fileOptionKey];
-                }
+                    foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+                        if (!isset($option[$fileOptionKey])) {
+                            continue;
+                        }
 
+                        $row[$fileOptionKey] = $option[$fileOptionKey];
+                    }
+                }
                 $values = $option->getValues();
 
                 if ($values) {
                     foreach ($values as $value) {
-                        $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
                         $row['option_title'] = $value['title'];
-                        $row['price'] = $value['price'];
-                        $row['price_type'] = $valuePriceType;
-                        $row['sku'] = $value['sku'];
+                        if (Store::DEFAULT_STORE_ID === $storeId) {
+                            $row['option_title'] = $value['title'];
+                            $row['price'] = $value['price'];
+                            $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
+                            $row['sku'] = $value['sku'];
+                        }
                         $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                     }
                 } else {

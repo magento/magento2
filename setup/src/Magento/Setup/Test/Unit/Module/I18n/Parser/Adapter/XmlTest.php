@@ -53,6 +53,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                     ['phrase' => 'Phrase 2', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 3', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 1', 'file' => $default, 'line' => '', 'quote' => ''],
+                    ['phrase' => 'Comment from new line.', 'file' => $default, 'line' => '', 'quote' => ''],
                 ],
             ],
             [

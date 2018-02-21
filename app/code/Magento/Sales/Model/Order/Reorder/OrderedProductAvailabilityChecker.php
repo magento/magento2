@@ -9,13 +9,14 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
- * @api
+ * Class for checking availability of different product types
  *
  * Class marked as an API because it can be used as extensibility point to check availability of
- * different product types(in order management). Can be configured through di by adding a check as a new element
+ * different product types (in order management). Can be configured through di by adding a check as a new element
  * of the array $productAvailabilityChecks(constructor argument). A product type should be a key for the new element.
  *
- * Class OrderedProductAvailabilityChecker
+ * @api
+ * @since 100.2.0
  */
 class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityCheckerInterface
 {
@@ -35,6 +36,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function isAvailable(Item $item)
     {

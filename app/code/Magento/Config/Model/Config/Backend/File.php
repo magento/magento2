@@ -111,6 +111,8 @@ class File extends \Magento\Framework\App\Config\Value
         } else {
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
+            } elseif (is_array($value) && !empty($value['value'])) {
+                $this->setValue($value['value']);
             } else {
                 $this->unsValue();
             }

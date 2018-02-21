@@ -12,8 +12,8 @@
     </head>
     <body>
         <referenceContainer name="main">
-            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual" before="advanced" as="swatches_visual"/>
-            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text" before="advanced" as="swatches_text"/>
+            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual" before="advanced" name="main.swatches_visual" as="swatches_visual"/>
+            <block class="Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text" before="advanced" name="main.swatches_text" as="swatches_text"/>
         </referenceContainer>
         <referenceBlock name="attribute_edit_js">
             <action method="setTemplate">

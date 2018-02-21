@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.order.print.invoice.renderers">
-            <block class="Magento\GroupedProduct\Block\Order\Item\Renderer\Grouped" as="grouped" template="Magento_Sales::order/invoice/items/renderer/default.phtml"/>
+            <block class="Magento\GroupedProduct\Block\Order\Item\Renderer\Grouped" name="checkout.order.print.invoice.renderers.grouped" as="grouped" template="Magento_Sales::order/invoice/items/renderer/default.phtml"/>
         </referenceBlock>
     </body>
 </page>

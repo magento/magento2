@@ -59,22 +59,32 @@ class PackageInfo
     protected $nonExistingDependencies = [];
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param Dir\Reader $reader
      * @param ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
-    public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
-    {
+    public function __construct(
+        Dir\Reader $reader,
+        ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Load the packages information
      *
      * @return void
-     * @throws \Zend_Json_Exception
+     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function load()
@@ -85,9 +95,9 @@ class PackageInfo
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
                     try {
-                        $packageData = \Zend_Json::decode($jsonData[$key]);
-                    } catch (\Zend_Json_Exception $e) {
-                        throw new \Zend_Json_Exception(
+                        $packageData = $this->serializer->unserialize($jsonData[$key]);
+                    } catch (\InvalidArgumentException $e) {
+                        throw new \InvalidArgumentException(
                             sprintf(
                                 "%s composer.json error: %s",
                                 $moduleName,

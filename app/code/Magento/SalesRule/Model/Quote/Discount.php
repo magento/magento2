@@ -179,7 +179,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $roundingDelta[$key] = 0.0000001;
         }
         foreach ($item->getChildren() as $child) {
-            $ratio = $child->getBaseRowTotal() / $parentBaseRowTotal;
+            $ratio = $parentBaseRowTotal != 0 ? $child->getBaseRowTotal() / $parentBaseRowTotal : 0;
             foreach ($keys as $key) {
                 if (!$item->hasData($key)) {
                     continue;

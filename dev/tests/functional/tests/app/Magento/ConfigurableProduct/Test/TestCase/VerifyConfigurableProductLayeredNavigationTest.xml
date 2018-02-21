@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ConfigurableProduct\Test\TestCase\VerifyConfigurableProductLayeredNavigationTest" summary="Verify OOS option configurable product in Layered Navigation on storefront">
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation2" summary="Verify the out of stock configurable attribute option doesn't show in Layered navigation" ticketId="MAGETWO-72439">
+            <data name="product" xsi:type="string">configurableProduct::product_with_3_sizes</data>
+            <data name="productUpdate/childProductUpdate" xsi:type="array">
+                <item name="data" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="array">
+                        <item name="is_in_stock" xsi:type="string">Out of Stock</item>
+                    </item>
+                </item>
+            </data>
+            <data name="productUpdate/optionNumber" xsi:type="string">1</data>
+            <data name="outOfStockOption" xsi:type="string">SIZE_S</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductAttributeOptionInLayeredNavigation" />
+        </variation>
+    </testCase>
+</config>

@@ -1,0 +1,38 @@
+{
+    "name": "magento/magento2-functional-test-module-msrp",
+    "description": "Magento 2 Functional Test Module Msrp",
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/magento2-functional-testing-framework": "1.0.0",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+    },
+    "suggest": {
+        "magento/magento2-functional-test-module-catalog": "100.0.0-dev",
+        "magento/magento2-functional-test-module-downloadable": "100.0.0-dev",
+        "magento/magento2-functional-test-module-eav": "100.0.0-dev",
+        "magento/magento2-functional-test-module-grouped-product": "100.0.0-dev",
+        "magento/magento2-functional-test-module-store": "100.0.0-dev",
+        "magento/magento2-functional-test-module-tax": "100.0.0-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\FunctionalTest\\Msrp\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "tests/functional/Magento/FunctionalTest/Msrp"
+            ]
+        ]
+    }
+}

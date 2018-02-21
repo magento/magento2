@@ -187,6 +187,12 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
         $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
 
+        $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMock();
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
+
         $this->assertEquals($this->subscriber, $this->subscriber->updateSubscription($customerId));
     }
 
@@ -335,6 +341,21 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $code = 111;
         $this->subscriber->setCode($code);
         $this->resource->expects($this->once())->method('save')->willReturnSelf();
+        $storeModel = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMock();
+        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn(true);
+        $this->transportBuilder->expects($this->once())->method('setTemplateIdentifier')->willReturnSelf();
+        $this->transportBuilder->expects($this->once())->method('setTemplateOptions')->willReturnSelf();
+        $this->transportBuilder->expects($this->once())->method('setTemplateVars')->willReturnSelf();
+        $this->transportBuilder->expects($this->once())->method('setFrom')->willReturnSelf();
+        $this->transportBuilder->expects($this->once())->method('addTo')->willReturnSelf();
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeModel);
+        $storeModel->expects($this->any())->method('getId')->willReturn(1);
+        $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
+        $transport->expects($this->once())->method('sendMessage')->willReturnSelf();
 
         $this->assertTrue($this->subscriber->confirm($code));
     }

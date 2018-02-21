@@ -173,7 +173,7 @@ class Config
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            str_replace('_', '-', $this->localeResolver->getLocale())
+            strstr($this->localeResolver->getLocale(), '_', true)
         );
     }
 
@@ -226,7 +226,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = htmlentities($content);
+        $this->metadata[$name] = htmlspecialchars($content);
     }
 
     /**

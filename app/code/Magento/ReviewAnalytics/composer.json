@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-review-analytics",
+    "description": "N/A",
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "101.0.*",
+        "magento/module-review": "100.2.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\ReviewAnalytics\\": ""
+        }
+    }
+}

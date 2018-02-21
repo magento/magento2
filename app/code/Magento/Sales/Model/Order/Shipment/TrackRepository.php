@@ -14,10 +14,8 @@ use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
+use Psr\Log\LoggerInterface;
 
-/**
- * @since 2.2.0
- */
 class TrackRepository implements ShipmentTrackRepositoryInterface
 {
     /**
@@ -41,22 +39,29 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ShipmentTrackResourceInterface $trackResource
      * @param ShipmentTrackInterfaceFactory $trackFactory
      * @param ShipmentTrackSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ShipmentTrackResourceInterface $trackResource,
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        LoggerInterface $logger = null
     ) {
-
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -67,6 +72,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         $searchResult = $this->searchResultFactory->create();
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
+
         return $searchResult;
     }
 
@@ -77,6 +83,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     {
         $entity = $this->trackFactory->create();
         $this->trackResource->load($entity, $id);
+
         return $entity;
     }
 
@@ -88,8 +95,10 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         try {
             $this->trackResource->delete($entity);
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete the shipment tracking.'), $e);
         }
+
         return true;
     }
 
@@ -101,8 +110,10 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         try {
             $this->trackResource->save($entity);
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save the shipment tracking.'), $e);
         }
+
         return $entity;
     }
 
@@ -112,6 +123,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     public function deleteById($id)
     {
         $entity = $this->get($id);
+
         return $this->delete($entity);
     }
 }
