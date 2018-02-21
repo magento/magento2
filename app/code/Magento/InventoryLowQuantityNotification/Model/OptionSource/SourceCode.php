@@ -5,21 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Block\Adminhtml\Product\Lowstock\Grid\Options;
+namespace Magento\InventoryLowQuantityNotification\Model\OptionSource;
 
-use Magento\Framework\Option\ArrayInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Source model for inventory sources list
+ * Provide option values for UI
+ *
+ * @api
  */
-class SourceCodeOption implements ArrayInterface
+class SourceCode implements OptionSourceInterface
 {
     /**
      * @var SourceRepositoryInterface
      */
-    protected $sourceRepository;
+    private $sourceRepository;
 
     /**
      * @param SourceRepositoryInterface $sourceRepository
@@ -31,9 +32,7 @@ class SourceCodeOption implements ArrayInterface
     }
 
     /**
-     * Return array of available sources
-     *
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {
@@ -41,7 +40,6 @@ class SourceCodeOption implements ArrayInterface
         $sourcesSearchResult = $this->sourceRepository->getList();
         $sourcesList = $sourcesSearchResult->getItems();
 
-        /** @var SourceInterface $source */
         foreach ($sourcesList as $source) {
             $optionArray[] = ['value' => $source->getSourceCode(), 'label' => $source->getSourceCode()];
         }
