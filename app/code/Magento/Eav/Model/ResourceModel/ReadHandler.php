@@ -127,8 +127,8 @@ class ReadHandler implements AttributeInterface
                         $this->getContextVariables($scope)
                     )->order('t.' . $scope->getIdentifier() . ' ASC');
                 }
-                $attributeTablesValues = $connection->fetchAll($select);
-                $attributeValues = array_merge($attributeValues, $attributeTablesValues);
+                $attrTablesValues = $connection->fetchAll($select);
+                $attributeValues = array_merge($attributeValues, $attrTablesValues);
             }
             foreach ($attributeValues as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
