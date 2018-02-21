@@ -96,7 +96,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         }
 
         if (!$category->hasData('store_id')) {
-            $this->setCategoryStoreIds($category);
+            $this->setCategoryStoreId($category);
         }
 
         $mapsGenerated = false;
@@ -129,7 +129,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      * @param Category $category
      * @return void
      */
-    private function setCategoryStoreIds($category)
+    private function setCategoryStoreId($category)
     {
         /** @var StoreGroupCollection $storeGroupCollection */
         $storeGroupCollection = $this->storeGroupFactory->create();
