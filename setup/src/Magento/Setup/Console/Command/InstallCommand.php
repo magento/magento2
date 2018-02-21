@@ -134,7 +134,7 @@ class InstallCommand extends AbstractSetupCommand
         $inputOptions = $this->configModel->getAvailableOptions();
         $inputOptions = array_merge($inputOptions, $this->userConfig->getOptionsList());
         $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList());
-        $inputOptions = array_merge($inputOptions, array(
+        $inputOptions = array_merge($inputOptions, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,
                 null,
@@ -198,7 +198,7 @@ class InstallCommand extends AbstractSetupCommand
                 InputOption::VALUE_NONE,
                 'Restore removed data from dumps'
             ),
-        ));
+        ]);
         $this->setName('setup:install')
             ->setDescription('Installs the Magento application')
             ->setDefinition($inputOptions);
