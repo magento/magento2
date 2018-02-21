@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -1058,12 +1058,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        if ($this->getId()) {
-            $this->_cacheManager->clean(
-                self::CACHE_TAG . '_' . $this->getId()
-            );
-        }
-        return $this;
+        return $this->cleanModelCache();
     }
 
     /**

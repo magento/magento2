@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1247,7 +1247,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($colorAttributeCode, "blue");
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
         $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
@@ -1389,21 +1389,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionByIdForProductWithoutOptions()
     {
         $this->assertNull($this->model->getOptionById(100));
-    }
-
-    public function testCleanCache()
-    {
-        //Without an ID cleanCache won't clean anything because the entity is
-        //not identified and it will be called later exactly once.
-        $this->model->setId(null);
-        $this->cacheManagerMock
-            ->expects($this->once())
-            ->method('clean');
-        $this->model->cleanCache();
-
-        //Now that ID is set clean will be called.
-        $this->model->setId(1);
-        $this->model->cleanCache();
     }
 
     public function testGetCacheTags()

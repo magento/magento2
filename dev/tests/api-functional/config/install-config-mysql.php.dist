@@ -2,7 +2,7 @@
 /**
  * Magento console installer options for Web API functional tests. Are used in functional tests bootstrap.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [

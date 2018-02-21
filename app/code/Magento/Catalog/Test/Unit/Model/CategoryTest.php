@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -550,7 +550,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setCustomAttribute($descriptionAttributeCode, "new description");
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
         $this->assertEquals(

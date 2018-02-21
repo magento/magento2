@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -328,7 +328,7 @@ class AdminSessionsManager
         return (float) max(
             1,
             min(
-                log((float)$this->securityConfig->getAdminSessionLifetime()),
+                4 * log((float)$this->securityConfig->getAdminSessionLifetime()),
                 $this->maxIntervalBetweenConsecutiveProlongs
             )
         );

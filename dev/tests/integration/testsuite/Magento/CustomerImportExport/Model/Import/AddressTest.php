@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -136,7 +136,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->_entityAdapter,
             'Addresses must be an array.'
         );
-        $this->assertAttributeNotEmpty('_addresses', $this->_entityAdapter, 'Addresses must not be empty');
+        $this->assertAttributeEmpty(
+            '_addresses',
+            $this->_entityAdapter,
+            'Addresses must not be loaded in constructor'
+        );
 
         // check country regions and regions
         $this->assertAttributeInternalType(
@@ -149,62 +153,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter, 'Regions must be an array.');
         $this->assertAttributeNotEmpty('_regions', $this->_entityAdapter, 'Regions must not be empty');
-    }
-
-    /**
-     * Test _initAddresses
-     *
-     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
-     */
-    public function testInitAddresses()
-    {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = Bootstrap::getObjectManager();
-
-        // get addressed from fixture
-        $customers = $objectManager->get('Magento\Framework\Registry')->registry($this->_fixtureKey);
-        $correctAddresses = [];
-        /** @var $customer \Magento\Customer\Model\Customer */
-        foreach ($customers as $customer) {
-            $correctAddresses[$customer->getId()] = [];
-            /** @var $address \Magento\Customer\Model\Address */
-            foreach ($customer->getAddressesCollection() as $address) {
-                $correctAddresses[$customer->getId()][] = $address->getId();
-            }
-        }
-
-        // invoke _initAddresses
-        $initAddresses = new \ReflectionMethod($this->_testClassName, '_initAddresses');
-        $initAddresses->setAccessible(true);
-        $initAddresses->invoke($this->_entityAdapter);
-
-        // check addresses
-        $this->assertAttributeInternalType(
-            'array',
-            '_addresses',
-            $this->_entityAdapter,
-            'Addresses must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_addresses', $this->_entityAdapter, 'Addresses must not be empty');
-
-        $addressesReflection = new \ReflectionProperty($this->_testClassName, '_addresses');
-        $addressesReflection->setAccessible(true);
-        $testAddresses = $addressesReflection->getValue($this->_entityAdapter);
-
-        $correctCustomerIds = array_keys($correctAddresses);
-        $testCustomerIds = array_keys($testAddresses);
-        sort($correctCustomerIds);
-        sort($testCustomerIds);
-        $this->assertEquals($correctCustomerIds, $testCustomerIds, 'Incorrect customer IDs in addresses array.');
-
-        foreach ($correctCustomerIds as $customerId) {
-            $this->assertInternalType('array', $correctAddresses[$customerId], 'Addresses must be an array.');
-            $correctAddressIds = $correctAddresses[$customerId];
-            $testAddressIds = $testAddresses[$customerId];
-            sort($correctAddressIds);
-            sort($testAddressIds);
-            $this->assertEquals($correctAddressIds, $testAddressIds, 'Incorrect addresses IDs.');
-        }
     }
 
     /**

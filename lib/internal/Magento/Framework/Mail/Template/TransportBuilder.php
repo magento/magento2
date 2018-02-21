@@ -2,7 +2,7 @@
 /**
  * Mail Template Transport Builder
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,11 @@ class TransportBuilder
      */
     protected $mailTransportFactory;
 
+    /** 
+     * @var int|null
+     */
+    private $scopeId;
+
     /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
@@ -106,7 +111,7 @@ class TransportBuilder
     }
 
     /**
-     * Add cc address
+     * Add cc address.
      *
      * @param array|string $address
      * @param string $name
@@ -119,7 +124,7 @@ class TransportBuilder
     }
 
     /**
-     * Add to address
+     * Add to address.
      *
      * @param array|string $address
      * @param string $name
@@ -132,7 +137,7 @@ class TransportBuilder
     }
 
     /**
-     * Add bcc address
+     * Add bcc address.
      *
      * @param array|string $address
      * @return $this
@@ -144,7 +149,7 @@ class TransportBuilder
     }
 
     /**
-     * Set Reply-To Header
+     * Set Reply-To Header.
      *
      * @param string $email
      * @param string|null $name
@@ -157,20 +162,34 @@ class TransportBuilder
     }
 
     /**
-     * Set mail from address
+     * Set scope.
+     *
+     * @param int $scopeId
+     * @return $this
+     */
+    public function setScopeId($scopeId)
+    {
+        $this->scopeId = $scopeId;
+
+        return $this;
+    }
+
+    /**
+     * Set mail from address.
      *
      * @param string|array $from
      * @return $this
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
+        $result = $this->_senderResolver->resolve($from, $this->scopeId);
         $this->message->setFrom($result['email'], $result['name']);
+
         return $this;
     }
 
     /**
-     * Set template identifier
+     * Set template identifier.
      *
      * @param string $templateIdentifier
      * @return $this
@@ -182,7 +201,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template model
+     * Set template model.
      *
      * @param string $templateModel
      * @return $this
@@ -194,7 +213,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template vars
+     * Set template vars.
      *
      * @param array $templateVars
      * @return $this
@@ -206,7 +225,7 @@ class TransportBuilder
     }
 
     /**
-     * Set template options
+     * Set template options.
      *
      * @param array $templateOptions
      * @return $this
@@ -218,7 +237,7 @@ class TransportBuilder
     }
 
     /**
-     * Get mail transport
+     * Get mail transport.
      *
      * @return \Magento\Framework\Mail\TransportInterface
      */
@@ -232,21 +251,23 @@ class TransportBuilder
     }
 
     /**
-     * Reset object state
+     * Reset object state.
      *
      * @return $this
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create('Magento\Framework\Mail\Message');
+        $this->message = $this->objectManager->create(Message::class);
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->scopeId = null;
+
         return $this;
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return \Magento\Framework\Mail\TemplateInterface
      */
@@ -258,7 +279,7 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
      */

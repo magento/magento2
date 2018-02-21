@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\Customer;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,6 +93,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
+                    'getCustomerStorage'
                 ])
             ->getMock();
 
@@ -157,6 +159,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $modelMock->expects($this->any())
             ->method('getErrorAggregator')
             ->will($this->returnValue($errorAggregator));
+        /** @var \PHPUnit_Framework_MockObject_MockObject $storageMock */
+        $storageMock = $this->getMockBuilder(Storage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storageMock->expects($this->any())->method('prepareCustomers');
+        $modelMock->expects($this->any())
+            ->method('getCustomerStorage')
+            ->willReturn($storageMock);
 
         return $modelMock;
     }
