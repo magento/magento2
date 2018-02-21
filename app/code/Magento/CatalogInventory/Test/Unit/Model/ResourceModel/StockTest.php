@@ -105,7 +105,6 @@ class StockTest extends \PHPUnit\Framework\TestCase
             )->getMock();
     }
 
-
     /**
      * Test Save Product Status per website with product ids.
      *
