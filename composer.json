@@ -44,7 +44,6 @@
         "pelago/emogrifier": "^2.0.0",
         "phpseclib/phpseclib": "2.0.*",
         "ramsey/uuid": "3.6.1",
-        "sjparkinson/static-review": "~4.1",
         "symfony/console": "~2.3, !=2.7.0",
         "symfony/event-dispatcher": "~2.1",
         "symfony/process": "~2.1",
