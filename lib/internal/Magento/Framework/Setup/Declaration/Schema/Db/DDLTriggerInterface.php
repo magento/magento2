@@ -31,7 +31,7 @@ interface DDLTriggerInterface
      * Setup callback to current statement, can generate new statements.
      *
      * @param ElementInterface $element
-     * @return Callable
+     * @return callable
      */
     public function getCallback(ElementInterface $element);
 }

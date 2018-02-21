@@ -259,7 +259,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $dataPatches
      * @param $moduleVersionInDb
      *
-     * @expectedException \Magento\Setup\Exception
+     * @expectedException \Magento\Framework\Setup\Exception
      * @expectedExceptionMessage Patch Apply Error
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
@@ -308,7 +308,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Setup\Exception
+     * @expectedException \Magento\Framework\Setup\Exception
      * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"
      */
     public function testNonDataPatchApply()

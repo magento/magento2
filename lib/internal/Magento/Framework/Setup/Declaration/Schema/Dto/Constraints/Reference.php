@@ -51,6 +51,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      * @param Table  $referenceTable
      * @param Column $referenceColumn
      * @param string $onDelete
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         string $name,

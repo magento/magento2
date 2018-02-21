@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Setup\Exception;
+use Magento\Framework\Setup\Exception;
 
 /**
  * Apply patches per specific module
@@ -81,6 +81,7 @@ class PatchApplier
      * @param \Magento\Framework\Setup\SchemaSetupInterface $schemaSetup
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         PatchReader $dataPatchReader,

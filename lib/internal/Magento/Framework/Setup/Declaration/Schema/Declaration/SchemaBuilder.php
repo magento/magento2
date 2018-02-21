@@ -6,7 +6,7 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
 use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Setup\Exception;
+use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;

@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 
-use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
@@ -22,6 +21,11 @@ use Magento\Framework\Setup\Declaration\Schema\ElementHistoryFactory;
  */
 class Diff implements DiffInterface
 {
+    /**
+     * Whitelist file name.
+     */
+    const GENERATED_WHITELIST_FILE_NAME = 'db_schema_whitelist.json';
+
     /**
      * @var array
      */
@@ -125,7 +129,7 @@ class Diff implements DiffInterface
         if (!$this->whiteListTables) {
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $path) {
                 $whiteListPath = $path . DIRECTORY_SEPARATOR . 'etc' .
-                    DIRECTORY_SEPARATOR . TablesWhitelistGenerateCommand::GENERATED_FILE_NAME;
+                    DIRECTORY_SEPARATOR . 'db_schema_whitelist.json';
 
                 if (file_exists($whiteListPath)) {
                     $this->whiteListTables = array_replace_recursive(

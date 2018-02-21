@@ -36,7 +36,7 @@ class Statement
     private $resource;
 
     /**
-     * @var Callable[]
+     * @var callable[]
      */
     private $triggers = [];
 
@@ -122,7 +122,7 @@ class Statement
     /**
      * Get triggers array.
      *
-     * @return Callable[]
+     * @return callable[]
      */
     public function getTriggers(): array
     {

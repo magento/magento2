@@ -16,7 +16,7 @@ class Table implements FactoryInterface
 {
     /**
      * Default engine.
-     * May be overriden for another DBMS.
+     * May be redefined for other DBMS.
      */
     const DEFAULT_ENGINE = 'innodb';
 

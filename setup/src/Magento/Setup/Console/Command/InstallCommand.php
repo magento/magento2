@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Symfony\Component\Console\Input\ArrayInput;
 use Magento\Framework\Setup\Declaration\Schema\Request;
 use Symfony\Component\Console\Input\InputInterface;
@@ -133,7 +134,7 @@ class InstallCommand extends AbstractSetupCommand
         $inputOptions = $this->configModel->getAvailableOptions();
         $inputOptions = array_merge($inputOptions, $this->userConfig->getOptionsList());
         $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList());
-        $inputOptions = array_merge($inputOptions, [
+        $inputOptions = array_merge($inputOptions, array(
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,
                 null,
@@ -186,18 +187,18 @@ class InstallCommand extends AbstractSetupCommand
                 'Interactive Magento instalation'
             ),
             new InputOption(
-                self::INPUT_KEY_SAFE_INSTALLER_MODE,
+                OperationsExecutor::KEY_SAFE_MODE,
                 null,
                 InputOption::VALUE_NONE,
                 'Safe installation of Magento with dumps on destructive operations, like column removal'
             ),
             new InputOption(
-                self::INPUT_KEY_DATA_RESTORE,
+                OperationsExecutor::KEY_DATA_RESTORE,
                 null,
                 InputOption::VALUE_NONE,
                 'Restore removed data from dumps'
             ),
-        ]);
+        ));
         $this->setName('setup:install')
             ->setDescription('Installs the Magento application')
             ->setDefinition($inputOptions);

@@ -7,7 +7,6 @@
 namespace Magento\Framework\Setup\Declaration\Schema;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Framework\Setup\Declaration\Schema\DataSavior\DataSaviorInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregatorFactory;
@@ -26,6 +25,12 @@ use Magento\Framework\Setup\Declaration\Schema\Operations\ReCreateTable;
  */
 class OperationsExecutor
 {
+    /**
+     * Request keys.
+     */
+    const KEY_SAFE_MODE = 'safe-mode';
+    const KEY_DATA_RESTORE = 'data-restore';
+
     /**
      * @var OperationInterface[]
      */
@@ -206,8 +211,7 @@ class OperationsExecutor
      */
     private function doRestore(array $elements, array $requestData)
     {
-        $restoreMode = isset($requestData[InstallCommand::INPUT_KEY_DATA_RESTORE]) &&
-            $requestData[InstallCommand::INPUT_KEY_DATA_RESTORE];
+        $restoreMode = isset($requestData[self::KEY_DATA_RESTORE]) && $requestData[self::KEY_DATA_RESTORE];
 
         if ($restoreMode) {
             /**
@@ -232,8 +236,7 @@ class OperationsExecutor
      */
     private function doDump(array $elements, array $requestData)
     {
-        $safeMode = isset($requestData[InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE]) &&
-            $requestData[InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE];
+        $safeMode = isset($requestData[self::KEY_SAFE_MODE]) && $requestData[self::KEY_SAFE_MODE];
 
         if ($safeMode) {
             /**

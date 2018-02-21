@@ -78,8 +78,8 @@ class Table extends GenericElement implements
      */
     public function __construct(
         string $name,
-        string $nameWithoutPrefix,
         string $type,
+        string $nameWithoutPrefix,
         string $resource,
         string $engine,
         string $comment = null,

@@ -10,6 +10,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -83,13 +84,13 @@ class UpgradeCommand extends AbstractSetupCommand
                 false
             ),
             new InputOption(
-                InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE,
+                OperationsExecutor::KEY_SAFE_MODE,
                 null,
                 InputOption::VALUE_NONE,
                 'Safe installation of Magento with dumps on destructive operations, like column removal'
             ),
             new InputOption(
-                InstallCommand::INPUT_KEY_DATA_RESTORE,
+                OperationsExecutor::KEY_DATA_RESTORE,
                 null,
                 InputOption::VALUE_NONE,
                 'Restore removed data from dumps'
