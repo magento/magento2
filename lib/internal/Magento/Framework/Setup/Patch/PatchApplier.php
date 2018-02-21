@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup\Patch;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Exception;
 
@@ -160,7 +161,7 @@ class PatchApplier
             );
             if (!$dataPatch instanceof DataPatchInterface) {
                 throw new Exception(
-                    sprintf("Patch %s should implement DataPatchInterface", get_class($dataPatch))
+                    new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
                 );
             }
             if ($dataPatch instanceof NonTransactionableInterface) {
@@ -174,7 +175,7 @@ class PatchApplier
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
-                    throw new Exception($e->getMessage());
+                    throw new Exception(new Phrase($e->getMessage()));
                 } finally {
                     unset($dataPatch);
                 }
