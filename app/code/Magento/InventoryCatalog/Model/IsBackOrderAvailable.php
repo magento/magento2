@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Model;
 
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -16,19 +17,19 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class IsBackOrderAvailable implements IsProductSalableInterface
 {
     /**
-     * @var GetLegacyStockItem
+     * @var GetStockItemConfigurationInterface
      */
-    private $getLegacyStockItem;
+    private $getStockItemConfiguration;
 
     /**
      * IsNotManageStock constructor.
      *
-     * @param GetLegacyStockItem $getLegacyStockItem
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
-        GetLegacyStockItem $getLegacyStockItem
+        GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
-        $this->getLegacyStockItem = $getLegacyStockItem;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
     }
 
     /**
@@ -38,9 +39,10 @@ class IsBackOrderAvailable implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        $legacyStockItem = $this->getLegacyStockItem->execute($sku);
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
 
-        if ($legacyStockItem->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO) {
+        if ($stockItemConfiguration->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO) {
             return true;
         }
 

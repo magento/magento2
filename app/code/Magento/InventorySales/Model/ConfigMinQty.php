@@ -5,10 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model;
+namespace Magento\InventorySales\Model;
 
 use Magento\Inventory\Model\GetStockItemDataInterface;
-use Magento\InventoryCatalog\Model\GetLegacyStockItem;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
@@ -19,9 +20,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class ConfigMinQty implements IsProductSalableInterface
 {
     /**
-     * @var GetLegacyStockItem
+     * @var GetStockItemConfigurationInterface
      */
-    private $getLegacyStockItem;
+    private $getStockItemConfiguration;
 
     /**
      * @var GetReservationsQuantityInterface
@@ -40,18 +41,18 @@ class ConfigMinQty implements IsProductSalableInterface
 
     /**
      * ConfigMinQty constructor.
-     * @param GetLegacyStockItem $getLegacyStockItem
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param Configuration $configuration
      * @param GetReservationsQuantityInterface $getReservationsQuantity
      * @param GetStockItemDataInterface $getStockItemData
      */
     public function __construct(
-        GetLegacyStockItem $getLegacyStockItem,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
         Configuration $configuration,
         GetReservationsQuantityInterface $getReservationsQuantity,
         GetStockItemDataInterface $getStockItemData
     ) {
-        $this->getLegacyStockItem = $getLegacyStockItem;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->configuration = $configuration;
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
@@ -61,16 +62,18 @@ class ConfigMinQty implements IsProductSalableInterface
      * @param string $sku
      * @param int $stockId
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $sku, int $stockId): bool
     {
+        /** @var StockItemConfigurationInterface $StockItemConfiguration */
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        $legacyStockItem = $this->getLegacyStockItem->execute($sku);
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
 
-        if (($legacyStockItem->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
-            || ($legacyStockItem->getUseConfigMinQty() == 0 && $qtyWithReservation <= $legacyStockItem->getMinQty())
+        if (($stockItemConfiguration->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
+            || ($stockItemConfiguration->getUseConfigMinQty() == 0 && $qtyWithReservation <= $stockItemConfiguration->getMinQty())
         ) {
             return false;
         }

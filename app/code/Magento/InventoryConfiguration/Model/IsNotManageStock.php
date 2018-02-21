@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Model\Configuration;
-use Magento\InventoryCatalog\Model\GetLegacyStockItem;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -22,21 +23,21 @@ class IsNotManageStock implements IsProductSalableInterface
     private $configuration;
 
     /**
-     * @var GetLegacyStockItem
+     * @var GetStockItemConfigurationInterface
      */
-    private $getLegacyStockItem;
+    private $getStockItemConfiguration;
 
     /**
      * IsNotManageStock constructor.
      *
      * @param Configuration $configuration
-     * @param GetLegacyStockItem $getLegacyStockItem
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
         Configuration $configuration,
-        GetLegacyStockItem $getLegacyStockItem
+        GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
-        $this->getLegacyStockItem = $getLegacyStockItem;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->configuration = $configuration;
     }
 
@@ -47,11 +48,12 @@ class IsNotManageStock implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        $legacyStockItem = $this->getLegacyStockItem->execute($sku);
+        /** @var StockItemConfigurationInterface $StockItemConfiguration */
+        $StockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $globalManageStock = $this->configuration->getManageStock();
         $manageStock = false;
-        if (($legacyStockItem->getUseConfigManageStock() == 1 && $globalManageStock == 1)
-            || ($legacyStockItem->getUseConfigManageStock() == 0 && $legacyStockItem->getManageStock() == 1)
+        if (($StockItemConfiguration->getUseConfigManageStock() == 1 && $globalManageStock == 1)
+            || ($StockItemConfiguration->getUseConfigManageStock() == 0 && $StockItemConfiguration->getManageStock() == 1)
         ) {
             $manageStock = true;
         }

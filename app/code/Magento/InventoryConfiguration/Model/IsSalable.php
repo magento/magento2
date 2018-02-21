@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\Inventory\Model\GetStockItemDataInterface;
-use Magento\InventoryCatalog\Model\GetLegacyStockItem;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
@@ -18,9 +19,9 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 class IsSalable implements IsProductSalableInterface
 {
     /**
-     * @var GetLegacyStockItem
+     * @var GetStockItemConfigurationInterface
      */
-    private $getLegacyStockItem;
+    private $getStockItemConfiguration;
 
     /**
      * @var GetStockItemDataInterface
@@ -29,14 +30,14 @@ class IsSalable implements IsProductSalableInterface
 
     /**
      * IsSalable constructor.
-     * @param GetLegacyStockItem $getLegacyStockItem
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param GetStockItemDataInterface $getStockItemData
      */
     public function __construct(
-        GetLegacyStockItem $getLegacyStockItem,
+        GetStockItemConfigurationInterface $getStockItemConfiguration,
         GetStockItemDataInterface $getStockItemData
     ) {
-        $this->getLegacyStockItem = $getLegacyStockItem;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->getStockItemData = $getStockItemData;
     }
 
@@ -48,12 +49,13 @@ class IsSalable implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-
-        $legacyStockItem = $this->getLegacyStockItem->execute($sku);
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $isSalable = (bool)$stockItemData['is_salable'];
-        if (null === $legacyStockItem) {
+        if (null === $stockItemConfiguration) {
             return $isSalable;
         }
+
         return false;
     }
 }
