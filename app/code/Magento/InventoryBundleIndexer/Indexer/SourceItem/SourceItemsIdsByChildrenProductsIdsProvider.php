@@ -10,7 +10,7 @@ namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 
-class GetChildrenSourceItemsIdsByChildrenProductIds
+class SourceItemsIdsByChildrenProductsIdsProvider
 {
     /**
      * @var ResourceConnection

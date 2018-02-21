@@ -7,12 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\MultiDimensionalIndexer\Alias;
-use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
-use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-
 /**
  * Source Item indexer
  * Check bundle children, if one of them in_stock - make bundle in_stock
@@ -21,11 +15,6 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
  */
 class SourceItemIndexer
 {
-    /**
-     * @var GetSkuListInStock
-     */
-    private $getSkuListInStock;
-
     /**
      * @var BundlesIndexDataProvider
      */
@@ -37,34 +26,23 @@ class SourceItemIndexer
     private $bundleChildrenSourceItemsIdsProvider;
 
     /**
-     * @var IndexNameBuilder
+     * @var BundleBySkuAndChildrenSourceItemsIdsIndexer
      */
-    private $indexNameBuilder;
+    private $bundleBySkuAndChildrenSourceItemsIdsIndexer;
 
     /**
-     * @var IndexHandlerInterface
-     */
-    private $indexHandler;
-
-    /**
-     * @param GetSkuListInStock $getSkuListInStock
      * @param BundlesIndexDataProvider $bundlesIndexDataProvider
      * @param BundleChildrenSourceItemsIdsProvider $bundleChildrenSourceItemsIdsProvider
-     * @param IndexNameBuilder $indexNameBuilder
-     * @param IndexHandlerInterface $indexHandler
+     * @param BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
      */
     public function __construct(
-        GetSkuListInStock $getSkuListInStock,
         BundlesIndexDataProvider $bundlesIndexDataProvider,
         BundleChildrenSourceItemsIdsProvider $bundleChildrenSourceItemsIdsProvider,
-        IndexNameBuilder $indexNameBuilder,
-        IndexHandlerInterface $indexHandler
+        BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
     ) {
-        $this->getSkuListInStock = $getSkuListInStock;
         $this->bundlesIndexDataProvider = $bundlesIndexDataProvider;
         $this->bundleChildrenSourceItemsIdsProvider = $bundleChildrenSourceItemsIdsProvider;
-        $this->indexNameBuilder = $indexNameBuilder;
-        $this->indexHandler = $indexHandler;
+        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer = $bundleBySkuAndChildrenSourceItemsIdsIndexer;
     }
 
     /**
@@ -74,7 +52,7 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->bundleChildrenSourceItemsIdsProvider->execute();
 
-        $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
+        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
 
     /**
@@ -94,38 +72,6 @@ class SourceItemIndexer
     {
         $bundleChildrenSourceItemsIdsWithSku = $this->bundleChildrenSourceItemsIdsProvider->execute($sourceItemIds);
 
-        $this->executeByBundleChildrenSourceItemsIdsWithSku($bundleChildrenSourceItemsIdsWithSku);
-    }
-
-    /**
-     * @param array $bundleChildrenSourceItemsIdsWithSku
-     * @return void
-     */
-    private function executeByBundleChildrenSourceItemsIdsWithSku(array $bundleChildrenSourceItemsIdsWithSku)
-    {
-        $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIdsWithSku);
-        foreach ($skuListInStockList as $skuListInStock) {
-            $stockId = $skuListInStock->getStockId();
-            $skuList = $skuListInStock->getSkuList();
-            $bundleIndexData = $this->bundlesIndexDataProvider->execute($skuList, $stockId);
-
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(InventoryIndexer::INDEXER_ID)
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
-
-            $this->indexHandler->cleanIndex(
-                $mainIndexName,
-                new \ArrayIterator(array_keys($skuList)),
-                ResourceConnection::DEFAULT_CONNECTION
-            );
-
-            $this->indexHandler->saveIndex(
-                $mainIndexName,
-                $bundleIndexData,
-                ResourceConnection::DEFAULT_CONNECTION
-            );
-        }
+        $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
 }

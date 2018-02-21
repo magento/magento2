@@ -7,7 +7,6 @@
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
         "magento/module-catalog": "100.3.*",
-        "magento/module-bundle": "100.3.*",
         "magento/framework": "100.3.*"
     },
     "type": "magento2-module",

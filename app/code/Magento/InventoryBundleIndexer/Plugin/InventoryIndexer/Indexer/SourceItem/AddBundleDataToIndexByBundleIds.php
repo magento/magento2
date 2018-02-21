@@ -12,7 +12,7 @@ use Magento\Bundle\Api\ProductOptionRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\InventoryBundleIndexer\Indexer\SourceItem\BundleBySkuAndChildrenSourceItemsIdsIndexer;
-use Magento\InventoryBundleIndexer\Indexer\SourceItem\GetChildrenSourceItemsIdsByChildrenProductIds;
+use Magento\InventoryBundleIndexer\Indexer\SourceItem\SourceItemsIdsByChildrenProductsIdsProvider;
 
 class AddBundleDataToIndexByBundleIds
 {
@@ -27,23 +27,23 @@ class AddBundleDataToIndexByBundleIds
     private $bundleBySkuAndChildrenSourceItemsIdsIndexer;
 
     /**
-     * @var GetChildrenSourceItemsIdsByChildrenProductIds
+     * @var SourceItemsIdsByChildrenProductsIdsProvider
      */
-    private $getChildrenSourceItemsIdsByChildrenProductIds;
+    private $sourceItemsIdsByChildrenProductsIdsProvider;
 
     /**
      * @param ProductRepository $productRepository
      * @param BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
-     * @param GetChildrenSourceItemsIdsByChildrenProductIds $getChildrenSourceItemsIdsByChildrenProductIds
+     * @param SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
      */
     public function __construct(
         ProductRepository $productRepository,
         BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer,
-        GetChildrenSourceItemsIdsByChildrenProductIds $getChildrenSourceItemsIdsByChildrenProductIds
+        SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
     ) {
         $this->productRepository = $productRepository;
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer = $bundleBySkuAndChildrenSourceItemsIdsIndexer;
-        $this->getChildrenSourceItemsIdsByChildrenProductIds = $getChildrenSourceItemsIdsByChildrenProductIds;
+        $this->sourceItemsIdsByChildrenProductsIdsProvider = $sourceItemsIdsByChildrenProductsIdsProvider;
     }
 
     /**
@@ -64,7 +64,7 @@ class AddBundleDataToIndexByBundleIds
         $childrenIds = $this->getChildrenProductIdsByProductLinks($option->getProductLinks());
 
         $bundleChildrenSourceItemsIdsWithSku = [
-                $product->getSku() => $this->getChildrenSourceItemsIdsByChildrenProductIds->execute($childrenIds)
+                $product->getSku() => $this->sourceItemsIdsByChildrenProductsIdsProvider->execute($childrenIds)
             ];
 
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
