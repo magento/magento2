@@ -26,7 +26,6 @@ class CatalogInventory extends AbstractModifier
      */
     public function __construct(
         ArrayManager $arrayManager
-
     ) {
         $this->arrayManager = $arrayManager;
     }
