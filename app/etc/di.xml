@@ -43,6 +43,8 @@
     <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
     <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
     <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http" />
+    <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup" />
+    <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup" />
     <type name="Magento\Store\Model\Store">
         <arguments>
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
@@ -177,6 +179,7 @@
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface" type="Magento\Setup\Model\Declaration\Schema\SchemaConfig" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Setup\Model\Declaration\Schema\FileSystem\Csv" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1447,6 +1450,10 @@
                 <item name="add_complex_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement</item>
                 <item name="modify_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyTable</item>
             </argument>
+            <argument name="dataSaviorsCollection" xsi:type="array">
+                <item name="table_savior" xsi:type="object">Magento\Setup\Model\Declaration\Schema\DataSavior\TableSavior</item>
+                <item name="column_savior" xsi:type="object">Magento\Setup\Model\Declaration\Schema\DataSavior\ColumnSavior</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Setup\Model\Declaration\Schema\Sharding">
@@ -1488,6 +1495,22 @@
                 <item name="date" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DateDefinition</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="\Magento\Setup\Model\Patch\SchemaPatchReader" type="\Magento\Setup\Model\Patch\PatchReader">
+        <arguments>
+            <argument name="type" xsi:type="string">schema</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="\Magento\Setup\Model\Patch\DataPatchReader" type="\Magento\Setup\Model\Patch\PatchReader">
+        <arguments>
+            <argument name="type" xsi:type="string">data</argument>
+        </arguments>
+    </virtualType>
+    <type name="\Magento\Setup\Model\Patch\PatchApplier">
+        <arguments>
+            <argument name="dataPatchReader" xsi:type="object">\Magento\Setup\Model\Patch\DataPatchReader</argument>
+            <argument name="schemaPatchReader" xsi:type="object">\Magento\Setup\Model\Patch\SchemaPatchReader</argument>
         </arguments>
     </type>
 </config>
