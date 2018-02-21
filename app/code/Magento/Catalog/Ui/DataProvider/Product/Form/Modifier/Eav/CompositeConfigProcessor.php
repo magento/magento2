@@ -49,7 +49,6 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
                 continue;
             }
 
-            //need to move to composite provider
             $wysiwygConfigData = array_merge_recursive($wysiwygConfigData, $processor->process($attribute));
         }
 
