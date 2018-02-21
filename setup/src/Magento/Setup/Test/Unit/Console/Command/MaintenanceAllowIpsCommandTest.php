@@ -75,7 +75,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
             [
                 ['ip' => ['127.0.0.1', '127.0.0.2'], '--none' => false],
                 [],
-                'Set exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
+                'Set exempt IP-addresses: 127.0.0.1 127.0.0.2' . PHP_EOL
             ],
             [
                 ['--none' => true],
