@@ -506,4 +506,20 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
     }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentities()
+    {
+        $category = $this->getCategoryModel();
+
+        //Without an ID no identities can be given.
+        $this->assertEmpty($category->getIdentities());
+
+        //Now because ID is set we can get some
+        $category->setId(42);
+        
+        $this->assertNotEmpty($category->getIdentities());
+    }
 }

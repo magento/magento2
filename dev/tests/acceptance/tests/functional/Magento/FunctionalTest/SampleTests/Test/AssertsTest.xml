@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AssertTest">
+        <annotations>
+            <features value="Test Asserts"/>
+            <group value="skip"/>
+        </annotations>
+
+        <createData entity="Simple_US_Customer" stepKey="createData2"/>
+        <amOnUrl url="https://www.yahoo.com" stepKey="amOnPage"/>
+        <waitForElementVisible stepKey="wait1" selector="#uh-logo" time="10"/>
+        <grabTextFrom selector="#uh-logo" stepKey="grabTextFrom1"/>
+
+        <!-- asserts without variable replacement -->
+        <assertArrayHasKey stepKey="assertArrayHasKey" message="pass">
+            <expectedResult type="string">apple</expectedResult>
+            <actualResult type="const">['orange' => 2, 'apple' => 1]</actualResult>
+        </assertArrayHasKey>
+        <assertEquals stepKey="assertEquals1" message="pass">
+            <expectedResult type="variable">grabTextFrom1</expectedResult>
+            <actualResult type="string">Copyright © 2013-2017 Magento, Inc. All rights reserved.</actualResult>
+        </assertEquals>
+        <assertFalse stepKey="assertFalse1" message="pass">
+            <actualResult type="bool">0</actualResult>
+        </assertFalse>
+        <assertGreaterOrEquals stepKey="assertGreaterOrEquals" message="pass">
+            <expectedResult type="int">2</expectedResult>
+            <actualResult type="int">5</actualResult>
+        </assertGreaterOrEquals>
+        <assertElementContainsAttribute stepKey="assertElementContainsAttribute1" selector="#username" attribute="class">
+            <expectedResult type="string">admin__control-text</expectedResult>
+        </assertElementContainsAttribute>
+
+        <!-- string type that use created data -->
+        <assertStringStartsWith stepKey="assert1" message="fail">
+            <expectedResult type="string">D</expectedResult>
+            <actualResult type="string">$$createData1.lastname$$, $$createData1.firstname$$</actualResult>
+        </assertStringStartsWith>
+        <assertStringStartsNotWith stepKey="assert2" message="pass">
+            <expectedResult type="string">W</expectedResult>
+            <actualResult type="string">$createData2.firstname$, $createData2.lastname$</actualResult>
+        </assertStringStartsNotWith>
+        <assertEquals stepKey="assert5" message="pass">
+            <expectedResult type="string">$$createData1.lastname$$</expectedResult>
+            <actualResult type="string">$$createData1.lastname$$</actualResult>
+        </assertEquals>
+        <assertElementContainsAttribute stepKey="assertElementContainsAttribute7" selector="#username" attribute="value">
+            <expectedResult type="const">$createData2.firstname$</expectedResult>
+        </assertElementContainsAttribute>
+
+        <!-- array type that use created data -->
+        <assertArraySubset stepKey="assert9" message="pass">
+            <expectedResult type="array">[$$createData1.lastname$$, $$createData1.firstname$$]</expectedResult>
+            <actualResult type="array">[$$createData1.lastname$$, $$createData1.firstname$$, 1]</actualResult>
+        </assertArraySubset>
+        <assertArraySubset stepKey="assert10" message="pass">
+            <expectedResult type="array">[$createData2.firstname$, $createData2.lastname$]</expectedResult>
+            <actualResult type="array">[$createData2.firstname$, $createData2.lastname$, 1]</actualResult>
+        </assertArraySubset>
+        <assertArrayHasKey stepKey="assert3" message="pass">
+            <expectedResult type="string">lastname</expectedResult>
+            <actualResult type="array">['lastname' => $$createData1.lastname$$, 'firstname' => $$createData1.firstname$$]</actualResult>
+        </assertArrayHasKey>
+        <assertArrayHasKey stepKey="assert4" message="pass">
+            <expectedResult type="string">lastname</expectedResult>
+            <actualResult type="array">['lastname' => $createData2.lastname$, 'firstname' => $createData2.firstname$]</actualResult>
+        </assertArrayHasKey>
+    </test>
+</tests>
