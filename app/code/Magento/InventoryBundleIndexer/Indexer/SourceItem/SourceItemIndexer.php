@@ -16,14 +16,14 @@ namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 class SourceItemIndexer
 {
     /**
-     * @var BundlesIndexDataProvider
+     * @var IndexDataProvider
      */
-    private $bundlesIndexDataProvider;
+    private $indexDataProvider;
 
     /**
-     * @var BundleChildrenSourceItemsIdsProvider
+     * @var ChildrenSourceItemsIdsProvider
      */
-    private $bundleChildrenSourceItemsIdsProvider;
+    private $childrenSourceItemsIdsProvider;
 
     /**
      * @var BundleBySkuAndChildrenSourceItemsIdsIndexer
@@ -31,17 +31,17 @@ class SourceItemIndexer
     private $bundleBySkuAndChildrenSourceItemsIdsIndexer;
 
     /**
-     * @param BundlesIndexDataProvider $bundlesIndexDataProvider
-     * @param BundleChildrenSourceItemsIdsProvider $bundleChildrenSourceItemsIdsProvider
+     * @param IndexDataProvider $indexDataProvider
+     * @param ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider
      * @param BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
      */
     public function __construct(
-        BundlesIndexDataProvider $bundlesIndexDataProvider,
-        BundleChildrenSourceItemsIdsProvider $bundleChildrenSourceItemsIdsProvider,
+        IndexDataProvider $indexDataProvider,
+        ChildrenSourceItemsIdsProvider $childrenSourceItemsIdsProvider,
         BundleBySkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
     ) {
-        $this->bundlesIndexDataProvider = $bundlesIndexDataProvider;
-        $this->bundleChildrenSourceItemsIdsProvider = $bundleChildrenSourceItemsIdsProvider;
+        $this->indexDataProvider = $indexDataProvider;
+        $this->childrenSourceItemsIdsProvider = $childrenSourceItemsIdsProvider;
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer = $bundleBySkuAndChildrenSourceItemsIdsIndexer;
     }
 
@@ -50,7 +50,7 @@ class SourceItemIndexer
      */
     public function executeFull()
     {
-        $bundleChildrenSourceItemsIdsWithSku = $this->bundleChildrenSourceItemsIdsProvider->execute();
+        $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute();
 
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
@@ -70,7 +70,7 @@ class SourceItemIndexer
      */
     public function executeList(array $sourceItemIds)
     {
-        $bundleChildrenSourceItemsIdsWithSku = $this->bundleChildrenSourceItemsIdsProvider->execute($sourceItemIds);
+        $bundleChildrenSourceItemsIdsWithSku = $this->childrenSourceItemsIdsProvider->execute($sourceItemIds);
 
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer->execute($bundleChildrenSourceItemsIdsWithSku);
     }
