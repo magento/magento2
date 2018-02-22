@@ -115,13 +115,6 @@ class SourceItems extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->isSourceManagementAllowed()) {
-            $meta['product-details']['children']['quantity_and_stock_status_qty']
-                ['arguments']['data']['config']['visible'] = 0;
-
-            // FIXME: this one does not work
-            $meta['product-details']['children']['container_quantity_and_stock_status']['children']
-                ['quantity_and_stock_status']['arguments']['data']['config']['visible'] = 0;
-
             return $meta;
         }
 
