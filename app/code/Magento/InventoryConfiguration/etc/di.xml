@@ -39,4 +39,10 @@
         </arguments>
     </type>
     <preference for="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\GetStockItemConfiguration"/>
+    <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
+    <type name="Magento\InventoryCatalog\Model\GetLegacyStockItem">
+        <arguments>
+            <argument name="stockItemConfiguration" xsi:type="object">Magento\InventoryConfiguration\Model\StockItemConfiguration\Proxy</argument>
+        </arguments>
+    </type>
 </config>
