@@ -42,9 +42,6 @@
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
-        <actionGroup ref="CheckProductInCheckoutCartItemsActionGroup" stepKey="guestCheckoutCheckProductInCartItems">
-            <argument name="productVar" value="$$createProduct$$"/>
-        </actionGroup>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeAddress">
             <argument name="customerVar" value="CustomerEntityOne" />
