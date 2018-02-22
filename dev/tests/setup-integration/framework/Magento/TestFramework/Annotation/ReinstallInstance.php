@@ -7,8 +7,7 @@
 namespace Magento\TestFramework\Annotation;
 
 /**
- * Handler for applying reinstallMagento annotation
- *
+ * Handler for applying reinstallMagento annotation.
  */
 class ReinstallInstance
 {
@@ -28,31 +27,12 @@ class ReinstallInstance
     }
 
     /**
-     * Handler for 'endTest' event
+     * Handler for 'endTest' event.
      *
-     * @param \PHPUnit\Framework\TestCase $test
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest()
     {
-        $this->_hasNonIsolatedTests = true;
-
-        /* Determine an isolation from doc comment */
-        $annotations = $test->getAnnotations();
-        $annotations = array_replace((array) $annotations['class'], (array) $annotations['method']);
-        $isIsolationEnabled = false;
-        if (isset($annotations['reinstallMagento'])) {
-            $isolation = $annotations['reinstallMagento'];
-            if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Invalid "@reinstallMagento" annotation, can be "enabled" or "disabled" only.')
-                );
-            }
-            $isIsolationEnabled = $isolation === ['enabled'];
-        }
-        if ($isIsolationEnabled && $this->application->isInstalled()) {
-            $this->application->cleanup();
-            $this->application->install();
-        }
+        $this->application->cleanup();
     }
 }

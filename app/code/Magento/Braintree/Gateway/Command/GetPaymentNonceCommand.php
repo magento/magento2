@@ -77,7 +77,7 @@ class GetPaymentNonceCommand implements CommandInterface
         $customerId = $this->subjectReader->readCustomerId($commandSubject);
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
         if (!$paymentToken) {
-            throw new Exception('No available payment tokens');
+            throw new Exception('No payment tokens are available.');
         }
 
         $data = $this->adapter->createNonce($paymentToken->getGatewayToken());

@@ -62,7 +62,12 @@ class RowParser
     ) {
         // validate row
         if (count($rowData) < 5) {
-            throw new RowException(__('Please correct Table Rates format in the Row #%1.', $rowNumber));
+            throw new RowException(
+                __(
+                    'The Table Rates File Format is incorrect in row number "%1". Verify the format and try again.',
+                    $rowNumber
+                )
+            );
         }
 
         $countryId = $this->getCountryId($rowData, $rowNumber, $columnResolver);
@@ -99,7 +104,13 @@ class RowParser
         } elseif ($countryCode === '*' || $countryCode === '') {
             $countryId = '0';
         } else {
-            throw new RowException(__('Please correct Country "%1" in the Row #%2.', $countryCode, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" country in row number "%2" is incorrect. Verify the country and try again.',
+                    $countryCode,
+                    $rowNumber
+                )
+            );
         }
         return $countryId;
     }
@@ -121,7 +132,14 @@ class RowParser
         } elseif ($regionCode === '*' || $regionCode === '') {
             $regionId = 0;
         } else {
-            throw new RowException(__('Please correct Region/State "%1" in the Row #%2.', $regionCode, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" region or state in row number "%2" is incorrect. '
+                    . 'Verify the region or state and try again.',
+                    $regionCode,
+                    $rowNumber
+                )
+            );
         }
         return $regionId;
     }
@@ -181,7 +199,13 @@ class RowParser
         $priceValue = $columnResolver->getColumnValue(ColumnResolver::COLUMN_PRICE, $rowData);
         $price = $this->_parseDecimalValue($priceValue);
         if ($price === false) {
-            throw new RowException(__('Please correct Shipping Price "%1" in the Row #%2.', $priceValue, $rowNumber));
+            throw new RowException(
+                __(
+                    'The "%1" shipping price in row number "%2" is incorrect. Verify the shipping price and try again.',
+                    $priceValue,
+                    $rowNumber
+                )
+            );
         }
         return $price;
     }

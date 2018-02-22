@@ -36,7 +36,7 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setCode($code);
 
     /**
-     * Rethreive website name
+     * Retrieve website name
      *
      * @return string
      */

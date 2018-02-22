@@ -669,7 +669,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);
-        
+
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
         if (!is_array($additionalData)) {
@@ -677,6 +677,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         foreach ($additionalData as $key => $value) {
+            // Skip extension attributes
+            if ($key === \Magento\Framework\Api\ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY) {
+                continue;
+            }
+
             $this->getInfoInstance()->setAdditionalInformation($key, $value);
         }
         return $this;

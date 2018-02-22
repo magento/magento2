@@ -156,7 +156,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     protected function initModifiers()
     {
-        $this->modifierMock = $this->getMockBuilder(\StdClass::class)
+        $this->modifierMock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['modifyData', 'modifyMeta'])
             ->getMock();
         $this->modifierFactoryMock->expects($this->once())

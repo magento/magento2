@@ -76,34 +76,47 @@ class Storage
     public function load()
     {
         if ($this->_isCollectionLoaded == false) {
-            $collection = clone $this->_customerCollection;
-            $collection->removeAttributeToSelect();
-            $tableName = $collection->getResource()->getEntityTable();
-            $collection->getSelect()->from($tableName, ['entity_id', 'website_id', 'email']);
-
-            $this->_byPagesIterator->iterate(
-                $this->_customerCollection,
-                $this->_pageSize,
-                [[$this, 'addCustomer']]
-            );
+            $connection = $this->_customerCollection->getConnection();
+            $select = $connection->select();
+            $select->from($this->_customerCollection->getMainTable(), ['entity_id', 'website_id', 'email']);
+            $results = $connection->fetchAll($select);
+            foreach ($results as $customer) {
+                $this->addCustomerByArray($customer);
+            }
 
             $this->_isCollectionLoaded = true;
         }
     }
 
     /**
+     * @param array $customer
+     * @return $this
+     */
+    public function addCustomerByArray(array $customer)
+    {
+        $email = strtolower(trim($customer['email']));
+        if (!isset($this->_customerIds[$email])) {
+            $this->_customerIds[$email] = [];
+        }
+        $this->_customerIds[$email][$customer['website_id']] = $customer['entity_id'];
+
+        return $this;
+    }
+
+    /**
      * Add customer to array
      *
+     * @deprecated @see addCustomerByArray
      * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
      */
     public function addCustomer(\Magento\Framework\DataObject $customer)
     {
-        $email = strtolower(trim($customer->getEmail()));
-        if (!isset($this->_customerIds[$email])) {
-            $this->_customerIds[$email] = [];
+        $customerData = $customer->toArray();
+        if (!isset($customerData['entity_id']) && isset($customer['id'])) {
+            $customerData['entity_id'] = $customerData['id'];
         }
-        $this->_customerIds[$email][$customer->getWebsiteId()] = $customer->getId();
+        $this->addCustomerByArray($customerData);
 
         return $this;
     }
