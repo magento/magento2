@@ -16,7 +16,6 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
  */
 class SomeSkippedPatch implements
     DataPatchInterface,
-    PatchRevertableInterface,
     PatchVersionInterface
 {
     /**
@@ -55,10 +54,6 @@ class SomeSkippedPatch implements
     public function apply()
     {
         throw new \Exception('This patch should be skipped!');
-    }
-
-    public function revert()
-    {
     }
 
     /**

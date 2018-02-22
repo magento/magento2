@@ -16,7 +16,6 @@ use Magento\Setup\Model\Patch\PatchVersionInterface;
  */
 class SomePatch implements
     DataPatchInterface,
-    PatchRevertableInterface,
     PatchVersionInterface
 {
     /**
@@ -56,10 +55,6 @@ class SomePatch implements
     {
         $adapter = $this->resourceConnection->getConnection();
         $adapter->insert('test_table', ['varchar' => "_ref"]);
-    }
-
-    public function revert()
-    {
     }
 
     /**
