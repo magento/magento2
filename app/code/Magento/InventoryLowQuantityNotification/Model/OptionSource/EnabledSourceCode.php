@@ -17,7 +17,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
  *
  * @api
  */
-class ActiveSourceCode implements OptionSourceInterface
+class EnabledSourceCode implements OptionSourceInterface
 {
     /**
      * @var SourceRepositoryInterface
@@ -28,9 +28,10 @@ class ActiveSourceCode implements OptionSourceInterface
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
+    
     /**
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
@@ -45,20 +46,16 @@ class ActiveSourceCode implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $optionArray = [];
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(
-                SourceInterface::ENABLED,
-                true
-            )
+            ->addFilter(SourceInterface::ENABLED, true)
             ->create();
         $sourcesSearchResult = $this->sourceRepository->getList($searchCriteria);
         $sourcesList = $sourcesSearchResult->getItems();
 
+        $optionArray = [];
         foreach ($sourcesList as $source) {
             $optionArray[] = ['value' => $source->getSourceCode(), 'label' => $source->getSourceCode()];
         }
-
         return $optionArray;
     }
 }

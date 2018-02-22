@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
@@ -93,12 +94,12 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addFieldToSelect('*');
 
-        $this->filterDisabledStocks();
         $this->joinCatalogProduct();
         $this->joinInventoryConfiguration();
 
         $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
+        $this->addEnabledSourceFilter();
 
         $this->setOrder(
             SourceItemInterface::QUANTITY,
@@ -118,7 +119,7 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity' => $productEntityTable],
-            'main_table.' . SourceItemInterface::SKU . ' = product_entity.sku',
+            'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
             []
         );
 
@@ -178,11 +179,9 @@ class LowQuantityCollection extends AbstractCollection
     }
 
     /**
-     * Remove all disabled sources
-     *
      * @return void
      */
-    private function filterDisabledStocks()
+    private function addEnabledSourceFilter()
     {
         $this->getSelect()->joinInner(
             ['inventory_source' => $this->getTable(Source::TABLE_NAME_SOURCE)],

@@ -5,26 +5,27 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$objectManager = Bootstrap::getObjectManager();
-
-/** @var SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave */
-$sourceItemConfigurationsSave = $objectManager->create(SourceItemConfigurationsSaveInterface::class);
+/** @var DataObjectHelper $dataObjectHelper */
+$dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
 /** @var SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory */
-$sourceItemConfigurationFactory = $objectManager->get(SourceItemConfigurationInterfaceFactory::class);
-$data = [
+$sourceItemConfigurationFactory = Bootstrap::getObjectManager()->get(SourceItemConfigurationInterfaceFactory::class);
+/** @var SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave */
+$sourceItemConfigurationsSave = Bootstrap::getObjectManager()->get(SourceItemConfigurationsSaveInterface::class);
+
+$sourceItemConfigurationsData = [
     [
-        // This should not be showed because source is disabled
+        // for disabled source
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-disabled',
         SourceItemConfigurationInterface::SKU => 'SKU-1',
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
     ],
     [
-        // This should be showed
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-1',
         SourceItemConfigurationInterface::SKU => 'SKU-1',
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
@@ -38,12 +39,14 @@ $data = [
 ];
 
 $sourceItemConfigurations = [];
-foreach ($data as $entity) {
+foreach ($sourceItemConfigurationsData as $sourceItemConfigurationData) {
     /** @var SourceItemConfigurationInterface $sourceItemConfiguration */
     $sourceItemConfiguration = $sourceItemConfigurationFactory->create();
-    $sourceItemConfiguration->setSourceCode($entity[SourceItemConfigurationInterface::SOURCE_CODE]);
-    $sourceItemConfiguration->setSku($entity[SourceItemConfigurationInterface::SKU]);
-    $sourceItemConfiguration->setNotifyStockQty($entity[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+    $dataObjectHelper->populateWithArray(
+        $sourceItemConfiguration,
+        $sourceItemConfigurationData,
+        SourceItemConfigurationInterface::class
+    );
     $sourceItemConfigurations[] = $sourceItemConfiguration;
 }
 
