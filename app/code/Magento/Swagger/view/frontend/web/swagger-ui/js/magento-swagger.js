@@ -23,9 +23,8 @@
     /**
      * Takes token from input and adds it to request header.
      */
-    function addApiKeyAuthorization() {
-        var elementApiKey = document.querySelector('#input_apiKey'),
-            key = encodeURIComponent(elementApiKey.value).trim();
+    function addApiKeyAuthorization(e) {
+        var key = encodeURIComponent(e.target.value).trim();
 
         if (key) {
             /**
