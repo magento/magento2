@@ -30,8 +30,6 @@ class ChildrenSourceItemsIdsProvider
     private $resourceConnection;
 
     /**
-     * GetBundleChildrenSourceItemsIdsWithSku constructor.
-     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -50,7 +48,7 @@ class ChildrenSourceItemsIdsProvider
         $select = $this->getChildrenSourceItemsIdsSelect();
         if ($sourceItemsIds) {
             $bundleIdsSelect = $this->getBundleIdsSelect($sourceItemsIds);
-            $select->where('relation.parent_id in (?)', $bundleIdsSelect);
+            $select->where('relation.parent_id IN (?)', $bundleIdsSelect);
         } else {
             $select->where('bundle_product.' . ProductInterface::TYPE_ID . ' = ?', ProductType::TYPE_BUNDLE);
         }
@@ -91,7 +89,7 @@ class ChildrenSourceItemsIdsProvider
             'bundle_product.entity_id = relation.parent_id',
             ['bundle_product.entity_id']
         )->where(
-            'source_item.' . SourceItem::ID_FIELD_NAME . ' in (?)',
+            'source_item.' . SourceItem::ID_FIELD_NAME . ' IN (?)',
             $sourceItemsIds
         )->where(
             'bundle_product.' . ProductInterface::TYPE_ID . ' = ?',
@@ -104,7 +102,7 @@ class ChildrenSourceItemsIdsProvider
     /**
      * @return Select
      */
-    public function getChildrenSourceItemsIdsSelect(): Select
+    private function getChildrenSourceItemsIdsSelect(): Select
     {
         $select = $this->resourceConnection->getConnection()->select();
         $select
