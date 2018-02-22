@@ -81,7 +81,8 @@ class CustomerPlugin
         }
         $newExtensionAttributes = $customer->getExtensionAttributes();
         if ($newExtensionAttributes
-            && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()) {
+            && $initialExtensionAttributes->getIsSubscribed() !== $newExtensionAttributes->getIsSubscribed()
+        ) {
             if ($newExtensionAttributes->getIsSubscribed() === true) {
                 $subscriber->subscribeCustomerById($resultId);
             } elseif ($newExtensionAttributes->getIsSubscribed() === false) {
@@ -149,18 +150,13 @@ class CustomerPlugin
     {
         $extensionAttributes = $customer->getExtensionAttributes();
         if ($extensionAttributes === null) {
-            /** @var CustomerExtensionInterface $customerExtension */
-            $customerExtension = $this->extensionFactory->create(CustomerInterface::class);
-            $isSubscribed = $this->isSubscribed($customer);
-            $customerExtension->setIsSubscribed($isSubscribed);
-            $customer->setExtensionAttributes($customerExtension);
-            return $customer;
+            /** @var CustomerExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+            $customer->setExtensionAttributes($extensionAttributes);
         }
         if ($extensionAttributes->getIsSubscribed() === null) {
             $isSubscribed = $this->isSubscribed($customer);
             $extensionAttributes->setIsSubscribed($isSubscribed);
-            $customer->setExtensionAttributes($extensionAttributes);
-            return $customer;
         }
         return $customer;
     }

@@ -201,6 +201,10 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->extensionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerExtensionMock);
+        $this->customerMock->expects($this->once())
+            ->method('setExtensionAttributes')
+            ->with($this->customerExtensionMock)
+            ->willReturnSelf();
         $this->customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -209,10 +213,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->with($this->customerMock)
             ->willReturn($subscriber);
         $this->customerExtensionMock->expects($this->once())->method('setIsSubscribed')->with($isSubscribed);
-        $this->customerMock->expects($this->once())
-            ->method('setExtensionAttributes')
-            ->with($this->customerExtensionMock)
-            ->willReturnSelf();
         $this->assertEquals(
             $this->customerMock,
             $this->plugin->afterGetById($subject, $this->customerMock)
@@ -235,10 +235,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->willReturn($subscriber);
         $this->customerExtensionMock->expects($this->once())
             ->method('setIsSubscribed')
-            ->willReturnSelf();
-        $this->customerMock->expects($this->once())
-            ->method('setExtensionAttributes')
-            ->with($this->customerExtensionMock)
             ->willReturnSelf();
         $this->assertEquals(
             $this->customerMock,
