@@ -64,20 +64,23 @@
         <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
 
         <!-- Open Category -->
+        <comment userInput="Open category" stepKey="commentOpenCategory" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategory">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>
         </actionGroup>
-        <!-- Check simple product1 in category -->
+        <!-- Check simple product 1 in category -->
+        <comment userInput="Check simple product 1 in category" stepKey="commentCheckSimpleProductInCategory" />
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="browseGrabSimpleProduct1ImageSrc"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct1ImageSrc" stepKey="browseAssertSimpleProduct1ImageNotDefault"/>
-        <!-- Check simple product2 in category -->
+        <!-- Check simple product 2 in category -->
+        <comment userInput="Check simple product 2 in category" stepKey="commentCheckSimpleProduct2InCategory" />
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
@@ -86,6 +89,7 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct2ImageSrc" stepKey="browseAssertSimpleProduct2ImageNotDefault"/>
 
         <!-- View Simple Product 1 -->
+        <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" />
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="browseAssertSimpleProduct2ImageNotDefault"/>
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
             <argument name="product" value="$$createSimpleProduct1$$"/>
@@ -95,6 +99,7 @@
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabSimpleProduct1PageImageSrc" stepKey="browseAssertSimpleProduct1PageImageNotDefault"/>
 
         <!-- View Simple Product 2 -->
+        <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View"/>
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page">
@@ -108,6 +113,7 @@
         <!-- Step 4: User compares products -->
         <comment userInput="Start of comparing products" stepKey="startOfComparingProducts" after="endOfBrowsingCatalog"/>
         <!-- Add Simple Product 1 to comparison -->
+        <comment userInput="Add simple product 1 to comparison" stepKey="commentAddSimpleProduct1ToComparison" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory" />
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory">
             <argument name="category" value="$$createCategory$$"/>
@@ -132,6 +138,7 @@
         </actionGroup>
 
         <!-- Add Simple Product 2 to comparison -->
+        <comment userInput="Add simple product 2 to comparison" stepKey="commentAddSimpleProduct2ToComparison" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1">
             <argument name="category" value="$$createCategory$$"/>
@@ -149,18 +156,21 @@
         </actionGroup>
 
         <!-- Check products in comparison sidebar -->
-        <!-- Check simple product1 in comparison sidebar -->
-        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct1InSidebar" after="compareAddSimpleProduct2ToCompare">
+        <!-- Check simple product 1 in comparison sidebar -->
+        <comment userInput="Check simple product 1 in comparison sidebar" stepKey="commentCheckSimpleProduct1InComparisonSidebar" after="compareAddSimpleProduct2ToCompare"/>
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct1InSidebar" after="commentCheckSimpleProduct1InComparisonSidebar">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
-        <!-- Check simple product2 in comparison sidebar -->
+        <!-- Check simple product 2 in comparison sidebar -->
+        <comment userInput="Check simple product 2 in comparison sidebar" stepKey="commentCheckSimpleProduct2InComparisonSidebar" />
         <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="compareSimpleProduct2InSidebar">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
 
         <!-- Check products on comparison page -->
-        <!-- Check simple product1 on comparison page -->
-        <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="compareOpenComparePage" after="compareSimpleProduct2InSidebar"/>
+        <!-- Check simple product 1 on comparison page -->
+        <comment userInput="Check simple product 1 on comparison page" stepKey="commentCheckSimpleProduct1OnComparisonPage" after="compareSimpleProduct2InSidebar"/>
+        <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="compareOpenComparePage" after="commentCheckSimpleProduct1OnComparisonPage"/>
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct1InComparison">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -168,6 +178,7 @@
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrcInComparison"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrcInComparison" stepKey="compareAssertSimpleProduct1ImageNotDefaultInComparison"/>
         <!-- Check simple product2 on comparison page -->
+        <comment userInput="Check simple product 2 on comparison page" stepKey="commentCheckSimpleProduct2OnComparisonPage" />
         <actionGroup ref="StorefrontCheckCompareSimpleProductActionGroup" stepKey="compareAssertSimpleProduct2InComparison">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
@@ -176,6 +187,7 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrcInComparison" stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
 
         <!-- Clear comparison sidebar -->
+        <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory2">
             <argument name="category" value="$$createCategory$$"/>

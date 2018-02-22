@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <!-- @TODO: Get rid off this workaround and its usages after MQE-498 is implemented -->
     <entity name="CONST" type="CONST">
-        <data key="one">1</data>
-        <data key="two">2</data>
+        <data key="apiSimpleProduct">Api Simple Product</data>
+        <data key="nonexistentProductName">NonexistentProductName</data>
     </entity>
 </entities>
