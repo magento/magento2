@@ -14,11 +14,6 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Cms\Helper\Wysiwyg\Images
-     */
-    protected $imagesHelper;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -26,11 +21,9 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->resultRawFactory = $resultRawFactory;
-        $this->imagesHelper = $imagesHelper;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -41,7 +34,7 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        $imagesHelper = $this->imagesHelper;
+        $imagesHelper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $request = $this->getRequest();
 
         $storeId = $request->getParam('store');
