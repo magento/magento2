@@ -19,6 +19,7 @@
         <element name="contentTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>
