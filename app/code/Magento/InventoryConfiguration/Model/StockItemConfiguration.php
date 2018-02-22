@@ -7,28 +7,99 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
-class StockItemConfiguration extends AbstractExtensibleModel implements StockItemConfigurationInterface
+/**
+ * Class replaces StockItemConfigurationInterface object with StockItemInterface object
+ */
+class StockItemConfiguration implements StockItemConfigurationInterface
 {
+    /**
+     * @var StockItemInterface
+     */
+    private $subject;
+    /**
+     * @var string
+     */
+    private $sku;
+    /**
+     * @var int
+     */
+    private $stockId;
+
+    /**
+     * @var StockItemCriteriaInterfaceFactory
+     */
+    private $stockItemCriteriaFactory;
+
+    /**
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
+
+    /**
+     * @var StockItemRepository
+     */
+    private $stockItemRepository;
+
+    /**
+     * StockItemConfiguration constructor.
+     * @param string $sku
+     * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
+     * @param StockItemRepository $stockItemRepository
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param int $stockId
+     */
+    public function __construct(
+        string $sku,
+        StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
+        StockItemRepository $stockItemRepository,
+        GetProductIdsBySkusInterface $getProductIdsBySkus,
+        int $stockId
+    ) {
+        $this->sku = $sku;
+        $this->stockId = $stockId;
+        $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
+        $this->stockItemRepository = $stockItemRepository;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
+    }
+
+    /**
+     * @return StockItemInterface
+     */
+    private function getSubject()
+    {
+        if (!$this->subject) {
+            $productId = $this->getProductIdsBySkus->execute([$this->sku])[$this->sku];
+            $searchCriteria = $this->stockItemCriteriaFactory->create();
+            $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
+            $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $this->stockId);
+            $this->subject = $this->stockItemRepository->getList($searchCriteria)[0];
+        }
+        return $this->subject;
+    }
+
     /**
      * @return string
      */
     public function getSku(): string
     {
-        return $this->getData(self::SKU);
+        return $this->sku;
     }
 
     /**
      * @param string $sku
-     * @return $this
+     * @return void
      */
-    public function setSku(string $sku): StockItemConfigurationInterface
+    public function setSku(string $sku): void
     {
-        $this->setData(self::SKU, $sku);
-
-        return $this;
+        $productId = $this->getProductIdsBySkus->execute([$this->sku])[$this->sku];
+        $this->getSubject()->setProductId($productId);
     }
 
     /**
@@ -36,18 +107,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getStockId(): int
     {
-        return $this->getData(self::STOCK_ID);
+        return $this->getSubject()->getStockId();
     }
 
     /**
      * @param int $stockId
-     * @return $this
+     * @return void
      */
-    public function setStockId(int $stockId): StockItemConfigurationInterface
+    public function setStockId(int $stockId): void
     {
-        $this->setData(self::STOCK_ID, $stockId);
-
-        return $this;
+        $this->getSubject()->setStockId($stockId);
     }
 
     /**
@@ -55,38 +124,33 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getQty(): float
     {
-        return $this->getData(self::QTY);
+        return $this->getSubject()->getQty();
     }
 
     /**
      * @param float $qty
-     * @return $this
+     * @return void
      */
-    public function setQty(float $qty): StockItemConfigurationInterface
+    public function setQty(float $qty): void
     {
-        $this->setData(self::QTY, $qty);
-
-        return $this;
+        $this->getSubject()->setQty($qty);
     }
-
 
     /**
      * @return bool
      */
     public function getIsQtyDecimal(): bool
     {
-        return $this->getData(self::IS_QTY_DECIMAL);
+        return $this->getSubject()->getIsQtyDecimal();
     }
 
     /**
      * @param bool $isQtyDecimal
-     * @return $this
+     * @return void
      */
-    public function setIsQtyDecimal(bool $isQtyDecimal): StockItemConfigurationInterface
+    public function setIsQtyDecimal(bool $isQtyDecimal): void
     {
-        $this->setData(self::IS_QTY_DECIMAL, $isQtyDecimal);
-
-        return $this;
+        $this->getSubject()->setIsQtyDecimal($isQtyDecimal);
     }
 
     /**
@@ -94,18 +158,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getShowDefaultNotificationMessage(): bool
     {
-        return $this->getData(self::SHOW_DEFAULT_NOTIFICATION_MESSAGE);
+        return $this->getSubject()->getShowDefaultNotificationMessage();
     }
 
     /**
      * @param bool $showDefaultNotificationMessage
-     * @return $this
+     * @return void
      */
-    public function setShowDefaultNotificationMessage(bool $showDefaultNotificationMessage): StockItemConfigurationInterface
+    public function setShowDefaultNotificationMessage(bool $showDefaultNotificationMessage): void
     {
-        $this->setData(self::SHOW_DEFAULT_NOTIFICATION_MESSAGE, $showDefaultNotificationMessage);
-
-        return $this;
+        $this->getSubject()->setShowDefaultNotificationMessage($showDefaultNotificationMessage);
     }
 
     /**
@@ -113,18 +175,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigMinQty(): bool
     {
-        return $this->getData(self::USE_CONFIG_MIN_QTY);
+        return $this->getSubject()->getUseConfigMinQty();
     }
 
     /**
      * @param bool $useConfigMinQty
-     * @return $this
+     * @return void
      */
-    public function setUseConfigMinQty(bool $useConfigMinQty): StockItemConfigurationInterface
+    public function setUseConfigMinQty(bool $useConfigMinQty): void
     {
-        $this->setData(self::USE_CONFIG_MIN_QTY, $useConfigMinQty);
-
-        return $this;
+        $this->getSubject()->setUseConfigMinQty($useConfigMinQty);
     }
 
     /**
@@ -132,18 +192,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getMinQty(): float
     {
-        return $this->getData(self::MIN_QTY);
+        return $this->getSubject()->getMinQty();
     }
 
     /**
      * @param float $minQty
-     * @return $this
+     * @return void
      */
-    public function setMinQty(float $minQty): StockItemConfigurationInterface
+    public function setMinQty(float $minQty): void
     {
-        $this->setData(self::MIN_QTY, $minQty);
-
-        return $this;
+        $this->getSubject()->setMinQty($minQty);
     }
 
     /**
@@ -151,18 +209,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigMinSaleQty(): bool
     {
-        return $this->getData(self::USE_CONFIG_MIN_SALE_QTY);
+        return (bool)$this->getSubject()->getUseConfigMinSaleQty();
     }
 
     /**
      * @param bool $useConfigMinSaleQty
-     * @return $this
+     * @return void
      */
-    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty): StockItemConfigurationInterface
+    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty): void
     {
-        $this->setData(self::USE_CONFIG_MIN_SALE_QTY, $useConfigMinSaleQty);
-
-        return $this;
+        $this->getSubject()->setUseConfigMinSaleQty($useConfigMinSaleQty);
     }
 
     /**
@@ -170,18 +226,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getMinSaleQty(): float
     {
-        return $this->getData(self::MIN_SALE_QTY);
+        return $this->getSubject()->getMinSaleQty();
     }
 
     /**
      * @param float $minSaleQty
-     * @return $this
+     * @return void
      */
-    public function setMinSaleQty(float $minSaleQty): StockItemConfigurationInterface
+    public function setMinSaleQty(float $minSaleQty): void
     {
-        $this->setData(self::MIN_SALE_QTY, $minSaleQty);
-
-        return $this;
+        $this->getSubject()->setMinSaleQty($minSaleQty);
     }
 
     /**
@@ -189,18 +243,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigMaxSaleQty(): bool
     {
-        return $this->getData(self::USE_CONFIG_MAX_SALE_QTY);
+        return $this->getSubject()->getUseConfigMaxSaleQty();
     }
 
     /**
      * @param bool $useConfigMaxSaleQty
-     * @return $this
+     * @return void
      */
-    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty): StockItemConfigurationInterface
+    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty): void
     {
-        $this->setData(self::USE_CONFIG_MAX_SALE_QTY, $useConfigMaxSaleQty);
-
-        return $this;
+        $this->getSubject()->setUseConfigMaxSaleQty($useConfigMaxSaleQty);
     }
 
     /**
@@ -208,18 +260,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getMaxSaleQty(): float
     {
-        return $this->getData(self::MAX_SALE_QTY);
+        return $this->getSubject()->getMaxSaleQty();
     }
 
     /**
      * @param float $maxSaleQty
-     * @return $this
+     * @return void
      */
-    public function setMaxSaleQty(float $maxSaleQty): StockItemConfigurationInterface
+    public function setMaxSaleQty(float $maxSaleQty): void
     {
-        $this->setData(self::MAX_SALE_QTY, $maxSaleQty);
-
-        return $this;
+        $this->getSubject()->setMaxSaleQty($maxSaleQty);
     }
 
     /**
@@ -227,18 +277,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigBackorders(): bool
     {
-        return $this->getData(self::USE_CONFIG_BACKORDERS);
+        return $this->getSubject()->getUseConfigBackorders();
     }
 
     /**
      * @param bool $useConfigBackorders
-     * @return $this
+     * @return void
      */
-    public function setUseConfigBackorders(bool $useConfigBackorders): StockItemConfigurationInterface
+    public function setUseConfigBackorders(bool $useConfigBackorders): void
     {
-        $this->setData(self::USE_CONFIG_BACKORDERS, $useConfigBackorders);
-
-        return $this;
+        $this->getSubject()->setUseConfigBackorders($useConfigBackorders);
     }
 
     /**
@@ -246,18 +294,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getBackorders(): int
     {
-        return $this->getData(self::BACKORDERS);
+        return $this->getSubject()->getBackorders();
     }
 
     /**
      * @param int $backOrders
-     * @return $this
+     * @return void
      */
-    public function setBackorders(int $backOrders): StockItemConfigurationInterface
+    public function setBackorders(int $backOrders): void
     {
-        $this->setData(self::BACKORDERS, $backOrders);
-
-        return $this;
+        $this->getSubject()->setBackorders($backOrders);
     }
 
     /**
@@ -265,18 +311,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigNotifyStockQty(): bool
     {
-        return $this->getData(self::USE_CONFIG_NOTIFY_STOCK_QTY);
+        return $this->getSubject()->getUseConfigNotifyStockQty();
     }
 
     /**
      * @param bool $useConfigNotifyStockQty
-     * @return $this
+     * @return void
      */
-    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty): StockItemConfigurationInterface
+    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty): void
     {
-        $this->setData(self::USE_CONFIG_NOTIFY_STOCK_QTY, $useConfigNotifyStockQty);
-
-        return $this;
+        $this->getSubject()->setUseConfigNotifyStockQty($useConfigNotifyStockQty);
     }
 
     /**
@@ -284,18 +328,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getNotifyStockQty(): float
     {
-        return $this->getData(self::NOTIFY_STOCK_QTY);
+        return $this->getSubject()->getNotifyStockQty();
     }
 
     /**
      * @param float $notifyStockQty
-     * @return $this
+     * @return void
      */
-    public function setNotifyStockQty(float $notifyStockQty): StockItemConfigurationInterface
+    public function setNotifyStockQty(float $notifyStockQty): void
     {
-        $this->setData(self::NOTIFY_STOCK_QTY, $notifyStockQty);
-
-        return $this;
+        $this->getSubject()->setNotifyStockQty($notifyStockQty);
     }
 
     /**
@@ -303,18 +345,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigQtyIncrements(): bool
     {
-        return $this->getData(self::USE_CONFIG_QTY_INCREMENTS);
+        return $this->getSubject()->getUseConfigQtyIncrements();
     }
 
     /**
      * @param bool $useConfigQtyIncrements
-     * @return $this
+     * @return void
      */
-    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements): StockItemConfigurationInterface
+    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements): void
     {
-        $this->setData(self::USE_CONFIG_QTY_INCREMENTS, $useConfigQtyIncrements);
-
-        return $this;
+        $this->getSubject()->setUseConfigQtyIncrements($useConfigQtyIncrements);
     }
 
     /**
@@ -322,18 +362,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getQtyIncrements(): float
     {
-        return $this->getData(self::QTY_INCREMENTS);
+        return $this->getSubject()->getQtyIncrements();
     }
 
     /**
      * @param float $qtyIncrements
-     * @return $this
+     * @return void
      */
-    public function setQtyIncrements(float $qtyIncrements): StockItemConfigurationInterface
+    public function setQtyIncrements(float $qtyIncrements): void
     {
-        $this->setData(self::QTY_INCREMENTS, $qtyIncrements);
-
-        return $this;
+        $this->getSubject()->setQtyIncrements($qtyIncrements);
     }
 
     /**
@@ -341,18 +379,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigEnableQtyInc(): bool
     {
-        return $this->getData(self::USE_CONFIG_ENABLE_QTY_INC);
+        return $this->getSubject()->getUseConfigEnableQtyInc();
     }
 
     /**
      * @param bool $useConfigEnableQtyInc
-     * @return $this
+     * @return void
      */
-    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc): StockItemConfigurationInterface
+    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc): void
     {
-        $this->setData(self::USE_CONFIG_ENABLE_QTY_INC, $useConfigEnableQtyInc);
-
-        return $this;
+        $this->getSubject()->setUseConfigEnableQtyInc($useConfigEnableQtyInc);
     }
 
     /**
@@ -360,18 +396,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getEnableQtyIncrements(): bool
     {
-        return $this->getData(self::ENABLE_QTY_INCREMENTS);
+        return $this->getSubject()->getEnableQtyIncrements();
     }
 
     /**
      * @param bool $enableQtyIncrements
-     * @return $this
+     * @return void
      */
-    public function setEnableQtyIncrements(bool $enableQtyIncrements): StockItemConfigurationInterface
+    public function setEnableQtyIncrements(bool $enableQtyIncrements): void
     {
-        $this->setData(self::ENABLE_QTY_INCREMENTS, $enableQtyIncrements);
-
-        return $this;
+        $this->getSubject()->setEnableQtyIncrements($enableQtyIncrements);
     }
 
     /**
@@ -379,18 +413,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getUseConfigManageStock(): bool
     {
-        return $this->getData(self::USE_CONFIG_MANAGE_STOCK);
+        return $this->getSubject()->getUseConfigManageStock();
     }
 
     /**
      * @param bool $useConfigManageStock
-     * @return $this
+     * @return void
      */
-    public function setUseConfigManageStock(bool $useConfigManageStock): StockItemConfigurationInterface
+    public function setUseConfigManageStock(bool $useConfigManageStock): void
     {
-        $this->setData(self::USE_CONFIG_MANAGE_STOCK, $useConfigManageStock);
-
-        return $this;
+        $this->getSubject()->setUseConfigManageStock($useConfigManageStock);
     }
 
     /**
@@ -398,18 +430,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getManageStock(): bool
     {
-        return $this->getData(self::MANAGE_STOCK);
+        return $this->getSubject()->getManageStock();
     }
 
     /**
      * @param bool $manageStock
-     * @return $this
+     * @return void
      */
-    public function setManageStock(bool $manageStock): StockItemConfigurationInterface
+    public function setManageStock(bool $manageStock): void
     {
-        $this->setData(self::MANAGE_STOCK, $manageStock);
-
-        return $this;
+        $this->getSubject()->setManageStock($manageStock);
     }
 
     /**
@@ -417,18 +447,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getIsInStock(): bool
     {
-        return $this->getData(self::IS_IN_STOCK);
+        return $this->getSubject()->getIsInStock();
     }
 
     /**
      * @param bool $isInStock
-     * @return $this
+     * @return void
      */
-    public function setIsInStock(bool $isInStock): StockItemConfigurationInterface
+    public function setIsInStock(bool $isInStock): void
     {
-        $this->setData(self::IS_IN_STOCK, $isInStock);
-
-        return $this;
+        $this->getSubject()->setIsInStock($isInStock);
     }
 
     /**
@@ -436,18 +464,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getLowStockDate(): string
     {
-        return $this->getData(self::LOW_STOCK_DATE);
+        return $this->getSubject()->getLowStockDate();
     }
 
     /**
      * @param string $lowStockDate
-     * @return $this
+     * @return void
      */
-    public function setLowStockDate(string $lowStockDate): StockItemConfigurationInterface
+    public function setLowStockDate(string $lowStockDate): void
     {
-        $this->setData(self::LOW_STOCK_DATE, $lowStockDate);
-
-        return $this;
+        $this->getSubject()->setLowStockDate($lowStockDate);
     }
 
     /**
@@ -455,18 +481,16 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getIsDecimalDivided(): bool
     {
-        return $this->getData(self::IS_DECIMAL_DIVIDED);
+        return $this->getSubject()->getIsDecimalDivided();
     }
 
     /**
      * @param bool $isDecimalDivided
-     * @return $this
+     * @return void
      */
-    public function setIsDecimalDivided(bool $isDecimalDivided): StockItemConfigurationInterface
+    public function setIsDecimalDivided(bool $isDecimalDivided): void
     {
-        $this->setData(self::IS_DECIMAL_DIVIDED, $isDecimalDivided);
-
-        return $this;
+        $this->getSubject()->setIsDecimalDivided($isDecimalDivided);
     }
 
     /**
@@ -474,39 +498,33 @@ class StockItemConfiguration extends AbstractExtensibleModel implements StockIte
      */
     public function getStockStatusChangedAuto(): int
     {
-        return $this->getData(self::STOCK_STATUS_CHANGED_AUTO);
+        return $this->getSubject()->getStockStatusChangedAuto();
     }
 
     /**
      * @param int $stockStatusChangedAuto
-     * @return $this
+     * @return void
      */
-    public function setStockStatusChangedAuto(int $stockStatusChangedAuto): StockItemConfigurationInterface
+    public function setStockStatusChangedAuto(int $stockStatusChangedAuto): void
     {
-        $this->setData(self::STOCK_STATUS_CHANGED_AUTO, $stockStatusChangedAuto);
-
-        return $this;
+        $this->getSubject()->setStockStatusChangedAuto($stockStatusChangedAuto);
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface|null
+     * @return StockItemConfigurationExtensionInterface
      */
-    public function getExtensionAttributes(): \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface
+    public function getExtensionAttributes(): StockItemConfigurationExtensionInterface
     {
-        return $this->_getExtensionAttributes();
+        return $this->getSubject()->getExtensionAttributes();
     }
 
     /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface $extensionAttributes
-     * @return $this
+     * @param StockItemConfigurationExtensionInterface $extensionAttributes
+     * @return void
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface $extensionAttributes
-    ): StockItemConfigurationInterface {
-        return $this->_setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes): void
+    {
+        $this->getSubject()->setExtensionAttributes($extensionAttributes);
     }
+
 }

@@ -7,11 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
@@ -20,49 +16,26 @@ use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 {
     /**
-     * @var StockItemCriteriaInterfaceFactory
+     * @var StockItemConfigurationFactory
      */
-    private $stockItemCriteriaFactory;
+    private $stockItemConfigurationFactory;
 
     /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
-
-    /**
-     * @var StockItemRepository
-     */
-    private $stockItemRepository;
-
-    /**
-     * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
-     * @param StockItemRepository $stockItemRepository
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      */
     public function __construct(
-        StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        StockItemRepository $stockItemRepository,
-        GetProductIdsBySkusInterface $getProductIdsBySkus
+        StockItemConfigurationFactory $stockItemConfigurationFactory
     ) {
-        $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
-        $this->stockItemRepository = $stockItemRepository;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
     }
 
     /**
      * @param string $sku
      * @param int $stockId
      * @return StockItemConfigurationInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $sku, int $stockId): StockItemConfigurationInterface
     {
-        //below - old logic from getLegacyStockItem service
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-        $searchCriteria = $this->stockItemCriteriaFactory->create();
-        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-        $legacyStockItem = $this->stockItemRepository->getList($searchCriteria);
-
-        return $legacyStockItem->getItems()[0];
+        return $this->stockItemConfigurationFactory->create($sku, $stockId);
     }
 }
