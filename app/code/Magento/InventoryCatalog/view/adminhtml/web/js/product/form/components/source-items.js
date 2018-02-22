@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
 define([
     'Magento_Ui/js/form/components/fieldset'
 ], function (Fieldset) {
@@ -13,7 +10,6 @@ define([
 
     return Fieldset.extend({
         defaults: {
-            additionalClasses: {},
             imports: {
                 onStockChange: '${ $.provider }:data.product.stock_data.manage_stock'
             }
@@ -21,13 +17,12 @@ define([
 
         /**
          * Disable all child elements if manage stock is zero
-         * @param manageStockValue
+         * @param {Integer} canManageStock
          */
-        onStockChange: function(manageStockValue) {
-            if (manageStockValue === 0) {
+        onStockChange: function (canManageStock) {
+            if (canManageStock === 0) {
                 this.delegate('disabled', true);
             }
         }
-
     });
 });

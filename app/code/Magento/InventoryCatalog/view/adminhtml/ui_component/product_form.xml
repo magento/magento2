@@ -6,7 +6,7 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="sources" sortOrder="5" component="Magento_InventoryCatalog/js/form/components/fieldset/manage-stock">
+    <fieldset name="sources" sortOrder="5" component="Magento_InventoryCatalog/js/product/form/components/source-items">
         <settings>
             <label translate="true">Sources</label>
             <collapsible>true</collapsible>
