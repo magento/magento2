@@ -10,35 +10,35 @@ namespace Magento\InventoryLowQuantityNotification\Block\Adminhtml\Product\Lowst
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid as GridWidget;
 use Magento\Backend\Helper\Data;
-use Magento\Framework\Data\Collection as DataCollection;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock\Collection as LowstockCollection;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Product\Lowstock\CollectionFactory;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\LowQuantityCollection;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\LowQuantityCollectionFactory;
 
 /**
- * Low stock products report grid block
+ * Low quantity products report grid block
+ *
  * @api
  */
 class Grid extends GridWidget
 {
     /**
-     * @var CollectionFactory
+     * @var LowQuantityCollectionFactory
      */
-    private $lowstockCollectionFactory;
+    private $lowQuantityCollectionFactory;
 
     /**
      * @param Context $context
      * @param Data $backendHelper
-     * @param CollectionFactory $lowstockCollectionFactory
+     * @param LowQuantityCollectionFactory $lowQuantityCollectionFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Data $backendHelper,
-        CollectionFactory $lowstockCollectionFactory,
+        LowQuantityCollectionFactory $lowQuantityCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
-        $this->lowstockCollectionFactory = $lowstockCollectionFactory;
+        $this->lowQuantityCollectionFactory = $lowQuantityCollectionFactory;
     }
 
     /**
@@ -46,19 +46,8 @@ class Grid extends GridWidget
      */
     protected function _prepareCollection(): GridWidget
     {
-        /** @var $collection LowstockCollection  */
-        $collection = $this->lowstockCollectionFactory->create();
-        $collection->addFieldToSelect(
-            '*'
-        )
-        ->joinCatalogProduct()
-        ->filterByIsQtyProductTypes()
-        ->useNotifyStockQtyFilter()
-        ->setOrder(
-            'quantity',
-            DataCollection::SORT_ORDER_ASC
-        );
-
+        /** @var LowQuantityCollection $collection  */
+        $collection = $this->lowQuantityCollectionFactory->create();
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
