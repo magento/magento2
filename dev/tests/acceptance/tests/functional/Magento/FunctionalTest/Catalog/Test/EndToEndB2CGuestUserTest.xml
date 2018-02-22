@@ -89,8 +89,8 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabSimpleProduct2ImageSrc" stepKey="browseAssertSimpleProduct2ImageNotDefault"/>
 
         <!-- View Simple Product 1 -->
-        <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" />
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="browseAssertSimpleProduct2ImageNotDefault"/>
+        <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="browseAssertSimpleProduct2ImageNotDefault"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -187,8 +187,8 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct2ImageSrcInComparison" stepKey="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
 
         <!-- Clear comparison sidebar -->
-        <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" />
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
+        <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear" after="commentClearComparisonSidebar"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory2">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
