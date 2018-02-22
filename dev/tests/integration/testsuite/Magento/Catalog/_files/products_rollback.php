@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\CatalogInventory\Model\StockRegistryStorage;
-
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
@@ -31,10 +29,10 @@ try {
     //Product already removed
 }
 
-/** @var StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(StockRegistryStorage::class);
-$stockRegistryStorage->removeStockItem(1);
-$stockRegistryStorage->removeStockItem(2);
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->clean();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
