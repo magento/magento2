@@ -20,13 +20,9 @@ if ($collection->count() > 0) {
     $collection->delete();
 }
 
-/** @var StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = $objectManager->get(StockRegistryStorage::class);
-$stockRegistryStorage->removeStockItem(1);
-$stockRegistryStorage->removeStockItem(2);
-$stockRegistryStorage->removeStockItem(3);
-$stockRegistryStorage->removeStockItem(4);
-$stockRegistryStorage->removeStockItem(5);
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = $objectManager->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->clean();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
