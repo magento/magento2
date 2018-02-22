@@ -68,30 +68,28 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // this condition added to avoid cron jobs locking after incorrect termination of running job
 
         $match = $connection->select()
-          ->from(['schedule' => $this->getTable('cron_schedule')])
-          ->where('schedule.schedule_id = ?', $scheduleId);
+            ->from(['schedule' => $this->getTable('cron_schedule')])
+            ->where('schedule.schedule_id = ?', $scheduleId);
 
         $result = $connection->fetchAll($match);
 
         $selectIfUnlocked = $connection->select()
-          ->from(['schedule' => $this->getTable('cron_schedule')])
-          ->where('schedule.job_code = ?', $result[0]["job_code"])
-          ->where('schedule.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY')
-          ->where('schedule.status = ? ', $newStatus);
+            ->from(['schedule' => $this->getTable('cron_schedule')])
+            ->where('schedule.job_code = ?', $result[0]["job_code"])
+            ->where('schedule.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY')
+            ->where('schedule.status = ? ', $newStatus);
         $result = $connection->query($selectIfUnlocked)->rowCount();
 
         if ($result == 0) {
-          $where = $connection->quoteInto('schedule_id =?', $scheduleId);
-          $result = $connection->update(
-            $this->getTable('cron_schedule'),
-            array('status'=>$newStatus),
-            $where);
+            $where = $connection->quoteInto('schedule_id =?', $scheduleId);
+            $result = $connection->update(
+                $this->getTable('cron_schedule'),
+                array('status'=>$newStatus),
+                $where);
 
-          if ($result == 1) {
-            return true;
-          } else {
-            return false;
-          }
+            if ($result == 1) {
+                return true;
+            }
         }
         return false;
     }
