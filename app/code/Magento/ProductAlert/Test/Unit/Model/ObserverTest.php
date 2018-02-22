@@ -6,6 +6,7 @@
 namespace Magento\ProductAlert\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ProductAlert\Model\ProductSaleability;
 
 /**
  * Class ObserverTest
@@ -110,7 +111,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     private $objectManagerMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\ProductSaleability|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSaleability|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productSaleabilityMock;
 
@@ -178,13 +179,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->productSaleabilityMock = $this->getMockBuilder(\Magento\ProductAlert\Model\ProductSaleability::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'isSalable',
-                ]
-            )->getMock();
+        $this->productSaleabilityMock = $this->createPartialMock(ProductSaleability::class, ['isSalable']);
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(

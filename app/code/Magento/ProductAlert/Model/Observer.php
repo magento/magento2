@@ -114,7 +114,7 @@ class Observer
     protected $inlineTranslation;
 
     /**
-     * @var \Magento\ProductAlert\Model\ProductSaleability
+     * @var ProductSaleability
      */
     protected $productSaleability;
 
@@ -130,6 +130,7 @@ class Observer
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param ProductSaleability|null $productSaleability
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,7 +145,7 @@ class Observer
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\ProductAlert\Model\EmailFactory $emailFactory,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\ProductAlert\Model\ProductSaleability $productSaleability = null
+        ProductSaleability $productSaleability = null
     ) {
         $this->_catalogData = $catalogData;
         $this->_scopeConfig = $scopeConfig;
@@ -158,8 +159,7 @@ class Observer
         $this->_emailFactory = $emailFactory;
         $this->inlineTranslation = $inlineTranslation;
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->productSaleability = $productSaleability ?:
-            $objectManager->get(\Magento\ProductAlert\Model\ProductSaleability::class);
+        $this->productSaleability = $productSaleability ?: $objectManager->get(ProductSaleability::class);
     }
 
     /**
