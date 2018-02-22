@@ -45,10 +45,14 @@ class CopyModules
         $annotations = $test->getAnnotations();
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
-            $moduleName = $annotations['method']['moduleName'][0];
-            $this->cliCommand->introduceModule($moduleName);
-            $path = MAGENTO_MODULES_PATH . explode("_", $moduleName)[1] . '/registration.php';
-            include_once $path;
+            $moduleNames = $annotations['method']['moduleName'];
+
+            foreach ($moduleNames as $moduleName) {
+                $this->cliCommand->introduceModule($moduleName);
+                //Include module`s registration.php to load it
+                $path = MAGENTO_MODULES_PATH . explode("_", $moduleName)[1] . '/registration.php';
+                include_once $path;
+            }
         }
     }
 
