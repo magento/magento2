@@ -18,19 +18,21 @@
             <createData stepKey="product" entity="SimpleOne" />
             <createData stepKey="secondProduct" entity="SimpleOne" />
             <createData stepKey="customer" entity="Simple_US_Customer"/>
+            <!-- Create new store view and assign it to non default store -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteFirstProduct" createDataKey="product"/>
             <deleteData stepKey="deleteSecondProduct" createDataKey="secondProduct"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <deleteData stepKey="deleteStore" createDataKey="storeGroup"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
+                <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
+            </actionGroup>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
-        <!-- Create new store view and assign it to non default store -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
-            <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
-        </actionGroup>
         <!-- Change products visibility on store-view level -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
             <argument name="product" value="$$product$$"/>
