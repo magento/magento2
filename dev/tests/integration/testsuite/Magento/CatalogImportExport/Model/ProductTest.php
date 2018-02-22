@@ -140,4 +140,32 @@ class ProductTest extends AbstractProductExportImportTestCase
     {
         return $this->exportImportDataProvider();
     }
+
+    /**
+     * Fixing https://github.com/magento-engcom/import-export-improvements/issues/50 means that during import images
+     * can now get renamed for this we need to skip the attribute checking and instead check that the images contain
+     * the right beginning part of the name. When an image is named "magento_image.jpeg" but there is already an image
+     * with that name it will now become "magento_image_1.jpeg"
+     *
+     * @param \Magento\Catalog\Model\Product $expectedProduct
+     * @param \Magento\Catalog\Model\Product $actualProduct
+     */
+    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
+    {
+        if (!empty($actualProduct->getImage())
+            && !empty($expectedProduct->getImage())
+        ) {
+            $this->assertContains('magento_image', $actualProduct->getImage());
+        }
+        if (!empty($actualProduct->getSmallImage())
+            && !empty($expectedProduct->getSmallImage())
+        ) {
+            $this->assertContains('magento_image', $actualProduct->getSmallImage());
+        }
+        if (!empty($actualProduct->getThumbnail())
+            && !empty($expectedProduct->getThumbnail())
+        ) {
+            $this->assertContains('magento_image', $actualProduct->getThumbnail());
+        }
+    }
 }
