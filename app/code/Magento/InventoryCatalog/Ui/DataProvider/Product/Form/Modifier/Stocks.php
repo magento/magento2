@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 
 /**
  * Product form modifier. Modify form stocks declaration
@@ -27,15 +28,23 @@ class Stocks extends AbstractModifier
     private $locator;
 
     /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
+    /**
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param LocatorInterface $locator
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
-        LocatorInterface $locator
+        LocatorInterface $locator,
+        IsSingleSourceModeInterface $isSingleSourceMode
     ) {
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
+        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
@@ -53,19 +62,18 @@ class Stocks extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
-            return $meta;
-        }
-
-        $meta['stocks'] = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'visible' => 0,
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+            $meta['stocks'] = [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'visible' => 0,
+                        ],
                     ],
                 ],
-            ],
-        ];
+            ];
+        }
         return $meta;
     }
 }

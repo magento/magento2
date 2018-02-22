@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 
 /**
  * Quantity And StockStatus modifier on CatalogInventory Product Editing Form
@@ -21,13 +22,21 @@ class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
     private $arrayManager;
 
     /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
+    /**
      * CatalogInventory constructor.
      * @param ArrayManager $arrayManager
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        IsSingleSourceModeInterface $isSingleSourceMode
     ) {
         $this->arrayManager = $arrayManager;
+        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
@@ -65,6 +74,13 @@ class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
                     'component' => 'Magento_InventoryCatalog/js/product/inventory/components/qty',
                 ]
             );
+        }
+
+        //TODO: What we should do with Advanced Inventory??
+        if ($this->isSingleSourceMode->execute() === false) {
+            unset($meta['product-details']['children']['container_quantity_and_stock_status']);
+            // or unset($meta['product-details']['children']['quantity_and_stock_status_qty']['children']['qty']);
+            unset($meta['product-details']['children']['quantity_and_stock_status_qty']);
         }
 
         return $meta;
