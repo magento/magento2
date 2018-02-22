@@ -13,17 +13,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Current directory path
-     * @var string
-     */
-    protected $_currentPath;
-
-    /**
      * Image directory subpath relative to media directory
      *
      * @var string
      */
-    protected $imageDirectorySubpath;
+    private $imageDirectorySubpath;
+
+    /**
+     * Current directory path
+     * @var string
+     */
+    protected $_currentPath;
 
     /**
      * Current directory URL
