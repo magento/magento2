@@ -33,10 +33,11 @@
             <deleteData createDataKey="subcategory1" stepKey="deleteCategory1" />
             <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage" />
         </after>
-
+        <!-- Login as admin and open page for creation new Price Rule -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage stepKey="openCatalogPriceRulePage" url="{{PriceRuleNewPage.url}}" />
         <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
+        <!-- Open Conditions section and select Categories condition -->
         <click stepKey="openConditionsSection" selector="{{PriceRuleConditionsSection.conditionsTab}}" />
         <click stepKey="createNewRule" selector="{{PriceRuleConditionsSection.createNewRule}}" />
         <selectOption stepKey="selectProductAttributes" selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product\Found" />
@@ -45,12 +46,12 @@
         <click stepKey="clickToshowAttributes" selector="{{PriceRuleConditionsSection.addProductAttributesButton}}"/>
         <selectOption stepKey="selectCategoryAttribute" selector="{{PriceRuleConditionsSection.productAttributesDropdown}}" userInput="Magento\SalesRule\Model\Rule\Condition\Product|category_ids" />
         <waitForAjaxLoad stepKey="ajaxLoad2"/>
-
+        <!-- Select categories chooser -->
         <waitForElement stepKey="wait2" selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" />
         <click stepKey="changeCategories" selector="{{PriceRuleConditionsSection.changeCategoriesButton}}" />
         <click stepKey="showCategoriesChooser" selector="{{PriceRuleConditionsSection.categoriesChooser}}" />
         <waitForAjaxLoad stepKey="ajaxLoad3"/>
-
+        <!-- Click on categories to check that the deepest subcategory is clickable -->
         <waitForElement selector="{{PriceRuleConditionsSection.treeRoot}}" stepKey="wait3"/>
         <click stepKey="openLatestTreeNode1" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
         <click stepKey="openLatestTreeNode2" selector="{{PriceRuleConditionsSection.lastTreeNode}}" />
