@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+// @codingStandardsIgnoreLine
 namespace Magento\InventoryLowQuantityNotification\Test\Integration\InventoryLowQuantityNotification\Model\ResourceModel;
 
 use Magento\InventoryLowQuantityNotification\Model\ResourceModel\LowQuantityCollection;
