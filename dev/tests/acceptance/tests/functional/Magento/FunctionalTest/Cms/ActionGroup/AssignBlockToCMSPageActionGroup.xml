@@ -36,10 +36,8 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
-        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending3" visible="true"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish2" />
-        <!-- Conditional Click again in case it goes from default state to ascending on first click -->
-        <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending4" visible="true"/>
+        <fillField selector="//input[@name='chooser_identifier']" userInput="{{Block.identifier}}" stepKey="fillBlockIdentifier"/>
+        <click selector="//div[@class='modal-inner-wrap']//button[@title='Search']" stepKey="clickSearchBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2" />
         <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle" />
         <click selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="selectPreCreateBlock" />
