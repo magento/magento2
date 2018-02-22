@@ -70,6 +70,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterFilterIsCleared"/>
         <fillField selector="{{AdminProductGridFilterSection.basicSearchFilter}}" userInput="{{_defaultProduct.name}}" stepKey="addSearchFilterForTestProduct"/>
         <click selector="{{AdminProductGridFilterSection.basicSearchFilterButton}}" stepKey="clickOnBasicSearchFilterButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>

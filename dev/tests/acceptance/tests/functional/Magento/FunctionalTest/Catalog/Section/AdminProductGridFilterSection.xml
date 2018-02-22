@@ -13,8 +13,7 @@
         <element name="clearAll" type="button" selector=".admin__data-grid-header .admin__data-grid-filters-current._show .action-clear"/>
         <element name="enabledFilters" type="textarea" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
         <element name="basicSearchFilter" type="textarea" selector=".admin__control-text.data-grid-search-control"/>
-        <element name="basicSearchFilterButton" type="button" selector="'.data-grid-search-control-wrap button.action-submit"/>
-
+        <element name="basicSearchFilterButton" type="button" selector=".data-grid-search-control-wrap button.action-submit"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="viewBookmark" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="columnsDropdown" type="button" selector=".admin__data-grid-action-columns button.admin__action-dropdown"/>
