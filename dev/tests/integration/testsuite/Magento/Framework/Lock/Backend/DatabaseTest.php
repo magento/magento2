@@ -27,24 +27,24 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->objectManager->create(\Magento\Framework\Lock\Backend\Database::class);
     }
 
-    public function testLockAndRelease()
+    public function testLockAndUnlock()
     {
         $name = 'test_lock';
 
         $this->assertFalse($this->model->isLocked($name));
 
-        $this->assertTrue($this->model->acquireLock($name));
+        $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->isLocked($name));
 
-        $this->assertTrue($this->model->releaseLock($name));
+        $this->assertTrue($this->model->unlock($name));
         $this->assertFalse($this->model->isLocked($name));
     }
 
-    public function testReleaseLockWithoutExistingLock()
+    public function testUnlockWithoutExistingLock()
     {
         $name = 'test_lock';
 
         $this->assertFalse($this->model->isLocked($name));
-        $this->assertFalse($this->model->releaseLock($name));
+        $this->assertFalse($this->model->unlock($name));
     }
 }

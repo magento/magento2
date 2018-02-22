@@ -143,8 +143,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->lockManagerMock = $this->getMockBuilder(\Magento\Framework\Lock\LockManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->lockManagerMock->method('acquireLock')->willReturn(true);
-        $this->lockManagerMock->method('releaseLock')->willReturn(true);
+        $this->lockManagerMock->method('lock')->willReturn(true);
+        $this->lockManagerMock->method('unlock')->willReturn(true);
 
         $this->observer = $this->createMock(\Magento\Framework\Event\Observer::class);
 

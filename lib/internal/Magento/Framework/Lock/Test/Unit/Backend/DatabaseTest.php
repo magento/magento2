@@ -61,33 +61,33 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAcquireLock()
+    public function testLock()
     {
         $this->statement->expects($this->once())
             ->method('fetchColumn')
             ->willReturn(true);
 
-        $this->assertTrue($this->database->acquireLock('testLock'));
+        $this->assertTrue($this->database->lock('testLock'));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
      */
-    public function testAcquireLockWithTooLongName()
+    public function testlockWithTooLongName()
     {
-        $this->database->acquireLock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
+        $this->database->lock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function testAcquireLockWithAlreadyAcquiredLockInSameSession()
+    public function testlockWithAlreadyAcquiredLockInSameSession()
     {
         $this->statement->expects($this->any())
             ->method('fetchColumn')
             ->willReturn(true);
 
-        $this->database->acquireLock('testLock');
-        $this->database->acquireLock('differentLock');
+        $this->database->lock('testLock');
+        $this->database->lock('differentLock');
     }
 }

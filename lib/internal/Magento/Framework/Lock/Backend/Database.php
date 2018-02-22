@@ -47,7 +47,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @throws InputException
      * @throws AlreadyExistsException
      */
-    public function acquireLock(string $name, int $timeout = -1): bool
+    public function lock(string $name, int $timeout = -1): bool
     {
         $name = $this->addPrefix($name);
 
@@ -58,7 +58,10 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
          */
         if ($this->currentLock) {
             throw new AlreadyExistsException(
-                new Phrase('This connection is already holding lock for $1', [$this->currentLock])
+                new Phrase(
+                    'Current connection is already holding lock for $1, only single lock allowed',
+                    [$this->currentLock]
+                )
             );
         }
 
@@ -81,7 +84,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @return bool
      * @throws InputException
      */
-    public function releaseLock(string $name): bool
+    public function unlock(string $name): bool
     {
         $name = $this->addPrefix($name);
 
