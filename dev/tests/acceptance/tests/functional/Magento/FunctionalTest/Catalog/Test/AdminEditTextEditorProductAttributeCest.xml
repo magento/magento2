@@ -21,7 +21,7 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
-            <createData stepKey="myProductAttributeCreation" entity="productAttributeWithTwoOptions"/>
+            <createData stepKey="myProductAttributeCreation" entity="productAttribute"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>

@@ -11,6 +11,9 @@
     <section name="StorefrontMiniCartSection">
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="show" type="button" selector="a.showcart"/>
-        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout"/>
+        <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
+        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
+        <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
+        <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
     </section>
 </sections>
