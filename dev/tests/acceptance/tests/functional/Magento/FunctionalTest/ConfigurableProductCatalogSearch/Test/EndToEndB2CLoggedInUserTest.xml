@@ -10,7 +10,8 @@
        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
         <!-- Search configurable product -->
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="searchAssertFilterCategoryConfigProduct" after="searchAssertSimpleProduct2ImageNotDefault">
+        <comment userInput="Search configurable product" stepKey="commentSearchConfigurableProduct" after="searchAssertSimpleProduct2ImageNotDefault" />
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="searchAssertFilterCategoryConfigProduct" after="commentSearchConfigurableProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
