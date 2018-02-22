@@ -213,7 +213,7 @@ class Eav extends AbstractModifier
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
-     * @param CompositeConfigProcessor|null $wysiwygConfigData
+     * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
