@@ -14,9 +14,9 @@
         </arguments>
         <amOnPage stepKey="amOnAdminSystemStorePage"  url="{{AdminSystemStorePage.url}}"/>
         <click stepKey="resetSearchFilter" selector="{{AdminStoresGridSection.resetButton}}"/>
-        <fillField stepKey="s17" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="{{storeGroupName}}"/>
-        <click stepKey="s19" selector="{{AdminStoresGridSection.searchButton}}"/>
-        <see stepKey="s23" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="{{storeGroupName}}"/>
+        <fillField stepKey="fillSearchStoreGroupField" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="{{storeGroupName}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <see stepKey="verifyThatCorrectStoreGroupFound" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="{{storeGroupName}}"/>
         <click stepKey="clickEditExistingStoreRow" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}"/>
         <click stepKey="clickDeleteStoreGroupButtonOnEditStorePage" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
         <selectOption stepKey="setCreateDbBackupToNo" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" userInput="No"/>
