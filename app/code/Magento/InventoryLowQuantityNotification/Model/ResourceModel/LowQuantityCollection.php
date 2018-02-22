@@ -15,13 +15,18 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LowQuantityCollection extends AbstractCollection
 {
     /**
@@ -88,6 +93,7 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addFieldToSelect('*');
 
+        $this->filterDisabledStocks();
         $this->joinCatalogProduct();
         $this->joinInventoryConfiguration();
 
@@ -168,6 +174,25 @@ class LowQuantityCollection extends AbstractCollection
         $this->getSelect()->where(
             SourceItemInterface::QUANTITY . ' < ?',
             $notifyStockExpression
+        );
+    }
+
+    /**
+     * Remove all disabled sources
+     *
+     * @return void
+     */
+    private function filterDisabledStocks()
+    {
+        $this->getSelect()->joinInner(
+            ['inventory_source' => $this->getTable(Source::TABLE_NAME_SOURCE)],
+            sprintf(
+                'inventory_source.%s = 1 AND inventory_source.%s = main_table.%s',
+                SourceInterface::ENABLED,
+                SourceInterface::SOURCE_CODE,
+                SourceItemInterface::SOURCE_CODE
+            ),
+            []
         );
     }
 }

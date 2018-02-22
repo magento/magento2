@@ -11,3 +11,5 @@ use Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfiguratio
 /** @var DeleteSourceItemConfigurationInterface $deleteSourceItemConfiguration */
 $deleteSourceItemConfiguration = Bootstrap::getObjectManager()->get(DeleteSourceItemConfigurationInterface::class);
 $deleteSourceItemConfiguration->execute('eu-1', 'SKU-1');
+$deleteSourceItemConfiguration->execute('eu-disabled', 'SKU-1');
+$deleteSourceItemConfiguration->execute('eu-2', 'SKU-3');
