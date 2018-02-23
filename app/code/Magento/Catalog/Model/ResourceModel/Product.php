@@ -547,7 +547,6 @@ class Product extends AbstractResource
         $select = $connection->select()->from($this->getTable('catalog_product_entity'), $columns);
 
         return $connection->fetchAll($select);
-
     }
 
     /**
