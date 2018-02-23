@@ -37,11 +37,11 @@
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="attachImage" stepKey="attachImage1">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="deleteImage" stepKey="deleteImage"/>
         <actionGroup ref="attachImage" stepKey="attachImage2">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
         <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
@@ -84,6 +84,7 @@
         <waitForPageLoad stepKey="waitForPageLoad11" />
         <!--see image on Storefront-->
         <seeElement selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource1"/>
         <after>
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>

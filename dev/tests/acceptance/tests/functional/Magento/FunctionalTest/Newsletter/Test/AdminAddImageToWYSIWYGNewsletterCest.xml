@@ -37,12 +37,12 @@
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="attachImage" stepKey="attachImage1">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="deleteImage" stepKey="deleteImage"/>
 
         <actionGroup ref="attachImage" stepKey="attachImage2">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
         <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
@@ -52,8 +52,9 @@
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
-        <waitForElementVisible selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="waitForPageLoad9"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
         <seeElement selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource1"/>
         <closeTab stepKey="closeTab"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
