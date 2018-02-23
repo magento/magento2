@@ -21,18 +21,26 @@ class Details extends \Magento\Backend\App\Action
     private $accessValidator;
 
     /**
+     * @var string
+     */
+    private $menuId;
+
+    /**
      * Details constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator
+     * @param string $menuId
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator
+        \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator,
+        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->accessValidator = $accessValidator;
+        $this->menuId = $menuId;
         parent::__construct($context);
     }
 
@@ -55,7 +63,7 @@ class Details extends \Magento\Backend\App\Action
         $bulkId = $this->getRequest()->getParam('uuid');
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
-        $this->_setActiveMenu('Magento_Logging::system_magento_logging_events');
+        $this->_setActiveMenu($this->menuId);
         $resultPage->getConfig()->getTitle()->prepend(__('Action Details - #' . $bulkId));
 
         return $resultPage;

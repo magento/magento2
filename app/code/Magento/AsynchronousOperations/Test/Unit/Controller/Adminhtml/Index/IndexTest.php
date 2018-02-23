@@ -50,7 +50,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $itemId = 'Magento_Logging::system_magento_logging_events';
+        $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
         $prependText = 'Bulk Actions Log';
         $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $menuModelMock = $this->createMock(\Magento\Backend\Model\Menu::class);

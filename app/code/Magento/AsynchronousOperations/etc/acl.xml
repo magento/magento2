@@ -11,6 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Logging::magento_logging" title="Action Log" translate="title" sortOrder="70">
+                        <resource id="Magento_Logging::magento_logging_events" title="Report" translate="title" sortOrder="10"/>
                         <resource id="Magento_Logging::system_magento_logging_bulk_operations" title="Bulk Actions" translate="title" sortOrder="15"/>
                     </resource>
                 </resource>

@@ -51,7 +51,7 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
     {
         $id = '42';
         $parameterName = 'uuid';
-        $itemId = 'Magento_Logging::system_magento_logging_events';
+        $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
         $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $blockMock = $this->createPartialMock(

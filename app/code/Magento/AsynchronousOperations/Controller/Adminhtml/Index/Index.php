@@ -21,15 +21,23 @@ class Index extends \Magento\Backend\App\Action
     private $resultPageFactory;
 
     /**
+     * @var string
+     */
+    private $menuId;
+
+    /**
      * Details constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param string $menuId
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
     ) {
         $this->resultPageFactory = $resultPageFactory;
+        $this->menuId = $menuId;
         parent::__construct($context);
     }
 
@@ -50,7 +58,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
-        $this->_setActiveMenu('Magento_Logging::system_magento_logging_events');
+        $this->_setActiveMenu($this->menuId);
         $resultPage->getConfig()->getTitle()->prepend(__('Bulk Actions Log'));
         return $resultPage;
     }
