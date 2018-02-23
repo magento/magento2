@@ -5,9 +5,13 @@
  *
  * Glory to Ukraine! Glory to the heroes!
  */
+namespace Magefan\LoginAsCustomer\Ui\Component\Listing\Column;
 
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Magefan_LoginAsCustomer',
-    __DIR__
-);
+/**
+ * Class CustomerActions
+ */
+class CustomerActions extends AbstractColumn
+{
+
+    protected $sourceColumnName = 'entity_id';
+}

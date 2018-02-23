@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * Copyright © Magefan (support@magefan.com). All rights reserved.
@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\PageCache\Model\Config">
-        <plugin name="las-cache-is-enabled" type="Magefan\LoginAsCustomer\Model\PageCache\ConfigPlugin"/>
+    <type name="Magento\Backend\Block\Widget\Button\Toolbar">
+        <plugin name="Magefan_LoginAsCustomer::toolbar_button" type="Magefan\LoginAsCustomer\Plugin\Button\ToolbarPlugin" />
     </type>
 </config>

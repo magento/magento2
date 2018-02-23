@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
  * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
  *
  * Glory to Ukraine! Glory to the heroes!
  */
+
 namespace Magefan\LoginAsCustomer\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -13,11 +14,10 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\AuthorizationInterface;
 
-/**
- * Class CustomerActions
- */
-class Actions extends Column
+
+abstract class AbstractColumn extends  \Magento\Ui\Component\Listing\Columns\Column
 {
+
     /**
      * @var UrlInterface
      */
@@ -27,6 +27,8 @@ class Actions extends Column
      * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
+
+    protected $sourceColumnName;
 
     /**
      * @param ContextInterface $context
@@ -55,20 +57,33 @@ class Actions extends Column
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
-    {
+    public function prepareDataSource(array $dataSource){
+
         if (isset($dataSource['data']['items'])) {
             $hidden = !$this->_authorization->isAllowed('Magefan_LoginAsCustomer::login_button');
             foreach ($dataSource['data']['items'] as &$item) {
-                $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl(
-                        'loginascustomer/login/login',
-                        ['customer_id' => $item['entity_id']]
-                    ),
-                    'label' => __('Login As Customer'),
-                    'hidden' => $hidden,
-                    'target' => '_blank',
-                ];
+                if(!empty($item[$this->sourceColumnName])) {
+                    $item[$this->getData('name')]['edit'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            'loginascustomer/login/login',
+                            ['customer_id' => $item[$this->sourceColumnName]]
+                        ),
+                        'label' => __('Login As Customer'),
+                        'hidden' => $hidden,
+                        'target' => '_blank',
+                    ];
+                } else {
+                    $item[$this->getData('name')]['edit'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            'loginascustomer/guest/convert',
+                            ['customer_id' => $item[$this->sourceColumnName]]
+                        ),
+                        'label' => __('Convert Guest to Customer'),
+                        'hidden' => $hidden,
+                        'target' => '_blank',
+                    ];
+                }
+
             }
         }
 
