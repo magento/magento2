@@ -12,6 +12,7 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
+use Psr\Log\LoggerInterface;
 
 /**
  * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
@@ -35,18 +36,26 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     private $setDataToLegacyStockStatus;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param SetDataToLegacyStockStatus $setDataToLegacyStockStatus
+     * @param LoggerInterface $logger
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
-        SetDataToLegacyStockStatus $setDataToLegacyStockStatus
+        SetDataToLegacyStockStatus $setDataToLegacyStockStatus,
+        LoggerInterface $logger
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->setDataToLegacyStockStatus = $setDataToLegacyStockStatus;
+        $this->logger = $logger;
     }
 
     /**
@@ -60,19 +69,23 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
-                continue;
+            try {
+                if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
+                    continue;
+                }
+                $this->setDataToLegacyStockItem->execute(
+                    $sourceItem->getSku(),
+                    (float)$sourceItem->getQuantity(),
+                    (int)$sourceItem->getStatus()
+                );
+                $this->setDataToLegacyStockStatus->execute(
+                    $sourceItem->getSku(),
+                    (float)$sourceItem->getQuantity(),
+                    (int)$sourceItem->getStatus()
+                );
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
             }
-            $this->setDataToLegacyStockItem->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$sourceItem->getStatus()
-            );
-            $this->setDataToLegacyStockStatus->execute(
-                $sourceItem->getSku(),
-                (float)$sourceItem->getQuantity(),
-                (int)$sourceItem->getStatus()
-            );
         }
     }
 }
