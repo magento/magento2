@@ -115,7 +115,7 @@ class SourceItemsProcessor
     }
 
     /**
-     * Key is source id, value is Source Item
+     * Get Source Items Hash Table by SKU
      *
      * @param string $sku
      * @return SourceItemInterface[]
