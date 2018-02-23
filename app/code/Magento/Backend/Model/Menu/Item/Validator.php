@@ -75,6 +75,10 @@ class Validator
      */
     public function validate($data)
     {
+        if (isset($data['id'], $data['removed']) && $data['removed'] === true) {
+            return;
+        }
+
         foreach ($this->_required as $param) {
             if (!isset($data[$param])) {
                 throw new \BadMethodCallException('Missing required param ' . $param);
