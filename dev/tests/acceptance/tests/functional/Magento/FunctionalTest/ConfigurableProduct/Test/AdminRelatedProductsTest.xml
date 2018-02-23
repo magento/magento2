@@ -92,7 +92,7 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
         </after>
 
-        <comment userInput="Filter and edit simple product 1" stepKey="Edit1"/>
+        <comment userInput="Filter and edit simple product 1" stepKey="filterAndEditComment1"/>
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="productIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
@@ -100,14 +100,12 @@
             <argument name="product" value="$$simple1Handle$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <!-- TODO: move adding related product to a action group when nested action group is allowed (ref#: MQE-539)-->
-        <comment userInput="Add related simple product to simple product" stepKey="Add1"/>
+        <comment userInput="Add related simple product to simple product" stepKey="addSimpleToSimpleComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple1">
             <argument name="product" value="$$simple2Handle$$"/>
         </actionGroup>
@@ -115,9 +113,8 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll1"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected1"/>
 
-        <comment userInput="Add related config product to simple product" stepKey="Add2"/>
+        <comment userInput="Add related config product to simple product" stepKey="addConfigToSimpleComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimpleForRelatedConfig1">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
@@ -125,37 +122,34 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll2"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected2"/>
 
-        <comment userInput="Save simple product" stepKey="Save1"/>
+        <comment userInput="Save simple product" stepKey="saveSimpleProductComment"/>
         <actionGroup ref="saveProductForm" stepKey="saveRelatedProduct1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
         <comment userInput="Assert related simple products for simple product in Admin Product Form" stepKey="assertRelated1Comment"/>
         <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated1">
-            <argument name="element" value="AdminProductRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$simple2Handle.name$$"/>
         </actionGroup>
 
         <comment userInput="Assert related config products for simple product in Admin Product Form" stepKey="assertRelated2Comment"/>
         <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated2">
-            <argument name="element" value="AdminProductRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$baseConfigProductHandle.name$$"/>
         </actionGroup>
 
-        <comment userInput="Filter and edit config product" stepKey="Edit2"/>
+        <comment userInput="Filter and edit config product" stepKey="filterAndEditComment2"/>
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="productIndexPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial2"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridConfig">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad12"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad131"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
-        <comment userInput="Add related simple product to config product" stepKey="Add3"/>
+        <comment userInput="Add related simple product to config product" stepKey="addSimpleToConfigComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton3"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridForConfig3">
             <argument name="product" value="$$simple2Handle$$"/>
         </actionGroup>
@@ -163,19 +157,18 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll3"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected3"/>
 
-        <comment userInput="Save config product" stepKey="Save2"/>
+        <comment userInput="Save config product" stepKey="saveConfigProductComment"/>
         <actionGroup ref="saveProductForm" stepKey="saveRelatedProduct2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad17"/>
 
         <comment userInput="Assert related simple product for config product in Admin Product Form" stepKey="assertRelated3Comment"/>
         <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated3">
-            <argument name="element" value="AdminProductRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$simple2Handle.name$$"/>
         </actionGroup>
 
         <comment userInput="Check storefront related products on simple product page" stepKey="navigateToSimpleProduct1PageComment"/>
         <amOnPage url="$$simple1Handle.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProduct1Page"/>
-        <waitForPageLoad stepKey="waitForPageLoad18"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
         <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsActionsHeaderText}}" userInput="Check items to add to the cart" stepKey="assertRelatedProductHeaderInStorefront1"/>
         <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsActionsHeaderText}}" userInput="select all" stepKey="assertRelatedProductHeaderInStorefront2"/>
         <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsListSectionText}}" userInput="$$simple2Handle.name$$" stepKey="assertRelatedSimpleProductNameInStorefront"/>
@@ -183,7 +176,7 @@
 
         <comment userInput="Navigate to product page from related product link" stepKey="navigateToConfigProductFromRelatedSectionComment"/>
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductName('$$baseConfigProductHandle.custom_attributes[url_key]$$')}}" stepKey="clickRelatedProductByName"/>
-        <waitForPageLoad stepKey="waitForPageLoad19"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
         <seeInCurrentUrl url="$$baseConfigProductHandle.custom_attributes[url_key]$$" stepKey="seeInCurrentUrl"/>
 
         <comment userInput="Select option for configurable product" stepKey="selectOptionConfigProduct"/>

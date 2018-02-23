@@ -89,7 +89,7 @@
     <!--Assert text in Related, Up-Sell or Cross-Sell section in Admin Product page-->
     <actionGroup name="AssertTextInAdminProductRelatedUpSellCrossSellSection">
         <arguments>
-            <argument name="element" defaultValue="AdminProductRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="element" defaultValue="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText"/>
         </arguments>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openTab"/>
