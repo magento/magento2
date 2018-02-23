@@ -15,7 +15,7 @@
             </after>
 
             <!--Create Bundle Product-->
-            <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageBundle" after="viewVirtualProductInGrid"/>
+            <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageBundle" after="seeSimpleProductInGrid"/>
             <waitForPageLoad stepKey="waitForProductPageLoadBundle" after="visitAdminProductPageBundle"/>
             <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct" after="waitForProductPageLoadBundle">
                 <argument name="product" value="BundleProduct"/>
@@ -38,9 +38,7 @@
             <fillField selector="{{AdminProductFormBundleSection.firstProductQuantity}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty" after="clickAddSelectedBundleProducts"/>
             <actionGroup ref="saveProductForm" stepKey="saveBundleProduct" after="fillProductDefaultQty"/>
             <actionGroup ref="viewBundleProductInAdminGrid" stepKey="viewBundleProductInGrid" after="saveBundleProduct">
-            <argument name="product" value="BundleProduct"/>
+                <argument name="product" value="BundleProduct"/>
             </actionGroup>
-
-
         </test>
 </tests>

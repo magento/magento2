@@ -15,7 +15,7 @@
         </after>
 
         <!--Create Downloadable Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitProductPageDownloadable" after="viewBundleProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
             <argument name="product" value="DownloadableProduct"/>

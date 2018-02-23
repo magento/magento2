@@ -15,7 +15,7 @@
         </after>
 
         <!--Create Grouped Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrouped" after="viewConfigurableProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrouped" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadGrouped" after="visitAdminProductPageGrouped"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateGroupedProduct" after="waitForProductPageLoadGrouped">
             <argument name="product" value="GroupedProduct"/>

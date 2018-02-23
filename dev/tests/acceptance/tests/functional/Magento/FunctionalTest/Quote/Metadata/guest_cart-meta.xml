@@ -64,19 +64,5 @@
         <object key="paymentMethod" dataType="payment_method">
             <field key="method">string</field>
         </object>
-        <!--<object key="billing_address" dataType="billing_address">-->
-            <!--<field key="region">string</field>-->
-            <!--<field key="region_code">string</field>-->
-            <!--<field key="region_id">integer</field>-->
-            <!--<field key="country_id">string</field>-->
-            <!--<array key="street">-->
-                <!--<value>string</value>-->
-            <!--</array>-->
-            <!--<field key="postcode">string</field>-->
-            <!--<field key="firstname">string</field>-->
-            <!--<field key="lastname">string</field>-->
-            <!--<field key="email">string</field>-->
-            <!--<field key="telephone">string</field>-->
-        <!--</object>-->
     </operation>
 </operations>

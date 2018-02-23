@@ -18,7 +18,6 @@
         <element name="itemTaxAmount" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-tax .price" parameterized="true"/>
         <element name="itemDiscountAmount" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-discount .price" parameterized="true"/>
         <element name="itemTotal" type="text" selector=".order-invoice-tables tbody:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
-
         <element name="nameColumn" type="text" selector=".order-invoice-tables .product-title"/>
         <element name="skuColumn" type="text" selector=".order-invoice-tables .product-sku-block"/>
         <element name="priceColumn" type="text" selector=".order-invoice-tables .col-price .price"/>
@@ -28,7 +27,6 @@
         <element name="taxAmountColumn" type="text" selector=".order-invoice-tables .col-tax .price"/>
         <element name="discountAmountColumn" type="text" selector=".order-invoice-tables .col-discount .price"/>
         <element name="totalColumn" type="text" selector=".order-invoice-tables .col-total .price"/>
-
         <element name="updateQty" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button']"/>
     </section>
 </sections>
