@@ -25,6 +25,9 @@ class LowQuantityCollectionTest extends TestCase
     }
 
     /**
+     * Tests that products from disabled sources are not present.
+     * Each source code is used exclusively in one source item, so we check only source codes.
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
@@ -33,7 +36,7 @@ class LowQuantityCollectionTest extends TestCase
      * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
      */
-    public function testThatProductsFromDisabledSourcesAreNotPresent()
+    public function testLowQuantityCollection()
     {
         $expectedSourceCodes = [
             'eu-1',
