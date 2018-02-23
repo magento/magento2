@@ -15,7 +15,6 @@ use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-// TODO: RENAME FILE
 class PriorityShippingAlgorithmTest extends TestCase
 {
     /**
@@ -87,7 +86,74 @@ class PriorityShippingAlgorithmTest extends TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
+     * Data provider for testStockSourceCombination.
+     *
+     * @return array
+     */
+    public function stockSourceCombinationDataProvider()
+    {
+        return [
+            [
+                'store_id' => 2,
+                'order_data' => [
+                    'SKU-1' => 14.5,
+                    'SKU-3' => 3,
+                ],
+                'expected_result' => [
+                    [
+                        'source_code' => 'eu-1',
+                        'source_item_selections' => [
+                            ['SKU-1', 5.5, 5.5],
+                        ],
+                    ],
+                    [
+                        'source_code' => 'eu-2',
+                        'source_item_selections' => [
+                            ['SKU-1', 3, 3],
+                            ['SKU-3', 3, 6],
+                        ],
+                    ],
+                    [
+                        'source_code' => 'eu-3',
+                        'source_item_selections' => [
+                            ['SKU-1', 6, 10],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'store_id' => 4,
+                'order_data' => [
+                    'SKU-1' => 14.5,
+                    'SKU-3' => 3,
+                ],
+                'expected_result' => [
+                    [
+                        'source_code' => 'eu-3',
+                        'source_item_selections' => [
+                            ['SKU-1', 10, 10],
+                        ],
+                    ],
+                    [
+                        'source_code' => 'eu-2',
+                        'source_item_selections' => [
+                            ['SKU-1', 3, 3],
+                            ['SKU-3', 3, 6],
+                        ],
+                    ],
+                    [
+                        'source_code' => 'eu-1',
+                        'source_item_selections' => [
+                            ['SKU-1', 1.5, 5.5],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Tests source selections with different source-stock link priorities.
      *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
@@ -96,48 +162,17 @@ class PriorityShippingAlgorithmTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @dataProvider stockSourceCombinationDataProvider
+     * @param int $storeId
+     * @param array $orderData
+     * @param array $expectedResult
      */
-    public function testStockSourceCombination()
+    public function testStockSourceCombination(int $storeId, array $orderData, array $expectedResult)
     {
-        $expectedResult = [
-            [
-                'source_code' => 'eu-1',
-                'source_item_selections' => [
-                    ['SKU-1', 5.5, 5.5],
-                ],
-            ],
-            [
-                'source_code' => 'eu-2',
-                'source_item_selections' => [
-                    ['SKU-1', 3, 3],
-                    ['SKU-3', 3, 6],
-                ],
-            ],
-            [
-                'source_code' => 'eu-3',
-                'source_item_selections' => [
-                    ['SKU-1', 10, 10],
-                ],
-            ],
-            [
-                'source_code' => 'eu-disabled',
-                'source_item_selections' => [
-                    ['SKU-1', 9, 10],
-                ],
-            ],
-            [
-                'source_code' => 'us-1',
-                'source_item_selections' => [
-                    ['SKU-2', 4.5, 5],
-                ],
-            ],
-        ];
-
-        $order = $this->createOrder([
-            'SKU-1' => 27.5,
-            'SKU-2' => 4.5,
-            'SKU-3' => 3,
-        ]);
+        $order = $this->createOrder(
+            $orderData,
+            $storeId
+        );
         $algorithmResult = $this->shippingAlgorithm->execute($order);
 
         $sourceSelections = $algorithmResult->getSourceSelections();
@@ -181,9 +216,10 @@ class PriorityShippingAlgorithmTest extends TestCase
      * Returns order object with specified products
      *
      * @param array $productsQty
+     * @param int $storeId
      * @return OrderInterface
      */
-    private function createOrder(array $productsQty): OrderInterface
+    private function createOrder(array $productsQty, int $storeId = 1): OrderInterface
     {
         $orderItems = [];
         foreach ($productsQty as $sku => $qty) {
@@ -197,7 +233,7 @@ class PriorityShippingAlgorithmTest extends TestCase
 
         /** @var OrderInterface $order */
         $order = Bootstrap::getObjectManager()->create(OrderInterface::class);
-        $order->setStoreId(2);
+        $order->setStoreId($storeId);
         $order->setItems($orderItems);
         return $order;
     }

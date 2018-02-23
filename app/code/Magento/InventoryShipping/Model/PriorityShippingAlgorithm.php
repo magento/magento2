@@ -139,6 +139,10 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             }
 
             foreach ($sources as $source) {
+                if (!$source->isEnabled()) {
+                    continue;
+                }
+
                 $sourceItem = $this->getStockItemBySku($source->getSourceCode(), $itemSku);
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);

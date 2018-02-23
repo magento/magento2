@@ -36,7 +36,7 @@ $stockSourceLinkFactory = Bootstrap::getObjectManager()->get(StockSourceLinkInte
 $linksData = [
     10 => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled'],
     20 => ['us-1'],
-    30 => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled', 'us-1']
+    30 => ['us-1', 'eu-disabled', 'eu-3', 'eu-2', 'eu-1']
 ];
 
 
