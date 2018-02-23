@@ -5,14 +5,33 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class MatchTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var MatchQueryBuilder
+     */
+    private $matchQueryBuilder;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $this->matchQueryBuilder = (new ObjectManager($this))->getObject(
+            MatchQueryBuilder::class,
+            [
+                'fieldMapper' => $this->getFieldMapper(),
+                'preprocessorContainer' => [],
+            ]
+        );
+    }
+
     /**
      * Tests that method constructs a correct select query.
      * @see MatchQueryBuilder::build
@@ -24,17 +43,8 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild($rawQueryValue, $errorMessage)
     {
-        /** @var MatchQueryBuilder $matchQueryBuilder */
-        $matchQueryBuilder = (new ObjectManager($this))->getObject(
-            MatchQueryBuilder::class,
-            [
-                'fieldMapper' => $this->getFieldMapper(),
-                'preprocessorContainer' => [],
-            ]
-        );
-
         $this->assertSelectQuery(
-            $matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not'),
+            $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not'),
             $errorMessage
         );
     }
@@ -52,6 +62,52 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             ['query_value-', 'Specifying a trailing minus sign causes InnoDB to report a syntax error.'],
             ['query_@value', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
             ['query_value+@', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
+        ];
+    }
+
+    /**
+     * Tests that method constructs a correct "match" query depending on query value.
+     *
+     * @dataProvider matchProvider
+     *
+     * @param string $rawQueryValue
+     * @param string $queryValue
+     * @param string $match
+     */
+    public function testBuildMatchQuery($rawQueryValue, $queryValue, $match)
+    {
+        $query = $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'should');
+
+        $expectedSelectQuery = [
+            'bool' => [
+                'should' => [
+                    [
+                        $match => [
+                            'some_field' => [
+                                'query' => $queryValue,
+                                'boost' => 43,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertEquals(
+            $expectedSelectQuery,
+            $query,
+            sprintf('Wrong "match" query. Should be processed with "%s"', $match)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function matchProvider()
+    {
+        return [
+            ['query_value', 'query_value', 'match'],
+            ['"query value"', 'query value', 'match_phrase'],
         ];
     }
 

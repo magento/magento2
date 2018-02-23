@@ -49,12 +49,14 @@ class Match implements QueryInterface
         $requestQueryBoost = $requestQuery->getBoost() ?: 1;
         foreach ($queries as $query) {
             $queryBody = $query['body'];
-            foreach ($queryBody['match'] as $field => $matchQuery) {
+            $matchKey = isset($queryBody['match_phrase']) ? 'match_phrase' : 'match';
+            foreach ($queryBody[$matchKey] as $field => $matchQuery) {
                 $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
-                $queryBody['match'][$field] = $matchQuery;
+                $queryBody[$matchKey][$field] = $matchQuery;
             }
-            $selectQuery['bool'][$query['condition']][]= $queryBody;
+            $selectQuery['bool'][$query['condition']][] = $queryBody;
         }
+
         return $selectQuery;
     }
 
@@ -94,6 +96,12 @@ class Match implements QueryInterface
     protected function buildQueries($matches, $queryValue)
     {
         $conditions = [];
+
+        // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
+        $count = 0;
+        $value = preg_replace('#^\\\\"(.*)\\\\"$#m', '$1', $queryValue['value'], -1, $count);
+        $condition = ($count) ? 'match_phrase' : 'match';
+
         foreach ($matches as $match) {
             $resolvedField = $this->fieldMapper->getFieldName(
                 $match['field'],
@@ -102,15 +110,16 @@ class Match implements QueryInterface
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
-                    'match' => [
+                    $condition => [
                         $resolvedField => [
-                            'query' => $queryValue['value'],
+                            'query' => $value,
                             'boost' => isset($match['boost']) ? $match['boost'] : 1,
                         ],
                     ],
                 ],
             ];
         }
+
         return $conditions;
     }
 
