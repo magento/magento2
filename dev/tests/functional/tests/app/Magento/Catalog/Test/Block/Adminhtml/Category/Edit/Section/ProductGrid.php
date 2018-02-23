@@ -29,6 +29,14 @@ class ProductGrid extends Grid
         'name' => [
             'selector' => '#catalog_category_products_filter_name',
         ],
+        'visibility' => [
+            'selector' => '#catalog_category_products_filter_visibility',
+            'input' => 'select',
+        ],
+        'status' => [
+            'selector' => '#catalog_category_products_filter_status',
+            'input' => 'select',
+        ],
     ];
 
     /**
