@@ -898,6 +898,7 @@ class Files
                         null,
                         null,
                         null,
+                        null,
                     ];
                 }
             }
