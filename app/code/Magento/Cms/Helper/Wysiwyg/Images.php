@@ -9,10 +9,16 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * Image directory subpath relative to media directory
+     *
+     * @var string
+     */
+    private $imageDirectorySubpath;
+
     /**
      * Current directory path
      * @var string
@@ -80,7 +86,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         $this->escaper = $escaper;
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->_directory->create(\Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY);
+        $this->_directory->create($this->getStorageRoot());
     }
 
     /**
@@ -102,7 +108,19 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getStorageRoot()
     {
-        return $this->_directory->getAbsolutePath(\Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY);
+        return $this->_directory->getAbsolutePath($this->getStorageRootSubpath());
+    }
+
+    /**
+     * Get image storage root subpath.  User is unable to traverse outside of this subpath in media gallery
+     *
+     * @return string
+     */
+    public function getStorageRootSubpath()
+    {
+        return $this->_getRequest()->getParam('use_storage_root')
+            ? ''
+            : \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY;
     }
 
     /**
@@ -159,7 +177,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new \stdClass();
+        $checkResult = (object) [];
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',
@@ -205,7 +223,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCurrentPath()
     {
         if (!$this->_currentPath) {
-            $currentPath = $this->_directory->getAbsolutePath() . \Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY;
+            $currentPath = $this->getStorageRoot();
             $path = $this->_getRequest()->getParam($this->getTreeNodeName());
             if ($path) {
                 $path = $this->convertIdToPath($path);
@@ -241,7 +259,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             )->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
             );
-            $this->_currentUrl = $mediaUrl . $this->_directory->getRelativePath($path) . '/';
+            $this->_currentUrl = rtrim($mediaUrl . $this->_directory->getRelativePath($path), '/') . '/';
         }
         return $this->_currentUrl;
     }
@@ -282,5 +300,16 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             return $filename;
         }
         return substr($filename, 0, $maxLength) . '...';
+    }
+
+    /**
+     * Set user-traversable image directory subpath relative to media directory and relative to nested storage root
+     *
+     * @var string $subpath
+     * @return void
+     */
+    public function setImageDirectorySubpath($subpath)
+    {
+        $this->imageDirectorySubpath = $subpath;
     }
 }

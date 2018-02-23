@@ -34,6 +34,7 @@
             <xs:element ref="form" maxOccurs="unbounded"/>
             <xs:element ref="hidden" maxOccurs="unbounded"/>
             <xs:element ref="htmlContent" maxOccurs="unbounded"/>
+            <xs:element ref="imageUploader" maxOccurs="unbounded"/>
             <xs:element ref="input" maxOccurs="unbounded"/>
             <xs:element ref="insertForm" maxOccurs="unbounded"/>
             <xs:element ref="insertListing" maxOccurs="unbounded"/>
@@ -180,6 +181,7 @@
             <xs:element ref="form" maxOccurs="unbounded"/>
             <xs:element ref="hidden" maxOccurs="unbounded"/>
             <xs:element ref="htmlContent" maxOccurs="unbounded"/>
+            <xs:element ref="imageUploader" maxOccurs="unbounded"/>
             <xs:element ref="input" maxOccurs="unbounded"/>
             <xs:element ref="insertForm" maxOccurs="unbounded"/>
             <xs:element ref="insertListing" maxOccurs="unbounded"/>
@@ -612,6 +614,14 @@
                 may contain as many child blocks or containers as required.
                 All blocks inside HtmlContent are integrated into layout, and external blocks can refer to them and
                 vice versa.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="imageUploader" type="componentImageUploader">
+        <xs:annotation>
+            <xs:documentation>
+                Adds image gallery functionality alongside file uploader functionality.
+                See fileUploader component documentation for more information.
             </xs:documentation>
         </xs:annotation>
     </xs:element>

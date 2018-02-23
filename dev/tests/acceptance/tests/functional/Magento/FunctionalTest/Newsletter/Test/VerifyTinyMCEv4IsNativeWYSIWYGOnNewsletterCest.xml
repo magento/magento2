@@ -43,7 +43,7 @@
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForText userInput="Hello World From Newsletter Template!" stepKey="waitForPageLoad2"/>
         <see userInput="Hello World From Newsletter Template!" stepKey="seeContent" />
         <closeTab stepKey="closeTab"/>
         <after>
