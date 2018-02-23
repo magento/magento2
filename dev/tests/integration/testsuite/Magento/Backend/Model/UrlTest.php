@@ -28,16 +28,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    /**
-     * @var Escaper
-     */
-    private $escaper;
-
     protected function setUp()
     {
         $this->request = Bootstrap::getObjectManager()->get(RequestInterface::class);
         $this->_model = Bootstrap::getObjectManager()->create(UrlInterface::class);
-        $this->escaper = Bootstrap::getObjectManager()->get(Escaper::class);
     }
 
     /**
@@ -49,7 +43,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
-    public function testGetUrl($requestParams, $expectedResult, $routeParams = null)
+    public function testGetUrl(array $requestParams, string $expectedResult, array $routeParams = null)
     {
         $this->request->setParams($requestParams);
         $url = $this->_model->getUrl('adminhtml/auth/login', $routeParams);
@@ -63,6 +57,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function getUrlDataProvider()
     {
+        /** @var $escaper Escaper */
+        $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
+
         return [
             [
                 'requestParams' => [],
@@ -94,7 +91,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'requestParams' => [],
-                'expectedResult' => '/param3/' . $this->escaper->encodeUrlParam('a3==') . '/',
+                'expectedResult' => '/param3/' . $escaper->encodeUrlParam('a3==') . '/',
                 'routeParams' => [
                     '_escape_params' => true,
                     'param3' => 'a3=='
@@ -102,7 +99,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'requestParams' => ['param4' => 'a4=='],
-                'expectedResult' => '/param4/' . $this->escaper->encodeUrlParam('a4==') . '/',
+                'expectedResult' => '/param4/' . $escaper->encodeUrlParam('a4==') . '/',
                 'routeParams' => [
                     '_current' => true,
                     '_escape_params' => true,
