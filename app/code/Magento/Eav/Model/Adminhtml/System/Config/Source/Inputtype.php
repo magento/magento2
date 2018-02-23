@@ -28,13 +28,9 @@ class Inputtype implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $result = [];
         //sort array elements using key value
         ksort($this->optionsArray);
-        foreach ($this->optionsArray as $option) {
-            $result[] = $option;
-        }
-        return $result;
+        return $this->optionsArray;
     }
 
     /**
