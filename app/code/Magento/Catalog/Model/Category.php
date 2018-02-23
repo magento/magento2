@@ -650,9 +650,22 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $image = $this->getData($attributeCode);
         if ($image) {
             if (is_string($image)) {
-                $url = $this->_storeManager->getStore()->getBaseUrl(
+                $store = $this->_storeManager->getStore();
+
+                $isRelativeUrl = substr($image, 0, 1) === '/';
+
+                $mediaBaseUrl = $store->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . 'catalog/category/' . $image;
+                );
+
+                if ($isRelativeUrl) {
+                    $url = $image;
+                } else {
+                    $url = $mediaBaseUrl
+                        . ltrim(\Magento\Catalog\Model\Category\FileInfo::ENTITY_MEDIA_PATH, '/')
+                        . '/'
+                        . $image;
+                }
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Something went wrong while getting the image url.')
