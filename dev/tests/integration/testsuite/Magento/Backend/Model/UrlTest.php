@@ -43,13 +43,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * App isolation is enabled to protect next tests from polluted registry by getUrl().
      *
-     * @param array|null $routeParams
      * @param array $requestParams
      * @param string $expectedResult
-     * @dataProvider getUrlWithRouteParamsDataProvider
+     * @param array|null $routeParams
+     * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
-    public function testGetUrl($routeParams = null, $requestParams, $expectedResult)
+    public function testGetUrl($requestParams, $expectedResult, $routeParams = null)
     {
         $this->request->setParams($requestParams);
         $url = $this->_model->getUrl('adminhtml/auth/login', $routeParams);
@@ -61,53 +61,52 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getUrlWithRouteParamsDataProvider()
+    public function getUrlDataProvider()
     {
         return [
             [
-                'routeParams' => null,
                 'requestParams' => [],
                 'expectedResult'=> 'admin/auth/login/key/',
             ],
             [
+                'requestParams' => [],
+                'expectedResult'=> '/param1/a1==/',
                 'routeParams' => [
                     '_escape_params' => false,
                     'param1' => 'a1==',
                 ],
-                'requestParams' => [],
-                'expectedResult'=> '/param1/a1==/',
             ],
             [
+                'requestParams' => [],
+                'expectedResult'=> '/param1/a1==/',
                 'routeParams' => [
                     '_escape_params' => false,
                     'param1' => 'a1==',
                 ],
-                'requestParams' => [],
-                'expectedResult'=> '/param1/a1==/',
             ],
             [
+                'requestParams' => ['param2' => 'a2=='],
+                'expectedResult'=> '/param2/a2==/',
                 'routeParams' => [
                     '_current' => true,
                     '_escape_params' => false,
                 ],
-                'requestParams' => ['param2' => 'a2=='],
-                'expectedResult'=> '/param2/a2==/',
             ],
             [
+                'requestParams' => [],
+                'expectedResult' => '/param3/' . $this->escaper->encodeUrlParam('a3==') . '/',
                 'routeParams' => [
                     '_escape_params' => true,
                     'param3' => 'a3=='
                 ],
-                'requestParams' => [],
-                'expectedResult' => '/param3/' . $this->escaper->encodeUrlParam('a3==') . '/',
             ],
             [
+                'requestParams' => ['param4' => 'a4=='],
+                'expectedResult' => '/param4/' . $this->escaper->encodeUrlParam('a4==') . '/',
                 'routeParams' => [
                     '_current' => true,
                     '_escape_params' => true,
                 ],
-                'requestParams' => ['param4' => 'a4=='],
-                'expectedResult' => '/param4/' . $this->escaper->encodeUrlParam('a4==') . '/',
             ],
         ];
     }
