@@ -74,14 +74,16 @@ class SourceItems extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        if ($this->isSingleSourceMode->execute() === true) {
+        $product = $this->locator->getProduct();
+
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false
+            || null === $product->getId()
+        ) {
             return $data;
         }
 
-        $product = $this->locator->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
-            $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
-        }
+        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
         return $data;
     }
 
