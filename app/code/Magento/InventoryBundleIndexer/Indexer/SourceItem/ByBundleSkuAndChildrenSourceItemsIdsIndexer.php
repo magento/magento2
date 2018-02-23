@@ -5,37 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryIndexer\Indexer\SourceItem;
+namespace Magento\InventoryBundleIndexer\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
-use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
 
 /**
- * Source Item indexer
- *
- * @api
+ * Bundle indexer by [bundle sku => [bundle children source item ids]]
  */
-class SourceItemIndexer
+class ByBundleSkuAndChildrenSourceItemsIdsIndexer
 {
     /**
      * @var GetSkuListInStock
      */
     private $getSkuListInStock;
-
-    /**
-     * @var IndexStructureInterface
-     */
-    private $indexStructure;
-
-    /**
-     * @var IndexHandlerInterface
-     */
-    private $indexHandler;
 
     /**
      * @var IndexDataBySkuListProvider
@@ -48,60 +34,36 @@ class SourceItemIndexer
     private $indexNameBuilder;
 
     /**
-     * @var StockIndexer
+     * @var IndexHandlerInterface
      */
-    private $stockIndexer;
+    private $indexHandler;
 
     /**
-     * $indexStructure is reserved name for construct variable (in index internal mechanism)
-     *
-     * @param GetSkuListInStock $getSkuListInStockToUpdate
-     * @param IndexStructureInterface $indexStructureHandler
-     * @param IndexHandlerInterface $indexHandler
+     * @param GetSkuListInStock $getSkuListInStock
      * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
      * @param IndexNameBuilder $indexNameBuilder
-     * @param StockIndexer $stockIndexer
+     * @param IndexHandlerInterface $indexHandler
      */
     public function __construct(
-        GetSkuListInStock $getSkuListInStockToUpdate,
-        IndexStructureInterface $indexStructureHandler,
-        IndexHandlerInterface $indexHandler,
+        GetSkuListInStock $getSkuListInStock,
         IndexDataBySkuListProvider $indexDataBySkuListProvider,
         IndexNameBuilder $indexNameBuilder,
-        StockIndexer $stockIndexer
+        IndexHandlerInterface $indexHandler
     ) {
-        $this->getSkuListInStock = $getSkuListInStockToUpdate;
-        $this->indexStructure = $indexStructureHandler;
-        $this->indexHandler = $indexHandler;
+        $this->getSkuListInStock = $getSkuListInStock;
         $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
         $this->indexNameBuilder = $indexNameBuilder;
-        $this->stockIndexer = $stockIndexer;
+        $this->indexHandler = $indexHandler;
     }
 
     /**
+     * @param array $bundleChildrenSourceItemsIdsWithSku
+     *
      * @return void
      */
-    public function executeFull()
+    public function execute(array $bundleChildrenSourceItemsIdsWithSku)
     {
-        $this->stockIndexer->executeFull();
-    }
-
-    /**
-     * @param int $sourceItemId
-     * @return void
-     */
-    public function executeRow(int $sourceItemId)
-    {
-        $this->executeList([$sourceItemId]);
-    }
-
-    /**
-     * @param array $sourceItemIds
-     * @return void
-     */
-    public function executeList(array $sourceItemIds)
-    {
-        $skuListInStockList = $this->getSkuListInStock->execute($sourceItemIds);
+        $skuListInStockList = $this->getSkuListInStock->execute($bundleChildrenSourceItemsIdsWithSku);
 
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();
@@ -113,13 +75,9 @@ class SourceItemIndexer
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
-            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            }
-
             $this->indexHandler->cleanIndex(
                 $mainIndexName,
-                new \ArrayIterator($skuList),
+                new \ArrayIterator(array_keys($skuList)),
                 ResourceConnection::DEFAULT_CONNECTION
             );
 
