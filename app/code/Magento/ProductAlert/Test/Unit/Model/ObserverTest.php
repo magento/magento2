@@ -6,7 +6,7 @@
 namespace Magento\ProductAlert\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\ProductAlert\Model\ProductSaleability;
+use Magento\ProductAlert\Model\ProductSalability;
 
 /**
  * Class ObserverTest
@@ -111,9 +111,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     private $objectManagerMock;
 
     /**
-     * @var ProductSaleability|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSalability|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productSaleabilityMock;
+    private $productSalabilityMock;
 
     protected function setUp()
     {
@@ -179,7 +179,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->productSaleabilityMock = $this->createPartialMock(ProductSaleability::class, ['isSalable']);
+        $this->productSalabilityMock = $this->createPartialMock(ProductSalability::class, ['isSalable']);
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
@@ -195,7 +195,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
                 'stockColFactory' => $this->stockColFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'productRepository' => $this->productRepositoryMock,
-                'productSaleability' => $this->productSaleabilityMock
+                'productSalability' => $this->productSalabilityMock
             ]
         );
     }
@@ -399,7 +399,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
-        $this->productSaleabilityMock->expects($this->once())->method('isSalable')->willReturn(false);
+        $this->productSalabilityMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
         $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());

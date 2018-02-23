@@ -1,6 +1,6 @@
 <?php
 /**
- * Create customer and attach it to custom website with code newwebsite
+ * Create customer and attach it to custom website with code eu_website
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -43,35 +43,5 @@ $customer->setWebsiteId(
     1
 );
 $customer->isObjectNew(true);
-
-/** @var \Magento\Customer\Model\Address $addressOne  */
-$addressOne = $objectManager->create(\Magento\Customer\Model\Address::class);
-$addressOneData = [
-    'firstname' => 'Firstname',
-    'lastname' => 'LastName',
-    'street' => ['test street'],
-    'city' => 'test city',
-    'country_id' => 'US',
-    'postcode' => '01001',
-    'telephone' => '+7000000001',
-    'entity_id' => 1,
-];
-$addressOne->setData($addressOneData);
-$customer->addAddress($addressOne);
-
-/** @var \Magento\Customer\Model\Address $addressTwo  */
-$addressTwo = $objectManager->create(\Magento\Customer\Model\Address::class);
-$addressTwoData = [
-    'firstname' => 'test firstname',
-    'lastname' => 'test lastname',
-    'street' => ['test street'],
-    'city' => 'test city',
-    'country_id' => 'US',
-    'postcode' => '01001',
-    'telephone' => '+7000000001',
-    'entity_id' => 2,
-];
-$addressTwo->setData($addressTwoData);
-$customer->addAddress($addressTwo);
 
 $customer->save();
