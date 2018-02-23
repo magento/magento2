@@ -2936,7 +2936,62 @@ if (testLabel
         <stringProp name="RegexExtractor.match_number">-1</stringProp>
       </RegexExtractor>
       <hashTree/>
+      <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: isPageCacheable" enabled="true">
+        <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+        <stringProp name="RegexExtractor.refname">isPageCacheable</stringProp>
+        <stringProp name="RegexExtractor.regex">catalogsearch/searchTermsLog/save</stringProp>
+        <stringProp name="RegexExtractor.template">$0$</stringProp>
+        <stringProp name="RegexExtractor.default">0</stringProp>
+        <stringProp name="RegexExtractor.match_number">1</stringProp>
+      </RegexExtractor>
+      <hashTree/>
     </hashTree>
+  
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
+        <stringProp name="IfController.condition">"${isPageCacheable}" != "0"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/search/if_page_cacheable_controller.jmx</stringProp></IfController>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Search Terms Log" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="q" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">true</boolProp>
+              <stringProp name="Argument.name">q</stringProp>
+              <stringProp name="Argument.value">${searchTerm}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}catalogsearch/searchTermsLog/save/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/search/search_terms_log_save.jmx</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert search result" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-547797305">"success":true</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+  </hashTree>
   
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Arguments" enabled="true">
       <stringProp name="BeanShellSampler.query">
@@ -3179,7 +3234,62 @@ if (testLabel
         <stringProp name="RegexExtractor.match_number">-1</stringProp>
       </RegexExtractor>
       <hashTree/>
+      <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: isPageCacheable" enabled="true">
+        <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+        <stringProp name="RegexExtractor.refname">isPageCacheable</stringProp>
+        <stringProp name="RegexExtractor.regex">catalogsearch/searchTermsLog/save</stringProp>
+        <stringProp name="RegexExtractor.template">$0$</stringProp>
+        <stringProp name="RegexExtractor.default">0</stringProp>
+        <stringProp name="RegexExtractor.match_number">1</stringProp>
+      </RegexExtractor>
+      <hashTree/>
     </hashTree>
+  
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
+        <stringProp name="IfController.condition">"${isPageCacheable}" != "0"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/search/if_page_cacheable_controller.jmx</stringProp></IfController>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Search Terms Log" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="q" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">true</boolProp>
+              <stringProp name="Argument.name">q</stringProp>
+              <stringProp name="Argument.value">${searchTerm}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+              <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}catalogsearch/searchTermsLog/save/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/search/search_terms_log_save.jmx</stringProp>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert search result" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-547797305">"success":true</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+  </hashTree>
   
     <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Attribute 1 present in layered navigation" enabled="true">
       <stringProp name="IfController.condition">${attribute_1_options_count} &gt; 0</stringProp>

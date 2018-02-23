@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
@@ -142,7 +143,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify a shipping method.
+     * @expectedExceptionMessage The shipping method is missing. Select the shipping method and try again.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfShippingRateIsNotSelected()
     {
@@ -181,7 +182,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please select a valid payment method.
+     * @expectedExceptionMessage Enter a valid payment method and try again.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfPaymentMethodIsNotSelected()
     {
@@ -225,7 +226,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
      * Test case when country id not present in allowed countries list.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
+     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      */
     public function testValidateBeforeSubmitThrowsExceptionIfCountrySpecificConfigurations()
     {

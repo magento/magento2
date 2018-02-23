@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\Encryption\Helper\Security;
@@ -49,7 +50,9 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
             $resetPasswordToken
         ) || empty($resetPasswordToken) || empty($userId) || $userId < 0
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The password reset token is incorrect. Verify the token and try again.')
+            );
         }
 
         /** @var $user \Magento\User\Model\User */

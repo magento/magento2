@@ -43,6 +43,12 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                     . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
                 );
                 $this->assertStringStartsNotWith(
+                    'InstallData',
+                    basename($file),
+                    'InstallData objects are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
+                );
+                $this->assertStringStartsNotWith(
                     'data-install-',
                     basename($file),
                     'Install scripts are obsolete. Please create class InstallData in module\'s Setup folder'
@@ -60,19 +66,26 @@ class InstallUpgradeTest extends \PHPUnit\Framework\TestCase
                     . 'Please use declarative schema approach in module\'s etc/db_schema.xml file'
                 );
                 $this->assertStringStartsNotWith(
+                    'UpgradeData',
+                    basename($file),
+                    'UpgradeSchema scripts are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
+                );
+                $this->assertStringStartsNotWith(
                     'data-upgrade-',
                     basename($file),
-                    'Upgrade scripts are obsolete. Please create class UpgradeData in module\'s Setup folder'
+                    'Upgrade scripts are obsolete. '
+                    . 'Please use data patches approach in module\'s Setup/Patch/Data dir'
                 );
                 $this->assertStringStartsNotWith(
                     'recurring',
                     basename($file),
                     'Recurring scripts are obsolete. Please create class Recurring in module\'s Setup folder'
                 );
-                if (preg_match('/.*\/(sql|data)/i', dirname($file))) {
+                if (preg_match('/.*\/(sql\/|data\/)/', dirname($file))) {
                     $this->fail(
                         "Invalid directory:\n"
-                        . "- Create an UpgradeData class within module's Setup folder for data upgrades.\n"
+                        . "- Create an data patch within module's Setup/Patch/Data folder for data upgrades.\n"
                         . "- Use declarative schema approach in module's etc/db_schema.xml file for schema changes."
                     );
                 }

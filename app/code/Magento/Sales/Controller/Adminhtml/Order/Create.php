@@ -327,7 +327,7 @@ abstract class Create extends \Magento\Backend\App\Action
                 if ($this->_getQuote()->getCouponCode() !== $couponCode) {
                     $this->messageManager->addError(
                         __(
-                            '"%1" coupon code is not valid.',
+                            'The "%1" coupon code isn\'t valid. Verify the code and try again.',
                             $this->escaper->escapeHtml($couponCode)
                         )
                     );

@@ -16,6 +16,8 @@
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
+            <!-- Skipped; see MAGETWO-88218 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <!--Login to Admin Area-->

@@ -81,7 +81,19 @@ class UpgradeCommand extends AbstractSetupCommand
                 InputOption::VALUE_OPTIONAL,
                 'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
                 false
-            )
+            ),
+            new InputOption(
+                InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE,
+                null,
+                InputOption::VALUE_NONE,
+                'Safe installation of Magento with dumps on destructive operations, like column removal'
+            ),
+            new InputOption(
+                InstallCommand::INPUT_KEY_DATA_RESTORE,
+                null,
+                InputOption::VALUE_NONE,
+                'Restore removed data from dumps'
+            ),
         ];
         $this->setName('setup:upgrade')
             ->setDescription('Upgrades the Magento application, DB data, and schema')

@@ -49,34 +49,4 @@ interface DiffInterface
         $operation,
         ElementInterface $oldDtoObject = null
     );
-
-    /**
-     * Register current state of schema to registry.
-     *
-     * @param  Schema $schema
-     * @return void
-     */
-    public function registerSchema(Schema $schema);
-
-    /**
-     * Retrieve current schema object.
-     *
-     * @return Schema
-     */
-    public function getCurrentSchemaState();
-
-    /**
-     * Return current installation request.
-     *
-     * @return Request
-     */
-    public function getCurrentInstallationRequest();
-
-    /**
-     * Register installation request with all needed options.
-     *
-     * @param  Request $request
-     * @return void
-     */
-    public function registerInstallationRequest(Request $request);
 }

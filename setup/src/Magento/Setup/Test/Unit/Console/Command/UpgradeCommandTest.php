@@ -104,7 +104,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert_old_scripts' => false
+                    '--convert_old_scripts' => false,
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
@@ -113,13 +113,15 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'keep-generated' => false,
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
+                    'safe-mode' => false,
+                    'data-restore' => false
                 ]
             ],
             [
                 'options' => [
                     '--magento-init-params' => '',
                     '--convert_old_scripts' => false,
-                    '--keep-generated' => true
+                    '--keep-generated' => true,
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => '',
@@ -127,6 +129,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'keep-generated' => true,
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
+                    'safe-mode' => false,
+                    'data-restore' => false
                 ]
             ],
             [
@@ -137,6 +141,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'keep-generated' => false,
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
+                    'safe-mode' => false,
+                    'data-restore' => false
                 ]
             ],
             [
@@ -147,6 +153,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'keep-generated' => false,
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
+                    'safe-mode' => false,
+                    'data-restore' => false
                 ]
             ],
         ];

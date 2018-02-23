@@ -93,7 +93,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             if (!empty($addresses)) {
                 $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(
-                    '<info>Set exempt IP-addresses: ' . implode(', ', $this->maintenanceMode->getAddressInfo()) .
+                    '<info>Set exempt IP-addresses: ' . implode(' ', $this->maintenanceMode->getAddressInfo()) .
                     '</info>'
                 );
             }
