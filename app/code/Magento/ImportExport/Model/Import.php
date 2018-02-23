@@ -267,7 +267,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
     }
-
+    
     /**
      * Return operation result messages
      *
@@ -278,7 +278,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $messages = [];
         if ($this->getProcessedRowsCount()) {
-            if ($validationResult->getErrorsCount()) {
+            if (($validationResult->getErrorsCount() && 
+                $validationResult->getValidationStrategy() === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR) ||
+                ($validationResult->getErrorsCount() > $validationResult->getAllowedErrorsCount() &&
+                $validationResult->getValidationStrategy() === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS)) {    
                 $messages[] = __('Data validation failed. Please fix the following errors and upload the file again.');
 
                 // errors info
@@ -574,7 +577,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->getErrorsCount();
+        $result = ($errorAggregator->getValidationStrategy() === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR) ? 
+                        !$errorAggregator->getErrorsCount() : 
+                        $errorAggregator->getErrorsCount() <= $errorAggregator->getAllowedErrorsCount();
+        
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }

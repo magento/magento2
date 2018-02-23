@@ -80,6 +80,13 @@ interface ProcessingErrorAggregatorInterface
     public function initValidationStrategy($validationStrategy, $allowedErrorCount = 0);
 
     /**
+     * Return the validation strategy
+     *
+     * @return string
+     */
+    public function getValidationStrategy();
+
+    /**
      * Check if the further processing should be stopped
      *
      * @return bool
