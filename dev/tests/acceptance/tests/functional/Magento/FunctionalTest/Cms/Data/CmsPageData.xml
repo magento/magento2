@@ -47,6 +47,7 @@
         <data key="shareable">Yes</data>
         <data key="value">magento2.jpg</data>
         <data key="fileName">magento2</data>
+        <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
@@ -57,6 +58,7 @@
         <data key="shareable">Yes</data>
         <data key="value">magento3.jpg</data>
         <data key="fileName">magento3</data>
+        <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>

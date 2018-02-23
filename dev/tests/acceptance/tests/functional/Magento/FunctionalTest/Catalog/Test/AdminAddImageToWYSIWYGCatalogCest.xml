@@ -21,6 +21,8 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Catalog Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84373"/>
+            <!--Skip because of issue MAGETWO-88266-->
+            <group value="skip"/>
         </annotations>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
         <waitForPageLoad stepKey="wait1"/>
@@ -49,7 +51,7 @@
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
-        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
