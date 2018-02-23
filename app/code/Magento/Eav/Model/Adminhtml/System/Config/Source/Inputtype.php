@@ -8,21 +8,33 @@ namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 class Inputtype implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * @var array
+     */
+    private $optionsArray;
+
+    /**
+     * Inputtype constructor.
+     * @param array $optionsArray
+     */
+    public function __construct(array $optionsArray = [])
+    {
+        $this->optionsArray = $optionsArray;
+    }
+
+    /**
      * Return array of options
      *
      * @return array
      */
     public function toOptionArray()
     {
-        return [
-            ['value' => 'text', 'label' => __('Text Field')],
-            ['value' => 'textarea', 'label' => __('Text Area')],
-            ['value' => 'texteditor', 'label' => __('Text Editor')],
-            ['value' => 'date', 'label' => __('Date')],
-            ['value' => 'boolean', 'label' => __('Yes/No')],
-            ['value' => 'multiselect', 'label' => __('Multiple Select')],
-            ['value' => 'select', 'label' => __('Dropdown')]
-        ];
+        $result = [];
+        //sort array elements using key value
+        ksort($this->optionsArray);
+        foreach ($this->optionsArray as $option) {
+            $result[] = $option;
+        }
+        return $result;
     }
 
     /**
