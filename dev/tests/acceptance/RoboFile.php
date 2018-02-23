@@ -89,7 +89,7 @@ class RoboFile extends \Robo\Tasks
      */
     function group($args = '')
     {
-        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --debug --skip-group skip --group')->args($args)->run();
+        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
     }
 
     /**
