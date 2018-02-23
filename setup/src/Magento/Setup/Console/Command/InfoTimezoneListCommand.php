@@ -56,6 +56,6 @@ class InfoTimezoneListCommand extends Command
         }
 
         $table->render($output);
-
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
