@@ -26,15 +26,22 @@ $sourceItemConfigurationsData = [
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
     ],
     [
+        // notify_stock_qty > quantity
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-1',
         SourceItemConfigurationInterface::SKU => 'SKU-1',
-        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 5.6,
     ],
     [
         // This should be showed regardless product is disabled
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
         SourceItemConfigurationInterface::SKU => 'SKU-3',
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
+    ],
+    [
+        // notify_stock_qty < quantity
+        SourceItemConfigurationInterface::SOURCE_CODE => 'us-1',
+        SourceItemConfigurationInterface::SKU => 'SKU-2',
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 4.5,
     ],
 ];
 
