@@ -64,16 +64,18 @@ class Stocks extends AbstractModifier
 
         if ($this->isSingleSourceMode->execute() === true
             || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
-            $meta['stocks'] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'visible' => 0,
-                        ],
+            return $meta;
+        }
+
+        $meta['stocks'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'visible' => 1,
                     ],
                 ],
-            ];
-        }
+            ],
+        ];
         return $meta;
     }
 }

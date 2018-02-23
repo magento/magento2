@@ -12,6 +12,7 @@
             <collapsible>true</collapsible>
             <opened>true</opened>
             <dataScope>data.sources</dataScope>
+            <visible>0</visible>
         </settings>
         <container name="assign_sources_container" component="Magento_Ui/js/form/components/group" sortOrder="10">
             <argument name="data" xsi:type="array">
@@ -177,6 +178,7 @@
             <label translate="true">Stocks Information</label>
             <collapsible>true</collapsible>
             <opened>false</opened>
+            <visible>0</visible>
         </settings>
         <container name="stocks_container" class="Magento\InventoryCatalog\Ui\Component\Stocks" template="Magento_InventoryCatalog/product/form/stocks">
             <argument name="data" xsi:type="array">

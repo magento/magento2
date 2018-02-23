@@ -122,16 +122,18 @@ class SourceItems extends AbstractModifier
 
         if ($this->isSingleSourceMode->execute() === true
             || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
-            $meta['sources'] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'visible' => 0,
-                        ],
+            return $meta;
+        }
+
+        $meta['sources'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'visible' => 1,
                     ],
                 ],
-            ];
-        }
+            ],
+        ];
         return $meta;
     }
 }

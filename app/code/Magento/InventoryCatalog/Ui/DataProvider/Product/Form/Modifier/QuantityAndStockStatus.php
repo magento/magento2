@@ -14,7 +14,7 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 /**
  * Quantity And StockStatus modifier on CatalogInventory Product Editing Form
  */
-class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
+class QuantityAndStockStatus extends AbstractModifier
 {
     /**
      * @var ArrayManager
@@ -59,7 +59,7 @@ class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
                 $stockStatusPath . '/arguments/data/config',
                 $meta,
                 [
-                    'component' => 'Magento_InventoryCatalog/js/product/inventory/components/stock-status'
+                    'component' => 'Magento_InventoryCatalog/js/product/form/stock-status'
                 ]
             );
         }
@@ -71,7 +71,7 @@ class CatalogInventoryQuantityAndStockStatus extends AbstractModifier
                 $stockQtyPath . '/children/qty/arguments/data/config',
                 $meta,
                 [
-                    'component' => 'Magento_InventoryCatalog/js/product/inventory/components/qty',
+                    'component' => 'Magento_InventoryCatalog/js/product/form/qty',
                 ]
             );
         }
