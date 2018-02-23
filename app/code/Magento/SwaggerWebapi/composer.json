@@ -10,7 +10,7 @@
         "magento/module-swagger": "100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.3.0-dev",
+    "version": "100.0.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -20,7 +20,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Swagger\\": ""
+            "Magento\\SwaggerWebapi\\": ""
         }
     }
 }

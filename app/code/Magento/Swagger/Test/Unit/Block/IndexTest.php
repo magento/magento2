@@ -9,9 +9,8 @@ namespace Magento\Swagger\Test\Unit\Block;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Swagger\Api\SchemaTypeInterface;
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\Swagger\Block\Index;
-use Magento\Swagger\Block\SchemaTypes;
 use Magento\SwaggerWebapi\Model\SchemaType\Rest;
 
 class IndexTest extends \PHPUnit\Framework\TestCase

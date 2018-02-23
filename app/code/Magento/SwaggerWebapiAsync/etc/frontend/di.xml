@@ -12,12 +12,4 @@
             <argument name="code" xsi:type="string">async</argument>
         </arguments>
     </type>
-
-    <type name="Magento\Swagger\Block\SchemaTypes">
-        <arguments>
-            <argument name="types" xsi:type="array">
-                <item name="async" xsi:type="object">Magento\SwaggerWebapiAsync\Model\SchemaType\Async</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

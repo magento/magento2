@@ -6,7 +6,7 @@
 
 namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
-use Magento\Swagger\Api\SchemaTypeInterface;
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapi\Model\SchemaType\Async;
 
 class AsyncTest extends \PHPUnit\Framework\TestCase
