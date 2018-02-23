@@ -76,6 +76,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
     /**
      * @var SourceItemInterfaceFactory
      */
@@ -123,9 +124,9 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     public function execute(OrderInterface $order): ShippingAlgorithmResultInterface
     {
         $isShippable = true;
-        $sourceSelections = [];
         $storeId = $order->getStoreId();
-        $sources = $this->getSourcesByStoreId($storeId);
+        $sources = $this->getSourcesByStoreId((int)$storeId);
+        $sourceItemSelections = [];
 
         /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {
@@ -133,7 +134,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             $qtyToDeliver = $orderItem->getQtyOrdered();
 
             //check if order item is not delivered yet
-            if ($orderItem->isDeleted() || $orderItem->getParentItemId() || $this->isZero($qtyToDeliver)) {
+            if ($orderItem->isDeleted() || $orderItem->getParentItemId() || $this->isZero((float)$qtyToDeliver)) {
                 continue;
             }
 
@@ -143,18 +144,23 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
                 // check if source has some qty of SKU, so it's possible to take them into account
-                if ($this->isZero($sourceItemQty)) {
+                if ($this->isZero((float)$sourceItemQty)) {
                     continue;
                 }
 
-                $sourceSelections[] = $this->sourceSelectionFactory->create([
-                    'sourceCode' => $sourceItem->getSourceCode(),
-                    'sourceItemSelections' => $this->sourceItemSelectionFactory->create([
+                $sourceItemSelection = $this->sourceItemSelectionFactory->create(
+                    [
                         'sku' => $itemSku,
                         'qty' => $qtyToDeduct,
                         'qtyAvailable' => $sourceItemQty,
-                    ]),
-                ]);
+                    ]
+                );
+
+                if (isset($sourceItemSelections[$sourceItem->getSourceCode()])) {
+                    $sourceItemSelections[$sourceItem->getSourceCode()][] = $sourceItemSelection;
+                } else {
+                    $sourceItemSelections[$sourceItem->getSourceCode()] = [$sourceItemSelection];
+                }
 
                 $qtyToDeliver -= $qtyToDeduct;
             }
@@ -165,6 +171,8 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                 $isShippable = false;
             }
         }
+
+        $sourceSelections = $this->createSourceSelection($sourceItemSelections);
 
         return $this->shippingAlgorithmResultFactory->create([
             'sourceSelections' => $sourceSelections,
@@ -185,7 +193,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
         $website = $this->websiteRepository->getById($store->getId());
         $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
 
-       return $this->getAssignedSourcesForStock->execute($stock->getStockId());
+        return $this->getAssignedSourcesForStock->execute((int)$stock->getStockId());
     }
 
     /**
@@ -205,7 +213,8 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
         $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
 
         if ($sourceItemsResult->getTotalCount() > 0) {
-            return reset($sourceItemsResult->getItems());
+            $sourceItems = $sourceItemsResult->getItems();
+            return reset($sourceItems);
         }
 
         return $this->sourceItemFactory->create();
@@ -221,5 +230,23 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     private function isZero(float $floatNumber): bool
     {
         return $floatNumber < 0.0000001;
+    }
+
+    /**
+     * @param $sourceItemSelections
+     * @return array
+     */
+    private function createSourceSelection($sourceItemSelections): array
+    {
+        $sourceSelections = [];
+        foreach ($sourceItemSelections as $sourceCode => $items) {
+            $sourceSelections[] = $this->sourceSelectionFactory->create(
+                [
+                    'sourceCode' => $sourceCode,
+                    'sourceItemSelections' => $items
+                ]
+            );
+        }
+        return $sourceSelections;
     }
 }

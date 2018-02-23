@@ -9,6 +9,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Inventory\Model\Source;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
@@ -78,15 +79,35 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
 
             $searchCriteria = $this->searchCriteriaBuilder
                 ->addFilter(SourceInterface::SOURCE_CODE, $sourceCodes, 'in')
+                ->addFilter(SourceInterface::ENABLED, true)
                 ->create();
 
             $searchResult = $this->sourceRepository->getList($searchCriteria);
+            $items = $searchResult->getItems();
+            $this->sortByCodes($items, $sourceCodes);
+            return $items;
 
-            return $searchResult->getItems();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new LocalizedException(__('Could not load Sources for Stock'), $e);
         }
+    }
+
+    /**
+     * TODO: this is a temporary decision, remove it!
+     *
+     * @param Source[] $items
+     * @param string[] $codes
+     * @return bool
+     */
+    private function sortByCodes(array &$items, array $codes)
+    {
+        return uasort(
+            $items,
+            function (Source $a, Source $b) use ($codes) {
+                return array_search($a->getSourceCode(), $codes) > array_search($b->getSourceCode(),  $codes);
+            }
+        );
     }
 
     /**

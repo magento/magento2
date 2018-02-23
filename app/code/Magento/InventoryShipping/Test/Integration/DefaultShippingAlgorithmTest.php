@@ -15,6 +15,7 @@ use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+// TODO: RENAME FILE
 class PriorityShippingAlgorithmTest extends TestCase
 {
     /**
@@ -86,11 +87,15 @@ class PriorityShippingAlgorithmTest extends TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      */
     public function testStockSourceCombination()
     {
@@ -192,6 +197,7 @@ class PriorityShippingAlgorithmTest extends TestCase
 
         /** @var OrderInterface $order */
         $order = Bootstrap::getObjectManager()->create(OrderInterface::class);
+        $order->setStoreId(2);
         $order->setItems($orderItems);
         return $order;
     }
