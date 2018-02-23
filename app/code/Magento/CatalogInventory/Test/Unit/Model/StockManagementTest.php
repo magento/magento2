@@ -119,9 +119,6 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getResource')
             ->willReturn($this->stockResourceMock);
-        $this->stockResourceMock
-            ->expects($this->any())
-            ->method('beginTransaction');
         $this->stockRegistryProviderMock
             ->expects($this->any())
             ->method('getStockItem')
@@ -151,7 +148,10 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
         $verifyStock = true
     ) {
         $this->stockResourceMock
-            ->expects($this->any())
+            ->expects($this->once())
+            ->method('beginTransaction');
+        $this->stockResourceMock
+            ->expects($this->once())
             ->method('lockProductsStock')
             ->willReturn([$lockedItems]);
         $this->stockItemInterfaceMock
@@ -183,7 +183,7 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
             ->method('verifyNotification')
             ->willReturn(false);
         $this->stockResourceMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('commit');
 
         $this->stockManagement->registerProductsSale($items, $this->websiteId);
@@ -202,7 +202,10 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
     public function testRegisterProductsSaleException(array $items, array $lockedItems)
     {
         $this->stockResourceMock
-            ->expects($this->any())
+            ->expects($this->once())
+            ->method('beginTransaction');
+        $this->stockResourceMock
+            ->expects($this->once())
             ->method('lockProductsStock')
             ->willReturn([$lockedItems]);
         $this->stockItemInterfaceMock
@@ -221,6 +224,9 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('checkQty')
             ->willReturn(false);
+        $this->stockResourceMock
+            ->expects($this->once())
+            ->method('commit');
 
         $this->stockManagement->registerProductsSale($items, $this->websiteId);
     }
