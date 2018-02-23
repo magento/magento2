@@ -13,7 +13,7 @@
             <stories value="Enable/disable Advanced Reporting"/>
             <title value="Enable Disable Advanced Reporting"/>
             <description value="An admin user can enable/disable Advanced Reporting."/>
-            <severity value="NORMAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-66465"/>
             <group value="analytics"/>
         </annotations>

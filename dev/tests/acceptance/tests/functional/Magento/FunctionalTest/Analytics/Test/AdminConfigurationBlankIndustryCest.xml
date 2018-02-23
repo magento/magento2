@@ -13,7 +13,7 @@
             <stories value="Try to save empty Magento Advanced Reporting vertical"/>
             <title value="Try to save empty Magento Advanced Reporting vertical"/>
             <description value="An admin user cannot save a blank industry setting on the Advanced Reporting configuration page."/>
-            <severity value="NORMAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-63981"/>
             <group value="analytics"/>
             <group value="skip"/>
