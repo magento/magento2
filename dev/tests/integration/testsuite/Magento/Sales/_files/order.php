@@ -5,6 +5,7 @@
  */
 
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 // @codingStandardsIgnoreFile
 
@@ -71,4 +72,7 @@ $order->setIncrementId(
 )->setPayment(
     $payment
 );
-$order->save();
+
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
+$orderRepository->save($order);
