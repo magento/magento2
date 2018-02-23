@@ -56,5 +56,6 @@ class InfoTimezoneListCommand extends Command
         }
 
         $table->render($output);
+
     }
 }
