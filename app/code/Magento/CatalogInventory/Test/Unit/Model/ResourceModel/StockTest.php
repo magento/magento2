@@ -118,14 +118,14 @@ class StockTest extends \PHPUnit\Framework\TestCase
      */
     public function testLockProductsStock($websiteId, array $productIds, array $products, array $result)
     {
-        $this->selectMock->expects($this->any())
+        $this->selectMock->expects($this->exactly(2))
             ->method('from')
             ->withConsecutive(
                 [$this->identicalTo(['si' => self::ITEM_TABLE])],
                 [$this->identicalTo(['p' => self::PRODUCT_TABLE]), $this->identicalTo([])]
             )
             ->willReturnSelf();
-        $this->selectMock->expects($this->any())
+        $this->selectMock->expects($this->exactly(3))
             ->method('where')
             ->withConsecutive(
                 [$this->identicalTo('website_id = ?'), $this->identicalTo($websiteId)],
@@ -133,29 +133,29 @@ class StockTest extends \PHPUnit\Framework\TestCase
                 [$this->identicalTo('entity_id IN (?)'), $this->identicalTo($productIds)]
             )
             ->willReturnSelf();
-        $this->selectMock->expects($this->any())
+        $this->selectMock->expects($this->once())
             ->method('forUpdate')
             ->with($this->identicalTo(true))
             ->willReturnSelf();
-        $this->selectMock->expects($this->any())
+        $this->selectMock->expects($this->once())
             ->method('columns')
             ->with($this->identicalTo(['product_id' => 'entity_id', 'type_id' => 'type_id']))
             ->willReturnSelf();
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock->expects($this->exactly(2))
             ->method('select')
             ->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($this->identicalTo($this->selectMock))
             ->willReturn($this->statementMock);
-        $this->statementMock->expects($this->any())
+        $this->statementMock->expects($this->once())
             ->method('fetchAll')
             ->willReturn($products);
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->identicalTo($this->selectMock))
             ->willReturn($result);
-        $this->stock->expects($this->any())
+        $this->stock->expects($this->exactly(2))
             ->method('getTable')
             ->withConsecutive(
                 [$this->identicalTo('cataloginventory_stock_item')],
@@ -164,7 +164,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
                 self::ITEM_TABLE,
                 self::PRODUCT_TABLE
             ));
-        $this->stock->expects($this->any())
+        $this->stock->expects($this->exactly(4))
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 

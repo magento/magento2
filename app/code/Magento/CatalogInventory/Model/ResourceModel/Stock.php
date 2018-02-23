@@ -119,7 +119,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int $websiteId
      * @return array
      */
-    public function lockProductsStock($productIds, $websiteId)
+    public function lockProductsStock(array $productIds, $websiteId)
     {
         if (empty($productIds)) {
             return [];
@@ -136,7 +136,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
             ->columns(
                 [
                     'product_id' => 'entity_id',
-                    'type_id' => 'type_id'
+                    'type_id' => 'type_id',
                 ]
             );
         $items = [];
@@ -157,7 +157,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     public function correctItemsQty(array $items, $websiteId, $operator)
     {
         if (empty($items)) {
-            return $this;
+            return;
         }
 
         $connection = $this->getConnection();
