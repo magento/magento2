@@ -51,4 +51,9 @@
     <event name="store_add">
         <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" />
     </event>
+    <event name="customer_save_after_data_object">
+        <observer
+                name="sales_assign_order_to_customer"
+                instance="Magento\Sales\Observer\AssignOrderToCustomerObserver" />
+    </event>
 </config>

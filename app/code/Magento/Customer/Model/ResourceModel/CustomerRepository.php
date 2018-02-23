@@ -7,11 +7,14 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Helper\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Customer\Helper\Delegation\Storage as DelegatedStorage;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer repository.
@@ -95,6 +98,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     private $notificationStorage;
 
     /**
+     * @var DelegatedStorage
+     */
+    private $delegatedStorage;
+
+    /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -110,6 +118,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
+     * @param DelegatedStorage|null $delegatedStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -127,7 +136,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        NotificationStorage $notificationStorage
+        NotificationStorage $notificationStorage,
+        DelegatedStorage $delegatedStorage = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -144,6 +154,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
+        $this->delegatedStorage = $delegatedStorage
+            ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
     }
 
     /**
@@ -153,6 +165,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
+        /** @var NewOperation|null $delegatedNewOperation */
+        $delegatedNewOperation = !$customer->getId()
+            ? $this->delegatedStorage->consumenewOperation() : null;
         $prevCustomerData = null;
         $prevCustomerDataArr = null;
         if ($customer->getId()) {
@@ -216,6 +231,14 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
 
+        if (!$customer->getAddresses()
+            && $delegatedNewOperation
+            && $delegatedNewOperation->getCustomer()->getAddresses()
+        ) {
+            $customer->setAddresses(
+                $delegatedNewOperation->getCustomer()->getAddresses()
+            );
+        }
         if ($customer->getAddresses() !== null) {
             if ($customer->getId()) {
                 $existingAddresses = $this->getById($customer->getId())->getAddresses();
@@ -244,10 +267,17 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
+
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
-            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $prevCustomerData]
+            [
+                'customer_data_object' => $savedCustomer,
+                'orig_customer_data_object' => $prevCustomerData,
+                'delegate_data' => $delegatedNewOperation
+                    ? $delegatedNewOperation->getAdditionalData() : []
+            ]
         );
+
         return $savedCustomer;
     }
 
