@@ -10,7 +10,7 @@ namespace Magento\InventoryConfigurationApi\Api;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 
 /**
- * Interface GetStockItemConfigurationInterface of Service that to return  stock item configuration interface object
+ * Interface GetStockItemConfigurationInterface of Service that to return  stock item configuration entity
  */
 interface GetStockItemConfigurationInterface
 {

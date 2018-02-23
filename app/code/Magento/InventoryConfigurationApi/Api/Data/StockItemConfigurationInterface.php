@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**
  * Interface StockItemConfiguration
@@ -21,7 +22,6 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
 
     const SKU = 'sku';
     const STOCK_ID = 'stock_id';
-    const QTY = 'qty';
     const IS_QTY_DECIMAL = 'is_qty_decimal';
     const SHOW_DEFAULT_NOTIFICATION_MESSAGE = 'show_default_notification_message';
 
@@ -60,37 +60,11 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getSku(): string;
 
     /**
-     * @param string $sku
-     * @return void
-     */
-    public function setSku(string $sku): void;
-
-    /**
      * Retrieve stock identifier
      *
      * @return int
      */
     public function getStockId(): int;
-
-    /**
-     * Set stock identifier
-     *
-     * @param int $stockId
-     * @return void
-     */
-    public function setStockId(int $stockId): void;
-
-    /**
-     * @return float
-     */
-    public function getQty(): float;
-
-    /**
-     * @param float $qty
-     * @return void
-     */
-    public function setQty(float $qty): void;
-
 
     /**
      * @return bool
@@ -291,21 +265,6 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setManageStock(bool $manageStock): void;
-
-    /**
-     * Retrieve Stock Availability
-     *
-     * @return bool
-     */
-    public function getIsInStock(): bool;
-
-    /**
-     * Set Stock Availability
-     *
-     * @param bool $isInStock
-     * @return void
-     */
-    public function setIsInStock(bool $isInStock): void;
 
     /**
      * @return string

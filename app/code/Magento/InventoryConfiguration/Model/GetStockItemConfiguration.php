@@ -11,7 +11,7 @@ use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
- * Service to return  stock item configuration interface object
+ * Service to return  stock item configuration entity
  */
 class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 {
@@ -36,6 +36,11 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId): StockItemConfigurationInterface
     {
-        return $this->stockItemConfigurationFactory->create($sku, $stockId);
+        return $this->stockItemConfigurationFactory->create(
+            [
+                'sku' => $sku,
+                'stockId' => $stockId
+            ]
+        );
     }
 }

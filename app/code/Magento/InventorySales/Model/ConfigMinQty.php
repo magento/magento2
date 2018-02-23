@@ -72,8 +72,13 @@ class ConfigMinQty implements IsProductSalableInterface
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
 
-        if (($stockItemConfiguration->getUseConfigMinQty() == 1 && $qtyWithReservation <= $globalMinQty)
-            || ($stockItemConfiguration->getUseConfigMinQty() == 0 && $qtyWithReservation <= $stockItemConfiguration->getMinQty())
+        if ((
+            $stockItemConfiguration->getUseConfigMinQty() == 1 &&
+            $qtyWithReservation <= $globalMinQty
+            ) || (
+                $stockItemConfiguration->getUseConfigMinQty() == 0 &&
+                $qtyWithReservation <= $stockItemConfiguration->getMinQty()
+            )
         ) {
             return false;
         }
