@@ -63,16 +63,16 @@ class AdvancedInventory extends AbstractModifier
                     'imports' => ''
                 ]
             );
+
+            $isInStockContainerPath = $advancedInventoryPath .
+                '/children/stock_data/children/container_is_in_stock/children/is_in_stock/arguments/data/config';
+
+            $meta = $this->arrayManager->set(
+                $isInStockContainerPath,
+                $meta,
+                ['visible' => false]
+            );
         }
-
-        $isInStockContainerPath = $advancedInventoryPath .
-            '/children/stock_data/children/container_is_in_stock/children/is_in_stock/arguments/data/config';
-
-        $meta = $this->arrayManager->set(
-            $isInStockContainerPath,
-            $meta,
-            ['visible' => false]
-        );
 
         return $meta;
     }
