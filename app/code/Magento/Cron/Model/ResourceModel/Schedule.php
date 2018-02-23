@@ -61,7 +61,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return bool
      * @since 100.2.0
      */
-     public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
+    public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
         $connection = $this->getConnection();
 
@@ -78,7 +78,8 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->from(['schedule' => $this->getTable('cron_schedule')])
             ->where('schedule.job_code = ?', $jobcode)
             ->where('schedule.scheduled_at > UTC_TIMESTAMP() - INTERVAL 1 DAY')
-            ->where('schedule.status = ? ', $newStatus);
+            ->where('schedule.status = ? ', $newStatus)
+            ->where('schedule.status != ? ', $currentStatus);
 
         $result = count($connection->fetchAll($selectIfUnlocked));
 
@@ -86,7 +87,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $where = $connection->quoteInto('schedule_id =?', $scheduleId);
             $result = $connection->update(
                 $this->getTable('cron_schedule'),
-                ['status'=>$newStatus,'executed_at'=>date("Y-m-d H:i:s", time())],
+                ['status'=>$newStatus],
                 $where);
 
             if ($result == 1) {
@@ -96,5 +97,3 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return false;
     }
 }
-
-
