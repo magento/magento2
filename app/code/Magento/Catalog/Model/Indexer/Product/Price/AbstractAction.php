@@ -139,10 +139,23 @@ abstract class AbstractAction
         $sql = $select->deleteFromSelect('index_price');
         $this->_connection->query($sql);
 
+        $updateData = [
+            'final_price' => $this->_connection->getCheckSql('tier_price < final_price', 'tier_price', 'final_price'),
+            'min_price' => $this->_connection->getCheckSql('tier_price < min_price', 'tier_price', 'min_price'),
+        ];
+
+        $where = '';
+        if (!empty($processIds)) {
+            $where = ['entity_id IN (?)' => $processIds];
+        }
+
+        $this->_connection->update($this->_defaultIndexerResource->getIdxTable(), $updateData, $where);
+
         $this->_insertFromTable(
             $this->_defaultIndexerResource->getIdxTable(),
             $this->getIndexTargetTable()
         );
+
         return $this;
     }
 
@@ -299,8 +312,89 @@ abstract class AbstractAction
             ->group(['b.entity_id', 'b.customer_group_id', 'b.website_id']);
 
         $query = $select->insertFromSelect($table, [], false);
-
         $this->_connection->query($query);
+
+        $this->populateTierPriceIndexTable($table, $linkField);
+
+        return $this;
+    }
+
+    /**
+     * Populate product tier price index table with minimal tier price for one product unit if it's set.
+     *
+     * Data from index table will be processed further to calculate minimal price for product taking into account
+     * tier and special prices.
+     *
+     * @param string $table
+     * @param string $linkField
+     * @return $this
+     */
+    protected function populateTierPriceIndexTable($table, $linkField)
+    {
+        $priceAttribute = $this->getProductResource()->getAttribute('price');
+
+        $subSelect = $this->_connection->select()
+            ->from(
+                ['t' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+                [$linkField]
+            )->where(
+                't.qty = 1'
+            );
+
+        $percentageValueIfNullSql = $this->_connection->getIfNullSql('tw.percentage_value', 't0.percentage_value');
+        $valueIfNullSql = $this->_connection->getIfNullSql('tw.value', 't0.value');
+        $tierPriceValueExpr = $this->_connection->getCheckSql(
+            $this->_connection->prepareSqlCondition($percentageValueIfNullSql, ['null' => 'null']),
+            $this->_connection->getIfNullSql('tw.value', 't0.value'),
+            sprintf('(1 - (%s/100)) * %s', $percentageValueIfNullSql, $valueIfNullSql)
+        );
+
+        $select = $this->_connection->select();
+        $select->from(
+            ['sw' => $this->_defaultIndexerResource->getTable('store_website')],
+            []
+        )->columns(
+            [
+                'cpe.entity_id',
+                'cg.customer_group_id',
+                'sw.website_id',
+                'tier_price_value' => $tierPriceValueExpr
+            ]
+        )->joinCross(
+            ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
+            []
+        )->joinCross(
+            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            []
+        )->joinLeft(
+            ['sg' => $this->_defaultIndexerResource->getTable('store_group')],
+            'sg.group_id = sw.default_group_id',
+            []
+        )->joinLeft(
+            ['t0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            '(t0.customer_group_id = cg.customer_group_id OR t0.all_groups = 1) 
+                AND t0.website_id = 0 AND t0.qty = 1 AND cpe.' . $linkField . ' = t0.' . $linkField,
+            []
+        )->joinLeft(
+            ['tw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            '(tw.customer_group_id = cg.customer_group_id OR tw.all_groups = 1) 
+                AND tw.website_id = sw.website_id AND tw.qty = 1 AND cpe.' . $linkField . ' = tw.' . $linkField,
+            []
+        )->joinLeft(
+            ['cped' => $this->_defaultIndexerResource->getTable('catalog_product_entity_decimal')],
+            '(cped.' . $linkField . ' = cpe.' . $linkField .') AND cped.store_id = sg.default_store_id 
+                AND cped.attribute_id = '.$priceAttribute->getId(),
+            []
+        )->joinLeft(
+            ['cped0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_decimal')],
+            '(cped0.' . $linkField . ' = cpe.' . $linkField . ') 
+                AND cped0.attribute_id = '.$priceAttribute->getId().' AND cped0.store_id = 0',
+            []
+        )->where('sw.website_id != 0 AND cpe.' . $linkField . ' IN(?)', $subSelect);
+
+        $query = $select->insertFromSelect($table, []);
+        $this->_connection->query($query);
+
         return $this;
     }
 
@@ -391,30 +485,17 @@ abstract class AbstractAction
      *
      * @param array $changedIds
      * @return array Affected ids
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _reindexRows($changedIds = [])
     {
         $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
         $this->_prepareWebsiteDateTable();
 
-        $select = $this->_connection->select()->from(
-            $this->_defaultIndexerResource->getTable('catalog_product_entity'),
-            ['entity_id', 'type_id']
-        )->where(
-            'entity_id IN(?)',
-            $changedIds
-        );
-        $pairs = $this->_connection->fetchPairs($select);
-        $byType = [];
-        foreach ($pairs as $productId => $productType) {
-            $byType[$productType][$productId] = $productId;
-        }
-
+        $productsTypes = $this->getProductsTypes($changedIds);
         $compositeIds = [];
         $notCompositeIds = [];
 
-        foreach ($byType as $productType => $entityIds) {
+        foreach ($productsTypes as $productType => $entityIds) {
             $indexer = $this->_getIndexer($productType);
             if ($indexer->getIsComposite()) {
                 $compositeIds += $entityIds;
@@ -424,25 +505,11 @@ abstract class AbstractAction
         }
 
         if (!empty($notCompositeIds)) {
-            $select = $this->_connection->select()->from(
-                ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
-                ''
-            )->join(
-                ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-                'e.' . $this->getProductIdFieldName() . ' = l.parent_id',
-                ['e.entity_id as parent_id', 'type_id']
-            )->where(
-                'l.child_id IN(?)',
-                $notCompositeIds
-            );
-            $pairs = $this->_connection->fetchPairs($select);
-            foreach ($pairs as $productId => $productType) {
-                if (!in_array($productId, $changedIds)) {
-                    $changedIds[] = (string) $productId;
-                    $byType[$productType][$productId] = $productId;
-                    $compositeIds[$productId] = $productId;
-                }
-            }
+            $parentProductsTypes = $this->getParentProductsTypes($notCompositeIds);
+            $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
+            $parentProductsIds = array_keys($parentProductsTypes);
+            $compositeIds = $compositeIds + array_combine($parentProductsIds, $parentProductsIds);
+            $changedIds = array_merge($changedIds, $parentProductsIds);
         }
 
         if (!empty($compositeIds)) {
@@ -450,11 +517,9 @@ abstract class AbstractAction
         }
         $this->_prepareTierPriceIndex($compositeIds + $notCompositeIds);
 
-        $indexers = $this->getTypeIndexers();
-        foreach ($indexers as $indexer) {
-            if (!empty($byType[$indexer->getTypeId()])) {
-                $indexer->reindexEntity($byType[$indexer->getTypeId()]);
-            }
+        foreach ($productsTypes as $productType => $entityIds) {
+            $indexer = $this->_getIndexer($productType);
+            $indexer->reindexEntity($entityIds);
         }
         $this->_syncData($changedIds);
 
@@ -521,6 +586,60 @@ abstract class AbstractAction
         $table = $this->_defaultIndexerResource->getTable('catalog_product_entity');
         $indexList = $this->_connection->getIndexList($table);
         return $indexList[$this->_connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
+    }
+
+    /**
+     * Get products types.
+     *
+     * @param array $changedIds
+     * @return array
+     */
+    private function getProductsTypes(array $changedIds = [])
+    {
+        $select = $this->_connection->select()->from(
+            $this->_defaultIndexerResource->getTable('catalog_product_entity'),
+            ['entity_id', 'type_id']
+        );
+        if ($changedIds) {
+            $select->where('entity_id IN (?)', $changedIds);
+        }
+        $pairs = $this->_connection->fetchPairs($select);
+
+        $byType = [];
+        foreach ($pairs as $productId => $productType) {
+            $byType[$productType][$productId] = $productId;
+        }
+
+        return $byType;
+    }
+
+    /**
+     * Get parent products types.
+     *
+     * @param array $productsIds
+     * @return array
+     */
+    private function getParentProductsTypes(array $productsIds)
+    {
+        $select = $this->_connection->select()->from(
+            ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
+            ''
+        )->join(
+            ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            'e.' . $this->getProductIdFieldName() . ' = l.parent_id',
+            ['e.entity_id as parent_id', 'type_id']
+        )->where(
+            'l.child_id IN(?)',
+            $productsIds
+        );
+        $pairs = $this->_connection->fetchPairs($select);
+
+        $byType = [];
+        foreach ($pairs as $productId => $productType) {
+            $byType[$productType][$productId] = $productId;
+        }
+
+        return $byType;
     }
 
     /**

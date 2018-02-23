@@ -23,12 +23,20 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $productCollectionFactory;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     */
+    private $priceResource;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productCollectionFactory = $this->objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+        );
+        $this->priceResource = $this->objectManager->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice::class
         );
     }
 
@@ -38,7 +46,7 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testTierPrice()
     {
-        $tierPriceValue = 20.00;
+        $tierPriceValue = 9.00;
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get('simple');
@@ -69,5 +77,16 @@ class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
             ->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE);
 
         $this->assertEquals($tierPriceValue, $tierPriceModel->getValue());
+
+        $connection = $this->priceResource->getConnection();
+        $select = $connection
+            ->select()
+            ->from($this->priceResource->getTable('catalog_product_index_tier_price'), 'min_price')
+            ->where('entity_id = ?', $product->getId())
+            ->where('customer_group_id = ?', 0)
+            ->where('website_id IN (?)', $product->getWebsiteIds());
+        $result = $connection->fetchRow($select);
+
+        $this->assertEquals($tierPriceValue, $result['min_price']);
     }
 }
