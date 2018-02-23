@@ -588,7 +588,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
         array $senderValues,
         $customerEmail,
         $customerName,
-        array $templateVars = array()
+        array $templateVars = []
     ) {
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
