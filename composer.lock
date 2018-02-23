@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0833d148c2fda476d8479b847be6ec2",
+    "content-hash": "480312eff404403568500ac30e7d4ee2",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3480,16 +3480,16 @@
         },
         {
             "name": "zendframework/zend-session",
-            "version": "2.8.4",
+            "version": "2.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-session.git",
-                "reference": "9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a"
+                "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a",
-                "reference": "9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a",
+                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/2cfd90e1a2f6b066b9f908599251d8f64f07021b",
+                "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b",
                 "shasum": ""
             },
             "require": {
@@ -3497,14 +3497,11 @@
                 "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
                 "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
-            "conflict": {
-                "phpunit/phpunit": ">=6.5.0"
-            },
             "require-dev": {
                 "container-interop/container-interop": "^1.1",
                 "mongodb/mongodb": "^1.0.1",
                 "php-mock/php-mock-phpunit": "^1.1.2 || ^2.0",
-                "phpunit/phpunit": "^5.7.5 || ^6.0.13",
+                "phpunit/phpunit": "^5.7.5 || >=6.0.13 <6.5.0",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-db": "^2.7",
@@ -3546,7 +3543,7 @@
                 "session",
                 "zf"
             ],
-            "time": "2018-01-31T17:38:47+00:00"
+            "time": "2018-02-22T16:33:54+00:00"
         },
         {
             "name": "zendframework/zend-soap",
