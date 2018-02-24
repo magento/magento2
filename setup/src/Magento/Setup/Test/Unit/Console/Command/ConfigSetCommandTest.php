@@ -113,7 +113,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db-host' => 'host']);
-        if ($interactionType) {
+        if (strtolower($interactionType) === 'y') {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
             $message = 'You made no changes to the configuration.'.PHP_EOL;
