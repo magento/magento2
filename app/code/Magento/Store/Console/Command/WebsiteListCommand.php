@@ -6,6 +6,7 @@
  */
 namespace Magento\Store\Console\Command;
 
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
@@ -48,7 +49,7 @@ class WebsiteListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $table = $this->getHelperSet()->get('table');
+            $table = new Table($output);
             $table->setHeaders(['ID', 'Default Group Id', 'Name', 'Code', 'Sort Order', 'Is Default']);
 
             foreach ($this->manager->getList() as $website) {
@@ -62,7 +63,7 @@ class WebsiteListCommand extends Command
                 ]);
             }
 
-            $table->render($output);
+            $table->render();
 
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
