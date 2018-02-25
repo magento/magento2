@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\OptionSource;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
@@ -15,7 +17,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
  *
  * @api
  */
-class SourceCode implements OptionSourceInterface
+class EnabledSourceCode implements OptionSourceInterface
 {
     /**
      * @var SourceRepositoryInterface
@@ -23,12 +25,20 @@ class SourceCode implements OptionSourceInterface
     private $sourceRepository;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    
+    /**
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        SourceRepositoryInterface $sourceRepository
+        SourceRepositoryInterface $sourceRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->sourceRepository = $sourceRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -36,14 +46,16 @@ class SourceCode implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $optionArray = [];
-        $sourcesSearchResult = $this->sourceRepository->getList();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceInterface::ENABLED, true)
+            ->create();
+        $sourcesSearchResult = $this->sourceRepository->getList($searchCriteria);
         $sourcesList = $sourcesSearchResult->getItems();
 
+        $optionArray = [];
         foreach ($sourcesList as $source) {
             $optionArray[] = ['value' => $source->getSourceCode(), 'label' => $source->getSourceCode()];
         }
-
         return $optionArray;
     }
 }
