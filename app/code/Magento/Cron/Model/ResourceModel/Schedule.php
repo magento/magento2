@@ -86,7 +86,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($result == 0) {
             $where = $connection->quoteInto('schedule_id =?', $scheduleId);
-            $result = $connection->update($this->getTable('cron_schedule'),['status'=>$newStatus],$where);
+            $result = $connection->update($this->getTable('cron_schedule'), ['status'=>$newStatus], $where);
 
             if ($result == 1) {
                 return true;
