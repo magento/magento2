@@ -12,9 +12,9 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
- * Get assigned stocks data by sku
+ * Get salable auantity data by sku
  */
-class GetAssignedStocksDataBySku
+class GetSalableQuantityDataBySku
 {
     /**
      * @var GetProductSalableQtyInterface

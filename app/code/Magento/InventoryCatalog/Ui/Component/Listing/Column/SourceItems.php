@@ -10,6 +10,7 @@ namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
 use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -25,6 +26,11 @@ class SourceItems extends Column
     private $isSourceItemsManagementAllowedForProductType;
 
     /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
+
+    /**
      * @var SourceRepositoryInterface
      */
     private $sourceRepository;
@@ -38,6 +44,7 @@ class SourceItems extends Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param array $components
@@ -47,6 +54,7 @@ class SourceItems extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSingleSourceModeInterface $isSingleSourceMode,
         SourceRepositoryInterface $sourceRepository,
         GetSourceItemsBySkuInterface $getSourceItemsBySku,
         array $components = [],
@@ -55,6 +63,7 @@ class SourceItems extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->sourceRepository = $sourceRepository;
+        $this->isSingleSourceMode = $isSingleSourceMode;
         $this->getSourceItemsBySku = $getSourceItemsBySku;
     }
 
@@ -63,7 +72,7 @@ class SourceItems extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if ($dataSource['data']['totalRecords'] > 0) {
+        if ($dataSource['data']['totalRecords'] > 0 && $this->isSingleSourceMode->execute() === false) {
             foreach ($dataSource['data']['items'] as &$row) {
                 $row['qty'] = $this->isSourceItemsManagementAllowedForProductType->execute($row['type_id']) === true
                     ? $this->getSourceItemsData($row['sku'])

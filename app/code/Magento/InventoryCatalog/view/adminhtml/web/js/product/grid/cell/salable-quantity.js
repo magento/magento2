@@ -9,16 +9,16 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_InventoryCatalog/product/grid/cell/stocks-cell.html'
+            bodyTmpl: 'Magento_InventoryCatalog/product/grid/cell/salable-quantity.html'
         },
 
         /**
-         * Get source items data (source name and qty)
+         * Get salable quantity data (stock name and salable qty)
          *
          * @param {Object} record - Record object
          * @returns {Array} Result array
          */
-        getStockData: function (record) {
+        getSalableQuantityData: function (record) {
             var result = record[this.index] ? record[this.index] : [];
 
             return result;
