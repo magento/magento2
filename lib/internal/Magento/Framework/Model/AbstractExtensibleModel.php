@@ -165,13 +165,16 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
         $customAttributesCodes = $this->getCustomAttributesCodes();
+
         /* If key corresponds to custom attribute code, populate custom attributes */
         if (in_array($attributeCode, $customAttributesCodes)) {
             $attribute = $this->customAttributeFactory->create();
             $attribute->setAttributeCode($attributeCode)
                 ->setValue($attributeValue);
             $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
+            $this->customAttributesChanged = true;
         }
+
         return $this;
     }
 
@@ -184,12 +187,24 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
-            $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
-            $value = $filteredData[self::CUSTOM_ATTRIBUTES];
+            parent::setData($key, $value);
+            $this->customAttributesChanged = true;
         }
-        $this->customAttributesChanged = true;
-        parent::setData($key, $value);
+
+        if (!is_array($key)) {
+            if ($key == self::CUSTOM_ATTRIBUTES) {
+                $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
+                $value = $filteredData[self::CUSTOM_ATTRIBUTES];
+            }
+
+            $customAttributesCodes = $this->getCustomAttributesCodes();
+
+            /* If key corresponds to custom attribute code, set custom attribute properly */
+            in_array($key, $customAttributesCodes)
+                ? $this->setCustomAttribute($key, $value)
+                : parent::setData($key, $value);
+        }
+
         return $this;
     }
 
