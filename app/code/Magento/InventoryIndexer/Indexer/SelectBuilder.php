@@ -18,7 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 /**
- * Select builder data provider
+ * Select builder
  */
 class SelectBuilder
 {
