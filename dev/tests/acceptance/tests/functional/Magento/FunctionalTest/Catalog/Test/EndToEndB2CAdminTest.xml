@@ -10,7 +10,7 @@
     <test name="EndToEndB2CAdminTest">
         <annotations>
             <features value="End to End scenarios"/>
-            <stories value="B2C - Admin"/>
+            <stories value="B2C admin - MAGETWO-75412"/>
             <group value="e2e"/>
             <title value="Pass End to End B2C Admin scenario"/>
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
@@ -18,26 +18,16 @@
             <testCaseId value="MAGETWO-87014"/>
         </annotations>
         <after>
-            <!--Clean up categories-->
-            <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
-                <argument name="categoryEntity" value="SimpleSubCategory"/>
-            </actionGroup>
-
-            <!--Clean up products-->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
-                <argument name="product" value="SimpleProduct"/>
-            </actionGroup>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
-                <argument name="product" value="VirtualProduct"/>
-            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
+
         <!--Login to Admin Area-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageSimple"/>
-        <waitForPageLoad stepKey="waitForProductPageLoadSimple"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
@@ -62,7 +52,7 @@
 
         <!--Create Virtual Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageVirtual"/>
-        <waitForPageLoad stepKey="waitForProductPageLoadVirtual"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
@@ -186,7 +176,7 @@
         <!--Admin creates category-->
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
         <amOnPage url="{{AdminCategoryPage}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
         <!--Create category under Default Category-->
         <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
         <actionGroup ref="CheckCategoryNameIsRequiredField" stepKey="checkCategoryNameIsRequired"/>
@@ -202,24 +192,41 @@
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
         <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToMoveCategory"/>
-        <waitForPageLoad stepKey="waitForPageLoadMoveCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadMoveCategory"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
                      selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
                      stepKey="dragAndDropCategory"/>
-        <waitForPageLoad stepKey="waitForMoveConfirmation"/>
+        <waitForPageLoad time="30" stepKey="waitForMoveConfirmation"/>
         <see selector="{{AdminCategoryModalSection.title}}" userInput="Warning Message" stepKey="seeMoveConfirmationModal"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkConfirmMove"/>
-        <waitForPageLoad stepKey="waitForMove"/>
+        <waitForPageLoad time="30" stepKey="waitForMove"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeCategoryMoveSuccessMessage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTreeUnderRoot(SimpleSubCategory.name)}}" stepKey="seeSubcategoryIsUnderDefault"/>
 
         <!--Admin deletes category-->
         <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
         <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToDeleteCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryPageDelete"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageDelete"/>
         <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
+
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <!--Clean up categories-->
+        <comment userInput="Clean up categories" stepKey="cleanupCategoriesComment"/>
+        <actionGroup ref="DeleteCategory" stepKey="cleanSimpleSubCategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <!--Clean up products-->
+        <comment userInput="Clean up simple product" stepKey="cleanUpSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <comment userInput="Clean up virtual product" stepKey="cleanUpVirtualProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+            <argument name="product" value="VirtualProduct"/>
         </actionGroup>
     </test>
 </tests>

@@ -109,7 +109,8 @@
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess"/>
 
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="seePageNameMatchesOrderIdAfterInvoice"/>
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid" after="clickOrderInvoicesTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" after="clickOrderInvoicesTab"/>
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid" after="waitForInvoiceGridLoadingMask"/>
         <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="seeOrderInvoiceInTabGrid"/>
         <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnInvoice" after="clickToViewInvoiceRow"/>
         <actionGroup ref="verifyBasicInvoiceInformation" stepKey="verifyBasicInvoiceInformation" after="seeOrderIdOnInvoice">
@@ -140,9 +141,11 @@
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline" after="verifyOrderCreditMemoInformation"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess" after="clickRefundOffline"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickOrderCreditMemosTab" after="seeCreditMemoSuccess"/>
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderCreditMemoInTabGrid" after="clickOrderCreditMemosTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoTabLoadingMask" after="clickOrderCreditMemosTab"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderCreditMemoInTabGrid" after="waitForCreditMemoTabLoadingMask"/>
         <click selector="{{AdminOrderCreditMemosTabSection.viewGridRow('1')}}" stepKey="clickToViewCreditMemoRow" after="seeOrderCreditMemoInTabGrid"/>
-        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnCreditMemo" after="clickToViewCreditMemoRow"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoad" after="clickToViewCreditMemoRow"/>
+        <see selector="{{AdminCreditMemoOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnCreditMemo" after="waitForCreditMemoPageLoad"/>
         <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyBasicCreditMemoInformation" after="seeOrderIdOnCreditMemo">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
@@ -158,7 +161,8 @@
 
         <!--Admin uses order grid-->
         <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
-        <waitForPageLoad stepKey="waitForOrderGridPageLoad" after="navigateToOrderGridPage"/>
+        <waitForPageLoad time="30" stepKey="waitForLoadUseOrderGrid" after="navigateToOrderGridPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderGridPageLoad" after="waitForLoadUseOrderGrid"/>
 
         <!--Search order grid by name-->
         <comment userInput="Admin searches order grid by name" stepKey="searchOrderGridComment" after="waitForOrderGridPageLoad"/>

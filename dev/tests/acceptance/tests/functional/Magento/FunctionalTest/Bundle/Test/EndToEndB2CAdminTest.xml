@@ -8,12 +8,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
         <test name="EndToEndB2CAdminTest">
-            <after>
-                <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProduct">
-                    <argument name="product" value="BundleProduct"/>
-                </actionGroup>
-            </after>
-
             <!--Create Bundle Product-->
             <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageBundle" after="seeSimpleProductInGrid"/>
             <waitForPageLoad stepKey="waitForProductPageLoadBundle" after="visitAdminProductPageBundle"/>
@@ -38,6 +32,12 @@
             <fillField selector="{{AdminProductFormBundleSection.firstProductQuantity}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty" after="clickAddSelectedBundleProducts"/>
             <actionGroup ref="saveProductForm" stepKey="saveBundleProduct" after="fillProductDefaultQty"/>
             <actionGroup ref="viewBundleProductInAdminGrid" stepKey="viewBundleProductInGrid" after="saveBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+
+            <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+            <comment userInput="Clean up bundle product" stepKey="cleanUpBundleProduct" after="deleteSimpleProduct"/>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProduct" after="cleanUpBundleProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
         </test>

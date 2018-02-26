@@ -30,8 +30,8 @@
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 1" stepKey="seeShippedQuantity" after="seeOrderComplete"/>
 
         <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab" after="seeShippedQuantity"/>
-        <waitForElementNotVisible selector="{{AdminOrderShipmentsTabSection.spinner}}" stepKey="waitForShipmentTabLoader" after="clickOrderShipmentsTab"/>
-        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderShipmentInTabGrid" after="waitForShipmentTabLoader"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipmentTabLoad" after="clickOrderShipmentsTab"/>
+        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderShipmentInTabGrid" after="waitForShipmentTabLoad"/>
         <click selector="{{AdminOrderShipmentsTabSection.viewGridRow('1')}}" stepKey="clickRowToViewShipment" after="seeOrderShipmentInTabGrid"/>
         <see selector="{{AdminShipmentOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnShipment" after="clickRowToViewShipment"/>
         <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkShipmentOrderInformation" after="seeOrderIdOnShipment">

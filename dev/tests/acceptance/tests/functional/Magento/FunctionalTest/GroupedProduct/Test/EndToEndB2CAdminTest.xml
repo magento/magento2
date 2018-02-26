@@ -8,12 +8,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
-        <after>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct">
-                <argument name="product" value="GroupedProduct"/>
-            </actionGroup>
-        </after>
-
         <!--Create Grouped Product-->
         <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrouped" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadGrouped" after="visitAdminProductPageGrouped"/>
@@ -36,6 +30,12 @@
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts" after="checkFilterResult"/>
         <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct" after="clickAddSelectedGroupProducts"/>
         <actionGroup ref="viewGroupedProductInAdminGrid" stepKey="viewGroupedProductInGrid" after="saveGroupedProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up grouped product" stepKey="cleanUpGroupedProduct" after="deleteSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct" after="cleanUpGroupedProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>

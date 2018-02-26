@@ -63,9 +63,9 @@
     <!--Add configurable product to order -->
     <actionGroup name="addConfigurableProductToOrder">
         <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
-            <argument name="attribute" defaultValue=""/>
-            <argument name="option" defaultValue=""/>
+            <argument name="product"/>
+            <argument name="attribute"/>
+            <argument name="option"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterConfigurable"/>
@@ -73,17 +73,19 @@
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectConfigurableProduct"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}" stepKey="waitForConfigurablePopover"/>
+        <wait time="2" stepKey="waitForOptionsToLoad"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_label)}}"
                       userInput="{{option.name}}" stepKey="selectionConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
     <!--Fill customer billing address-->
     <actionGroup name="fillOrderCustomerInformation">
         <arguments>
-            <argument name="customer" defaultValue=""/>
-            <argument name="address" defaultValue=""/>
+            <argument name="customer"/>
+            <argument name="address"/>
         </arguments>
         <fillField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
         <fillField selector="{{AdminOrderFormBillingAddressSection.LastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
@@ -107,9 +109,9 @@
     <!--Check that customer information is correct in order-->
     <actionGroup name="verifyBasicOrderInformation">
         <arguments>
-            <argument name="customer" defaultValue=""/>
-            <argument name="shippingAddress" defaultValue=""/>
-            <argument name="billingAddress" defaultValue=""/>
+            <argument name="customer"/>
+            <argument name="shippingAddress"/>
+            <argument name="billingAddress"/>
             <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
         </arguments>
         <see selector="{{AdminOrderDetailsInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>

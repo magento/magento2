@@ -74,6 +74,7 @@
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
         <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderInformationTabLoadingMask"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
         <amOnPage url="{{AdminInvoicesPage.url}}" stepKey="goToInvoices"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
