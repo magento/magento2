@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**

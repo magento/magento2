@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 
 /**
  * @inheritdoc
@@ -35,20 +35,20 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $getProductIdsBySkus;
 
     /**
-     * @var StockItemRepository
+     * @var StockItemRepositoryInterface
      */
     private $stockItemRepository;
 
     /**
      * @param StockItemConfigurationFactory $stockItemConfigurationFactory
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
-     * @param StockItemRepository $stockItemRepository
+     * @param StockItemRepositoryInterface $stockItemRepository
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         StockItemConfigurationFactory $stockItemConfigurationFactory,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        StockItemRepository $stockItemRepository,
+        StockItemRepositoryInterface $stockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
@@ -80,7 +80,14 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         $searchCriteria = $this->stockItemCriteriaFactory->create();
         $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
         $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $stockId);
-        $legacyStockItem = $this->stockItemRepository->getList($searchCriteria)->getItems()[0];
-        return $legacyStockItem;
+        $stockItemCollection = $this->stockItemRepository->getList($searchCriteria);
+
+        if ($stockItemCollection->getTotalCount() > 0) {
+            $stockItem = $stockItemCollection->getItems()[0];
+        } else {
+            // TODO:
+            $stockItem = \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+        }
+        return $stockItem;
     }
 }
