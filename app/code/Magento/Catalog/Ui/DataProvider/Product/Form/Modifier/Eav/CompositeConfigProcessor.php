@@ -32,7 +32,6 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
         $this->eavWysiwygDataProcessors = $eavWysiwygDataProcessors;
     }
 
-
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return array
@@ -44,8 +43,10 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
         foreach ($this->eavWysiwygDataProcessors as $processor) {
             if (!$processor instanceof WysiwygConfigDataProcessorInterface) {
                 $this->logger->critical(
-                    __('Processor %1 doesn\'t implement BaseSelectProcessorInterface. It will be skipped',
-                        get_class($processor))
+                    __(
+                        'Processor %1 doesn\'t implement BaseSelectProcessorInterface. It will be skipped',
+                        get_class($processor)
+                    )
                 );
                 continue;
             }
