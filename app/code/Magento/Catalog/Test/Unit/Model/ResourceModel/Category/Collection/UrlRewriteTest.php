@@ -17,7 +17,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethodsExcept(['joinUrlRewrite', 'setStoreId', 'getStoreId'])
+            ->setMethods(['joinTable'])
             ->getMock();
     }
 
