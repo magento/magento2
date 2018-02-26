@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Indexer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Action;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
@@ -49,17 +50,22 @@ class FulltextTest extends TestCase
     private $queryFactory;
 
     /**
-     * @var Product
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var ProductInterface
      */
     private $productSku1;
 
     /**
-     * @var Product
+     * @var ProductInterface
      */
     private $productSku2;
 
     /**
-     * @var Product
+     * @var ProductInterface
      */
     private $productSku3;
 
@@ -105,10 +111,10 @@ class FulltextTest extends TestCase
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->storeCodeBefore = $this->storeManager->getStore()->getCode();
 
-        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->productSku1 = $productRepository->get('SKU-1');
-        $this->productSku2 = $productRepository->get('SKU-2');
-        $this->productSku3 = $productRepository->get('SKU-3');
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->productSku1 = $this->productRepository->get('SKU-1');
+        $this->productSku2 = $this->productRepository->get('SKU-2');
+        $this->productSku3 = $this->productRepository->get('SKU-3');
         $this->productAction = Bootstrap::getObjectManager()->get(Action::class);
     }
 
@@ -159,8 +165,8 @@ class FulltextTest extends TestCase
 
         $this->indexer->reindexAll();
 
-        $this->productSku1->setData('name', 'Simple Product Red');
-        $this->productSku1->save();
+        $this->productSku1->setName('Simple Product Red');
+        $this->productRepository->save($this->productSku1);
 
         $products = $this->search('Orange');
         $this->assertCount(0, $products);
