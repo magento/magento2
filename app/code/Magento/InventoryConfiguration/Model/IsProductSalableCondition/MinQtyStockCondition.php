@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
+namespace Magento\InventoryConfiguration\Model\IsProductSalableCondition;
 
 use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
@@ -15,9 +15,9 @@ use Magento\CatalogInventory\Model\Configuration;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
- * Class ConfigMinQty
+ * @inheritdoc
  */
-class ConfigMinQty implements IsProductSalableInterface
+class MinQtyStockCondition implements IsProductSalableInterface
 {
     /**
      * @var GetStockItemConfigurationInterface
@@ -59,10 +59,7 @@ class ConfigMinQty implements IsProductSalableInterface
     }
 
     /**
-     * @param string $sku
-     * @param int $stockId
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function execute(string $sku, int $stockId): bool
     {

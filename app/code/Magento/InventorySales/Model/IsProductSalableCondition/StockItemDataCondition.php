@@ -5,17 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model\IsProductSalable;
+namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
 use Magento\Inventory\Model\GetStockItemDataInterface;
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 /**
- * Class IsSalable
+ * @inheritdoc
  */
-class IsSalable implements IsProductSalableInterface
+class StockItemDataCondition implements IsProductSalableInterface
 {
     /**
      * @var GetStockItemDataInterface
@@ -32,9 +30,7 @@ class IsSalable implements IsProductSalableInterface
     }
 
     /**
-     * @param string $sku
-     * @param int $stockId
-     * @return bool
+     * @inheritdoc
      */
     public function execute(string $sku, int $stockId): bool
     {

@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- IsSalableCondition -->
+    <!-- ResourceModel Select IsSalableCondition -->
     <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
         <arguments>
             <argument name="getIsSalableConditions" xsi:type="array">
@@ -16,28 +16,23 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\InventorySales\Model\IsProductSalable">
+    <!-- IsProductSalable -->
+    <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
-                <item name="back_order" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">20</item>
-                    <item name="condition" xsi:type="object">Magento\InventoryCatalog\Model\IsBackOrderAvailable</item>
+                <item name="manage_stock" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">10</item>
+                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\ManageStockCondition</item>
                 </item>
+                <!-- should be after stock_item condition -->
                 <item name="min_qty" xsi:type="array">
                     <item name="sort_order" xsi:type="number">40</item>
-                    <item name="condition" xsi:type="object">Magento\InventorySales\Model\ConfigMinQty</item>
-                </item>
-                <item name="is_salable" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">30</item>
-                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\IsSalable</item>
-                </item>
-                <item name="is_manage_stock" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">10</item>
-                    <item name="condition" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\IsNotManageStock</item>
+                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalableCondition\MinQtyStockCondition</item>
                 </item>
             </argument>
         </arguments>
     </type>
+    <!-- Configuration query interfaces -->
     <preference for="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\GetStockItemConfiguration"/>
     <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
 </config>
