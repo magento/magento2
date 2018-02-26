@@ -212,6 +212,7 @@ class FulltextTest extends TestCase
             'name' => 'Simple Product Common',
         ];
 
+        /** @var Action */
         $this->productAction->updateAttributes($productIds, $attrData, $this->storeManager->getStore()->getId());
 
         $products = $this->search('Orange');
@@ -250,7 +251,7 @@ class FulltextTest extends TestCase
         $this->storeManager->setCurrentStore($store);
         $this->indexer->reindexAll();
 
-        $this->productSku2->delete();
+        $this->productRepository->delete($this->productSku2);
 
         $products = $this->search('Simple Product');
 
