@@ -1533,7 +1533,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
@@ -1542,7 +1542,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
                 $responseBody = utf8_decode($responseBody);
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $this->_errors[$e->getCode()] = $e->getMessage();
@@ -1727,7 +1727,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 /** @var \Magento\Framework\HTTP\ZendClient $client */
                 $client = $this->_httpClientFactory->create();
@@ -1735,7 +1735,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setRawData($request);
                 $responseBody = $client->request(\Magento\Framework\HTTP\ZendClient::POST)->getBody();
-                $debugData['result'] = $responseBody;
+                $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
             } catch (\Exception $e) {
                 $this->_errors[$e->getCode()] = $e->getMessage();
