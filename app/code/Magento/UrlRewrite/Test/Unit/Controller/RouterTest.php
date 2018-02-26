@@ -72,24 +72,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testRewriteAfterStoreSwitcher()
     {
-<<<<<<< HEAD
-        $this->request->expects($this->any())->method('getPathInfo')->will($this->returnValue('request-path'));
-        $this->request->expects($this->any())->method('getParam')->with('___from_store')
-            ->will($this->returnValue('old-store'));
-        $oldStore = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
-        $this->storeManager->expects($this->any())->method('getStore')
-            ->will($this->returnValueMap([['old-store', $oldStore], [null, $this->store]]));
-        $oldStore->expects($this->any())->method('getId')->will($this->returnValue('old-store-id'));
-        $this->store->expects($this->any())->method('getId')->will($this->returnValue('current-store-id'));
-        $oldUrlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
-            ->disableOriginalConstructor()->getMock();
-        $oldUrlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('entity-type'));
-        $oldUrlRewrite->expects($this->any())->method('getEntityId')->will($this->returnValue('entity-id'));
-        $oldUrlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('old-request-path'));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
-            ->disableOriginalConstructor()->getMock();
-        $urlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('new-request-path'));
-=======
         $initialRequestPath = 'request-path';
         $newRequestPath = 'new-request-path';
         $oldStoreAlias = 'old-store';
@@ -98,7 +80,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $rewriteEntityType = 'entity-type';
         $rewriteEntityId = 42;
         $redirectUrl = '/' . $newRequestPath;
->>>>>>> e71416c2343... Merge branch 'MAGETWO-70726' into QwertyPR20171107
 
         $this->request
             ->expects($this->any())
@@ -165,15 +146,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                     ],
                     $urlRewrite,
                 ],
-<<<<<<< HEAD
-            ])
-        );
-        $this->response->expects($this->once())->method('setRedirect')
-            ->with('new-request-path', OptionProvider::TEMPORARY);
-        $this->request->expects($this->once())->method('setDispatched')->with(true);
-        $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect');
-=======
             ]);
 
         $this->url
@@ -193,7 +165,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->with(Redirect::class);
->>>>>>> e71416c2343... Merge branch 'MAGETWO-70726' into QwertyPR20171107
 
         $this->router->match($this->request);
     }
