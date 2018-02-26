@@ -93,7 +93,7 @@ class Match implements QueryInterface
      * @param array $queryValue
      * @return array
      */
-    protected function buildQueries($matches, $queryValue)
+    protected function buildQueries(array $matches, array $queryValue)
     {
         $conditions = [];
 
