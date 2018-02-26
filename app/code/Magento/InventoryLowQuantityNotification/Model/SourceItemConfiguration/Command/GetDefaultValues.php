@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\ConfigValueProvider;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
@@ -16,22 +16,17 @@ use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfiguration
 class GetDefaultValues
 {
     /**
-     * Default Notify Stock Qty config path
+     * @var ConfigValueProvider
      */
-    const XML_PATH_NOTIFY_STOCK_QTY = 'inventory/source_item_configuration/notify_stock_qty';
+    private $configValueProvider;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ConfigValueProvider $configValueProvider
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ConfigValueProvider $configValueProvider
     ) {
-        $this->scopeConfig = $scopeConfig;
+        $this->configValueProvider = $configValueProvider;
     }
 
     /**
@@ -39,15 +34,16 @@ class GetDefaultValues
      * @param string $sku
      * @return array
      */
-    public function execute(string $sourceCode, string $sku) : array
+    public function execute(string $sourceCode, string $sku): array
     {
-        $inventoryNotifyQty = (float)$this->scopeConfig->getValue(self::XML_PATH_NOTIFY_STOCK_QTY);
+        $inventoryNotifyQty = $this->configValueProvider->execute('notify_stock_qty');
 
         $defaultConfiguration = [
             SourceItemConfigurationInterface::SOURCE_CODE => $sourceCode,
             SourceItemConfigurationInterface::SKU => $sku,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => $inventoryNotifyQty,
         ];
+
         return $defaultConfiguration;
     }
 }
