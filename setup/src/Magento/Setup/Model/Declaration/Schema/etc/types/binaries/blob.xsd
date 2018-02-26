@@ -9,13 +9,16 @@
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/column.xsd"/>
 
     <xs:complexType name="blob">
-        <xs:annotation>
-            <xs:documentation>
-                Can be used as binary source
-            </xs:documentation>
-        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Can be used as binary source
+                    </xs:documentation>
+                </xs:annotation>
 
-        <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="nullable" type="xs:boolean" />
+                <xs:attribute name="nullable" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

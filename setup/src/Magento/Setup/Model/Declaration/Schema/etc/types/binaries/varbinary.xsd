@@ -9,21 +9,24 @@
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/column.xsd"/>
 
     <xs:complexType name="varbinary">
-        <xs:annotation>
-            <xs:documentation>
-                Can be used as binary source
-            </xs:documentation>
-        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Can be used as binary source
+                    </xs:documentation>
+                </xs:annotation>
 
-        <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="length">
-            <xs:simpleType>
-                <xs:restriction base="xs:integer">
-                    <xs:maxInclusive value="255"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-        <xs:attribute name="default" type="xs:string" />
-        <xs:attribute name="nullable" type="xs:boolean" />
+                <xs:attribute name="length">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                            <xs:maxInclusive value="255"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="default" type="xs:string" />
+                <xs:attribute name="nullable" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

@@ -25,7 +25,7 @@ class AutoIncrementColumnValidation implements ValidationInterface
     /**
      * Error message, that will be shown.
      */
-    const ERROR_MESSAGE = 'Auto Increment column do not have index. Column - "%s"';
+    const ERROR_MESSAGE = 'Auto Increment column do not have index. Column - "%s", table - "%s"';
 
     /**
      * @inheritdoc
@@ -54,7 +54,7 @@ class AutoIncrementColumnValidation implements ValidationInterface
 
                     $errors[] = [
                         'column' => $column->getName(),
-                        'message' => sprintf(self::ERROR_MESSAGE, $column->getName())
+                        'message' => sprintf(self::ERROR_MESSAGE, $column->getName(), $table->getName())
                     ];
                 }
             }

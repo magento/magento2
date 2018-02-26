@@ -34,6 +34,7 @@
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/constraints/primary.xsd" />
     <!--Indexes-->
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/index.xsd" />
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/column.xsd" />
 
     <xs:element name="schema">
         <xs:complexType>
@@ -50,7 +51,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="column" />
+            <xs:element name="column" type="abstractColumnType"/>
             <xs:element name="constraint" />
             <xs:element name="index" type="index" />
         </xs:choice>
