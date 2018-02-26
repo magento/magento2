@@ -29,7 +29,6 @@ define([
                 recordIndex;
 
             this.parsePagesData(data);
-            this.templates.record.bundleOptionsDataScope = this.dataScope;
 
             if (newData.length) {
                 if (this.insertData().length) {

@@ -58,10 +58,6 @@ define([
 
             this.prefer = typeMap[type];
             this.elementTmpl(this.templates[typeMap[type]]);
-
-            if (this.prefer === 'radio' && this.checked()) {
-                this.clearValues();
-            }
         },
 
         /**
