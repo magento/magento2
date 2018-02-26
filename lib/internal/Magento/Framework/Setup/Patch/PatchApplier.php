@@ -228,7 +228,14 @@ class PatchApplier
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
             } catch (\Exception $e) {
-                throw new Exception($e->getMessage());
+                throw new Exception(
+                    __(
+                        'Unable to apply patch %1 for module %2. Original exception message: %3',
+                        get_class($schemaPatch),
+                        $moduleName,
+                        $e->getMessage()
+                    )
+                );
             } finally {
                 unset($schemaPatch);
             }

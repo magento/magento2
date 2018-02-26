@@ -1419,14 +1419,6 @@
         <arguments>
             <argument name="triggers" xsi:type="array">
                 <item name="migrateDataFromSameTable" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFrom</item>
-                <item name="migrateDataFromAnotherTable" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFromAnotherTable</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable">
-        <arguments>
-            <argument name="triggers" xsi:type="array">
-                <item name="migrateDataFromAnotherTable" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFromAnotherTable</item>
             </argument>
         </arguments>
     </type>
@@ -1511,6 +1503,11 @@
         <arguments>
             <argument name="dataPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
             <argument name="schemaPatchReader" xsi:type="object">\Magento\Framework\Setup\Patch\SchemaPatchReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Setup\Declaration\Schema\Db\SchemaBuilder">
+        <arguments>
+            <argument name="logger" xsi:type="object">\Magento\Framework\Setup\Patch\DataPatchReader</argument>
         </arguments>
     </type>
 </config>

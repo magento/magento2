@@ -287,8 +287,9 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $references
      * @param array $constraints
      * @param array $indexes
-     * @expectedException \Magento\Framework\Setup\Exception
-     * @expectedExceptionMessage Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table
+     * @expectedException \PHPUnit\Framework\Exception
+     * @expectedExceptionMessage
+     * User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table
      */
     public function testBuildUnknownIndexColumn(array $columns, array $references, array $constraints, array $indexes)
     {

@@ -174,13 +174,14 @@ class SchemaBuilder
         foreach ($data['column'] as $columnName) {
             if (!isset($columns[$columnName])) {
                 $tableName = isset($data['table']) ? $data['table']->getName() : '';
-                throw new Exception(
+                trigger_error(
                     __(
                         'Column %1 does not exist for index/constraint %2 in table %3.',
                         $columnName,
                         $data['name'],
                         $tableName
-                    )
+                    ),
+                    E_USER_WARNING
                 );
             } else {
                 $referenceColumns[] = $columns[$columnName];
