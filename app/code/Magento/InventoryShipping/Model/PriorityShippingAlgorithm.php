@@ -17,7 +17,9 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterfaceFactory;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterfaceFactory;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
@@ -27,8 +29,10 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * {@inheritdoc}
- *
  * This shipping algorithm just iterates over all the sources one by one in priority order
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
 {
@@ -160,11 +164,11 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                     ]
                 );
 
-                if (isset($sourceItemSelections[$sourceItem->getSourceCode()])) {
-                    $sourceItemSelections[$sourceItem->getSourceCode()][] = $sourceItemSelection;
-                } else {
-                    $sourceItemSelections[$sourceItem->getSourceCode()] = [$sourceItemSelection];
-                }
+                $sourceItemSelections = $this->updateSourceItemSelections(
+                    $sourceItemSelections,
+                    $sourceItemSelection,
+                    $sourceItem
+                );
 
                 $qtyToDeliver -= $qtyToDeduct;
             }
@@ -237,8 +241,8 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     }
 
     /**
-     * @param $sourceItemSelections
-     * @return array
+     * @param SourceItemSelectionInterface[] $sourceItemSelections
+     * @return SourceSelectionInterface[]
      */
     private function createSourceSelection($sourceItemSelections): array
     {
@@ -252,5 +256,24 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             );
         }
         return $sourceSelections;
+    }
+
+    /**
+     * @param SourceItemSelectionInterface[] $sourceItemSelections
+     * @param SourceItemSelectionInterface $sourceItemSelection
+     * @param SourceItemInterface $sourceItem
+     * @return SourceItemSelectionInterface[]
+     */
+    private function updateSourceItemSelections(
+        array $sourceItemSelections,
+        SourceItemSelectionInterface $sourceItemSelection,
+        SourceItemInterface $sourceItem
+    ): array {
+        if (isset($sourceItemSelections[$sourceItem->getSourceCode()])) {
+            $sourceItemSelections[$sourceItem->getSourceCode()][] = $sourceItemSelection;
+        } else {
+            $sourceItemSelections[$sourceItem->getSourceCode()] = [$sourceItemSelection];
+        }
+        return $sourceItemSelections;
     }
 }

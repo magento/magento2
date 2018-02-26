@@ -12,9 +12,14 @@ use Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ */
 class PriorityShippingAlgorithmTest extends TestCase
 {
     /**
@@ -38,6 +43,11 @@ class PriorityShippingAlgorithmTest extends TestCase
     private $shippingAlgorithm;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -46,6 +56,7 @@ class PriorityShippingAlgorithmTest extends TestCase
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
         $this->orderFactory = Bootstrap::getObjectManager()->get(OrderInterfaceFactory::class);
         $this->orderItemFactory = Bootstrap::getObjectManager()->get(OrderItemInterfaceFactory::class);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -94,7 +105,7 @@ class PriorityShippingAlgorithmTest extends TestCase
     {
         return [
             [
-                'store_id' => 2,
+                'store_code' => 'store_for_eu_website',
                 'order_data' => [
                     'SKU-1' => 14.5,
                     'SKU-3' => 3,
@@ -122,7 +133,7 @@ class PriorityShippingAlgorithmTest extends TestCase
                 ],
             ],
             [
-                'store_id' => 4,
+                'store_code' => 'store_for_global_website',
                 'order_data' => [
                     'SKU-1' => 14.5,
                     'SKU-3' => 3,
@@ -163,15 +174,15 @@ class PriorityShippingAlgorithmTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
      * @dataProvider stockSourceCombinationDataProvider
-     * @param int $storeId
+     * @param string $storeCode
      * @param array $orderData
      * @param array $expectedResult
      */
-    public function testStockSourceCombination(int $storeId, array $orderData, array $expectedResult)
+    public function testStockSourceCombination(string $storeCode, array $orderData, array $expectedResult)
     {
         $order = $this->createOrder(
             $orderData,
-            $storeId
+            $storeCode
         );
         $algorithmResult = $this->shippingAlgorithm->execute($order);
 
@@ -216,10 +227,10 @@ class PriorityShippingAlgorithmTest extends TestCase
      * Returns order object with specified products
      *
      * @param array $productsQty
-     * @param int $storeId
+     * @param string $storeCode
      * @return OrderInterface
      */
-    private function createOrder(array $productsQty, int $storeId = 1): OrderInterface
+    private function createOrder(array $productsQty, string $storeCode = 'default'): OrderInterface
     {
         $orderItems = [];
         foreach ($productsQty as $sku => $qty) {
@@ -233,6 +244,7 @@ class PriorityShippingAlgorithmTest extends TestCase
 
         /** @var OrderInterface $order */
         $order = Bootstrap::getObjectManager()->create(OrderInterface::class);
+        $storeId = $this->storeManager->getStore($storeCode)->getId();
         $order->setStoreId($storeId);
         $order->setItems($orderItems);
         return $order;
