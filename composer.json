@@ -234,6 +234,8 @@
         "magento/language-pt_br": "100.3.0-dev",
         "magento/language-zh_hans_cn": "100.3.0-dev",
         "magento/framework": "100.3.0-dev",
+        "magento/framework-amqp": "100.1.0-dev",
+        "magento/framework-bulk": "100.3.0-dev",
         "magento/framework-message-queue": "100.3.0-dev",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "components/jquery": "1.11.0",
