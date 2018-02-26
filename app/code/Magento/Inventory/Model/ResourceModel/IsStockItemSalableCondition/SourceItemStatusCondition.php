@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
+namespace Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\DB\Select;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * Source Item status condition
  */
-class GetSourceItemStatusCondition implements GetIsSalableConditionInterface
+class SourceItemStatusCondition implements GetIsStockItemSalableConditionInterface
 {
     /**
      * @inheritdoc

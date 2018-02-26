@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition;
+namespace Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
+use Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 /**
  * Condition for manage_stock configuration.
  */
-class GetManageStockCondition implements GetIsSalableConditionInterface
+class ManageStockCondition implements GetIsStockItemSalableConditionInterface
 {
     /**
      * @var StockConfigurationInterface

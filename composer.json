@@ -151,6 +151,7 @@
         "magento/module-inventory-catalog-search": "100.3.0-dev",
         "magento/module-inventory-configurable-product": "100.0.0-dev",
         "magento/module-inventory-configuration": "100.0.0-dev",
+        "magento/module-inventory-configuration-api": "100.0.0-dev",
         "magento/module-inventory-import-export": "100.0.0-dev",
         "magento/module-inventory-indexer": "100.0.0-dev",
         "magento/module-inventory-low-quantity-notification": "100.0.0-dev",

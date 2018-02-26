@@ -87,12 +87,13 @@
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
         </arguments>
     </type>
-    <!-- ResourceModel Select IsSalableCondition -->
-    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
-    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+    <!-- IsStockItemSalableCondition -->
+    <preference for="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface"
+                type="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain"/>
+    <type name="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
         <arguments>
-            <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
+            <argument name="conditions" xsi:type="array">
+                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\SourceItemStatusCondition</item>
             </argument>
         </arguments>
     </type>

@@ -6,17 +6,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- ResourceModel Select IsSalableCondition -->
-    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
+    <!-- IsStockItemSalableCondition -->
+    <type name="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
         <arguments>
-            <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
+            <argument name="conditions" xsi:type="array">
+                <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>
                 <!-- override source_item_status condition due to min_qty condition includes first (need to for proper work of chain) -->
-                <item name="source_item_status" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
+                <item name="source_item_status" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition\MinQtyStockCondition</item>
             </argument>
         </arguments>
     </type>
-    <!-- IsProductSalable -->
+    <!-- IsProductSalableCondition -->
     <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">

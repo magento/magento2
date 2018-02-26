@@ -5,12 +5,16 @@ app/code/Magento/InventoryBundle
 app/code/Magento/InventoryBundleIndexer
 app/code/Magento/InventoryCatalog
 app/code/Magento/InventoryCatalogSearch
+app/code/Magento/InventoryConfigurableProduct
 app/code/Magento/InventoryConfiguration
+app/code/Magento/InventoryConfigurationApi
 app/code/Magento/InventoryImportExport
 app/code/Magento/InventoryIndexer
 app/code/Magento/InventoryLowQuantityNotification
 app/code/Magento/InventoryLowQuantityNotificationApi
 app/code/Magento/InventoryProductAlert
+app/code/Magento/InventoryReservations
+app/code/Magento/InventoryReservationsApi
 app/code/Magento/InventorySales
 app/code/Magento/InventorySalesApi
 app/code/Magento/InventoryShipping
