@@ -110,9 +110,6 @@ class OrderCustomerExtractor
         );
         $addresses = $order->getAddresses();
         foreach ($addresses as $address) {
-            if (!$this->haveToSaveAddress($address->getData('quote_address_id'))) {
-                continue;
-            }
             $addressData = $this->objectCopyService->copyFieldsetToTarget(
                 'order_address',
                 'to_customer_address',
@@ -142,24 +139,5 @@ class OrderCustomerExtractor
         }
 
         return $this->customerFactory->create(['data' => $customerData]);
-    }
-
-    /**
-     * Check if we need to save address in address book.
-     *
-     * @param string $quoteAddressId
-     *
-     * @return bool
-     */
-    private function haveToSaveAddress(string $quoteAddressId): bool
-    {
-        $saveInAddressBook = true;
-        /** @var QuoteAddress $quoteAddress */
-        $quoteAddress = $this->quoteAddressFactory->create()->load($quoteAddressId);
-        if ($quoteAddress && $quoteAddress->getId()) {
-            $saveInAddressBook = (bool)(int)$quoteAddress->getData('save_in_address_book');
-        }
-
-        return $saveInAddressBook;
     }
 }

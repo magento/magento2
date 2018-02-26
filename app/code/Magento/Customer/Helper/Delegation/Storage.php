@@ -9,13 +9,17 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Helper\Delegation;
 
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Helper\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Helper\Delegation\Data\NewOperationFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 
 /**
  * Store data for delegated operations.
@@ -38,18 +42,34 @@ class Storage
     private $customerFactory;
 
     /**
+     * @var AddressInterfaceFactory
+     */
+    private $addressFactory;
+
+    /**
+     * @var RegionInterfaceFactory
+     */
+    private $regionFactory;
+
+    /**
      * @param Session $session
      * @param NewOperationFactory $newFactory
      * @param CustomerInterfaceFactory $customerFactory
+     * @param AddressInterfaceFactory $addressFactory
+     * @param RegionInterfaceFactory $regionFactory
      */
     public function __construct(
         Session $session,
         NewOperationFactory $newFactory,
-        CustomerInterfaceFactory $customerFactory
+        CustomerInterfaceFactory $customerFactory,
+        AddressInterfaceFactory $addressFactory,
+        RegionInterfaceFactory $regionFactory
     ) {
         $this->session = $session;
         $this->newFactory = $newFactory;
         $this->customerFactory = $customerFactory;
+        $this->addressFactory = $addressFactory;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -75,10 +95,8 @@ class Storage
         }
         $this->session->setCustomerFormData($customerData);
         $this->session->setDelegatedNewCustomerData([
-            'customer' => array_merge(
-                $customerData,
-                ['addresses' => $addressesData]
-            ),
+            'customer' => $customerData,
+            'addresses' => $addressesData,
             'delegated_data' => $delegatedData
         ]);
     }
@@ -90,14 +108,31 @@ class Storage
      */
     public function consumeNewOperation()
     {
-        $serialized = $this->session->gettDelegatedNewCustomerData(true);
+        $serialized = $this->session->getDelegatedNewCustomerData(true);
         if (!$serialized) {
             return null;
         }
 
+        /** @var AddressInterface[] $addresses */
+        $addresses = [];
+        foreach ($serialized['addresses'] as $addressData) {
+            if (isset($addressData['region'])) {
+                /** @var RegionInterface $region */
+                $region = $this->regionFactory->create(
+                    ['data' => $addressData['region']]
+                );
+                $addressData['region'] = $region;
+            }
+            $addresses[] = $this->addressFactory->create(
+                ['data' => $addressData]
+            );
+        }
+        $customerData = $serialized['customer'];
+        $customerData['addresses'] = $addresses;
+
         return $this->newFactory->create([
             'customer' => $this->customerFactory->create(
-                ['data' => $serialized['customer']]
+                ['data' => $customerData]
             ),
             'additionalData' => $serialized['delegated_data']
         ]);
