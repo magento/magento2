@@ -55,7 +55,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $storeSwitchUrl = 'http://domain.com/stores/store/switch';
         $store->expects($this->once())
             ->method('getCurrentUrl')
-            ->with(false)
+            ->with(true)
             ->willReturn($storeSwitchUrl);
         $this->corePostDataHelper->expects($this->any())
             ->method('getPostData')

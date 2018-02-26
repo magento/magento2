@@ -364,10 +364,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @param boolean $secure
      * @param string $url
      * @param string $expected
+     * @param bool|string $fromStore
      */
-    public function testGetCurrentUrl($secure, $url, $expected)
+    public function testGetCurrentUrl($secure, $url, $expected, $fromStore)
     {
-        $defaultStore = $this->getMock('\Magento\Store\Model\Store', [
+
+        $defaultStore = $this->createPartialMock(Store::class, [
             'getId',
             'isCurrentlySecure',
             '__wakeup'
@@ -381,16 +383,34 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $config = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ReinitableConfigInterface');
 
 
-        $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
+        $requestString = preg_replace(
+            '/http(s?)\:\/\/[a-z0-9\-]+\//i',
+            '',
+            $url
+        );
+        $this->requestMock
+            ->expects($this->atLeastOnce())
+            ->method('getRequestString')
+            ->willReturn($requestString);
         $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
 
 
         $urlMock = $this->getMockForAbstractClass('\Magento\Framework\UrlInterface');
-        $urlMock->expects($this->atLeastOnce())->method('setScope')->will($this->returnSelf());
-        $urlMock->expects($this->any())->method('getUrl')
-            ->will($this->returnValue($url));
+
+        $urlMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $urlMock
+            ->expects($this->atLeastOnce())
+            ->method('setScope')
+            ->will($this->returnSelf());
+        $urlMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue(str_replace($requestString, '', $url)));
+        $urlMock
+            ->expects($this->atLeastOnce())
+            ->method('escape')
+            ->willReturnArgument(0);
 
         $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
@@ -405,7 +425,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $model->setStoreId(2);
         $model->setCode('scope_code');
 
-        $this->assertEquals($expected, $model->getCurrentUrl(false));
+        $this->assertEquals($expected, $model->getCurrentUrl($fromStore));
     }
 
     /**
@@ -414,9 +434,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getCurrentUrlDataProvider()
     {
         return [
-            [true, 'http://test/url', 'http://test/url?SID=sid&amp;___store=scope_code'],
-            [true, 'http://test/url?SID=sid1&___store=scope', 'http://test/url?SID=sid&amp;___store=scope_code'],
-            [false, 'https://test/url', 'https://test/url?SID=sid&amp;___store=scope_code']
+            [
+                true,
+                'http://test/url',
+                'http://test/url?SID=sid&amp;___store=scope_code',
+                false
+            ],
+            [
+                true,
+                'http://test/url?SID=sid1&___store=scope',
+                'http://test/url?SID=sid&amp;___store=scope_code',
+                false
+            ],
+            [
+                false,
+                'https://test/url',
+                'https://test/url?SID=sid&amp;___store=scope_code',
+                false
+            ],
+            [
+                true,
+                'http://test/u/u.2?__store=scope_code',
+                'http://test/u/u.2?'
+                . 'SID=sid&amp;___store=scope_code&amp;___from_store=old-store',
+                'old-store'
+            ]
         ];
     }
 
