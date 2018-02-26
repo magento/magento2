@@ -22,7 +22,7 @@
             <argument name="conditions" xsi:type="array">
                 <item name="manage_stock" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
-                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalable\ManageStockCondition</item>
+                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalableCondition\ManageStockCondition</item>
                 </item>
                 <!-- should be after stock_item condition -->
                 <item name="min_qty" xsi:type="array">
