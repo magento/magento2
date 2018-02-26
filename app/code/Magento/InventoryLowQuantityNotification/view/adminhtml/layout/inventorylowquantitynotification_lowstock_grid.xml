@@ -67,7 +67,7 @@
                             <argument name="filter_index" xsi:type="string">source_code</argument>
                             <argument name="index" xsi:type="string">source_code</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\InventoryLowQuantityNotification\Model\OptionSource\SourceCode"/>
+                            <argument name="options" xsi:type="options" model="Magento\InventoryLowQuantityNotification\Model\OptionSource\EnabledSourceCode"/>
                             <argument name="header_css_class" xsi:type="string">col-source-code</argument>
                             <argument name="column_css_class" xsi:type="string">col-source-code</argument>
                         </arguments>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
@@ -15,13 +16,18 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LowQuantityCollection extends AbstractCollection
 {
     /**
@@ -93,6 +99,7 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
+        $this->addEnabledSourceFilter();
 
         $this->setOrder(
             SourceItemInterface::QUANTITY,
@@ -112,7 +119,7 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity' => $productEntityTable],
-            'main_table.' . SourceItemInterface::SKU . ' = product_entity.sku',
+            'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
             []
         );
 
@@ -168,6 +175,23 @@ class LowQuantityCollection extends AbstractCollection
         $this->getSelect()->where(
             SourceItemInterface::QUANTITY . ' < ?',
             $notifyStockExpression
+        );
+    }
+
+    /**
+     * @return void
+     */
+    private function addEnabledSourceFilter()
+    {
+        $this->getSelect()->joinInner(
+            ['inventory_source' => $this->getTable(Source::TABLE_NAME_SOURCE)],
+            sprintf(
+                'inventory_source.%s = 1 AND inventory_source.%s = main_table.%s',
+                SourceInterface::ENABLED,
+                SourceInterface::SOURCE_CODE,
+                SourceItemInterface::SOURCE_CODE
+            ),
+            []
         );
     }
 }

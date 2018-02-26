@@ -6,8 +6,8 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -18,17 +18,43 @@ $sourceItemConfigurationFactory = Bootstrap::getObjectManager()->get(SourceItemC
 /** @var SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave */
 $sourceItemConfigurationsSave = Bootstrap::getObjectManager()->get(SourceItemConfigurationsSaveInterface::class);
 
-$InventoryLowQuantityNotificationData = [
-    SourceItemConfigurationInterface::SOURCE_CODE => 'eu-1',
-    SourceItemConfigurationInterface::SKU => 'SKU-1',
-    SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2.000,
+$sourceItemConfigurationsData = [
+    [
+        // for disabled source
+        SourceItemConfigurationInterface::SOURCE_CODE => 'eu-disabled',
+        SourceItemConfigurationInterface::SKU => 'SKU-1',
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
+    ],
+    [
+        // notify_stock_qty > quantity
+        SourceItemConfigurationInterface::SOURCE_CODE => 'eu-1',
+        SourceItemConfigurationInterface::SKU => 'SKU-1',
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 5.6,
+    ],
+    [
+        // This should be showed regardless product is disabled
+        SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
+        SourceItemConfigurationInterface::SKU => 'SKU-3',
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,
+    ],
+    [
+        // notify_stock_qty < quantity
+        SourceItemConfigurationInterface::SOURCE_CODE => 'us-1',
+        SourceItemConfigurationInterface::SKU => 'SKU-2',
+        SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 4.5,
+    ],
 ];
 
-/** @var SourceItemConfigurationInterface $sourceItemConfiguration */
-$sourceItemConfiguration = $sourceItemConfigurationFactory->create();
-$dataObjectHelper->populateWithArray(
-    $sourceItemConfiguration,
-    $InventoryLowQuantityNotificationData,
-    SourceItemConfigurationInterface::class
-);
-$sourceItemConfigurationsSave->execute([$sourceItemConfiguration]);
+$sourceItemConfigurations = [];
+foreach ($sourceItemConfigurationsData as $sourceItemConfigurationData) {
+    /** @var SourceItemConfigurationInterface $sourceItemConfiguration */
+    $sourceItemConfiguration = $sourceItemConfigurationFactory->create();
+    $dataObjectHelper->populateWithArray(
+        $sourceItemConfiguration,
+        $sourceItemConfigurationData,
+        SourceItemConfigurationInterface::class
+    );
+    $sourceItemConfigurations[] = $sourceItemConfiguration;
+}
+
+$sourceItemConfigurationsSave->execute($sourceItemConfigurations);

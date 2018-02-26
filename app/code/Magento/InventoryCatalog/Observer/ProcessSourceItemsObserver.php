@@ -37,18 +37,22 @@ class ProcessSourceItemsObserver implements ObserverInterface
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
+
     /**
      * @var IsSingleSourceModeInterface
      */
     private $isSingleSourceMode;
+
     /**
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
+
     /**
      * @var SearchCriteriaBuilderFactory
      */
     private $searchCriteriaBuilderFactory;
+
     /**
      * @var SourceItemRepositoryInterface
      */
