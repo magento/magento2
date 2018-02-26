@@ -11,6 +11,8 @@ use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 
 /**
  * Returns stock item configuration data
+ *
+ * @api
  */
 interface GetStockItemConfigurationInterface
 {
