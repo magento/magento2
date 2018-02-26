@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryCatalogSearch\Test\Integration\Model\Indexer;
 
@@ -149,7 +150,7 @@ class FulltextTest extends TestCase
      * @param array $expectedSearchSize
      * @return void
      *
-     * @dataProvider reindexAllDataProvider
+     * @dataProvider reindexRowDataProvider
      */
     public function testReindexRowAfterEdit(string $store, array $expectedSearchSize)
     {
@@ -170,6 +171,18 @@ class FulltextTest extends TestCase
         }
         $products = $this->search('Simple Product');
         $this->assertCount($expectedSearchSize[1], $products);
+    }
+
+    /**
+     * @return array
+     */
+    public function reindexRowDataProvider(): array
+    {
+        return [
+            ['store_for_eu_website', [1, 1]],
+            ['store_for_us_website', [0, 1]],
+            ['store_for_global_website', [1, 2]],
+        ];
     }
 
     /**
@@ -257,9 +270,7 @@ class FulltextTest extends TestCase
      */
     protected function search(string $text): array
     {
-        $this->resourceFulltext->resetSearchResults();
-        $query = $this->queryFactory->get();
-        $query->unsetData();
+        $query = $this->queryFactory->create();
         $query->setQueryText($text);
         $query->saveIncrementalPopularity();
         $products = [];
