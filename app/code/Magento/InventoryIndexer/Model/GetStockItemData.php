@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\GetStockItemDataInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
 /**

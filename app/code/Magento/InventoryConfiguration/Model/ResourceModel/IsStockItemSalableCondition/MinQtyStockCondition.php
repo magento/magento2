@@ -10,8 +10,8 @@ namespace Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableC
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 /**
  * Condition for min_qty configuration.

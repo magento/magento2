@@ -31,6 +31,18 @@
     </type>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
+    <!-- StockItem -->
+    <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventorySales\Model\ResourceModel\GetStockItemData"/>
+    <!-- IsStockItemSalableCondition -->
+    <preference for="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface"
+                type="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain"/>
+    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="source_item_status" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\SourceItemStatusCondition</item>
+            </argument>
+        </arguments>
+    </type>
     <!-- IsProductSalable -->
     <preference for="Magento\InventorySalesApi\Api\IsProductSalableInterface" type="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain"/>
     <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">

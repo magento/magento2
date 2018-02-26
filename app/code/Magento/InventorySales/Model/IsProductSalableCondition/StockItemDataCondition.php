@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 
 /**
  * @inheritdoc

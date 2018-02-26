@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition;
+namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\DB\Select;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;

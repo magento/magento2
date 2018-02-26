@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition;
+namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
@@ -39,7 +39,7 @@ class IsStockItemSalableConditionChain implements GetIsStockItemSalableCondition
         foreach ($conditions as $getIsSalableCondition) {
             if (!$getIsSalableCondition instanceof GetIsStockItemSalableConditionInterface) {
                 throw new LocalizedException(
-                    __('Condition must implement GetIsSalableConditionInterface')
+                    __('Condition must implement %1', GetIsStockItemSalableConditionInterface::class)
                 );
             }
         }

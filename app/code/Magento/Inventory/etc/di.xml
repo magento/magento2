@@ -63,7 +63,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Inventory\Model\GetStockItemDataInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData"/>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
@@ -85,16 +84,6 @@
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinksValidator">
         <arguments>
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
-        </arguments>
-    </type>
-    <!-- IsStockItemSalableCondition -->
-    <preference for="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface"
-                type="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain"/>
-    <type name="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\SourceItemStatusCondition</item>
-            </argument>
         </arguments>
     </type>
     <!-- Product types -->

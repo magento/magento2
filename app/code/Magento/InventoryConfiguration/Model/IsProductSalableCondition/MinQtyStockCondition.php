@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\IsProductSalableCondition;
 
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;

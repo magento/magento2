@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\Stock;
+namespace Magento\InventorySales\Model\ResourceModel;
 
-use Magento\Inventory\Model\GetStockItemDataInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 
 /**
  * @inheritdoc

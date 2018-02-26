@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\InventorySales\Model;
 
 /**
  * Responsible for retrieving StockItem Data

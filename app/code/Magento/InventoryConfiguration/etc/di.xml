@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- IsStockItemSalableCondition -->
-    <type name="Magento\Inventory\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
+    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
                 <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>

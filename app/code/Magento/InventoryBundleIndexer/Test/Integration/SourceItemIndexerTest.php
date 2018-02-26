@@ -10,11 +10,11 @@ namespace Magento\InventoryBundleIndexer\Test\Integration;
 use Magento\Bundle\Model\ResourceModel\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
