@@ -11,6 +11,7 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Setup\Declaration\Schema\Db\DDLTriggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
+use Magento\Framework\Setup\Exception;
 
 /**
  * Used to migrate data from one column to another in scope of one table.
@@ -80,6 +81,14 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
                     $adapter->insertFromSelect(
                         $select,
                         $this->resourceConnection->getTableName($tableName)
+                    )
+                );
+            } else {
+                throw new Exception(
+                    __(
+                        'Table `%1` does not exist for connection `%2`.',
+                        $tableMigrateFrom,
+                        $column->getTable()->getResource()
                     )
                 );
             }

@@ -11,6 +11,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
+use Magento\Framework\Setup\Exception;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
@@ -98,15 +99,15 @@ class SchemaBuilder
                 $table->addColumns($columns);
                 //Process indexes
                 foreach ($indexesData as $indexData) {
-                    $indexData['columns'] = $this->resolveInternalRelations($columns, $indexData);
                     $indexData['table'] = $table;
+                    $indexData['columns'] = $this->resolveInternalRelations($columns, $indexData);
                     $index = $this->elementFactory->create('index', $indexData);
                     $indexes[$index->getName()] = $index;
                 }
                 //Process internal constraints
                 foreach ($constrainsData as $constraintData) {
-                    $constraintData['columns'] = $this->resolveInternalRelations($columns, $constraintData);
                     $constraintData['table'] = $table;
+                    $constraintData['columns'] = $this->resolveInternalRelations($columns, $constraintData);
                     $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                     $constraints[$constraint->getName()] = $constraint;
                 }
@@ -159,19 +160,28 @@ class SchemaBuilder
      * @param  Column[] $columns
      * @param  array    $data
      * @return Column[]
+     * @throws Exception
      */
     private function resolveInternalRelations(array $columns, array $data)
     {
         if (!is_array($data['column'])) {
-            throw new \InvalidArgumentException("Cannot find columns for internal index");
+            throw new Exception(
+                __("Cannot find columns for internal index")
+            );
         }
 
         $referenceColumns = [];
         foreach ($data['column'] as $columnName) {
             if (!isset($columns[$columnName])) {
-                //Depends on business logic, can either ignore non-existing column
-                //or throw exception if db is not consistent and there is no column
-                //that was specified for key
+                $tableName = isset($data['table']) ? $data['table']->getName() : '';
+                throw new Exception(
+                    __(
+                        'Column %1 does not exist for index/constraint %2 in table %3.',
+                        $columnName,
+                        $data['name'],
+                        $tableName
+                    )
+                );
             } else {
                 $referenceColumns[] = $columns[$columnName];
             }
