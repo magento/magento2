@@ -7,13 +7,9 @@ namespace Magento\Framework\MessageQueue\Rpc;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
-use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeRepository;
-use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
-use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
@@ -58,8 +54,8 @@ class Publisher implements PublisherInterface
      *
      * @param ExchangeRepository $exchangeRepository
      * @param EnvelopeFactory $envelopeFactory
-     * @param MessageQueueConfig $messageQueueConfig
-     * @param \Magento\Amqp\Model\Config $amqpConfig
+     * @param null $messageQueueConfig @deprecated obsolete dependency
+     * @param null $amqpConfig @deprecated obsolete dependency
      * @param MessageEncoder $messageEncoder
      * @param MessageValidator $messageValidator
      *
@@ -68,8 +64,8 @@ class Publisher implements PublisherInterface
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
-        MessageQueueConfig $messageQueueConfig,
-        \Magento\Amqp\Model\Config $amqpConfig,
+        $messageQueueConfig = null,
+        $amqpConfig = null,
         MessageEncoder $messageEncoder,
         MessageValidator $messageValidator
     ) {
