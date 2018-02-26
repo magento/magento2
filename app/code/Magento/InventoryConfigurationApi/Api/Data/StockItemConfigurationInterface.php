@@ -55,51 +55,19 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     const STOCK_STATUS_CHANGED_AUTO = 'stock_status_changed_auto';
 
     /**
-     * @return string
-     */
-    public function getSku(): string;
-
-    /**
-     * Retrieve stock identifier
-     *
-     * @return int
-     */
-    public function getStockId(): int;
-
-    /**
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsQtyDecimal(): bool;
-
-    /**
-     * @param bool $isQtyDecimal
-     * @return void
-     */
-    public function setIsQtyDecimal(bool $isQtyDecimal);
-
-    /**
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getShowDefaultNotificationMessage(): bool;
-
-    /**
-     * @param bool $showDefaultNotificationMessage
-     * @return void
-     */
-    public function setShowDefaultNotificationMessage(bool $showDefaultNotificationMessage);
+    public function isQtyDecimal(): bool;
 
     /**
      * @return bool
      */
-    public function getUseConfigMinQty(): bool;
+    public function isShowDefaultNotificationMessage(): bool;
 
     /**
-     * @param bool $useConfigMinQty
-     * @return void
+     * @return bool
      */
-    public function setUseConfigMinQty(bool $useConfigMinQty);
+    public function isUseConfigMinQty(): bool;
 
     /**
      * @return float
@@ -107,20 +75,9 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getMinQty(): float;
 
     /**
-     * @param float $minQty
-     */
-    public function setMinQty(float $minQty);
-
-    /**
      * @return bool
      */
-    public function getUseConfigMinSaleQty(): bool;
-
-    /**
-     * @param bool $useConfigMinSaleQty
-     * @return void
-     */
-    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty);
+    public function isUseConfigMinSaleQty(): bool;
 
     /**
      * @return float
@@ -128,20 +85,9 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getMinSaleQty(): float;
 
     /**
-     * @param float $minSaleQty
-     */
-    public function setMinSaleQty(float $minSaleQty);
-
-    /**
      * @return bool
      */
-    public function getUseConfigMaxSaleQty(): bool;
-
-    /**
-     * @param bool $useConfigMaxSaleQty
-     * @return void
-     */
-    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty);
+    public function isUseConfigMaxSaleQty(): bool;
 
     /**
      * @return float
@@ -149,20 +95,9 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getMaxSaleQty(): float;
 
     /**
-     * @param float $maxSaleQty
-     */
-    public function setMaxSaleQty(float $maxSaleQty);
-
-    /**
      * @return bool
      */
-    public function getUseConfigBackorders(): bool;
-
-    /**
-     * @param bool $useConfigBackorders
-     * @return void
-     */
-    public function setUseConfigBackorders(bool $useConfigBackorders);
+    public function isUseConfigBackorders(): bool;
 
     /**
      * Retrieve backorders status
@@ -172,20 +107,9 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getBackorders(): int;
 
     /**
-     * @param int $backOrders
-     */
-    public function setBackorders(int $backOrders);
-
-    /**
      * @return bool
      */
-    public function getUseConfigNotifyStockQty(): bool;
-
-    /**
-     * @param bool $useConfigNotifyStockQty
-     * @return void
-     */
-    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty);
+    public function isUseConfigNotifyStockQty(): bool;
 
     /**
      * @return float
@@ -193,78 +117,36 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getNotifyStockQty(): float;
 
     /**
-     * @param float $notifyStockQty
-     */
-    public function setNotifyStockQty(float $notifyStockQty);
-
-    /**
      * @return bool
      */
-    public function getUseConfigQtyIncrements(): bool;
-
-    /**
-     * @param bool $useConfigQtyIncrements
-     * @return void
-     */
-    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements);
+    public function isUseConfigQtyIncrements(): bool;
 
     /**
      * Retrieve Quantity Increments data wrapper
      *
-     * @return float|false
+     * @return float
      */
     public function getQtyIncrements(): float;
 
     /**
-     * @param float $qtyIncrements
+     * @return bool
      */
-    public function setQtyIncrements(float $qtyIncrements);
+    public function isUseConfigEnableQtyInc(): bool;
 
     /**
      * @return bool
      */
-    public function getUseConfigEnableQtyInc(): bool;
-
-    /**
-     * @param bool $useConfigEnableQtyInc
-     * @return void
-     */
-    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc);
+    public function isEnableQtyIncrements(): bool;
 
     /**
      * @return bool
      */
-    public function getEnableQtyIncrements(): bool;
-
-    /**
-     * Set whether Quantity Increments is enabled
-     *
-     * @param bool $enableQtyIncrements
-     * @return void
-     */
-    public function setEnableQtyIncrements(bool $enableQtyIncrements);
+    public function isUseConfigManageStock(): bool;
 
     /**
      * @return bool
      */
-    public function getUseConfigManageStock(): bool;
-
-    /**
-     * @param bool $useConfigManageStock
-     * @return void
-     */
-    public function setUseConfigManageStock(bool $useConfigManageStock);
-
-    /**
-     * @return bool
-     */
-    public function getManageStock(): bool;
-
-    /**
-     * @param bool $manageStock
-     * @return void
-     */
-    public function setManageStock(bool $manageStock);
+    public function isManageStock(): bool;
 
     /**
      * @return string
@@ -272,21 +154,9 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getLowStockDate(): string;
 
     /**
-     * @param string $lowStockDate
-     * @return void
-     */
-    public function setLowStockDate(string $lowStockDate);
-
-    /**
      * @return bool
      */
-    public function getIsDecimalDivided(): bool;
-
-    /**
-     * @param bool $isDecimalDivided
-     * @return void
-     */
-    public function setIsDecimalDivided(bool $isDecimalDivided);
+    public function isDecimalDivided(): bool;
 
     /**
      * @return int
@@ -294,19 +164,7 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getStockStatusChangedAuto(): int;
 
     /**
-     * @param int $stockStatusChangedAuto
-     * @return void
-     */
-    public function setStockStatusChangedAuto(int $stockStatusChangedAuto);
-
-    /**
      * @return StockItemConfigurationExtensionInterface
      */
     public function getExtensionAttributes(): StockItemConfigurationExtensionInterface;
-
-    /**
-     * @param StockItemConfigurationExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes);
 }

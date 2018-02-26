@@ -49,11 +49,11 @@ class ManageStockCondition implements IsProductSalableInterface
         $globalManageStock = $this->configuration->getManageStock();
         $manageStock = false;
         if ((
-                $stockItemConfiguration->getUseConfigManageStock() == 1 &&
+                $stockItemConfiguration->isUseConfigManageStock() == 1 &&
                 $globalManageStock == 1
             ) || (
-                $stockItemConfiguration->getUseConfigManageStock() == 0 &&
-                $stockItemConfiguration->getManageStock() == 1
+                $stockItemConfiguration->isUseConfigManageStock() == 0 &&
+                $stockItemConfiguration->isManageStock() == 1
             )
         ) {
             $manageStock = true;

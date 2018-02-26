@@ -8,319 +8,130 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**
- * Class replaces StockItemConfigurationInterface object with StockItemInterface object
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @inheritdoc
  */
 class StockItemConfiguration implements StockItemConfigurationInterface
 {
     /**
      * @var StockItemInterface
      */
-    private $legacyStockItem;
+    private $stockItem;
 
     /**
-     * @var string
-     */
-    private $sku;
-
-    /**
-     * @var int
-     */
-    private $stockId;
-
-    /**
-     * @var StockItemCriteriaInterfaceFactory
-     */
-    private $stockItemCriteriaFactory;
-
-    /**
-     * @var GetProductIdsBySkusInterface
-     */
-    private $getProductIdsBySkus;
-
-    /**
-     * @var StockItemRepository
-     */
-    private $stockItemRepository;
-
-    /**
-     * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
-     * @param StockItemRepository $stockItemRepository
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
-     * @param string $sku
-     * @param int $stockId
+     * @param string $stockItem
      */
     public function __construct(
-        StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        StockItemRepository $stockItemRepository,
-        GetProductIdsBySkusInterface $getProductIdsBySkus,
-        string $sku,
-        int $stockId
+        string $stockItem
     ) {
-        $this->sku = $sku;
-        $this->stockId = $stockId;
-        $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
-        $this->stockItemRepository = $stockItemRepository;
-        $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->stockItem = $stockItem;
     }
 
     /**
-     * @return StockItemInterface
+     * @inheritdoc
      */
-    private function getLegacyStockItem()
+    public function isQtyDecimal(): bool
     {
-        if (!$this->legacyStockItem) {
-            $productId = $this->getProductIdsBySkus->execute([$this->sku])[$this->sku];
-            $searchCriteria = $this->stockItemCriteriaFactory->create();
-            $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-            $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $this->stockId);
-            $this->legacyStockItem = $this->stockItemRepository->getList($searchCriteria)->getItems()[0];
-        }
-        return $this->legacyStockItem;
+        return $this->stockItem->getIsQtyDecimal();
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    public function getSku(): string
+    public function isShowDefaultNotificationMessage(): bool
     {
-        return $this->sku;
+        return $this->stockItem->getShowDefaultNotificationMessage();
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
-    public function getStockId(): int
+    public function isUseConfigMinQty(): bool
     {
-        return $this->getLegacyStockItem()->getStockId();
+        return $this->stockItem->getUseConfigMinQty();
     }
 
     /**
-     * @return bool
-     */
-    public function getIsQtyDecimal(): bool
-    {
-        return $this->getLegacyStockItem()->getIsQtyDecimal();
-    }
-
-    /**
-     * @param bool $isQtyDecimal
-     * @return void
-     */
-    public function setIsQtyDecimal(bool $isQtyDecimal)
-    {
-        $this->getLegacyStockItem()->setIsQtyDecimal($isQtyDecimal);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getShowDefaultNotificationMessage(): bool
-    {
-        return $this->getLegacyStockItem()->getShowDefaultNotificationMessage();
-    }
-
-    /**
-     * @param bool $showDefaultNotificationMessage
-     * @return void
-     */
-    public function setShowDefaultNotificationMessage(bool $showDefaultNotificationMessage)
-    {
-        $this->getLegacyStockItem()->setShowDefaultNotificationMessage($showDefaultNotificationMessage);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getUseConfigMinQty(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigMinQty();
-    }
-
-    /**
-     * @param bool $useConfigMinQty
-     * @return void
-     */
-    public function setUseConfigMinQty(bool $useConfigMinQty)
-    {
-        $this->getLegacyStockItem()->setUseConfigMinQty($useConfigMinQty);
-    }
-
-    /**
-     * @return float
+     * @inheritdoc
      */
     public function getMinQty(): float
     {
-        return $this->getLegacyStockItem()->getMinQty();
+        return $this->stockItem->getMinQty();
     }
 
     /**
-     * @param float $minQty
-     * @return void
+     * @inheritdoc
      */
-    public function setMinQty(float $minQty)
+    public function isUseConfigMinSaleQty(): bool
     {
-        $this->getLegacyStockItem()->setMinQty($minQty);
+        return (bool)$this->stockItem->getUseConfigMinSaleQty();
     }
 
     /**
-     * @return bool
-     */
-    public function getUseConfigMinSaleQty(): bool
-    {
-        return (bool)$this->getLegacyStockItem()->getUseConfigMinSaleQty();
-    }
-
-    /**
-     * @param bool $useConfigMinSaleQty
-     * @return void
-     */
-    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty)
-    {
-        $this->getLegacyStockItem()->setUseConfigMinSaleQty($useConfigMinSaleQty);
-    }
-
-    /**
-     * @return float
+     * @inheritdoc
      */
     public function getMinSaleQty(): float
     {
-        return $this->getLegacyStockItem()->getMinSaleQty();
+        return $this->stockItem->getMinSaleQty();
     }
 
     /**
-     * @param float $minSaleQty
-     * @return void
+     * @inheritdoc
      */
-    public function setMinSaleQty(float $minSaleQty)
+    public function isUseConfigMaxSaleQty(): bool
     {
-        $this->getLegacyStockItem()->setMinSaleQty($minSaleQty);
+        return $this->stockItem->getUseConfigMaxSaleQty();
     }
 
     /**
-     * @return bool
-     */
-    public function getUseConfigMaxSaleQty(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigMaxSaleQty();
-    }
-
-    /**
-     * @param bool $useConfigMaxSaleQty
-     * @return void
-     */
-    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty)
-    {
-        $this->getLegacyStockItem()->setUseConfigMaxSaleQty($useConfigMaxSaleQty);
-    }
-
-    /**
-     * @return float
+     * @inheritdoc
      */
     public function getMaxSaleQty(): float
     {
-        return $this->getLegacyStockItem()->getMaxSaleQty();
+        return $this->stockItem->getMaxSaleQty();
     }
 
     /**
-     * @param float $maxSaleQty
-     * @return void
+     * @inheritdoc
      */
-    public function setMaxSaleQty(float $maxSaleQty)
+    public function isUseConfigBackorders(): bool
     {
-        $this->getLegacyStockItem()->setMaxSaleQty($maxSaleQty);
+        return $this->stockItem->getUseConfigBackorders();
     }
 
     /**
-     * @return bool
-     */
-    public function getUseConfigBackorders(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigBackorders();
-    }
-
-    /**
-     * @param bool $useConfigBackorders
-     * @return void
-     */
-    public function setUseConfigBackorders(bool $useConfigBackorders)
-    {
-        $this->getLegacyStockItem()->setUseConfigBackorders($useConfigBackorders);
-    }
-
-    /**
-     * @return int
+     * @inheritdoc
      */
     public function getBackorders(): int
     {
-        return $this->getLegacyStockItem()->getBackorders();
+        return $this->stockItem->getBackorders();
     }
 
     /**
-     * @param int $backOrders
-     * @return void
+     * @inheritdoc
      */
-    public function setBackorders(int $backOrders)
+    public function isUseConfigNotifyStockQty(): bool
     {
-        $this->getLegacyStockItem()->setBackorders($backOrders);
+        return $this->stockItem->getUseConfigNotifyStockQty();
     }
 
     /**
-     * @return bool
-     */
-    public function getUseConfigNotifyStockQty(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigNotifyStockQty();
-    }
-
-    /**
-     * @param bool $useConfigNotifyStockQty
-     * @return void
-     */
-    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty)
-    {
-        $this->getLegacyStockItem()->setUseConfigNotifyStockQty($useConfigNotifyStockQty);
-    }
-
-    /**
-     * @return float
+     * @inheritdoc
      */
     public function getNotifyStockQty(): float
     {
-        return $this->getLegacyStockItem()->getNotifyStockQty();
+        return $this->stockItem->getNotifyStockQty();
     }
 
     /**
-     * @param float $notifyStockQty
-     * @return void
+     * @inheritdoc
      */
-    public function setNotifyStockQty(float $notifyStockQty)
+    public function isUseConfigQtyIncrements(): bool
     {
-        $this->getLegacyStockItem()->setNotifyStockQty($notifyStockQty);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getUseConfigQtyIncrements(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigQtyIncrements();
-    }
-
-    /**
-     * @param bool $useConfigQtyIncrements
-     * @return void
-     */
-    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements)
-    {
-        $this->getLegacyStockItem()->setUseConfigQtyIncrements($useConfigQtyIncrements);
+        return $this->stockItem->getUseConfigQtyIncrements();
     }
 
     /**
@@ -328,151 +139,70 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function getQtyIncrements(): float
     {
-        return $this->getLegacyStockItem()->getQtyIncrements();
+        return $this->stockItem->getQtyIncrements();
     }
 
     /**
-     * @param float $qtyIncrements
-     * @return void
+     * @inheritdoc
      */
-    public function setQtyIncrements(float $qtyIncrements)
+    public function isUseConfigEnableQtyInc(): bool
     {
-        $this->getLegacyStockItem()->setQtyIncrements($qtyIncrements);
+        return $this->stockItem->getUseConfigEnableQtyInc();
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
-    public function getUseConfigEnableQtyInc(): bool
+    public function isEnableQtyIncrements(): bool
     {
-        return $this->getLegacyStockItem()->getUseConfigEnableQtyInc();
+        return $this->stockItem->getEnableQtyIncrements();
     }
 
     /**
-     * @param bool $useConfigEnableQtyInc
-     * @return void
+     * @inheritdoc
      */
-    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc)
+    public function isUseConfigManageStock(): bool
     {
-        $this->getLegacyStockItem()->setUseConfigEnableQtyInc($useConfigEnableQtyInc);
+        return $this->stockItem->getUseConfigManageStock();
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
-    public function getEnableQtyIncrements(): bool
+    public function isManageStock(): bool
     {
-        return $this->getLegacyStockItem()->getEnableQtyIncrements();
+        return $this->stockItem->getManageStock();
     }
 
     /**
-     * @param bool $enableQtyIncrements
-     * @return void
-     */
-    public function setEnableQtyIncrements(bool $enableQtyIncrements)
-    {
-        $this->getLegacyStockItem()->setEnableQtyIncrements($enableQtyIncrements);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getUseConfigManageStock(): bool
-    {
-        return $this->getLegacyStockItem()->getUseConfigManageStock();
-    }
-
-    /**
-     * @param bool $useConfigManageStock
-     * @return void
-     */
-    public function setUseConfigManageStock(bool $useConfigManageStock)
-    {
-        $this->getLegacyStockItem()->setUseConfigManageStock($useConfigManageStock);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getManageStock(): bool
-    {
-        return $this->getLegacyStockItem()->getManageStock();
-    }
-
-    /**
-     * @param bool $manageStock
-     * @return void
-     */
-    public function setManageStock(bool $manageStock)
-    {
-        $this->getLegacyStockItem()->setManageStock($manageStock);
-    }
-
-    /**
-     * @return string
+     * @inheritdoc
      */
     public function getLowStockDate(): string
     {
-        return $this->getLegacyStockItem()->getLowStockDate();
+        return $this->stockItem->getLowStockDate();
     }
 
     /**
-     * @param string $lowStockDate
-     * @return void
+     * @inheritdoc
      */
-    public function setLowStockDate(string $lowStockDate)
+    public function isDecimalDivided(): bool
     {
-        $this->getLegacyStockItem()->setLowStockDate($lowStockDate);
+        return $this->stockItem->getIsDecimalDivided();
     }
 
     /**
-     * @return bool
-     */
-    public function getIsDecimalDivided(): bool
-    {
-        return $this->getLegacyStockItem()->getIsDecimalDivided();
-    }
-
-    /**
-     * @param bool $isDecimalDivided
-     * @return void
-     */
-    public function setIsDecimalDivided(bool $isDecimalDivided)
-    {
-        $this->getLegacyStockItem()->setIsDecimalDivided($isDecimalDivided);
-    }
-
-    /**
-     * @return int
+     * @inheritdoc
      */
     public function getStockStatusChangedAuto(): int
     {
-        return $this->getLegacyStockItem()->getStockStatusChangedAuto();
+        return $this->stockItem->getStockStatusChangedAuto();
     }
 
     /**
-     * @param int $stockStatusChangedAuto
-     * @return void
-     */
-    public function setStockStatusChangedAuto(int $stockStatusChangedAuto)
-    {
-        $this->getLegacyStockItem()->setStockStatusChangedAuto($stockStatusChangedAuto);
-    }
-
-    /**
-     * @return StockItemConfigurationExtensionInterface
+     * @inheritdoc
      */
     public function getExtensionAttributes(): StockItemConfigurationExtensionInterface
     {
-        return $this->getLegacyStockItem()->getExtensionAttributes();
-    }
-
-    /**
-     * @param StockItemConfigurationExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(StockItemConfigurationExtensionInterface $extensionAttributes)
-    {
-        $this->getLegacyStockItem()->setExtensionAttributes($extensionAttributes);
+        // TODO: not implemented
     }
 }
