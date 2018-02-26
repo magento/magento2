@@ -177,6 +177,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
+        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -219,7 +220,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-        if ($customer->getDefaultBilling() === null
+        if (!array_key_exists('default_billing', $customerArr)
             && null !== $prevCustomerDataArr
             && array_key_exists('default_billing', $prevCustomerDataArr)
         ) {
@@ -227,7 +228,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $prevCustomerDataArr['default_billing']
             );
         }
-        if ($customer->getDefaultShipping() === null
+        if (!array_key_exists('default_shipping', $customerArr)
             && null !== $prevCustomerDataArr
             && array_key_exists('default_shipping', $prevCustomerDataArr)
         ) {
