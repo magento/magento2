@@ -24,7 +24,7 @@ define([
             data === 'checkbox' || data === 'multi' ?
                 this.clear()
                     .visible(false) :
-                this.visible(true)
+                this.visible(true);
         }
     });
 });
