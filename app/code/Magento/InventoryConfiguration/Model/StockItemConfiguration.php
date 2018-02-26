@@ -81,7 +81,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
             $searchCriteria = $this->stockItemCriteriaFactory->create();
             $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
             $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $this->stockId);
-            $this->legacyStockItem = $this->stockItemRepository->getList($searchCriteria)[0];
+            $this->legacyStockItem = $this->stockItemRepository->getList($searchCriteria)->getItems()[0];
         }
         return $this->legacyStockItem;
     }
