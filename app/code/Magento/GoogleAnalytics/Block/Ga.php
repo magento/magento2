@@ -130,7 +130,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJs($item->getSku()),
+                    $this->escapeJsQuote($item->getSku()),
                     $this->escapeJsQuote($item->getName()),
                     $item->getPrice(),
                     $item->getQtyOrdered()
@@ -236,7 +236,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'id' => $this->escapeJs($item->getSku()),
+                    'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
                     'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
