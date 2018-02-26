@@ -46,6 +46,6 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
 
         self::assertEquals($sourceCode, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_CODE]);
         self::assertEquals($sku, $sourceItemConfiguration[SourceItemConfigurationInterface::SKU]);
-        self::assertEquals(2, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+        self::assertEquals(1000, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }
 }

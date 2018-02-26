@@ -24,14 +24,14 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 class SourceItems extends AbstractModifier
 {
     /**
-     * @var IsSingleSourceModeInterface
-     */
-    private $isSingleSourceMode;
-
-    /**
      * @var IsSourceItemsManagementAllowedForProductTypeInterface
      */
     private $isSourceItemsManagementAllowedForProductType;
+
+    /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
 
     /**
      * @var LocatorInterface
@@ -50,23 +50,23 @@ class SourceItems extends AbstractModifier
 
     /**
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
-     * @param IsSingleSourceModeInterface $isSingleSourceMode
      */
     public function __construct(
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
-        ResourceConnection $resourceConnection,
-        IsSingleSourceModeInterface $isSingleSourceMode
+        ResourceConnection $resourceConnection
     ) {
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->isSingleSourceMode = $isSingleSourceMode;
     }
 
     /**
@@ -75,9 +75,15 @@ class SourceItems extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
-            $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
+
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false
+            || null === $product->getId()
+        ) {
+            return $data;
         }
+
+        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
         return $data;
     }
 
@@ -114,7 +120,10 @@ class SourceItems extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($this->isSourceManagementAllowed()) {
+        $product = $this->locator->getProduct();
+
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
 
@@ -122,24 +131,11 @@ class SourceItems extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'visible' => 0,
+                        'visible' => 1,
                     ],
                 ],
             ],
         ];
         return $meta;
-    }
-
-    /**
-     * Check that multisource is applicable in a scope of current product and configuration
-     *
-     * @return bool
-     */
-    private function isSourceManagementAllowed(): bool
-    {
-        $product = $this->locator->getProduct();
-
-        return $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) &&
-            !$this->isSingleSourceMode->execute();
     }
 }

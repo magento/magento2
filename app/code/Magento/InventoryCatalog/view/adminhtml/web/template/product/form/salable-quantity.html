@@ -6,11 +6,11 @@
 -->
 <div class="admin__field-complex" css="$data.additionalClasses" visible="visible" attr="'data-index': index">
     <div class="admin__field-complex-content">
-        <div repeat="foreach: $data.stocks || [] , item: '$stockQtyInfo'">
+        <div repeat="foreach: $data.salable_quantity || [], item: '$salableQuantityData'">
             <div>
-                <strong text="$stockQtyInfo().stock_name" />
+                <strong text="$salableQuantityData().stock_name" />
                 :
-                <span text="$stockQtyInfo().qty" />
+                <span text="$salableQuantityData().qty" />
             </div>
         </div>
     </div>
