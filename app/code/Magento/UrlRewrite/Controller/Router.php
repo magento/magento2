@@ -23,7 +23,6 @@ class Router implements \Magento\Framework\App\RouterInterface
     /** var \Magento\Framework\App\ActionFactory */
     protected $actionFactory;
 
-
     /**
      * @var UrlInterface
      */
