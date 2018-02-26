@@ -11,7 +11,7 @@
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
-            <group value="Newsletter"/>
+            <group value="skip"/>
             <title value="Admin should be able to add image to WYSIWYG content of Newsletter"/>
             <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
             <severity value="CRITICAL"/>
