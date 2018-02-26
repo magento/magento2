@@ -17,6 +17,7 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Search\Model\QueryFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchIndexer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -91,7 +92,7 @@ class FulltextTest extends TestCase
 
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = $objectManager->get(Indexer::class);
-        $this->indexer->load('catalogsearch_fulltext');
+        $this->indexer->load(CatalogSearchIndexer::INDEXER_ID);
 
         $this->resourceFulltext = $objectManager->get(Fulltext::class);
         $this->queryFactory = $objectManager->get(QueryFactory::class);
@@ -268,7 +269,7 @@ class FulltextTest extends TestCase
      *
      * @return Product[]
      */
-    protected function search(string $text): array
+    private function search(string $text): array
     {
         $query = $this->queryFactory->create();
         $query->setQueryText($text);
