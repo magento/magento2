@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\GetDefaultValues;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 
 /**
  * Product form modifier. Add to form source item configuration data
@@ -36,18 +38,26 @@ class SourceItemConfiguration extends AbstractModifier
     private $getSourceItemConfiguration;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param LocatorInterface $locator
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         LocatorInterface $locator,
-        GetSourceItemConfigurationInterface $getSourceItemConfiguration
+        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -69,6 +79,7 @@ class SourceItemConfiguration extends AbstractModifier
             $assignedSources,
             $product
         );
+
         return $data;
     }
 
@@ -87,8 +98,14 @@ class SourceItemConfiguration extends AbstractModifier
 
             $source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] =
                 $sourceConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY];
+
+            if ($source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] === null) {
+                $source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] = $this->getNotifyQtyConfigValue();
+                $source['notify_stock_qty_use_default'] = "1";
+            }
         }
         unset($source);
+
         return $assignedSources;
     }
 
@@ -98,5 +115,13 @@ class SourceItemConfiguration extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         return $meta;
+    }
+
+    /**
+     * @return float
+     */
+    private function getNotifyQtyConfigValue()
+    {
+        return (float)$this->scopeConfig->getValue(GetDefaultValues::XML_PATH_NOTIFY_STOCK_QTY);
     }
 }
