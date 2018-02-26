@@ -6,11 +6,9 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Model\Declaration\Schema\Generated\MysqlDumpSchemaParser;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
 
 /**

@@ -64,4 +64,15 @@
         <seeInCurrentUrl url="{{AdminCategoryPage.url}}add" stepKey="seeBackOnCreateCategoryPage"/>
         <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
     </actionGroup>
+
+    <actionGroup name="navigateToCreatedCategory">
+        <arguments>
+            <argument name="Category"/>
+        </arguments>
+        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSpinner" />
+    </actionGroup>
 </actionGroups>

@@ -15,6 +15,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Setup\Model\Patch\PatchApplierFactory;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -167,6 +169,16 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
      */
     private $contextMock;
 
+    /**
+     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierMock;
+
+    /**
+     * @var PatchApplierFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $patchApplierFactoryMock;
+
     protected function setUp()
     {
         $this->filePermissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
@@ -204,6 +216,9 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
         $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
         $this->declarationInstallerMock = $this->createMock(DeclarationInstaller::class);
         $this->schemaListenerMock = $this->createMock(SchemaListener::class);
+        $this->patchApplierFactoryMock = $this->createMock(PatchApplierFactory::class);
+        $this->patchApplierMock = $this->createMock(PatchApplier::class);
+        $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn($this->patchApplierMock);
         $this->object = $this->createObject();
     }
 
@@ -308,7 +323,24 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\Cache\Manager::class, [], $cacheManager],
                 [\Magento\Framework\App\State::class, [], $appState],
+                [
+                    PatchApplierFactory::class,
+                    ['objectManager' => $this->objectManager],
+                    $this->patchApplierFactoryMock
+                ],
             ]));
+        $this->patchApplierMock->expects($this->exactly(2))->method('applySchemaPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
+        $this->patchApplierMock->expects($this->exactly(2))->method('applyDataPatch')->willReturnMap(
+            [
+                ['Bar_Two'],
+                ['Foo_One'],
+            ]
+        );
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([

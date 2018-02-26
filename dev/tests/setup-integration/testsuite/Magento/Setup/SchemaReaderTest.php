@@ -40,6 +40,7 @@ class SchemaReaderTest extends SetupTestCase
     public function testSuccessfullRead()
     {
         $schema = $this->reader->read('all');
+        unset($schema['table']['patch_list']);
         self::assertEquals($this->getData(), $schema);
     }
 
@@ -78,6 +79,7 @@ class SchemaReaderTest extends SetupTestCase
     {
         $this->updateRevisionTo('foreign_key_interpreter');
         $schema = $this->reader->read('all');
+        unset($schema['table']['patch_list']);
         self::assertEquals($this->getData(), $schema);
     }
 }

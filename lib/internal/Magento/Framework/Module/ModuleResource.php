@@ -134,4 +134,15 @@ class ModuleResource extends AbstractDb implements ResourceInterface
             $this->getConnection()->insert($this->getMainTable(), $data);
         }
     }
+
+    /**
+     * Flush all class cache
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        self::$dataVersions = null;
+        self::$schemaVersions = null;
+    }
 }

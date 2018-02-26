@@ -66,10 +66,6 @@ class DeclarationInstaller
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
         $dbSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $dbSchema);
-        $diff->registerSchema($declarativeSchema);
-        $diff->registerInstallationRequest(
-            $this->requestFactory->create($requestData)
-        );
-        $this->operationsExecutor->execute($diff);
+        $this->operationsExecutor->execute($diff, $requestData);
     }
 }
