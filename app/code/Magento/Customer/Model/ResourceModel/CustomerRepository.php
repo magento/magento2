@@ -191,7 +191,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customer->setAddresses($origAddresses);
-        $customerModel = $this->customerFactory->create(['data' => $customerData]);
+        /** @var Customer $customerModel */
+        $customerModel = $this->customerFactory->create(
+            ['data' => $customerData]
+        );
+        //Model's actual ID field maybe different than "id"
+        //so "id" field from $customerData may be ignored.
+        $customerModel->setId($customer->getId());
 
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
