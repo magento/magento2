@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Customer repository.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
 {
@@ -162,6 +163,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
@@ -175,7 +177,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
-        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -189,14 +190,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             [],
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-
         $customer->setAddresses($origAddresses);
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
+
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
-        $customerModel->setId($customer->getId());
 
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -213,18 +213,21 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-        if (!array_key_exists('default_billing', $customerArr) &&
-            null !== $prevCustomerDataArr &&
-            array_key_exists('default_billing', $prevCustomerDataArr)
+        if ($customer->getDefaultBilling() === null
+            && null !== $prevCustomerDataArr
+            && array_key_exists('default_billing', $prevCustomerDataArr)
         ) {
-            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+            $customerModel->setDefaultBilling(
+                $prevCustomerDataArr['default_billing']
+            );
         }
-
-        if (!array_key_exists('default_shipping', $customerArr) &&
-            null !== $prevCustomerDataArr &&
-            array_key_exists('default_shipping', $prevCustomerDataArr)
+        if ($customer->getDefaultShipping() === null
+            && null !== $prevCustomerDataArr
+            && array_key_exists('default_shipping', $prevCustomerDataArr)
         ) {
-            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
+            $customerModel->setDefaultShipping(
+                $prevCustomerDataArr['default_shipping']
+            );
         }
 
         $customerModel->save();
@@ -249,7 +252,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             } else {
                 $existingAddressIds = [];
             }
-
             $savedAddressIds = [];
             foreach ($customer->getAddresses() as $address) {
                 $address->setCustomerId($customerId)
@@ -259,7 +261,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                     $savedAddressIds[] = $address->getId();
                 }
             }
-
             $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
             foreach ($addressIdsToDelete as $addressId) {
                 $this->addressRepository->deleteById($addressId);
