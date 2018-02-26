@@ -40,7 +40,7 @@
                     </item>
                 </argument>
             </container>
-            <container name="sources_advanced_inventory_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
+            <container name="advanced_inventory_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
