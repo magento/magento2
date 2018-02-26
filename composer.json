@@ -75,7 +75,7 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "^2.8.1",
+        "zendframework/zend-view": "^2.10.0",
         "webonyx/graphql-php": "^0.11.1"
     },
     "require-dev": {
