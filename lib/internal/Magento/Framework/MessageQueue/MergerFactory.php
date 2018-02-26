@@ -24,7 +24,7 @@ class MergerFactory
      * @param ObjectManagerInterface $objectManager
      * @param string[] $mergers
      */
-    public function __construct(ObjectManagerInterface $objectManager, $mergers)
+    public function __construct(ObjectManagerInterface $objectManager, $mergers = [])
     {
         $this->objectManager = $objectManager;
         $this->mergers = $mergers;
