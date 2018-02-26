@@ -198,7 +198,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     private function getSourcesByStoreId(int $storeId): array
     {
         $store = $this->storeManager->getStore($storeId);
-        $website = $this->websiteRepository->getById($store->getId());
+        $website = $this->websiteRepository->getById($store->getWebsiteId());
         $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
 
         return $this->getAssignedSourcesForStock->execute((int)$stock->getStockId());
