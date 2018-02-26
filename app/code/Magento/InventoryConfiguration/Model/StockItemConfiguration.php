@@ -22,10 +22,10 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     private $stockItem;
 
     /**
-     * @param string $stockItem
+     * @param StockItemInterface $stockItem
      */
     public function __construct(
-        string $stockItem
+        StockItemInterface $stockItem
     ) {
         $this->stockItem = $stockItem;
     }
