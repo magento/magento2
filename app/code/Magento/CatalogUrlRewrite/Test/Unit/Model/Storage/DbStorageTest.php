@@ -7,7 +7,7 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Storage;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Framework\Api\DataObjectHelper;
