@@ -10,6 +10,7 @@ app/code/Magento/InventoryImportExport
 app/code/Magento/InventoryIndexer
 app/code/Magento/InventoryLowQuantityNotification
 app/code/Magento/InventoryLowQuantityNotificationApi
+app/code/Magento/InventoryProductAlert
 app/code/Magento/InventorySales
 app/code/Magento/InventorySalesApi
 app/code/Magento/InventoryShipping
