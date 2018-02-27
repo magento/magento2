@@ -150,7 +150,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
             \Magento\Backend\Model\UrlInterface::class
         );
         $backendUrlModel->turnOffSecretKey();
-        $url = $backendUrlModel->getUrl('newsletter');
+        $url = $backendUrlModel->getUrl('newsletter/template');
         $this->assertRedirect($this->stringStartsWith($url));
     }
 }

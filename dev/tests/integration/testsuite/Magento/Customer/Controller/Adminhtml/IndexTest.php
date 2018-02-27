@@ -325,7 +325,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
         $this->assertEquals(1, $subscriber->getStatus());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -371,7 +371,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -421,7 +421,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          * Check that no errors were generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/'));
     }
 
     /**
@@ -499,7 +499,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $post,
             Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerFormData()
         );
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/'));
     }
 
     /**

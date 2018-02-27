@@ -528,16 +528,18 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
         $this->_setActionName($action);
 
+        $routePathParams = [];
         if (!empty($routePieces)) {
             while (!empty($routePieces)) {
                 $key = array_shift($routePieces);
                 if (!empty($routePieces)) {
                     $value = array_shift($routePieces);
-                    $this->getRouteParamsResolver()->setRouteParam($key, $value);
+                    $routePathParams[$key] = $value;
                 }
             }
         }
 
+        $this->getRouteParamsResolver()->setRouteParams($routePathParams);
         return $this;
     }
 
@@ -732,14 +734,28 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $routePath
      * @param array $routeParams
      * @return string
+     * @deprecated 101.0.1 getRouteUrl method will become private, and will disappear from the interface, url
+     * creation is centralized through getUrl method
      */
     public function getRouteUrl($routePath = null, $routeParams = null)
+    {
+        return $this->getRouteUrlByParams($routePath, $routeParams);
+    }
+
+    /**
+     * Retrieve route URL
+     *
+     * @param string $routePath
+     * @param array $routeParams
+     * @return string
+     */
+    private function getRouteUrlByParams($routePath = null, $routeParams = null)
     {
         if (filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
         }
 
-        $this->getRouteParamsResolver()->unsetData('route_params');
+        $this->getRouteParamsResolver()->setRouteParams([]);
 
         if (isset($routeParams['_direct'])) {
             if (is_array($routeParams)) {
@@ -929,7 +945,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $noSid = (bool)$routeParams['_nosid'];
             unset($routeParams['_nosid']);
         }
-        $url = $this->getRouteUrl($routePath, $routeParams);
+        $url = $this->getRouteUrlByParams($routePath, $routeParams);
 
         /**
          * Apply query params, need call after getRouteUrl for rewrite _current values

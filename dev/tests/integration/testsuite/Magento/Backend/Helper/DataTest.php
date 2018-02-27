@@ -141,8 +141,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHomePageUrl()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\UrlInterface::class
+        )->turnOffSecretKey();
+
         $this->assertStringEndsWith(
-            'index.php/backend/admin/',
+            'index.php/backend/admin/index/index/',
             $this->_helper->getHomePageUrl(),
             'Incorrect home page URL'
         );
