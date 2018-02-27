@@ -34,7 +34,7 @@ interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\EavAttribu
     const CODE_WEIGHT = 'weight';
 
     /**
-     * @return \Magento\Eav\Api\Data\AttributeExtensionInterface
+     * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
      */
     public function getExtensionAttributes();
 }
