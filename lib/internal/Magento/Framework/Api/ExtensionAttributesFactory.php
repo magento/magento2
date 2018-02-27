@@ -49,7 +49,7 @@ class ExtensionAttributesFactory
         $interfaceReflection = new \ReflectionClass($this->getExtensibleInterfaceName($extensibleClassName));
 
         $methodReflection = $interfaceReflection->getMethod('getExtensionAttributes');
-        if ($methodReflection->getDeclaringClass() == self::EXTENSIBLE_INTERFACE_NAME) {
+        if ($methodReflection->getDeclaringClass()->getName() === self::EXTENSIBLE_INTERFACE_NAME) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
