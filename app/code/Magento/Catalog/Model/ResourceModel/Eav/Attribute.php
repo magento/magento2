@@ -105,9 +105,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -133,8 +134,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
