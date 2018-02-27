@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -394,13 +395,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com'
+            ],
             $customerId,
             $newEmail
         );
         $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
-            'customer' => ['entity_id' => $customerId,
+            'customer' => [
+                'entity_id' => $customerId,
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -440,7 +445,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com'
+            ],
             $customerId,
             $newEmail
         );
@@ -757,7 +765,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      *
      * @param int $occurrenceNumber
      * @param string $templateId
-     * @param string $sender
+     * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
      * @return \PHPUnit_Framework_MockObject_MockObject
