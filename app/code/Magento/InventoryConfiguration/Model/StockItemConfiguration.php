@@ -35,7 +35,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isQtyDecimal(): bool
     {
-        return $this->stockItem->getIsQtyDecimal();
+        return (bool)$this->stockItem->getIsQtyDecimal();
     }
 
     /**
@@ -51,7 +51,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigMinQty(): bool
     {
-        return $this->stockItem->getUseConfigMinQty();
+        return (bool)$this->stockItem->getUseConfigMinQty();
     }
 
     /**
@@ -83,7 +83,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigMaxSaleQty(): bool
     {
-        return $this->stockItem->getUseConfigMaxSaleQty();
+        return (bool)$this->stockItem->getUseConfigMaxSaleQty();
     }
 
     /**
@@ -99,7 +99,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigBackorders(): bool
     {
-        return $this->stockItem->getUseConfigBackorders();
+        return (bool)$this->stockItem->getUseConfigBackorders();
     }
 
     /**
@@ -115,7 +115,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigNotifyStockQty(): bool
     {
-        return $this->stockItem->getUseConfigNotifyStockQty();
+        return (bool)$this->stockItem->getUseConfigNotifyStockQty();
     }
 
     /**
@@ -131,7 +131,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigQtyIncrements(): bool
     {
-        return $this->stockItem->getUseConfigQtyIncrements();
+        return (bool)$this->stockItem->getUseConfigQtyIncrements();
     }
 
     /**
@@ -147,7 +147,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigEnableQtyInc(): bool
     {
-        return $this->stockItem->getUseConfigEnableQtyInc();
+        return (bool)$this->stockItem->getUseConfigEnableQtyInc();
     }
 
     /**
@@ -155,7 +155,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isEnableQtyIncrements(): bool
     {
-        return $this->stockItem->getEnableQtyIncrements();
+        return (bool)$this->stockItem->getEnableQtyIncrements();
     }
 
     /**
@@ -163,7 +163,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isUseConfigManageStock(): bool
     {
-        return $this->stockItem->getUseConfigManageStock();
+        return (bool)$this->stockItem->getUseConfigManageStock();
     }
 
     /**
@@ -171,7 +171,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isManageStock(): bool
     {
-        return $this->stockItem->getManageStock();
+        return (bool)$this->stockItem->getManageStock();
     }
 
     /**
@@ -187,7 +187,7 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function isDecimalDivided(): bool
     {
-        return $this->stockItem->getIsDecimalDivided();
+        return (bool)$this->stockItem->getIsDecimalDivided();
     }
 
     /**
