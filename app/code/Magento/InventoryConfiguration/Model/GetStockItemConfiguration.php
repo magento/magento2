@@ -9,6 +9,7 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -95,7 +96,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     /**
      * @param string $sku
      * @return StockItemInterface
-     * @throws \Exception
+     * @throws LocalizedException
      */
     private function getLegacyStockItem(string $sku)
     {
@@ -109,8 +110,7 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         $stockItemCollection = $this->stockItemRepository->getList($searchCriteria);
 
         if ($stockItemCollection->getTotalCount() === 0) {
-            // TODO:
-            throw new \Exception('Legacy stock item is not found');
+            throw new LocalizedException(__('Legacy stock item is not found'));
         }
 
         $stockItems = $stockItemCollection->getItems();
