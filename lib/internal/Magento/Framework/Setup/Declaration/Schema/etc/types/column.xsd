@@ -21,10 +21,6 @@
     </xs:attributeGroup>
 
     <xs:complexType name="abstractColumnType">
-        <xs:complexContent>
-            <xs:extension base="xs:anyType">
-                <xs:attributeGroup ref="baseColumn" />
-            </xs:extension>
-        </xs:complexContent>
+        <xs:attributeGroup ref="baseColumn" />
     </xs:complexType>
 </xs:schema>
