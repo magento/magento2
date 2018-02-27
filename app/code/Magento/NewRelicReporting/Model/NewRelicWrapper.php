@@ -47,7 +47,7 @@ class NewRelicWrapper
      * @param string $appName
      * @return void
      */
-    public function setAppName($appName)
+    public function setAppName(string $appName)
     {
         if (extension_loaded('newrelic')) {
             newrelic_set_appname($appName);
