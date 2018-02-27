@@ -78,6 +78,11 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_DATA_RESTORE = 'data-restore';
 
     /**
+     * We will run installation or upgrade in Dry Run mode
+     */
+    const INPUT_KEY_DRY_RUN_MODE = 'dry-run';
+
+    /**
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -196,6 +201,13 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Restore removed data from dumps'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
             ),
         ]);
         $this->setName('setup:install')
