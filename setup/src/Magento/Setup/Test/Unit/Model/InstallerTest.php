@@ -345,7 +345,8 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\App\State::class, $appState],
-                [\Magento\Framework\App\Cache\Manager::class, $cacheManager]
+                [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
+                [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock]
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->createMock(\Magento\Setup\Model\AdminAccount::class)
