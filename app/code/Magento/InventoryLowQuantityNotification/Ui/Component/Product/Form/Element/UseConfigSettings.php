@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Ui\Component\Product\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\ValueSourceInterface;
 use Magento\Framework\Serialize\JsonValidator;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -37,15 +38,14 @@ class UseConfigSettings extends Checkbox
      */
     public function __construct(
         ContextInterface $context,
-        Json $serializer,
-        JsonValidator $jsonValidator,
         $components = [],
-        array $data = []
+        array $data = [],
+        Json $serializer = null,
+        JsonValidator $jsonValidator = null
     ) {
         parent::__construct($context, $components, $data);
-
-        $this->serializer = $serializer;
-        $this->jsonValidator = $jsonValidator;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);
     }
 
     /**
