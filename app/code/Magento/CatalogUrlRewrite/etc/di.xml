@@ -19,6 +19,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
+        <plugin name="update_url_path_for_different_stores" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\UpdateUrlPath"/>
     </type>
     <type name="Magento\UrlRewrite\Model\StorageInterface">
         <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
