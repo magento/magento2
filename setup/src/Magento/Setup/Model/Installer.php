@@ -321,9 +321,7 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
-        $this->declarationInstaller = $declarationInstaller ?: $this->objectManagerProvider->get()->get(
-            DeclarationInstaller::class
-        );
+
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
@@ -383,6 +381,21 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
+    }
+
+    /**
+     * Get declaration installer. For upgrade process it must be created after deployment config update.
+     *
+     * @return DeclarationInstaller
+     */
+    private function getDeclarationInstaller()
+    {
+        if (!$this->declarationInstaller) {
+            $this->declarationInstaller = $this->objectManagerProvider->get()->get(
+                DeclarationInstaller::class
+            );
+        }
+        return $this->declarationInstaller;
     }
 
     /**
@@ -794,7 +807,7 @@ class Installer
      */
     public function declarativeInstallSchema(array $request)
     {
-        $this->declarationInstaller->installSchema($request);
+        $this->getDeclarationInstaller()->installSchema($request);
     }
 
     /**
