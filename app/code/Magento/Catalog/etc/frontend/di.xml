@@ -79,6 +79,7 @@
             <argument name="typeId" xsi:type="string">recently_compared_product</argument>
         </arguments>
     </virtualType>
+<<<<<<< HEAD
     <type name="Magento\Catalog\Block\Product\View\Gallery">
         <arguments>
             <argument name="galleryImagesConfig" xsi:type="array">
@@ -96,11 +97,24 @@
                     <item name="image_id" xsi:type="string">product_page_image_large</item>
                     <item name="data_object_key" xsi:type="string">large_image_url</item>
                     <item name="json_object_key" xsi:type="string">full</item>
+=======
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addCompareAddSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Catalog::messages/addCompareAddSuccessMessage.phtml</item>
+                    </item>
+>>>>>>> edd6062d2f4... Add a link to the success message when adding a product to the compare list
                 </item>
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Framework\App\ResourceConnection">
         <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
     </type>
+=======
+>>>>>>> edd6062d2f4... Add a link to the success message when adding a product to the compare list
 </config>
