@@ -60,7 +60,7 @@ class Switcher
             UrlRewrite::STORE_ID => $store->getId(),
         ]);
 
-        $urlToSwitch = (is_null($currentRewrite)) ? $baseUrl : $currentUrl;
+        $urlToSwitch = (null === $currentRewrite) ? $baseUrl : $currentUrl;
         return $this->postHelper->getPostData($urlToSwitch, $data);
     }
 }
