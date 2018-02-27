@@ -266,9 +266,56 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $references
      * @param array $constraints
      * @param array $indexes
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testBuild(array $columns, array $references, array $constraints, array $indexes)
+    {
+        $this->prepareSchemaMocks($columns, $references, $constraints, $indexes);
+        $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Schema $schema */
+        $schema = $this->objectManagerHelper->getObject(
+            Schema::class,
+            ['resourceConnection' => $resourceConnectionMock]
+        );
+        $this->model->build($schema);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @param array $columns
+     * @param array $references
+     * @param array $constraints
+     * @param array $indexes
+     * @expectedException \PHPUnit\Framework\Exception
+     * @expectedExceptionMessage
+     * User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table
+     */
+    public function testBuildUnknownIndexColumn(array $columns, array $references, array $constraints, array $indexes)
+    {
+        $indexes['second_table']['FIRST_INDEX']['column'][] = 'unknown_column';
+        $this->prepareSchemaMocks($columns, $references, $constraints, $indexes);
+        $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Schema $schema */
+        $schema = $this->objectManagerHelper->getObject(
+            Schema::class,
+            ['resourceConnection' => $resourceConnectionMock]
+        );
+        $this->model->build($schema);
+    }
+
+    /**
+     * Prepare mocks for test.
+     *
+     * @param array $columns
+     * @param array $references
+     * @param array $constraints
+     * @param array $indexes
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function prepareSchemaMocks(array $columns, array $references, array $constraints, array $indexes)
     {
         $withContext = [['first_table', 'default'], ['second_table', 'default']];
         $this->shardingMock->expects(self::once())
@@ -278,26 +325,26 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('readTables')
             ->with('default')
             ->willReturn(['first_table', 'second_table']);
-        $this->dbSchemaReaderMock->expects(self::exactly(2))
+        $this->dbSchemaReaderMock->expects($this->any())
             ->method('getTableOptions')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls(
                 ['Engine' => 'innodb', 'Comment' => ''],
                 ['Engine' => 'innodb', 'Comment' => 'Not null comment']
             );
-        $this->dbSchemaReaderMock->expects(self::exactly(2))
+        $this->dbSchemaReaderMock->expects($this->any())
             ->method('readColumns')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls($columns['first_table'], $columns['second_table']);
-        $this->dbSchemaReaderMock->expects(self::exactly(2))
+        $this->dbSchemaReaderMock->expects($this->any())
             ->method('readIndexes')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls([], $indexes['second_table']);
-        $this->dbSchemaReaderMock->expects(self::exactly(2))
+        $this->dbSchemaReaderMock->expects($this->any())
             ->method('readConstraints')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls($constraints['first_table'], []);
-        $this->dbSchemaReaderMock->expects(self::exactly(2))
+        $this->dbSchemaReaderMock->expects($this->any())
             ->method('readReferences')
             ->withConsecutive(...array_values($withContext))
             ->willReturnOnConsecutiveCalls($references['first_table'], []);
@@ -322,7 +369,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
         );
         $table->addColumns([$firstColumn, $foreignColumn, $timestampColumn]);
         $table->addConstraints([$foreignKey, $primaryKey]);
-        $this->elementFactoryMock->expects(self::exactly(9))
+        $this->elementFactoryMock->expects($this->any())
             ->method('create')
             ->withConsecutive(
                 [
@@ -426,14 +473,6 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                 $index,
                 $foreignKey
             );
-        $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var Schema $schema */
-        $schema = $this->objectManagerHelper->getObject(
-            Schema::class,
-            ['resourceConnection' => $resourceConnectionMock]
-        );
-        $this->model->build($schema);
+
     }
 }
