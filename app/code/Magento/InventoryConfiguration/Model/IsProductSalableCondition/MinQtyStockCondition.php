@@ -73,10 +73,10 @@ class MinQtyStockCondition implements IsProductSalableInterface
 
         if ((
             $stockItemConfiguration->isUseConfigMinQty() == 1 &&
-            $qtyWithReservation < $globalMinQty
+            $qtyWithReservation <= $globalMinQty
             ) || (
                 $stockItemConfiguration->isUseConfigMinQty() == 0 &&
-                $qtyWithReservation < $stockItemConfiguration->getMinQty()
+                $qtyWithReservation <= $stockItemConfiguration->getMinQty()
             )
         ) {
             return false;
