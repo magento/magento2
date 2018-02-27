@@ -3,6 +3,7 @@
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.png)](https://crowdin.com/project/magento-2)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
+[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 
 ## Magento system requirements
 [Magento system requirements](http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements2.html)
