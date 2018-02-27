@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
@@ -71,6 +72,12 @@ class CopyModules
                 explode("_", $annotations['method']['moduleName'][0])[1];
 
             File::rmdirRecursive($path);
+            $reflection = new \ReflectionClass(ComponentRegistrar::class);
+            $reflectionProperty = $reflection->getProperty('paths');
+            $reflectionProperty->setAccessible(true);
+            $value = $reflectionProperty->getValue();
+            $value[ComponentRegistrar::MODULE] = [];
+            $reflectionProperty->setValue($value);
         }
     }
 }
