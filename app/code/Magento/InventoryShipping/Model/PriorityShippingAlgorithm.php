@@ -147,7 +147,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                     continue;
                 }
 
-                $sourceItem = $this->getStockItemBySku($source->getSourceCode(), $itemSku);
+                $sourceItem = $this->getSourceItemBySku($source->getSourceCode(), $itemSku);
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
@@ -205,17 +205,17 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     }
 
     /**
-     * Retrieve stock item from specific source by SKU
+     * Retrieve source item from specific source by SKU
      *
-     * @param string $stockCode
+     * @param string $sourceCode
      * @param string $sku
      *
      * @return SourceItemInterface
      */
-    private function getStockItemBySku(string $stockCode, string $sku): SourceItemInterface
+    private function getSourceItemBySku(string $sourceCode, string $sku): SourceItemInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $stockCode)
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
             ->addFilter(SourceItemInterface::SKU, $sku)
             ->create();
         $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
