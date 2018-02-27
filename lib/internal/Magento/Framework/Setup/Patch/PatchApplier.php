@@ -231,9 +231,11 @@ class PatchApplier
                 throw new Exception(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
-                        get_class($schemaPatch),
-                        $moduleName,
-                        $e->getMessage()
+                        [
+                            get_class($schemaPatch),
+                            $moduleName,
+                            $e->getMessage()
+                        ]
                     )
                 );
             } finally {

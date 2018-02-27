@@ -178,9 +178,11 @@ class SchemaBuilder
                 trigger_error(
                     new Phrase(
                         'Column %1 does not exist for index/constraint %2 in table %3.',
-                        $columnName,
-                        $data['name'],
-                        $tableName
+                        [
+                            $columnName,
+                            $data['name'],
+                            $tableName
+                        ]
                     ),
                     E_USER_WARNING
                 );
