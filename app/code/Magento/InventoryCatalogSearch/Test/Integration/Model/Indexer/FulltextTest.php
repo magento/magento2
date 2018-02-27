@@ -196,7 +196,7 @@ class FulltextTest extends TestCase
      * @param string $store
      * @return void
      *
-     * @dataProvider reindexAllDataProvider
+     * @dataProvider reindexRowAfterMassActionDataProvider
      */
     public function testReindexRowAfterMassAction(string $store)
     {
@@ -212,7 +212,6 @@ class FulltextTest extends TestCase
             'name' => 'Simple Product Common',
         ];
 
-        /** @var Action */
         $this->productAction->updateAttributes($productIds, $attrData, $this->storeManager->getStore()->getId());
 
         $products = $this->search('Orange');

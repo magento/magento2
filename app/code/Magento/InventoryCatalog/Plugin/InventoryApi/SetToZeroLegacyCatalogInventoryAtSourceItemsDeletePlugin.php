@@ -37,26 +37,18 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     private $setDataToLegacyStockStatus;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SetDataToLegacyStockItem $setDataToLegacyStockItem
      * @param SetDataToLegacyStockStatus $setDataToLegacyStockStatus
-     * @param LoggerInterface $logger
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         SetDataToLegacyStockItem $setDataToLegacyStockItem,
-        SetDataToLegacyStockStatus $setDataToLegacyStockStatus,
-        LoggerInterface $logger
+        SetDataToLegacyStockStatus $setDataToLegacyStockStatus
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->setDataToLegacyStockItem = $setDataToLegacyStockItem;
         $this->setDataToLegacyStockStatus = $setDataToLegacyStockStatus;
-        $this->logger = $logger;
     }
 
     /**
@@ -70,15 +62,11 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            try {
-                if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
-                    continue;
-                }
-                $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
-                $this->setDataToLegacyStockStatus->execute($sourceItem->getSku(), 0, Status::STATUS_OUT_OF_STOCK);
-            } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
+            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
+                continue;
             }
+            $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
+            $this->setDataToLegacyStockStatus->execute($sourceItem->getSku(), 0, Status::STATUS_OUT_OF_STOCK);
         }
     }
 }
