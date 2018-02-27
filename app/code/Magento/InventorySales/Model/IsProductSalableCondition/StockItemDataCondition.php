@@ -35,6 +35,11 @@ class StockItemDataCondition implements IsProductSalableInterface
     public function execute(string $sku, int $stockId): bool
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+
+        if (null === $stockItemData) {
+            // Sku is not assigned to Stock
+            return false;
+        }
         return (bool)$stockItemData['is_salable'];
     }
 }

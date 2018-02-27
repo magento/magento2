@@ -40,7 +40,6 @@ class MinQtyStockCondition implements IsProductSalableInterface
     private $configuration;
 
     /**
-     * ConfigMinQty constructor.
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param Configuration $configuration
      * @param GetReservationsQuantityInterface $getReservationsQuantity
@@ -63,8 +62,12 @@ class MinQtyStockCondition implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        /** @var StockItemConfigurationInterface $StockItemConfiguration */
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        if (null === $stockItemData) {
+            // Sku is not assigned to Stock
+            return false;
+        }
+
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
