@@ -82,10 +82,10 @@
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
-                <item name="addCompareAddSuccessMessage" xsi:type="array">
+                <item name="addCompareSuccessMessage" xsi:type="array">
                     <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
-                        <item name="template" xsi:type="string">Magento_Catalog::messages/addCompareAddSuccessMessage.phtml</item>
+                        <item name="template" xsi:type="string">Magento_Catalog::messages/addCompareSuccessMessage.phtml</item>
                     </item>
                 </item>
             </argument>
