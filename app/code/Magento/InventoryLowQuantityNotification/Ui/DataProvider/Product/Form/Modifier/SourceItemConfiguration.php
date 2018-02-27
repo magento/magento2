@@ -10,9 +10,9 @@ namespace Magento\InventoryLowQuantityNotification\Ui\DataProvider\Product\Form\
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\ConfigValueProvider;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 
@@ -37,27 +37,26 @@ class SourceItemConfiguration extends AbstractModifier
     private $getSourceItemConfiguration;
 
     /**
-     * @var ConfigValueProvider
+     * @var ScopeConfigInterface
      */
-    private $configValueProvider;
+    private $scopeConfig;
 
     /**
      * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
      * @param LocatorInterface $locator
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
-     * @param ConfigValueProvider $configValueProvider
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
         LocatorInterface $locator,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration,
-        ConfigValueProvider $configValueProvider
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
-        $this->configValueProvider = $configValueProvider;
-    }
+        $this->scopeConfig = $scopeConfig;    }
 
     /**
      * {@inheritdoc}
@@ -119,8 +118,8 @@ class SourceItemConfiguration extends AbstractModifier
     /**
      * @return float
      */
-    private function getNotifyQtyConfigValue()
+    private function getNotifyQtyConfigValue() : float
     {
-        return (float)$this->configValueProvider->execute('notify_stock_qty');
+        return (float)$this->scopeConfig->getValue('inventory/source_item_configuration/notify_stock_qty');
     }
 }

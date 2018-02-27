@@ -28,7 +28,7 @@
                         </imports>
                     </settings>
                 </field>
-                <field name="notify_stock_qty_use_default" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox" sortOrder="55">
+                <field name="notify_stock_qty_use_default" component="Magento_InventoryLowQuantityNotification/js/components/use-config-settings" formElement="checkbox" sortOrder="55">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="valueFromConfig" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\GetConfigValue</item>
@@ -43,7 +43,7 @@
                         </links>
                     </settings>
                     <formElements>
-                        <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
+                        <checkbox class="Magento\InventoryLowQuantityNotification\Ui\Component\Product\Form\Element\UseConfigSettings">
                             <settings>
                                 <valueMap>
                                     <map name="false" xsi:type="string">0</map>

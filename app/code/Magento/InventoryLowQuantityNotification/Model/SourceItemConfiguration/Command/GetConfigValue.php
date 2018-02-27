@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\ValueSourceInterface;
-use Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\ConfigValueProvider;
 
 /**
  * Get config value by field name from Source Item Configuration.
@@ -16,17 +16,17 @@ use Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Confi
 class GetConfigValue implements ValueSourceInterface
 {
     /**
-     * @var ConfigValueProvider
+     * @var ScopeConfigInterface
      */
-    private $configValueProvider;
+    private $scopeConfig;
 
     /**
-     * @param ConfigValueProvider $configValueProvider
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ConfigValueProvider $configValueProvider
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->configValueProvider = $configValueProvider;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -34,7 +34,7 @@ class GetConfigValue implements ValueSourceInterface
      */
     public function getValue($name)
     {
-        $value = (float)$this->configValueProvider->execute($name);
+        $value = (float)$this->scopeConfig->getValue('inventory/source_item_configuration/' . $name);
 
         return $value;
     }
