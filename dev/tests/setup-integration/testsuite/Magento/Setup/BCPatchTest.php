@@ -53,7 +53,6 @@ class BCPatchTest extends SetupTestCase
         $this->dbVersionInfo = $objectManager->get(DbVersionInfo::class);
         $this->tableData = $objectManager->get(TableData::class);
         $this->moduleResource = $objectManager->get(ModuleResource::class);
-        $this->moduleResource->flush();
     }
 
     /**

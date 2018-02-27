@@ -7,12 +7,14 @@
 namespace Magento\Setup;
 
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
@@ -60,6 +62,7 @@ class BCMultiModuleTest extends SetupTestCase
         $this->tableData = $objectManager->get(TableData::class);
         $this->moduleResource = $objectManager->get(ModuleResource::class);
         $this->dbSchemaReader = $objectManager->get(DbSchemaReaderInterface::class);
+
     }
 
     /**

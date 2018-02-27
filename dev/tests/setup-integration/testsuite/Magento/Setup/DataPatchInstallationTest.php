@@ -78,7 +78,7 @@ class DataPatchInstallationTest extends SetupTestCase
             'etc'
         );
         $this->movePatches();
-        $this->moduleResource->flush();
+        ModuleResource::flush();
         $this->cliCommad->upgrade();
         self::assertEquals(
             '0.0.3',
