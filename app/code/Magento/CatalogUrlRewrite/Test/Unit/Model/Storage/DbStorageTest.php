@@ -66,12 +66,12 @@ class DbStorageTest extends TestCase
             ->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();;
+            ->getMock();
         $this->connectionMock = $this
             ->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();;
+            ->getMock();
         $this->select = $this->createPartialMock(
             Select::class,
             ['from', 'where', 'deleteFromSelect', 'joinLeft']
@@ -80,7 +80,7 @@ class DbStorageTest extends TestCase
             ->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();;;
+            ->getMock();
 
         $this->resource->expects($this->any())
             ->method('getConnection')
