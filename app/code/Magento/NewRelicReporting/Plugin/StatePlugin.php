@@ -54,14 +54,14 @@ class StatePlugin
     public function afterSetAreaCode(State $state, $result)
     {
         if (!$this->shouldSetAppName()) {
-            return;
+            return $result;
         }
 
         try {
             $this->newRelicWrapper->setAppName($this->appName($state));
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
-            return;
+            return $result;
         }
     }
 
