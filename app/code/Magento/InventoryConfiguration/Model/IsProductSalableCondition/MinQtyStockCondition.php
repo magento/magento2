@@ -68,19 +68,15 @@ class MinQtyStockCondition implements IsProductSalableInterface
         }
 
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        if (null === $stockItemConfiguration) {
-            return false;
-        }
-
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
 
         if ((
             $stockItemConfiguration->isUseConfigMinQty() == 1 &&
-            $qtyWithReservation <= $globalMinQty
+            $qtyWithReservation < $globalMinQty
             ) || (
                 $stockItemConfiguration->isUseConfigMinQty() == 0 &&
-                $qtyWithReservation <= $stockItemConfiguration->getMinQty()
+                $qtyWithReservation < $stockItemConfiguration->getMinQty()
             )
         ) {
             return false;
