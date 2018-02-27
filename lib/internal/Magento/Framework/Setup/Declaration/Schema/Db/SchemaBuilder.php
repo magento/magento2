@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
@@ -166,7 +167,7 @@ class SchemaBuilder
     {
         if (!is_array($data['column'])) {
             throw new Exception(
-                __("Cannot find columns for internal index")
+                new Phrase("Cannot find columns for internal index")
             );
         }
 
@@ -175,7 +176,7 @@ class SchemaBuilder
             if (!isset($columns[$columnName])) {
                 $tableName = isset($data['table']) ? $data['table']->getName() : '';
                 trigger_error(
-                    __(
+                    new Phrase(
                         'Column %1 does not exist for index/constraint %2 in table %3.',
                         $columnName,
                         $data['name'],

@@ -229,7 +229,7 @@ class PatchApplier
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
             } catch (\Exception $e) {
                 throw new Exception(
-                    __(
+                    new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
                         get_class($schemaPatch),
                         $moduleName,
@@ -268,7 +268,7 @@ class PatchApplier
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
-                    throw new Exception($e->getMessage());
+                    throw new Exception(new Phrase($e->getMessage()));
                 } finally {
                     unset($dataPatch);
                 }

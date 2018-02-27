@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model\Declaration\Schema\ValidationRules;
+namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\ValidationRules;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex;
