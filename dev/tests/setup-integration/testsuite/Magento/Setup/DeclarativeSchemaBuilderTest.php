@@ -16,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
 
 /**
+ * @magentoAppIsolation enabled
  * The purpose of this test is verifying initial InstallSchema, InstallData scripts.
  */
 class DeclarativeSchemaBuilderTest extends SetupTestCase
@@ -38,7 +39,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->schemaConfig = $objectManager->get(SchemaConfig::class);
+        $this->schemaConfig = $objectManager->create(SchemaConfig::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
     }
@@ -60,24 +61,24 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         //Test primary key and renaming
         $referenceTable = $schemaTables['reference_table'];
         /**
-        * @var Internal $primaryKey
-        */
+         * @var Internal $primaryKey
+         */
         $primaryKey = $referenceTable->getPrimaryConstraint();
         $columns = $primaryKey->getColumns();
         self::assertEquals('tinyint_ref', reset($columns)->getName());
         //Test column
         $testTable = $schemaTables['test_table'];
         /**
-        * @var Timestamp $timestampColumn
-        */
+         * @var Timestamp $timestampColumn
+         */
         $timestampColumn = $testTable->getColumnByName('timestamp');
         self::assertEquals('CURRENT_TIMESTAMP', $timestampColumn->getOnUpdate());
         //Test disabled
         self::assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());
         //Test foreign key
         /**
-        * @var Reference $foreignKey
-        */
+         * @var Reference $foreignKey
+         */
         $foreignKey = $testTable->getConstraintByName('some_foreign_key');
         self::assertEquals('NO ACTION', $foreignKey->getOnDelete());
         self::assertEquals('tinyint_ref', $foreignKey->getReferenceColumn()->getName());

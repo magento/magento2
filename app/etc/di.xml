@@ -1468,6 +1468,9 @@
             <argument name="rules" xsi:type="array">
                 <item name="check_references" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex</item>
                 <item name="real_types" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationRules\RealTypes</item>
+                <item name="check_primary_key" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\PrimaryKeyCanBeCreated</item>
+                <item name="inconsistence_references" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\IncosistentReferenceDefinition</item>
+                <item name="auto_increment_validation" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\AutoIncrementColumnValidation</item>
             </argument>
         </arguments>
     </type>

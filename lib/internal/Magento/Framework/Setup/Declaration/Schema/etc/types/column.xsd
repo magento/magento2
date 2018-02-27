@@ -7,7 +7,6 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/operations.xsd" />
-
     <xs:attributeGroup name="baseColumn">
         <xs:attributeGroup ref="basicOperations" />
         <xs:attribute name="name" type="nameType" use="required" />
@@ -20,4 +19,12 @@
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
+
+    <xs:complexType name="abstractColumnType">
+        <xs:complexContent>
+            <xs:extension base="xs:anyType">
+                <xs:attributeGroup ref="baseColumn" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>

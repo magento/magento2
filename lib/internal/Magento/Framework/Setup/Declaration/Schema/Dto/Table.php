@@ -216,7 +216,7 @@ class Table extends GenericElement implements
      * If column exists - retrieve column
      *
      * @param  string $nameOrId
-     * @return Column
+     * @return Column | bool
      */
     public function getColumnByName($nameOrId)
     {
@@ -224,7 +224,7 @@ class Table extends GenericElement implements
             return $this->columns[$nameOrId];
         }
 
-        throw new \LogicException(sprintf("Cannot find column with name or id %s", $nameOrId));
+        return false;
     }
 
     /**

@@ -9,14 +9,17 @@
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/column.xsd"/>
 
     <xs:complexType name="longblob">
-        <xs:annotation>
-            <xs:documentation>
-                Can be used as binary source. Different types can be used depends on data size
-                you want to persist
-            </xs:documentation>
-        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Can be used as binary source. Different types can be used depends on data size
+                        you want to persist
+                    </xs:documentation>
+                </xs:annotation>
 
-        <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="nullable" type="xs:boolean" />
+                <xs:attribute name="nullable" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

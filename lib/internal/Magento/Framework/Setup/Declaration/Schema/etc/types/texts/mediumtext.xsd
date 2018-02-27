@@ -9,14 +9,17 @@
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/column.xsd"/>
 
     <xs:complexType name="mediumtext">
-        <xs:annotation>
-            <xs:documentation>
-                Here plain text can be persisted. Length of this field is more than 65536 characters
-                and less than 16777216
-            </xs:documentation>
-        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Here plain text can be persisted. Length of this field is more than 65536 characters
+                        and less than 16777216
+                    </xs:documentation>
+                </xs:annotation>
 
-        <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="nullable" type="xs:boolean" />
+                <xs:attribute name="nullable" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

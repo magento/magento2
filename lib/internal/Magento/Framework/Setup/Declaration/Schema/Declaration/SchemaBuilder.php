@@ -7,6 +7,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
@@ -115,7 +116,7 @@ class SchemaBuilder
                 $messages .= sprintf("%s%s", PHP_EOL, $error['message']);
             }
 
-            throw new Exception($messages);
+            throw new Exception(__($messages));
         }
     }
 
@@ -240,6 +241,24 @@ class SchemaBuilder
     }
 
     /**
+     * @param string $columnName
+     * @param Table $table
+     * @return Column
+     */
+    private function getColumnByName(string $columnName, Table $table)
+    {
+        $columnCandidate = $table->getColumnByName($columnName);
+
+        if (!$columnCandidate) {
+            throw new \LogicException(
+                sprintf('Table %s do not have column with name %s', $table->getName(), $columnName)
+            );
+        }
+
+        return $columnCandidate;
+    }
+
+    /**
      * Convert column names to objects.
      *
      * @param  array $columnNames
@@ -251,7 +270,7 @@ class SchemaBuilder
         $columns = [];
 
         foreach ($columnNames as $columnName) {
-            $columns[] = $table->getColumnByName($columnName);
+            $columns[] = $this->getColumnByName($columnName, $table);
         }
 
         return $columns;
@@ -311,7 +330,7 @@ class SchemaBuilder
             $constraintData = $this->processGenericData($constraintData, $resource, $table);
             //As foreign constraint has different schema we need to process it in different way
             if ($constraintData['type'] === 'foreign') {
-                $constraintData['column'] = $table->getColumnByName($constraintData['column']);
+                $constraintData['column'] = $this->getColumnByName($constraintData['column'], $table);
                 $referenceTableData = $this->tablesData[$constraintData['referenceTable']];
                 //If we are referenced to the same table we need to specify it
                 //Get table name from resource connection regarding prefix settings
@@ -327,11 +346,14 @@ class SchemaBuilder
                 $constraintData['referenceTable'] = $referenceTable;
 
                 if (!$constraintData['referenceTable']) {
-                    throw new \LogicException("Cannot find reference table");
+                    throw new \LogicException(
+                        sprintf('Cannot find reference table with name %s', $constraints['referenceTable'])
+                    );
                 }
 
-                $constraintData['referenceColumn'] = $constraintData['referenceTable']->getColumnByName(
-                    $constraintData['referenceColumn']
+                $constraintData['referenceColumn'] = $this->getColumnByName(
+                    $constraintData['referenceColumn'],
+                    $constraintData['referenceTable']
                 );
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;
