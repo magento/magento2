@@ -40,6 +40,5 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
             }
         }
         $this->_redirect('adminhtml/*/');
-        return;
     }
 }
