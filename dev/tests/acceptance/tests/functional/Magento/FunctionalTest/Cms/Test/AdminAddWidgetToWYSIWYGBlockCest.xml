@@ -68,8 +68,9 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate2" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn2" />
         <waitForLoadingMaskToDisappear stepKey="waitForWidgetChooserLoadingMaskToDisappear"/>
-        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
-        <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
+        <actionGroup ref="searchBlockOnGridPage" stepKey="searchBlockOnGridPage">
+            <argument name="Block" value="_defaultBlock"/>
+        </actionGroup>
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
