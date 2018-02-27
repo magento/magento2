@@ -282,12 +282,13 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * WARNING! The expected exception type may differ depending on PHPUnit version.
+     *
      * @dataProvider dataProvider
      * @param array $columns
      * @param array $references
      * @param array $constraints
      * @param array $indexes
-     * @expectedException \PHPUnit\Framework\Exception
      * @expectedExceptionMessage
      * User Warning: Column unknown_column does not exist for index/constraint FIRST_INDEX in table second_table
      */
