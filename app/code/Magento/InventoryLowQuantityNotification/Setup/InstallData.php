@@ -42,18 +42,18 @@ class InstallData implements InstallDataInterface
         $select = $connection->select();
         $select
             ->from(
-                ['stock_item' => $connection->getTableName(StockItem::ENTITY)],
+                ['stock_item' => $setup->getTable(StockItem::ENTITY)],
                 [
                     'source_item.' . SourceItemInterface::SOURCE_CODE,
                     'source_item.' . SourceItemInterface::SKU,
                     'stock_item.notify_stock_qty',
                 ]
             )->join(
-                ['product' => $connection->getTableName('catalog_product_entity')],
+                ['product' => $setup->getTable('catalog_product_entity')],
                 'product.entity_id = stock_item.product_id',
                 []
             )->join(
-                ['source_item' => $connection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM)],
+                ['source_item' => $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM)],
                 'source_item.sku = product.sku',
                 []
             )->where(
@@ -65,7 +65,7 @@ class InstallData implements InstallDataInterface
 
         $sql = $connection->insertFromSelect(
             $select,
-            $connection->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
+            $setup->getTable(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
         );
 
         $connection->query($sql);
