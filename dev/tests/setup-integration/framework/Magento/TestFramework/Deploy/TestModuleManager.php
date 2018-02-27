@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Deploy;
+
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\ModuleListInterface;

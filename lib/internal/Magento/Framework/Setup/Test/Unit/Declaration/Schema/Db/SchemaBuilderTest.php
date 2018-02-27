@@ -473,6 +473,5 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
                 $index,
                 $foreignKey
             );
-
     }
 }

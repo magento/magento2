@@ -25,7 +25,6 @@ class IncosistentReferenceDefinition implements ValidationInterface
      */
     const ERROR_TYPE = 'reference_incosistence_definition';
 
-
     /**
      * Assert that column dimensions are the same
      *
