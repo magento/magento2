@@ -64,6 +64,6 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="file">logo.png</data>
+        <data key="file">magento-logo.png</data>
     </entity>
 </entities>
