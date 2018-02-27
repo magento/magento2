@@ -31,6 +31,8 @@ use Magento\Framework\Setup\Declaration\Schema\Sharding;
  *    -internal (unique, primary, check, nullable)
  *    -reference (referenceTable=<DTO>, referenceColumn=<DTO>, ...)
  *   -index
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SchemaBuilder
 {
