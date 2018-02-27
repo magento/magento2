@@ -314,6 +314,7 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
+                        'isDefaultFieldScope' => 'is_default',
                         'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
                     ],
                 ],
@@ -601,6 +602,9 @@ class BundlePanel extends AbstractModifier
                         'is_collection' => true,
                         'imports' => [
                             'inputType' => '${$.parentName}:inputType'
+                        ],
+                        'exports' => [
+                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}'
                         ]
                     ],
                 ],
