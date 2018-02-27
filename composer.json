@@ -33,7 +33,7 @@
         "braintree/braintree_php": "3.22.0",
         "colinmollenhour/cache-backend-file": "1.4",
         "colinmollenhour/cache-backend-redis": "1.10.2",
-        "colinmollenhour/credis": "1.6",
+        "colinmollenhour/credis": "1.9.1",
         "colinmollenhour/php-redis-session-abstract": "~1.2.2",
         "composer/composer": "1.4.1",
         "magento/composer": "~1.2.0",
