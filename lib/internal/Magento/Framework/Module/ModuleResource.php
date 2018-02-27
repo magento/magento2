@@ -143,6 +143,6 @@ class ModuleResource extends AbstractDb implements ResourceInterface
     public function flush()
     {
         self::$dataVersions = null;
-        self::$schemaVersions = null;
+        self::$schemaVersions = [];
     }
 }
