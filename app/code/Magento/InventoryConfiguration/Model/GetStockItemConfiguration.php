@@ -83,7 +83,8 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         $stockItemCollection = $this->stockItemRepository->getList($searchCriteria);
 
         if ($stockItemCollection->getTotalCount() > 0) {
-            $stockItem = $stockItemCollection->getItems()[0];
+            $stockItems = $stockItemCollection->getItems();
+            $stockItem = reset($stockItems);
         } else {
             // TODO:
             $stockItem = \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
