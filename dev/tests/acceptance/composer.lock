@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8549e85c50597c0494002f415527fcad",
+    "content-hash": "8854f0e0030e4ccd3107db23f0872556",
     "packages": [
         {
             "name": "allure-framework/allure-codeception",
-            "version": "dev-master",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-codeception.git",
-                "reference": "af40af5ae2b717618a42fe3e137d75878508c75d"
+                "reference": "e2672e57e6839edb770fa5de5f2b3fcc47917aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/af40af5ae2b717618a42fe3e137d75878508c75d",
-                "reference": "af40af5ae2b717618a42fe3e137d75878508c75d",
+                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/e2672e57e6839edb770fa5de5f2b3fcc47917aa1",
+                "reference": "e2672e57e6839edb770fa5de5f2b3fcc47917aa1",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "steps",
                 "testing"
             ],
-            "time": "2017-03-30T09:01:00+00:00"
+            "time": "2017-12-27T11:38:21+00:00"
         },
         {
             "name": "allure-framework/allure-php-api",
@@ -4420,9 +4420,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "allure-framework/allure-codeception": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

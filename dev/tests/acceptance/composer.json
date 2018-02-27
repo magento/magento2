@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
+        "allure-framework/allure-codeception": "~1.2.6",
         "codeception/codeception": "~2.3.4",
         "consolidation/robo": "^1.0.0",
         "symfony/process": ">=2.7 <3.4",
