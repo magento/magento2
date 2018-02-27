@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
@@ -116,7 +117,7 @@ class SchemaBuilder
                 $messages .= sprintf("%s%s", PHP_EOL, $error['message']);
             }
 
-            throw new Exception(__($messages));
+            throw new Exception(new Phrase($messages));
         }
     }
 
