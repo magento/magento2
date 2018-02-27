@@ -360,6 +360,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
         $estimatedModules = $this->createModulesConfig($request, true);
+        $this->objectManagerProvider->reset();
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
