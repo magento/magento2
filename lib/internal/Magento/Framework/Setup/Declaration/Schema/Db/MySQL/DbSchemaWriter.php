@@ -7,15 +7,14 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal;
 use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 
 /**
  * @inheritdoc
@@ -44,17 +43,25 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private $statementFactory;
 
     /**
+     * @var DryRunLogger
+     */
+    private $dryRunLogger;
+
+    /**
      * Constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
+     * @param DryRunLogger $dryRunLogger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        StatementFactory $statementFactory
+        StatementFactory $statementFactory,
+        DryRunLogger $dryRunLogger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
+        $this->dryRunLogger = $dryRunLogger;
     }
 
     /**
@@ -217,7 +224,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * @inheritdoc
      */
-    public function compile(StatementAggregator $statementAggregator)
+    public function compile(StatementAggregator $statementAggregator, $dryRun)
     {
         foreach ($statementAggregator->getStatementsBank() as $statementBank) {
             $statementsSql = [];
@@ -225,18 +232,28 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             foreach ($statementBank as $statement) {
                 $statementsSql[] = $statement->getStatement();
             }
-
             $adapter = $this->resourceConnection->getConnection($statement->getResource());
-            $adapter->query(
-                sprintf(
-                    $this->statementDirectives[$statement->getType()],
-                    $adapter->quoteIdentifier($statement->getTableName()),
-                    implode(", ", $statementsSql)
-                )
-            );
-            //Do post update, like SQL DML operations or etc...
-            foreach ($statement->getTriggers() as $trigger) {
-                call_user_func($trigger);
+
+            if ($dryRun) {
+                $this->dryRunLogger->log(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        implode(", ", $statementsSql)
+                    )
+                );
+            } else {
+                $adapter->query(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        implode(", ", $statementsSql)
+                    )
+                );
+                //Do post update, like SQL DML operations or etc...
+                foreach ($statement->getTriggers() as $trigger) {
+                    call_user_func($trigger);
+                }
             }
         }
     }

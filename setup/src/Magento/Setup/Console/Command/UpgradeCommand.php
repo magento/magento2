@@ -10,6 +10,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -95,6 +96,13 @@ class UpgradeCommand extends AbstractSetupCommand
                 InputOption::VALUE_NONE,
                 'Restore removed data from dumps'
             ),
+            new InputOption(
+                DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
+            ),
         ];
         $this->setName('setup:upgrade')
             ->setDescription('Upgrades the Magento application, DB data, and schema')
@@ -113,7 +121,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $installer->installSchema($request);
-            $installer->installDataFixtures();
+            $installer->installDataFixtures($request);
 
             if ($this->deploymentConfig->isAvailable()) {
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
