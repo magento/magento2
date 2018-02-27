@@ -66,21 +66,33 @@ class CopyModules
     {
         $annotations = $test->getAnnotations();
         //This annotation can be declared only on method level
-        if (isset($annotations['method']['moduleName'])) {
+        if (!empty($annotations['method']['moduleName'])) {
             foreach ($annotations['method']['moduleName'] as $moduleName) {
                 $path = MAGENTO_MODULES_PATH .
                     //Take only module name from Magento_ModuleName
                     explode("_", $moduleName)[1];
-
                 File::rmdirRecursive($path);
+                $this->unsergisterModuleFromComponentRegistrar($moduleName);
             }
-
-            $reflection = new \ReflectionClass(ComponentRegistrar::class);
-            $reflectionProperty = $reflection->getProperty('paths');
-            $reflectionProperty->setAccessible(true);
-            $value = $reflectionProperty->getValue();
-            $value[ComponentRegistrar::MODULE] = [];
-            $reflectionProperty->setValue($value);
         }
+    }
+
+    /**
+     * Unregister module from component registrar.
+     * The component registrar uses static private variable and does not provide unregister method,
+     * however unregister is required to remove registered modules after they are deleted from app/code.
+     *
+     * @param $moduleName
+     *
+     * @return void
+     */
+    private function unsergisterModuleFromComponentRegistrar($moduleName)
+    {
+        $reflection = new \ReflectionClass(ComponentRegistrar::class);
+        $reflectionProperty = $reflection->getProperty('paths');
+        $reflectionProperty->setAccessible(true);
+        $value = $reflectionProperty->getValue();
+        unset($value[ComponentRegistrar::MODULE][$moduleName]);
+        $reflectionProperty->setValue($value);
     }
 }
