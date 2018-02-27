@@ -9,6 +9,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
+use Psr\Log\LoggerInterface;
 
 class StatePlugin
 {
@@ -23,15 +24,22 @@ class StatePlugin
     private $newRelicWrapper;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
     public function __construct(
         Config $config,
-        NewRelicWrapper $newRelicWrapper
+        NewRelicWrapper $newRelicWrapper,
+        LoggerInterface $logger
     ) {
         $this->config = $config;
         $this->newRelicWrapper = $newRelicWrapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -52,6 +60,7 @@ class StatePlugin
         try {
             $this->newRelicWrapper->setAppName($this->appName($state));
         } catch (LocalizedException $e) {
+            $this->logger->critical($e);
             return;
         }
     }
