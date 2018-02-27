@@ -70,12 +70,11 @@ class DbStorageTest extends TestCase
         $this->connectionMock = $this
             ->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->select = $this->createPartialMock(
-            Select::class,
-            ['from', 'where', 'deleteFromSelect', 'joinLeft']
-        );
+            ->getMockForAbstractClass();
+
+        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()->setMethods(['from', 'where', 'deleteFromSelect', 'joinLeft'])->getMock();
+
         $this->resource = $this
             ->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
