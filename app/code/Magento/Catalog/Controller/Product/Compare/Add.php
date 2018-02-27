@@ -37,7 +37,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
                     \Magento\Framework\Escaper::class
                 )->escapeHtml($product->getName());
                 $this->messageManager->addComplexSuccessMessage(
-                    'addCompareAddSuccessMessage',
+                    'addCompareSuccessMessage',
                     [
                         'product_name' => $productName,
                         'compare_list_url' => $this->_url->getUrl('catalog/product_compare')
