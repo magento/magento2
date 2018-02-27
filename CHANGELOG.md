@@ -1,4 +1,4 @@
-2.2.2
+2.2.2 test
 =============
 * GitHub issues:
     * [#9968](https://github.com/magento/magento2/issues/9968) -- Canceled invoice can be canceled again (fixed in [#11261](https://github.com/magento/magento2/pull/11261))
