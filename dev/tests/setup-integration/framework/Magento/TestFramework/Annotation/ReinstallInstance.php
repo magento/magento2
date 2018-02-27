@@ -33,6 +33,7 @@ class ReinstallInstance
      */
     public function endTest()
     {
+        $this->application->reinitialize();
         $this->application->cleanup();
     }
 }
