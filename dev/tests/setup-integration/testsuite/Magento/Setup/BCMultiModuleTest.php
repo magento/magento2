@@ -182,7 +182,7 @@ class BCMultiModuleTest extends SetupTestCase
         $this->assertUsToUsUpgrade();
 
         $this->doUsToDsRevision();
-        //Check US to DS upgrade
+        //Check US to declarative schema upgrade
         $this->cliCommand->upgrade();
         $this->assertUsToDsUpgrade();
 
