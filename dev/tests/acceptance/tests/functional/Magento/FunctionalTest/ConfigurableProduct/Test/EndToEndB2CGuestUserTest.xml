@@ -97,7 +97,8 @@
         <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory2" after="commentViewConfigurableProduct"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="browseClickCategoryConfigProductView" after="clickCategory2"/>
-        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="browseAssertConfigProductPage" after="browseClickCategoryConfigProductView">
+        <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductViewloaded" after="browseClickCategoryConfigProductView"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="browseAssertConfigProductPage" after="waitForConfigurableProductViewloaded">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
@@ -108,7 +109,8 @@
         <!-- Add Configurable Product to cart -->
         <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory2" after="commentAddConfigurableProductToCart"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="cartClickCategory2">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategory2loaded" after="cartClickCategory2"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="waitForCartCategory2loaded">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>
@@ -130,7 +132,8 @@
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabConfigProductPageImageSrc1" after="cartAssertConfigProductPage"/>
         <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc1" stepKey="cartAssertConfigProductPageImageNotDefault1" after="cartGrabConfigProductPageImageSrc1"/>
         <selectOption userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="cartConfigProductFillOption" after="cartAssertConfigProductPageImageNotDefault1"/>
-        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertConfigProductWithOptionPage" after="cartConfigProductFillOption">
+        <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductOptionloaded" after="cartConfigProductFillOption"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertConfigProductWithOptionPage" after="waitForConfigurableProductOptionloaded">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct2$$"/>
         </actionGroup>
@@ -155,7 +158,8 @@
         <click selector="{{StorefrontMinicartSection.productOptionsDetailsByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProductDetails" after="cartMinicartAssertConfigProductImageNotDefault"/>
         <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontMinicartSection.productOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartMinicartCheckConfigProductOption" after="cartMinicartClickConfigProductDetails"/>
         <click selector="{{StorefrontMinicartSection.productLinkByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProduct" after="cartMinicartCheckConfigProductOption"/>
-        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertMinicartConfigProductPage" after="cartMinicartClickConfigProduct">
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartConfigProductloaded" after="cartMinicartClickConfigProduct"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertMinicartConfigProductPage" after="waitForMinicartConfigProductloaded">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
@@ -177,7 +181,8 @@
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabConfigProduct2ImageSrc" stepKey="cartCartAssertConfigProduct2ImageNotDefault" after="cartCartGrabConfigProduct2ImageSrc"/>
         <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartCheckConfigProductOption" after="cartCartAssertConfigProduct2ImageNotDefault"/>
         <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createConfigProduct.name$$)}}" stepKey="cartClickCartConfigProduct" after="cartCheckConfigProductOption"/>
-        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertCartConfigProductPage" after="cartClickCartConfigProduct">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartConfigProductloaded" after="cartClickCartConfigProduct"/>
+        <actionGroup ref="StorefrontCheckConfigurableProduct" stepKey="cartAssertCartConfigProductPage" after="waitForCartConfigProductloaded">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
         </actionGroup>

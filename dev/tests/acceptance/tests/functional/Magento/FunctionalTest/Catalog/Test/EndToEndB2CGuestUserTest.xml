@@ -11,7 +11,7 @@
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
             <features value="End to End scenarios"/>
-            <stories value="End-to-end automation: B2C guest user - MAGETWO-75411"/>
+            <stories value="B2C guest user - MAGETWO-75411"/>
             <group value="e2e"/>
             <title value="You should be able to pass End to End B2C Guest User scenario"/>
             <description value="User browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
@@ -91,6 +91,7 @@
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="browseAssertSimpleProduct2ImageNotDefault"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct1Viewloaded" />
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -102,6 +103,7 @@
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct2ViewLoaded" />
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
@@ -115,6 +117,7 @@
         <!-- Add Simple Product 1 to comparison -->
         <comment userInput="Add simple product 1 to comparison" stepKey="commentAddSimpleProduct1ToComparison" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory" />
+        <waitForLoadingMaskToDisappear stepKey="waitForCategoryloaded" />
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
@@ -127,6 +130,7 @@
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrc"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrc" stepKey="compareAssertSimpleProduct1ImageNotDefault"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCompareSimpleProduct1loaded" />
         <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="compareAssertProduct1Page">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -140,6 +144,7 @@
         <!-- Add Simple Product 2 to comparison -->
         <comment userInput="Add simple product 2 to comparison" stepKey="commentAddSimpleProduct2ToComparison" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCompareCategory1loaded" />
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
