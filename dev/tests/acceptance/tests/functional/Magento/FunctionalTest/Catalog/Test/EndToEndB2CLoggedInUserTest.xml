@@ -80,7 +80,8 @@
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="browseAssertSimpleProduct2ImageNotDefault"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page" after="browseClickCategorySimpleProduct1View">
+        <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct1Viewloaded" after="browseClickCategorySimpleProduct1View"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct1Page" after="waitForSimpleProduct1Viewloaded">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -91,7 +92,8 @@
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" after="browseAssertSimpleProduct1PageImageNotDefault"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickCategory1" after="commentViewSimpleProduct2"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" after="clickCategory1"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page" after="browseClickCategorySimpleProduct2View">
+        <waitForLoadingMaskToDisappear stepKey="waitForSimpleProduct2ViewLoaded" after="browseClickCategorySimpleProduct2View"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="browseAssertProduct2Page" after="waitForSimpleProduct2ViewLoaded">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -104,7 +106,8 @@
         <!-- Add Simple Product 1 to comparison -->
         <comment userInput="Add simple product 1 to comparison" stepKey="commentAddSimpleProduct1ToComparison" after="startOfComparingProducts"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory" after="commentAddSimpleProduct1ToComparison"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory" after="compareClickCategory">
+        <waitForLoadingMaskToDisappear stepKey="waitForCategoryloaded" after="compareClickCategory"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory" after="waitForCategoryloaded">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>
@@ -116,7 +119,8 @@
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="compareGrabSimpleProduct1ImageSrc" after="compareAssertSimpleProduct1"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabSimpleProduct1ImageSrc" stepKey="compareAssertSimpleProduct1ImageNotDefault" after="compareGrabSimpleProduct1ImageSrc"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1" after="compareAssertSimpleProduct1ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="compareAssertProduct1Page" after="compareClickSimpleProduct1">
+        <waitForLoadingMaskToDisappear stepKey="waitForCompareSimpleProduct1loaded" after="compareClickSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="compareAssertProduct1Page" after="waitForCompareSimpleProduct1loaded">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -129,7 +133,8 @@
         <!-- Add Simple Product 2 to comparison -->
         <comment userInput="Add simple product 2 to comparison" stepKey="commentAddSimpleProduct2ToComparison" after="compareAddSimpleProduct1ToCompare"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1" after="commentAddSimpleProduct2ToComparison"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1" after="compareClickCategory1">
+        <waitForLoadingMaskToDisappear stepKey="waitForCompareCategory1loaded" after="compareClickCategory1"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory1" after="waitForCompareCategory1loaded">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>

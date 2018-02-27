@@ -14,7 +14,8 @@
         <!-- Add Simple Product 1 to cart -->
         <comment userInput="Add Simple Product 1 to cart" stepKey="commentAddSimpleProduct1ToCart" after="startOfAddingProductsToCart" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" after="commentAddSimpleProduct1ToCart"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="cartClickCategory">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategoryloaded" after="cartClickCategory"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory" after="waitForCartCategoryloaded">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>
@@ -26,7 +27,8 @@
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartGrabSimpleProduct1ImageSrc" after="cartAssertSimpleProduct1"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabSimpleProduct1ImageSrc" stepKey="cartAssertSimpleProduct1ImageNotDefault" after="cartGrabSimpleProduct1ImageSrc"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickSimpleProduct1" after="cartAssertSimpleProduct1ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertProduct1Page" after="cartClickSimpleProduct1">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct1loaded" after="cartClickSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertProduct1Page" after="waitForCartSimpleProduct1loaded">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -41,7 +43,8 @@
         <!-- Add Simple Product 2 to cart -->
         <comment userInput="Add Simple Product 2 to cart" stepKey="commentAddSimpleProduct2ToCart" after="cartAddProduct1ToCart" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" after="commentAddSimpleProduct2ToCart"/>
-        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="cartClickCategory1">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartCategory1loaded" after="cartClickCategory1"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForSimpleProduct2" after="waitForCartCategory1loaded">
             <argument name="category" value="$$createCategory$$"/>
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="productCount" value="CONST.three"/>
@@ -68,7 +71,8 @@
         <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct1ImageSrc" after="cartOpenMinicartAndCheckSimpleProduct1"/>
         <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabSimpleProduct1ImageSrc" stepKey="cartMinicartAssertSimpleProduct1ImageNotDefault" after="cartMinicartGrabSimpleProduct1ImageSrc"/>
         <click selector="{{StorefrontMinicartSection.productLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartMinicartClickSimpleProduct1" after="cartMinicartAssertSimpleProduct1ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct1Page" after="cartMinicartClickSimpleProduct1">
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartSimpleProduct1loaded" after="cartMinicartClickSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct1Page" after="waitForMinicartSimpleProduct1loaded">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -83,7 +87,8 @@
         <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartMinicartGrabSimpleProduct2ImageSrc" after="commentCheckSimpleProduct2InMinicart"/>
         <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabSimpleProduct2ImageSrc" stepKey="cartMinicartAssertSimpleProduct2ImageNotDefault" after="cartMinicartGrabSimpleProduct2ImageSrc"/>
         <click selector="{{StorefrontMinicartSection.productLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartMinicartClickSimpleProduct2" after="cartMinicartAssertSimpleProduct2ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct2Page" after="cartMinicartClickSimpleProduct2">
+        <waitForLoadingMaskToDisappear stepKey="waitForMinicartSimpleProduct2loaded" after="cartMinicartClickSimpleProduct2"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertMinicartProduct2Page" after="waitForMinicartSimpleProduct2loaded">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -115,7 +120,8 @@
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct1ImageSrc" after="cartAssertCartSimpleProduct1"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabSimpleProduct1ImageSrc" stepKey="cartCartAssertSimpleProduct1ImageNotDefault" after="cartCartGrabSimpleProduct1ImageSrc"/>
         <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickCartSimpleProduct1" after="cartCartAssertSimpleProduct1ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct1Page" after="cartClickCartSimpleProduct1">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct1loadedAgain" after="cartClickCartSimpleProduct1"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct1Page" after="waitForCartSimpleProduct1loadedAgain">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
@@ -134,7 +140,8 @@
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="cartCartGrabSimpleProduct2ImageSrc" after="cartAssertCartSimpleProduct2"/>
         <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabSimpleProduct2ImageSrc" stepKey="cartCartAssertSimpleProduct2ImageNotDefault" after="cartCartGrabSimpleProduct2ImageSrc"/>
         <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickCartSimpleProduct2" after="cartCartAssertSimpleProduct2ImageNotDefault"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct2Page" after="cartClickCartSimpleProduct2">
+        <waitForLoadingMaskToDisappear stepKey="waitForCartSimpleProduct2loaded" after="cartClickCartSimpleProduct2"/>
+        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="cartAssertCartProduct2Page" after="waitForCartSimpleProduct2loaded">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
