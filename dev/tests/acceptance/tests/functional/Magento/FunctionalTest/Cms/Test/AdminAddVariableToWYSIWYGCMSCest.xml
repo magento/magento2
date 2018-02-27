@@ -71,7 +71,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
