@@ -6,7 +6,7 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;

@@ -8,7 +8,7 @@ namespace Magento\Setup;
 
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Framework\Module\ModuleResource;
-use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface;
+use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
