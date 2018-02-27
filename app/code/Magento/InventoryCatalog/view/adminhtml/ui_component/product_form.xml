@@ -40,6 +40,23 @@
                     </item>
                 </argument>
             </container>
+            <container name="advanced_inventory_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">product_form.product_form.advanced_inventory_modal</item>
+                                <item name="actionName" xsi:type="string">toggleModal</item>
+                            </item>
+                        </item>
+                        <item name="title" xsi:type="string" translate="true">Advanced Inventory</item>
+                        <item name="additionalForGroup" xsi:type="boolean">true</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
+                        <item name="dataScope" xsi:type="string"/>
+                    </item>
+                </argument>
+            </container>
         </container>
         <dynamicRows name="assigned_sources" component="Magento_Ui/js/dynamic-rows/dynamic-rows-grid" sortOrder="20">
             <argument name="data" xsi:type="array">

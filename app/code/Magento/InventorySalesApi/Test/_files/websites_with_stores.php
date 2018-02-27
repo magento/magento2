@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -16,22 +17,15 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $website->setData([
         'code' => $websiteCode,
         'name' => 'Test Website ' . $websiteCode,
-        'default_group_id' => '1',
         'is_default' => '0',
     ]);
     $website->save();
 
     $store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-
-    $groupId = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
-        ->getWebsite()->getDefaultGroupId();
-
     $store->setCode(
         'store_for_' . $websiteCode
     )->setWebsiteId(
         $website->getId()
-    )->setGroupId(
-        $groupId
     )->setName(
         'store_for_' . $websiteCode
     )->setSortOrder(
@@ -39,6 +33,18 @@ foreach ($websiteCodes as $key => $websiteCode) {
     )->setIsActive(
         1
     );
+
+    /** @var GroupInterface $group */
+    $group = Bootstrap::getObjectManager()->create(GroupInterface::class);
+    $group->setName('store_view_' . $websiteCode);
+    $group->setCode('store_view_' . $websiteCode);
+    $group->setWebsiteId($website->getId());
+    $group->setDefaultStoreId($store->getId());
+    $group->save();
+
+    $website->setDefaultGroupId($group->getId());
+    $website->save();
+    $store->setGroupId($group->getId());
     $store->save();
 }
 
