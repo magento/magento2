@@ -52,7 +52,7 @@ class CopyModules
                 $this->cliCommand->introduceModule($moduleName);
                 //Include module`s registration.php to load it
                 $path = MAGENTO_MODULES_PATH . explode("_", $moduleName)[1] . '/registration.php';
-                include_once $path;
+                include $path;
             }
         }
     }
