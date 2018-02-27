@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\IsProductSalableCondition;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
@@ -44,8 +43,11 @@ class ManageStockCondition implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        /** @var StockItemConfigurationInterface $stockItemConfiguration */
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        if (null === $stockItemConfiguration) {
+            return false;
+        }
+
         $globalManageStock = $this->configuration->getManageStock();
         $manageStock = false;
         if ((

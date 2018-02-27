@@ -35,8 +35,10 @@ class BackOrderCondition implements IsProductSalableInterface
      */
     public function execute(string $sku, int $stockId): bool
     {
-        /** @var StockItemConfigurationInterface $stockItemConfiguration */
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        if (null === $stockItemConfiguration) {
+            return false;
+        }
 
         return $stockItemConfiguration->getBackorders() !== StockItemConfigurationInterface::BACKORDERS_NO;
     }

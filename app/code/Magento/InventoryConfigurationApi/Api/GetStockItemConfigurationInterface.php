@@ -17,9 +17,11 @@ use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 interface GetStockItemConfigurationInterface
 {
     /**
+     * Return null if configuration for sku per stock is not exist
+     *
      * @param string $sku
      * @param int $stockId
-     * @return StockItemConfigurationInterface
+     * @return StockItemConfigurationInterface|null
      */
-    public function execute(string $sku, int $stockId): StockItemConfigurationInterface;
+    public function execute(string $sku, int $stockId);
 }
