@@ -59,12 +59,13 @@ class InstallData implements InstallDataInterface
             )->where(
                 'stock_item.use_config_notify_stock_qty = 0'
             )->where(
-                'source_item.' . SourceItemInterface::SOURCE_CODE . ' = ?', $defaultSource
+                'source_item.' . SourceItemInterface::SOURCE_CODE . ' = ?',
+                $defaultSource
             );
 
         $sql = $connection->insertFromSelect(
             $select,
-            CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
+            $connection->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
         );
 
         $connection->query($sql);
