@@ -67,11 +67,14 @@ class CopyModules
         $annotations = $test->getAnnotations();
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
-            $path = MAGENTO_MODULES_PATH .
-                //Take only module name from Magento_ModuleName
-                explode("_", $annotations['method']['moduleName'][0])[1];
+            foreach ($annotations['method']['moduleName'] as $moduleName) {
+                $path = MAGENTO_MODULES_PATH .
+                    //Take only module name from Magento_ModuleName
+                    explode("_", $moduleName)[1];
 
-            File::rmdirRecursive($path);
+                File::rmdirRecursive($path);
+            }
+
             $reflection = new \ReflectionClass(ComponentRegistrar::class);
             $reflectionProperty = $reflection->getProperty('paths');
             $reflectionProperty->setAccessible(true);

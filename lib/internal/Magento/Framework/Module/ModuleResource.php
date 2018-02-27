@@ -141,6 +141,8 @@ class ModuleResource extends AbstractDb implements ResourceInterface
     /**
      * Flush all class cache
      *
+     * @deprecated This method was added as temporary solution, to increase modularity:
+     * Because before new modules appears in resource only on next bootstrap
      * @return void
      */
     public static function flush()
