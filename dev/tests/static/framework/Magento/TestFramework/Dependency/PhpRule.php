@@ -88,10 +88,13 @@ class PhpRule implements RuleInterface
             return [];
         }
 
-        $pattern = '~\b(?<class>(?<module>(' . implode(
-            '_|',
-            Files::init()->getNamespaces()
-        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+        $pattern = '~\b(?<class>(?<module>('
+            . implode(
+                '_|',
+                Files::init()->getNamespaces()
+            )
+            . '[_\\\\])[a-zA-Z0-9]+)'
+            . '(?<class_inside_module>[a-zA-Z0-9_\\\\]*))\b(?:::(?<module_scoped_key>[a-z0-9_]+))?~';
 
         $dependenciesInfo = [];
         if (preg_match_all($pattern, $contents, $matches)) {
@@ -101,11 +104,16 @@ class PhpRule implements RuleInterface
                 if ($currentModule == $referenceModule) {
                     continue;
                 }
+
                 $dependencyClass = trim($matches['class'][$i]);
-                $currentClass = $this->getClassFromFilepath($file, $currentModule);
-                $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
-                    ? RuleInterface::TYPE_SOFT
-                    : RuleInterface::TYPE_HARD;
+                if (empty($matches['class_inside_module'][$i]) && !empty($matches['module_scoped_key'][$i])) {
+                    $dependencyType = RuleInterface::TYPE_SOFT;
+                } else {
+                    $currentClass = $this->getClassFromFilepath($file, $currentModule);
+                    $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
+                        ? RuleInterface::TYPE_SOFT
+                        : RuleInterface::TYPE_HARD;
+                }
 
                 $dependenciesInfo[] = [
                     'module' => $referenceModule,
