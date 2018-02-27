@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableCondition;
 
+use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 
 /**
  * @inheritdoc
  */
-class StockItemDataCondition implements IsProductSalableInterface
+class IsSalableWithReservationsCondition implements IsProductSalableInterface
 {
     /**
      * @var GetStockItemDataInterface
@@ -21,12 +22,20 @@ class StockItemDataCondition implements IsProductSalableInterface
     private $getStockItemData;
 
     /**
+     * @var GetReservationsQuantityInterface
+     */
+    private $getReservationsQuantity;
+
+    /**
      * @param GetStockItemDataInterface $getStockItemData
+     * @param GetReservationsQuantityInterface $getReservationsQuantity
      */
     public function __construct(
-        GetStockItemDataInterface $getStockItemData
+        GetStockItemDataInterface $getStockItemData,
+        GetReservationsQuantityInterface $getReservationsQuantity
     ) {
         $this->getStockItemData = $getStockItemData;
+        $this->getReservationsQuantity = $getReservationsQuantity;
     }
 
     /**
@@ -40,6 +49,7 @@ class StockItemDataCondition implements IsProductSalableInterface
             return false;
         }
 
-        return (bool)$stockItemData['is_salable'];
+        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
+        return (bool)$stockItemData['is_salable'] && $qtyWithReservation > 0.0001;
     }
 }

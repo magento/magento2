@@ -52,9 +52,9 @@
                     <item name="sort_order" xsi:type="number">20</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
                 </item>
-                <item name="stock_item" xsi:type="array">
+                <item name="is_salable_with_reservations" xsi:type="array">
                     <item name="sort_order" xsi:type="number">30</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\StockItemDataCondition</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableWithReservationsCondition</item>
                 </item>
             </argument>
         </arguments>
