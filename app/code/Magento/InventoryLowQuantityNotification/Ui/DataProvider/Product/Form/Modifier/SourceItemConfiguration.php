@@ -56,7 +56,8 @@ class SourceItemConfiguration extends AbstractModifier
         $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
-        $this->scopeConfig = $scopeConfig;    }
+        $this->scopeConfig = $scopeConfig;
+    }
 
     /**
      * {@inheritdoc}
