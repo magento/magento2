@@ -7,14 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
-use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\GetSourceItemBySku;
+use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\GetSourcesByStoreId;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterfaceFactory;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterface;
@@ -24,15 +19,10 @@ use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInter
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * {@inheritdoc}
  * This shipping algorithm just iterates over all the sources one by one in priority order
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
 {
@@ -52,74 +42,34 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     private $shippingAlgorithmResultFactory;
 
     /**
-     * @var StoreManagerInterface
+     * @var GetSourceItemBySku
      */
-    private $storeManager;
+    private $getSourceItemBySku;
 
     /**
-     * @var WebsiteRepositoryInterface
+     * @var GetSourcesByStoreId
      */
-    private $websiteRepository;
-
-    /**
-     * @var StockResolverInterface
-     */
-    private $stockResolver;
-
-    /**
-     * @var GetAssignedSourcesForStockInterface
-     */
-    private $getAssignedSourcesForStock;
-
-    /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SourceItemInterfaceFactory
-     */
-    private $sourceItemFactory;
+    private $getSourcesByStoreId;
 
     /**
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
      * @param ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
-     * @param StoreManagerInterface $storeManager
-     * @param WebsiteRepositoryInterface $websiteRepository
-     * @param StockResolverInterface $stockResolver
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
-     * @param SourceItemRepositoryInterface $sourceItemRepository
-     * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param GetSourceItemBySku $getSourceItemBySku
+     * @param GetSourcesByStoreId $getSourcesByStoreId
      */
     public function __construct(
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
         SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory,
         ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory,
-        StoreManagerInterface $storeManager,
-        WebsiteRepositoryInterface $websiteRepository,
-        StockResolverInterface $stockResolver,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock,
-        SourceItemRepositoryInterface $sourceItemRepository,
-        SourceItemInterfaceFactory $sourceItemFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        GetSourceItemBySku $getSourceItemBySku,
+        GetSourcesByStoreId $getSourcesByStoreId
     ) {
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceSelectionFactory = $sourceSelectionFactory;
         $this->sourceItemSelectionFactory = $sourceItemSelectionFactory;
-        $this->storeManager = $storeManager;
-        $this->websiteRepository = $websiteRepository;
-        $this->stockResolver = $stockResolver;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
-        $this->sourceItemRepository = $sourceItemRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->sourceItemFactory = $sourceItemFactory;
+        $this->getSourceItemBySku = $getSourceItemBySku;
+        $this->getSourcesByStoreId = $getSourcesByStoreId;
     }
 
     /**
@@ -129,7 +79,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     {
         $isShippable = true;
         $storeId = $order->getStoreId();
-        $sources = $this->getSourcesByStoreId((int)$storeId);
+        $sources = $this->getSourcesByStoreId->execute((int)$storeId);
         $sourceItemSelections = [];
 
         /** @var OrderItemInterface|OrderItem $orderItem */
@@ -147,7 +97,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
                     continue;
                 }
 
-                $sourceItem = $this->getSourceItemBySku($source->getSourceCode(), $itemSku);
+                $sourceItem = $this->getSourceItemBySku->execute($source->getSourceCode(), $itemSku);
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 
@@ -186,46 +136,6 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             'sourceSelections' => $sourceSelections,
             'isShippable' => $isShippable
         ]);
-    }
-
-    /**
-     * Retrieve sources are related to current stock that are ordered by priority
-     *
-     * @param int $storeId
-     *
-     * @return SourceInterface[]
-     */
-    private function getSourcesByStoreId(int $storeId): array
-    {
-        $store = $this->storeManager->getStore($storeId);
-        $website = $this->websiteRepository->getById($store->getWebsiteId());
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
-
-        return $this->getAssignedSourcesForStock->execute((int)$stock->getStockId());
-    }
-
-    /**
-     * Retrieve source item from specific source by SKU
-     *
-     * @param string $sourceCode
-     * @param string $sku
-     *
-     * @return SourceItemInterface
-     */
-    private function getSourceItemBySku(string $sourceCode, string $sku): SourceItemInterface
-    {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
-            ->addFilter(SourceItemInterface::SKU, $sku)
-            ->create();
-        $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
-
-        if ($sourceItemsResult->getTotalCount() > 0) {
-            $sourceItems = $sourceItemsResult->getItems();
-            return reset($sourceItems);
-        }
-
-        return $this->sourceItemFactory->create();
     }
 
     /**
