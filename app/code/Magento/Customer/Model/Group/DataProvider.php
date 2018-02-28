@@ -98,12 +98,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getMeta()
     {
         $meta = parent::getMeta();
-        $meta['general']['children']['customer_group_code']['arguments']['data']['config']['notice'] = __(
-            'Maximum length must be less then %1 characters.',
-            GroupManagement::GROUP_CODE_MAX_LENGTH
-        );
-        $meta['general']['children']['customer_group_code']['arguments']['data']['config']['validation']['max_text_length'] =
-            GroupManagement::GROUP_CODE_MAX_LENGTH;
+
+        $meta['general']['children']['customer_group_code']['arguments']['data']['config'] = [
+            'notice' => __('Maximum length must be less then %1 characters.', GroupManagement::GROUP_CODE_MAX_LENGTH),
+            'validation' => [
+                'max_text_length' => GroupManagement::GROUP_CODE_MAX_LENGTH,
+            ]
+        ];
 
         $groupId = $this->registry->registry(RegistryConstants::CURRENT_GROUP_ID);
 

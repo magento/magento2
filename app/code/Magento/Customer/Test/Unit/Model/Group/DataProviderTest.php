@@ -138,6 +138,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertTrue($meta['general']['children']['customer_group_code']['arguments']['data']['config']['disabled']);
+        $this->assertTrue(
+            $meta['general']['children']['customer_group_code']['arguments']['data']['config']['disabled']
+        );
     }
 }

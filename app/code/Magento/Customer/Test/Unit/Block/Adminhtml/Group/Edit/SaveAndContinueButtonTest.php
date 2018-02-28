@@ -59,15 +59,15 @@ class SaveAndContinueButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetButtonData()
     {
         $data = [
-        'label' => __('Save and Continue Edit'),
-        'class' => 'save',
-        'data_attribute' => [
-            'mage-init' => [
-                'button' => ['event' => 'saveAndContinueEdit'],
+            'label' => __('Save and Continue Edit'),
+            'class' => 'save',
+            'data_attribute' => [
+                'mage-init' => [
+                    'button' => ['event' => 'saveAndContinueEdit'],
+                ],
             ],
-        ],
-        'sort_order' => 80,
-    ];
+            'sort_order' => 80,
+        ];
 
         $this->assertEquals($data, $this->model->getButtonData());
     }
