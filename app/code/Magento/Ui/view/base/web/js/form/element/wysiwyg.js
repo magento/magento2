@@ -12,8 +12,9 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'mage/adminhtml/events'
-], function (wysiwyg, $, _, ko, Abstract) {
+    'mage/adminhtml/events',
+    'Magento_Variable/variables'
+], function (wysiwyg, $, _, ko, Abstract, varienGlobalEvents) {
     'use strict';
 
     return Abstract.extend({
