@@ -21,10 +21,11 @@ define([
             regionId;
 
         countryId = addressData['country_id'] || addressData.countryId;
+
         if (countryId) {
             if (addressData.region && addressData.region['region_id']) {
                 regionId = addressData.region['region_id'];
-            } else if(countryId == window.checkoutConfig.defaultCountryId) {
+            } else if(countryId === window.checkoutConfig.defaultCountryId) {
                 regionId = window.checkoutConfig.defaultRegionId;
             }
         } else {
