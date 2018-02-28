@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface StockItemConfiguration
  * @api
  */
 interface StockItemConfigurationInterface extends ExtensibleDataInterface
@@ -164,7 +163,7 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
     public function getStockStatusChangedAuto(): int;
 
     /**
-     * @return StockItemConfigurationExtensionInterface
+     * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface
      */
     public function getExtensionAttributes(): StockItemConfigurationExtensionInterface;
 }

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Test\Integration;
+namespace Magento\InventorySales\Test\Integration\IsProductSalable;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -19,7 +19,7 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsBackorderedProductInStockTest extends TestCase
+class BackorderConditionTest extends TestCase
 {
     /**
      * @var SourceItemRepositoryInterface

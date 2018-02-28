@@ -6,32 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- IsStockItemSalableCondition -->
-    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>
-                <!-- override source_item_status condition due to min_qty condition includes first (need to for proper work of chain) -->
-                <item name="source_item_status" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsStockItemSalableCondition\MinQtyStockCondition</item>
-            </argument>
-        </arguments>
-    </type>
-    <!-- IsProductSalableCondition -->
-    <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">10</item>
-                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalableCondition\ManageStockCondition</item>
-                </item>
-                <!-- should be after stock_item condition -->
-                <item name="min_qty" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">40</item>
-                    <item name="object" xsi:type="object">Magento\InventoryConfiguration\Model\IsProductSalableCondition\MinQtyStockCondition</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <!-- Configuration query interfaces -->
     <preference for="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\GetStockItemConfiguration"/>
     <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>

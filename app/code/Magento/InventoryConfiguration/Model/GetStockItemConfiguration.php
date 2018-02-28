@@ -11,12 +11,12 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
-use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -104,30 +104,29 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
             return null;
         }
 
-        $legacyStockId = $this->resolveLegacyStockId();
-
         return $this->stockItemConfigurationFactory->create(
             [
-                'stockItem' => $this->getLegacyStockItem($sku, $legacyStockId),
+                'stockItem' => $this->getLegacyStockItem($sku),
             ]
         );
     }
 
     /**
      * @param string $sku
-     * @param int $stockId
      * @return StockItemInterface
      * @throws LocalizedException
      */
-    private function getLegacyStockItem(string $sku, int $stockId): StockItemInterface
+    private function getLegacyStockItem(string $sku): StockItemInterface
     {
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
-
         $searchCriteria = $this->legacyStockItemCriteriaFactory->create();
-        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
-        $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $stockId);
-        $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
 
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
+
+        $legacyStockId = $this->resolveLegacyStockId();
+        $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $legacyStockId);
+
+        $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
             // TODO:
             return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);

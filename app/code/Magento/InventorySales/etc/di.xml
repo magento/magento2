@@ -39,7 +39,9 @@
     <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
-                <item name="source_item_status" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\SourceItemStatusCondition</item>
+                <item name="manage_stock" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>
+                <!-- min_qty condition includes source_item_status check (need to proper work of min_qty) -->
+                <item name="min_qty" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\MinQtyStockCondition</item>
             </argument>
         </arguments>
     </type>
@@ -49,12 +51,21 @@
         <arguments>
             <argument name="conditions" xsi:type="array">
                 <item name="back_order" xsi:type="array">
+                    <item name="manage_stock" xsi:type="array">
+                        <item name="sort_order" xsi:type="number">10</item>
+                        <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition</item>
+                    </item>
                     <item name="sort_order" xsi:type="number">20</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
                 </item>
                 <item name="is_salable_with_reservations" xsi:type="array">
                     <item name="sort_order" xsi:type="number">30</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableWithReservationsCondition</item>
+                </item>
+                <!-- should be after is_salable_with_reservations condition -->
+                <item name="min_qty" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">40</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\MinQtyStockCondition</item>
                 </item>
             </argument>
         </arguments>
