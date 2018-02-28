@@ -57,7 +57,6 @@ class GetSourcesByStoreId
         $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
     }
 
-
     /**
      * Returns sources related to current stock ordered by priority.
      *
