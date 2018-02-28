@@ -58,32 +58,16 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
             );
         }
-        return true;
-    }
 
-    /**
-     * Generate and set unique SKU to product
-     *
-     * @param Product $object
-     * @return void
-     */
-    protected function _generateUniqueSku($object)
-    {
         $attribute = $this->getAttribute();
         $entity = $attribute->getEntity();
-        $attributeValue = $object->getData($attribute->getAttributeCode());
-        $increment = null;
-        while (!$entity->checkAttributeUniqueValue($attribute, $object)) {
-            if ($increment === null) {
-                $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
-            }
-            $sku = trim($attributeValue);
-            if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
-                $sku = substr($sku, 0, -strlen($increment) - 1);
-            }
-            $sku = $sku . '-' . $increment;
-            $object->setData($attribute->getAttributeCode(), $sku);
+        if (!$entity->checkAttributeUniqueValue($attribute, $object)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('SKU is already in use.')
+            );
         }
+
+        return true;
     }
 
     /**
@@ -94,51 +78,6 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function beforeSave($object)
     {
-        $this->_generateUniqueSku($object);
-        $this->trimValue($object);
         return parent::beforeSave($object);
-    }
-
-    /**
-     * Return increment needed for SKU uniqueness
-     *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param Product $object
-     * @return int
-     */
-    protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
-    {
-        $connection = $this->getAttribute()->getEntity()->getConnection();
-        $select = $connection->select();
-        $value = $object->getData($attribute->getAttributeCode());
-        $bind = ['attribute_code' => trim($value) . '-%'];
-
-        $select->from(
-            $this->getTable(),
-            $attribute->getAttributeCode()
-        )->where(
-            $attribute->getAttributeCode() . ' LIKE :attribute_code'
-        )->order(
-            ['entity_id DESC', $attribute->getAttributeCode() . ' ASC']
-        )->limit(
-            1
-        );
-        $data = $connection->fetchOne($select, $bind);
-        return abs((int)str_replace($value, '', $data));
-    }
-
-    /**
-     * Remove extra spaces from attribute value before save.
-     *
-     * @param Product $object
-     * @return void
-     */
-    private function trimValue($object)
-    {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = $object->getData($attrCode);
-        if ($value) {
-            $object->setData($attrCode, trim($value));
-        }
     }
 }
