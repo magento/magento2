@@ -347,7 +347,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchResult = $this->searchResultFactory->create()->setItems([]);
         } catch (NonExistingRequestNameException $e) {
             $this->_logger->error($e->getMessage());
-            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+            throw new LocalizedException(__('An error occurred. For details, see the error log.'));
         }
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
@@ -441,7 +441,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     $result[$metrics['value']] = $metrics;
                 }
             } else {
-                throw new StateException(__('Bucket does not exist'));
+                throw new StateException(__("The bucket doesn't exist."));
             }
         }
         return $result;

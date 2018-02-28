@@ -71,7 +71,7 @@ class AlgorithmFactory
         );
 
         if (!isset($this->algorithms[$calculationType])) {
-            throw new LocalizedException(__('%1 was not found in algorithms', $calculationType));
+            throw new LocalizedException(__("The %1 value wasn't found in the algorithms.", $calculationType));
         }
 
         $className = $this->algorithms[$calculationType];

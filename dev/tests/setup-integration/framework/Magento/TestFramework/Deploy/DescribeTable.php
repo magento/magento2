@@ -24,7 +24,7 @@ class DescribeTable
      *
      * @var array
      */
-    private static $ignoredSystemTables = ['cache', 'cache_tag', 'flag', 'session', 'setup_module'];
+    private static $ignoredSystemTables = ['cache', 'cache_tag', 'flag', 'session', 'setup_module', 'patch_list'];
 
     /**
      * Constructor.
