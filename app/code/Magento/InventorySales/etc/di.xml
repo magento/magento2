@@ -51,12 +51,12 @@
         <arguments>
             <argument name="conditions" xsi:type="array">
                 <item name="back_order" xsi:type="array">
-                    <item name="manage_stock" xsi:type="array">
-                        <item name="sort_order" xsi:type="number">10</item>
-                        <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition</item>
-                    </item>
-                    <item name="sort_order" xsi:type="number">20</item>
+                    <item name="sort_order" xsi:type="number">10</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
+                </item>
+                <item name="manage_stock" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">20</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition</item>
                 </item>
                 <item name="is_salable_with_reservations" xsi:type="array">
                     <item name="sort_order" xsi:type="number">30</item>
