@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminFilterStocksInGridTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Filter Stocks in Grid"/>
+            <title value="Filter Stocks on the Manage Stocks grid"/>
+            <description value="You should be able to Filter the Stocks from the Manage Stocks grid."/>
+            <testCaseId value=""/>
+            <group value="msi"/>
+        </annotations>
+        <before>
+            <createData entity="TestStock1" stepKey="createStock1"/>
+            <createData entity="TestStock2" stepKey="createStock2"/>
+            <createData entity="TestStock1" stepKey="createStock3"/>
+            <createData entity="TestStock2" stepKey="createStock4"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="value" value="$$createStock4.general[name]$$"/>
+        </actionGroup>
+
+        <see userInput="$$createStock4.general[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
+
+        <!-- Since the AdminFormPost does NOT return the ID we have to grab the ID from the UI -->
+        <grabTextFrom selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div" stepKey="grabID1"/>
+        <click selector="{{AdminGridFilterControls.clearAll}}" stepKey="clickOnClearAllFilters1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
+            <argument name="selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="value" value="$$createStock3.general[name]$$"/>
+        </actionGroup>
+        <grabTextFrom selector="//tr[contains(@data-repeat-index, '0')]/td[2]/div" stepKey="grabID2"/>
+        <click selector="{{AdminGridFilterControls.clearAll}}" stepKey="clickOnClearAllFilters2"/>
+
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
+        <fillField userInput="{$grabID2}" selector="{{AdminManageStockGridFilterControls.idFrom}}" stepKey="fillIdFromField1"/>
+        <fillField userInput="{$grabID1}" selector="{{AdminManageStockGridFilterControls.idTo}}" stepKey="fillIdToField1"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters1"/>
+
+        <see userInput="$$createStock3.general[name]$$" selector="{{AdminGridRow.rowByIndex('0')}}" stepKey="seeNameInRow2"/>
+        <see userInput="$$createStock4.general[name]$$" selector="{{AdminGridRow.rowByIndex('1')}}" stepKey="seeNameInRow3"/>
+
+        <click selector="{{AdminGridFilterControls.clearAll}}" stepKey="clickOnClearAllFilters3"/>
+    </test>
+</tests>

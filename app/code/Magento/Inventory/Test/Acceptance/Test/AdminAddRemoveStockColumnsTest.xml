@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveStockColumnsTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Add/Remove Stock Grid Columns"/>
+            <title value="Add/Remove Stock Grid Columns"/>
+            <testCaseId value="620"/>
+            <group value="msi"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <seeElement selector="{{AdminGridColumnsControls.columnsPanel}}" stepKey="seeTheColumnsDropDownPanel1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <see selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" userInput="4 out of 4 visible" stepKey="seeAllColumnsAreActive"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="seeTheHeaderSalesChannel1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction1"/>
+
+        <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn1"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Sales Channel')}}" stepKey="disableSalesChannelColumn1"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction2"/>
+
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders"/>
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="seeTheHeaderSalesChannel2"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction3"/>
+
+        <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn3"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn3"/>
+        <click selector="{{AdminGridColumnsControls.columnName('Action')}}" stepKey="disableActionColumn3"/>
+        <click selector="{{AdminGridColumnsControls.cancel}}" stepKey="clickOnCancel"/>
+
+        <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="seeTheHeaderSalesChannel3"/>
+        <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction4"/>
+    </test>
+</tests>
