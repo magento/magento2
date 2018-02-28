@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 return ['ALTER TABLE `reference_table` MODIFY COLUMN `tinyint_without_padding` tinyint(2)  NOT NULL   , MODIFY COLUMN `bigint_default_nullable` bigint(2) UNSIGNED NULL DEFAULT 123  , MODIFY COLUMN `bigint_not_default_not_nullable` bigint(20)  NOT NULL   
 
 ALTER TABLE `auto_increment_test` MODIFY COLUMN `int_auto_increment_with_nullable` int(15) UNSIGNED NULL   

@@ -292,8 +292,7 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck,
-        DeclarationInstaller $declarationInstaller = null
+        PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -317,7 +316,6 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
-
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
