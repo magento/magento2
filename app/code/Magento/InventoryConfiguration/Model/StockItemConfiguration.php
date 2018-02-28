@@ -9,7 +9,6 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
 
 /**
  * @inheritdoc
@@ -196,13 +195,5 @@ class StockItemConfiguration implements StockItemConfigurationInterface
     public function getStockStatusChangedAuto(): int
     {
         return $this->stockItem->getStockStatusChangedAuto();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExtensionAttributes(): StockItemConfigurationExtensionInterface
-    {
-        // TODO: not implemented
     }
 }

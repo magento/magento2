@@ -7,13 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
-use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface;
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * @api
  */
-interface StockItemConfigurationInterface extends ExtensibleDataInterface
+interface StockItemConfigurationInterface
 {
     const BACKORDERS_NO = 0;
     const BACKORDERS_YES_NONOTIFY = 1;
@@ -161,9 +158,4 @@ interface StockItemConfigurationInterface extends ExtensibleDataInterface
      * @return int
      */
     public function getStockStatusChangedAuto(): int;
-
-    /**
-     * @return \Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationExtensionInterface
-     */
-    public function getExtensionAttributes(): StockItemConfigurationExtensionInterface;
 }
