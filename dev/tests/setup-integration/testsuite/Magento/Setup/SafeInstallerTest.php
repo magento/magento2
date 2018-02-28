@@ -69,7 +69,7 @@ class SafeInstallerTest extends SetupTestCase
         );
         $this->cliCommad->upgrade(
             [
-                '--safe-mode' => true,
+                'safe-mode' => '',
             ]
         );
         //Move new db_schema.xml with restored title field
@@ -81,7 +81,7 @@ class SafeInstallerTest extends SetupTestCase
         );
         $this->cliCommad->upgrade(
             [
-                '--data-restore' => true,
+                'data-restore' => '',
             ]
         );
         $testTableSelect = $adapter->select()->from($testTableName);

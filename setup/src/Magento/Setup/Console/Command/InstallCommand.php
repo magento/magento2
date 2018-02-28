@@ -49,6 +49,7 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * List of comma-separated module names. That must be avoided during installation.
+     * List of comma-separated module names. That must be avoided during installation.
      * Avaiable magic param all.
      */
     const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
