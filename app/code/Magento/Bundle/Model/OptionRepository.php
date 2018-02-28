@@ -201,10 +201,10 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
         /** @var \Magento\Bundle\Model\Option $existingOption */
         $existingOption = $optionCollection->getFirstItem();
-        if (!$optionId) {
-            $option->setOptionId(null);
-        }
         if (!$optionId || $existingOption->getParentId() != $parentId) {
+            //If option ID is empty or existing option's parent ID is different
+            //we'd need a new ID for the option.
+            $option->setOptionId(null);
             $option->setDefaultTitle($option->getTitle());
             if (is_array($option->getProductLinks())) {
                 $linksToAdd = $option->getProductLinks();

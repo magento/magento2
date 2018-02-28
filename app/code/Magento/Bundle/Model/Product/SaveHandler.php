@@ -65,22 +65,22 @@ class SaveHandler implements ExtensionInterface
         }
 
         if (!$entity->getCopyFromView()) {
-            $updatedOptions = [];
             $oldOptions = $this->optionRepository->getList($entity->getSku());
+            if ($oldOptions) {
+                $remainingOptions = [];
+                $metadata
+                    = $this->metadataPool->getMetadata(ProductInterface::class);
+                $productId = $entity->getData($metadata->getLinkField());
 
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-
-            $productId = $entity->getData($metadata->getLinkField());
-
-            foreach ($options as $option) {
-                $updatedOptions[$option->getOptionId()][$productId] = (bool)$option->getOptionId();
-            }
-
-            foreach ($oldOptions as $option) {
-                if (!isset($updatedOptions[$option->getOptionId()][$productId])) {
-                    $option->setParentId($productId);
-                    $this->removeOptionLinks($entity->getSku(), $option);
-                    $this->optionRepository->delete($option);
+                foreach ($options as $option) {
+                    $remainingOptions[] = $option->getOptionId();
+                }
+                foreach ($oldOptions as $option) {
+                    if (!in_array($option->getOptionId(), $remainingOptions)) {
+                        $option->setParentId($productId);
+                        $this->removeOptionLinks($entity->getSku(), $option);
+                        $this->optionRepository->delete($option);
+                    }
                 }
             }
         }
