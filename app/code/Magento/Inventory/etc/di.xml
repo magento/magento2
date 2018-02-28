@@ -86,6 +86,4 @@
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
         </arguments>
     </type>
-    <!-- Product types -->
-    <preference for="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType"/>
 </config>
