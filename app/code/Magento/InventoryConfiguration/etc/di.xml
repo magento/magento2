@@ -11,4 +11,5 @@
     <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
     <!-- Product types -->
     <preference for="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType"/>
+    <preference for="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItems"/>
 </config>
