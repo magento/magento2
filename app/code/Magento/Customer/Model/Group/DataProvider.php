@@ -48,7 +48,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $customerGroupCollectionFactory
+     * @param CollectionFactory $groupCollectionFactory
      * @param Registry $registry
      * @param GroupRepositoryInterface $groupRepository
      * @param TaxHelper $taxHelper
@@ -59,7 +59,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $customerGroupCollectionFactory,
+        CollectionFactory $groupCollectionFactory,
         Registry $registry,
         GroupRepositoryInterface $groupRepository,
         TaxHelper $taxHelper,
@@ -67,7 +67,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->collection = $customerGroupCollectionFactory->create();
+        $this->collection = $groupCollectionFactory->create();
         $this->registry = $registry;
         $this->groupRepository = $groupRepository;
         $this->taxHelper = $taxHelper;
@@ -110,12 +110,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if ($groupId === null) {
             $meta['general']['children']['tax_class_id']['arguments']['data']['config']['default'] =
                 $this->taxHelper->getDefaultCustomerTaxClass();
-        } else {
-            $customerGroup = $this->groupRepository->getById($groupId);
+            return $meta;
+        }
 
-            if ($customerGroup->getId() == GroupManagement::NOT_LOGGED_IN_ID) {
-                $meta['general']['children']['customer_group_code']['arguments']['data']['config']['disabled'] = true;
-            }
+        $customerGroup = $this->groupRepository->getById($groupId);
+
+        if ($customerGroup->getId() == GroupManagement::NOT_LOGGED_IN_ID) {
+            $meta['general']['children']['customer_group_code']['arguments']['data']['config']['disabled'] = true;
         }
 
         return $meta;

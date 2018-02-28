@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test for class \Magento\Customer\Model\Group\DataProvider
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -89,7 +90,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
-                'customerGroupCollectionFactory' => $this->collectionFactoryMock,
+                'groupCollectionFactory' => $this->collectionFactoryMock,
                 'registry' => $this->registryMock,
                 'groupRepository' => $this->groupRepositoryMock,
                 'taxHelper' => $this->taxHelperMock,
@@ -114,7 +115,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
-                'customerGroupCollectionFactory' => $this->collectionFactoryMock,
+                'groupCollectionFactory' => $this->collectionFactoryMock,
                 'registry' => $this->registryMock,
                 'groupRepository' => $this->groupRepositoryMock,
                 'taxHelper' => $this->taxHelperMock,
