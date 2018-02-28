@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Webapi\Test\Unit\Controller\Soap\Request;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -54,7 +52,10 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $this->_requestMock = $this->createMock(\Magento\Framework\Webapi\Request::class);
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_authorizationMock = $this->createMock(\Magento\Framework\Webapi\Authorization::class);
-        $this->_dataObjectConverter = $this->createPartialMock(\Magento\Framework\Api\SimpleDataObjectConverter::class, ['convertStdObjectToArray']);
+        $this->_dataObjectConverter = $this->createPartialMock(
+            \Magento\Framework\Api\SimpleDataObjectConverter::class,
+            ['convertStdObjectToArray']
+        );
         $this->_serviceInputProcessorMock = $this->createMock(\Magento\Framework\Webapi\ServiceInputProcessor::class);
         $this->_dataObjectProcessorMock = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
         $this->_methodsMapProcessorMock = $this->createMock(\Magento\Framework\Reflection\MethodsMap::class);

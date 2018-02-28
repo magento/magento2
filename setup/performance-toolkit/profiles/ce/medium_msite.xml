@@ -7,6 +7,7 @@
 -->
 <config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
+        <admin_users>50</admin_users><!-- Number of admin users to generate -->
         <websites>25</websites> <!-- Number of websites to generate -->
         <store_groups>25</store_groups> <!--Number of stores-->
         <store_views>50</store_views> <!-- Number of store views -->
@@ -62,6 +63,18 @@
                 <scope>default</scope>
                 <scopeId>0</scopeId>
                 <value>0</value>
+            </config>
+            <config>
+                <path>admin/security/session_lifetime</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>7200</value>
+            </config>
+            <config>
+                <path>admin/security/admin_account_sharing</path>
+                <scope>default</scope>
+                <scopeId>0</scopeId>
+                <value>1</value>
             </config>
             <config>
                 <path>carriers/flatrate/active</path>

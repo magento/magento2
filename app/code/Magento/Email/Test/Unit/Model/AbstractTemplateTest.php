@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Email\Model\AbstractTemplate.
  */
@@ -20,11 +18,6 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $design;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $registry;
 
     /**
      * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
@@ -136,7 +129,6 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
                 \Magento\Email\Model\AbstractTemplate::class,
                 [
                     'design' => $this->design,
-                    'registry' => $this->registry,
                     'appEmulation' => $this->appEmulation,
                     'storeManager' => $this->storeManager,
                     'filesystem' => $this->filesystem,
@@ -244,7 +236,8 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetProcessedTemplateException() {
+    public function testGetProcessedTemplateException()
+    {
         $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods([
                 'setUseSessionInUrl',

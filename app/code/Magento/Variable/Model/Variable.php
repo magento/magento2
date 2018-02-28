@@ -157,7 +157,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
             ];
         }
         if ($withGroup && $variables) {
-            $variables = ['label' => __('Custom Variables'), 'value' => $variables];
+            $variables = [['label' => __('Custom Variables'), 'value' => $variables]];
         }
         return $variables;
     }

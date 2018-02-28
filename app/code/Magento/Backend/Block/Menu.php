@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block;
 
 /**
@@ -137,7 +135,9 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderMouseEvent($menuItem)
     {
-        return $menuItem->hasChildren() ? 'onmouseover="Element.addClassName(this,\'over\')" onmouseout="Element.removeClassName(this,\'over\')"' : '';
+        return $menuItem->hasChildren()
+            ? 'onmouseover="Element.addClassName(this,\'over\')" onmouseout="Element.removeClassName(this,\'over\')"'
+            : '';
     }
 
     /**

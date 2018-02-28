@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
@@ -146,7 +147,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      * Validate update by invalid customer.
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Consumer is not authorized to access %resources
+     * @expectedExceptionMessage The consumer isn't authorized to access %resources.
      */
     public function testInvalidCustomerUpdate()
     {
@@ -432,7 +433,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $expectedException = new InputException();
                 $expectedException->addError(
                     __(
-                        '%fieldName is a required field.',
+                        '"%fieldName" is required. Enter and try again.',
                         ['fieldName' => Address::FIRSTNAME]
                     )
                 );
@@ -447,7 +448,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => '%fieldName is a required field.',
+                    'message' => '"%fieldName" is required. Enter and try again.',
                     'parameters' => ['fieldName' => Address::FIRSTNAME],
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
@@ -554,7 +555,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => '%fieldName is a required field.',
+                'message' => '"%fieldName" is required. Enter and try again.',
                 'parameters' => [
                     'fieldName' => 'searchCriteria'
                 ],

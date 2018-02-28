@@ -12,7 +12,7 @@ use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that created widget displayed on frontent on Home page and on Advanced Search and
+ * Check that created widget displayed on frontend on Home page and on Advanced Search and
  * after click on widget link on frontend system redirects you to cms page.
  */
 class AssertWidgetCmsPageLink extends AbstractConstraint

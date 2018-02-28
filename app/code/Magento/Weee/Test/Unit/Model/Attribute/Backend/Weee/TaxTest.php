@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Weee\Model\Attribute\Backend\Weee\Tax
  */
@@ -99,7 +97,8 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     ['state' => 12, 'country' => 'US', 'website_id' => '1'],
                     ['state' => null, 'country' => 'ES', 'website_id' => '1']
                 ],
-                'expected' => 'You must set unique country-state combinations within the same fixed product tax',
+                'expected' => 'Set unique country-state combinations within the same fixed product tax. '
+                    . 'Verify the combinations and try again.',
                 ]
         ];
     }

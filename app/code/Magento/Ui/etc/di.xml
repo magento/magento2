@@ -23,6 +23,7 @@
     <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <preference for="Magento\Ui\Config\ConverterInterface" type="Magento\Ui\Config\Converter\Composite"/>
     <preference for="Magento\Ui\Config\Argument\ParserInterface" type="Magento\Ui\Config\Argument\Parser\Composite"/>
+    <preference for="Magento\Ui\DataProvider\Modifier\PoolInterface" type="Magento\Ui\DataProvider\Modifier\Pool"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">

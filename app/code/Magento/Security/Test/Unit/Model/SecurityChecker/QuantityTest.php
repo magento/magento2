@@ -114,7 +114,6 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      * @param int $requestsMethod
      * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
      * @expectedException \Magento\Framework\Exception\SecurityViolationException
-     * @expectedExceptionMessage Too many password reset requests. Please wait and try again or contact test@host.com.
      */
     public function testCheckException($securityEventType, $requestsMethod)
     {
@@ -127,6 +126,11 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
             ->willReturn($limitNumberPasswordResetRequests);
 
         $this->model->check($securityEventType);
+
+        $this->expectExceptionMessage(
+            'We received too many requests for password resets. '
+            . 'Please wait and try again later or contact test@host.com.'
+        );
     }
 
     /**

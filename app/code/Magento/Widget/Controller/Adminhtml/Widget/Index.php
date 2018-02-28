@@ -41,7 +41,7 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Wisywyg widget plugin main page
+     * Wysiwyg widget plugin main page
      *
      * @return void
      */

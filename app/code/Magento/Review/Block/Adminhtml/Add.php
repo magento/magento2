@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Review\Block\Adminhtml;
 
 /**
@@ -41,6 +39,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
         ';
 
+        // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
             require(["jquery","prototype"], function(jQuery){
             window.review = function() {
@@ -115,6 +114,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
            //]]>
         ';
+        // @codingStandardsIgnoreEnd
     }
 
     /**

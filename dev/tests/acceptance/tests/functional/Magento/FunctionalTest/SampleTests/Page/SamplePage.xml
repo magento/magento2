@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="SamplePage" urlPath="/{{var1}}/{{var2}}.html" module="SampleTests" parameterized="true">
+    <page name="SamplePage" url="/{{var1}}/{{var2}}.html" area="storefront" module="SampleTests" parameterized="true">
         <section name="SampleSection"/>
     </page>
-</config>
+</pages>

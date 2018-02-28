@@ -217,7 +217,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
+            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
+            if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == 'type') {
@@ -318,11 +319,20 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * @deprecated Misspelled method
+     * @see retrieveProductsByCachedSkus
+     */
+    protected function retrieveProducsByCachedSkus()
+    {
+        return $this->retrieveProductsByCachedSkus();
+    }
+
+    /**
      * Retrieve mapping between skus and products.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function retrieveProducsByCachedSkus()
+    protected function retrieveProductsByCachedSkus()
     {
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -367,7 +377,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->parseSelections($rowData, $productData[$this->getProductEntityLinkField()]);
                 }
                 if (!empty($this->_cachedOptions)) {
-                    $this->retrieveProducsByCachedSkus();
+                    $this->retrieveProductsByCachedSkus();
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();

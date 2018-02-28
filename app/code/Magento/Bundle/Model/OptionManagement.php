@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Model;
 
 use Magento\Framework\Exception\InputException;
@@ -39,7 +40,7 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
     {
         $product = $this->productRepository->get($option->getSku(), true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Only implemented for bundle product'));
+            throw new InputException(__('This is implemented for bundle products only.'));
         }
         return $this->optionRepository->save($product, $option);
     }

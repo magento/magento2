@@ -1,0 +1,14 @@
+{
+  "name": "magento/theme-frontend-rush",
+  "description": "N/A",
+  "require": {
+    "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+    "magento/framework": "100.3.*"
+  },
+  "type": "magento2-theme",
+  "version": "100.3.0-dev",
+  "license": ["OSL-3.0", "AFL-3.0"],
+  "autoload": {
+    "files": ["registration.php"]
+  }
+}

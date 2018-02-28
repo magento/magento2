@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\Test\Unit\Config\Data;
 
 use \Magento\Framework\Mview\Config\Data\Proxy;
@@ -44,7 +42,8 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             ->with(['some_config']);
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             true
         );
 
@@ -62,7 +61,8 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             ->with(['some_config']);
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             false
         );
 
@@ -81,7 +81,8 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('some_value'));
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             true
         );
 
@@ -100,7 +101,8 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('some_value'));
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             false
         );
 

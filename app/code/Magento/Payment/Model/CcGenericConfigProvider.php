@@ -110,7 +110,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve availables credit card types
+     * Retrieve available credit card types
      *
      * @param string $methodCode
      * @return array

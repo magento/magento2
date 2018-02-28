@@ -131,9 +131,11 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         ];
 
         $transformedOptions = [
-            'label' => __('Custom Variables'),
-            'value' => [
-                ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+                ]
             ]
         ];
 

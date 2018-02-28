@@ -176,7 +176,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Loads collecion and adds customers info
+     * Loads collection and adds customers info
      *
      * @param bool $printQuery
      * @param bool $logQuery

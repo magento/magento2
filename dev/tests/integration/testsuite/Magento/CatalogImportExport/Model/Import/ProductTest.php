@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\CatalogImportExport\Model\Import\Product
  *
@@ -22,11 +20,11 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
-use Magento\UrlRewrite\Model\UrlRewrite;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ProductTest
@@ -34,6 +32,7 @@ use Magento\UrlRewrite\Model\UrlRewrite;
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -62,11 +61,20 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\CatalogImportExport\Model\Import\Product::class
+            \Magento\CatalogImportExport\Model\Import\Product::class,
+            ['logger' => $this->logger]
         );
         parent::setUp();
     }
@@ -660,6 +668,21 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that errors occurred during importing images are logged.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture mediaImportImageFixtureError
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSaveMediaImageError()
+    {
+        $this->logger->expects(self::once())->method('critical');
+        $this->importDataForMediaTest('import_media.csv', 1);
+    }
+
+    /**
      * Copy fixture images into media import directory
      */
     public static function mediaImportImageFixture()
@@ -718,6 +741,29 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Copy incorrect fixture image into media import directory.
+     */
+    public static function mediaImportImageFixtureError()
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
+        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Filesystem::class
+        )->getDirectoryWrite(
+            DirectoryList::MEDIA
+        );
+        $dirPath = $mediaDirectory->getAbsolutePath('import');
+        $items = [
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_error.jpg',
+                'dest' => $dirPath . '/magento_additional_image_two.jpg',
+            ],
+        ];
+        foreach ($items as $item) {
+            copy($item['source'], $item['dest']);
+        }
+    }
+
+    /**
      * Export CSV string to array
      *
      * @param string $content
@@ -734,7 +780,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $data['header'] = str_getcsv($line);
             } else {
                 $row = array_combine($data['header'], str_getcsv($line));
-                if (!is_null($entityId) && !empty($row[$entityId])) {
+                if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
                     $data['data'][] = $row;
@@ -1551,21 +1597,27 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $product1 = $productRepository->get('simple1');
         $this->assertEquals('\'", =|', $product1->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product1->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product1->getData('multiselect_attribute')
+        );
 
         $product2 = $productRepository->get('simple2');
         $this->assertEquals('', $product2->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product2->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product2->getData('multiselect_attribute')
+        );
     }
 
     /**
-     * Import and check data from file
+     * Import and check data from file.
      *
      * @param string $fileName
+     * @param int $expectedErrors
+     * @return void
      */
-    private function importDataForMediaTest($fileName)
+    private function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1603,7 +1655,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == 0);
+        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
     }
 
     /**
@@ -1917,6 +1969,25 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $productRepository->get($sku, false, null, true)->getPrice(),
                 'Check that all products were updated'
             );
+        }
+    }
+
+    /**
+     * Test that product import with images for non-default store works properly.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testImportImageForNonDefaultStore()
+    {
+        $this->importDataForMediaTest('import_media_two_stores.csv');
+        $product = $this->getProductBySku('simple_with_images');
+        $mediaGallery = $product->getData('media_gallery');
+        foreach ($mediaGallery['images'] as $image) {
+            $image['file'] === '/m/a/magento_image.jpg'
+                ? self::assertSame('1', $image['disabled'])
+                : self::assertSame('0', $image['disabled']);
         }
     }
 }

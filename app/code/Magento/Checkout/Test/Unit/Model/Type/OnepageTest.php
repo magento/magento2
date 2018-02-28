@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Test\Unit\Model\Type;
 
 use \Magento\Checkout\Model\Type\Onepage;
@@ -122,8 +120,14 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
         $this->customerUrlMock = $this->createMock(\Magento\Customer\Model\Url::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->checkoutSessionMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData']);
-        $this->customerSessionMock = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getCustomerDataObject', 'isLoggedIn']);
+        $this->checkoutSessionMock = $this->createPartialMock(
+            \Magento\Checkout\Model\Session::class,
+            ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData']
+        );
+        $this->customerSessionMock = $this->createPartialMock(
+            \Magento\Customer\Model\Session::class,
+            ['getCustomerDataObject', 'isLoggedIn']
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
@@ -135,7 +139,10 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->copyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->customerFormFactoryMock = $this->createPartialMock(\Magento\Customer\Model\FormFactory::class, ['create']);
+        $this->customerFormFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Model\FormFactory::class,
+            ['create']
+        );
 
         $this->customerDataFactoryMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
 
@@ -325,7 +332,10 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $orderId = 1;
         $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
             ->will($this->returnValue($orderId));
-        $orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['load', 'getIncrementId', '__wakeup']);
+        $orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['load', 'getIncrementId', '__wakeup']
+        );
         $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
         $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
         $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));

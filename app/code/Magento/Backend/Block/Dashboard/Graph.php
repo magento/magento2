@@ -421,6 +421,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
 
                     $valueBuffer[] = $indexid . ":|" . $tmpstring;
+                } elseif ($idx == 'y') {
+                    $valueBuffer[] = $indexid . ":|" . implode('|', $yLabels);
                 }
                 $indexid++;
             }

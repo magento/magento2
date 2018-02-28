@@ -6,13 +6,19 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SampleActionGroup">
         <arguments>
             <argument name="person" defaultValue="SamplePerson"/>
         </arguments>
-        <fillField selector="#foo" userInput="{{person.foo}}" mergeKey="fillField1"/>
-        <fillField selector="#bar" userInput="{{person.bar}}" mergeKey="fillField2"/>
+        <fillField selector="#foo" userInput="{{person.foo}}" stepKey="fillField1"/>
+        <fillField selector="#bar" userInput="{{person.bar}}" stepKey="fillField2"/>
     </actionGroup>
-</config>
+    <actionGroup name="ValidateSlideOutPanelField">
+        <arguments>
+            <argument name="property" defaultValue=""/>
+        </arguments>
+        <see userInput="{{property.name}}" selector="{{ColumnSection.panelFieldLabel(property.section, property.fieldName, property.section, property.name)}}" stepKey="seePropertyLabel"/>
+    </actionGroup>
+</actionGroups>

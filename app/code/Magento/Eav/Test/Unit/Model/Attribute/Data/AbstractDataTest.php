@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 use Magento\Eav\Model\Attribute\Data\Text;
@@ -107,7 +105,10 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         ]));
         $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
 
-        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Attribute::class, ['getInputFilter', 'getAttributeCode']);
+        $attributeMock = $this->createPartialMock(
+            \Magento\Eav\Model\Attribute::class,
+            ['getInputFilter', 'getAttributeCode']
+        );
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
         if ($filter) {
             $attributeMock->expects($this->any())->method('getInputFilter')->will($this->returnValue($filter));

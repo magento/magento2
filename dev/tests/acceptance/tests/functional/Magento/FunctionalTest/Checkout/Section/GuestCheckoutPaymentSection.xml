@@ -6,11 +6,13 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="GuestCheckoutPaymentSection">
+        <element name="cartItemsArea" type="textarea" selector=".items-in-cart"/>
+        <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active"/>
         <element name="cartItems" type="text" selector=".minicart-items"/>
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
     </section>
-</config>
+</sections>

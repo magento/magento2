@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\File;
 
 class FileListTest extends \PHPUnit\Framework\TestCase
@@ -105,10 +103,13 @@ class FileListTest extends \PHPUnit\Framework\TestCase
             ->method('collate')
             ->with(
                 $this->equalTo($files),
-                $this->equalTo([
-                    $this->_baseFile->getFileIdentifier() => $this->_baseFile,
-                    $this->_themeFile->getFileIdentifier() => $this->_themeFile, ]
-                ))
+                $this->equalTo(
+                    [
+                        $this->_baseFile->getFileIdentifier() => $this->_baseFile,
+                        $this->_themeFile->getFileIdentifier() => $this->_themeFile,
+                    ]
+                )
+            )
             ->will($this->returnValue($result));
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());
