@@ -5,21 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
+namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Chain of stock conditions.
+ * Chain of stock item salable conditions.
  */
-class GetStockConditionChain implements GetIsSalableConditionInterface
+class IsStockItemSalableConditionChain implements GetIsStockItemSalableConditionInterface
 {
     /**
-     * @var GetIsSalableConditionInterface[]
+     * @var GetIsStockItemSalableConditionInterface[]
      */
-    private $getIsSalableConditions = [];
+    private $conditions = [];
 
     /**
      * @var ResourceConnection
@@ -28,23 +28,23 @@ class GetStockConditionChain implements GetIsSalableConditionInterface
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param array $getIsSalableConditions
+     * @param array $conditions
      *
      * @throws LocalizedException
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        array $getIsSalableConditions = []
+        array $conditions = []
     ) {
-        foreach ($getIsSalableConditions as $getIsSalableCondition) {
-            if (!$getIsSalableCondition instanceof GetIsSalableConditionInterface) {
+        foreach ($conditions as $getIsSalableCondition) {
+            if (!$getIsSalableCondition instanceof GetIsStockItemSalableConditionInterface) {
                 throw new LocalizedException(
-                    __('Condition must implement GetIsSalableConditionInterface')
+                    __('Condition must implement %1', GetIsStockItemSalableConditionInterface::class)
                 );
             }
         }
         $this->resourceConnection = $resourceConnection;
-        $this->getIsSalableConditions = $getIsSalableConditions;
+        $this->conditions = $conditions;
     }
 
     /**
@@ -53,13 +53,13 @@ class GetStockConditionChain implements GetIsSalableConditionInterface
      */
     public function execute(Select $select): string
     {
-        if (empty($this->getIsSalableConditions)) {
+        if (empty($this->conditions)) {
             return '1';
         }
 
         $conditionStrings = [];
-        foreach ($this->getIsSalableConditions as $getIsSalableCondition) {
-            $conditionString = $getIsSalableCondition->execute($select);
+        foreach ($this->conditions as $condition) {
+            $conditionString = $condition->execute($select);
             if ('' !== trim($conditionString)) {
                 $conditionStrings[] = $conditionString;
             }

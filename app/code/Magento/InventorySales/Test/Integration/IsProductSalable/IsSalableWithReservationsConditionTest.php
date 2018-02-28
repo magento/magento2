@@ -5,8 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Test\Integration\Stock;
+namespace Magento\InventorySales\Test\Integration\IsProductSalable;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
@@ -14,7 +20,7 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class IsProductSalableTest extends TestCase
+class IsSalableWithReservationsConditionTest extends TestCase
 {
     /**
      * @var ReservationBuilderInterface
@@ -37,6 +43,36 @@ class IsProductSalableTest extends TestCase
     private $isProductSalable;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var StockItemRepositoryInterface
+     */
+    private $stockItemRepository;
+
+    /**
+     * @var StockItemCriteriaInterfaceFactory
+     */
+    private $stockItemCriteriaFactory;
+
+    /**
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var SourceItemsSaveInterface
+     */
+    private $sourceItemsSave;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -47,6 +83,14 @@ class IsProductSalableTest extends TestCase
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->stockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
+        $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
+            StockItemCriteriaInterfaceFactory::class
+        );
+        $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
     }
 
     /**

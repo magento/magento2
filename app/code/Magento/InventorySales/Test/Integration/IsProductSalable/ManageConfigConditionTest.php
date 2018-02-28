@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\GetStockItemData;
+namespace Magento\InventorySales\Test\Integration\IsProductSalable;
 
-use Magento\Inventory\Model\GetStockItemDataInterface;
-use Magento\InventoryIndexer\Indexer\IndexStructure;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ManageConfigTest extends TestCase
+class ManageConfigConditionTest extends TestCase
 {
     /**
-     * @var GetStockItemDataInterface
+     * @var IsProductSalableInterface
      */
-    private $getStockItemData;
+    private $isProductSalable;
 
     /**
      * @inheritdoc
@@ -26,7 +25,7 @@ class ManageConfigTest extends TestCase
     {
         parent::setUp();
 
-        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemDataInterface::class);
+        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
     }
 
     /**
@@ -40,16 +39,15 @@ class ManageConfigTest extends TestCase
      *
      * @param string $sku
      * @param int $stockId
-     * @param $expectedData
+     * @param bool $expectedResult
      * @return void
      *
      * @dataProvider executeWithManageStockFalseDataProvider
      */
-    public function testExecuteWithManageStockFalse(string $sku, int $stockId, $expectedData)
+    public function testExecuteWithManageStockFalse(string $sku, int $stockId, bool $expectedResult)
     {
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-
-        self::assertEquals($expectedData, $stockItemData);
+        $isSalable = $this->isProductSalable->execute($sku, $stockId);
+        self::assertEquals($expectedResult, $isSalable);
     }
 
     /**
@@ -58,15 +56,15 @@ class ManageConfigTest extends TestCase
     public function executeWithManageStockFalseDataProvider(): array
     {
         return [
-            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-1', 20, null],
-            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-2', 10, null],
-            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-3', 10, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-3', 20, null],
-            ['SKU-3', 30, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 10, true],
+            ['SKU-1', 20, false],
+            ['SKU-1', 30, true],
+            ['SKU-2', 10, false],
+            ['SKU-2', 20, true],
+            ['SKU-2', 30, true],
+            ['SKU-3', 10, true],
+            ['SKU-3', 20, false],
+            ['SKU-3', 30, true],
         ];
     }
 }

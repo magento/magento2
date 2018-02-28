@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\ResourceModel\IsSalableCondition;
+namespace Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\DB\Select;
 
 /**
- * Responsible for building is_salable conditions.
+ * Responsible for building is_salable conditions foe stock item
  *
  * @api
  */
-interface GetIsSalableConditionInterface
+interface GetIsStockItemSalableConditionInterface
 {
     /**
      * @param Select $select
