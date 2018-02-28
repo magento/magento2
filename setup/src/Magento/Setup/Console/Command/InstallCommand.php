@@ -6,15 +6,16 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Symfony\Component\Console\Input\ArrayInput;
 use Magento\Framework\Setup\Declaration\Schema\Request;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Magento\Setup\Model\ConfigModel;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -47,6 +48,7 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
 
     /**
+     * List of comma-separated module names. That must be avoided during installation.
      * List of comma-separated module names. That must be avoided during installation.
      * Avaiable magic param all.
      */
@@ -189,14 +191,21 @@ class InstallCommand extends AbstractSetupCommand
             new InputOption(
                 OperationsExecutor::KEY_SAFE_MODE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Safe installation of Magento with dumps on destructive operations, like column removal'
             ),
             new InputOption(
                 OperationsExecutor::KEY_DATA_RESTORE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Restore removed data from dumps'
+            ),
+            new InputOption(
+                DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
             ),
         ]);
         $this->setName('setup:install')

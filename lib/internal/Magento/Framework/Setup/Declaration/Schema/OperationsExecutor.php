@@ -67,15 +67,21 @@ class OperationsExecutor
     private $dataSaviorsCollection;
 
     /**
+     * @var DryRunLogger
+     */
+    private $dryRunLogger;
+
+    /**
      * Constructor.
      *
      * @param array $operations
+     * @param array $dataSaviorsCollection
      * @param Sharding $sharding
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
      * @param DbSchemaWriterInterface $dbSchemaWriter
      * @param StatementAggregatorFactory $statementAggregatorFactory
-     * @param array $dataSaviorsCollection
+     * @param DryRunLogger $dryRunLogger
      */
     public function __construct(
         array $operations,
@@ -84,7 +90,8 @@ class OperationsExecutor
         ResourceConnection $resourceConnection,
         StatementFactory $statementFactory,
         DbSchemaWriterInterface $dbSchemaWriter,
-        StatementAggregatorFactory $statementAggregatorFactory
+        StatementAggregatorFactory $statementAggregatorFactory,
+        DryRunLogger $dryRunLogger
     ) {
         $this->operations = $operations;
         $this->sharding = $sharding;
@@ -93,6 +100,7 @@ class OperationsExecutor
         $this->dbSchemaWriter = $dbSchemaWriter;
         $this->statementAggregatorFactory = $statementAggregatorFactory;
         $this->dataSaviorsCollection = $dataSaviorsCollection;
+        $this->dryRunLogger = $dryRunLogger;
     }
 
     /**
@@ -173,6 +181,13 @@ class OperationsExecutor
     {
         $this->startSetupForAllConnections();
         $tableHistories = $diff->getAll();
+        $dryRun = isset($requestData[DryRunLogger::INPUT_KEY_DRY_RUN_MODE]) &&
+            $requestData[DryRunLogger::INPUT_KEY_DRY_RUN_MODE];
+
+        if ($dryRun) {
+            $this->dryRunLogger->prepareToDryRun();
+        }
+
         if (is_array($tableHistories)) {
             foreach ($tableHistories as $tableHistory) {
                 $destructiveElements = [];
@@ -195,7 +210,7 @@ class OperationsExecutor
                 }
 
                 $this->doDump($destructiveElements, $requestData);
-                $this->dbSchemaWriter->compile($statementAggregator);
+                $this->dbSchemaWriter->compile($statementAggregator, $dryRun);
                 $this->doRestore($oppositeToDestructiveElements, $requestData);
             }
         }

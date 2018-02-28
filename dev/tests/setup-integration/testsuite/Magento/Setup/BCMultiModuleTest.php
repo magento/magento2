@@ -62,7 +62,6 @@ class BCMultiModuleTest extends SetupTestCase
         $this->tableData = $objectManager->get(TableData::class);
         $this->moduleResource = $objectManager->get(ModuleResource::class);
         $this->dbSchemaReader = $objectManager->get(DbSchemaReaderInterface::class);
-
     }
 
     /**

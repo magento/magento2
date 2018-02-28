@@ -109,7 +109,8 @@ interface DbSchemaWriterInterface
      * Compile statements and make SQL request from them.
      *
      * @param StatementAggregator $statementAggregator
+     * @param bool $dryRun
      * @return void
      */
-    public function compile(StatementAggregator $statementAggregator);
+    public function compile(StatementAggregator $statementAggregator, $dryRun);
 }
