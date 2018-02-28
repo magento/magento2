@@ -52,6 +52,13 @@ define([
                     this.$wysiwygEditorButton.add($(element)) : $(element);
             }.bind(this));
 
+            // disable editor completely after initialization is field is disabled
+            varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
+                if (this.disabled()) {
+                    this.setDisabled(true);
+                }
+            }.bind(this));
+
             return this;
         },
 
