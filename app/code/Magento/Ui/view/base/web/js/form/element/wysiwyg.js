@@ -23,12 +23,10 @@ define([
             value: '',
             $wysiwygEditorButton: '',
             links: {
-                value: '${ $.provider }:${ $.dataScope }',
-                stageActive: false
+                value: '${ $.provider }:${ $.dataScope }'
             },
             template: 'ui/form/field',
             elementTmpl: 'ui/form/element/wysiwyg',
-            stageActive: false,
             content:        '',
             showSpinner:    false,
             loading:        false,
