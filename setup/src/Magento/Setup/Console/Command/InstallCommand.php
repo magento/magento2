@@ -191,13 +191,13 @@ class InstallCommand extends AbstractSetupCommand
             new InputOption(
                 OperationsExecutor::KEY_SAFE_MODE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Safe installation of Magento with dumps on destructive operations, like column removal'
             ),
             new InputOption(
                 OperationsExecutor::KEY_DATA_RESTORE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Restore removed data from dumps'
             ),
             new InputOption(
