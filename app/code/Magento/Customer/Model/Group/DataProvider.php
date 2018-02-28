@@ -43,11 +43,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $taxHelper;
 
     /**
-     * Constructor
+     * Initialize dependencies.
      *
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param CollectionFactory $customerGroupCollectionFactory
      * @param Registry $registry
      * @param GroupRepositoryInterface $groupRepository
@@ -66,11 +66,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $customerGroupCollectionFactory->create();
         $this->registry = $registry;
         $this->groupRepository = $groupRepository;
         $this->taxHelper = $taxHelper;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
