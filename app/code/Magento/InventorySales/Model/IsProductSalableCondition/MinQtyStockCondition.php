@@ -67,7 +67,8 @@ class MinQtyStockCondition implements IsProductSalableInterface
         }
 
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
+        $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
+            $this->getReservationsQuantity->execute($sku, $stockId);
         $globalMinQty = $this->configuration->getMinQty();
 
         if ((

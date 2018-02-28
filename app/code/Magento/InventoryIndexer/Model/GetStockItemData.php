@@ -45,7 +45,13 @@ class GetStockItemData implements GetStockItemDataInterface
         $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
         $connection = $this->resource->getConnection();
         $select = $connection->select()
-            ->from($stockItemTableName, [IndexStructure::QUANTITY, IndexStructure::IS_SALABLE])
+            ->from(
+                $stockItemTableName,
+                [
+                    GetStockItemDataInterface::QUANTITY => IndexStructure::QUANTITY,
+                    GetStockItemDataInterface::IS_SALABLE => IndexStructure::IS_SALABLE,
+                ]
+            )
             ->where(IndexStructure::SKU . ' = ?', $sku);
         return $connection->fetchRow($select) ?: null;
     }

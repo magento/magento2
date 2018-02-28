@@ -49,7 +49,8 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
             return false;
         }
 
-        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
-        return (bool)$stockItemData['is_salable'] && $qtyWithReservation > 0.0001;
+        $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
+            $this->getReservationsQuantity->execute($sku, $stockId);
+        return (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] && $qtyWithReservation > 0.0001;
     }
 }
