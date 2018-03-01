@@ -32,6 +32,6 @@ class IsSourceItemsAllowedForProductType implements IsSourceItemsAllowedForProdu
      */
     public function execute(string $productType): bool
     {
-        return in_array($productType, array_keys($this->stockConfiguration->getIsQtyTypeIds()), true);
+        return in_array($productType, array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds())), true);
     }
 }

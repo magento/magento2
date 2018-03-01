@@ -32,6 +32,6 @@ class GetAllowedProductTypesForSourceItems implements GetAllowedProductTypesForS
      */
     public function execute(): array
     {
-        return array_keys($this->stockConfiguration->getIsQtyTypeIds());
+        return array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds()));
     }
 }
