@@ -41,7 +41,7 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model = new ConfigSetProcessorFactory(
             $this->objectManagerMock,
             [
-                ConfigSetProcessorFactory::TYPE_LOCK => LockProcessor::class,
+                ConfigSetProcessorFactory::TYPE_LOCK_ENV => LockProcessor::class,
                 ConfigSetProcessorFactory::TYPE_DEFAULT => DefaultProcessor::class,
                 'wrongType' => \stdClass::class,
             ]
@@ -59,7 +59,7 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf(
             ConfigSetProcessorInterface::class,
-            $this->model->create(ConfigSetProcessorFactory::TYPE_LOCK)
+            $this->model->create(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
         );
     }
 
