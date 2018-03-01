@@ -452,6 +452,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param string[] $productIds Link IDs of products to find tier prices for.
      *
      * @return array Tier prices data.
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function fetchTierPrices(array $productIds): array
     {
@@ -478,14 +481,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE => 'ap.percentage_value',
             'product_link_id' => 'ap.' .$productEntityLinkField,
         ];
-        if ($exportFilter) {
-            if (array_key_exists('tier_price', $exportFilter)) {
-                if (!empty($exportFilter['tier_price'][0])) {
-                    $priceFromFilter = $exportFilter['tier_price'][0];
-                }
-                if (!empty($exportFilter['tier_price'][1])) {
-                    $priceToFilter = $exportFilter['tier_price'][1];
-                }
+        if ($exportFilter && array_key_exists('tier_price', $exportFilter)) {
+            if (!empty($exportFilter['tier_price'][0])) {
+                $priceFromFilter = $exportFilter['tier_price'][0];
+            }
+            if (!empty($exportFilter['tier_price'][1])) {
+                $priceToFilter = $exportFilter['tier_price'][1];
             }
         }
 
