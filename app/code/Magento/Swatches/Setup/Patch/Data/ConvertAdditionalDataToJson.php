@@ -9,8 +9,8 @@ namespace Magento\Swatches\Setup\Patch\Data;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class ConvertAdditionalDataToJson
