@@ -8,8 +8,8 @@ namespace Magento\SalesSequence\Setup\Patch\Schema;
 
 use Magento\Framework\App\State;
 use Magento\SalesSequence\Setup\SequenceCreator;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
-use Magento\Setup\Model\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
 /**
  * Class CreateSequence
