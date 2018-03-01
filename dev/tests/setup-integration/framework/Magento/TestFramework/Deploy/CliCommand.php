@@ -160,8 +160,8 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $command = 'php -f ' . BP . '/bin/magento module:uninstall ' . $moduleName . ' --remove-data ' .
-            ' -vvv --non-composer --magento-init-params=' .
-            $initParams['magento-init-params'];
+            ' -vvv --non-composer --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command);
     }
