@@ -371,12 +371,6 @@ class Full
             foreach ($products as $productData) {
                 $lastProductId = $productData['entity_id'];
 
-                if (!$this->isProductVisible($productData['entity_id'], $productsAttributes) ||
-                    !$this->isProductEnabled($productData['entity_id'], $productsAttributes)
-                ) {
-                    continue;
-                }
-
                 $productIndex = [$productData['entity_id'] => $productsAttributes[$productData['entity_id']]];
                 if (isset($relatedProducts[$productData['entity_id']])) {
                     $childProductsIndex = $this->getChildProductsIndex(
@@ -416,25 +410,6 @@ class Full
             );
         }
         return array_filter($relatedProducts);
-    }
-
-    /**
-     * Performs check that product is visible on Store Front
-     *
-     * Check that product is visible on Store Front using visibility attribute
-     * and allowed visibility values.
-     *
-     * @param int $productId
-     * @param array $productsAttributes
-     * @return bool
-     */
-    private function isProductVisible($productId, array $productsAttributes)
-    {
-        $visibility = $this->dataProvider->getSearchableAttribute('visibility');
-        $allowedVisibility = $this->engine->getAllowedVisibility();
-        return isset($productsAttributes[$productId]) &&
-            isset($productsAttributes[$productId][$visibility->getId()]) &&
-            in_array($productsAttributes[$productId][$visibility->getId()], $allowedVisibility);
     }
 
     /**

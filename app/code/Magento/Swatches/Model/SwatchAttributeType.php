@@ -18,6 +18,11 @@ class SwatchAttributeType
     private $serializer;
 
     /**
+     * @var array
+     */
+    private $swatchAttributeCache = [];
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -63,7 +68,12 @@ class SwatchAttributeType
      */
     public function isSwatchAttribute(AttributeInterface $productAttribute)
     {
-        return ($this->isTextSwatch($productAttribute) || $this->isVisualSwatch($productAttribute));
+        if (!isset($this->swatchAttributeCache[$productAttribute->getAttributeId()])) {
+            $this->swatchAttributeCache[$productAttribute->getAttributeId()] = $this->isTextSwatch($productAttribute)
+                || $this->isVisualSwatch($productAttribute);
+        }
+
+        return $this->swatchAttributeCache[$productAttribute->getAttributeId()];
     }
 
     /**

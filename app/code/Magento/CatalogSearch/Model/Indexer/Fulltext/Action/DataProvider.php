@@ -6,7 +6,10 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -92,6 +95,13 @@ class DataProvider
     private $connection;
 
     /**
+     * Attribute values cache
+     *
+     * @var array
+     */
+    private $attributeValueCache = [];
+
+    /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     private $metadata;
@@ -102,6 +112,23 @@ class DataProvider
     private $attributeOptions = [];
 
     /**
+     * Cache searchable attributes by backend type
+     *
+     * @var array
+     */
+    private $searchableAttributesByBackendType = [];
+
+    /**
+     * Adjusts a size of filtered rows for searchable products. Filtered rows counts by the following condition:
+     * entity_id > X AND entity_id < X + BatchSize * antiGapMultiplier
+     * It will help in case a lot of gaps between entity_id in product table, when selected amount of products will be
+     * less than batch size
+     *
+     * @var int
+     */
+    private $antiGapMultiplier;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -110,6 +137,7 @@ class DataProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param int $antiGapMultiplier
      */
     public function __construct(
         ResourceConnection $resource,
@@ -119,7 +147,8 @@ class DataProvider
         \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        int $antiGapMultiplier = 5
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -130,6 +159,7 @@ class DataProvider
         $this->storeManager = $storeManager;
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
+        $this->antiGapMultiplier = max(1, $antiGapMultiplier);
     }
 
     /**
@@ -150,7 +180,7 @@ class DataProvider
      * @param array $staticFields
      * @param array|int $productIds
      * @param int $lastProductId
-     * @param int $limit
+     * @param int $batch
      * @return array
      * @since 100.0.3
      */
@@ -159,9 +189,11 @@ class DataProvider
         array $staticFields,
         $productIds = null,
         $lastProductId = 0,
-        $limit = 100
+        $batch = 500
     ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        $lastProductId = (int) $lastProductId;
+
         $select = $this->connection->select()
             ->useStraightJoin(true)
             ->from(
@@ -174,15 +206,70 @@ class DataProvider
                 []
             );
 
+        $this->joinAttribute($select, 'visibility', $storeId, $this->engine->getAllowedVisibility());
+        $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
+
         if ($productIds !== null) {
             $select->where('e.entity_id IN (?)', $productIds);
+        } else {
+            $select->where('e.entity_id > ?', $lastProductId);
+            $select->where(
+                'e.entity_id < ?',
+                $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
+            );
         }
+        $select->order('e.entity_id');
+        $select->limit($batch);
 
-        $select->where('e.entity_id > ?', $lastProductId)->limit($limit)->order('e.entity_id');
+        return $this->connection->fetchAll($select);
+    }
 
-        $result = $this->connection->fetchAll($select);
+    /**
+     * Join attribute to searchable product for filtration
+     *
+     * @param Select $select
+     * @param string $attributeCode
+     * @param int $storeId
+     * @param array $whereValue
+     */
+    private function joinAttribute(Select $select, $attributeCode, $storeId, array $whereValue)
+    {
+        $linkField = $this->metadata->getLinkField();
+        $attribute = $this->getSearchableAttribute($attributeCode);
+        $attributeTable = $this->getTable('catalog_product_entity_' . $attribute->getBackendType());
+        $defaultAlias = $attributeCode . '_default';
+        $storeAlias = $attributeCode . '_store';
 
-        return $result;
+        $whereCondition = $this->connection->getCheckSql(
+            $storeAlias . '.value_id > 0',
+            $storeAlias . '.value',
+            $defaultAlias . '.value'
+        );
+
+        $select->join(
+            [$defaultAlias => $attributeTable],
+            $this->connection->quoteInto(
+                $defaultAlias . '.' . $linkField . '= e.' . $linkField . ' AND ' . $defaultAlias . '.attribute_id = ?',
+                $attribute->getAttributeId()
+            ) . $this->connection->quoteInto(
+                ' AND ' . $defaultAlias . '.store_id = ?',
+                Store::DEFAULT_STORE_ID
+            ),
+            []
+        )->joinLeft(
+            [$storeAlias => $attributeTable],
+            $this->connection->quoteInto(
+                $storeAlias . '.' . $linkField . '= e.' . $linkField . ' AND ' . $storeAlias . '.attribute_id = ?',
+                $attribute->getAttributeId()
+            ) . $this->connection->quoteInto(
+                ' AND ' . $storeAlias . '.store_id = ?',
+                $storeId
+            ),
+            []
+        )->where(
+            $whereCondition . ' IN (?)',
+            $whereValue
+        );
     }
 
     /**
@@ -219,14 +306,17 @@ class DataProvider
         }
 
         if ($backendType !== null) {
-            $attributes = [];
+            if (isset($this->searchableAttributesByBackendType[$backendType])) {
+                return $this->searchableAttributesByBackendType[$backendType];
+            }
+            $this->searchableAttributesByBackendType[$backendType] = [];
             foreach ($this->searchableAttributes as $attributeId => $attribute) {
                 if ($attribute->getBackendType() == $backendType) {
-                    $attributes[$attributeId] = $attribute;
+                    $this->searchableAttributesByBackendType[$backendType][$attributeId] = $attribute;
                 }
             }
 
-            return $attributes;
+            return $this->searchableAttributesByBackendType[$backendType];
         }
 
         return $this->searchableAttributes;
@@ -339,7 +429,7 @@ class DataProvider
         }
 
         if ($selects) {
-            $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
+            $select = $this->connection->select()->union($selects, Select::SQL_UNION_ALL);
             $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
                 $entityId = $productLinkFieldsToEntityIdMap[$row[$linkField]];
@@ -454,7 +544,6 @@ class DataProvider
                 }
             }
         }
-
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValue) {
                 $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
@@ -494,35 +583,37 @@ class DataProvider
      */
     private function getAttributeValue($attributeId, $valueId, $storeId)
     {
-        $attribute = $this->getSearchableAttribute($attributeId);
-        $value = $this->engine->processAttributeValue($attribute, $valueId);
-
-        if (false !== $value
-            && $attribute->getIsSearchable()
-            && $attribute->usesSource()
-            && $this->engine->allowAdvancedIndex()
-        ) {
-            if (!isset($this->attributeOptions[$attributeId][$storeId])) {
-                $attribute->setStoreId($storeId);
-                $options = $attribute->getSource()->toOptionArray();
-                $this->attributeOptions[$attributeId][$storeId] = array_combine(
-                    array_column($options, 'value'),
-                    array_column($options, 'label')
-                );
+        $valueHash = "$attributeId-$valueId-$storeId";
+        if (!array_key_exists($valueHash, $this->attributeValueCache)) {
+            $attribute = $this->getSearchableAttribute($attributeId);
+            $value = $this->engine->processAttributeValue($attribute, $valueId);
+            $optionKey = "$attributeId-$storeId";
+            if (false !== $value && !array_key_exists($optionKey, $this->attributeOptions)
+            ) {
+                if ($this->engine->allowAdvancedIndex()
+                && $attribute->getIsSearchable()
+                && $attribute->usesSource()
+                ) {
+                    $attribute->setStoreId($storeId);
+                    $options = $attribute->getSource()->toOptionArray();
+                    $this->attributeOptions[$optionKey] = array_combine(
+                        array_column($options, 'value'),
+                        array_column($options, 'label')
+                    );
+                } else {
+                    $this->attributeOptions[$optionKey] = null;
+                }
+            } elseif (isset($this->attributeOptions[$optionKey][$valueId])) {
+                $valueText = $this->attributeOptions[$optionKey][$valueId];
+                $pieces = array_filter(array_merge([$value], [$valueText]));
+                $value = implode($this->separator, $pieces);
             }
 
-            $valueText = '';
-            if (isset($this->attributeOptions[$attributeId][$storeId][$valueId])) {
-                $valueText = $this->attributeOptions[$attributeId][$storeId][$valueId];
-            }
+            $value = $value !== false ? preg_replace('/\\s+/siu', ' ', trim(strip_tags($value))) : false;
 
-            $pieces = array_filter(array_merge([$value], [$valueText]));
-
-            $value = implode($this->separator, $pieces);
+            $this->attributeValueCache[$valueHash] = $value;
         }
 
-        $value = preg_replace('/\\s+/siu', ' ', trim(strip_tags($value)));
-
-        return $value;
+        return $this->attributeValueCache[$valueHash];
     }
 }
