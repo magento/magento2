@@ -11,5 +11,6 @@
     <section name="AdminProductGridSection">
         <element name="productGridElement1" type="input" selector="#addselector" />
         <element name="productGridElement2" type="text" selector="#addselector" />
+        <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
     </section>
 </sections>
