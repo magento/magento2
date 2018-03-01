@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_product_bundle_option" resource="default" engine="innodb"
            comment="Catalog Product Bundle Option">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"

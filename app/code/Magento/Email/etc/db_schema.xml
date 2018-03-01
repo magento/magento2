@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="email_template" resource="default" engine="innodb" comment="Email Templates">
         <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Template ID"/>
