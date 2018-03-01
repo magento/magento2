@@ -14,4 +14,24 @@
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\Get"/>
     <preference for="Magento\InventoryLowQuantityNotificationApi\Api\DeleteSourceItemConfigurationInterface"
                 type="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\Delete"/>
+    <type name="Magento\Catalog\Block\Adminhtml\Rss\NotifyStock\DescriptionProvider">
+        <plugin name="rss_adapt_description_provider"
+                type="Magento\InventoryLowQuantityNotification\Plugin\Rss\AdaptDescriptionProvider"/>
+    </type>
+    <type name="Magento\Catalog\Model\Rss\Product\NotifyStock">
+        <plugin name="rss_adapt_notify_stock"
+                type="Magento\InventoryLowQuantityNotification\Plugin\Rss\AdaptNotifyStock"/>
+    </type>
+    <!-- LowStockCondition -->
+    <preference for="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionInterface"
+                type="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain"/>
+    <type name="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="configuration" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\ConfigurationCondition</item>
+                <item name="name_attribute" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\NameAttributeCondition</item>
+                <item name="status_attribute" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\StatusAttributeCondition</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
