@@ -13,7 +13,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
 use Magento\Sales\Api\OrderCustomerDelegateInterface;
 
-class Delegate extends Action
+/**
+ * Redirect guest customer for registration.
+ */
+class DelegateCreate extends Action
 {
     /**
      * @var OrderCustomerDelegateInterface

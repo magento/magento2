@@ -17,6 +17,7 @@ use Magento\Customer\Helper\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Session\Proxy as SessionProxy;
 use Magento\Customer\Helper\Delegation\Data\NewOperationFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
@@ -64,33 +65,22 @@ class Storage
      * @param AddressInterfaceFactory $addressFactory
      * @param RegionInterfaceFactory $regionFactory
      * @param LoggerInterface $logger
+     * @param SessionProxy $session
      */
     public function __construct(
         NewOperationFactory $newFactory,
         CustomerInterfaceFactory $customerFactory,
         AddressInterfaceFactory $addressFactory,
         RegionInterfaceFactory $regionFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SessionProxy $session
     ) {
         $this->newFactory = $newFactory;
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
         $this->regionFactory = $regionFactory;
         $this->logger = $logger;
-    }
-
-    /**
-     * @return Session
-     *
-     * @throws \Throwable
-     */
-    private function getSession(): Session
-    {
-        if (!$this->session) {
-            $this->session = ObjectManager::getInstance()->get(Session::class);
-        }
-
-        return $this->session;
+        $this->session = $session;
     }
 
     /**
@@ -114,8 +104,8 @@ class Storage
                 $addressesData[] = $address->__toArray();
             }
         }
-        $this->getSession()->setCustomerFormData($customerData);
-        $this->getSession()->setDelegatedNewCustomerData([
+        $this->session->setCustomerFormData($customerData);
+        $this->session->setDelegatedNewCustomerData([
             'customer' => $customerData,
             'addresses' => $addressesData,
             'delegated_data' => $delegatedData
@@ -130,8 +120,7 @@ class Storage
     public function consumeNewOperation()
     {
         try {
-            $serialized = $this->getSession()
-                ->getDelegatedNewCustomerData(true);
+            $serialized = $this->session->getDelegatedNewCustomerData(true);
         } catch (\Throwable $exception) {
             $this->logger->error($exception);
             $serialized = null;

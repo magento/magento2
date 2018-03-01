@@ -169,7 +169,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId()
-            ? $this->delegatedStorage->consumenewOperation() : null;
+            ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = null;
         $prevCustomerDataArr = null;
         if ($customer->getId()) {
