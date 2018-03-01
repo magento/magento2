@@ -191,57 +191,31 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $redirectToDashboard
     ) {
         // Preparations for method updateLastCustomerId()
-        $this->customerSession->expects($this->once())
-            ->method('getLastCustomerId')
-            ->willReturn($customerId);
-        $this->customerSession->expects($this->any())
-            ->method('isLoggedIn')
-            ->willReturn($customerLoggedIn);
-        $this->customerSession->expects($this->any())
-            ->method('getId')
-            ->willReturn($lastCustomerId);
-        $this->customerSession->expects($this->any())
-            ->method('unsBeforeAuthUrl')
-            ->willReturnSelf();
+        $this->customerSession->expects($this->once())->method('getLastCustomerId')->willReturn($customerId);
+        $this->customerSession->expects($this->any())->method('isLoggedIn')->willReturn($customerLoggedIn);
+        $this->customerSession->expects($this->any())->method('getId')->willReturn($lastCustomerId);
+        $this->customerSession->expects($this->any())->method('unsBeforeAuthUrl')->willReturnSelf();
         $this->customerSession->expects($this->any())
             ->method('setLastCustomerId')
             ->with($lastCustomerId)
             ->willReturnSelf();
 
         // Preparations for method prepareRedirectUrl()
-        $this->store->expects($this->once())
-            ->method('getBaseUrl')
-            ->willReturn($baseUrl);
+        $this->store->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
 
-        $this->customerSession->expects($this->any())
-            ->method('getBeforeAuthUrl')
-            ->willReturn($beforeAuthUrl);
-        $this->customerSession->expects($this->any())
-            ->method('setBeforeAuthUrl')
-            ->willReturnSelf();
-        $this->customerSession->expects($this->any())
-            ->method('getAfterAuthUrl')
-            ->willReturn($afterAuthUrl);
+        $this->customerSession->expects($this->any())->method('getBeforeAuthUrl')->willReturn($beforeAuthUrl);
+        $this->customerSession->expects($this->any())->method('setBeforeAuthUrl')->willReturnSelf();
+        $this->customerSession->expects($this->any())->method('getAfterAuthUrl')->willReturn($afterAuthUrl);
         $this->customerSession->expects($this->any())
             ->method('setAfterAuthUrl')
             ->with($beforeAuthUrl)
             ->willReturnSelf();
-        $this->customerSession->expects($this->any())
-            ->method('getBeforeRequestParams')
-            ->willReturn(false);
+        $this->customerSession->expects($this->any())->method('getBeforeRequestParams')->willReturn(false);
 
-        $this->customerUrl->expects($this->any())
-            ->method('getAccountUrl')
-            ->willReturn($accountUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('getLoginUrl')
-            ->willReturn($loginUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('getLogoutUrl')
-            ->willReturn($logoutUrl);
-        $this->customerUrl->expects($this->any())
-            ->method('getDashboardUrl')
-            ->willReturn($dashboardUrl);
+        $this->customerUrl->expects($this->any())->method('getAccountUrl')->willReturn($accountUrl);
+        $this->customerUrl->expects($this->any())->method('getLoginUrl')->willReturn($loginUrl);
+        $this->customerUrl->expects($this->any())->method('getLogoutUrl')->willReturn($logoutUrl);
+        $this->customerUrl->expects($this->any())->method('getDashboardUrl')->willReturn($dashboardUrl);
 
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
@@ -253,28 +227,18 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             ->with(CustomerUrl::REFERER_QUERY_PARAM_NAME)
             ->willReturn($referer);
 
-        $this->urlDecoder->expects($this->any())
-            ->method('decode')
-            ->with($referer)
-            ->willReturn($referer);
+        $this->urlDecoder->expects($this->any())->method('decode')->with($referer)->willReturn($referer);
 
-        $this->url->expects($this->any())
-            ->method('isOwnOriginUrl')
-            ->willReturn(true);
+        $this->url->expects($this->any())->method('isOwnOriginUrl')->willReturn(true);
 
-        $this->resultRedirect->expects($this->once())
-            ->method('setUrl')
-            ->with($beforeAuthUrl)
-            ->willReturnSelf();
+        $this->resultRedirect->expects($this->once())->method('setUrl')->with($beforeAuthUrl)->willReturnSelf();
 
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
-        $this->hostChecker->expects($this->any())
-            ->method('isOwnOrigin')
-            ->willReturn(true);
+        $this->hostChecker->expects($this->any())->method('isOwnOrigin')->willReturn(true);
 
         $this->model->getRedirect();
     }
