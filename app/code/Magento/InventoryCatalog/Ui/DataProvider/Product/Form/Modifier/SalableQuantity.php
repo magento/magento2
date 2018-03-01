@@ -9,9 +9,9 @@ namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalog\Model\GetSalableQuantityDataBySku;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Product form modifier. Modify form stocks declaration
@@ -19,9 +19,9 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 class SalableQuantity extends AbstractModifier
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var LocatorInterface
@@ -39,18 +39,18 @@ class SalableQuantity extends AbstractModifier
     private $getSalableQuantityDataBySku;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param LocatorInterface $locator
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param GetSalableQuantityDataBySku $getSalableQuantityDataBySku
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         LocatorInterface $locator,
         IsSingleSourceModeInterface $isSingleSourceMode,
         GetSalableQuantityDataBySku $getSalableQuantityDataBySku
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->locator = $locator;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->getSalableQuantityDataBySku = $getSalableQuantityDataBySku;
@@ -64,7 +64,7 @@ class SalableQuantity extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $data;
@@ -82,7 +82,7 @@ class SalableQuantity extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $meta;

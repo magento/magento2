@@ -15,6 +15,14 @@ namespace Magento\InventorySales\Model;
 interface GetStockItemDataInterface
 {
     /**
+     * Constants for represent fields in result array
+     */
+    const SKU = 'sku';
+    const QUANTITY = 'quantity';
+    const IS_SALABLE = 'is_salable';
+    /**#@-*/
+
+    /**
      * Given a product sku and a stock id, return stock item data.
      *
      * @param string $sku

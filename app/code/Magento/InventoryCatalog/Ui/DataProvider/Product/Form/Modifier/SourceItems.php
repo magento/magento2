@@ -10,13 +10,13 @@ namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Product form modifier. Add to form source data
@@ -24,9 +24,9 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 class SourceItems extends AbstractModifier
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var IsSingleSourceModeInterface
@@ -49,20 +49,20 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
@@ -77,7 +77,7 @@ class SourceItems extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
             || null === $product->getId()
         ) {
             return $data;
@@ -123,7 +123,7 @@ class SourceItems extends AbstractModifier
         $product = $this->locator->getProduct();
 
         if ($this->isSingleSourceMode->execute() === true
-            || $this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
 

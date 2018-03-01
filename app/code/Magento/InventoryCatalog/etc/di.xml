@@ -55,14 +55,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType">
-        <arguments>
-            <argument name="allowedProductTypes" xsi:type="array">
-                <item name="simple" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_SIMPLE</item>
-                <item name="virtual" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\InventorySalesApi\Api\StockResolverInterface">
         <plugin name="adapt_stock_resolver_to_admin_website"
                 type="Magento\InventoryCatalog\Plugin\InventorySalesApi\StockResolver\AdaptStockResolverToAdminWebsitePlugin"/>

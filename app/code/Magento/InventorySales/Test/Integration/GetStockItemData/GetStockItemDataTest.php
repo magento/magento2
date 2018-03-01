@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\GetStockItemData;
 
-use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ManageConfigTest extends TestCase
+class GetStockItemDataTest extends TestCase
 {
     /**
      * @var GetStockItemDataInterface
@@ -36,37 +35,34 @@ class ManageConfigTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 0
      *
      * @param string $sku
      * @param int $stockId
-     * @param $expectedData
-     * @return void
+     * @param array|null $expectedData
      *
-     * @dataProvider executeWithManageStockFalseDataProvider
+     * @dataProvider getStockItemDataDataProvider
      */
-    public function testExecuteWithManageStockFalse(string $sku, int $stockId, $expectedData)
+    public function testGetStockItemData(string $sku, int $stockId, $expectedData)
     {
         $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-
         self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
      * @return array
      */
-    public function executeWithManageStockFalseDataProvider(): array
+    public function getStockItemDataDataProvider(): array
     {
         return [
-            ['SKU-1', 10, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 10, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
             ['SKU-1', 20, null],
-            ['SKU-1', 30, [IndexStructure::QUANTITY => 8.5, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-1', 30, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
             ['SKU-2', 10, null],
-            ['SKU-2', 20, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-2', 30, [IndexStructure::QUANTITY => 5, IndexStructure::IS_SALABLE => 1]],
-            ['SKU-3', 10, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-2', 20, [GetStockItemDataInterface::QUANTITY => 5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-2', 30, [GetStockItemDataInterface::QUANTITY => 5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-3', 10, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
             ['SKU-3', 20, null],
-            ['SKU-3', 30, [IndexStructure::QUANTITY => 0, IndexStructure::IS_SALABLE => 1]],
+            ['SKU-3', 30, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
         ];
     }
 }
