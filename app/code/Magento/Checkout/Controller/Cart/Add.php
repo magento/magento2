@@ -129,7 +129,6 @@ class Add extends \Magento\Checkout\Controller\Cart
                             'cart_url' => $this->getCartUrl(),
                         ]
                     );
-
                 }
                 return $this->goBack(null, $product);
             }
