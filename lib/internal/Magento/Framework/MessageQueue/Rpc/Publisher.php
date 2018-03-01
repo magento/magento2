@@ -49,6 +49,7 @@ class Publisher implements PublisherInterface
      */
     private $publisherConfig;
 
+    //@codingStandardsIgnoreStart
     /**
      * Initialize dependencies.
      *
@@ -74,6 +75,7 @@ class Publisher implements PublisherInterface
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
     }
+    //@codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}
