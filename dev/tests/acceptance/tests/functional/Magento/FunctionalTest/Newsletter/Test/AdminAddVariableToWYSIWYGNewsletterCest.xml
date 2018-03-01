@@ -37,6 +37,7 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <waitForPageLoad time="10" stepKey="waitForPageLoad21"/>
         <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
