@@ -66,7 +66,8 @@ class BackorderConditionTest extends TestCase
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
-        $this->isProductSalableForRequestedQty = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
+        $this->isProductSalableForRequestedQty
+            = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
     }
 
     /**

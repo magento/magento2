@@ -25,7 +25,8 @@ class ManageStockConditionTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductSalableForRequestedQty = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
+        $this->isProductSalableForRequestedQty
+            = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
     }
 
     /**
