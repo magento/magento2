@@ -24,7 +24,7 @@
         <arguments>
             <argument name="securityCheckers" xsi:type="array">
                 <item name="frequency" xsi:type="object">Magento\Security\Model\SecurityChecker\Frequency</item>
-                <item name="wuantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
+                <item name="quantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
             </argument>
         </arguments>
     </type>
