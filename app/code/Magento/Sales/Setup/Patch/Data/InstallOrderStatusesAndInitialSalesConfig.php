@@ -8,8 +8,8 @@ namespace Magento\Sales\Setup\Patch\Data;
 
 use Magento\Sales\Setup\SalesSetupFactory;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class InstallOrderStatusesAndInitialSalesConfig

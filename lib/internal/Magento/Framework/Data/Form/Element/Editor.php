@@ -67,7 +67,7 @@ class Editor extends Textarea
      * @return bool|string
      * @throws \InvalidArgumentException
      */
-    private function getJsonConfig()
+    protected function getJsonConfig()
     {
         if (is_object($this->getConfig()) && method_exists($this->getConfig(), 'toJson')) {
             return $this->getConfig()->toJson();
