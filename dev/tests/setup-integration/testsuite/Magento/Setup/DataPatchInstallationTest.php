@@ -7,7 +7,7 @@
 namespace Magento\Setup;
 
 use Magento\Framework\Module\ModuleResource;
-use Magento\Setup\Model\Patch\PatchHistory;
+use Magento\Framework\Setup\Patch\PatchHistory;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TableData;
 use Magento\TestFramework\Deploy\TestModuleManager;
@@ -78,7 +78,7 @@ class DataPatchInstallationTest extends SetupTestCase
             'etc'
         );
         $this->movePatches();
-        $this->moduleResource->flush();
+        ModuleResource::flush();
         $this->cliCommad->upgrade();
         self::assertEquals(
             '0.0.3',

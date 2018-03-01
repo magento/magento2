@@ -13,8 +13,8 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Setup\SalesSetupFactory;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 class FillQuoteAddressIdInSalesOrderAddress implements DataPatchInterface, PatchVersionInterface
 {
