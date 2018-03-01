@@ -205,13 +205,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
             ->method('getIsChangedCategories')
             ->will($this->returnValue($isChangedCategories));
 
-        $this->urlPersist->expects($this->exactly($expectedDeleteCount))->method('deleteByData')->with([
-            UrlRewrite::ENTITY_ID => $this->product->getId(),
-            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::REDIRECT_TYPE => 0,
-            UrlRewrite::STORE_ID => $this->product->getStoreId()
-        ]);
-
         $this->product->expects($this->any())
             ->method('isVisibleInSiteVisibility')
             ->will($this->returnValue($visibilityResult));
