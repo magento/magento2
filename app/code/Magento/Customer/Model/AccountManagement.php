@@ -384,8 +384,7 @@ class AccountManagement implements AccountManagementInterface
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         CredentialsValidator $credentialsValidator = null,
         DateTimeFactory $dateTimeFactory = null,
-        AccountConfirmation $accountConfirmation = null
-        DateTimeFactory $dateTimeFactory = null,
+        AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
         CollectionFactory $visitorCollectionFactory = null

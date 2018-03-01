@@ -236,7 +236,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
                 'dateTimeFactory' => $this->dateTimeFactory,
-                'accountConfirmation' => $this->accountConfirmation
+                'accountConfirmation' => $this->accountConfirmation,
                 'sessionManager' => $this->sessionManager,
                 'saveHandler' => $this->saveHandler,
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
