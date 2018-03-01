@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\OperationsExecutor;
-use Magento\Setup\Model\Declaration\Schema\RequestFactory;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
+use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Framework\Setup\Declaration\Schema\RequestFactory;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
 
 /**
  * Declaration Installer is facade for installation and upgrade db in declaration mode.

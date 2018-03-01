@@ -11,8 +11,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Directory\Model\AllowedCountriesFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, PatchVersionInterface
 {

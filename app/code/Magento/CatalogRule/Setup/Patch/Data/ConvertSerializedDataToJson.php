@@ -8,8 +8,8 @@ namespace Magento\CatalogRule\Setup\Patch\Data;
 
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;

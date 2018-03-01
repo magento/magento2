@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="directory_country" resource="default" engine="innodb" comment="Directory Country">
         <column xsi:type="varchar" name="country_id" nullable="false" length="2" comment="Country Id in ISO-2"/>
         <column xsi:type="varchar" name="iso2_code" nullable="true" length="2" comment="Country ISO-2 format"/>
