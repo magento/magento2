@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Test\Integration;
 
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
+use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\PriorityShippingAlgorithm;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
@@ -16,10 +16,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
- */
 class PriorityShippingAlgorithmTest extends TestCase
 {
     /**
@@ -97,11 +93,9 @@ class PriorityShippingAlgorithmTest extends TestCase
     }
 
     /**
-     * Data provider for testStockSourceCombination.
-     *
      * @return array
      */
-    public function stockSourceCombinationDataProvider()
+    public function stockSourceCombinationDataProvider(): array
     {
         return [
             [

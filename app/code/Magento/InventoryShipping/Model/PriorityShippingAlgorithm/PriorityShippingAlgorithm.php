@@ -41,9 +41,9 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     private $shippingAlgorithmResultFactory;
 
     /**
-     * @var GetSourceItemBySku
+     * @var GetSourceItemBySourceCodeAndSku
      */
-    private $getSourceItemBySku;
+    private $getSourceItemBySourceCodeAndSku;
 
     /**
      * @var GetEnabledSourcesOrderedByPriorityByStoreId
@@ -54,20 +54,20 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
      * @param ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
-     * @param GetSourceItemBySku $getSourceItemBySku
+     * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
      * @param GetEnabledSourcesOrderedByPriorityByStoreId $getEnabledSourcesOrderedByPriorityByStoreId
      */
     public function __construct(
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
         SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory,
         ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory,
-        GetSourceItemBySku $getSourceItemBySku,
+        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
         GetEnabledSourcesOrderedByPriorityByStoreId $getEnabledSourcesOrderedByPriorityByStoreId
     ) {
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceSelectionFactory = $sourceSelectionFactory;
         $this->sourceItemSelectionFactory = $sourceItemSelectionFactory;
-        $this->getSourceItemBySku = $getSourceItemBySku;
+        $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
         $this->getEnabledSourcesOrderedByPriorityByStoreId = $getEnabledSourcesOrderedByPriorityByStoreId;
     }
 
@@ -92,7 +92,11 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             }
 
             foreach ($sources as $source) {
-                $sourceItem = $this->getSourceItemBySku->execute($source->getSourceCode(), $itemSku);
+                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($source->getSourceCode(), $itemSku);
+                if (null === $sourceItem) {
+                    continue;
+                }
+
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);
 

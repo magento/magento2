@@ -10,9 +10,6 @@
         "magento/module-sales": "100.3.*",
         "magento/module-store": "100.3.*"
     },
-    "suggest": {
-        "magento/module-inventory": "100.0.*"
-    },
     "type": "magento2-module",
     "version": "100.0.0-dev",
     "license": [

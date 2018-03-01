@@ -9,15 +9,13 @@ namespace Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**
  * Retrieve source item from specific source by given SKU.
  */
-class GetSourceItemBySku
+class GetSourceItemBySourceCodeAndSku
 {
-
     /**
      * @var SourceItemRepositoryInterface
      */
@@ -29,34 +27,25 @@ class GetSourceItemBySku
     private $searchCriteriaBuilder;
 
     /**
-     * @var SourceItemInterfaceFactory
-     */
-    private $sourceItemFactory;
-
-    /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SourceItemInterfaceFactory $sourceItemFactory
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        SourceItemInterfaceFactory $sourceItemFactory
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->sourceItemFactory = $sourceItemFactory;
     }
 
     /**
-     * Returns source item from specific source by given SKU.
+     * Returns source item from specific source by given SKU. Return null if source item is not found
      *
      * @param string $sourceCode
      * @param string $sku
-     *
-     * @return SourceItemInterface
+     * @return SourceItemInterface|null
      */
-    public function execute(string $sourceCode, string $sku): SourceItemInterface
+    public function execute(string $sourceCode, string $sku)
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
@@ -64,11 +53,6 @@ class GetSourceItemBySku
             ->create();
         $sourceItemsResult = $this->sourceItemRepository->getList($searchCriteria);
 
-        if ($sourceItemsResult->getTotalCount() > 0) {
-            $sourceItems = $sourceItemsResult->getItems();
-            return reset($sourceItems);
-        }
-
-        return $this->sourceItemFactory->create();
+        return $sourceItemsResult->getTotalCount() > 0 ? current($sourceItemsResult->getItems()) : null;
     }
 }
