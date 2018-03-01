@@ -157,7 +157,8 @@
         <actionGroup ref="seeProductInItemsRefunded" stepKey="seeConfigurableProductInItemsRefunded" after="seeSimpleProductInItemsRefunded">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="seeConfigurableProductInItemsRefunded"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfCreditMemo" after="seeConfigurableProductInItemsRefunded"/>
+        <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="scrollToTopOfCreditMemo"/>
 
         <!--Admin uses order grid-->
         <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
