@@ -114,7 +114,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
                     'safe-mode' => false,
-                    'data-restore' => false
+                    'data-restore' => false,
+                    'dry-run' => false,
                 ]
             ],
             [
@@ -130,7 +131,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
                     'safe-mode' => false,
-                    'data-restore' => false
+                    'data-restore' => false,
+                    'dry-run' => false,
                 ]
             ],
             [
@@ -142,7 +144,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
                     'safe-mode' => false,
-                    'data-restore' => false
+                    'data-restore' => false,
+                    'dry-run' => false,
                 ]
             ],
             [
@@ -154,7 +157,8 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
                     'convert_old_scripts' => false,
                     'magento-init-params' => '',
                     'safe-mode' => false,
-                    'data-restore' => false
+                    'data-restore' => false,
+                    'dry-run' => false,
                 ]
             ],
         ];
