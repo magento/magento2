@@ -70,4 +70,28 @@
             </argument>
         </arguments>
     </type>
+    <!-- IsProductSalableForRequestedQtyCondition -->
+    <preference for="Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain"/>
+    <type name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="back_order" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">10</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\BackOrderCondition</item>
+                </item>
+                <item name="manage_stock" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">20</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ManageStockCondition</item>
+                </item>
+                <item name="is_salable_with_reservations" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">30</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsSalableWithReservationsCondition</item>
+                </item>
+                <item name="correct_qty" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">40</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsCorrectQtyCondition</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
