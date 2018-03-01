@@ -153,7 +153,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
      * @param SourceItemSelectionInterface[] $sourceItemSelections
      * @return SourceSelectionInterface[]
      */
-    private function createSourceSelection($sourceItemSelections): array
+    private function createSourceSelection(array $sourceItemSelections): array
     {
         $sourceSelections = [];
         foreach ($sourceItemSelections as $sourceCode => $items) {

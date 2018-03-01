@@ -9,7 +9,9 @@
 <?php foreach ($block->getSourceSelections() as $sourceSelection) : ?>
     <table class="data-table admin__table-primary edit-order-table">
         <div class="admin__page-section-item-title">
-            <span class="title"><?= $block->escapeHtml($this->getSourceName($sourceSelection->getSourceCode())) ?></span>
+            <span class="title">
+                <?= $block->escapeHtml($this->getSourceName($sourceSelection->getSourceCode())) ?>
+            </span>
         </div>
         <thead>
             <tr class="headings">
