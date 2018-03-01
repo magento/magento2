@@ -45,6 +45,8 @@ class RoboFile extends \Robo\Tasks
      */
     function generateTests($opts = ['config' => null, 'force' => false])
     {
+        $GLOBALS['GENERATE_TESTS'] = true;
+
         if ($opts['force'])
         {
             $GLOBALS['FORCE_PHP_GENERATE'] = true;
