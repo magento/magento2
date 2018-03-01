@@ -26,7 +26,6 @@
         </after>
 
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
-        <seeElement selector="{{AdminGridColumnsControls.columnsPanel}}" stepKey="seeTheColumnsDropDownPanel1"/>
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
         <see selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-action-columns-menu" userInput="4 out of 4 visible" stepKey="seeAllColumnsAreActive"/>
 
@@ -39,6 +38,9 @@
         <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn1"/>
         <click selector="{{AdminGridColumnsControls.columnName('Sales Channel')}}" stepKey="disableSalesChannelColumn1"/>
         <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction2"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="dontSeeIdColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="dontSeeNameColumn1"/>
+        <dontSee selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="dontSeeSalesChannelColumn1"/>
 
         <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders"/>
         <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId2"/>
