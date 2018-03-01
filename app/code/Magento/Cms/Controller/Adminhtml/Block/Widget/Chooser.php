@@ -7,9 +7,13 @@
 namespace Magento\Cms\Controller\Adminhtml\Block\Widget;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\View\LayoutFactory;
 
+/**
+ * Class Chooser
+ * @package Magento\Cms\Controller\Adminhtml\Block\Widget
+ */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**

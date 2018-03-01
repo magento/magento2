@@ -5,13 +5,16 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassEnable
+ * @package Magento\Cms\Controller\Adminhtml\Page
  */
 class MassEnable extends \Magento\Backend\App\Action
 {
@@ -33,14 +36,26 @@ class MassEnable extends \Magento\Backend\App\Action
     protected $collectionFactory;
 
     /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
+    private $pageRepository;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
+    ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
+        $this->pageRepository = $pageRepository
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -54,12 +69,20 @@ class MassEnable extends \Magento\Backend\App\Action
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
-        foreach ($collection as $item) {
-            $item->setIsActive(true);
-            $item->save();
-        }
+        try {
+            foreach ($collection as $item) {
+                $item->setIsActive(true);
+                $this->pageRepository->save($item);
+            }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been enabled.', $collection->getSize()));
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have been enabled.', $collection->getSize())
+            );
+        } catch (LocalizedException $e) {
+            $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
+        } catch (\Exception $e) {
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong while enabling the page.'));
+        }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

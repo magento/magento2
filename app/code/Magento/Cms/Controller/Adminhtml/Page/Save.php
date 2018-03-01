@@ -8,9 +8,16 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class Save
+ * @package Magento\Cms\Controller\Adminhtml\Page
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -58,10 +65,9 @@ class Save extends \Magento\Backend\App\Action
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
         $this->pageFactory = $pageFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -77,34 +83,20 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $data = $this->dataProcessor->filter($data);
-            if (isset($data['is_active']) && $data['is_active'] === 'true') {
-                $data['is_active'] = Page::STATUS_ENABLED;
-            }
-            if (empty($data['page_id'])) {
-                $data['page_id'] = null;
-            }
-
-            /** @var \Magento\Cms\Model\Page $model */
-            $model = $this->pageFactory->create();
-
             $id = $this->getRequest()->getParam('page_id');
-            if ($id) {
-                $model->load($id);
-                if (!$model->getId()) {
-                    $this->messageManager->addErrorMessage(__('This page no longer exists.'));
-                    /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                    $resultRedirect = $this->resultRedirectFactory->create();
-                    return $resultRedirect->setPath('*/*/');
-                }
-            }
+            $model = $this->prepareModel($data);
 
-            $model->setData($data);
+            if (!$model || ($id && $model->getId() != $id)) {
+                $this->messageManager->addErrorMessage(__('This page no longer exists.'));
+                return $resultRedirect->setPath('*/*/');
+            }
 
             $this->_eventManager->dispatch(
                 'cms_page_prepare_save',
                 ['page' => $model, 'request' => $this->getRequest()]
             );
+
+            $data = $model->getData();
 
             if (!$this->dataProcessor->validate($data)) {
                 return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
@@ -119,7 +111,7 @@ class Save extends \Magento\Backend\App\Action
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
+                $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
@@ -128,5 +120,39 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Avoid NPath complexity, retrieve and prepare model.
+     *
+     * @param $data
+     * @return bool|\Magento\Cms\Api\Data\PageInterface
+     */
+    private function prepareModel($data)
+    {
+        $id = $this->getRequest()->getParam('page_id');
+        if ($id) {
+            try {
+                $model = $this->pageRepository->getById($id);
+            } catch (NoSuchEntityException $e) {
+                return false;
+            }
+        }
+
+        if (!isset($model)) {
+            $model = $this->pageFactory->create();
+        }
+
+        $data = $this->dataProcessor->filter($data);
+        if (isset($data['is_active']) && $data['is_active'] === 'true') {
+            $data['is_active'] = Page::STATUS_ENABLED;
+        }
+        if (empty($data['page_id'])) {
+            $data['page_id'] = null;
+        }
+
+        $model->setData($data);
+
+        return $model;
     }
 }

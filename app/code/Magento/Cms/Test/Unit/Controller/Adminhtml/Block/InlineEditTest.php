@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Test\Unit\Controller\Block;
+namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
 use Magento\Cms\Controller\Adminhtml\Block\InlineEdit;
 
@@ -76,12 +76,12 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->at(0))
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
             ->with('items', [])
             ->willReturn($postData);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(true);
         $this->blockRepository->expects($this->once())
             ->method('getById')
             ->with(1)
@@ -92,14 +92,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->cmsBlock->expects($this->once())
             ->method('getData')
             ->willReturn([
-                'identifier' => 'test-identifier'
-            ]);
+                             'identifier' => 'test-identifier'
+                         ]);
         $this->cmsBlock->expects($this->once())
             ->method('setData')
             ->with([
-                'title' => 'Catalog Events Lister',
-                'identifier' => 'Catalog Events Lister'
-            ]);
+                       'title' => 'Catalog Events Lister',
+                       'identifier' => 'Catalog Events Lister'
+                   ]);
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -115,11 +115,11 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with([
-                'messages' => [
-                    '[Block ID: 1] Exception'
-                ],
-                'error' => true
-            ])
+                       'messages' => [
+                           '[Block ID: 1] Exception'
+                       ],
+                       'error' => true
+                   ])
             ->willReturnSelf();
 
         $this->controller->execute();
@@ -129,23 +129,23 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     {
         $this->request->expects($this->at(0))
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
             ->with('items', [])
             ->willReturn([]);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(true);
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with([
-                'messages' => [
-                    'Please correct the data sent.'
-                ],
-                'error' => true
-            ])
+                       'messages' => [
+                           'Please correct the data sent.'
+                       ],
+                       'error' => true
+                   ])
             ->willReturnSelf();
 
         $this->controller->execute();
