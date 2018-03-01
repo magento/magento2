@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
@@ -9,10 +8,10 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="_defaultCoupon" type="coupon">
-        <data key="rule_id">4</data>
-        <data key="code">FREESHIPPING123</data>
-        <data key="times_used">0</data>
-        <data key="is_primary">false</data>
+    <!-- @TODO: Get rid off this workaround and its usages after MQE-498 is implemented -->
+    <entity name="CONST" type="CONST">
+        <data key="successGuestCheckoutOrderNumberMessage">Your order # is:</data>
+        <data key="successCheckoutOrderNumberMessage">Your order number is:</data>
+        <data key="successCheckoutEmailYouMessage">We'll email you an order confirmation with details and tracking info.</data>
     </entity>
 </entities>
