@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Customer\Helper\Delegation\Data;
+namespace Magento\Customer\Model\Delegation\Data;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 

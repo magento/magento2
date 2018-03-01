@@ -7,21 +7,20 @@
 
 declare(strict_types=1);
 
-namespace Magento\Customer\Helper\Delegation;
+namespace Magento\Customer\Model\Delegation;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Customer\Helper\Delegation\Data\NewOperation;
+use Magento\Customer\Model\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Session\Proxy as SessionProxy;
-use Magento\Customer\Helper\Delegation\Data\NewOperationFactory;
+use Magento\Customer\Model\Delegation\Data\NewOperationFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**

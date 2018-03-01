@@ -994,5 +994,5 @@
     </type>
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
-            type="Magento\Sales\Helper\OrderCustomerDelegate" />
+            type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
 </config>

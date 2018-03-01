@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Helper\OrderCustomerExtractor;
 
 /**
  * Class CustomerManagement
