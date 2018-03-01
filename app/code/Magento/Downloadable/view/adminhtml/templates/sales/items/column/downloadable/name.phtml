@@ -17,7 +17,7 @@
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
         <?php foreach ($block->getOrderOptions() as $_option): ?>
-            <dt><?= /* @escapeNotVerified */ $_option['label'] ?>:</dt>
+            <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
             <dd>
             <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
                 <?= /* @escapeNotVerified */ $_option['value'] ?>
@@ -42,7 +42,7 @@ require(['prototype'], function(){
     <?php endif; ?>
     <?php if ($block->getLinks()): ?>
         <dl class="item-options">
-            <dt><?= /* @escapeNotVerified */ $block->getLinksTitle() ?>:</dt>
+            <dt><?= $block->escapeHtml($block->getLinksTitle()) ?>:</dt>
             <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
                 <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= /* @escapeNotVerified */ $_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U')) ?>)</dd>
             <?php endforeach; ?>

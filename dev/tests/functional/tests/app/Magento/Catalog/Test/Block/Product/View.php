@@ -680,6 +680,7 @@ class View extends AbstractConfigureBlock
      */
     public function isVideoVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->_rootElement->find($this->videoContainer)->isVisible();
     }
 
