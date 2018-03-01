@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Retrieve sources related to current stock ordered by priority.
+ * Get enabled sources ordered by priority by storeId
  */
-class GetSourcesByStoreId
+class GetEnabledSourcesOrderedByPriorityByStoreId
 {
     /**
      * @var StoreManagerInterface
@@ -35,33 +35,30 @@ class GetSourcesByStoreId
     private $stockResolver;
 
     /**
-     * @var GetAssignedSourcesForStockInterface
+     * @var GetSourcesAssignedToStockOrderedByPriorityInterface
      */
-    private $getAssignedSourcesForStock;
+    private $getSourcesAssignedToStockOrderedByPriority;
 
     /**
      * @param StoreManagerInterface $storeManager
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param StockResolverInterface $stockResolver
-     * @param GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+     * @param GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         WebsiteRepositoryInterface $websiteRepository,
         StockResolverInterface $stockResolver,
-        GetAssignedSourcesForStockInterface $getAssignedSourcesForStock
+        GetSourcesAssignedToStockOrderedByPriorityInterface $getSourcesAssignedToStockOrderedByPriority
     ) {
         $this->storeManager = $storeManager;
         $this->websiteRepository = $websiteRepository;
         $this->stockResolver = $stockResolver;
-        $this->getAssignedSourcesForStock = $getAssignedSourcesForStock;
+        $this->getSourcesAssignedToStockOrderedByPriority = $getSourcesAssignedToStockOrderedByPriority;
     }
 
     /**
-     * Returns sources related to current stock ordered by priority.
-     *
      * @param int $storeId
-     *
      * @return SourceInterface[]
      */
     public function execute(int $storeId): array
@@ -70,6 +67,10 @@ class GetSourcesByStoreId
         $website = $this->websiteRepository->getById($store->getWebsiteId());
         $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
 
-        return $this->getAssignedSourcesForStock->execute((int)$stock->getStockId());
+        $sources = $this->getSourcesAssignedToStockOrderedByPriority->execute((int)$stock->getStockId());
+        $sources = array_filter($sources, function (SourceInterface $source) {
+            return $source->isEnabled();
+        });
+        return $sources;
     }
 }

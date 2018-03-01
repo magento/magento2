@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\GetSourceItemBySku;
-use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\GetSourcesByStoreId;
+use Magento\InventoryShipping\Model\ShippingAlgorithmInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterfaceFactory;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterface;
@@ -47,29 +46,29 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     private $getSourceItemBySku;
 
     /**
-     * @var GetSourcesByStoreId
+     * @var GetEnabledSourcesOrderedByPriorityByStoreId
      */
-    private $getSourcesByStoreId;
+    private $getEnabledSourcesOrderedByPriorityByStoreId;
 
     /**
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
      * @param SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory
      * @param ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory
      * @param GetSourceItemBySku $getSourceItemBySku
-     * @param GetSourcesByStoreId $getSourcesByStoreId
+     * @param GetEnabledSourcesOrderedByPriorityByStoreId $getEnabledSourcesOrderedByPriorityByStoreId
      */
     public function __construct(
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
         SourceItemSelectionInterfaceFactory $sourceItemSelectionFactory,
         ShippingAlgorithmResultInterfaceFactory $shippingAlgorithmResultFactory,
         GetSourceItemBySku $getSourceItemBySku,
-        GetSourcesByStoreId $getSourcesByStoreId
+        GetEnabledSourcesOrderedByPriorityByStoreId $getEnabledSourcesOrderedByPriorityByStoreId
     ) {
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceSelectionFactory = $sourceSelectionFactory;
         $this->sourceItemSelectionFactory = $sourceItemSelectionFactory;
         $this->getSourceItemBySku = $getSourceItemBySku;
-        $this->getSourcesByStoreId = $getSourcesByStoreId;
+        $this->getEnabledSourcesOrderedByPriorityByStoreId = $getEnabledSourcesOrderedByPriorityByStoreId;
     }
 
     /**
@@ -79,7 +78,7 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
     {
         $isShippable = true;
         $storeId = $order->getStoreId();
-        $sources = $this->getSourcesByStoreId->execute((int)$storeId);
+        $sources = $this->getEnabledSourcesOrderedByPriorityByStoreId->execute((int)$storeId);
         $sourceItemSelections = [];
 
         /** @var OrderItemInterface|OrderItem $orderItem */
@@ -93,10 +92,6 @@ class PriorityShippingAlgorithm implements ShippingAlgorithmInterface
             }
 
             foreach ($sources as $source) {
-                if (!$source->isEnabled()) {
-                    continue;
-                }
-
                 $sourceItem = $this->getSourceItemBySku->execute($source->getSourceCode(), $itemSku);
                 $sourceItemQty = $sourceItem->getQuantity();
                 $qtyToDeduct = min($sourceItemQty, $qtyToDeliver);

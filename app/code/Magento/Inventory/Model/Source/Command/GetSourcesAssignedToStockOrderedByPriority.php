@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Command;
+namespace Magento\Inventory\Model\Source\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
+class GetSourcesAssignedToStockOrderedByPriority implements GetSourcesAssignedToStockOrderedByPriorityInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -87,7 +87,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
-     * Get all stock-source links by given stockId.
+     * Get all stock-source links by given stockId
      *
      * @param int $stockId
      * @return array
