@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Client;
+namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -45,6 +45,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 'search',
                 'scroll',
                 'suggest',
+                'info',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,7 +60,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 'stats',
                 'updateAliases',
                 'existsAlias',
-                'getAlias'
+                'getAlias',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,10 +70,13 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->elasticsearchClientMock->expects($this->any())
             ->method('ping')
             ->willReturn(true);
+        $this->elasticsearchClientMock->expects($this->any())
+            ->method('info')
+            ->willReturn(['version' => ['number' => '5.0.0']]);
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
+            \Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -339,18 +343,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                         'properties' => [
                             'name' => [
-                                'type' => 'string',
+                                'type' => 'text',
                             ],
                         ],
                         'dynamic_templates' => [
                             [
                                 'price_mapping' => [
                                     'match' => 'price_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'float'
                                     ],
@@ -359,9 +363,9 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'string_mapping' => [
                                     'match' => '*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'string',
+                                        'type' => 'text',
                                         'index' => 'no'
                                     ],
                                 ],
@@ -369,7 +373,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'position_mapping' => [
                                     'match' => 'position_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'int'
                                     ],
@@ -382,7 +386,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->model->addFieldsMapping(
             [
                 'name' => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
             ],
             'indexName',
@@ -405,18 +409,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                         'properties' => [
                             'name' => [
-                                'type' => 'string',
+                                'type' => 'text',
                             ],
                         ],
                         'dynamic_templates' => [
                             [
                                 'price_mapping' => [
                                     'match' => 'price_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'float'
                                     ],
@@ -425,17 +429,17 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'string_mapping' => [
                                     'match' => '*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'string',
-                                        'index' => 'no'
+                                        'type' => 'text',
+                                        'index' => 'no',
                                     ],
                                 ],
                             ],
                             [
                                 'position_mapping' => [
                                     'match' => 'position_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'int'
                                     ],
@@ -449,7 +453,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->model->addFieldsMapping(
             [
                 'name' => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
             ],
             'indexName',

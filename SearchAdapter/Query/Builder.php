@@ -6,58 +6,15 @@
 namespace Magento\Elasticsearch\SearchAdapter\Query;
 
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**
  * @api
  * @since 100.1.0
  */
-class Builder
+class Builder extends Elasticsearch5Builder
 {
-    /**
-     * @var Config
-     * @since 100.1.0
-     */
-    protected $clientConfig;
-
-    /**
-     * @var SearchIndexNameResolver
-     * @since 100.1.0
-     */
-    protected $searchIndexNameResolver;
-
-    /**
-     * @var AggregationBuilder
-     * @since 100.1.0
-     */
-    protected $aggregationBuilder;
-
-    /**
-     * @var ScopeResolverInterface
-     * @since 100.1.0
-     */
-    protected $scopeResolver;
-
-    /**
-     * @param Config $clientConfig
-     * @param SearchIndexNameResolver $searchIndexNameResolver
-     * @param AggregationBuilder $aggregationBuilder
-     * @param ScopeResolverInterface $scopeResolver
-     */
-    public function __construct(
-        Config $clientConfig,
-        SearchIndexNameResolver $searchIndexNameResolver,
-        AggregationBuilder $aggregationBuilder,
-        ScopeResolverInterface $scopeResolver
-    ) {
-        $this->clientConfig = $clientConfig;
-        $this->searchIndexNameResolver = $searchIndexNameResolver;
-        $this->aggregationBuilder = $aggregationBuilder;
-        $this->scopeResolver = $scopeResolver;
-    }
 
     /**
      * Set initial settings for query
@@ -81,20 +38,5 @@ class Builder
             ],
         ];
         return $searchQuery;
-    }
-
-    /**
-     * Add aggregations settings to query
-     *
-     * @param RequestInterface $request
-     * @param array $searchQuery
-     * @return array
-     * @since 100.1.0
-     */
-    public function initAggregations(
-        RequestInterface $request,
-        array $searchQuery
-    ) {
-        return $this->aggregationBuilder->build($request, $searchQuery);
     }
 }

@@ -13,32 +13,15 @@ use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5Mapper;
 
 /**
  * Mapper class
  * @api
  * @since 100.1.0
  */
-class Mapper
+class Mapper extends Elasticsearch5Mapper
 {
-    /**
-     * @var QueryBuilder
-     * @since 100.1.0
-     */
-    protected $queryBuilder;
-
-    /**
-     * @var MatchQueryBuilder
-     * @since 100.1.0
-     */
-    protected $matchQueryBuilder;
-
-    /**
-     * @var FilterBuilder
-     * @since 100.1.0
-     */
-    protected $filterBuilder;
-
     /**
      * @param QueryBuilder $queryBuilder
      * @param MatchQueryBuilder $matchQueryBuilder
@@ -72,134 +55,10 @@ class Mapper
                 BoolQuery::QUERY_CONDITION_MUST
             )
         );
+
         $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
+
         $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
         return $searchQuery;
-    }
-
-    /**
-     * Process query
-     *
-     * @param RequestQueryInterface $requestQuery
-     * @param array $selectQuery
-     * @param string $conditionType
-     * @return array
-     * @throws \InvalidArgumentException
-     * @since 100.1.0
-     */
-    protected function processQuery(
-        RequestQueryInterface $requestQuery,
-        array $selectQuery,
-        $conditionType
-    ) {
-        switch ($requestQuery->getType()) {
-            case RequestQueryInterface::TYPE_MATCH:
-                /** @var MatchQuery $requestQuery */
-                $selectQuery = $this->matchQueryBuilder->build(
-                    $selectQuery,
-                    $requestQuery,
-                    $conditionType
-                );
-                break;
-            case RequestQueryInterface::TYPE_BOOL:
-                /** @var BoolQuery $requestQuery */
-                $selectQuery = $this->processBoolQuery($requestQuery, $selectQuery);
-                break;
-            case RequestQueryInterface::TYPE_FILTER:
-                /** @var FilterQuery $requestQuery */
-                $selectQuery = $this->processFilterQuery($requestQuery, $selectQuery, $conditionType);
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Unknown query type \'%s\'', $requestQuery->getType()));
-        }
-
-        return $selectQuery;
-    }
-
-    /**
-     * Process bool query
-     *
-     * @param BoolQuery $query
-     * @param array $selectQuery
-     * @return array
-     * @since 100.1.0
-     */
-    protected function processBoolQuery(
-        BoolQuery $query,
-        array $selectQuery
-    ) {
-        $selectQuery = $this->processBoolQueryCondition(
-            $query->getMust(),
-            $selectQuery,
-            BoolQuery::QUERY_CONDITION_MUST
-        );
-
-        $selectQuery = $this->processBoolQueryCondition(
-            $query->getShould(),
-            $selectQuery,
-            BoolQuery::QUERY_CONDITION_SHOULD
-        );
-
-        $selectQuery = $this->processBoolQueryCondition(
-            $query->getMustNot(),
-            $selectQuery,
-            BoolQuery::QUERY_CONDITION_NOT
-        );
-
-        return $selectQuery;
-    }
-
-    /**
-     * Process bool query condition (must, should, must_not)
-     *
-     * @param RequestQueryInterface[] $subQueryList
-     * @param array $selectQuery
-     * @param string $conditionType
-     * @return array
-     * @since 100.1.0
-     */
-    protected function processBoolQueryCondition(
-        array $subQueryList,
-        array $selectQuery,
-        $conditionType
-    ) {
-        foreach ($subQueryList as $subQuery) {
-            $selectQuery = $this->processQuery($subQuery, $selectQuery, $conditionType);
-        }
-
-        return $selectQuery;
-    }
-
-    /**
-     * Process filter query
-     *
-     * @param FilterQuery $query
-     * @param array $selectQuery
-     * @param string $conditionType
-     * @return array
-     */
-    private function processFilterQuery(
-        FilterQuery $query,
-        array $selectQuery,
-        $conditionType
-    ) {
-        switch ($query->getReferenceType()) {
-            case FilterQuery::REFERENCE_QUERY:
-                $selectQuery = $this->processQuery($query->getReference(), $selectQuery, $conditionType);
-                break;
-            case FilterQuery::REFERENCE_FILTER:
-                $conditionType = $conditionType === BoolQuery::QUERY_CONDITION_NOT ?
-                    MatchQueryBuilder::QUERY_CONDITION_MUST_NOT : $conditionType;
-                $filterQuery = $this->filterBuilder->build($query->getReference(), $conditionType);
-                foreach ($filterQuery['bool'] as $condition => $filter) {
-                    $selectQuery['bool'][$condition]= array_merge(
-                        isset($selectQuery['bool'][$condition]) ? $selectQuery['bool'][$condition] : [],
-                        $filter
-                    );
-                }
-                break;
-        }
-
-        return $selectQuery;
     }
 }

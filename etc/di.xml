@@ -10,7 +10,7 @@
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
-                <item name="product" xsi:type="string">Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper</item>
+                <item name="product" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy</item>
             </argument>
         </arguments>
     </type>
@@ -18,7 +18,7 @@
     <virtualType name="AdditionalFieldsForElasticsearchDataMapper" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
-                <item name="categories" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+                <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
                 <item name="prices" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\PriceFieldsProvider</item>
             </argument>
         </arguments>
@@ -42,6 +42,31 @@
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch</item>
+                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.0+</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
+        <arguments>
+            <argument name="categoryFieldsProviders" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy">
+        <arguments>
+            <argument name="dataMappers" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+        <arguments>
+            <argument name="productFieldMappers" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper</item>
             </argument>
         </arguments>
     </type>
@@ -49,9 +74,11 @@
         <arguments>
             <argument name="clientFactories" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">\Magento\Elasticsearch\Model\Client\ElasticsearchFactory</item>
+                <item name="elasticsearch5" xsi:type="string">\Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</item>
             </argument>
             <argument name="clientOptions" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
+                <item name="elasticsearch5" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
             </argument>
         </arguments>
     </type>
@@ -59,6 +86,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
             </argument>
         </arguments>
     </type>
@@ -66,6 +94,7 @@
         <arguments>
             <argument name="structures" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
             </argument>
         </arguments>
     </type>
@@ -73,6 +102,7 @@
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Engine</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Engine</item>
             </argument>
         </arguments>
     </type>
@@ -80,6 +110,7 @@
         <arguments>
             <argument name="adapters" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Adapter</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter</item>
             </argument>
         </arguments>
     </type>
@@ -95,14 +126,39 @@
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
         <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Model\Client\ElasticsearchFactory</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager" type="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
+        <arguments>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</argument>
+            <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
+        <arguments>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
+        <arguments>
+            <argument name="clientFactories" xsi:type="array">
+                <item name="elasticsearch" xsi:type="object">Magento\Elasticsearch\Model\Client\ElasticsearchFactory</item>
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter">
+        <arguments>
+            <argument name="connectionManager" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
             <argument name="intervals" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
             </argument>
         </arguments>
     </type>
@@ -110,6 +166,7 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
             </argument>
         </arguments>
     </type>
@@ -161,6 +218,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\DataProvider\Suggestions</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\DataProvider\Suggestions</item>
             </argument>
         </arguments>
     </type>
@@ -175,6 +233,10 @@
                 <item name="catalog/search/elasticsearch_password" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_server_hostname" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_username" xsi:type="string">1</item>
+
+                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
             </argument>
             <argument name="environment" xsi:type="array">
                 <item name="catalog/search/elasticsearch_enable_auth" xsi:type="string">1</item>
@@ -184,6 +246,14 @@
                 <item name="catalog/search/elasticsearch_server_port" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_username" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_server_timeout" xsi:type="string">1</item>
+
+                <item name="catalog/search/elasticsearch5_enable_auth" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_index_prefix" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_port" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_timeout" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

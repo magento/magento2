@@ -11,13 +11,13 @@
         "magento/module-search": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/framework": "101.0.*",
-        "elasticsearch/elasticsearch": "~2.0"
+        "elasticsearch/elasticsearch": "~2.0|~5.1"
     },
     "suggest": {
         "magento/module-config": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "100.2.1",
+    "version": "100.2.2",
     "license": [
         "proprietary"
     ],

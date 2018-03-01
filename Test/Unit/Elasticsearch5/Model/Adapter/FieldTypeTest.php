@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
+namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -49,7 +49,7 @@ class FieldTypeTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->type = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldType::class,
+            \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType::class,
             [
                 'eavConfig' => $this->eavConfig,
             ]
@@ -92,13 +92,13 @@ class FieldTypeTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['attr1', 'static', 'select', 'integer'],
-            ['attr1', 'static', 'text', 'string'],
+            ['attr1', 'static', 'text', 'text'],
             ['attr1', 'timestamp', 'select', 'date'],
             ['attr1', 'datetime', 'text', 'date'],
             ['attr1', 'int', 'select', 'integer'],
             ['attr1', 'decimal', 'text', 'float'],
-            ['attr1', 'varchar', 'select', 'string'],
-            ['attr1', 'array', 'multiselect', 'string'],
+            ['attr1', 'varchar', 'select', 'text'],
+            ['attr1', 'array', 'multiselect', 'text'],
             ['price', 'int', 'text', 'integer'],
             ['tier_price', 'int', 'text', 'integer'],
             ['tier_price', 'smallint', 'text', 'integer'],

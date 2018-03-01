@@ -8,45 +8,18 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use \Magento\Customer\Model\Session as CustomerSession;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper
+    as Elasticsearch5ProductFieldMapper;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 
 /**
  * Class ProductFieldMapper
  */
-class ProductFieldMapper implements FieldMapperInterface
+class ProductFieldMapper extends Elasticsearch5ProductFieldMapper implements FieldMapperInterface
 {
-    /**
-     * @var Config
-     */
-    protected $eavConfig;
-
-    /**
-     * @var FieldType
-     */
-    protected $fieldType;
-
-    /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
-     * Store manager
-     *
-     * @var StoreManager
-     */
-    protected $storeManager;
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
     /**
      * @param Config $eavConfig
      * @param FieldType $fieldType
@@ -141,79 +114,5 @@ class ProductFieldMapper implements FieldMapperInterface
         }
 
         return $allAttributes;
-    }
-
-    /**
-     * @param Object $attribute
-     * @return bool
-     */
-    protected function isAttributeUsedInAdvancedSearch($attribute)
-    {
-        return $attribute->getIsVisibleInAdvancedSearch()
-        || $attribute->getIsFilterable()
-        || $attribute->getIsFilterableInSearch();
-    }
-
-    /**
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'integer')
-            ? $attributeCode . '_value' : $attributeCode;
-    }
-
-    /**
-     * @param string $frontendInput
-     * @param string $fieldType
-     * @param string $attributeCode
-     * @return string
-     */
-    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode)
-    {
-        if ($attributeCode === '*') {
-            $fieldName = '_all';
-        } else {
-            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
-        }
-        return $fieldName;
-    }
-
-    /**
-     * Get "position" field name
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPositionFiledName($context)
-    {
-        if (isset($context['categoryId'])) {
-            $category = $context['categoryId'];
-        } else {
-            $category = $this->coreRegistry->registry('current_category')
-                ? $this->coreRegistry->registry('current_category')->getId()
-                : $this->storeManager->getStore()->getRootCategoryId();
-        }
-        return 'position_category_' . $category;
-    }
-
-    /**
-     * Prepare price field name for search engine
-     *
-     * @param array $context
-     * @return string
-     */
-    protected function getPriceFieldName($context)
-    {
-        $customerGroupId = !empty($context['customerGroupId'])
-            ? $context['customerGroupId']
-            : $this->customerSession->getCustomerGroupId();
-        $websiteId = !empty($context['websiteId'])
-            ? $context['websiteId']
-            : $this->storeManager->getStore()->getWebsiteId();
-        return 'price_' . $customerGroupId . '_' . $websiteId;
     }
 }
