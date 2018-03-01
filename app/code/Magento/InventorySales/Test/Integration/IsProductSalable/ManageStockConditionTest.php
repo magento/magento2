@@ -11,7 +11,7 @@ use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ManageConfigConditionTest extends TestCase
+class ManageStockConditionTest extends TestCase
 {
     /**
      * @var IsProductSalableInterface
