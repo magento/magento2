@@ -12,15 +12,15 @@
             <input>optgroupselect</input>
         </page_group>
         <layout_handle>
-            <selector>#pages_0 #layout_handle</selector>
+            <selector>#layout_handle</selector>
             <input>select</input>
         </layout_handle>
         <block>
-            <selector>#pages_0 .block_reference select</selector>
+            <selector>.block_reference select</selector>
             <input>select</input>
         </block>
         <template>
-            <selector>#pages_0 .block_template select</selector>
+            <selector>.block_template select</selector>
             <input>select</input>
         </template>
     </fields>
