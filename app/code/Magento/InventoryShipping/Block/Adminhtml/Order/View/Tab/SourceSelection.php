@@ -13,6 +13,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmProviderInterface;
+use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
 use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface;
 
 /**
@@ -22,6 +23,11 @@ use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInter
  */
 class SourceSelection extends Template implements TabInterface
 {
+    /**
+     * @var ShippingAlgorithmResultInterface
+     */
+    private $shippingAlgorithmResult;
+
     /**
      * @var Registry
      */
@@ -58,15 +64,23 @@ class SourceSelection extends Template implements TabInterface
     }
 
     /**
+     * Check if order items can be shipped by the current shipping algorithm
+     *
+     * @return bool
+     */
+    public function isShippable()
+    {
+        return $this->getShippingAlgorithmResult()->isShippable();
+    }
+
+    /**
      * Get source selections for order
      *
      * @return SourceSelectionInterface[]
      */
     public function getSourceSelections(): array
     {
-        $order = $this->registry->registry('current_order');
-        $shippingAlgorithm = $this->shippingAlgorithmProvider->execute();
-        return $shippingAlgorithm->execute($order)->getSourceSelections();
+        return $this->getShippingAlgorithmResult()->getSourceSelections();
     }
 
     /**
@@ -102,7 +116,7 @@ class SourceSelection extends Template implements TabInterface
      */
     public function canShowTab()
     {
-        return true;
+        return $this->isShippable();
     }
 
     /**
@@ -111,5 +125,20 @@ class SourceSelection extends Template implements TabInterface
     public function isHidden()
     {
         return false;
+    }
+
+    /**
+     * @return ShippingAlgorithmResultInterface
+     */
+    private function getShippingAlgorithmResult()
+    {
+        if (null === $this->shippingAlgorithmResult) {
+            $order = $this->registry->registry('current_order');
+            $shippingAlgorithm = $this->shippingAlgorithmProvider->execute();
+
+            $this->shippingAlgorithmResult = $shippingAlgorithm->execute($order);
+        }
+
+        return $this->shippingAlgorithmResult;
     }
 }
