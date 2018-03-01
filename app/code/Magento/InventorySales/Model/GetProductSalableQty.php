@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
