@@ -9,9 +9,9 @@ namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalog\Model\GetSalableQuantityDataBySku;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
@@ -20,9 +20,9 @@ use Magento\Ui\Component\Listing\Columns\Column;
 class SalableQuantity extends Column
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var IsSingleSourceModeInterface
@@ -37,7 +37,7 @@ class SalableQuantity extends Column
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param GetSalableQuantityDataBySku $getSalableQuantityDataBySku
      * @param array $components
@@ -46,14 +46,14 @@ class SalableQuantity extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         IsSingleSourceModeInterface $isSingleSourceMode,
         GetSalableQuantityDataBySku $getSalableQuantityDataBySku,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->getSalableQuantityDataBySku = $getSalableQuantityDataBySku;
     }
@@ -66,7 +66,7 @@ class SalableQuantity extends Column
         if ($dataSource['data']['totalRecords'] > 0 && $this->isSingleSourceMode->execute() === false) {
             foreach ($dataSource['data']['items'] as &$row) {
                 $row['salable_quantity'] =
-                    $this->isSourceItemsManagementAllowedForProductType->execute($row['type_id']) === true
+                    $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
                     ? $this->getSalableQuantityDataBySku->execute($row['sku'])
                     : [];
             }

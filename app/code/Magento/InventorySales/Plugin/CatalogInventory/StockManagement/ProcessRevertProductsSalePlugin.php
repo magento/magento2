@@ -73,8 +73,8 @@ class ProcessRevertProductsSalePlugin
             return [];
         }
         if (null === $websiteId) {
-            //TODO: is we need to throw exception?
-            throw new LocalizedException(__('$websiteId is required'));
+            //TODO: Do we need to throw exception?
+            throw new LocalizedException(__('$websiteId parameter is required'));
         }
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));

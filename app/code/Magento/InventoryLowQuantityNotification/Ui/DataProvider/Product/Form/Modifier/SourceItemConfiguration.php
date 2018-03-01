@@ -11,10 +11,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
  * Product form modifier. Add to form source item configuration data
@@ -22,9 +22,9 @@ use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationIn
 class SourceItemConfiguration extends AbstractModifier
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var LocatorInterface
@@ -42,18 +42,18 @@ class SourceItemConfiguration extends AbstractModifier
     private $scopeConfig;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param LocatorInterface $locator
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         LocatorInterface $locator,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
         $this->scopeConfig = $scopeConfig;
@@ -65,7 +65,7 @@ class SourceItemConfiguration extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $data;
         }
 
