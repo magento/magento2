@@ -50,13 +50,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
+     * @dataProvider getCanadaValidPostCodes
      */
-    public function testValidCanadaZipCode() {
-        $resultPattern1 = $this->validator->validate('A1B2C3', 'CA');
-        $resultPattern2 = $this->validator->validate('A1B 2C3', 'CA');
-        $this->assertTrue($resultPattern1);
-        $this->assertTrue($resultPattern2);
+    public function testValidCanadaZipCode($countryId, $validPostCode) {
+        $this->assertTrue($this->validator->validate($validPostCode, $countryId));
     }
 
     /**
@@ -68,6 +65,18 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['countryId' => 'CA', 'postcode' => 'A1B2C3D'],
             ['countryId' => 'CA', 'postcode' => 'A1B2C'],
             ['countryId' => 'CA', 'postcode' => 'A1B  2C3'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCanadaValidPostCodes() {
+        return [
+            ['countryId' => 'CA', 'postcode' => 'A1B2C3'],
+            ['countryId' => 'CA', 'postcode' => 'A1B 2C3'],
+            ['countryId' => 'CA', 'postcode' => 'Z9Y 8X7'],
+            ['countryId' => 'CA', 'postcode' => 'Z9Y8X7'],
         ];
     }
 
