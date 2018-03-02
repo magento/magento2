@@ -433,7 +433,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 }
             }
             sort($dependenciesListed);
-            $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
+            $nonDeclaredDependencies = array_diff(
+                self::$dependencies,
+                $dependenciesListed,
+                self::$rootComposerModuleBlacklist
+            );
             $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
             $this->assertEmpty(
                 $nonDeclaredDependencies,
