@@ -141,6 +141,7 @@ define([
 
             // strip tags
             tmpElement = document.createElement('div');
+            str = str.replace(/(<([^>]+)>)/ig, '');
             tmpElement.innerHTML = str;
             str =  tmpElement.textContent || tmpElement.innerText || '';
 

@@ -357,6 +357,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * @inheritdoc
+     * Starting from 23.02.2018 USPS doesn't allow to create free shipping labels via their API.
+     */
+    public function isShippingLabelsAvailable()
+    {
+        return false;
+    }
+
+    /**
      * Get quotes
      *
      * @return Result
@@ -1414,6 +1423,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
+     * @deprecated This method should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1589,6 +1600,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @deprecated Should not be used anymore.
+     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -1842,6 +1855,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {

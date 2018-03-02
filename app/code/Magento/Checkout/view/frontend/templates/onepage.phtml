@@ -23,7 +23,7 @@
         }
     </script>
     <script>
-        window.checkoutConfig = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
+        window.checkoutConfig = <?php /* @escapeNotVerified */ echo json_encode($block->getCheckoutConfig(), JSON_HEX_TAG); ?>;
         // Create aliases for customer.js model from customer module
         window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
         window.customerData = window.checkoutConfig.customerData;
