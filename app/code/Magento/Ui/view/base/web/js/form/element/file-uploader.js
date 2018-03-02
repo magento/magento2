@@ -119,7 +119,7 @@ define([
          * Adds provided file to the files list.
          *
          * @param {Object} file
-         * @returns {FileUploder} Chainable.
+         * @returns {FileUploader} Chainable.
          */
         addFile: function (file) {
             file = this.processFile(file);

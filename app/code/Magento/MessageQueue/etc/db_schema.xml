@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="queue_lock" resource="default" engine="innodb"
            comment="Messages that were processed are inserted here to be locked.">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
