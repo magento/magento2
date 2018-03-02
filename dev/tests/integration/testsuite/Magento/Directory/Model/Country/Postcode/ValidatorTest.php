@@ -42,22 +42,33 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validator->validate('12345', 'INVALID-CODE');
     }
 
-    public function testInvalidCanadaZipCode() {
-        $resultOnlyDigits               = $this->validator->validate('12345', 'CA');
-        $resultMoreCharactersThanNeeded = $this->validator->validate('A1B2C3D', 'CA');
-        $resultLessCharactersThanNeeded = $this->validator->validate('A1B2C', 'CA');
-        $resultMoreThanOneSpace         = $this->validator->validate('A1B  2C3', 'CA');
-        $this->assertFalse($resultOnlyDigits);
-        $this->assertFalse($resultMoreCharactersThanNeeded);
-        $this->assertFalse($resultLessCharactersThanNeeded);
-        $this->assertFalse($resultMoreThanOneSpace);
+    /**
+     * @dataProvider getCanadaInvalidPostCodes
+     */
+    public function testInvalidCanadaZipCode($countryId, $invalidPostCode) {
+        $this->assertFalse($this->validator->validate($invalidPostCode, $countryId));
     }
 
+    /**
+     *
+     */
     public function testValidCanadaZipCode() {
         $resultPattern1 = $this->validator->validate('A1B2C3', 'CA');
         $resultPattern2 = $this->validator->validate('A1B 2C3', 'CA');
         $this->assertTrue($resultPattern1);
         $this->assertTrue($resultPattern2);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCanadaInvalidPostCodes() {
+        return [
+            ['countryId' => 'CA', 'postcode' => '12345'],
+            ['countryId' => 'CA', 'postcode' => 'A1B2C3D'],
+            ['countryId' => 'CA', 'postcode' => 'A1B2C'],
+            ['countryId' => 'CA', 'postcode' => 'A1B  2C3'],
+        ];
     }
 
     /**
