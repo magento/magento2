@@ -190,7 +190,7 @@ class DataProvider
         array $staticFields,
         $productIds = null,
         $lastProductId = 0,
-        $batch = 500
+        $batch = 100
     ) {
         $products = $this->connection->fetchAll(
             $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)->where(
