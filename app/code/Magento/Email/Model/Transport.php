@@ -10,6 +10,7 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Class that responsible for filling some message data before transporting it.
@@ -50,24 +51,35 @@ class Transport implements TransportInterface
     private $scopeConfig;
 
     /**
+     * Store
+     * @var \Magento\Store\Model\Store
+     */
+    private $store;
+
+    /**
      * @param \Zend_Mail_Transport_Sendmail $transport
      * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param string|array|\Zend_Config|null $parameters Config options for sendmail parameters
+     * @param null|\Magento\Store\Model\Store $store
      *
      * @throws \InvalidArgumentException when $message is not an instance of \Zend_Mail
      */
     public function __construct(
         \Zend_Mail_Transport_Sendmail $transport,
         MessageInterface $message,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        $store = null
     ) {
+
         if (!$message instanceof \Zend_Mail) {
             throw new \InvalidArgumentException('The message should be an instance of \Zend_Mail');
         }
         $this->transport = $transport;
         $this->message = $message;
         $this->scopeConfig = $scopeConfig;
+        $this->store = $store ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\Store::class
+        );
     }
 
     /**
@@ -85,13 +97,16 @@ class Transport implements TransportInterface
              * 2 - use custom value
              * @see Magento\Config\Model\Config\Source\Yesnocustom
              */
+
             $isSetReturnPath = $this->scopeConfig->getValue(
                 self::XML_PATH_SENDING_SET_RETURN_PATH,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $this->getStoreId()
             );
             $returnPathValue = $this->scopeConfig->getValue(
                 self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $this->getStoreId()
             );
 
             if ($isSetReturnPath == '1') {
@@ -112,4 +127,14 @@ class Transport implements TransportInterface
     {
         return $this->message;
     }
+
+    /**
+     * Retrieve store id
+     * @return int | null
+     */
+    public function getStoreId()
+    {
+        return $this->store ? $this->store->getId() : null;
+    }
+
 }

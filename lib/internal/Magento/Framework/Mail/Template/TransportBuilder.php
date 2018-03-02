@@ -87,6 +87,12 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+     * Store
+     * @var \Magento\Store\Model\Store
+     */
+    protected $store;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
@@ -220,6 +226,17 @@ class TransportBuilder
     }
 
     /**
+     * Set store
+     * @param \Magento\Store\Model\Store
+     * @return $this;
+     */
+    public function setStore($store)
+    {
+        $this->store = $store;
+        return $this;
+    }
+
+    /**
      * Get mail transport
      *
      * @return \Magento\Framework\Mail\TransportInterface
@@ -227,7 +244,12 @@ class TransportBuilder
     public function getTransport()
     {
         $this->prepareMessage();
-        $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
+        $mailTransport = $this->mailTransportFactory->create(
+            [
+                'message' => clone $this->message,
+                'store' => $this->store,
+            ]
+        );
         $this->reset();
 
         return $mailTransport;

@@ -5,6 +5,8 @@
  */
 namespace Magento\Email\Model\Plugin;
 
+use \Magento\Store\Model\ScopeInterface;
+
 /**
  * Plugin for \Magento\Framework\Mail\TransportInterface
  */
@@ -52,8 +54,16 @@ class WindowsSmtpConfig
     public function beforeSendMessage(\Magento\Framework\Mail\TransportInterface $subject)
     {
         if ($this->osInfo->isWindows()) {
-            ini_set('SMTP', $this->config->getValue(self::XML_SMTP_HOST));
-            ini_set('smtp_port', $this->config->getValue(self::XML_SMTP_PORT));
+            ini_set('SMTP', $this->config->getValue(
+                self::XML_SMTP_HOST,
+                ScopeInterface::SCOPE_STORE,
+                $subject->getStoreId()
+            ));
+            ini_set('smtp_port', $this->config->getValue(
+                self::XML_SMTP_PORT,
+                ScopeInterface::SCOPE_STORE,
+                $subject->getStoreId()
+            ));
         }
     }
 }
