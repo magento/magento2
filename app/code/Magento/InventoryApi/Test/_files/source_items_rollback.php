@@ -30,8 +30,5 @@ $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
  * In that case there is "if" which checks that SKU1, SKU2 and SKU3 still exists in database.
  */
 if (!empty($sourceItems)) {
-    try {
-        $sourceItemsDelete->execute($sourceItems);
-    } catch (\Exception $e) {
-    }
+    $sourceItemsDelete->execute($sourceItems);
 }

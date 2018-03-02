@@ -31,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
  * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
  * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FulltextTest extends TestCase
 {
@@ -230,9 +232,9 @@ class FulltextTest extends TestCase
     public function reindexRowAfterMassActionDataProvider(): array
     {
         return [
-            ['store_for_eu_website', [1, 1]],
-            ['store_for_us_website', [0, 1]],
-            ['store_for_global_website', [1, 2]],
+            ['store_for_eu_website'],
+            ['store_for_us_website'],
+            ['store_for_global_website'],
         ];
     }
 
