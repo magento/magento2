@@ -10,11 +10,11 @@ namespace Magento\InventoryBundleIndexer\Test\Integration;
 use Magento\Bundle\Model\ResourceModel\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -88,7 +88,7 @@ class SourceItemIndexerTest extends TestCase
     {
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(1, $bundleStockItemData['is_salable']);
+        self::assertEquals(1, $bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     /**
@@ -109,7 +109,7 @@ class SourceItemIndexerTest extends TestCase
         $this->makeChildrenOutOfStock(1);
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(1, $bundleStockItemData['is_salable']);
+        self::assertEquals(1, $bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     /**
@@ -130,7 +130,7 @@ class SourceItemIndexerTest extends TestCase
         $this->makeChildrenOutOfStock(3);
         $bundleStockItemData = $this->getStockItemData->execute('bundle-product-eu-website', 10);
 
-        self::assertEquals(0, $bundleStockItemData['is_salable']);
+        self::assertEquals(0, $bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     /**
@@ -152,7 +152,7 @@ class SourceItemIndexerTest extends TestCase
 
         $this->makeChildrenOutOfStock(2);
         $bundleStockItemData = $this->getStockItemData->execute($bundleSku, 10);
-        self::assertEquals(1, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(1, (bool)$bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
 
         //unassign only in stock product from bundle to make it out of stock
         $bundleProduct = $this->productRepository->get($bundleSku, true, null, true);
@@ -162,7 +162,7 @@ class SourceItemIndexerTest extends TestCase
         $bundleProduct->getExtensionAttributes()->getBundleProductOptions()[0]->setProductLinks($productLinks);
         $this->productRepository->save($bundleProduct);
         $bundleStockItemData = $this->getStockItemData->execute($bundleSku, 10);
-        self::assertEquals(0, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(0, (bool)$bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
 
         //assign product in stock to make bundle in stock
         $unassignedLink->setId(null);
@@ -170,7 +170,7 @@ class SourceItemIndexerTest extends TestCase
         $bundleProduct->getExtensionAttributes()->getBundleProductOptions()[0]->setProductLinks($productLinks);
         $this->productRepository->save($bundleProduct);
         $bundleStockItemData = $this->getStockItemData->execute($bundleSku, 10);
-        self::assertEquals(1, (bool)$bundleStockItemData['is_salable']);
+        self::assertEquals(1, (bool)$bundleStockItemData[GetStockItemDataInterface::IS_SALABLE]);
     }
 
     /**

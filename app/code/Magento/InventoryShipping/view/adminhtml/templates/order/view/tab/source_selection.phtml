@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/** @var \Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection $block */
+/** @var Magento\InventoryShipping\Block\Adminhtml\Order\View\Tab\SourceSelection $block */
 ?>
-<?php foreach ($block->getSourceSelections() as $sourceSelection): ?>
+<?php foreach ($block->getSourceSelections() as $sourceSelection) : ?>
     <table class="data-table admin__table-primary edit-order-table">
         <div class="admin__page-section-item-title">
-            <span class="title"><?= $block->escapeHtml($this->getSourceName($sourceSelection->getSourceCode())) ?></span>
+            <span class="title">
+                <?= $block->escapeHtml($this->getSourceName($sourceSelection->getSourceCode())) ?>
+            </span>
         </div>
         <thead>
             <tr class="headings">
@@ -20,7 +20,7 @@
                 <th><span><?= $block->escapeHtml(__('Qty to Deduct')) ?></span></th>
             </tr>
         </thead>
-        <?php foreach ($sourceSelection->getSourceItemSelections() as $itemSelection): ?>
+        <?php foreach ($sourceSelection->getSourceItemSelections() as $itemSelection) : ?>
             <tr>
                 <td><?= $block->escapeHtml($itemSelection->getSku()) ?></td>
                 <td><?= $block->escapeHtml($itemSelection->getQtyAvailable()) ?></td>
