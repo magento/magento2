@@ -6,6 +6,8 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Module\ModuleResource;
+
 /**
  * Handler for applying reinstallMagento annotation.
  */
@@ -26,6 +28,11 @@ class ReinstallInstance
         $this->application = $application;
     }
 
+    public function startTest()
+    {
+        $this->application->reinitialize();
+    }
+
     /**
      * Handler for 'endTest' event.
      *
@@ -34,5 +41,7 @@ class ReinstallInstance
     public function endTest()
     {
         $this->application->cleanup();
+        $this->application->reinitialize();
+        ModuleResource::flush();
     }
 }

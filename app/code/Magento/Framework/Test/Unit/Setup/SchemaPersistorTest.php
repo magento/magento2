@@ -145,7 +145,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                 ],
                 'XMLResult' => '<?xml version="1.0"?>
                         <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                            xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+                            xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
                             <table name="first_table" resource="default" engine="innodb">
                                 <column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1" 
                                     unsigned="0"/>
