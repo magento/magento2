@@ -66,6 +66,7 @@ class CollectSourcesForShipmentItems
      * @param array $items
      * @param null $tracks
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return
      */
     public function aroundCreate(
         ShipmentFactory $subject,
@@ -84,6 +85,7 @@ class CollectSourcesForShipmentItems
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         /** @var \Magento\Sales\Api\Data\ShipmentItemInterface $item */
         foreach ($shipment->getItems() as $item) {
+            //TODO: I didn't test, but I think it can be broken with configurable products
             $requestItem = $this->itemRequestFactory->create([
                     'sku' => $item->getSku(),
                     'qty' => $item->getQty()
