@@ -9,6 +9,7 @@ namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\Notif
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
@@ -26,12 +27,20 @@ class SelectBuilder
     private $lowStockCondition;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param LowStockConditionInterface $lowStockCondition
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        LowStockConditionInterface $lowStockCondition
+        LowStockConditionInterface $lowStockCondition,
+        ResourceConnection $resourceConnection
     ) {
         $this->lowStockCondition = $lowStockCondition;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -41,7 +50,6 @@ class SelectBuilder
      */
     public function build(Select $select)
     {
-        $connection = $select->getConnection();
         $condition = $this->lowStockCondition->execute();
         $sourceItemConfigurationTable = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION;
         $configurationJoinCondition =
@@ -51,30 +59,30 @@ class SelectBuilder
             . ' = main_table.' . SourceItemInterface::SOURCE_CODE;
 
         $select->join(
-            ['source' => $connection->getTableName(Source::TABLE_NAME_SOURCE)],
+            ['source' => $this->resourceConnection->getTableName(Source::TABLE_NAME_SOURCE)],
             'source.' . SourceInterface::SOURCE_CODE . '= main_table.' . SourceItemInterface::SOURCE_CODE,
             ['source_name' => 'source.' . SourceInterface::NAME]
         )->join(
-            ['product' => $connection->getTableName('catalog_product_entity')],
+            ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
             'main_table.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
             ['*']
         )->join(
-            ['source_item_config' => $connection->getTableName($sourceItemConfigurationTable)],
+            ['source_item_config' => $this->resourceConnection->getTableName($sourceItemConfigurationTable)],
             $configurationJoinCondition,
             ['source_item_config.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
         )->join(
-            ['invtr' => $connection->getTableName('cataloginventory_stock_item')],
+            ['invtr' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
             'invtr.product_id = product.entity_id',
             [
                 'invtr.' . StockItemInterface::LOW_STOCK_DATE,
                 'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
             ]
         )->join(
-            ['product_varchar' => $connection->getTableName('catalog_product_entity_varchar')],
+            ['product_varchar' => $this->resourceConnection->getTableName('catalog_product_entity_varchar')],
             'product_varchar.entity_id = product.entity_id',
             ['name' => 'product_varchar.value']
         )->join(
-            ['product_int' => $connection->getTableName('catalog_product_entity_int')],
+            ['product_int' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
             'product_int.entity_id = product.entity_id',
             ['status' => 'product_int.value']
         )

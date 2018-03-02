@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Rss;
 
+use Magento\Catalog\Block\Adminhtml\Rss\NotifyStock\DescriptionProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -61,20 +62,27 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
+    /**
+     * @var DescriptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $descriptionProvider;
+
     protected function setUp()
     {
         $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
-            ->setMethods(['getProductsCollection', '__wakeup'])
+            ->setMethods(['getItemsCollection', '__wakeup'])
             ->disableOriginalConstructor()->getMock();
         $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
         $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->descriptionProvider = $this->createMock(DescriptionProvider::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Block\Adminhtml\Rss\NotifyStock::class,
             [
                 'urlBuilder' => $this->urlBuilder,
                 'rssModel' => $this->rssModel,
-                'rssUrlBuilder' => $this->rssUrlBuilder
+                'rssUrlBuilder' => $this->rssUrlBuilder,
+                'descriptionProvider' => $this->descriptionProvider,
             ]
         );
     }
@@ -84,14 +92,16 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->will($this->returnValue('http://magento.com/rss/feeds/index/type/notifystock'));
         $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getId', 'getQty', 'getName'])
+            ->setMethods(['__sleep', '__wakeup', 'getId', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $item->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $item->expects($this->once())->method('getQty')->will($this->returnValue(1));
-        $item->expects($this->any())->method('getName')->will($this->returnValue('Low Stock Product'));
+        $item->expects($this->any())->method('getData')->will($this->returnValue('Low Stock Product'));
 
-        $this->rssModel->expects($this->once())->method('getProductsCollection')
+        $this->descriptionProvider->expects($this->once())->method('execute')->willReturn(
+            __('Low Stock Product has reached a quantity of 1.')
+        );
+        $this->rssModel->expects($this->once())->method('getItemsCollection')
             ->will($this->returnValue([$item]));
         $this->urlBuilder->expects($this->once())->method('getUrl')
             ->with('catalog/product/edit', ['id' => 1, '_secure' => true, '_nosecret' => true])

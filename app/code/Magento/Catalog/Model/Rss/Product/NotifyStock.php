@@ -85,7 +85,7 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
      *
      * @return AbstractDb
      */
-    public function getItemsCollection(): AbstractDb
+    public function getItemsCollection()
     {
         return $this->getProductsCollection();
     }
