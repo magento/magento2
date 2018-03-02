@@ -12,7 +12,7 @@
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-42156-Widgets in WYSIWYG"/>
-            <group value="Cms"/>
+            <group value="kieu"/>
             <title value="Create CMS Page With Widget Type:CMS page link"/>
             <description value="Create CMS Page With Widget Type:CMS page link"/>
             <severity value="CRITICAL"/>
@@ -51,6 +51,7 @@
         <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideoutCloses" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <wait stepKey="waitForPageLoad5" time="10" />
