@@ -275,7 +275,8 @@ class StockItemRepository implements StockItemRepositoryInterface
         if ($stockItem->getManageStock()
             && $isInStock
             && !$stockItem->getIsInStock()
-            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) == 0
+            && $stockItem->getQty() > 0
+            && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) <= 0
             && $stockItem->getOrigData(\Magento\CatalogInventory\Api\Data\StockItemInterface::QTY) !== null
         ) {
             $stockItem->setIsInStock(true)->setStockStatusChangedAutomaticallyFlag(true);
