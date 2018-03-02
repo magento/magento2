@@ -14,7 +14,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserIsLocked extends AbstractConstraint
 {
-    const USER_ACCOUNT_DISABLED_MESSAGE = 'account is temporarily disabled';
+    const USER_ACCOUNT_DISABLED_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
+    . 'Please wait and try again later.';
 
     /**
      * Verify that user account has been locked.

@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
@@ -117,7 +118,7 @@ class Save extends \Magento\Backend\App\Action
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
         if (!$formKeyIsValid || !$isPost) {
-            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
+            $this->messageManager->addError(__("The invoice can't be saved at this time. Please try again later."));
             return $resultRedirect->setPath('sales/order/index');
         }
 
@@ -146,12 +147,12 @@ class Save extends \Magento\Backend\App\Action
             $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice) {
-                throw new LocalizedException(__('We can\'t save the invoice right now.'));
+                throw new LocalizedException(__("The invoice can't be saved at this time. Please try again later."));
             }
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('You can\'t create an invoice without products.')
+                    __("The invoice can't be created without products. Add products and try again.")
                 );
             }
             $this->registry->register('current_invoice', $invoice);
@@ -221,7 +222,7 @@ class Save extends \Magento\Backend\App\Action
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
+            $this->messageManager->addError(__("The invoice can't be saved at this time. Please try again later."));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);

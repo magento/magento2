@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
@@ -69,7 +70,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Could not save group price'));
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__("The group price couldn't be saved."));
         }
         return true;
     }
@@ -126,7 +127,9 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
         $data = ['qty' => $tierPrice->getQty(), 'price' => $tierPrice->getValue()];
         foreach ($data as $value) {
             if (!is_float($value) || $value <= 0) {
-                throw new \Magento\Framework\Exception\InputException(__('Please provide valid data'));
+                throw new \Magento\Framework\Exception\InputException(
+                    __('The data was invalid. Verify the data and try again.')
+                );
             }
         }
     }

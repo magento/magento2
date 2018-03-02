@@ -137,7 +137,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid data provided for linked products
+     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testSaveWithException()
     {
@@ -208,7 +208,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid data provided for linked products
+     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testDeleteWithInvalidDataException()
     {

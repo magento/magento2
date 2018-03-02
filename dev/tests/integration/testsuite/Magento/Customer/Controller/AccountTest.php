@@ -404,7 +404,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/forgotpassword'));
         $this->assertSessionMessages(
-            $this->equalTo(['Please correct the email address.']),
+            $this->equalTo(['The email address is incorrect. Verify the email address and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -635,7 +635,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         // Not sure if its the most secure message. Not changing the behavior for now in the new AccountManagement APIs.
         $this->assertSessionMessages(
-            $this->equalTo(['The password doesn\'t match this account.']),
+            $this->equalTo(["The password doesn't match this account. Verify the password and try again."]),
             MessageInterface::TYPE_ERROR
         );
     }

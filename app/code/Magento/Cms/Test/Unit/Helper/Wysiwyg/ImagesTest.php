@@ -331,9 +331,14 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrentPath($pathId, $expectedPath, $isExist)
     {
-        $this->requestMock->expects($this->once())
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturn($pathId);
+            ->willReturnMap(
+                [
+                    ['node', null, $pathId],
+                    ['use_storage_root', null, false],
+                ]
+            );
 
         $this->directoryWriteMock->expects($this->any())
             ->method('isDirectory')
@@ -477,7 +482,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
         $this->backendDataMock->expects($this->any())
             ->method('getUrl')
-            ->with('cms/wysiwyg/directive', ['___directive' => $directive])
+            ->with('cms/wysiwyg/directive', ['___directive' => $directive, '_escape_params' => false])
             ->willReturn($directive);
 
         $this->assertEquals($expectedHtml, $this->imagesHelper->getImageHtmlDeclaration($fileName));

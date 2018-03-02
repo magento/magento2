@@ -505,7 +505,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_PARAMETER_ABSENT
      *
      * @expectedException \Magento\Framework\Oauth\OauthInputException
-     * @expectedExceptionMessage oauth_verifier is a required field.
+     * @expectedExceptionMessage "oauth_verifier" is required. Enter and try again.
      */
     public function testGetAccessTokenParameterAbsent()
     {

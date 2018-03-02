@@ -123,7 +123,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->bookmarkMock);
         $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
-            __('Bookmark with id "%1" does not exist.', $notExistsBookmarkId)
+            __('The bookmark with "%1" ID doesn\'t exist. Verify your information and try again.', $notExistsBookmarkId)
         );
         $this->bookmarkRepository->getById($notExistsBookmarkId);
     }
