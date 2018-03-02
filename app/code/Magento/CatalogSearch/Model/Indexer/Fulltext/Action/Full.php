@@ -199,6 +199,13 @@ class Full
     private $dataProvider;
 
     /**
+     * Batch size for searchable product ids
+     *
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -219,6 +226,7 @@ class Full
      * @param \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param DataProvider $dataProvider
+     * @param int $batchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -241,7 +249,8 @@ class Full
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
         \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        DataProvider $dataProvider = null
+        DataProvider $dataProvider = null,
+        $batchSize = 500
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -265,6 +274,7 @@ class Full
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->dataProvider = $dataProvider ?: ObjectManager::getInstance()->get(DataProvider::class);
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -360,7 +370,7 @@ class Full
 
         $lastProductId = 0;
         $products = $this->dataProvider
-            ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
+            ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
         while (count($products) > 0) {
             $productsIds = array_column($products, 'entity_id');
             $relatedProducts = $this->getRelatedProducts($products);
@@ -388,7 +398,7 @@ class Full
                 yield $productData['entity_id'] => $index;
             }
             $products = $this->dataProvider
-                ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
+                ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
         };
     }
 

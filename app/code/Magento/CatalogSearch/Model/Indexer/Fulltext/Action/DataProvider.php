@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.3
  */
@@ -159,7 +160,7 @@ class DataProvider
         $this->storeManager = $storeManager;
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
-        $this->antiGapMultiplier = max(1, $antiGapMultiplier);
+        $this->antiGapMultiplier = $antiGapMultiplier;
     }
 
     /**
@@ -191,6 +192,39 @@ class DataProvider
         $lastProductId = 0,
         $batch = 500
     ) {
+        $products = $this->connection->fetchAll(
+            $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)->where(
+                'e.entity_id < ?',
+                $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
+            )
+        );
+        if (!$products) {
+            // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
+            $products = $this->connection->fetchAll(
+                $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)
+            );
+        }
+
+        return $products;
+    }
+
+    /**
+     * Get Select object for searchable products
+     *
+     * @param int $storeId
+     * @param array $staticFields
+     * @param array|int $productIds
+     * @param int $lastProductId
+     * @param int $batch
+     * @return Select
+     */
+    private function getSelectForSearchableProducts(
+        $storeId,
+        array $staticFields,
+        $productIds,
+        $lastProductId,
+        $batch
+    ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
         $lastProductId = (int) $lastProductId;
 
@@ -213,14 +247,10 @@ class DataProvider
             $select->where('e.entity_id IN (?)', $productIds);
         }
         $select->where('e.entity_id > ?', $lastProductId);
-        $select->where(
-            'e.entity_id < ?',
-            $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
-        );
         $select->order('e.entity_id');
         $select->limit($batch);
 
-        return $this->connection->fetchAll($select);
+        return $select;
     }
 
     /**
@@ -582,37 +612,51 @@ class DataProvider
      */
     private function getAttributeValue($attributeId, $valueId, $storeId)
     {
-        $valueHash = "$attributeId-$valueId-$storeId";
+        $valueHash = $attributeId . '-' . $valueId . '-' . $storeId;
         if (!array_key_exists($valueHash, $this->attributeValueCache)) {
             $attribute = $this->getSearchableAttribute($attributeId);
             $value = $this->engine->processAttributeValue($attribute, $valueId);
-            $optionKey = "$attributeId-$storeId";
-            if (false !== $value && !array_key_exists($optionKey, $this->attributeOptions)
-            ) {
-                if ($this->engine->allowAdvancedIndex()
-                && $attribute->getIsSearchable()
-                && $attribute->usesSource()
-                ) {
-                    $attribute->setStoreId($storeId);
-                    $options = $attribute->getSource()->toOptionArray();
-                    $this->attributeOptions[$optionKey] = array_combine(
-                        array_column($options, 'value'),
-                        array_column($options, 'label')
-                    );
-                } else {
-                    $this->attributeOptions[$optionKey] = null;
-                }
-            } elseif (isset($this->attributeOptions[$optionKey][$valueId])) {
-                $valueText = $this->attributeOptions[$optionKey][$valueId];
-                $pieces = array_filter(array_merge([$value], [$valueText]));
-                $value = implode($this->separator, $pieces);
+            if (false !== $value) {
+                $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
+                $value = null !== $optionValue
+                    ? implode($this->separator, array_filter([$value, $optionValue]))
+                    : $value;
             }
 
-            $value = $value !== false ? preg_replace('/\\s+/siu', ' ', trim(strip_tags($value))) : false;
+            $value = false !== $value ? preg_replace('/\s+/iu', ' ', trim(strip_tags($value))) : false;
 
             $this->attributeValueCache[$valueHash] = $value;
         }
 
         return $this->attributeValueCache[$valueHash];
+    }
+
+    /**
+     * Get attribute option value
+     *
+     * @param int $attributeId
+     * @param int $valueId
+     * @param int $storeId
+     * @return null|string
+     */
+    private function getAttributeOptionValue($attributeId, $valueId, $storeId)
+    {
+        $optionKey = $attributeId . '-' . $storeId;
+        if (!array_key_exists($optionKey, $this->attributeOptions)
+        ) {
+            $attribute = $this->getSearchableAttribute($attributeId);
+            if ($this->engine->allowAdvancedIndex()
+                && $attribute->getIsSearchable()
+                && $attribute->usesSource()
+            ) {
+                $attribute->setStoreId($storeId);
+                $options = $attribute->getSource()->toOptionArray();
+                $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
+            } else {
+                $this->attributeOptions[$optionKey] = null;
+            }
+        }
+
+        return $this->attributeOptions[$optionKey][$valueId] ?? null;
     }
 }
