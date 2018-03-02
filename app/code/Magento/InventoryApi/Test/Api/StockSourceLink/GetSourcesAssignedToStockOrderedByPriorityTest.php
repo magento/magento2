@@ -12,13 +12,14 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class GetAssignedSourcesForStockTest extends WebapiAbstract
+class GetSourcesAssignedToStockOrderedByPriorityTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH_GET_ASSIGNED_SOURCES_FOR_STOCK = '/V1/inventory/stock/get-assigned-sources';
-    const SERVICE_NAME_GET_ASSIGNED_SOURCES_FOR_STOCK = 'inventoryApiGetAssignedSourcesForStockV1';
+    const RESOURCE_PATH_GET_ASSIGNED_SOURCES_FOR_STOCK
+        = '/V1/inventory/get-sources-assigned-to-stock-ordered-by-priority';
+    const SERVICE_NAME_GET_ASSIGNED_SOURCES_FOR_STOCK = 'inventoryApiGetSourcesAssignedToStockOrderedByPriorityV1';
     /**#@-*/
 
     /**
@@ -28,7 +29,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
      */
     public function testGetAssignedSourcesForStock()
     {
-        $stockId = 10;
+        $stockId = 30;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_GET_ASSIGNED_SOURCES_FOR_STOCK . '/' . $stockId,
@@ -43,7 +44,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
         self::assertEquals(
-            ['eu-1', 'eu-2', 'eu-3', 'eu-disabled'],
+            ['us-1', 'eu-disabled', 'eu-3', 'eu-2', 'eu-1'],
             array_column($response, SourceInterface::SOURCE_CODE)
         );
     }

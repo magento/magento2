@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api;
 
 /**
- * Get assigned Sources for Stock
+ * Retrieve sources related to current stock ordered by priority
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-interface GetAssignedSourcesForStockInterface
+interface GetSourcesAssignedToStockOrderedByPriorityInterface
 {
     /**
-     * Get Sources assigned to Stock
+     * Get Sources assigned to Stock ordered by priority
      *
      * If Stock with given id doesn't exist then return an empty array
      *

@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Command;
+namespace Magento\Inventory\Model\Source\Command;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
+use Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface;
 use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
+class GetSourcesAssignedToStockOrderedByPriority implements GetSourcesAssignedToStockOrderedByPriorityInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -42,21 +42,29 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     private $logger;
 
     /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param GetStockSourceLinksInterface $getStockSourceLinks
+     * @param SortOrderBuilder $sortOrderBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
         GetStockSourceLinksInterface $getStockSourceLinks,
+        SortOrderBuilder $sortOrderBuilder,
         LoggerInterface $logger
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
         $this->getStockSourceLinks = $getStockSourceLinks;
         $this->logger = $logger;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -65,15 +73,13 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     public function execute(int $stockId): array
     {
         try {
-            $sourceCodes = $this->getAssignedSourceCodes($stockId);
+            $stockSourceLinks = $this->getStockSourceLinks($stockId);
+            $sources = [];
+            foreach ($stockSourceLinks as $link) {
+                $sources[] = $this->sourceRepository->get($link->getSourceCode());
+            }
 
-            $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(SourceInterface::SOURCE_CODE, $sourceCodes, 'in')
-                ->create();
-
-            $searchResult = $this->sourceRepository->getList($searchCriteria);
-
-            return $searchResult->getItems();
+            return $sources;
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new LocalizedException(__('Could not load Sources for Stock'), $e);
@@ -81,26 +87,23 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
-     * Get all linked SourceCodes by given stockId
+     * Get all stock-source links by given stockId
      *
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourceCodes(int $stockId): array
+    private function getStockSourceLinks(int $stockId): array
     {
+        $sortOrder = $this->sortOrderBuilder
+            ->setField(StockSourceLinkInterface::PRIORITY)
+            ->setAscendingDirection()
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLinkInterface::STOCK_ID, $stockId)
+            ->addSortOrder($sortOrder)
             ->create();
         $searchResult = $this->getStockSourceLinks->execute($searchCriteria);
 
-        if (0 === $searchResult->getTotalCount()) {
-            return [];
-        }
-
-        $sourceCodes = [];
-        foreach ($searchResult->getItems() as $link) {
-            $sourceCodes[] = $link->getSourceCode();
-        }
-        return $sourceCodes;
+        return $searchResult->getItems();
     }
 }
