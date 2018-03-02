@@ -134,7 +134,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         $destFile = dirname(
             $file
         ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->getFilePath($basePath, $file)
+            $this->getFilePath($this->_mediaDirectory->getAbsolutePath($basePath), $file)
         );
 
         $this->_coreFileStorageDatabase->copyFile(
