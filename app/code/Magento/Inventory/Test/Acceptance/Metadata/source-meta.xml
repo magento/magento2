@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateSource" dataType="source" type="create"
+               auth="adminFormKey" url="/admin/inventory/source/save" removeBackend="true" method="POST" successRegex="/messages-message-success/" returnRegex="">
+        <contentType>application/x-www-form-urlencoded</contentType>
+        <object dataType="source" key="general">
+            <field key="id_field_name">string</field>
+            <field key="name">string</field>
+            <field key="source_code">string</field>
+            <field key="enabled">boolean</field>
+            <field key="description">string</field>
+            <field key="latitude">string</field>
+            <field key="longitude">string</field>
+            <field key="priority">integer</field>
+            <field key="contact_name">string</field>
+            <field key="email">string</field>
+            <field key="phone">string</field>
+            <field key="fax">string</field>
+            <field key="country_id">string</field>
+            <field key="region">string</field>
+            <field key="region_id">integer</field>
+            <field key="city">string</field>
+            <field key="street">string</field>
+            <field key="postcode">string</field>
+            <field key="use_default_carrier_config">boolean</field>
+            <field key="carrier_codes">integer</field>
+        </object>
+    </operation>
+</operations>

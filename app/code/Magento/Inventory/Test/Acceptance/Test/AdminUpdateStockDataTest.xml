@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminUpdateStockDataTest">
+        <annotations>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Update existing Stock Data"/>
+            <title value="Stock data updated by Admin user"/>
+            <description value="You should be able to update a Stocks data via the Admin."/>
+            <testCaseId value="516"/>
+            <group value="msi"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAdd"/>
+
+        <fillField userInput="{{TestStock1.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName1"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="openSaveDropDown"/>
+
+        <fillField userInput="{{TestStock2.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName2"/>
+
+        <actionGroup ref="AdminSaveAndClose" stepKey="saveAndClose1"/>
+
+        <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
+            <argument name="value" value="TestStock2.name"/>
+        </actionGroup>
+
+        <see userInput="{{TestStock2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+    </test>
+</tests>
