@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\InventoryShipping\Model\PriorityShippingAlgorithm\PriorityShippingAlgorithm;
 
 /**
  * @inheritdoc
@@ -33,6 +34,6 @@ class ShippingAlgorithmProvider implements ShippingAlgorithmProviderInterface
      */
     public function execute(): ShippingAlgorithmInterface
     {
-        return $this->objectManager->get(DefaultShippingAlgorithm::class);
+        return $this->objectManager->get(PriorityShippingAlgorithm::class);
     }
 }

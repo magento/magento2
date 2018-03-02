@@ -11,6 +11,7 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
+    <preference for="Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface" type="Magento\Inventory\Model\Source\Command\GetSourcesAssignedToStockOrderedByPriority"/>
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface" type="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySku"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
@@ -69,7 +70,6 @@
     <preference for="Magento\InventoryApi\Api\GetStockSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetStockSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
-    <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
