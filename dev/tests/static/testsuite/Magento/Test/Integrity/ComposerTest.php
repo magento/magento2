@@ -35,12 +35,42 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private static $objectManager;
 
+    /**
+     * @var string[]
+     */
+    private static $rootComposerModuleBlacklist = [];
+
+    /**
+     * @var string[]
+     */
+    private static $moduleNameBlacklist;
+
     public static function setUpBeforeClass()
     {
         self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
         self::$dependencies = [];
         self::$objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
+        // A block can be whitelisted and thus not be required to be public
+        self::$rootComposerModuleBlacklist = self::getBlacklist(
+            __DIR__ . '/_files/blacklist/composer_root_modules*.txt'
+        );
+        self::$moduleNameBlacklist = self::getBlacklist(__DIR__ . '/_files/blacklist/composer_module_names*.txt');
+    }
+
+    /**
+     * Return aggregated blacklist
+     *
+     * @param string $pattern
+     * @return string[]
+     */
+    public static function getBlacklist(string $pattern)
+    {
+        $blacklist = [];
+        foreach (glob($pattern) as $list) {
+            $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        }
+        return $blacklist;
     }
 
     public function testValidComposerJson()
@@ -222,13 +252,15 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertConsistentModuleName(\SimpleXMLElement $xml, $packageName)
     {
-        $moduleName = (string)$xml->module->attributes()->name;
-        $expectedPackageName = $this->convertModuleToPackageName($moduleName);
-        $this->assertEquals(
-            $expectedPackageName,
-            $packageName,
-            "For the module '{$moduleName}', the expected package name is '{$expectedPackageName}'"
-        );
+        if (!in_array($packageName, self::$moduleNameBlacklist)) {
+            $moduleName = (string)$xml->module->attributes()->name;
+            $expectedPackageName = $this->convertModuleToPackageName($moduleName);
+            $this->assertEquals(
+                $expectedPackageName,
+                $packageName,
+                "For the module '{$moduleName}', the expected package name is '{$expectedPackageName}'"
+            );
+        }
     }
 
     /**
@@ -280,11 +312,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertRequireInSync(\StdClass $json)
     {
-        $name = $json->name;
         if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
             return;
         }
-        if (isset($json->require)) {
+        $name = $json->name;
+        if (!in_array($name, self::$rootComposerModuleBlacklist) && isset($json->require)) {
             $errors = [];
             foreach (array_keys((array)$json->require) as $depName) {
                 if ($depName == 'magento/magento-composer-installer') {
