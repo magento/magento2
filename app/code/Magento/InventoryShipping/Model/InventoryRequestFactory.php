@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
 class InventoryRequestFactory
 {
@@ -33,19 +34,27 @@ class InventoryRequestFactory
     private $stockByWebsiteIdResolver;
 
     /**
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
+
+    /**
      * InventoryRequestFactory constructor.
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        StockByWebsiteIdResolver $stockByWebsiteIdResolver
+        StockByWebsiteIdResolver $stockByWebsiteIdResolver,
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -61,6 +70,10 @@ class InventoryRequestFactory
         /** @var OrderItemInterface|OrderItem $orderItem */
         foreach ($order->getItems() as $orderItem) {
             $itemSku = $orderItem->getSku();
+            if ($itemSku === null) {
+                $productId = $orderItem->getProductId();
+                $itemSku = $this->getSkusByProductIds->execute([$productId])[$productId];
+            }
             $qtyToDeliver = $orderItem->getQtyToShip();
 
             //check if order item is not delivered yet
