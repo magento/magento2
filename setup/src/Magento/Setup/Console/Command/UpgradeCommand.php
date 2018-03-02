@@ -10,6 +10,8 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -83,16 +85,23 @@ class UpgradeCommand extends AbstractSetupCommand
                 false
             ),
             new InputOption(
-                InstallCommand::INPUT_KEY_SAFE_INSTALLER_MODE,
+                OperationsExecutor::KEY_SAFE_MODE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Safe installation of Magento with dumps on destructive operations, like column removal'
             ),
             new InputOption(
-                InstallCommand::INPUT_KEY_DATA_RESTORE,
+                OperationsExecutor::KEY_DATA_RESTORE,
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Restore removed data from dumps'
+            ),
+            new InputOption(
+                DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
             ),
         ];
         $this->setName('setup:upgrade')
@@ -112,7 +121,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $installer->installSchema($request);
-            $installer->installDataFixtures();
+            $installer->installDataFixtures($request);
 
             if ($this->deploymentConfig->isAvailable()) {
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);

@@ -28,13 +28,16 @@ class TableData
 
     /**
      * @param string $tableName
+     * @param string $columnName
      * @return array
      */
-    public function describeTableData($tableName)
+    public function describeTableData($tableName, $columnName = null)
     {
         $adapter = $this->resourceConnection->getConnection();
-        return $adapter->fetchAll(
-            $adapter->select()->from($tableName)
-        );
+        $cols = $columnName ?: '*';
+        $select = $adapter
+            ->select()
+            ->from($tableName, $cols);
+        return $columnName ? $adapter->fetchCol($select) : $adapter->fetchAll($select);
     }
 }

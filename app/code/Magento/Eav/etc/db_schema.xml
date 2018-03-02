@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="eav_entity_type" resource="default" engine="innodb" comment="Eav Entity Type">
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="true"
                 comment="Entity Type Id"/>
