@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\Math\Division as MathDivision;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
@@ -35,7 +35,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
     private $getStockItemData;
 
     /**
-     * @var Configuration
+     * @var StockConfigurationInterface
      */
     private $configuration;
 
@@ -46,7 +46,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
 
     public function __construct(
         GetStockItemConfigurationInterface $getStockItemConfiguration,
-        Configuration $configuration,
+        StockConfigurationInterface $configuration,
         GetReservationsQuantityInterface $getReservationsQuantity,
         GetStockItemDataInterface $getStockItemData,
         MathDivision $mathDivision
@@ -91,11 +91,11 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             return false;
         }
 
-        $globalEnableQtyIncrements = $this->configuration->getEnableQtyIncrements();
-        if (($globalEnableQtyIncrements
-                && $this->mathDivision->getExactDivision($requestedQty, $this->configuration->getQtyIncrements()))
-            || ($stockItemConfiguration->isEnableQtyIncrements()
-                && $this->mathDivision->getExactDivision($requestedQty, $stockItemConfiguration->getQtyIncrements()))) {
+        if ($this->mathDivision->getExactDivision($requestedQty, $this->configuration->getQtyIncrements()) !== 0
+            || $this->mathDivision->getExactDivision(
+                $requestedQty,
+                $stockItemConfiguration->getQtyIncrements()
+            ) !== 0) {
             return false;
         }
 

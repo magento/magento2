@@ -87,7 +87,7 @@
                     <item name="sort_order" xsi:type="number">30</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsSalableWithReservationsCondition</item>
                 </item>
-                <item name="correct_qty" xsi:type="array">
+                <item name="is_correct_qty" xsi:type="array">
                     <item name="sort_order" xsi:type="number">40</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsCorrectQtyCondition</item>
                 </item>
