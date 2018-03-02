@@ -211,13 +211,12 @@ class DataProvider
 
         if ($productIds !== null) {
             $select->where('e.entity_id IN (?)', $productIds);
-        } else {
-            $select->where('e.entity_id > ?', $lastProductId);
-            $select->where(
-                'e.entity_id < ?',
-                $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
-            );
         }
+        $select->where('e.entity_id > ?', $lastProductId);
+        $select->where(
+            'e.entity_id < ?',
+            $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
+        );
         $select->order('e.entity_id');
         $select->limit($batch);
 
