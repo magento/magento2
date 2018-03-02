@@ -217,7 +217,6 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      */
     public function getIsVisibleInAdvancedSearch()
     {
-        die('s');
         return $this->_getData(self::IS_VISIBLE_IN_ADVANCED_SEARCH);
     }
 
