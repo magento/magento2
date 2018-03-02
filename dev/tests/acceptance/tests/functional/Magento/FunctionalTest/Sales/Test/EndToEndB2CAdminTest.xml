@@ -161,8 +161,9 @@
         <click selector="{{AdminCreditMemoOrderInformationSection.orderId}}" stepKey="clickOrderIdLinkOnCreditMemo" after="scrollToTopOfCreditMemo"/>
 
         <!--Admin uses order grid-->
+        <comment userInput="Admin uses order grid" stepKey="adminUseOrderGridComment" before="navigateToOrderGridPage"/>
         <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
-        <waitForPageLoad time="30" stepKey="waitForLoadUseOrderGrid" after="navigateToOrderGridPage"/>
+        <waitForPageLoad time="60" stepKey="waitForLoadUseOrderGrid" after="navigateToOrderGridPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrderGridPageLoad" after="waitForLoadUseOrderGrid"/>
 
         <!--Search order grid by name-->
