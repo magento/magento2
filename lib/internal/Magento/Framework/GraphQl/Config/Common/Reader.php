@@ -37,7 +37,7 @@ class Reader implements ReaderInterface
     {
         $output = [];
         foreach ($this->readers as $reader) {
-            $output = array_merge_recursive($output, $reader->read($scope));
+            $output = array_replace_recursive($output, $reader->read($scope));
         }
         return $output;
     }

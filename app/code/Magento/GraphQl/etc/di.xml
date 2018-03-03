@@ -47,7 +47,9 @@
     <virtualType name="Magento\Framework\GraphQl\Config\Reader" type="Magento\Framework\GraphQl\Config\Common\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xmlReader" xsi:type="object">Magento\Framework\GraphQl\Config\XmlReader</item>
+                <!--TODO: Delete all xml configs-->
+                <!--<item name="xmlReader" xsi:type="object">Magento\Framework\GraphQl\Config\XmlReader</item>-->
+                <item name="graphQlReader" xsi:type="object">Magento\Framework\GraphQl\Config\GraphQlReader</item>
             </argument>
         </arguments>
     </virtualType>

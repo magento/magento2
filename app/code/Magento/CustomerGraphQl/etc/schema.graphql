@@ -1,0 +1,53 @@
+type Query {
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer")
+}
+
+type Products {
+    testCustomizationFromCustomerConfig: String
+}
+
+type Customer {
+    created_at: String
+    group_id: Int
+    prefix: String
+    firstname: String
+    middlename: String
+    lastname: String
+    suffix: String
+    email: String
+    default_billing: String
+    default_shipping: String
+    dob: String
+    taxvat: String
+    id: Int
+    is_subscribed: Boolean
+    addresses: [CustomerAddress]
+}
+
+type CustomerAddress {
+    id: Int
+    customer_id: Int
+    region: CustomerAddressRegion
+    region_id: Int
+    country_id: String
+    street: [String]
+    company: String
+    telephone: String
+    fax: String
+    postcode: String
+    city: String
+    firstname: String
+    lastname: String
+    middlename: String
+    prefix: String
+    suffix: String
+    vat_id: String
+    default_shipping: Boolean
+    default_billing: Boolean
+}
+
+type CustomerAddressRegion {
+    region_code: String
+    region: String
+    region_id: Int
+}
