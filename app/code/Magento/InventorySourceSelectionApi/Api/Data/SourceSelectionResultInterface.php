@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\ShippingAlgorithmResult;
+namespace Magento\InventorySourceSelectionApi\Api\Data;
 
 /**
  * Result of how we will deduct product qty from different Sources
  *
  * @api
  */
-interface ShippingAlgorithmResultInterface
+interface SourceSelectionResultInterface
 {
     /**
-     * @return SourceSelectionInterface[]
+     * @return SourceSelectionItemInterface[]
      */
-    public function getSourceSelections(): array;
+    public function getSourceSelectionItems(): array;
 
     /**
      * @return bool

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\PriorityShippingAlgorithm;
+namespace Magento\InventoryShipping\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;

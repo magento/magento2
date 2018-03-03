@@ -5,15 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model\ShippingAlgorithmResult;
+namespace Magento\InventorySourceSelectionApi\Api\Data;
 
 /**
- * Represents shipping algorithm results for the specific source item
+ * Represents source selection result for the specific source and SKU
  *
  * @api
  */
-interface SourceItemSelectionInterface
+interface SourceSelectionItemInterface
 {
+    /**
+     * Get source code
+     *
+     * @return string
+     */
+    public function getSourceCode(): string;
+
     /**
      * Get item SKU
      *
@@ -26,7 +33,7 @@ interface SourceItemSelectionInterface
      *
      * @return float
      */
-    public function getQty(): float;
+    public function getQtyToDeduct(): float;
 
     /**
      * Get available quantity for this source
