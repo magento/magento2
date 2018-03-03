@@ -15,6 +15,8 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+
 
 class SourceDeductionProcessor implements ObserverInterface
 {
@@ -44,25 +46,33 @@ class SourceDeductionProcessor implements ObserverInterface
     private $getSourceItemBySourceCodeAndSku;
 
     /**
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
+
+    /**
      * SourceDeductionProcessor constructor.
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
         SourceItemsSaveInterface $sourceItemsSave,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
-        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku
+        GetSourceItemBySourceCodeAndSku $getSourceItemBySourceCodeAndSku,
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
         $this->sourceItemsSave = $sourceItemsSave;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->getSourceItemBySourceCodeAndSku = $getSourceItemBySourceCodeAndSku;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -94,13 +104,16 @@ class SourceDeductionProcessor implements ObserverInterface
             foreach ($sources as $source) {
                 $sourceCode = $source['sourceCode'];
                 $qty = $source['qtyToDeduct'];
-                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $item->getSku());
+                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                    [$item->getProductId()]
+                )[$item->getProductId()];
+                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $itemSku);
                 //TODO: need to implement additional checks
                 // with backorder+when source disabled or product OutOfStock
                 if (($sourceItem->getQuantity() - $qty) >= 0) {
                     $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
                     $sourceItemToSave[] = $sourceItem;
-                    $reservationsToBuild[$item->getSku()] = ($reservationsToBuild[$item->getSku()] ?? 0) + $qty;
+                    $reservationsToBuild[$itemSku] = ($reservationsToBuild[$itemSku] ?? 0) + $qty;
                     //TODO: add data to history order_item_id|source_code|qty
                 } else {
                     throw new LocalizedException(__('Negative quantity is not allowed.'));
