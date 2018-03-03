@@ -505,9 +505,27 @@ class Product extends AbstractResource
 
         $result = [];
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $result[$row['sku']] = $row['entity_id'];
+            $result[$this->getResultKey($row['sku'], $productSkuList)] = $row['entity_id'];
         }
         return $result;
+    }
+
+    /**
+     * Return correct key for result array in getProductIdsBySku
+     * Allows for different case sku to be passed in search array
+     * with original cased sku to be passed back in result array
+     *
+     * @param string $sku
+     * @param array $productSkuList
+     * @return string
+     */
+    private function getResultKey(string $sku, array $productSkuList): string
+    {
+        $key = array_search(strtolower($sku), array_map('strtolower', $productSkuList));
+        if ($key !== false) {
+            $sku = $productSkuList[$key];
+        }
+        return $sku;
     }
 
     /**
