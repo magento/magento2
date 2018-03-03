@@ -90,26 +90,30 @@ class SourceDeductionProcessor implements ObserverInterface
                 continue;
             }
             $sourceItemToSave = [];
-            $reservationToSave = [];
+            $reservationsToBuild = [];
             foreach ($sources as $source) {
-                $source_code = $source['sourceCode'];
+                $sourceCode = $source['sourceCode'];
                 $qty = $source['qtyToDeduct'];
-                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($source_code, $item->getSku());
+                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $item->getSku());
                 //TODO: need to implement additional checks
                 // with backorder+when source disabled or product OutOfStock
                 if (($sourceItem->getQuantity() - $qty) >= 0) {
                     $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
                     $sourceItemToSave[] = $sourceItem;
-                    $reservationToSave[] = $this->reservationBuilder
-                        ->setSku($item->getSku())
-                        ->setQuantity($qty)
-                        ->setStockId($stockId)
-                        ->build();
-
+                    $reservationsToBuild[$item->getSku()] = ($reservationsToBuild[$item->getSku()] ?? 0) + $qty;
                     //TODO: add data to history order_item_id|source_code|qty
                 } else {
                     throw new LocalizedException(__('Negative quantity is not allowed.'));
                 }
+            }
+
+            $reservationToSave = [];
+            foreach ($reservationsToBuild as $sku => $reservationQty) {
+                $reservationToSave[] = $this->reservationBuilder
+                    ->setSku($sku)
+                    ->setQuantity($reservationQty)
+                    ->setStockId($stockId)
+                    ->build();
             }
             $this->sourceItemsSave->execute($sourceItemToSave);
             $this->appendReservations->execute($reservationToSave);
