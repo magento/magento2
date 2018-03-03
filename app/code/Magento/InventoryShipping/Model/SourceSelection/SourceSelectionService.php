@@ -44,8 +44,7 @@ class SourceSelectionService implements SourceSelectionServiceInterface
     public function execute(
         InventoryRequestInterface $inventoryRequest,
         string $algorithmCode
-    ): SourceSelectionResultInterface
-    {
+    ): SourceSelectionResultInterface {
         if (!isset($this->sourceSelectionMethods[$algorithmCode])) {
             throw new \LogicException(
                 __('There is no such Source Selection Algorithm implemented: %1', $algorithmCode)

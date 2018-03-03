@@ -100,7 +100,7 @@ class SourceDeductionProcessor implements ObserverInterface
                 if (($sourceItem->getQuantity() - $qty) >= 0) {
                     $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
                     $sourceItemToSave[] = $sourceItem;
-                    $reservationToSave[] = $reservation = $this->reservationBuilder
+                    $reservationToSave[] = $this->reservationBuilder
                         ->setSku($item->getSku())
                         ->setQuantity($qty)
                         ->setStockId($stockId)

@@ -162,6 +162,7 @@
         "magento/module-inventory-sales": "100.0.0-dev",
         "magento/module-inventory-sales-api": "100.0.0-dev",
         "magento/module-inventory-shipping": "100.0.0-dev",
+        "magento/module-inventory-source-selection-api": "100.0.0-dev",
         "magento/module-layered-navigation": "100.3.0-dev",
         "magento/module-media-storage": "100.3.0-dev",
         "magento/module-msrp": "100.3.0-dev",

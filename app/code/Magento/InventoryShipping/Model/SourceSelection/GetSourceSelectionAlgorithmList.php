@@ -45,7 +45,7 @@ class GetSourceSelectionAlgorithmList implements GetSourceSelectionAlgorithmList
     public function execute(): array
     {
         $algorithmsList = [];
-        foreach ($this->availableAlgorithms as $code => $data) {
+        foreach ($this->availableAlgorithms as $data) {
             $algorithmsList[] = $this->sourceSelectionAlgorithmFactory->create(
                 [
                     'code' => $data['code'],
