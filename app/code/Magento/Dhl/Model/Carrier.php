@@ -1409,7 +1409,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if (!$originRegion) {
             $xml->addChild('RequestedPickupTime', 'N', '');
         }
-        $xml->addChild('NewShipper', 'N', '');
+        if ($originRegion !== 'AP') {
+            $xml->addChild('NewShipper', 'N', '');
+        }
         $xml->addChild('LanguageCode', 'EN', '');
         $xml->addChild('PiecesEnabled', 'Y', '');
 
@@ -1451,7 +1453,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         $nodeConsignee->addChild('City', $rawRequest->getRecipientAddressCity());
-        $nodeConsignee->addChild('Division', $rawRequest->getRecipientAddressStateOrProvinceCode());
+        if ($originRegion !== 'AP') {
+            $nodeConsignee->addChild('Division', $rawRequest->getRecipientAddressStateOrProvinceCode());
+        }
         $nodeConsignee->addChild('PostalCode', $rawRequest->getRecipientAddressPostalCode());
         $nodeConsignee->addChild('CountryCode', $rawRequest->getRecipientAddressCountryCode());
         $nodeConsignee->addChild(
@@ -1500,7 +1504,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeShipper = $xml->addChild('Shipper', '', '');
         $nodeShipper->addChild('ShipperID', (string)$this->getConfigData('account'));
         $nodeShipper->addChild('CompanyName', $rawRequest->getShipperContactCompanyName());
-        $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
+        if ($originRegion !== 'AP') {
+            $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
+        }
 
         $address = $rawRequest->getShipperAddressStreet1() . ' ' . $rawRequest->getShipperAddressStreet2();
         $address = $this->string->split($address, 35, false, true);
@@ -1513,7 +1519,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         $nodeShipper->addChild('City', $rawRequest->getShipperAddressCity());
-        $nodeShipper->addChild('Division', $rawRequest->getShipperAddressStateOrProvinceCode());
+        if ($originRegion !== 'AP') {
+            $nodeShipper->addChild('Division', $rawRequest->getShipperAddressStateOrProvinceCode());
+        }
         $nodeShipper->addChild('PostalCode', $rawRequest->getShipperAddressPostalCode());
         $nodeShipper->addChild('CountryCode', $rawRequest->getShipperAddressCountryCode());
         $nodeShipper->addChild(
