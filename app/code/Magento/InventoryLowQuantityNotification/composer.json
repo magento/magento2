@@ -12,6 +12,7 @@
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
         "magento/module-inventory-configuration": "100.0.*",
+        "magento/module-inventory-catalog": "100.0.*",
         "magento/module-inventory-low-quantity-notification-api": "100.0.*"
     },
     "type": "magento2-module",
