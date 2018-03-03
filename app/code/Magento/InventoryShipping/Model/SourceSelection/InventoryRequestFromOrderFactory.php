@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
@@ -16,7 +16,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactor
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
-class InventoryRequestFactory
+class InventoryRequestFromOrderFactory
 {
     /**
      * @var ItemRequestInterfaceFactory

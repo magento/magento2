@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
@@ -25,7 +25,6 @@ class SourceSelectionService implements SourceSelectionServiceInterface
     private $sourceSelectionMethods;
 
     /**
-     * SourceSelectionService constructor.
      * @param ObjectManagerInterface $objectManager
      * @param array $sourceSelectionMethods
      */
@@ -44,7 +43,7 @@ class SourceSelectionService implements SourceSelectionServiceInterface
      */
     public function execute(
         InventoryRequestInterface $inventoryRequest,
-        string $algorithmCode = 'priority'
+        string $algorithmCode
     ): SourceSelectionResultInterface
     {
         if (!isset($this->sourceSelectionMethods[$algorithmCode])) {

@@ -17,7 +17,7 @@ interface SourceSelectionResultInterface
     /**
      * @return SourceSelectionItemInterface[]
      */
-    public function getSourceItemSelections(): array;
+    public function getSourceSelectionItems(): array;
 
     /**
      * @return bool

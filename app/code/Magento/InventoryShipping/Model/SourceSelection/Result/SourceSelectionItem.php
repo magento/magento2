@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection\Result;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 
@@ -35,7 +35,6 @@ class SourceSelectionItem implements SourceSelectionItemInterface
     private $qtyAvailable;
 
     /**
-     * SourceSelectionResult constructor.
      * @param string $sourceCode
      * @param string $sku
      * @param float $qtyToDeduct

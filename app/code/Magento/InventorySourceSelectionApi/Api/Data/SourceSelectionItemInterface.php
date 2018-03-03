@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
 /**
- * Represents source selection result for the specific source
+ * Represents source selection result for the specific source and SKU
  *
  * @api
  */

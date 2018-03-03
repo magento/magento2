@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection\Request;
 
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
 
@@ -25,7 +25,6 @@ class ItemRequest implements ItemRequestInterface
     private $qty;
 
     /**
-     * ItemRequest constructor.
      * @param string $sku
      * @param float $qty
      */

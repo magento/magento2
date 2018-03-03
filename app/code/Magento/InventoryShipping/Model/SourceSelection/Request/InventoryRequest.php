@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection\Request;
 
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
@@ -26,7 +26,6 @@ class InventoryRequest implements InventoryRequestInterface
     private $items;
 
     /**
-     * InventoryRequest constructor.
      * @param int $stockId
      * @param array $items
      */

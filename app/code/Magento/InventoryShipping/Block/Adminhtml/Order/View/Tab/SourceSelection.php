@@ -12,9 +12,10 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryShipping\Model\InventoryRequestFactory;
+use Magento\InventoryShipping\Model\SourceSelection\InventoryRequestFromOrderFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
+use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 /**
  * Tab for source items display on the order editing page
@@ -39,7 +40,7 @@ class SourceSelection extends Template implements TabInterface
     private $sourceRepository;
 
     /**
-     * @var InventoryRequestFactory
+     * @var InventoryRequestFromOrderFactory
      */
     private $inventoryRequestFactory;
 
@@ -49,19 +50,26 @@ class SourceSelection extends Template implements TabInterface
     private $sourceSelectionService;
 
     /**
+     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     */
+    private $getDefaultSourceSelectionAlgorithmCode;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param SourceRepositoryInterface $sourceRepository
-     * @param InventoryRequestFactory $inventoryRequestFactory
+     * @param InventoryRequestFromOrderFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
+     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         SourceRepositoryInterface $sourceRepository,
-        InventoryRequestFactory $inventoryRequestFactory,
+        InventoryRequestFromOrderFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -69,6 +77,7 @@ class SourceSelection extends Template implements TabInterface
         $this->sourceRepository = $sourceRepository;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
+        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
     }
 
     /**
@@ -89,7 +98,7 @@ class SourceSelection extends Template implements TabInterface
     public function getSourceSelections(): array
     {
         $result = [];
-        foreach ($this->getShippingAlgorithmResult()->getSourceItemSelections() as $item) {
+        foreach ($this->getShippingAlgorithmResult()->getSourceSelectionItems() as $item) {
             $result[$item->getSourceCode()][] = $item;
         }
         return $result;
@@ -147,7 +156,10 @@ class SourceSelection extends Template implements TabInterface
         if (null === $this->sourceSelectionResult) {
             $order = $this->registry->registry('current_order');
             $inventoryRequest = $this->inventoryRequestFactory->create($order);
-            $this->sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest);
+            $this->sourceSelectionResult = $this->sourceSelectionService->execute(
+                $inventoryRequest,
+                $this->getDefaultSourceSelectionAlgorithmCode->execute()
+            );
         }
 
         return $this->sourceSelectionResult;

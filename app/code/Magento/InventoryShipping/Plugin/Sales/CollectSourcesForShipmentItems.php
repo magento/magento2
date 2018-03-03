@@ -13,6 +13,7 @@ use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
+use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 /**
  * This is the best entry point for both POST and API request
@@ -40,23 +41,29 @@ class CollectSourcesForShipmentItems
     private $sourceSelectionService;
 
     /**
-     * ProcessShipmentItems constructor.
+     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     */
+    private $getDefaultSourceSelectionAlgorithmCode;
+
+    /**
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
-     * @internal param ShippingAlgorithmProviderInterface $shippingAlgorithmProvider
+     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      */
     public function __construct(
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
-        SourceSelectionServiceInterface $sourceSelectionService
+        SourceSelectionServiceInterface $sourceSelectionService,
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
     ) {
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
+        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
     }
 
     /**
@@ -94,9 +101,12 @@ class CollectSourcesForShipmentItems
                 'stockId' => $stockId,
                 'items' => [$requestItem]
             ]);
-            $sourceSelectionResult = $this->sourceSelectionService->execute($inventoryRequest);
+            $sourceSelectionResult = $this->sourceSelectionService->execute(
+                $inventoryRequest,
+                $this->getDefaultSourceSelectionAlgorithmCode->execute()
+            );
             $shippingItemSources = [];
-            foreach ($sourceSelectionResult->getSourceItemSelections() as $data) {
+            foreach ($sourceSelectionResult->getSourceSelectionItems() as $data) {
                 //TODO: need to implement it as Extension Attribute
                 $shippingItemSources[] = [
                     'sourceCode' => $data->getSourceCode(),

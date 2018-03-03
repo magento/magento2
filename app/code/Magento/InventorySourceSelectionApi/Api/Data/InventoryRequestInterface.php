@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySourceSelectionApi\Api\Data;
 
+use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface;
+
 /**
  * Request products in a given Qty and StockId
  *
@@ -20,7 +22,7 @@ interface InventoryRequestInterface
     public function getStockId(): int;
 
     /**
-     * @return \Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface[]
+     * @return ItemRequestInterface[]
      */
     public function getItems(): array;
 }

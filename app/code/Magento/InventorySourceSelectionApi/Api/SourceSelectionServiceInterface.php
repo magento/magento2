@@ -24,6 +24,6 @@ interface SourceSelectionServiceInterface
      */
     public function execute(
         InventoryRequestInterface $inventoryRequest,
-        string $algorithmCode = 'priority'
+        string $algorithmCode
     ): SourceSelectionResultInterface;
 }

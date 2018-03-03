@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection\Result;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
@@ -26,7 +26,6 @@ class SourceSelectionResult implements SourceSelectionResultInterface
     private $isShippable;
 
     /**
-     * SourceSelectionResult constructor.
      * @param SourceSelectionItemInterface[] $sourceItemSelections
      * @param bool $isShippable
      */
@@ -39,7 +38,7 @@ class SourceSelectionResult implements SourceSelectionResultInterface
     /**
      * @inheritdoc
      */
-    public function getSourceItemSelections(): array
+    public function getSourceSelectionItems(): array
     {
         return $this->sourceItemSelections;
     }

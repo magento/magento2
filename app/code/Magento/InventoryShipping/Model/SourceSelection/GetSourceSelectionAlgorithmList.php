@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Model;
+namespace Magento\InventoryShipping\Model\SourceSelection;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface;
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterfaceFactory;
-use Magento\InventorySourceSelectionApi\Api\SourceSelectionAlgorithmProviderInterface;
+use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface;
 
 /**
  * @inheritdoc
  */
-class SourceSelectionAlgorithmProvider implements SourceSelectionAlgorithmProviderInterface
+class GetSourceSelectionAlgorithmList implements GetSourceSelectionAlgorithmListInterface
 {
     /**
      * @var SourceSelectionAlgorithmInterface[]
