@@ -14,6 +14,7 @@ use Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactory;
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
 /**
  * This is the best entry point for both POST and API request
@@ -46,24 +47,32 @@ class CollectSourcesForShipmentItems
     private $getDefaultSourceSelectionAlgorithmCode;
 
     /**
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
+
+    /**
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ItemRequestInterfaceFactory $itemRequestFactory
      * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
      * @param SourceSelectionServiceInterface $sourceSelectionService
      * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ItemRequestInterfaceFactory $itemRequestFactory,
         InventoryRequestInterfaceFactory $inventoryRequestFactory,
         SourceSelectionServiceInterface $sourceSelectionService,
-        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->itemRequestFactory = $itemRequestFactory;
         $this->inventoryRequestFactory = $inventoryRequestFactory;
         $this->sourceSelectionService = $sourceSelectionService;
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -93,8 +102,11 @@ class CollectSourcesForShipmentItems
         /** @var \Magento\Sales\Api\Data\ShipmentItemInterface $item */
         foreach ($shipment->getItems() as $item) {
             //TODO: I didn't test, but I think it can be broken with configurable products
+            $sku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                [$item->getProductId()]
+            )[$item->getProductId()];
             $requestItem = $this->itemRequestFactory->create([
-                    'sku' => $item->getSku(),
+                    'sku' => $sku,
                     'qty' => $item->getQty()
             ]);
             $inventoryRequest = $this->inventoryRequestFactory->create([
