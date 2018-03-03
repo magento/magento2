@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryShipping\Model\GetSourceItemBySourceCodeAndSku;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
-
 class SourceDeductionProcessor implements ObserverInterface
 {
     /**
