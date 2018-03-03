@@ -8,6 +8,7 @@
         "magento/module-inventory-api": "100.0.*",
         "magento/module-inventory-sales-api": "100.0.*",
         "magento/module-inventory-sales": "100.0.*",
+        "magento/module-inventory-catalog": "100.0.*",
         "magento/module-inventory-source-selection-api": "100.0.*",
         "magento/module-inventory-reservations-api": "100.0.*",
         "magento/module-inventory-reservations": "100.0.*",
