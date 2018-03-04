@@ -910,6 +910,7 @@ define([
         'validate-item-quantity': [
             function (value, params) {
                 var validator = this,
+                    result = false,
                     // obtain values for validation
                     qty = utils.parseNumber(value),
                     isMinAllowedValid = typeof params.minAllowed === 'undefined' ||
@@ -919,7 +920,7 @@ define([
                     isQtyIncrementsValid = typeof params.qtyIncrements === 'undefined' ||
                         qty % utils.parseNumber(params.qtyIncrements) === 0;
 
-                var result = qty > 0;
+                result = qty > 0;
 
                 if (result === false) {
                   validator.itemQtyErrorMessage = $.mage.__("Please enter a quantity greater than 0.");//eslint-disable-line max-len
@@ -927,7 +928,7 @@ define([
                   return result;
                 }
 
-                var result = isMinAllowedValid;
+                result = isMinAllowedValid;
 
                 if (result === false) {
                   validator.itemQtyErrorMessage = $.mage.__("The fewest you may purchase is %1.").replace('%1', params.minAllowed);//eslint-disable-line max-len
