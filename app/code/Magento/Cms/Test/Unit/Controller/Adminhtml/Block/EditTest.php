@@ -5,7 +5,11 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
+ * Class EditTest
+ * @package Magento\Cms\Test\Unit\Controller\Adminhtml\Block
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditTest extends \PHPUnit\Framework\TestCase
@@ -65,6 +69,16 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultPageFactoryMock;
 
+    /**
+     * @var \Magento\Cms\Model\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $blockFactory;
+
+    /**
+     * @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $blockRepository;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -79,7 +93,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock->expects($this->once())
+        $this->objectManagerMock->expects($this->never())
             ->method('create')
             ->with(\Magento\Cms\Model\Block::class)
             ->willReturn($this->blockMock);
@@ -112,12 +126,22 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
+        $this->blockFactory = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
+            ->disableOriginalConstructor()->setMethods(
+                ['create']
+            )->getMock();
+        $this->blockRepository = $this->getMockBuilder(\Magento\Cms\Api\BlockRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->editController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Block\Edit::class,
             [
                 'context' => $this->contextMock,
-                'coreRegistry' => $this->coreRegistryMock,
-                'resultPageFactory' => $this->resultPageFactoryMock
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'registry' => $this->coreRegistryMock,
+                'blockFactory' => $this->blockFactory,
+                'blockRepository' => $this->blockRepository,
             ]
         );
     }
@@ -131,15 +155,20 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with('block_id')
             ->willReturn($blockId);
 
-        $this->blockMock->expects($this->once())
-            ->method('load')
-            ->with($blockId);
-        $this->blockMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
+        $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->willThrowException(
+                new NoSuchEntityException(__('No such entity.'))
+            );
+        $this->blockFactory->expects($this->never())->method('create');
+
+        $this->blockMock->expects($this->never())
+            ->method('load');
+        $this->blockMock->expects($this->never())
+            ->method('getId');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('This block no longer exists.'));
 
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
@@ -167,9 +196,19 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with('block_id')
             ->willReturn($blockId);
 
-        $this->blockMock->expects($this->any())
-            ->method('load')
-            ->with($blockId);
+        $expectedTimes = $blockId ? 1 : 0;
+        $this->blockRepository->expects($this->exactly($expectedTimes))
+            ->method('getById')
+            ->with($blockId)
+            ->willReturn($this->blockMock);
+
+        $expectedTimes = $blockId ? 0 : 1;
+        $this->blockFactory->expects($this->exactly($expectedTimes))
+            ->method('create')
+            ->willReturn($this->blockMock);
+
+        $this->blockMock->expects($this->never())
+            ->method('load');
         $this->blockMock->expects($this->any())
             ->method('getId')
             ->willReturn($blockId);
@@ -190,8 +229,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $titleMock->expects($this->at(0))->method('prepend')->with(__('Blocks'));
         $titleMock->expects($this->at(1))->method('prepend')->with($this->getTitle());
-        $pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
+        $blockConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $blockConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
         $resultPageMock->expects($this->once())
             ->method('setActiveMenu')
@@ -205,7 +244,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $resultPageMock->expects($this->exactly(2))
             ->method('getConfig')
-            ->willReturn($pageConfigMock);
+            ->willReturn($blockConfigMock);
 
         $this->assertSame($resultPageMock, $this->editController->execute());
     }

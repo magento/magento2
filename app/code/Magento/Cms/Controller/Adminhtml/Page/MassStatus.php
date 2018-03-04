@@ -13,17 +13,17 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
- * Class MassDelete
+ * Class MassStatus
  * @package Magento\Cms\Controller\Adminhtml\Page
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassStatus extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Cms::page_delete';
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
 
     /**
      * @var Filter
@@ -63,43 +63,37 @@ class MassDelete extends \Magento\Backend\App\Action
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException|\Exception
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $collectionSize = $collection->getSize();
 
-        $title = '';
         try {
-            foreach ($collection as $page) {
-                $title = $page->getTitle();
-                $this->pageRepository->delete($page);
-
-                $this->_eventManager->dispatch(
-                    'adminhtml_cmspage_on_delete',
-                    ['title' => $title, 'status' => 'success']
-                );
+            $status = $this->getRequest()->getParam('status');
+            if ($status === null) {
+                throw new LocalizedException(__('Status is a required param.'));
+            }
+            $status = (bool) $status;
+            $statusLabel = $status ? __('Enabled') : __('Disabled');
+            foreach ($collection as $item) {
+                $item->setIsActive($status);
+                $this->pageRepository->save($item);
             }
 
-            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been deleted.', $collectionSize));
-        } catch (LocalizedException $e) {
-            $this->_eventManager->dispatch(
-                'adminhtml_cmspage_on_delete',
-                ['title' => $title, 'status' => 'fail']
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have changed their status to %2.', $collection->getSize(), $statusLabel)
             );
+        } catch (LocalizedException $e) {
             $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
         } catch (\Exception $e) {
-            $this->_eventManager->dispatch(
-                'adminhtml_cmspage_on_delete',
-                ['title' => $title, 'status' => 'fail']
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while changing the page status.')
             );
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while deleting the page.'));
         }
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/');
     }
 }

@@ -88,14 +88,14 @@
             </action>
             <action name="disable">
                 <settings>
-                    <url path="cms/page/massDisable"/>
+                    <url path="cms/page/massStatus/status/0"/>
                     <type>disable</type>
                     <label translate="true">Disable</label>
                 </settings>
             </action>
             <action name="enable">
                 <settings>
-                    <url path="cms/page/massEnable"/>
+                    <url path="cms/page/massStatus/status/1"/>
                     <type>enable</type>
                     <label translate="true">Enable</label>
                 </settings>
