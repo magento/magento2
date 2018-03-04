@@ -48,8 +48,8 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
             'validate-item-quantity' =>
                 [
                     'minAllowed' => 0.5,
-                    'maxAllowed' => 5,
-                    'qtyIncrements' => 3
+                    'maxAllowed' => 5.0,
+                    'qtyIncrements' => 3.0
                 ]
         ];
         $validators = [];
