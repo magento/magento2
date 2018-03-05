@@ -122,13 +122,21 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             if (!$this->_checkoutSession->getNoCartRedirect(true)) {
                 if (!$this->cart->getQuote()->getHasError()) {
-                    $this->messageManager->addComplexSuccessMessage(
-                        'addCartSuccessMessage',
-                        [
-                            'product_name' => $product->getName(),
-                            'cart_url' => $this->getCartUrl(),
-                        ]
-                    );
+                    if ($this->shouldRedirectToCart()) {
+                        $message = __(
+                            'You added %1 to your shopping cart.',
+                            $product->getName()
+                        );
+                        $this->messageManager->addSuccessMessage($message);
+                    } else {
+                        $this->messageManager->addComplexSuccessMessage(
+                            'addCartSuccessMessage',
+                            [
+                                'product_name' => $product->getName(),
+                                'cart_url' => $this->getCartUrl(),
+                            ]
+                        );
+                    }
                 }
                 return $this->goBack(null, $product);
             }
