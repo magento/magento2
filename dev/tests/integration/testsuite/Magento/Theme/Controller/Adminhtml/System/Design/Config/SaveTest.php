@@ -67,7 +67,7 @@ class SaveTest extends AbstractBackendController
             'header_logo_height' => '',
             'header_logo_alt' => '',
             'header_welcome' => 'Default welcome msg!',
-            'footer_copyright' => 'Copyright © 2013-2018 Magento, Inc. All rights reserved.',
+            'footer_copyright' => 'Copyright © 2013-present Magento, Inc. All rights reserved.',
             'footer_absolute_footer' => '',
             'default_robots' => 'INDEX,FOLLOW',
             'custom_instructions' => '',

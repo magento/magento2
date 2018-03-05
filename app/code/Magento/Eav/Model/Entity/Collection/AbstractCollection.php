@@ -803,7 +803,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     {
         $tableAlias = null;
         if (is_array($table)) {
-            list($tableAlias, $tableName) = each($table);
+            list($tableAlias, $tableName) = [key($table), current($table)];
         } else {
             $tableName = $table;
         }

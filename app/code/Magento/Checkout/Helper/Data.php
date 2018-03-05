@@ -20,6 +20,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_GUEST_CHECKOUT = 'checkout/options/guest_checkout';
 
+    /**
+     * @deprecated
+     */
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
     /**
@@ -393,6 +396,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return boolean
      * @codeCoverageIgnore
+     * @deprecated
      */
     public function isCustomerMustBeLogged()
     {

@@ -104,8 +104,8 @@ define([
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', $.proxy(function () {
-                this._onSubmit();
+            this.searchForm.on('submit', $.proxy(function (e) {
+                this._onSubmit(e);
                 this._updateAriaHasPopup(false);
             }, this));
         },
