@@ -221,7 +221,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->setLastname('Doe')
             ->setTelephone('123456')
             ->setPostcode('12345')
-            ->setCountryId(1)
+            ->setCountryId('US')
             ->setCity($city)
             ->setStreet([$street]);
         $addressData = $addressRepository->save($addressData);

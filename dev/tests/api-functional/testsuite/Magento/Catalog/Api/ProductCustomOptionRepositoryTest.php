@@ -426,7 +426,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             ],
         ];
 
+
         $this->setExpectedException('Exception', $message, $exceptionCode);
+
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

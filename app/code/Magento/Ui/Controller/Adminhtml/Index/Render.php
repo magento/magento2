@@ -37,6 +37,11 @@ class Render extends AbstractAction
         }
 
         $this->prepareComponent($component);
+
+        if ($component->getContext()->getAcceptType() === 'json') {
+            $this->_response->setHeader('Content-Type', 'application/json');
+        }
+
         $this->_response->appendBody((string) $component->render());
     }
 
