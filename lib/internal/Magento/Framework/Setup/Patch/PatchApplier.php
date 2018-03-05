@@ -10,8 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Exception;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Apply patches per specific module
@@ -263,11 +263,11 @@ class PatchApplier
             );
             if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
-                    $adapter->beginTransaction();
+                    //$adapter->beginTransaction();
                     /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
                     $dataPatch->revert();
                     $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
-                    $adapter->commit();
+                    //$adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
                     throw new Exception(new Phrase($e->getMessage()));
