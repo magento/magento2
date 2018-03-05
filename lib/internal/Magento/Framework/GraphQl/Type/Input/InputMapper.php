@@ -47,24 +47,36 @@ class InputMapper
     }
 
     /**
+     * Determine an arguments type and structure for schema generation.
+     *
      * @param Argument $argument
-     * @return InputType
+     * @return array
      */
-    public function getRepresentation(Argument $argument) : InputType
+    public function getRepresentation(Argument $argument) : array
     {
         $type = $argument->isList() ? $argument->getItemType() : $argument->getType();
         $instance = $this->typeFactory->createScalar($type);
+        $calculateDefault = true;
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
+            $calculateDefault = false;
         }
+
         if ($argument->isList()) {
             $instance = $argument->areItemsRequired() ? $this->typeFactory->createNonNull($instance) : $instance;
             $instance = $this->typeFactory->createList($instance);
         }
-        $instance = $argument->isRequired() ? $this->typeFactory->createNonNull($instance) : $instance;
+        $calculatedArgument = [
+            'type' => $argument->isRequired() ? $this->typeFactory->createNonNull($instance) : $instance,
+            'description' => $argument->getDescription()
+        ];
 
-        return $instance;
+        if ($calculateDefault && $argument->getDefault() !== null) {
+            $calculatedArgument['defaultValue'] = $this->calculateDefaultValue($argument);
+        }
+
+        return $calculatedArgument;
     }
 
     public function getFieldRepresentation(string $type) : InputType
@@ -75,5 +87,19 @@ class InputMapper
             $instance = $this->inputFactory->create($configElement);
         }
         return $instance;
+    }
+
+    private function calculateDefaultValue(Argument $argument)
+    {
+        switch ($argument->getType()) {
+            case 'Int':
+                return (int)$argument->getDefault();
+            case 'Float':
+                return (float)$argument->getDefault();
+            case 'Boolean':
+                return (bool)$argument->getDefault();
+            default:
+                return $argument->getDefault();
+        }
     }
 }

@@ -48,7 +48,7 @@ class DataFactory
                 'name' => $fieldData['name'],
                 'type' => $fieldData['type'],
                 'required' => isset($fieldData['required']) ? $fieldData['required'] : false,
-                'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : "",
+                'isList' => isset($fieldData['itemType']),
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : "",
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : "",
                 'arguments' => $arguments
@@ -72,12 +72,13 @@ class DataFactory
             Argument::class,
             [
                 'name' => $argumentData['name'],
-                'type' => $argumentData['type'],
+                'type' => isset($argumentData['itemType']) ? $argumentData['itemType'] : $argumentData['type'],
                 'baseType' => isset($argumentData['baseType']) ? $argumentData['baseType'] : "",
-                'itemType' => isset($argumentData['itemType']) ? $argumentData['itemType'] : "",
                 'description' => isset($argumentData['description']) ? $argumentData['description'] : "",
                 'required' => isset($argumentData['required']) ? $argumentData['required'] : false,
-                'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false
+                'isList' => isset($argumentData['itemType']),
+                'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false,
+                'default' => isset($argumentData['default']) ? $argumentData['default'] : null
             ]
         );
     }

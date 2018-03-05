@@ -26,17 +26,12 @@ class Argument
     /**
      * @var string
      */
-    private $baseType;
-
-    /**
-     * @var string
-     */
-    private $itemType;
-
-    /**
-     * @var string
-     */
     private $description;
+
+    /**
+     * @var string
+     */
+    private $baseType;
 
     /**
      * @var bool
@@ -46,33 +41,46 @@ class Argument
     /**
      * @var bool
      */
+    private $isList;
+
+    /**
+     * @var bool
+     */
     private $itemsRequired;
+
+    /**
+     * @var string|null
+     */
+    private $default;
 
     /**
      * @param string $name
      * @param string $type
      * @param string $baseType
-     * @param string $itemType
      * @param string $description
      * @param bool $required
+     * @param bool $isList
      * @param bool $itemsRequired
+     * @param string $default
      */
     public function __construct(
         string $name,
         string $type,
         string $baseType,
-        string $itemType,
         string $description,
         bool $required,
-        bool $itemsRequired = false
+        bool $isList,
+        bool $itemsRequired = false,
+        string $default = null
     ) {
         $this->name = $name;
         $this->type = $type;
         $this->baseType = $baseType;
-        $this->itemType = $itemType;
         $this->description = $description;
         $this->required = $required;
+        $this->isList = $isList;
         $this->itemsRequired = $itemsRequired;
+        $this->default = $default;
     }
 
     /**
@@ -122,7 +130,7 @@ class Argument
      */
     public function isList() : bool
     {
-        return !empty($this->itemType);
+        return $this->isList;
     }
 
     /**
@@ -153,5 +161,15 @@ class Argument
     public function getDescription() : string
     {
         return $this->description;
+    }
+
+    /**
+     * Return default if argument is a scalar and has a configured default. Otherwise return an empty string.
+     *
+     * @return string|null
+     */
+    public function getDefault() //: ?string
+    {
+        return $this->default;
     }
 }
