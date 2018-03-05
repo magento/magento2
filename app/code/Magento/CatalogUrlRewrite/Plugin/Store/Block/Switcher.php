@@ -12,8 +12,8 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Plug makes connection between Store and UrlRewrite
- * because Magento\Store\Block\Switcher does not know anything about url rewrites
+ * Plugin makes connection between Store and UrlRewrite modules
+ * because Magento\Store\Block\Switcher should not know about UrlRewrite module functionality
  */
 class Switcher
 {
