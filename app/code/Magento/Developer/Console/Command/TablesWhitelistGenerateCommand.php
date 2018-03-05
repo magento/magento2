@@ -8,8 +8,9 @@ namespace Magento\Developer\Console\Command;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Setup\Declaration\Schema\Diff\Diff;
 use Magento\Framework\Setup\JsonPersistor;
-use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -103,7 +104,7 @@ class TablesWhitelistGenerateCommand extends Command
             . DIRECTORY_SEPARATOR
             . Dir::MODULE_ETC_DIR
             . DIRECTORY_SEPARATOR
-            . self::GENERATED_FILE_NAME;
+            . Diff::GENERATED_WHITELIST_FILE_NAME;
         //We need to load whitelist file and update it with new revision of code.
         if (file_exists($whiteListFileName)) {
             $content = json_decode(file_get_contents($whiteListFileName), true);

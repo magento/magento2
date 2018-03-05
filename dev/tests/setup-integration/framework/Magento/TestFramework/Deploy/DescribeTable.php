@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Deploy;
 
-use Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader;
+use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader;
 
 /**
  * The purpose of this class is adding test modules files to Magento code base.
