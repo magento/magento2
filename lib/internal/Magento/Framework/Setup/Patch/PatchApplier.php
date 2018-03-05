@@ -169,10 +169,8 @@ class PatchApplier
                 $this->patchHistory->fixPatch(get_class($dataPatch));
             } else {
                 try {
-                    $this->moduleDataSetup->getConnection()->beginTransaction();
                     $dataPatch->apply();
                     $this->patchHistory->fixPatch(get_class($dataPatch));
-                    $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
                     throw new Exception(new Phrase($e->getMessage()));
@@ -263,11 +261,9 @@ class PatchApplier
             );
             if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
-                    //$adapter->beginTransaction();
                     /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
                     $dataPatch->revert();
                     $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
-                    //$adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
                     throw new Exception(new Phrase($e->getMessage()));
