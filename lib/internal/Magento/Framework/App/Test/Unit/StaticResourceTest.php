@@ -284,4 +284,25 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('sendResponse');
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue(State::MODE_DEVELOPER));
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->will(
+                $this->returnValue(
+                    'frontend/..\..\folder_above'
+                    . '/././Magento_Ui/template/messages.html'
+                )
+            );
+
+        $this->object->launch();
+    }
 }
