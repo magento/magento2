@@ -13,7 +13,6 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.3
  */
@@ -94,13 +93,6 @@ class DataProvider
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $connection;
-
-    /**
-     * Attribute values cache
-     *
-     * @var array
-     */
-    private $attributeValueCache = [];
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
@@ -327,11 +319,11 @@ class DataProvider
 
             $entity = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
 
-            foreach ($attributes as $attribute) {
+            foreach ($attributes as $attributeId => $attribute) {
                 $attribute->setEntity($entity);
+                $this->searchableAttributes[$attribute->getAttributeId()] = $attribute;
+                $this->searchableAttributes[$attribute->getAttributeCode()] = $attribute;
             }
-
-            $this->searchableAttributes = $attributes;
         }
 
         if ($backendType !== null) {
@@ -339,9 +331,9 @@ class DataProvider
                 return $this->searchableAttributesByBackendType[$backendType];
             }
             $this->searchableAttributesByBackendType[$backendType] = [];
-            foreach ($this->searchableAttributes as $attributeId => $attribute) {
+            foreach ($this->searchableAttributes as $attribute) {
                 if ($attribute->getBackendType() == $backendType) {
-                    $this->searchableAttributesByBackendType[$backendType][$attributeId] = $attribute;
+                    $this->searchableAttributesByBackendType[$backendType][$attribute->getAttributeId()] = $attribute;
                 }
             }
 
@@ -361,16 +353,8 @@ class DataProvider
     public function getSearchableAttribute($attribute)
     {
         $attributes = $this->getSearchableAttributes();
-        if (is_numeric($attribute)) {
-            if (isset($attributes[$attribute])) {
-                return $attributes[$attribute];
-            }
-        } elseif (is_string($attribute)) {
-            foreach ($attributes as $attributeModel) {
-                if ($attributeModel->getAttributeCode() == $attribute) {
-                    return $attributeModel;
-                }
-            }
+        if (isset($attributes[$attribute])) {
+            return $attributes[$attribute];
         }
 
         return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
@@ -612,23 +596,18 @@ class DataProvider
      */
     private function getAttributeValue($attributeId, $valueId, $storeId)
     {
-        $valueHash = $attributeId . '-' . $valueId . '-' . $storeId;
-        if (!array_key_exists($valueHash, $this->attributeValueCache)) {
-            $attribute = $this->getSearchableAttribute($attributeId);
-            $value = $this->engine->processAttributeValue($attribute, $valueId);
-            if (false !== $value) {
-                $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
-                $value = null !== $optionValue
-                    ? implode($this->separator, array_filter([$value, $optionValue]))
-                    : $value;
+        $attribute = $this->getSearchableAttribute($attributeId);
+        $value = $this->engine->processAttributeValue($attribute, $valueId);
+        if (false !== $value) {
+            $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
+            if (null === $optionValue) {
+                $value = preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+            } else {
+                $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
-
-            $value = false !== $value ? preg_replace('/\s+/iu', ' ', trim(strip_tags($value))) : false;
-
-            $this->attributeValueCache[$valueHash] = $value;
         }
 
-        return $this->attributeValueCache[$valueHash];
+        return $value;
     }
 
     /**

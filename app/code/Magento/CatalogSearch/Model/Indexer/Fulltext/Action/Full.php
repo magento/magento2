@@ -436,8 +436,7 @@ class Full
     {
         $status = $this->dataProvider->getSearchableAttribute('status');
         $allowedStatuses = $this->catalogProductStatus->getVisibleStatusIds();
-        return isset($productsAttributes[$productId]) &&
-            isset($productsAttributes[$productId][$status->getId()]) &&
+        return isset($productsAttributes[$productId][$status->getId()]) &&
             in_array($productsAttributes[$productId][$status->getId()], $allowedStatuses);
     }
 
