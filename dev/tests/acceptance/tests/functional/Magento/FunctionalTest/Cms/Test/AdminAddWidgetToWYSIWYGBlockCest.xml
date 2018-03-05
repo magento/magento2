@@ -66,6 +66,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6" />
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
