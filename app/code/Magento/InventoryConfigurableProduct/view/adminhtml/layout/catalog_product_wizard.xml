@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
    <referenceBlock name="step3">
       <action method="setTemplate">
          <argument name="template" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml</argument>
@@ -16,4 +16,4 @@
          <argument name="template" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml</argument>
       </action>
    </referenceBlock>
-</layout>
+</page>

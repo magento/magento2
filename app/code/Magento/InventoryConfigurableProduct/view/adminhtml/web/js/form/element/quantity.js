@@ -35,8 +35,8 @@ define([
         },
 
         updateItems: function (data) {
-            this.isFullList(data.length > this.itemsToDisplat);
-            this.isFullList() ?  this.items(data) : this.items(data.slice(0, this.itemsToDisplay));
+            this.isFullList(data.length > this.itemsToDisplay);
+            this.isFullList() ? this.items(data.slice(0, this.itemsToDisplay)) : this.items(data);
         }
     });
 });

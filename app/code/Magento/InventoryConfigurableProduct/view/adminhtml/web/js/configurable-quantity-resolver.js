@@ -59,7 +59,7 @@ define([
                 items.push({
                     'source': item.name,
                     'source_code': item[this.identifier]
-                })
+                });
             }.bind(this));
 
             return items;
@@ -97,7 +97,7 @@ define([
                 this.destroyChildren();
 
                 _.each(data.chosen, function (item) {
-                    this.addChild(item)
+                    this.addChild(item);
                 }.bind(this));
             }
         },
@@ -167,7 +167,7 @@ define([
          */
         handleToggleSourcesModal: function (id) {
             this.currentDynamicRows = this.type === 'each' ? this.currentAttribute.code + '.' + id : id;
-            this.insertListing().value(this.source.get(this.dynamicRowsName + '.' + this.currentDynamicRows))
+            this.insertListing().value(this.source.get(this.dynamicRowsName + '.' + this.currentDynamicRows));
         },
 
         /**
@@ -189,7 +189,7 @@ define([
 
             drDataScope += key;
             drExportTo += key;
-            drDataProvider +=key;
+            drDataProvider += key;
 
             return {
                 group: {
@@ -217,7 +217,6 @@ define([
                 dynamicRows = template[this.templateElementNames.dynamicRows],
                 button = template[this.templateElementNames.button],
                 group = template[this.templateElementNames.group],
-                key = data ? data.label : this.dynamicRowsName,
                 dynamicData = this.generateDynamicData(data);
 
             group.dynamicData = dynamicData.group;

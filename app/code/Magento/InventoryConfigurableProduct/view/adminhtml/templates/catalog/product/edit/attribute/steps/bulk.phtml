@@ -802,7 +802,7 @@
                 "quantity_resolver": {
                     "component": "Magento_InventoryConfigurableProduct/js/configurable-quantity-resolver",
                     "name": "quantity_resolver",
-                    "childTemplate": <?= $block->getJsonConfig() ?>,
+                    "childTemplate": <?= /* @noEscape */ $block->getJsonConfig() ?>,
                     "provider": "product_form.product_form_data_source",
                     "insertListingComponent": "product_form.product_form.assign_sources_configurable_modal.assign_sources_configurable_grid",
                     "imports": {

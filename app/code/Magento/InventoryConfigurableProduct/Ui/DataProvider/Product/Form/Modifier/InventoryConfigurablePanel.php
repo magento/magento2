@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
@@ -10,8 +12,7 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Configurab
 use Magento\Ui\Component\Form;
 
 /**
- * Data provider for Configurable panel
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Data provider for Configurable panel.
  */
 class InventoryConfigurablePanel extends AbstractModifier
 {
@@ -19,7 +20,7 @@ class InventoryConfigurablePanel extends AbstractModifier
     const QUANTITY_CONTAINER = 'quantity_container';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -31,7 +32,7 @@ class InventoryConfigurablePanel extends AbstractModifier
      *
      * @return array
      */
-    private function getQuantityContainerConfig()
+    private function getQuantityContainerConfig(): array
     {
         return [
             'arguments' => [
@@ -50,8 +51,7 @@ class InventoryConfigurablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

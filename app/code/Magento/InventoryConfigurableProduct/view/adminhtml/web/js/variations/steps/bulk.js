@@ -5,8 +5,9 @@
 
 define([
     'Magento_ConfigurableProduct/js/variations/steps/bulk',
-    'jquery'
-], function (Bulk, $) {
+    'jquery',
+    'underscore'
+], function (Bulk, $, _) {
     'use strict';
 
     return Bulk.extend({
@@ -73,15 +74,14 @@ define([
          * Prepares dynamic rows data for the next step
          */
         prepareDynamicRowsData: function () {
-            var result = [],
-                data,
+            var data,
                 module = this.quantityResolver();
 
             if (this.type() === 'each') {
                 data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
-                    item.sections()['quantity'] = data[item.label]
+                    item.sections()['quantity'] = data[item.label];
                 });
             } else if (this.type() === 'single') {
                 data = module.dynamicRowsCollection[module.dynamicRowsName];
@@ -101,8 +101,8 @@ define([
 
                 quantity.elems().forEach(function (item) {
                     quantity.validate.call(quantity, item);
-                    valid = valid && item.elems()[1].elems().length
-                }.bind(this));
+                    valid = valid && item.elems()[1].elems().length;
+                });
 
                 if (!quantity.valid || !valid) {
                     throw new Error($.mage.__('Please fill-in correct values.'));
