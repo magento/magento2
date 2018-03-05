@@ -6,7 +6,7 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\ModuleUninstaller;
-use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplier;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

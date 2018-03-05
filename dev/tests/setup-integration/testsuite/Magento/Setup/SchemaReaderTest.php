@@ -6,7 +6,7 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -17,7 +17,7 @@ use Magento\TestFramework\TestCase\SetupTestCase;
 class SchemaReaderTest extends SetupTestCase
 {
     /**
-     * @var  \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
+     * @var  \Magento\Framework\Setup\Declaration\Schema\FileSystem\XmlReader
      */
     private $reader;
 

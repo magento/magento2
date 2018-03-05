@@ -5,6 +5,10 @@
  */
 namespace Magento\TestFramework\Deploy;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleListInterface;
+
 /**
  * The purpose of this class is adding test modules files to Magento code base.
  */
@@ -128,6 +132,21 @@ class TestModuleManager
         if (is_dir($folder)) {
             \Magento\Framework\Filesystem\Io\File::rmdirRecursive($folder);
         }
+    }
+
+    /**
+     * There can be situation when config version of module can be cached
+     * So proposed to clean shared instance of
+     * @see ModuleList in order to achieve clean installation
+     */
+    public function cleanModuleList()
+    {
+        /**
+         * @var \Magento\TestFramework\ObjectManager $objectManager
+         */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->removeSharedInstance(ModuleList::class);
+        $objectManager->removeSharedInstance(ModuleListInterface::class);
     }
 
     /**
