@@ -99,7 +99,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->connection->delete(
             $this->activeTableSwitcher
                 ->getAdditionalTableName($this->getMainTable())
- 	 	);
+        );
     }
 
     /**
