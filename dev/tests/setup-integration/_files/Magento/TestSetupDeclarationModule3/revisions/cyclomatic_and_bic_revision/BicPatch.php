@@ -6,9 +6,9 @@
 namespace Magento\TestSetupDeclarationModule3\Setup\Patch\Data;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchRevertableInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchRevertableInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * @package Magento\TestSetupDeclarationModule3\Setup
