@@ -13,6 +13,8 @@
             <features value="End to End scenarios"/>
             <stories value="B2C logged in user - MAGETWO-72524"/>
             <group value="e2e"/>
+            <!--Skipped; see: MAGETWO-88777-->
+            <group value="skip"/>
             <title value="You should be able to pass End to End B2C Logged In User scenario"/>
             <description value="New user signup and browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
             <severity value="CRITICAL"/>
