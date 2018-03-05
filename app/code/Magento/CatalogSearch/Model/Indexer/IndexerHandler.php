@@ -75,7 +75,7 @@ class IndexerHandler implements IndexerInterface
         Batch $batch,
         IndexScopeResolverInterface $indexScopeResolver,
         array $data,
-        $batchSize = 100
+        $batchSize = 500
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;
