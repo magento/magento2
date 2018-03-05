@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="report_compared_product_index" resource="default" engine="innodb"
            comment="Reports Compared Product Index Table">
         <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"

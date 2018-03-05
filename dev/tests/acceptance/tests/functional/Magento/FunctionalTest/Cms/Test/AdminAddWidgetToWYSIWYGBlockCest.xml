@@ -16,7 +16,6 @@
             <description value="Admin should be able to add widget to WYSIWYG content Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84654"/>
-            <group value="skip" />
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
@@ -47,6 +46,8 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForGridReload"/>
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
@@ -80,6 +81,10 @@
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

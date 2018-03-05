@@ -78,7 +78,7 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
-        <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter1" visible="true"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter1" visible="true"/>
         <waitForPageLoad stepKey="waitForFilterReload"/>
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
@@ -128,6 +128,10 @@
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <after>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

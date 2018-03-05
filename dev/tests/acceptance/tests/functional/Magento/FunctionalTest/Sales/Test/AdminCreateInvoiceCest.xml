@@ -36,8 +36,8 @@
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickCart"/>
-        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
