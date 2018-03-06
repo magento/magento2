@@ -6,6 +6,9 @@
 
 namespace Magento\SalesRule\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RulesApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
