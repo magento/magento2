@@ -152,7 +152,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Filename has not permitted symbols in it
      * @param string $fileName
-     * return void
+     * @return void
      */
     public function testImportFileExistsException($fileName)
     {
