@@ -27,9 +27,12 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             '',
             [
                 'data' => [
-                    'schema_types' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        \Magento\Swagger\Api\Block\SchemaTypesInterface::class
-                    )
+                    'schema_types' => [
+                        'rest' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                            \Magento\SwaggerWebapi\Model\SchemaType\Rest::class
+                        )
+                    ],
+                    'default_schema_type_code' => 'rest'
                 ]
             ]
         );

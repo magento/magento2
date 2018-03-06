@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Swagger\Api;
+namespace Magento\Swagger\Api\Data;
+
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Swagger Schema Type.
  *
  * @api
  */
-interface SchemaTypeInterface
+interface SchemaTypeInterface extends ArgumentInterface
 {
     /**
      * Retrieve the available types of Swagger schema.

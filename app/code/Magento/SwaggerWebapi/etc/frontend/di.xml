@@ -12,12 +12,4 @@
             <argument name="code" xsi:type="string">rest</argument>
         </arguments>
     </type>
-
-    <type name="Magento\Swagger\Block\SchemaTypes">
-        <arguments>
-            <argument name="types" xsi:type="array">
-                <item name="rest" xsi:type="object">Magento\SwaggerWebapi\Model\SchemaType\Rest</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

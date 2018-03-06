@@ -5,15 +5,18 @@
  */
 namespace Magento\Swagger\Block;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template;
-use Magento\Swagger\Api\SchemaTypeInterface;
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
 
 /**
  * Block for swagger index page
  *
  * @api
  *
- * @method \Magento\Swagger\Api\Block\SchemaTypesInterface getSchemaTypes()
+ * @method SchemaTypeInterface[] getSchemaTypes()
+ * @method bool hasSchemaTypes()
+ * @method string getDefaultSchemaTypeCode()
  */
 class Index extends Template
 {
@@ -26,30 +29,38 @@ class Index extends Template
     }
 
     /**
-     * @return SchemaTypeInterface
+     * @return SchemaTypeInterface|null
      */
-    private function getParamSchemaType()
+    private function getSchemaType()
     {
-        $schemaTypeCode = $this->getRequest()->getParam(
-            'type',
-            $this->getSchemaTypes()->getDefault()->getCode()
-        );
-
-        foreach ($this->getSchemaTypes()->getTypes() as $schemaType) {
-            if ($schemaTypeCode === $schemaType->getCode()) {
-                return $schemaType;
-            }
+        if (!$this->hasSchemaTypes()) {
+            return null;
         }
 
-        return $this->getSchemaTypes()->getDefault();
+        $schemaTypeCode = $this->getRequest()->getParam(
+            'type',
+            $this->getDefaultSchemaTypeCode()
+        );
+
+        if (!array_key_exists($schemaTypeCode, $this->getSchemaTypes())) {
+            throw new \UnexpectedValueException(
+                new Phrase('Unknown schema type supplied')
+            );
+        }
+
+        return $this->getSchemaTypes()[$schemaTypeCode];
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSchemaUrl()
     {
+        if ($this->getSchemaType() === null) {
+            return null;
+        }
+
         return rtrim($this->getBaseUrl(), '/') .
-            $this->getParamSchemaType()->getSchemaUrlPath($this->getParamStore());
+            $this->getSchemaType()->getSchemaUrlPath($this->getParamStore());
     }
 }

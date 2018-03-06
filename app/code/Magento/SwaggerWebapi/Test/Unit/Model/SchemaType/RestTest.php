@@ -6,7 +6,7 @@
 
 namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
-use Magento\Swagger\Api\SchemaTypeInterface;
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapi\Model\SchemaType\Rest;
 
 class RestTest extends \PHPUnit\Framework\TestCase

@@ -5,7 +5,7 @@
  */
 namespace Magento\SwaggerWebapi\Model\SchemaType;
 
-use Magento\Swagger\Api\SchemaTypeInterface;
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
 
 /**
  * Rest swagger schema type.

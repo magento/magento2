@@ -6,10 +6,11 @@
     },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "100.3.*"
+        "magento/framework": "100.3.*",
+        "magento/module-webapi": "100.3.*",
     },
     "type": "magento2-module",
-    "version": "100.3.0-dev",
+    "version": "100.0.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -19,7 +20,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Swagger\\": ""
+            "Magento\\SwaggerWebapi\\": ""
         }
     }
 }

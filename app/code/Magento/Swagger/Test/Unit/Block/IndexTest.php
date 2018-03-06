@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Swagger\Api\SchemaTypeInterface;
 use Magento\Swagger\Block\Index;
 use Magento\Swagger\Block\SchemaTypes;
+use Magento\SwaggerWebapi\Model\SchemaType\Rest;
 
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,12 +49,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                     ]
                 ),
                 'data' => [
-                    'schema_types' => (new ObjectManager($this))->getObject(
-                        SchemaTypes::class,
-                        [
-                            'types' => [$this->schemaTypeMock]
-                        ]
-                    )
+                    'schema_types' => [
+                        'rest' => (new ObjectManager($this))->getObject(Rest::class)
+                    ]
                 ]
             ]
         );
@@ -81,7 +79,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that the passed URL parameter is not used when it is not a valid schema type.
+     * Test that Swagger UI throws an exception if an invalid schema type is supplied.
      *
      * @covers \Magento\Swagger\Block\Index::getSchemaUrl()
      */
@@ -94,10 +92,8 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->schemaTypeMock->expects($this->any())
             ->method('getCode')->willReturn('test');
 
-        $this->schemaTypeMock->expects($this->once())
-            ->method('getSchemaUrlPath')
-            ->willReturn('/test');
+        $this->expectException(\UnexpectedValueException::class);
 
-        $this->assertEquals('/test', $this->index->getSchemaUrl());
+        $this->index->getSchemaUrl();
     }
 }
