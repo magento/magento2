@@ -309,6 +309,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      * Make sure requirements of components are reflected in root composer.json
      *
      * @param \StdClass $json
+     * @return void
      */
     private function assertRequireInSync(\StdClass $json)
     {
@@ -324,8 +325,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      * Check if package is reflected in root composer.json
      *
      * @param \StdClass $json
+     * @return void
      */
-    private function checkPackageInRootComposer(\StdClass $json): void
+    private function checkPackageInRootComposer(\StdClass $json)
     {
         $name = $json->name;
         $errors = [];
