@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Block\Address\Renderer;
 
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\ElementFactory;
