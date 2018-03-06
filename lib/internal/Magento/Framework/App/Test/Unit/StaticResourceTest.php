@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+ * Test for Magento\Framework\App\StaticResource class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StaticResourceTest extends \PHPUnit\Framework\TestCase
@@ -259,6 +261,21 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
+        $this->object->launch();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willreturn(State::MODE_DEVELOPER);
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
         $this->object->launch();
     }
 
