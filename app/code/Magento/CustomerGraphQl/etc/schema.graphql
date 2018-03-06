@@ -46,8 +46,3 @@ type CustomerAddress {
     default_billing: Boolean
 }
 
-type CustomerAddressRegion {
-    region_code: String
-    region: String
-    region_id: Int
-}

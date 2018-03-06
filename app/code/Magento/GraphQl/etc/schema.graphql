@@ -1,3 +1,9 @@
+type CustomerAddressRegion {
+    region_code: String
+    region: String
+    region_id: Int
+}
+
 type Attribute {
     attribute_code: String
     entity_type: String
@@ -84,7 +90,6 @@ type BundleProduct implements ProductInterface, PhysicalProductInterface, Custom
     tax_class_id: Int
     weight: Float
     options: [CustomizableOptionInterface]
-    color: Int
     manufacturer: Int
 }
 
@@ -137,7 +142,6 @@ type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, 
     tax_class_id: Int
     weight: Float
     options: [CustomizableOptionInterface]
-    color: Int
     manufacturer: Int
 }
 
@@ -491,7 +495,6 @@ type DownloadableProduct implements ProductInterface, CustomizableProductInterfa
     swatch_image: String
     tax_class_id: Int
     options: [CustomizableOptionInterface]
-    color: Int
     manufacturer: Int
 }
 
@@ -588,7 +591,6 @@ type GroupedProduct implements ProductInterface, PhysicalProductInterface {
     swatch_image: String
     tax_class_id: Int
     weight: Float
-    color: Int
     manufacturer: Int
 }
 
@@ -677,7 +679,6 @@ input ProductFilterInput {
     small_image: FilterTypeInput
     thumbnail: FilterTypeInput
     tier_price: FilterTypeInput
-    color: FilterTypeInput
     news_from_date: FilterTypeInput
     news_to_date: FilterTypeInput
     custom_design: FilterTypeInput
@@ -807,7 +808,6 @@ input ProductSortInput {
     small_image: SortEnum
     thumbnail: SortEnum
     tier_price: SortEnum
-    color: SortEnum
     news_from_date: SortEnum
     news_to_date: SortEnum
     custom_design: SortEnum
@@ -908,7 +908,6 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
     tax_class_id: Int
     weight: Float
     options: [CustomizableOptionInterface]
-    color: Int
     manufacturer: Int
 }
 
@@ -969,6 +968,5 @@ type VirtualProduct implements ProductInterface, CustomizableProductInterface {
     swatch_image: String
     tax_class_id: Int
     options: [CustomizableOptionInterface]
-    color: Int
     manufacturer: Int
 }

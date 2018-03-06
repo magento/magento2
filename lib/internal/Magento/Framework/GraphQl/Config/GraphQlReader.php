@@ -44,7 +44,17 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
             return $result;
         }
 
-        foreach ($schemaFiles as $schemaContent) {
+        /**
+         * Compatible with @see \Magento\Framework\GraphQl\Config\GraphQlReader::parseTypes
+         */
+        $knownTypes = [];
+        foreach ($schemaFiles as $partialSchemaContent) {
+            $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
+            /**
+             * Keep declarations from current partial schema, add missing declarations from all previously read schemas
+             */
+            $knownTypes = $partialSchemaTypes + $knownTypes;
+            $schemaContent = implode("\n", $knownTypes);
             $partialResult = [];
             $schema = \GraphQL\Utils\BuildSchema::build($schemaContent);
             $typeMap = $schema->getTypeMap();
@@ -295,5 +305,28 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
             }
         }
         return null;
+    }
+
+    /**
+     * @param string $graphQlSchemaContent
+     * @return array [$typeName => $typeDeclaration, ...]
+     */
+    private function parseTypes($graphQlSchemaContent)
+    {
+        $typeKindsPattern = '(type|interface|union|enum|input)';
+        $typeNamePattern = '[_A-Za-z][_0-9A-Za-z]*';
+        $typeDefinitionPattern = '.*\{[^\}]*\}';
+        $spacePattern = '[\s\t\n\r]*';
+        preg_match_all(
+            "/{$typeKindsPattern}{$spacePattern}({$typeNamePattern}){$spacePattern}{$typeDefinitionPattern}/i",
+            $graphQlSchemaContent,
+            $matches
+        );
+        /**
+         * $matches[0] is an indexed array with the whole type definitions
+         * $matches[2] is an indexed array with type names
+         */
+        $parsedTypes = array_combine($matches[2], $matches[0]);
+        return $parsedTypes;
     }
 }
