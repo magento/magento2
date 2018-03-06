@@ -177,7 +177,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'fileName' => 'some_folder\..\another_folder',
-            ]
+            ],
         ];
     }
 
