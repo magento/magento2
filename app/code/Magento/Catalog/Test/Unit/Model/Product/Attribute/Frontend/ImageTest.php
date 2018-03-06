@@ -3,71 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Frontend;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Attribute\Frontend\Image;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
 
-class ImageTest extends TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Image
+     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Image
      */
     private $model;
 
-    /**
-     * @dataProvider getUrlDataProvider
-     * @param string $expectedImage
-     * @param string $productImage
-     */
-    public function testGetUrl(string $expectedImage, string $productImage)
+    public function testGetUrl()
     {
-        $this->assertEquals($expectedImage, $this->model->getUrl($this->getMockedProduct($productImage)));
-    }
-
-    /**
-     * Data provider for testGetUrl
-     *
-     * @return array
-     */
-    public function getUrlDataProvider(): array
-    {
-        return [
-            ['catalog/product/img.jpg', 'img.jpg'],
-            ['catalog/product/img.jpg', '/img.jpg'],
-        ];
+        $this->assertEquals('catalog/product/img.jpg', $this->model->getUrl($this->getMockedProduct()));
     }
 
     protected function setUp()
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            Image::class,
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Image::class,
             ['storeManager' => $this->getMockedStoreManager()]
         );
         $this->model->setAttribute($this->getMockedAttribute());
     }
 
     /**
-     * @param string $productImage
-     * @return Product
+     * @return \Magento\Catalog\Model\Product
      */
-    private function getMockedProduct(string $productImage): Product
+    private function getMockedProduct()
     {
-        $mockBuilder = $this->getMockBuilder(Product::class);
+        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product::class);
         $mock = $mockBuilder->setMethods(['getData', 'getStore', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $mock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($productImage));
+            ->will($this->returnValue('img.jpg'));
 
         $mock->expects($this->any())
             ->method('getStore');
@@ -76,13 +50,13 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @return StoreManagerInterface
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
-    private function getMockedStoreManager(): StoreManagerInterface
+    private function getMockedStoreManager()
     {
         $mockedStore = $this->getMockedStore();
 
-        $mockBuilder = $this->getMockBuilder(StoreManagerInterface::class);
+        $mockBuilder = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class);
         $mock = $mockBuilder->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -95,11 +69,11 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @return Store
+     * @return \Magento\Store\Model\Store
      */
-    private function getMockedStore(): Store
+    private function getMockedStore()
     {
-        $mockBuilder = $this->getMockBuilder(Store::class);
+        $mockBuilder = $this->getMockBuilder(\Magento\Store\Model\Store::class);
         $mock = $mockBuilder->setMethods(['getBaseUrl', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -112,11 +86,11 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @return AbstractAttribute
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
-    private function getMockedAttribute(): AbstractAttribute
+    private function getMockedAttribute()
     {
-        $mockBuilder = $this->getMockBuilder(AbstractAttribute::class);
+        $mockBuilder = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
         $mockBuilder->setMethods(['getAttributeCode', '__wakeup']);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();

@@ -349,7 +349,9 @@ class Rule extends AbstractResource
                     }
                 }
             }
-            $connection->insertMultiple($this->getTable('salesrule_product_attribute'), $data);
+            if ($data) {
+                $connection->insertMultiple($this->getTable('salesrule_product_attribute'), $data);
+            }
         }
 
         return $this;
