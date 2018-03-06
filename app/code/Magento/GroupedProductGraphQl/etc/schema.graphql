@@ -1,0 +1,51 @@
+type GroupedProduct implements ProductInterface, PhysicalProductInterface {
+    items: [GroupedProductItem]
+    id: Int
+    name: String
+    sku: String
+    description: String
+    short_description: String
+    special_price: Float
+    special_from_date: String
+    special_to_date: String
+    attribute_set_id: Int
+    meta_title: String
+    meta_keyword: String
+    meta_description: String
+    image: String
+    small_image: String
+    thumbnail: String
+    new_from_date: String
+    new_to_date: String
+    tier_price: Float
+    custom_design: String
+    custom_design_from: String
+    custom_design_to: String
+    custom_layout_update: String
+    custom_layout: String
+    page_layout: String
+    category_ids: [Int]
+    options_container: String
+    image_label: String
+    small_image_label: String
+    thumbnail_label: String
+    created_at: String
+    updated_at: String
+    country_of_manufacture: String
+    type_id: String
+    website_ids: [Int]
+    category_links: [ProductCategoryLinks]
+    product_links: [ProductLinksInterface]
+    media_gallery_entries: [MediaGalleryEntry]
+    tier_prices: [ProductTierPrices]
+    price: ProductPrices
+    gift_message_available: String
+    weight: Float
+    manufacturer: Int
+}
+
+type GroupedProductItem {
+    qty: Float
+    position: Int
+    product: ProductInterface
+}

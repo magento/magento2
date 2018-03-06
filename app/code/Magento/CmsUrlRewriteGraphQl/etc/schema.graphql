@@ -1,0 +1,3 @@
+enum UrlRewriteEntityTypeEnum {
+    CMS_PAGE
+}

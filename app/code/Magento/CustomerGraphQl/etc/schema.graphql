@@ -2,10 +2,6 @@ type Query {
     customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer")
 }
 
-type Products {
-    testCustomizationFromCustomerConfig: String
-}
-
 type Customer {
     created_at: String
     group_id: Int
@@ -44,5 +40,11 @@ type CustomerAddress {
     vat_id: String
     default_shipping: Boolean
     default_billing: Boolean
+}
+
+type CustomerAddressRegion {
+    region_code: String
+    region: String
+    region_id: Int
 }
 

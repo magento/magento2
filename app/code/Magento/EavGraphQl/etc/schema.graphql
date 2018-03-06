@@ -1,0 +1,18 @@
+type Query {
+    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
+}
+
+type CustomAttributeMetadata {
+    items: [Attribute]
+}
+
+type Attribute {
+    attribute_code: String
+    entity_type: String
+    attribute_type: String
+}
+
+input AttributeInput {
+    attribute_code: String
+    entity_type: String
+}

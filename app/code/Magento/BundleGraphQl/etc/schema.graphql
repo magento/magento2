@@ -1,0 +1,84 @@
+
+type BundleItem {
+    option_id: Int
+    title: String
+    required: Boolean
+    type: String
+    position: Int
+    sku: String
+    options: [BundleItemOption]
+}
+
+type BundleItemOption {
+    id: Int
+    label: String
+    qty: Float
+    position: Int
+    is_default: Boolean
+    price: Float
+    price_type: PriceTypeEnum
+    can_change_quantity: Boolean
+    product: ProductInterface
+}
+
+type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
+    price_view: PriceViewEnum
+    dynamic_price: Boolean
+    dynamic_sku: Boolean
+    ship_bundle_items: ShipBundleItemsEnum
+    dynamic_weight: Boolean
+    items: [BundleItem]
+    id: Int
+    name: String
+    sku: String
+    description: String
+    short_description: String
+    special_price: Float
+    special_from_date: String
+    special_to_date: String
+    attribute_set_id: Int
+    meta_title: String
+    meta_keyword: String
+    meta_description: String
+    image: String
+    small_image: String
+    thumbnail: String
+    new_from_date: String
+    new_to_date: String
+    tier_price: Float
+    custom_design: String
+    custom_design_from: String
+    custom_design_to: String
+    custom_layout_update: String
+    custom_layout: String
+    page_layout: String
+    category_ids: [Int]
+    options_container: String
+    image_label: String
+    small_image_label: String
+    thumbnail_label: String
+    created_at: String
+    updated_at: String
+    country_of_manufacture: String
+    type_id: String
+    website_ids: [Int]
+    category_links: [ProductCategoryLinks]
+    product_links: [ProductLinksInterface]
+    media_gallery_entries: [MediaGalleryEntry]
+    tier_prices: [ProductTierPrices]
+    price: ProductPrices
+    gift_message_available: String
+    weight: Float
+    options: [CustomizableOptionInterface]
+    manufacturer: Int
+}
+
+enum PriceViewEnum {
+    PRICE_RANGE
+    AS_LOW_AS
+}
+
+enum ShipBundleItemsEnum {
+    TOGETHER
+    SEPARATELY
+}
