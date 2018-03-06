@@ -122,7 +122,7 @@
                         </imports>
                     </settings>
                 </field>
-                <field name="use_config_min_qty" component="Magento_InventoryConfigurableProduct/js/components/use-config-settings" formElement="checkbox">
+                <field name="use_config_min_qty" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="keyInConfiguration" xsi:type="string">min_qty</item>
@@ -138,7 +138,8 @@
                         </links>
                     </settings>
                     <formElements>
-                        <checkbox class="Magento\InventoryConfigurableProduct\Ui\Component\Product\Form\Element\UseConfigSettings">                            <settings>
+                        <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
+                            <settings>
                                 <description translate="true">Use config</description>
                                 <valueMap>
                                     <map name="true" xsi:type="string">1</map>
@@ -171,7 +172,7 @@
                         </imports>
                     </settings>
                 </field>
-                <field name="use_config_notify_stock_qty" component="Magento_InventoryConfigurableProduct/js/components/use-config-settings" formElement="checkbox">
+                <field name="use_config_notify_stock_qty" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
@@ -187,13 +188,14 @@
                         </links>
                     </settings>
                     <formElements>
-                        <checkbox class="Magento\InventoryConfigurableProduct\Ui\Component\Product\Form\Element\UseConfigSettings">                            <settings>
-                            <description translate="true">Use config</description>
-                            <valueMap>
-                                <map name="true" xsi:type="string">1</map>
-                                <map name="false" xsi:type="string">0</map>
-                            </valueMap>
-                        </settings>
+                        <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
+                            <settings>
+                                <description translate="true">Use config</description>
+                                <valueMap>
+                                    <map name="true" xsi:type="string">1</map>
+                                    <map name="false" xsi:type="string">0</map>
+                                </valueMap>
+                            </settings>
                         </checkbox>
                     </formElements>
                 </field>
