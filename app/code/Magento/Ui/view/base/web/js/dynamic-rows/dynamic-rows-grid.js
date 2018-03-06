@@ -124,7 +124,7 @@ define([
             prop = this.map[this.identificationDRProperty];
 
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
-                return ~~recordData[prop] === ~~data[prop];
+                return recordData[prop].toString() === data[prop].toString();
             }, this));
         },
 
