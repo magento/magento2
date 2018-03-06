@@ -230,11 +230,11 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $errors = $exception->getErrors();
             $this->assertCount(3, $errors);
             $this->assertEquals(
-                'firstname is a required field.',
+                '"firstname" is required. Enter and try again.',
                 $errors[0]->getLogMessage()
             );
             $this->assertEquals(
-                'lastname is a required field.',
+                '"lastname" is required. Enter and try again.',
                 $errors[1]->getLogMessage()
             );
             $this->assertEquals(

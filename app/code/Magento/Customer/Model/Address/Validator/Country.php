@@ -56,10 +56,7 @@ class Country implements ValidatorInterface
             //Checking if such country exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                [
-                    'fieldName' => 'countryId',
-                    'value' => htmlspecialchars($countryId),
-                ]
+                ['fieldName' => 'countryId', 'value' => htmlspecialchars($countryId)]
             );
         }
 
@@ -94,10 +91,7 @@ class Country implements ValidatorInterface
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                [
-                    'fieldName' => 'regionId',
-                    'value' => htmlspecialchars($regionId),
-                ]
+                ['fieldName' => 'regionId', 'value' => htmlspecialchars($regionId)]
             );
         }
 
