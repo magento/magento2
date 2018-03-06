@@ -314,8 +314,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function rollBack()
     {
-        /** This is done for S2 build in order to see where transaction is rolled back */
-        var_dump(debug_backtrace(10));
         if ($this->_transactionLevel === 1) {
             $this->logger->startTimer();
             parent::rollBack();
