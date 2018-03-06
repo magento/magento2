@@ -81,7 +81,7 @@ define([
                 data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
-                    item.sections()['quantity'] = data[item.label];
+                    item.sections().quantity = data[item.label];
                 });
             } else if (this.type() === 'single') {
                 data = module.dynamicRowsCollection[module.dynamicRowsName];

@@ -213,7 +213,7 @@ define([
          * @param {Object | Undefined} data - optional.
          */
         addChild: function (data) {
-            var template = utils.copy(this.childTemplate['templates']).children,
+            var template = utils.copy(this.childTemplate.templates).children,
                 dynamicRows = template[this.templateElementNames.dynamicRows],
                 button = template[this.templateElementNames.button],
                 group = template[this.templateElementNames.group],
