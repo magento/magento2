@@ -143,12 +143,10 @@ abstract class AbstractAction
             'final_price' => $this->_connection->getCheckSql('tier_price < final_price', 'tier_price', 'final_price'),
             'min_price' => $this->_connection->getCheckSql('tier_price < min_price', 'tier_price', 'min_price'),
         ];
-
-        $where = '';
+        $where = [];
         if (!empty($processIds)) {
-            $where = ['entity_id IN (?)' => $processIds];
+            $where['entity_id IN (?)'] = $processIds;
         }
-
         $this->_connection->update($this->_defaultIndexerResource->getIdxTable(), $updateData, $where);
 
         $this->_insertFromTable(
