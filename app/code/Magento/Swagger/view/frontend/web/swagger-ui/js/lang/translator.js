@@ -25,7 +25,7 @@
 
             sel = sel || '[data-sw-translate]';
 
-            document.querySelectorAll(sel).forEach(function (elem) {
+            Array.prototype.slice.call(document.querySelectorAll(sel)).forEach(function (elem) {
                 elem.innerHTML = $this._tryTranslate(elem.innerHTML);
                 elem.value = $this._tryTranslate(elem.value);
                 elem.setAttribute('title', $this._tryTranslate(elem.getAttribute('title')));
