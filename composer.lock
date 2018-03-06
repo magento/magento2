@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a00917993179ae9cc8416e5bac8ed73",
+    "content-hash": "acb0f9f39d9c35013b48bd5398a40631",
     "packages": [
         {
             "name": "braintree/braintree_php",
-            "version": "3.28.0",
+            "version": "3.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "f8ab5ca7b3397536de622fc9640e5b257fc33e71"
+                "reference": "25e8fd2886240ee825860376a9c78b456d52b39c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/f8ab5ca7b3397536de622fc9640e5b257fc33e71",
-                "reference": "f8ab5ca7b3397536de622fc9640e5b257fc33e71",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/25e8fd2886240ee825860376a9c78b456d52b39c",
+                "reference": "25e8fd2886240ee825860376a9c78b456d52b39c",
                 "shasum": ""
             },
             "require": {
@@ -47,11 +47,11 @@
             "authors": [
                 {
                     "name": "Braintree",
-                    "homepage": "https://www.braintreepayments.com"
+                    "homepage": "http://www.braintreepayments.com"
                 }
             ],
             "description": "Braintree PHP Client Library",
-            "time": "2018-02-08T23:03:34+00:00"
+            "time": "2018-01-18T21:43:00+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -91,16 +91,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.2",
+            "version": "1.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "18b33e4b69cf15747ab98b4f2c98ab445da05abd"
+                "reference": "6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/18b33e4b69cf15747ab98b4f2c98ab445da05abd",
-                "reference": "18b33e4b69cf15747ab98b4f2c98ab445da05abd",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972",
+                "reference": "6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +123,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2017-03-25T04:54:24+00:00"
+            "time": "2017-10-05T20:50:44+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -1025,16 +1025,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.9",
+            "version": "2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558"
+                "reference": "d305b780829ea4252ed9400b3f5937c2c99b51d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
-                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/d305b780829ea4252ed9400b3f5937c2c99b51d4",
+                "reference": "d305b780829ea4252ed9400b3f5937c2c99b51d4",
                 "shasum": ""
             },
             "require": {
@@ -1042,7 +1042,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
                 "sami/sami": "~2.0",
                 "squizlabs/php_codesniffer": "~2.0"
             },
@@ -1113,7 +1113,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2017-11-29T06:38:08+00:00"
+            "time": "2018-02-19T04:29:13+00:00"
         },
         {
             "name": "psr/container",
@@ -1968,16 +1968,16 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "1c7ae93cf6b392d4dae5c4ae18979918413af16e"
+                "reference": "3cbf557f4079d83a06f9c3ff9b957c022d7805cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/1c7ae93cf6b392d4dae5c4ae18979918413af16e",
-                "reference": "1c7ae93cf6b392d4dae5c4ae18979918413af16e",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/3cbf557f4079d83a06f9c3ff9b957c022d7805cf",
+                "reference": "3cbf557f4079d83a06f9c3ff9b957c022d7805cf",
                 "shasum": ""
             },
             "require": {
@@ -2017,7 +2017,7 @@
                 "minify",
                 "yui"
             ],
-            "time": "2017-05-16T13:45:26+00:00"
+            "time": "2018-01-15T15:26:51+00:00"
         },
         {
             "name": "zendframework/zend-captcha",
@@ -4385,26 +4385,26 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.5.0",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "0c50874333149c0dad5a2877801aed148f2767ff"
+                "reference": "9daf26d0368d4a12bed1cacae1a9f3a6f0adf239"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/0c50874333149c0dad5a2877801aed148f2767ff",
-                "reference": "0c50874333149c0dad5a2877801aed148f2767ff",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/9daf26d0368d4a12bed1cacae1a9f3a6f0adf239",
+                "reference": "9daf26d0368d4a12bed1cacae1a9f3a6f0adf239",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.7",
-                "symfony/config": "^2.3.0|^3",
-                "symfony/dependency-injection": "^2.3.0|^3",
-                "symfony/filesystem": "^2.3.0|^3"
+                "symfony/config": "^2.3.0|^3|^4",
+                "symfony/dependency-injection": "^2.3.0|^3|^4",
+                "symfony/filesystem": "^2.3.0|^3|^4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.4.0,<4.8",
+                "phpunit/phpunit": "^4.8|^5.7",
                 "squizlabs/php_codesniffer": "^2.0.0"
             },
             "bin": [
@@ -4421,7 +4421,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2017-01-19T14:23:36+00:00"
+            "time": "2017-12-13T13:21:38+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4745,16 +4745,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.7.4",
+            "version": "1.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "9f901e29c93dae4aa77c0bb161df4276f9c9a1be"
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/9f901e29c93dae4aa77c0bb161df4276f9c9a1be",
-                "reference": "9f901e29c93dae4aa77c0bb161df4276f9c9a1be",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/dfd6be44111a7c41c2e884a336cc4f461b3b2401",
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401",
                 "shasum": ""
             },
             "require": {
@@ -4804,7 +4804,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-02-11T18:49:29+00:00"
+            "time": "2018-02-19T10:16:54+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

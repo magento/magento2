@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Tests \Magento\Catalog\Model\Product\Option.
+ */
 class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -67,5 +70,42 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(25, $this->model->getRegularPrice());
         $this->model->setPriceType(null);
         $this->assertEquals(50, $this->model->getRegularPrice());
+    }
+
+    /**
+     * Tests removing ineligible characters from file_extension.
+     *
+     * @param string $rawExtensions
+     * @param string $expectedExtensions
+     * @dataProvider beforeSaveFileOptionDataProvider
+     */
+    public function testBeforeSaveFileOption($rawExtensions, $expectedExtensions)
+    {
+        $this->model->setType(Option::OPTION_GROUP_FILE);
+        $this->model->setFileExtension($rawExtensions);
+        $this->model->beforeSave();
+        $actualExtensions = $this->model->getFileExtension();
+        $this->assertEquals(
+            $expectedExtensions,
+            $actualExtensions
+        );
+    }
+
+    /**
+     * Data provider for testBeforeSaveFileOption.
+     *
+     * @return array
+     */
+    public function beforeSaveFileOptionDataProvider()
+    {
+        return [
+            ['JPG, PNG, GIF', 'jpg, png, gif'],
+            ['jpg, jpg, jpg', 'jpg'],
+            ['jpg, png, gif', 'jpg, png, gif'],
+            ['jpg png gif', 'jpg, png, gif'],
+            ['!jpg@png#gif%', 'jpg, png, gif'],
+            ['jpg, png, 123', 'jpg, png, 123'],
+            ['', ''],
+        ];
     }
 }
