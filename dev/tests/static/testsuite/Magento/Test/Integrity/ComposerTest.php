@@ -309,36 +309,45 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      * Make sure requirements of components are reflected in root composer.json
      *
      * @param \StdClass $json
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function assertRequireInSync(\StdClass $json)
     {
         if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
             return;
         }
+        if (!in_array($json->name, self::$rootComposerModuleBlacklist) && isset($json->require)) {
+            $this->checkPackageInRootComposer($json);
+        }
+    }
+
+    /**
+     * Check if package is reflected in root composer.json
+     *
+     * @param \StdClass $json
+     */
+    private function checkPackageInRootComposer(\StdClass $json): void
+    {
         $name = $json->name;
-        if (!in_array($name, self::$rootComposerModuleBlacklist) && isset($json->require)) {
-            $errors = [];
-            foreach (array_keys((array)$json->require) as $depName) {
-                if ($depName == 'magento/magento-composer-installer') {
-                    // Magento Composer Installer is not needed for already existing components
-                    continue;
-                }
-                if (!isset(self::$rootJson['require-dev'][$depName]) && !isset(self::$rootJson['require'][$depName])
-                    && !isset(self::$rootJson['replace'][$depName])) {
-                    $errors[] = "'$name' depends on '$depName'";
-                }
+        $errors = [];
+        foreach (array_keys((array)$json->require) as $depName) {
+            if ($depName == 'magento/magento-composer-installer') {
+                // Magento Composer Installer is not needed for already existing components
+                continue;
             }
-            if (!empty($errors)) {
-                $this->fail(
-                    "The following dependencies are missing in root 'composer.json',"
-                    . " while declared in child components.\n"
-                    . "Consider adding them to 'require-dev' section (if needed for child components only),"
-                    . " to 'replace' section (if they are present in the project),"
-                    . " to 'require' section (if needed for the skeleton).\n"
-                    . join("\n", $errors)
-                );
+            if (!isset(self::$rootJson['require-dev'][$depName]) && !isset(self::$rootJson['require'][$depName])
+                && !isset(self::$rootJson['replace'][$depName])) {
+                $errors[] = "'$name' depends on '$depName'";
             }
+        }
+        if (!empty($errors)) {
+            $this->fail(
+                "The following dependencies are missing in root 'composer.json',"
+                . " while declared in child components.\n"
+                . "Consider adding them to 'require-dev' section (if needed for child components only),"
+                . " to 'replace' section (if they are present in the project),"
+                . " to 'require' section (if needed for the skeleton).\n"
+                . join("\n", $errors)
+            );
         }
     }
 
