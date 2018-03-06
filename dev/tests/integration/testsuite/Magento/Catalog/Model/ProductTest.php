@@ -597,7 +597,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param int $qty
      * @param int $stockStatus
      * @param bool $expectedStockStatus
-     *
      */
     public function testSaveWithBackordersEnabled(int $qty, int $stockStatus, bool $expectedStockStatus)
     {
@@ -618,7 +617,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * DataProvider for the testSaveWithBackordersEnabled()
-     * return array
+     * @return array
      */
     public function productWithBackordersDataProvider(): array
     {
