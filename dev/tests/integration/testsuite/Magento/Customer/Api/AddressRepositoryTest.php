@@ -200,15 +200,50 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setId(null)
             ->setFirstname(null)
             ->setLastname(null)
-            ->setCustomerId(1);
+            ->setCustomerId(1)
+            ->setRegionId($invalidRegion = 10354);
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
-            $this->assertCount(2, $errors);
+            $this->assertCount(3, $errors);
             $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
             $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+            $this->assertEquals(
+                __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['fieldName' => 'regionId', 'value' => $invalidRegion]
+                ),
+                $errors[2]->getLogMessage()
+            );
+        }
+
+        $address->setCountryId($invalidCountry = 'invalid_id');
+        try {
+            $this->repository->save($address);
+        } catch (InputException $exception) {
+            $this->assertEquals(
+                'One or more input exceptions have occurred.',
+                $exception->getMessage()
+            );
+            $errors = $exception->getErrors();
+            $this->assertCount(3, $errors);
+            $this->assertEquals(
+                'firstname is a required field.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                'lastname is a required field.',
+                $errors[1]->getLogMessage()
+            );
+            $this->assertEquals(
+                __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['fieldName' => 'countryId', 'value' => $invalidCountry]
+                ),
+                $errors[2]->getLogMessage()
+            );
         }
     }
 
@@ -337,6 +372,9 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function searchAddressDataProvider()
     {
         /**
@@ -360,7 +398,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ],
             'Addresses with postcode of either 75477 or 47676' => [
@@ -371,7 +409,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ],
             'Addresses with postcode greater than 0' => [
@@ -379,7 +417,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ]
         ];
