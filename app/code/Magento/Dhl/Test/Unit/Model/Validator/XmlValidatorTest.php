@@ -123,7 +123,7 @@ class XmlValidatorTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'file' => 'invalidDHLResponse.xml',
-                    'errorMessage' => 'Security validation of XML document has been failed.',
+                    'errorMessage' => 'The security validation of the XML document has failed.',
                     'isGenerateXml' => false,
                 ],
             ],

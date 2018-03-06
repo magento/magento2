@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
-use Magento\Framework\GraphQl\Argument\Find\Clause;
-use Magento\Framework\GraphQl\Argument\Find\Connective;
-use Magento\Framework\GraphQl\Argument\Find\Operator;
+use Magento\Framework\GraphQl\Argument\Filter\Clause;
+use Magento\Framework\GraphQl\Argument\Filter\Connective;
+use Magento\Framework\GraphQl\Argument\Filter\Operator;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueInterface;
+use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
 
@@ -41,33 +41,25 @@ class FilterGroupFactory
     /**
      * Create a filter groups from an AST
      *
-     * @param FindArgumentValueInterface $arguments
+     * @param FilterArgumentValueInterface $arguments
      * @return \Magento\Framework\Api\Search\FilterGroup[]
      * @throws GraphQlInputException
      */
     public function create($arguments)
     {
-        /** @var Connective $filters */
-        $filters = $arguments->getClause();
+        $filters = $arguments->getValue();
         /** @var \Magento\Framework\Api\Search\FilterGroup[] $searchCriteriaFilterGroups */
         $searchCriteriaFilterGroups = [];
 
-        //Requiring and as top level operator
-        $filters = current($filters->getConditions());
-
-        if (!$filters instanceof Connective) {
-            throw new GraphQlInputException(new Phrase('Top level has to have condition operator'));
-        }
-
-        foreach ($filters->getConditions() as $node) {
-            if ($node instanceof Operator) {
+        foreach ($filters->getConditions() as $filter) {
+            if ($filter instanceof Operator) {
                 throw new GraphQlInputException(new Phrase('Can\'t support nested operators'));
             }
 
-            if ($node instanceof Clause) {
-                $searchCriteriaFilterGroups[] = $this->processClause($node);
-            } elseif ($node instanceof Connective) {
-                $searchCriteriaFilterGroups[] = $this->processConnective($node);
+            if ($filter instanceof Clause) {
+                $searchCriteriaFilterGroups[] = $this->processClause($filter);
+            } elseif ($filter instanceof Connective) {
+                $searchCriteriaFilterGroups[] = $this->processConnective($filter);
             } else {
                 throw new GraphQlInputException(new Phrase('Nesting "OR" node type not supported'));
             }
@@ -94,8 +86,18 @@ class FilterGroupFactory
                     ->create();
 
                 $this->filterGroupBuilder->addFilter($subFilter);
-            } else {
-                throw new GraphQlInputException(new Phrase('Sub nesting nodes not supported'));
+            } elseif ($subNode instanceof Connective) {
+                // This recursive OR processing can be done because AND is not yet supported
+                // we should not be doing this for OR if both AND and OR will be nestedly supported
+                // because it's mathematically incorrect to reduce OR in a boolean operation
+                // you can only do it when you have only OR operation.
+                if (((string)$subNode->getOperator()) == 'OR') {
+                    return $this->processConnective($subNode);
+                } else {
+                    throw new GraphQlInputException(
+                        new Phrase('Sub nesting of %1 is not supported', [$subNode->getOperator()])
+                    );
+                }
             }
         }
         return $this->filterGroupBuilder->create();

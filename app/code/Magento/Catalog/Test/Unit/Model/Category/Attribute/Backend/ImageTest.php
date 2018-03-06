@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -26,6 +28,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
 
     protected function setUp()
     {
@@ -59,6 +66,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ImageUploader::class,
             ['moveFileFromTmp']
         );
+
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -142,6 +152,38 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model->beforeSave($object);
 
         $this->assertEquals('test123.jpg', $object->getTestAttribute());
+    }
+
+    public function testBeforeSaveAttributeFileNameOutsideOfCategoryDir()
+    {
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
+            'filesystem' => $this->filesystem
+        ]);
+
+        $model->setAttribute($this->attribute);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getUri')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn('pub/media');
+
+        $object = new \Magento\Framework\DataObject([
+            'test_attribute' => [
+                [
+                    'name' => '/test123.jpg',
+                    'url' => '/pub/media/wysiwyg/test123.jpg',
+                ]
+            ]
+        ]);
+
+        $model->beforeSave($object);
+
+        $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
+        $this->assertEquals(
+            [['name' => '/pub/media/wysiwyg/test123.jpg', 'url' => '/pub/media/wysiwyg/test123.jpg']],
+            $object->getData('_additional_data_test_attribute')
+        );
     }
 
     public function testBeforeSaveTemporaryAttribute()

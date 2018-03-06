@@ -115,7 +115,10 @@ class ValidatorFile extends Validator
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
                 throw new \Magento\Framework\Validator\Exception(
-                    __('Validation failed. Required options were not filled or the file was not uploaded.')
+                    __(
+                        'The validation failed. '
+                        . 'Make sure the required options are entered and the file is uploaded, then try again.'
+                    )
                 );
             }
 
@@ -128,10 +131,14 @@ class ValidatorFile extends Validator
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
                 throw new LocalizedException(
-                    __('The file you uploaded is larger than %1 Megabytes allowed by server', $value)
+                    __(
+                        "The file was too big and couldn't be uploaded. "
+                        . "Use a file smaller than %1 MBs and try to upload again.",
+                        $value
+                    )
                 );
             } else {
-                throw new ProductException(__('Option required.'));
+                throw new ProductException(__("The required option wasn't entered. Enter the option and try again."));
             }
         }
 
@@ -150,7 +157,7 @@ class ValidatorFile extends Validator
             $extension = pathinfo(strtolower($fileInfo['name']), PATHINFO_EXTENSION);
 
             $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
-            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
 
             $filePath = $dispersion;
 
@@ -182,7 +189,7 @@ class ValidatorFile extends Validator
                         $imageSize = getimagesize($fileInfo['tmp_name']);
                     }
                 } else {
-                    throw new LocalizedException(__('The file is empty. Please choose another one'));
+                    throw new LocalizedException(__('The file is empty. Select another file and try again.'));
                 }
 
                 if (!empty($imageSize)) {
@@ -209,7 +216,9 @@ class ValidatorFile extends Validator
                 throw new LocalizedException(__(implode("\n", $errors)));
             }
         } else {
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         }
         return $userValue;
     }

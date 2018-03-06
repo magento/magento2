@@ -15,6 +15,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_category_and_weight.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryConfigurableProductLinks()
     {
@@ -23,62 +24,152 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-    product(sku: "{$productSku}")
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
-        id
-        attribute_set_id
-        created_at
-        name
-        sku
-        status
-        type_id
-        updated_at
-        visibility
-        weight
-        category_ids                
-        ... on ConfigurableProduct {
-            configurable_product_links {
-                id
-                category_ids
-                name
-                sku
-                attribute_set_id
-                visibility
+        items{
+            id
+            attribute_set_id
+            created_at
+            name
+            sku
+            type_id
+            updated_at
+            ... on PhysicalProductInterface {
                 weight
-                created_at
-                updated_at
-                category_links {
-                position
-                category_id
+            }
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
                 }
-                media_gallery_entries{
-                disabled
-                file
-                id
-                label
-                media_type
-                position
-                types
-                content
-                {
-                    base64_encoded_data
-                    type
-                    name
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
                 }
-                video_content
-                {
-                    media_type
-                    video_description
-                    video_metadata
-                    video_provider
-                    video_title
-                    video_url
-                }            
               }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
+            category_ids                
+            ... on ConfigurableProduct {
+                configurable_product_links {
+                    id
+                    category_ids
+                    name
+                    sku
+                    attribute_set_id
+                    ... on PhysicalProductInterface {
+                        weight
+                    }
+                    created_at
+                    updated_at
+                    price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
+                    category_links {
+                    position
+                    category_id
+                    }
+                    media_gallery_entries {
+                    disabled
+                    file
+                    id
+                    label
+                    media_type
+                    position
+                    types
+                    content
+                    {
+                        base64_encoded_data
+                        type
+                        name
+                    }
+                    video_content
+                    {
+                        media_type
+                        video_description
+                        video_metadata
+                        video_provider
+                        video_title
+                        video_url
+                    }            
+                  }
+                }
             }
         }
     }
-    
 }
 QUERY;
 
@@ -87,12 +178,16 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
+
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
-        $this->assertArrayHasKey('product', $response);
-        $this->assertBaseFields($product, $response['product']);
-        $this->assertConfigurableProductLinks($response['product']);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertBaseFields($product, $response['products']['items'][0]);
+        $this->assertConfigurableProductLinks($response['products']['items'][0]);
     }
 
     /**
@@ -101,20 +196,42 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        /**
-         * ['product_object_field_name', 'expected_value']
-         */
+        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
-            ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
-            ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+            [
+                'response_field' => 'price',
+                'expected_value' => [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ]
+            ],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
@@ -168,8 +285,7 @@ QUERY;
             $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
             $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
             $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-            $expectedValue = implode(',', $categoryIdsAttributeValue);
-            $this->assertEquals($expectedValue, $actualResponse['category_ids']);
+            $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
             unset($configurableProductLinkArray['category_ids']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
@@ -223,8 +339,37 @@ QUERY;
             unset($configurableProductLinkArray['media_gallery_entries']);
 
             foreach ($configurableProductLinkArray as $key => $value) {
-                $this->assertEquals($value, $childProduct->getData($key));
+                if ($key !== 'price') {
+                    $this->assertEquals($value, $childProduct->getData($key));
+                }
             }
+            //assert prices
+            $this->assertEquals(
+                [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ],
+                $configurableProductLinkArray['price']
+            );
         }
     }
 

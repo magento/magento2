@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['__get', 'Magento\Framework\DataObject'],
@@ -2526,5 +2526,7 @@ return [
     ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
     ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
-    ['var_dump', '']
+    ['var_dump', ''],
+    ['each', ''],
+    ['create_function', ''],
 ];

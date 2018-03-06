@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Checkout\Model\Session
  */
@@ -146,7 +144,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRestoreQuote($hasOrderId, $hasQuoteId)
     {
-        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getId', 'loadByIncrementId', '__wakeup']);
+        $order = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['getId', 'loadByIncrementId', '__wakeup']
+        );
         $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         $orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
@@ -178,7 +179,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         if ($hasOrderId) {
             $order->setQuoteId($quoteId);
-            $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['setIsActive', 'getId', 'setReservedOrderId', '__wakeup', 'save']);
+            $quote = $this->createPartialMock(
+                \Magento\Quote\Model\Quote::class,
+                ['setIsActive', 'getId', 'setReservedOrderId', '__wakeup', 'save']
+            );
             if ($hasQuoteId) {
                 $quoteRepository->expects($this->once())->method('get')->with($quoteId)->willReturn($quote);
                 $quote->expects(
@@ -291,7 +295,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $storage->expects($this->any())
             ->method('setData');
 
-        $quoteIdMaskMock = $this->createPartialMock(\Magento\Quote\Model\QuoteIdMask::class, ['getMaskedId', 'load', 'setQuoteId', 'save']);
+        $quoteIdMaskMock = $this->createPartialMock(
+            \Magento\Quote\Model\QuoteIdMask::class,
+            ['getMaskedId', 'load', 'setQuoteId', 'save']
+        );
         $quoteIdMaskMock->expects($this->once())->method('load')->with($replaceQuoteId, 'quote_id')->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn(null);
         $quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($replaceQuoteId)->willReturnSelf();
@@ -339,9 +346,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
-            'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            \Magento\Checkout\Model\Session::class,
+            ['storage' => new \Magento\Framework\Session\Storage()]
+        );
         $session->resetCheckout();
         $this->assertEquals(\Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN, $session->getCheckoutState());
     }
@@ -356,9 +363,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         ];
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
-            'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            \Magento\Checkout\Model\Session::class,
+            ['storage' => new \Magento\Framework\Session\Storage()]
+        );
         $session->setSteps($stepData);
         $this->assertEquals($stepData, $session->getStepData());
         $this->assertFalse($session->getStepData('invalid_key'));
@@ -376,9 +383,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         ];
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
-            'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            \Magento\Checkout\Model\Session::class,
+            ['storage' => new \Magento\Framework\Session\Storage()]
+        );
         $session->setSteps($stepData);
 
         $session->setStepData('complex', 'key2', 'value2');

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Catalog\Model\Category;
@@ -58,7 +56,8 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->categoriesCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class)
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+        )
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
             ->will($this->returnValue($this->categoriesCollection));

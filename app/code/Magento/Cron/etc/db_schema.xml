@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cron_schedule" resource="default" engine="innodb" comment="Cron Schedule">
+        <column xsi:type="int" name="schedule_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Schedule Id"/>
+        <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0" comment="Job Code"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending" comment="Status"/>
+        <column xsi:type="text" name="messages" nullable="true" comment="Messages"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="scheduled_at" on_update="false" nullable="true" comment="Scheduled At"/>
+        <column xsi:type="timestamp" name="executed_at" on_update="false" nullable="true" comment="Executed At"/>
+        <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true" comment="Finished At"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="schedule_id"/>
+        </constraint>
+        <index name="CRON_SCHEDULE_JOB_CODE" indexType="btree">
+            <column name="job_code"/>
+        </index>
+        <index name="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
+            <column name="scheduled_at"/>
+            <column name="status"/>
+        </index>
+    </table>
+</schema>

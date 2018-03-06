@@ -40,9 +40,13 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
         // set entered data if was error when we do save
         $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getAttributeData(true);
+        $presentation = $this->_objectManager->get(
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
+        );
         if (!empty($data)) {
             $model->addData($data);
         }
+        $model->setFrontendInput($presentation->getPresentationInputType($model));
         $attributeData = $this->getRequest()->getParam('attribute');
         if (!empty($attributeData) && $id === null) {
             $model->addData($attributeData);

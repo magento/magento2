@@ -8,6 +8,7 @@ namespace Magento\Cms\Block;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @magentoAppArea frontend
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Variable/_files/variable.php
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/

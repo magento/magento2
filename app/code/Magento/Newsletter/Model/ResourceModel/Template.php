@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Newsletter\Model\ResourceModel;
 
 /**
@@ -83,7 +81,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function checkCodeUsage(\Magento\Newsletter\Model\Template $template)
     {
-        if ($template->getTemplateActual() != 0 || is_null($template->getTemplateActual())) {
+        if ($template->getTemplateActual() != 0 || $template->getTemplateActual() === null) {
             $bind = [
                 'template_id' => $template->getId(),
                 'template_code' => $template->getTemplateCode(),

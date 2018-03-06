@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 require __DIR__ . '/configurable_products.php';
 
 /** @var \Magento\Quote\Model\Quote $quote */
@@ -39,9 +37,8 @@ $request->setData(
     ]
 );
 
-$quote->setStoreId(
-        1
-    )->setIsActive(
+$quote->setStoreId(1)
+    ->setIsActive(
         true
     )->setIsMultiShipping(
         false

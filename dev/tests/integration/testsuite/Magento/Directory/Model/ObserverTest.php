@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Model;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -61,7 +59,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testScheduledUpdateCurrencyRates()
     {
         //skipping test if service is unavailable
-        $url = str_replace('{{CURRENCY_FROM}}', 'USD',
+        $url = str_replace(
+            '{{CURRENCY_FROM}}',
+            'USD',
             \Magento\Directory\Model\Currency\Import\Webservicex::CURRENCY_CONVERTER_URL
         );
         $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);

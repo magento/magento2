@@ -31,18 +31,23 @@ class UpgradeSystemTest extends Injectable
     protected $adminDashboard;
 
     /**
-     * Injection data.
-     *
+     * @var \Magento\Mtf\Util\Iterator\ApplicationState
+     */
+    private $applicationStateIterator;
+
+    /**
      * @param Dashboard $adminDashboard
      * @param SetupWizard $setupWizard
-     * @return void
+     * @param \Magento\Mtf\Util\Iterator\ApplicationState $applicationStateIterator
      */
     public function __inject(
         Dashboard $adminDashboard,
-        SetupWizard $setupWizard
+        SetupWizard $setupWizard,
+        \Magento\Mtf\Util\Iterator\ApplicationState $applicationStateIterator
     ) {
         $this->adminDashboard = $adminDashboard;
         $this->setupWizard = $setupWizard;
+        $this->applicationStateIterator = $applicationStateIterator;
     }
 
     /**

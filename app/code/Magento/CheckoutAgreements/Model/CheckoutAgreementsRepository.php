@@ -7,15 +7,15 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory as AgreementCollectionFactory;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection as AgreementCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement as AgreementResource;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Store;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
 /**
  * Checkout agreement repository.
@@ -61,6 +61,16 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface
+     */
+    private $agreementsList;
+
+    /**
+     * @var ActiveStoreAgreementsFilter
+     */
+    private $activeStoreAgreementsFilter;
+
+    /**
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
@@ -69,6 +79,8 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface|null $agreementsList
+     * @param ActiveStoreAgreementsFilter|null $activeStoreAgreementsFilter
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -77,7 +89,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         ScopeConfigInterface $scopeConfig,
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
+        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
@@ -85,6 +99,12 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $this->resourceModel = $agreementResource;
         $this->agreementFactory = $agreementFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->agreementsList = $agreementsList ?: ObjectManager::getInstance()->get(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+        );
+        $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter ?: ObjectManager::getInstance()->get(
+            ActiveStoreAgreementsFilter::class
+        );
     }
 
     /**
@@ -97,18 +117,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         if (!$this->scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
             return [];
         }
-        $storeId = $this->storeManager->getStore()->getId();
-        /** @var $agreementCollection AgreementCollection */
-        $agreementCollection = $this->collectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process($agreementCollection);
-        $agreementCollection->addStoreFilter($storeId);
-        $agreementCollection->addFieldToFilter('is_active', 1);
-        $agreementDataObjects = [];
-        foreach ($agreementCollection as $agreement) {
-            $agreementDataObjects[] = $agreement;
-        }
-
-        return $agreementDataObjects;
+        return $this->agreementsList->getList($this->activeStoreAgreementsFilter->buildSearchCriteria());
     }
 
     /**
@@ -129,7 +138,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
             $this->resourceModel->save($data);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Unable to save checkout agreement %1', $data->getAgreementId())
+                __('The "%1" checkout agreement couldn\'t be saved.', $data->getAgreementId())
             );
         }
         return $data;
@@ -144,7 +153,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
             $this->resourceModel->delete($data);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                __('Unable to remove checkout agreement %1', $data->getAgreementId())
+                __('The "%1" checkout agreement couldn\'t be removed.', $data->getAgreementId())
             );
         }
         return true;
@@ -169,7 +178,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $agreement = $this->agreementFactory->create();
         $this->resourceModel->load($agreement, $id);
         if (!$agreement->getId()) {
-            throw new NoSuchEntityException(__('Checkout agreement with specified ID "%1" not found.', $id));
+            throw new NoSuchEntityException(
+                __('A checkout agreement with the "%1" specified ID wasn\'t found. Verify the ID and try again.', $id)
+            );
         }
         return $agreement;
     }

@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Oauth\Token;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
@@ -24,7 +22,8 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory
+     * |\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */
@@ -52,8 +51,8 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-                ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
-            )->getMock();
+            ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
+        )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
@@ -118,7 +117,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens could not be revoked.
+     * @expectedExceptionMessage The tokens couldn't be revoked.
      */
     public function testRevokeAdminAccessTokenCannotRevoked()
     {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
@@ -206,13 +204,11 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
     public function testCodeStyle()
     {
-        $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
-            ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
-
+        $isFullScan = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($whiteList);
-        $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
+        $result = $codeSniffer->run($isFullScan ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']));
+        $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
             $result,

@@ -84,11 +84,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
                 );
         }
 
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($product->getStoreId());
-        }
-
         return $resultPage;
     }
 }

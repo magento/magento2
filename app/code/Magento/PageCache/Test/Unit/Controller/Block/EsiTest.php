@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
 /**
@@ -57,7 +55,9 @@ class EsiTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Layout\LayoutCacheKeyInterface::class
+        );
 
         $contextMock =
             $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
