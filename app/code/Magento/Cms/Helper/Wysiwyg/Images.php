@@ -170,7 +170,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->getStorageRoot();
         } else {
             $path = $this->getStorageRoot() . $this->idDecode($id);
-            if (preg_match('/\.\.(\\|\/)/', $path)) {
+            if (preg_match('/\.\.(\\\|\/)/', $path)) {
                 throw new \InvalidArgumentException('Path is invalid');
             }
 
