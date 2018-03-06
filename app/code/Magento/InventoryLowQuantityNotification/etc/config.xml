@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <inventory>
+        <cataloginventory>
             <source_item_configuration>
                 <notify_stock_qty>1</notify_stock_qty>
             </source_item_configuration>
-        </inventory>
+        </cataloginventory>
     </default>
 </config>
