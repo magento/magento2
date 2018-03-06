@@ -184,13 +184,16 @@ class DataProvider
         $lastProductId = 0,
         $batch = 100
     ) {
-        $products = $this->connection->fetchAll(
-            $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)->where(
+
+        $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch);
+        if ($productIds === null) {
+            $select->where(
                 'e.entity_id < ?',
                 $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
-            )
-        );
-        if (!$products) {
+            );
+        }
+        $products = $this->connection->fetchAll($select);
+        if ($productIds === null && !$products) {
             // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
             $products = $this->connection->fetchAll(
                 $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)
