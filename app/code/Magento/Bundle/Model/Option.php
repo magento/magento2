@@ -122,14 +122,15 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Return selection by it's id
      *
-     * @param int $selectionId
+     * @param mixed $selectionId
      * @return \Magento\Catalog\Model\Product|null
      */
     public function getSelectionById($selectionId)
     {
         $foundSelection = null;
+        $selectionId = (is_array($selectionId)) ? $selectionId : [$selectionId] ;
         foreach ($this->getSelections() as $selection) {
-            if ($selection->getSelectionId() == $selectionId) {
+            if (in_array($selection->getSelectionId(), $selectionId)) {
                 $foundSelection = $selection;
                 break;
             }
