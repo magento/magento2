@@ -159,10 +159,12 @@ class SwaggerUiPage
     public function closeEndpointContent($serviceName, $endpoint)
     {
         $this->expandServiceContent($serviceName);
+
         /**
          * Selector for endpoint href
          */
-       $endpointRefSelector = '#operations-%s-%s%s > div';
+        $endpointRefSelector = '#operations-%s-%s%s > div';
+
         /**
          * Selector for operation
          */
