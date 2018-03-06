@@ -160,7 +160,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($decodedHash);
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getProtectCode', 'getShipmentsCollection'])
+            ->setMethods(['load', 'getId', 'getProtectCode'])
             ->getMock();
         $order->expects($this->atLeastOnce())->method('load')->with($decodedHash['id'])->willReturnSelf();
         $order->expects($this->atLeastOnce())->method('getId')->willReturn($decodedHash['id']);
@@ -236,7 +236,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($decodedHash);
         $shipment = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getProtectCode', 'getIncrementId', 'getId'])
+            ->setMethods(['getEntityId', 'getProtectCode'])
             ->getMock();
         $shipment->expects($this->atLeastOnce())->method('getEntityId')->willReturn(3);
         $shipment->expects($this->atLeastOnce())->method('getProtectCode')->willReturn('0e123123123');
@@ -292,7 +292,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($decodedHash);
         $track = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment\Track::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getProtectCode', 'getNumberDetail'])
+            ->setMethods(['load', 'getId', 'getProtectCode'])
             ->getMock();
         $track->expects($this->atLeastOnce())->method('load')->with($decodedHash['id'])->willReturnSelf();
         $track->expects($this->atLeastOnce())->method('getId')->willReturn($decodedHash['id']);
