@@ -44,13 +44,4 @@
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
-    <actionGroup name="searchBlockOnGridPage">
-        <arguments>
-            <argument name="Block" defaultValue=""/>
-        </arguments>
-        <fillField selector="//input[@name='chooser_identifier']" userInput="{{Block.identifier}}" stepKey="fillEntityIdentifier"/>
-        <click selector="//div[@class='modal-inner-wrap']//button[@title='Search']" stepKey="clickSearchBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2" />
-        <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle" />
-    </actionGroup>
 </actionGroups>
