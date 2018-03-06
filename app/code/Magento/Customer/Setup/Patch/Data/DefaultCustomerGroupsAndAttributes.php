@@ -11,8 +11,8 @@ use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class DefaultCustomerGroupsAndAttributes
