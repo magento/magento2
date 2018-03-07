@@ -32,6 +32,8 @@
         </arguments>
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <conditionalClick selector="{{BlockPageActionsSection.idColumn}}" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending" visible="true"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish" />
         <!-- Conditional Click again in case it goes from default state to ascending on first click  -->
@@ -39,7 +41,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish" />
         <click selector="{{BlockPageActionsSection.select(CMSBlockPage.identifier)}}" stepKey="clickSelectCreatedCMSBlock" />
         <click selector="{{BlockPageActionsSection.edit(CMSBlockPage.identifier)}}" stepKey="navigateToCreatedCMSBlock" />
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOfStagingSection" />
     </actionGroup>
 </actionGroups>
