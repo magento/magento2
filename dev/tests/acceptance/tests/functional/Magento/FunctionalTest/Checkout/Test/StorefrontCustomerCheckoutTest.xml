@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="#"/>
             <group value="checkout"/>
+            <!--Skipped; see: MAGETWO-88791-->
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
