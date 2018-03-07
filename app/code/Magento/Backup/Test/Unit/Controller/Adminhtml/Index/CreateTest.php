@@ -67,7 +67,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $maintenanceMode;
+    private $maintenanceModeMock;
 
     /**
      * @var \Magento\Framework\Backup\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -75,7 +75,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $backupFactoryMock;
 
     /**
-     * @var \Magento\Backup\Controller\Adminhtml\Index\Create|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Controller\Adminhtml\Index\Create
      */
     private $createController;
 
@@ -110,7 +110,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getExtensionByType', 'getBackupsDir'])
             ->getMock();
-        $this->maintenanceMode = $this->getMockBuilder(\Magento\Framework\App\MaintenanceMode::class)
+        $this->maintenanceModeMock = $this->getMockBuilder(\Magento\Framework\App\MaintenanceMode::class)
             ->disableOriginalConstructor()
             ->setMethods(['set'])
             ->getMock();
@@ -126,7 +126,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'response' => $this->responseMock,
                 'session' => $this->sessionMock,
                 'helper' => $this->dataBackendHelperMock,
-                'maintenanceMode' => $this->maintenanceMode,
+                'maintenanceMode' => $this->maintenanceModeMock,
             ]
         );
         $this->createController = $this->objectManager->getObject(
@@ -154,10 +154,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('isPost')
             ->willReturn(false);
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('maintenance_mode')
-            ->willReturn(true);
         $this->dataBackendHelperMock->expects($this->any())
             ->method('getUrl')
             ->with($redirectUrl, [])
@@ -202,7 +198,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('representJson')
             ->with($response)
             ->willReturnSelf();
-        $this->maintenanceMode->expects($this->any())
+        $this->maintenanceModeMock->expects($this->any())
             ->method('set')
             ->with(true)
             ->willReturn(false);
