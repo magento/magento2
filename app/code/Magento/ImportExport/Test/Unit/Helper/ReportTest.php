@@ -147,9 +147,26 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     */
+    public function testImportFileExistsException()
+    {
+        $this->report->importFileExists('some_folder/../another_folder');
+    }
+
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('file'), true);
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testImportFileExistsExceptionInverted()
+    {
+        $this->report->importFileExists('some_folder\..\another_folder');
     }
 
     /**
