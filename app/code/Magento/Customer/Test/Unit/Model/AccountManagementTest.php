@@ -1318,19 +1318,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-
         $this->customerSecure
             ->expects($this->any())
             ->method('getRpToken')
             ->willReturn('newStringToken');
-
         $pastDateTime = '2016-10-25 00:00:00';
-
         $this->customerSecure
             ->expects($this->any())
             ->method('getRpTokenCreatedAt')
             ->willReturn($pastDateTime);
-
         $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getResetPasswordLinkExpirationPeriod'])
@@ -1363,17 +1359,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('format')
             ->with(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             ->willReturn($dateTime);
-
         $dateTimeMock
             ->expects($this->any())
             ->method('getTimestamp')
             ->willReturn($timestamp);
-
         $dateTimeMock
             ->expects($this->any())
             ->method('setTimestamp')
             ->willReturnSelf();
-
         $dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -1400,10 +1393,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'transportBuilder' => $this->transportBuilder,
             ]
         );
-        $reflection = new \ReflectionClass(get_class($this->accountManagement));
-        $reflectionProperty = $reflection->getProperty('authentication');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->accountManagement, $this->authenticationMock);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'authentication',
+            $this->authenticationMock
+        );
     }
 
     /**
