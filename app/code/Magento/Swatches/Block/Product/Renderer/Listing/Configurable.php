@@ -24,6 +24,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
