@@ -570,6 +570,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         }
 
         $path = rtrim($this->getSitemapPath(), '/') . '/' . $fileName;
+
+        if (is_link($path) && readlink($path)) {
+            $path = readlink($path);
+        }
+
         $this->_stream = $this->_directory->openFile($path);
 
         $fileHeader = sprintf($this->_tags[$type][self::OPEN_TAG_KEY], $type);
