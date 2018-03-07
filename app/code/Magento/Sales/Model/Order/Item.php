@@ -79,9 +79,9 @@ class Item extends AbstractModel implements OrderItemInterface
     protected $_children = [];
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var \Magento\Sales\Model\OrderRepository\Proxy 
      */
-    protected $_orderFactory;
+    protected $orderRepository;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -107,7 +107,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Model\OrderRepository\Proxy $orderRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -121,7 +121,7 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Sales\Model\OrderRepository\Proxy $orderRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -140,7 +140,7 @@ class Item extends AbstractModel implements OrderItemInterface
         );
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->_orderFactory = $orderFactory;
+        $this->orderRepository = $orderRepository;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
     }
@@ -297,8 +297,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getOrder()
     {
         if ($this->_order === null && ($orderId = $this->getOrderId())) {
-            $order = $this->_orderFactory->create();
-            $order->load($orderId);
+            $order = $this->orderRepository->get($this->getOrderId());
             $this->setOrder($order);
         }
         return $this->_order;
