@@ -598,7 +598,7 @@ class DataProvider
         if (false !== $value) {
             $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
             if (null === $optionValue) {
-                $value = preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+                $value = $this->filterAttributeValue($value);
             } else {
                 $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
@@ -628,11 +628,25 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
+                $this->attributeOptions[$optionKey] = array_map(function ($value) {
+                    return $this->filterAttributeValue($value);
+                }, $this->attributeOptions[$optionKey]);
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
 
         return $this->attributeOptions[$optionKey][$valueId] ?? null;
+    }
+
+    /**
+     * Remove whitespaces and tags from attribute value
+     *
+     * @param string $value
+     * @return string
+     */
+    private function filterAttributeValue($value)
+    {
+        return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
     }
 }
