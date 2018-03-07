@@ -147,9 +147,38 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
     }
 
+    /**
+     * @dataProvider importFileExistsDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     * @param string $fileName
+     * @return void
+     */
+    public function testImportFileExistsException($fileName)
+    {
+        $this->report->importFileExists($fileName);
+    }
+
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('file'), true);
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
+    /**
+     * Dataprovider for testImportFileExistsException()
+     *
+     * @return array
+     */
+    public function importFileExistsDataProvider()
+    {
+        return [
+            [
+                'fileName' => 'some_folder/../another_folder',
+            ],
+            [
+                'fileName' => 'some_folder\..\another_folder',
+            ],
+        ];
     }
 
     /**
