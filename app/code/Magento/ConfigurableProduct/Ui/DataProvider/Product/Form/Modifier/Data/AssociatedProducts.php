@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\CurrencyInterface;
@@ -84,6 +85,11 @@ class AssociatedProducts
     protected $imageHelper;
 
     /**
+     * @var ProductStockDataProvider
+     */
+    private $productStockDataProvider;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ConfigurableType $configurableType
@@ -93,6 +99,7 @@ class AssociatedProducts
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
+     * @param ProductStockDataProvider $productStockDataProvider
      */
     public function __construct(
         LocatorInterface $locator,
@@ -103,7 +110,8 @@ class AssociatedProducts
         VariationMatrix $variationMatrix,
         CurrencyInterface $localeCurrency,
         JsonHelper $jsonHelper,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        ProductStockDataProvider $productStockDataProvider
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -114,6 +122,8 @@ class AssociatedProducts
         $this->localeCurrency = $localeCurrency;
         $this->jsonHelper = $jsonHelper;
         $this->imageHelper = $imageHelper;
+        $this->productStockDataProvider = $productStockDataProvider ?: ObjectManager::getInstance()
+            ->get(ProductStockDataProvider::class);
     }
 
     /**
@@ -283,7 +293,7 @@ class AssociatedProducts
                         ) . '" target="_blank">' . $product->getName() . '</a>',
                         'sku' => $product->getSku(),
                         'name' => $product->getName(),
-                        'qty' => $this->getProductStockQty($product),
+                        'qty' => $this->productStockDataProvider->execute($product),
                         'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
@@ -420,6 +430,8 @@ class AssociatedProducts
      *
      * @param Product $product
      * @return float
+     *
+     * @deprecated
      */
     protected function getProductStockQty(Product $product)
     {

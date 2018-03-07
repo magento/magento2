@@ -13,4 +13,8 @@
         </arguments>
     </type>
     <preference for="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" type="Magento\InventoryConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" />
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductStockDataProvider">
+        <plugin name="adapt_configurable_product_form_product_stock_data_provider"
+                type="Magento\InventoryConfigurableProduct\Plugin\ProductForm\AdaptProductStockDataProvider"/>
+    </type>
 </config>

@@ -100,12 +100,12 @@
                     </validation>
                 </settings>
             </field>
-            <container name="out_of_stock_threshold_group" component="Magento_Ui/js/form/components/group" template="ui/group/group">
+            <container name="min_qty_group" component="Magento_Ui/js/form/components/group" template="ui/group/group">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
                         <item name="label" xsi:type="string">Out of stock Threshold</item>
-                        <item name="dataScope" xsi:type="string">out_of_stock_threshold_group</item>
+                        <item name="dataScope" xsi:type="string">min_qty_group</item>
                     </item>
                 </argument>
                 <field name="min_qty" formElement="input">
@@ -168,11 +168,11 @@
                         <dataScope>notify_stock_qty</dataScope>
                         <dataType>text</dataType>
                         <imports>
-                            <link name="disabled">${$.parentName}.use_config_notify_stock_qty:checked</link>
+                            <link name="disabled">${$.parentName}.notify_stock_qty_use_default:checked</link>
                         </imports>
                     </settings>
                 </field>
-                <field name="use_config_notify_stock_qty" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
+                <field name="notify_stock_qty_use_default" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
@@ -182,7 +182,7 @@
                         </item>
                     </argument>
                     <settings>
-                        <dataScope>use_config_notify_stock_qty</dataScope>
+                        <dataScope>notify_stock_qty_use_default</dataScope>
                         <links>
                             <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
                         </links>
