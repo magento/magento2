@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
  * @since 100.0.3
  */
@@ -322,7 +323,7 @@ class DataProvider
 
             $entity = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
 
-            foreach ($attributes as $attributeId => $attribute) {
+            foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
                 $this->searchableAttributes[$attribute->getAttributeId()] = $attribute;
                 $this->searchableAttributes[$attribute->getAttributeCode()] = $attribute;
