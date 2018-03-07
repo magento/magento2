@@ -12,7 +12,6 @@ use Magento\Wishlist\Model\LocaleQuantityProcessor;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 
 class Update extends \Magento\Wishlist\Controller\AbstractIndex
 {
@@ -54,8 +53,9 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
         parent::__construct($context);
-        $this->stockItemRepository = $stockItemRepository ?: ObjectManager::getInstance()
-            ->get(StockItemRepositoryInterface::class);
+        $this->stockItemRepository = $stockItemRepository ?: $this->_objectManager->get(
+            StockItemRepositoryInterface::class
+        );
     }
 
     /**
@@ -101,10 +101,10 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
 
                 $qty = null;
                 if (isset($post['qty'][$itemId])) {
-                    $stockItem = $this->stockItemRepository->get($itemId);
                     $qty = $this->quantityProcessor->process($post['qty'][$itemId]);
-                    if (is_double($qty) && !$stockItem->getIsQtyDecimal()) {
-                        $qty = floor($qty);
+                    if (is_double($qty)) {
+                        $stockItem = $this->stockItemRepository->get($itemId);
+                        $qty = !$stockItem->getIsQtyDecimal() ? floor($qty) : $qty;
                     }
                 }
                 if ($qty === null) {
