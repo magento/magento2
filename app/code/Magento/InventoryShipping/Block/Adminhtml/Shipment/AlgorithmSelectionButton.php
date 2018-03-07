@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Block\Adminhtml\Shipment;
 
+use Magento\Backend\Block\Widget\Button\SplitButton;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
 use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface;
@@ -50,14 +51,14 @@ class AlgorithmSelectionButton extends Container
     protected function _prepareLayout()
     {
         if (!empty($this->_getAlgorithmsListOptions())) {
-            $addButtonProps = [
+            $addButtonProps = array(
                 'id' => 'algorithm_action_list',
                 'label' => __('Source Selection Algorithm'),
                 'class' => 'add',
                 'button_class' => '',
-                'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                'class_name' => SplitButton::class,
                 'options' => $this->_getAlgorithmsListOptions(),
-            ];
+            );
 
             $this->buttonList->add('algorithm_action_list', $addButtonProps);
         }
@@ -78,7 +79,6 @@ class AlgorithmSelectionButton extends Container
                 'label' => $algorithm->getTitle(),
                 'onclick' => 'processAlgorithm("'.$algorithm->getCode().'")'
             ];
-
         }
         return $splitButtonOptions;
     }

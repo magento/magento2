@@ -1,3 +1,12 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
 <script>
     require([
         'jquery',
@@ -34,7 +43,7 @@
         sendRequest = function (requestData, code) {
             var websiteId = <?= $block->getWebsiteId() ?>;
             $.ajax({
-                url: "<?php echo $block->getUrl('inventoryshipping/Algorithm/GetSources') ?>",
+                url: "<?= $block->getUrl('inventoryshipping/Algorithm/GetSources') ?>",
                 type: 'POST',
                 dataType: 'json',
                 showLoader: true,

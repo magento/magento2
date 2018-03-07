@@ -85,7 +85,8 @@ class GetSources extends Action
 
         if ($request->isPost() && !empty($postRequest['requestData'])) {
             $requestData = $postRequest['requestData'];
-            $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $this->getDefaultSourceSelectionAlgorithmCode->execute();
+            $defaultCode = $this->getDefaultSourceSelectionAlgorithmCode->execute();
+            $algorithmCode = !empty($postRequest['algorithmCode']) ? $postRequest['algorithmCode'] : $defaultCode;
 
             $websiteId = $postRequest['websiteId'] ?? 1;
             $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
@@ -115,6 +116,6 @@ class GetSources extends Action
             }
             $resultJson->setData($result);
         }
-       return $resultJson;
+        return $resultJson;
     }
 }
