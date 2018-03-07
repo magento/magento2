@@ -100,6 +100,8 @@ class AssociatedProducts
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
      * @param ProductStockDataProvider $productStockDataProvider
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LocatorInterface $locator,
