@@ -60,8 +60,8 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'commit',
                 'clean',
             ])->disableOriginalConstructor()->getMock();
-        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('visitor_id'));
-        $this->resource->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
+        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
+        $this->resource->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 
         $arguments = $this->objectManagerHelper->getConstructArguments(
             \Magento\Customer\Model\Visitor::class,
@@ -79,8 +79,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
     {
         $oldSessionId = 'asdfhasdfjhkj2198sadf8sdf897';
         $newSessionId = 'bsdfhasdfjhkj2198sadf8sdf897';
-        $this->session->expects($this->any())->method('getSessionId')
-            ->will($this->returnValue($newSessionId));
+        $this->session->expects($this->any())->method('getSessionId')->willReturn($newSessionId);
         $this->session->expects($this->atLeastOnce())->method('getVisitorData')
             ->willReturn(['session_id' => $oldSessionId]);
         $this->visitor->initByRequest(null);
@@ -164,7 +163,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testClean()
     {
-        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->will($this->returnSelf());
+        $this->resource->expects($this->once())->method('clean')->with($this->visitor)->willReturnSelf();
         $this->visitor->clean();
     }
 }
