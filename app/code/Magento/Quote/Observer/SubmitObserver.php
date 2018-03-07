@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Observer\Webapi;
+namespace Magento\Quote\Observer;
 
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Event\ObserverInterface;
@@ -13,12 +13,12 @@ class SubmitObserver implements ObserverInterface
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var OrderSender
      */
-    protected $orderSender;
+    private $orderSender;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
