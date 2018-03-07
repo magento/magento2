@@ -9,6 +9,7 @@ use Magento\Swatches\Block\Product\Renderer\Configurable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {

@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
