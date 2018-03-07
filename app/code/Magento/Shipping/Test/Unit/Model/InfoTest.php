@@ -309,30 +309,4 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
-    public function testLoadByHashWithWrongCode()
-    {
-        $hash = base64_encode('hash');
-        $decodedHash = [
-            'key' => 'track_id',
-            'id' => 1,
-            'hash' => 'protected_code',
-        ];
-        $this->helper->expects($this->atLeastOnce())
-            ->method('decodeTrackingHash')
-            ->with($hash)
-            ->willReturn($decodedHash);
-        $track = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment\Track::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getProtectCode'])
-            ->getMock();
-        $track->expects($this->atLeastOnce())->method('load')->with($decodedHash['id'])->willReturnSelf();
-        $track->expects($this->atLeastOnce())->method('getId')->willReturn($decodedHash['id']);
-        $track->expects($this->atLeastOnce())->method('getProtectCode')->willReturn('0e123123123');
-
-        $this->trackFactory->expects($this->atLeastOnce())->method('create')->willReturn($track);
-        $this->info->loadByHash($hash);
-
-        $this->assertEmpty($this->info->getTrackingInfo());
-    }
 }
