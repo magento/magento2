@@ -17,7 +17,6 @@ if (isset($_POST['command'])) {
         }
         echo implode("\n", $output);
     } else {
-
         http_response_code(403);
         echo "Given command not found valid in Magento CLI Command list.";
     }
