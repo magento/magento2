@@ -248,7 +248,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $imagePath = '/sales/store/logo/' . $image;
             if ($this->_mediaDirectory->isFile($imagePath)) {
                 $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
-                $top = 830;
+                $top = $this->y;
                 //top border of the page
                 $widthLimit = 270;
                 //half of the page width
