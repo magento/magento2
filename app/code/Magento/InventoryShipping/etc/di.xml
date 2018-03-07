@@ -6,8 +6,33 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmProviderInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmProvider"/>
-    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResult"/>
-    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelection"/>
-    <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelectionInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceItemSelection"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterface" type="Magento\InventoryShipping\Model\SourceSelection\Request\InventoryRequest"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\ItemRequestInterface" type="Magento\InventoryShipping\Model\SourceSelection\Request\ItemRequest"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionAlgorithmInterface" type="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionAlgorithm"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInterface" type="Magento\InventoryShipping\Model\SourceSelection\GetSourceSelectionAlgorithmList"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface" type="Magento\InventoryShipping\Model\SourceSelection\Result\SourceSelectionItem"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface" type="Magento\InventoryShipping\Model\SourceSelection\Result\SourceSelectionResult"/>
+    <preference for="Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface" type="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService"/>
+    <preference for="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface" type="Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCode"/>
+    <type name="Magento\InventoryShipping\Model\SourceSelection\SourceSelectionService">
+        <arguments>
+            <argument name="sourceSelectionMethods" xsi:type="array">
+                <item name="priority" xsi:type="string">Magento\InventoryShipping\Model\SourceSelection\Algorithms\PriorityBasedAlgorithm</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\InventoryShipping\Model\SourceSelection\GetSourceSelectionAlgorithmList">
+        <arguments>
+            <argument name="availableAlgorithms" xsi:type="array">
+                <item name="priority" xsi:type="array">
+                    <item xsi:type="string" name="code">priority</item>
+                    <item xsi:type="string" name="title">Algorithm which provides Source Selections based on predefined priority of Source</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\ShipmentFactory">
+        <plugin name="collect_sources_for_shipment_items" type="Magento\InventoryShipping\Plugin\Sales\CollectSourcesForShipmentItems"/>
+    </type>
 </config>

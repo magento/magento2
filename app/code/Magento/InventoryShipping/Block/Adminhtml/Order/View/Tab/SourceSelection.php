@@ -12,9 +12,10 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryShipping\Model\ShippingAlgorithmProviderInterface;
-use Magento\InventoryShipping\Model\ShippingAlgorithmResult\ShippingAlgorithmResultInterface;
-use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInterface;
+use Magento\InventoryShipping\Model\SourceSelection\InventoryRequestFromOrderFactory;
+use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
+use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionResultInterface;
+use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
 /**
  * Tab for source items display on the order editing page
@@ -24,9 +25,9 @@ use Magento\InventoryShipping\Model\ShippingAlgorithmResult\SourceSelectionInter
 class SourceSelection extends Template implements TabInterface
 {
     /**
-     * @var ShippingAlgorithmResultInterface
+     * @var SourceSelectionResultInterface
      */
-    private $shippingAlgorithmResult;
+    private $sourceSelectionResult = null;
 
     /**
      * @var Registry
@@ -34,33 +35,49 @@ class SourceSelection extends Template implements TabInterface
     private $registry;
 
     /**
-     * @var ShippingAlgorithmProviderInterface
-     */
-    private $shippingAlgorithmProvider;
-
-    /**
      * @var SourceRepositoryInterface
      */
     private $sourceRepository;
 
     /**
+     * @var InventoryRequestFromOrderFactory
+     */
+    private $inventoryRequestFactory;
+
+    /**
+     * @var SourceSelectionServiceInterface
+     */
+    private $sourceSelectionService;
+
+    /**
+     * @var GetDefaultSourceSelectionAlgorithmCodeInterface
+     */
+    private $getDefaultSourceSelectionAlgorithmCode;
+
+    /**
      * @param Context $context
      * @param Registry $registry
-     * @param ShippingAlgorithmProviderInterface $shippingAlgorithmProvider
      * @param SourceRepositoryInterface $sourceRepository
+     * @param InventoryRequestFromOrderFactory $inventoryRequestFactory
+     * @param SourceSelectionServiceInterface $sourceSelectionService
+     * @param GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        ShippingAlgorithmProviderInterface $shippingAlgorithmProvider,
         SourceRepositoryInterface $sourceRepository,
+        InventoryRequestFromOrderFactory $inventoryRequestFactory,
+        SourceSelectionServiceInterface $sourceSelectionService,
+        GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->registry = $registry;
-        $this->shippingAlgorithmProvider = $shippingAlgorithmProvider;
         $this->sourceRepository = $sourceRepository;
+        $this->inventoryRequestFactory = $inventoryRequestFactory;
+        $this->sourceSelectionService = $sourceSelectionService;
+        $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
     }
 
     /**
@@ -74,13 +91,17 @@ class SourceSelection extends Template implements TabInterface
     }
 
     /**
-     * Get source selections for order
+     * Get source selections for order grouped by sourceCode
      *
-     * @return SourceSelectionInterface[]
+     * @return array
      */
     public function getSourceSelections(): array
     {
-        return $this->getShippingAlgorithmResult()->getSourceSelections();
+        $result = [];
+        foreach ($this->getShippingAlgorithmResult()->getSourceSelectionItems() as $item) {
+            $result[$item->getSourceCode()][] = $item;
+        }
+        return $result;
     }
 
     /**
@@ -128,17 +149,19 @@ class SourceSelection extends Template implements TabInterface
     }
 
     /**
-     * @return ShippingAlgorithmResultInterface
+     * @return SourceSelectionResultInterface
      */
     private function getShippingAlgorithmResult()
     {
-        if (null === $this->shippingAlgorithmResult) {
+        if (null === $this->sourceSelectionResult) {
             $order = $this->registry->registry('current_order');
-            $shippingAlgorithm = $this->shippingAlgorithmProvider->execute();
-
-            $this->shippingAlgorithmResult = $shippingAlgorithm->execute($order);
+            $inventoryRequest = $this->inventoryRequestFactory->create($order);
+            $this->sourceSelectionResult = $this->sourceSelectionService->execute(
+                $inventoryRequest,
+                $this->getDefaultSourceSelectionAlgorithmCode->execute()
+            );
         }
 
-        return $this->shippingAlgorithmResult;
+        return $this->sourceSelectionResult;
     }
 }
