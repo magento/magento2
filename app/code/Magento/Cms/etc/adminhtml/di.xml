@@ -46,4 +46,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Cms\Ui\Component\Form\Field\PageLayout" type="Magento\Ui\Component\Form\Field\DefaultValue">
+        <arguments>
+            <argument name="path" xsi:type="string">web/default_layouts/default_cms_layout</argument>
+        </arguments>
+    </virtualType>
 </config>

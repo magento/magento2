@@ -226,7 +226,7 @@
             <collapsible>true</collapsible>
             <label translate="true">Design</label>
         </settings>
-        <field name="page_layout" formElement="select">
+        <field name="page_layout" formElement="select" class="Magento\Cms\Ui\Component\Form\Field\PageLayout">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>
