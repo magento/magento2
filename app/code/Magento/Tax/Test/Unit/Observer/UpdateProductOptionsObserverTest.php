@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +24,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         $displayPriceExcludingTax
     ) {
 
-        $frameworkObject= new \Magento\Framework\DataObject();
+        $frameworkObject = new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
         $product=$this->createMock(\Magento\Catalog\Model\Product::class);
@@ -70,10 +69,11 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             [
                 'taxData' => $taxData,
                 'registry' => $registry,
-                ]
+            ]
         );
 
         $taxObserverObject->execute($observerObject);
+
         $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }
 
