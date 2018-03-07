@@ -15,5 +15,6 @@
         <fillField  stepKey="fillEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
         <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
