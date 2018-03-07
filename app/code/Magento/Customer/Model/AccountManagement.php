@@ -48,6 +48,9 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SaveHandlerInterface;
+use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 
 /**
  * Handle various customer account actions
@@ -244,6 +247,21 @@ class AccountManagement implements AccountManagementInterface
     private $transportBuilder;
 
     /**
+     * @var SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
+     * @var SaveHandlerInterface
+     */
+    private $saveHandler;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $visitorCollectionFactory;
+
+    /**
      * @var DataObjectProcessor
      */
     protected $dataProcessor;
@@ -335,6 +353,9 @@ class AccountManagement implements AccountManagementInterface
      * @param CredentialsValidator|null $credentialsValidator
      * @param DateTimeFactory|null $dateTimeFactory
      * @param AccountConfirmation|null $accountConfirmation
+     * @param SessionManagerInterface|null $sessionManager
+     * @param SaveHandlerInterface|null $saveHandler
+     * @param CollectionFactory|null $visitorCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -363,7 +384,10 @@ class AccountManagement implements AccountManagementInterface
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         CredentialsValidator $credentialsValidator = null,
         DateTimeFactory $dateTimeFactory = null,
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        SessionManagerInterface $sessionManager = null,
+        SaveHandlerInterface $saveHandler = null,
+        CollectionFactory $visitorCollectionFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -393,6 +417,12 @@ class AccountManagement implements AccountManagementInterface
         $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->sessionManager = $sessionManager
+            ?: ObjectManager::getInstance()->get(SessionManagerInterface::class);
+        $this->saveHandler = $saveHandler
+            ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
+        $this->visitorCollectionFactory = $visitorCollectionFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
     }
 
     /**
@@ -594,7 +624,10 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $this->sessionManager->destroy();
+        $this->destroyCustomerSessions($customer->getId());
         $this->customerRepository->save($customer);
+
         return true;
     }
 
@@ -896,7 +929,9 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpTokenCreatedAt(null);
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $this->destroyCustomerSessions($customer->getId());
         $this->customerRepository->save($customer);
+
         return true;
     }
 
@@ -1397,6 +1432,37 @@ class AccountManagement implements AccountManagementInterface
             );
         } else {
             return $this->emailNotification;
+        }
+    }
+
+    /**
+     * Destroy all active customer sessions by customer id (current session will not be destroyed).
+     * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
+     * configured session lifetime.
+     *
+     * @param string|int $customerId
+     * @return void
+     */
+    private function destroyCustomerSessions($customerId)
+    {
+        $sessionLifetime = $this->scopeConfig->getValue(
+            \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $dateTime = $this->dateTimeFactory->create();
+        $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+        /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
+        $visitorCollection = $this->visitorCollectionFactory->create();
+        $visitorCollection->addFieldToFilter('customer_id', $customerId);
+        $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
+        $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
+        /** @var \Magento\Customer\Model\Visitor $visitor */
+        foreach ($visitorCollection->getItems() as $visitor) {
+            $sessionId = $visitor->getSessionId();
+            $this->sessionManager->start();
+            $this->saveHandler->destroy($sessionId);
+            $this->sessionManager->writeClose();
         }
     }
 }
