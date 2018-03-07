@@ -250,15 +250,26 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->info->getTrackingInfo());
     }
 
-    public function testLoadByHashWithTrackId()
-    {
+    /**
+     * @dataProvider loadByHashWithTrackIdDataProvider
+     * @param string $protectCodeHash
+     * @param string $protectCode
+     * @param string $numberDetail
+     * @param array $trackDetails
+     * @return void
+     */
+    public function testLoadByHashWithTrackId(
+        string $protectCodeHash,
+        string $protectCode,
+        string $numberDetail,
+        array $trackDetails
+    ) {
         $hash = base64_encode('hash');
         $decodedHash = [
             'key' => 'track_id',
             'id' => 1,
-            'hash' => 'protected_code',
+            'hash' => $protectCodeHash,
             ];
-        $trackDetails = 'track_details';
         $this->helper->expects($this->atLeastOnce())
             ->method('decodeTrackingHash')
             ->with($hash)
@@ -269,13 +280,34 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $track->expects($this->atLeastOnce())->method('load')->with($decodedHash['id'])->willReturnSelf();
         $track->expects($this->atLeastOnce())->method('getId')->willReturn($decodedHash['id']);
-        $track->expects($this->atLeastOnce())->method('getProtectCode')->willReturn($decodedHash['hash']);
-        $track->expects($this->atLeastOnce())->method('getNumberDetail')->willReturn($trackDetails);
+        $track->expects($this->atLeastOnce())->method('getProtectCode')->willReturn($protectCode);
+        $track->expects($this->any())->method('getNumberDetail')->willReturn($numberDetail);
 
         $this->trackFactory->expects($this->atLeastOnce())->method('create')->willReturn($track);
         $this->info->loadByHash($hash);
 
-        $this->assertEquals([[$trackDetails]], $this->info->getTrackingInfo());
+        $this->assertEquals($trackDetails, $this->info->getTrackingInfo());
+    }
+
+    /**
+     * @return array
+     */
+    public function loadByHashWithTrackIdDataProvider()
+    {
+        return [
+            [
+                'hash' => 'protected_code',
+                'protect_code' => 'protected_code',
+                'number_detail' => 'track_details',
+                'track_details' => [['track_details']],
+            ],
+            [
+                'hash' => '0',
+                'protect_code' => '0e6640',
+                'number_detail' => '',
+                'track_details' => [],
+            ],
+        ];
     }
 
     public function testLoadByHashWithWrongCode()
