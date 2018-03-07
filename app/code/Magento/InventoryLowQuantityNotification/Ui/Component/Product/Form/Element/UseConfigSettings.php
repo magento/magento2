@@ -40,7 +40,7 @@ class UseConfigSettings extends Checkbox
         ContextInterface $context,
         Json $serializer,
         JsonValidator $jsonValidator,
-        $components = [],
+        array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
