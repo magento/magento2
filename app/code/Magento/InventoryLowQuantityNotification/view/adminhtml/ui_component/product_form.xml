@@ -31,7 +31,7 @@
                 <field name="notify_stock_qty_use_default" component="Magento_InventoryLowQuantityNotification/js/components/use-config-settings" formElement="checkbox" sortOrder="55">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
-                            <item name="valueFromConfig" xsi:type="object">Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Command\GetConfigValue</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
                         </item>
                     </argument>

@@ -46,19 +46,23 @@ class SetDataToLegacyStockStatus
      */
     public function execute(string $sku, float $quantity, int $status)
     {
-        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $productIds = $this->getProductIdsBySkus->execute([$sku]);
 
-        $connection = $this->resourceConnection->getConnection();
-        $connection->update(
-            $this->resourceConnection->getTableName('cataloginventory_stock_status'),
-            [
-                StockStatusInterface::QTY => $quantity,
-                StockStatusInterface::STOCK_STATUS => $status,
-            ],
-            [
-                StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,
-                'website_id = ?' => 0,
-            ]
-        );
+        if (isset($productIds[$sku])) {
+            $productId = $productIds[$sku];
+
+            $connection = $this->resourceConnection->getConnection();
+            $connection->update(
+                $this->resourceConnection->getTableName('cataloginventory_stock_status'),
+                [
+                    StockStatusInterface::QTY => $quantity,
+                    StockStatusInterface::STOCK_STATUS => $status,
+                ],
+                [
+                    StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,
+                    'website_id = ?' => 0,
+                ]
+            );
+        }
     }
 }

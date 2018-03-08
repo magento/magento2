@@ -31,19 +31,20 @@ class UseConfigSettings extends Checkbox
 
     /**
      * @param ContextInterface $context
+     * @param Json $serializer
+     * @param JsonValidator $jsonValidator
      * @param array $components
      * @param array $data
-     * @param Json|null $serializer
-     * @param JsonValidator|null $jsonValidator
      */
     public function __construct(
         ContextInterface $context,
         Json $serializer,
         JsonValidator $jsonValidator,
-        $components = [],
+        array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
+
         $this->serializer = $serializer;
         $this->jsonValidator = $jsonValidator;
     }
