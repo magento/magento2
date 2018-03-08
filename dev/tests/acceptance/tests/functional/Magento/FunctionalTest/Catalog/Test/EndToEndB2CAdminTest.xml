@@ -214,7 +214,6 @@
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>
 
-
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
         <!--Clean up categories-->
         <comment userInput="Clean up categories" stepKey="cleanupCategoriesComment"/>
