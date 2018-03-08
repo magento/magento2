@@ -56,7 +56,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $result = $codeSniffer->run($this->filterFiles($fileList));
 
-        $report = file_get_contents($reportFile);
+        $report = file_exists($reportFile) ? file_get_contents($reportFile) : "";
         $this->assertEquals(
             0,
             $result,
