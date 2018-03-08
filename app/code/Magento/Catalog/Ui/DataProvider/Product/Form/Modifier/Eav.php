@@ -195,7 +195,7 @@ class Eav extends AbstractModifier
     private $wysiwygConfigProcessor;
 
     /**
-     * @var
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
