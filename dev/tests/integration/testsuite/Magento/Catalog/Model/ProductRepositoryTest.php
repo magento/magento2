@@ -12,6 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Provide tests for ProductRepository model.
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -121,5 +124,24 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         self::assertSame('1.1200', $product->getPrice());
         self::assertSame('1.2300', $product->getWeight());
         self::assertSame('simple', $product->getTypeId());
+    }
+
+    /**
+     * Tests product repository update should use provided store code.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductUpdate()
+    {
+        $sku = 'simple';
+        $nameUpdated = 'updated';
+        $product = $this->productRepository->get($sku, false, 0);
+        $product->setName($nameUpdated);
+        $this->productRepository->save($product);
+        $product = $this->productRepository->get($sku, false, 0);
+        self::assertEquals(
+            $nameUpdated,
+            $product->getName()
+        );
     }
 }
