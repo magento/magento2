@@ -98,6 +98,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $_url;
 
     /**
+     * @var ResourceModel\Category
+     */
+    protected $_resource;
+
+    /**
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
@@ -311,6 +316,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected function getCustomAttributesCodes()
     {
         return $this->getCustomAttributeCodes->execute($this->metadataService);
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
