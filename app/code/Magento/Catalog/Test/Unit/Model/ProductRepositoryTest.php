@@ -330,6 +330,22 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->productMock, $this->model->get($sku));
     }
 
+    /**
+     * Test we can get product using get() with different cased SKU
+     */
+    public function testGetBySkuWithDifferentCase()
+    {
+        $correctCasedSku = 'test_sku';
+        $differentCasedSku = 'tEsT_sKU';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($correctCasedSku)
+            ->will($this->returnValue('test_id'));
+        $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getSku')->willReturn($correctCasedSku);
+        $this->assertEquals($this->productMock, $this->model->get($differentCasedSku));
+    }
+
     public function testGetWithSetStoreId()
     {
         $productId = 123;
