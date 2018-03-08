@@ -231,6 +231,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
+        $sku = strtolower($sku);
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
@@ -307,7 +308,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $this->instancesById[$product->getId()][$cacheKey] = $product;
-        $this->instances[$product->getSku()][$cacheKey] = $product;
+        $this->instances[strtolower($product->getSku())][$cacheKey] = $product;
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
@@ -340,7 +341,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 unset($this->instancesById[$productData['id']]);
                 $product = $this->getById($productData['id']);
             } else {
-                unset($this->instances[$productData['sku']]);
+                unset($this->instances[strtolower($productData['sku'])]);
                 $product = $this->get($productData['sku']);
             }
         }
@@ -495,7 +496,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
-            unset($this->instances[$product->getSku()]);
+            unset($this->instances[strtolower($product->getSku())]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (ConnectionException $exception) {
@@ -529,7 +530,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
         }
-        unset($this->instances[$product->getSku()]);
+        unset($this->instances[strtolower($product->getSku())]);
         unset($this->instancesById[$product->getId()]);
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
@@ -542,7 +543,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
-            unset($this->instances[$product->getSku()]);
+            unset($this->instances[strtolower($product->getSku())]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
@@ -552,7 +553,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 __('Unable to remove product %1', $sku)
             );
         }
-        unset($this->instances[$sku]);
+        unset($this->instances[strtolower($sku)]);
         unset($this->instancesById[$productId]);
         return true;
     }
