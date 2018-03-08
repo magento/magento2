@@ -16,12 +16,13 @@
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
-            <createData stepKey="myProductAttributeCreation" entity="productAttributeWithTwoOptions"/>
+            <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
