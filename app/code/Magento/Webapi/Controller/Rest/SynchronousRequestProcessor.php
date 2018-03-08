@@ -86,7 +86,6 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         $route = $this->inputParamsResolver->getRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
-
         $service = $this->objectManager->get($serviceClassName);
 
         /**
