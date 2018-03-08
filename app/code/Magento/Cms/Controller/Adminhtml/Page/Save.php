@@ -41,21 +41,29 @@ class Save extends \Magento\Backend\App\Action
     private $pageRepository;
 
     /**
+     * @var Page\Copier
+     */
+    private $copier;
+
+    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
+     * @param Page\Copier $copier
+     * @param \Magento\Cms\Model\PageFactory|null $pageFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
      */
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
+        \Magento\Cms\Model\Page\Copier $copier,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
         \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
+        $this->copier = $copier;
         $this->pageFactory = $pageFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
@@ -73,6 +81,7 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
+        $redirectBack = $this->getRequest()->getParam('back', false);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
@@ -110,8 +119,22 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $this->pageRepository->save($model);
+                if ($redirectBack === 'duplicate') {
+                    $newPage = $this->copier->copy($model);
+                    //
+                    $this->messageManager->addSuccessMessage(__('You duplicated the page'));//add here logic to save one more page
+                }
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
+                if ($redirectBack === 'duplicate' && isset($newPage)) {
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        [
+                            'page_id' => $newPage->getId(),
+                            '_current' => true
+                        ]
+                    );
+                }
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
@@ -126,5 +149,24 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Duplicate existing Cms Page
+     *
+     * @param PageInterface $model
+     * @return PageInterface
+     * @throws LocalizedException
+     */
+    private function duplicatePage(PageInterface $model)
+    {
+        $data = $model->getData();
+        //unset page_id because we duplicate existing page
+        unset($data['page_id']);
+        $newPage = $this->pageFactory->create()->setData($data);
+        //add unique identifier - url key
+        $identifier = $newPage->getIdentifier() . '-1';
+        $newPage->setIdentifier($identifier);
+        return $this->pageRepository->save($newPage);
     }
 }
