@@ -462,7 +462,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
         $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
-        $this->assertEquals($initialCustomAttributeValue, $this->category->getCustomAttribute($customAttributeCode)->getValue());
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->category->setData($customAttributeCode, $newCustomAttributeValue);

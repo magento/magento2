@@ -1299,13 +1299,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals($initialCustomAttributeValue, $this->model->getCustomAttribute($customAttributeCode)->getValue());
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->model->setData($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
-        $this->assertEquals($newCustomAttributeValue, $this->model->getCustomAttribute($customAttributeCode)->getValue());
+        $this->assertEquals(
+            $newCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
     }
 
     /**
