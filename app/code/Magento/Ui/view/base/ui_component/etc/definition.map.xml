@@ -362,6 +362,9 @@
                     <item name="openDialogTitle" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/openDialogTitle
                     </item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/initialMediaGalleryOpenSubpath
+                    </item>
                     <item name="customEntry" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/customEntry
                     </item>
@@ -427,6 +430,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="openDialogTitle" type="string" translate="true" xsi:type="xpath">settings/openDialogTitle</item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">settings/initialMediaGalleryOpenSubpath</item>
                 </item>
             </argument>
         </schema>
