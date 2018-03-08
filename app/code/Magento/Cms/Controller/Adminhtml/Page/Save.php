@@ -11,6 +11,9 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -76,6 +79,7 @@ class Save extends \Magento\Backend\App\Action
      * Save action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
@@ -121,8 +125,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->pageRepository->save($model);
                 if ($redirectBack === 'duplicate') {
                     $newPage = $this->copier->copy($model);
-                    //
-                    $this->messageManager->addSuccessMessage(__('You duplicated the page'));//add here logic to save one more page
+                    $this->messageManager->addSuccessMessage(__('You duplicated the page'));
                 }
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
@@ -149,24 +152,5 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * Duplicate existing Cms Page
-     *
-     * @param PageInterface $model
-     * @return PageInterface
-     * @throws LocalizedException
-     */
-    private function duplicatePage(PageInterface $model)
-    {
-        $data = $model->getData();
-        //unset page_id because we duplicate existing page
-        unset($data['page_id']);
-        $newPage = $this->pageFactory->create()->setData($data);
-        //add unique identifier - url key
-        $identifier = $newPage->getIdentifier() . '-1';
-        $newPage->setIdentifier($identifier);
-        return $this->pageRepository->save($newPage);
     }
 }
