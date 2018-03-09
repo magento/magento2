@@ -4212,6 +4212,14 @@ return [
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
     ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
+    ['Magento\Fmework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'],
+    [
+        'Magento\Framework\MessageQueue\Config\Converter',
+        'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter'
+    ],
+    ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
+    ['Magento\Framework\MessageQueue\PublisherFactory'],
+    ['Magento\Framework\MessageQueue\PublisherProxy'],
     ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
-    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton']
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
 ];
