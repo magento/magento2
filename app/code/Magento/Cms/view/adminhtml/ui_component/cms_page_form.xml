@@ -16,7 +16,6 @@
     <settings>
         <buttons>
             <button name="save" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton"/>
-            <button name="reset" class="Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton"/>
             <button name="delete" class="Magento\Cms\Block\Adminhtml\Page\Edit\DeleteButton"/>
             <button name="back" class="Magento\Cms\Block\Adminhtml\Page\Edit\BackButton"/>
         </buttons>
