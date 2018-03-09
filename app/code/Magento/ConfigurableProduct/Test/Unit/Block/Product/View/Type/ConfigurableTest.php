@@ -192,10 +192,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     2 => null,
                     'base_url' => null,
                     'template' => null,
-                    3 => '$',
+                    3 => 'USD',
                     4 => null,
                 ],
-                '$',
+                'USD',
                 null,
             ]
         ];
@@ -222,9 +222,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($storeMock);
+        $currency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $currency->expects($this->once())->method('getCode')->willReturn($priceCurrency);
         $this->priceCurrency->expects($this->once())
-            ->method('getCurrencySymbol')
-            ->willReturn($priceCurrency);
+            ->method('getCurrency')
+            ->willReturn($currency);
         $this->customerSession->expects($this->once())
             ->method('getCustomerGroupId')
             ->willReturn($customerGroupId);
