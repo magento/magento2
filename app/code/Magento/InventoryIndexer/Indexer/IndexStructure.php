@@ -20,7 +20,7 @@ use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 class IndexStructure implements IndexStructureInterface
 {
     /**
-     * Constants for represent fields in index table. Only for internal module using
+     * Constants for represent fields in index table
      */
     const SKU = 'sku';
     const QUANTITY = 'quantity';

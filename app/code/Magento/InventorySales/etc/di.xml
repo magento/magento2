@@ -24,10 +24,6 @@
     <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
     </type>
-    <!-- TODO: remove plugin on the same module -->
-    <type name="Magento\InventorySalesApi\Api\IsProductSalableInterface">
-        <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin"/>
-    </type>
     <type name="Magento\CatalogInventory\Model\StockManagement">
         <plugin name="process_back_item_qty" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessBackItemQtyPlugin"/>
         <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
@@ -35,5 +31,43 @@
     </type>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
-    <preference for="Magento\InventorySalesApi\Api\IsProductSalableInterface" type="Magento\InventorySales\Model\IsProductSalable"/>
+    <!-- StockItem -->
+    <preference for="Magento\InventorySales\Model\GetStockItemDataInterface" type="Magento\InventorySales\Model\ResourceModel\GetStockItemData"/>
+    <!-- IsStockItemSalableCondition -->
+    <preference for="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface"
+                type="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain"/>
+    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="manage_stock" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\ManageStockCondition</item>
+                <!-- min_qty condition includes source_item_status check (need to proper work of min_qty) -->
+                <item name="min_qty" xsi:type="object">Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\MinQtyStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- IsProductSalable -->
+    <preference for="Magento\InventorySalesApi\Api\IsProductSalableInterface" type="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain"/>
+    <type name="Magento\InventorySales\Model\IsProductSalableCondition\IsProductSalableConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="back_order" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">10</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition</item>
+                </item>
+                <item name="manage_stock" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">20</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition</item>
+                </item>
+                <item name="is_salable_with_reservations" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">30</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableWithReservationsCondition</item>
+                </item>
+                <!-- should be after is_salable_with_reservations condition -->
+                <item name="min_qty" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">40</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\MinQtyStockCondition</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
