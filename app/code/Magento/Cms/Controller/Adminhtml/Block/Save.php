@@ -97,7 +97,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 } else if ($redirect == 'close') {
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
-                    $data['identifier'] = $data['identifier'] . '_1';
+                    $data['identifier'] = $data['identifier'] . '-1';
                     $this->dataPersistor->set('cms_block', $data);
                     $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
                     return $resultRedirect->setPath('*/*/newAction');

@@ -52,20 +52,22 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
      */
     protected function getOptions()
     {
-        $options[] = [
-            'label' => __('Save & Duplicate'),
-            'id_hard' => 'save_and_duplicate',
-            'data_attribute' => [
-                'mage-init' => [
-                    'buttonAdapter' => [
-                        'actions' => [
-                            [
-                                'targetName' => 'cms_block_form.cms_block_form',
-                                'actionName' => 'save',
-                                'params' => [
-                                    true,
-                                    [
-                                        'back' => 'duplicate'
+        $options = [
+            [
+                'label' => __('Save & Duplicate'),
+                'id_hard' => 'save_and_duplicate',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'cms_block_form.cms_block_form',
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'duplicate'
+                                        ]
                                     ]
                                 ]
                             ]
@@ -73,29 +75,28 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
                     ]
                 ]
             ],
-        ];
-
-        $options[] = [
-            'id_hard' => 'save_and_close',
-            'label' => __('Save & Close'),
-            'data_attribute' => [
-                'mage-init' => [
-                    'buttonAdapter' => [
-                        'actions' => [
-                            [
-                                'targetName' => 'cms_block_form.cms_block_form',
-                                'actionName' => 'save',
-                                'params' => [
-                                    true,
-                                    [
-                                        'back' => 'close'
+            [
+                'id_hard' => 'save_and_close',
+                'label' => __('Save & Close'),
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'cms_block_form.cms_block_form',
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'close'
+                                        ]
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
+            ]
         ];
 
         return $options;

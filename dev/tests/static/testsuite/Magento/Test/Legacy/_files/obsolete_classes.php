@@ -4212,4 +4212,6 @@ return [
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
     ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\ResetButton'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\SaveAndContinueButton']
 ];
