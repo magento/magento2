@@ -72,19 +72,19 @@ define([
                 output = {},
                 streetObject;
 
-            if ($.isArray(addrs.street)) {
-                streetObject = {};
-                addrs.street.forEach(function (value, index) {
-                    streetObject[index] = value;
-                });
-                addrs.street = streetObject;
-            }
-
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
                     output[self.toUnderscore(key)] = addrs[key];
                 }
             });
+
+            if ($.isArray(addrs.street)) {
+                streetObject = {};
+                addrs.street.forEach(function (value, index) {
+                    streetObject[index] = value;
+                });
+                output.street = streetObject;
+            }
 
             return output;
         },

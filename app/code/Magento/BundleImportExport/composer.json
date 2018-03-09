@@ -7,6 +7,7 @@
         "magento/module-import-export": "100.2.*",
         "magento/module-catalog-import-export": "100.2.*",
         "magento/module-bundle": "100.2.*",
+        "magento/module-store": "100.2.*",
         "magento/module-eav": "101.0.*",
         "magento/framework": "101.0.*"
     },

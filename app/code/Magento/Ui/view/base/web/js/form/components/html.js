@@ -19,8 +19,12 @@ define([
             showSpinner:    false,
             loading:        false,
             visible:        true,
+            error:          false,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**

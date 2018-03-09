@@ -68,6 +68,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     public function testSetGetFinalPrice()
     {
         $this->assertEquals(0, $this->_model->getFinalPrice());
+        $this->_model->setPrice(10);
         $this->_model->setFinalPrice(10);
         $this->assertEquals(10, $this->_model->getFinalPrice());
     }
