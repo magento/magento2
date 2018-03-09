@@ -9,7 +9,10 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 /**
  * Wrapper for GraphQl IntType
  */
-class IntType extends \GraphQL\Type\Definition\IntType implements TypeInterface
+class IntType extends \GraphQL\Type\Definition\IntType implements InputType, OutputType
 {
-
+    /**
+     * @var string
+     */
+    public $name = "Magento_Int";
 }

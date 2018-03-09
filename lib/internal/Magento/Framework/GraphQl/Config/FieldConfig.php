@@ -46,7 +46,7 @@ class FieldConfig
      * @return ArgumentConfig[]
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function getFieldConfig(string $fieldName, array $arguments)
+    public function getFieldConfig(string $fieldName, array $arguments) : array
     {
         if (isset($this->instances[$fieldName])) {
             return $this->instances[$fieldName];
@@ -69,7 +69,13 @@ class FieldConfig
         }
     }
 
-    private function processConfiguredField(string $fieldName, array $arguments)
+    /**
+     * Configure field and create arguments instance
+     *
+     * @param string $fieldName
+     * @param array $arguments
+     */
+    private function processConfiguredField(string $fieldName, array $arguments) : void
     {
         $this->instances[$fieldName] = [];
         foreach ($this->config[$fieldName] as $argumentName => $fieldConfig) {

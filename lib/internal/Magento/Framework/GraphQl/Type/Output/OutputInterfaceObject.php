@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
-use GraphQL\Type\Definition\InterfaceType;
+use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\Framework\GraphQl\Config\Data\InterfaceType as InterfaceTypeStructure;
 
 /**

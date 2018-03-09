@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
-use GraphQL\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
@@ -81,7 +81,7 @@ class Fields implements FormatterInterface
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function format(StructureInterface $typeStructure, OutputType $outputType)
+    public function format(StructureInterface $typeStructure, OutputType $outputType) : array
     {
         $config = [];
         foreach ($typeStructure->getFields() as $field) {
@@ -134,9 +134,9 @@ class Fields implements FormatterInterface
      *
      * @param Field $field
      * @param OutputType $object
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @return OutputType
      */
-    private function processIsNullable(Field $field, OutputType $object)
+    private function processIsNullable(Field $field, OutputType $object) : OutputType
     {
         if ($field->isRequired()) {
             return $this->typeFactory->createNonNull($object);
@@ -149,9 +149,9 @@ class Fields implements FormatterInterface
      *
      * @param Field $field
      * @param OutputType $object
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @return OutputType
      */
-    private function processIsList(Field $field, OutputType $object)
+    private function processIsList(Field $field, OutputType $object) : OutputType
     {
         if ($field->isList()) {
             return $this->typeFactory->createList($object);
@@ -167,7 +167,7 @@ class Fields implements FormatterInterface
      * @param OutputType $outputType
      * @return OutputType
      */
-    private function getFieldType(StructureInterface $typeStructure, Field $field, OutputType $outputType)
+    private function getFieldType(StructureInterface $typeStructure, Field $field, OutputType $outputType) : OutputType
     {
         if ($typeStructure->getName() == $field->getType()) {
             $type = $outputType;

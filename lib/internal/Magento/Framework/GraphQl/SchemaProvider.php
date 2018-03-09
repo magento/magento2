@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl;
 
-use GraphQL\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 
@@ -41,7 +41,7 @@ class SchemaProvider
     /**
      * Retrieve all type objects generated for a GraphQL schema.
      *
-     * @return array
+     * @return OutputType[]
      */
     public function getTypes() : array
     {

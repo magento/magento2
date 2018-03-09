@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Type\Output;
 
-use GraphQL\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 
 /**

@@ -53,7 +53,7 @@ class InputMapper
     public function getRepresentation(Argument $argument) : InputType
     {
         $type = $argument->isList() ? $argument->getItemType() : $argument->getType();
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
@@ -69,7 +69,7 @@ class InputMapper
 
     public function getFieldRepresentation(string $type) : InputType
     {
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);

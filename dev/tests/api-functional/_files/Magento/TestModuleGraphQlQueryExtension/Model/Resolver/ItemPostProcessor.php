@@ -31,7 +31,7 @@ class ItemPostProcessor implements PostFetchProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(array $resultData)
+    public function process(array $resultData) : array
     {
         /** @var Item $item */
         $item = $this->itemFactory->create();

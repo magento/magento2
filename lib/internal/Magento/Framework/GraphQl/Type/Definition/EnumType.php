@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 /**
  * Wrapper for GraphQl EnumType
  */
-class EnumType extends \GraphQL\Type\Definition\EnumType implements TypeInterface
+class EnumType extends \GraphQL\Type\Definition\EnumType implements InputType, OutputType
 {
 
 }

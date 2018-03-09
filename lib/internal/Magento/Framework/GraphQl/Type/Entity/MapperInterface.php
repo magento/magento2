@@ -17,5 +17,5 @@ interface MapperInterface
      * @param string $entityName
      * @return string[]
      */
-    public function getMappedTypes(string $entityName);
+    public function getMappedTypes(string $entityName) : array;
 }
