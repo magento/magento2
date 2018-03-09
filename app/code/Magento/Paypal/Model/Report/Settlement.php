@@ -376,7 +376,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
-                    for ($i = 1; $i < count($line); $i++) {
+                    $count = count($line);
+                    for ($i = 1; $i < $count; $i++) {
                         $sectionColumns[$line[$i]] = $i;
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
