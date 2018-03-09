@@ -15,6 +15,8 @@ use Magento\Framework\Registry;
 
 /**
  * Class AlgorithmSelectionButton | used ONLY for TEST.
+ *
+ * @api
  */
 class AlgorithmSelectionButton extends Container
 {
@@ -51,14 +53,14 @@ class AlgorithmSelectionButton extends Container
     protected function _prepareLayout()
     {
         if (!empty($this->_getAlgorithmsListOptions())) {
-            $addButtonProps = array(
+            $addButtonProps = [
                 'id' => 'algorithm_action_list',
                 'label' => __('Source Selection Algorithm'),
                 'class' => 'add',
                 'button_class' => '',
                 'class_name' => SplitButton::class,
                 'options' => $this->_getAlgorithmsListOptions(),
-            );
+            ];
 
             $this->buttonList->add('algorithm_action_list', $addButtonProps);
         }

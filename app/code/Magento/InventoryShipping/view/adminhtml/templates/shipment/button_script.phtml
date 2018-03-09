@@ -5,7 +5,7 @@
  */
 
 // @codingStandardsIgnoreFile
-
+/** @var \Magento\InventoryShipping\Block\Adminhtml\Shipment\AlgorithmSelectionButton $block */
 ?>
 <script>
     require([
@@ -41,9 +41,9 @@
         };
 
         sendRequest = function (requestData, code) {
-            var websiteId = <?= $block->getWebsiteId() ?>;
+            var websiteId = <?= /* @escapeNotVerified */ $block->getWebsiteId() ?>;
             $.ajax({
-                url: "<?= $block->getUrl('inventoryshipping/Algorithm/GetSources') ?>",
+                url: "<?= $block->escapeUrl($block->getUrl('inventoryshipping/Algorithm/GetSources')) ?>",
                 type: 'POST',
                 dataType: 'json',
                 showLoader: true,

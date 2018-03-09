@@ -24,6 +24,11 @@ use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlg
 class GetSources extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+
+    /**
      * @var StockByWebsiteIdResolver
      */
     private $stockByWebsiteIdResolver;
