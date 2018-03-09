@@ -64,6 +64,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
+        $redirect = $data['back'];
         if ($data) {
             if (isset($data['is_active']) && $data['is_active'] === 'true') {
                 $data['is_active'] = Block::STATUS_ENABLED;
@@ -91,10 +92,16 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
-                if ($this->getRequest()->getParam('back')) {
+                if ($redirect == 'continue') {
                     return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
+                } else if ($redirect == 'close') {
+                    return $resultRedirect->setPath('*/*/');
+                } else if ($redirect == 'duplicate') {
+                    $data['identifier'] = $data['identifier'] . '_1';
+                    $this->dataPersistor->set('cms_block', $data);
+                    $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
+                    return $resultRedirect->setPath('*/*/newAction');
                 }
-                return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
