@@ -19,6 +19,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
  * Class ShipmentDocumentFactoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -128,6 +129,8 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         $packages = [];
         $items = [1 => 10];
 
+        $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
+        $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
         $this->itemMock->expects($this->once())
             ->method('getOrderItemId')
             ->willReturn(1);

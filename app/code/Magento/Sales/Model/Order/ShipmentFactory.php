@@ -104,6 +104,9 @@ class ShipmentFactory
 
             /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
             $item = $this->converter->itemToShipmentItem($orderItem);
+            if ($orderItem->getIsVirtual() || $orderItem->getParentItemId()) {
+                $item->isDeleted(true);
+            }
 
             if ($orderItem->isDummy(true)) {
                 $qty = 0;
