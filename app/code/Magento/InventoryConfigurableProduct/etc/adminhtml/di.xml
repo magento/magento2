@@ -13,6 +13,10 @@
                     <item name="class" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
                     <item name="sortOrder" xsi:type="number">200</item>
                 </item>
+                <item name="source_grid" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\SourceGrid</item>
+                    <item name="sortOrder" xsi:type="number">250</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
