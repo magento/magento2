@@ -404,6 +404,71 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $mimeType
+     * @param string $disposition
+     * @dataProvider downloadTypesDataProvider
+     * @return void
+     */
+    public function testContentDisposition($mimeType, $disposition)
+    {
+        $this->objectManager->expects($this->at(0))
+            ->method('get')
+            ->with(\Magento\Customer\Model\Session::class)
+            ->willReturn($this->session);
+        $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
+        $this->objectManager->expects($this->at(1))
+            ->method('create')
+            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
+            ->willReturn($this->linkPurchasedItem);
+        $this->linkPurchasedItem->expects($this->once())
+            ->method('load')
+            ->with('some_id', 'link_hash')
+            ->willReturnSelf();
+        $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
+        $this->objectManager->expects($this->at(2))
+            ->method('get')
+            ->with(\Magento\Downloadable\Helper\Data::class)
+            ->willReturn($this->helperData);
+        $this->helperData->expects($this->once())
+            ->method('getIsShareable')
+            ->with($this->linkPurchasedItem)
+            ->willReturn(true);
+        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsBought')->willReturn(10);
+        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsUsed')->willReturn(9);
+        $this->linkPurchasedItem->expects($this->once())->method('getStatus')->willReturn('available');
+        $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
+        $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');
+
+        $fileSize = 58493;
+        $fileName = 'link.jpg';
+
+        $this->objectManager->expects($this->at(3))
+            ->method('get')
+            ->with(\Magento\Downloadable\Helper\Download::class)
+            ->willReturn($this->downloadHelper);
+        $this->downloadHelper->expects($this->once())
+            ->method('setResource')
+            ->with('link_url', 'url')
+            ->willReturnSelf();
+        $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn($fileName);
+        $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn($mimeType);
+        $this->response->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
+        $this->response
+            ->expects($this->any())
+            ->method('setHeader')
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
+                ['Content-type', $mimeType, true],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', $disposition . '; filename=' . $fileName]
+            )
+            ->willReturnSelf();
+
+        $this->assertEquals($this->response, $this->link->execute());
+    }
+
+    /**
      * @return array
      */
     public function linkNotAvailableDataProvider()
