@@ -29,7 +29,6 @@ class GridFilteringDeletedEntityTest extends Injectable
 {
     /* tags */
     const SEVERITY = 'S2';
-    const STABLE = 'no';
     const MVP = 'no';
     /* end tags */
 
