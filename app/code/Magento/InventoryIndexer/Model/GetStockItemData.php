@@ -55,8 +55,7 @@ class GetStockItemData implements GetStockItemDataInterface
             return $connection->fetchRow($select) ?: null;
         } catch (\Exception $e) {
             throw new LocalizedException(__(
-                'Product with sku "%sku" is not assigned to stock with id "%stock"',
-                ['sku' => $sku, 'stock' => $stockId]
+                'Could not receive Stock Item data'
             ), $e);
         }
     }
