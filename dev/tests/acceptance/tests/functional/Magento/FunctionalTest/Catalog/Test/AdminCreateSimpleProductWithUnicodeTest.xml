@@ -8,14 +8,15 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminCreateSimpleProductTest">
+    <test name="AdminCreateSimpleProductWithUnicodeTest">
         <annotations>
             <features value="Product Creation"/>
-            <stories value="Create a Simple Product via Admin"/>
-            <title value="You should be able to create a Simple Product in the admin back-end."/>
-            <description value="You should be able to create a Simple Product in the admin back-end."/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-23414"/>
+            <stories value="Create a Unicode Named Simple Product via Admin"/>
+            <title value="You should be able to create a unicode named simple product in admin."/>
+            <description value="You should be able to create a unicode named simple product in admin."/>
+            <severity value="NORMAL"/>
+            <testCaseId value="MAGETWO-87504"/>
+            <!--useCaseId value="USECASE-114"/-->
             <group value="product"/>
         </annotations>
         <before>
@@ -29,14 +30,14 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
-            <argument name="simpleProduct" value="_defaultProduct"/>
+            <argument name="simpleProduct" value="ProductWithUnicode"/>
         </actionGroup>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
-            <argument name="product" value="_defaultProduct"/>
+            <argument name="product" value="ProductWithUnicode"/>
         </actionGroup>
         <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefront2">
-            <argument name="product" value="_defaultProduct"/>
+            <argument name="product" value="ProductWithUnicode"/>
         </actionGroup>
     </test>
 </tests>
