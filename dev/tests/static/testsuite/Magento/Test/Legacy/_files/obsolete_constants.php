@@ -950,4 +950,8 @@ return [
     ],
     ['TAB_GENERAL_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
     ['TAB_IMAGE_MANAGEMENT_CODE', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'],
+    [
+        'CALLBACK',
+        'Magento\Framework\MessageQueue\ConsumerConfiguration'
+    ],
 ];

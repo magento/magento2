@@ -300,4 +300,5 @@ return [
     'theme_files'                                 => 'Magento\Theme',
     'variable'                                    => 'Magento\Variable',
     'variable_value'                              => 'Magento\Variable',
+    'job_queue'                                   => 'Magento\Queue',
 ];
