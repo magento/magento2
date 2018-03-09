@@ -59,7 +59,7 @@ define([
                 items.push({
                     'source': item.name,
                     'source_code': item[this.identifier],
-                    'source_status': parseInt(item.enabled) ? $.mage.__('Enabled') : $.mage.__('Disabled')
+                    'source_status': parseInt(item.enabled, 10) ? $.mage.__('Enabled') : $.mage.__('Disabled')
                 });
             }.bind(this));
 
