@@ -57,7 +57,6 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 
     protected function setUp()
     {
-        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/368');
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 
         $this->legacyStockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
