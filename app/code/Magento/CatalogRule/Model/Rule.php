@@ -516,12 +516,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function afterSave()
     {
-        if ($this->isObjectNew()) {
-            if (!$this->_ruleProductProcessor->isIndexerScheduled()) {
-                $this->getMatchingProductIds();
-                if (!empty($this->_productIds) && is_array($this->_productIds)) {
-                    $this->_getResource()->addCommitCallback([$this, 'reindex']);
-                }
+        if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $productIds = $this->getMatchingProductIds();
+            if (!empty($productIds) && is_array($productIds)) {
+                $this->_getResource()->addCommitCallback([$this, 'reindex']);
             }
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
