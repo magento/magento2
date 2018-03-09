@@ -17,8 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="#"/>
             <group value="checkout"/>
-            <!--Skipped; see: MAGETWO-88791-->
-            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -34,22 +32,19 @@
             <deleteData createDataKey="simpleuscustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <amOnPage stepKey="s1"  url="customer/account/login/"/>
-        <fillField  stepKey="s3" userInput="$$simpleuscustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-        <fillField  stepKey="s5" userInput="$$simpleuscustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-        <click stepKey="s7" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <waitForPageLoad stepKey="s9"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$simpleuscustomer$$" />
+        </actionGroup>
 
-        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
-        <moveMouseOver stepKey="s15" selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" />
-        <click stepKey="s17" selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" />
-        <waitForElementVisible stepKey="s21" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" />
-        <see stepKey="s23" selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart."/>
-        <see stepKey="s25" selector="{{StorefrontMinicartSection.quantity}}" userInput="1" />
-        <click stepKey="s27" selector="{{StorefrontMinicartSection.showCart}}" />
-        <click stepKey="s31" selector="{{StorefrontMinicartSection.goToCheckout}}" />
-        <waitForPageLoad stepKey="s33"/>
-        <waitForLoadingMaskToDisappear stepKey="s34"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+
         <click stepKey="s35" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
         <waitForElement stepKey="s36" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="s37" selector="{{CheckoutShippingMethodsSection.next}}" />
