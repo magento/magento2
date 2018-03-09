@@ -12,8 +12,8 @@
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
-        <amOnPage stepKey="navigateProductPage-{{product.name}}" url="/{{product.name}}.html"/>
-        <click stepKey="addToCart-{{product.name}}" selector="{{StorefrontProductPageSection.AddToCartBtn}}"/>
+        <amOnPage stepKey="navigateProductPage" url="/{{product.name}}.html"/>
+        <click stepKey="addToCart" selector="{{StorefrontProductPageSection.AddToCartBtn}}"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
     </actionGroup>
 </actionGroups>
