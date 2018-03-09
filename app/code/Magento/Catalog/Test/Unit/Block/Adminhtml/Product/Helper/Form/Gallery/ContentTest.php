@@ -10,6 +10,9 @@ use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
