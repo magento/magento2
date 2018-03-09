@@ -38,7 +38,7 @@ define([
                 isEmpty,
                 isVisibleSources;
 
-            if (typeof matrix !== "undefined" && typeof sources !== "undefined") {
+            if (typeof matrix !== 'undefined' && typeof sources !== 'undefined') {
                 isEmpty = matrix.isEmpty();
                 isVisibleSources = sources.visible();
 
