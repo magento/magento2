@@ -55,31 +55,29 @@ class XmlScanner implements ScannerInterface
                 $output[] = $node->nodeValue;
             }
 
-            $factoriesOutput = array_merge($factoriesOutput, $this->scanNonVirtualFactories($virtualTypes, $xpath));
+            $factoriesOutput = array_merge($factoriesOutput, $this->scanFactories($xpath));
         }
 
         $output = array_unique($output);
         $factoriesOutput = array_unique($factoriesOutput);
+        $factoriesOutput = array_diff($factoriesOutput, $virtualTypes);
         return array_merge($this->_filterEntities($output), $factoriesOutput);
     }
 
     /**
      * Scan factories from all di.xml and retrieve non virtual one
      *
-     * @param array $virtualTypes
      * @param \DOMXPath $domXpath
      * @return array
      */
-    private function scanNonVirtualFactories(array $virtualTypes, \DOMXPath $domXpath)
+    private function scanFactories(\DOMXPath $domXpath)
     {
         $output = [];
         $regex = '/^(.*)Factory$/';
         $query = "//argument[@xsi:type='object' and php:functionString('preg_match', '{$regex}', text()) > 0] |" .
             "//item[@xsi:type='object' and php:functionString('preg_match', '{$regex}', text()) > 0]";
         foreach ($domXpath->query($query) as $node) {
-            if (!in_array($node->nodeValue, $virtualTypes)) {
-                $output[] = $node->nodeValue;
-            }
+            $output[] = $node->nodeValue;
         }
 
         return $output;
