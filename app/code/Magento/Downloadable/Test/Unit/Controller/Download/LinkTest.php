@@ -411,10 +411,23 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testContentDisposition($mimeType, $disposition)
     {
-        $this->objectManager->expects($this->at(0))
+        $this->objectManager->expects($this->any())
             ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->session);
+            ->willReturnMap([
+                [
+                    \Magento\Customer\Model\Session::class,
+                    $this->session,
+                ],
+                [
+                    \Magento\Downloadable\Helper\Data::class,
+                    $this->helperData,
+                ],
+                [
+                    \Magento\Downloadable\Helper\Download::class,
+                    $this->downloadHelper,
+                ],
+            ]);
+        
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
             ->method('create')
@@ -425,10 +438,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with('some_id', 'link_hash')
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
-        $this->objectManager->expects($this->at(2))
-            ->method('get')
-            ->with(\Magento\Downloadable\Helper\Data::class)
-            ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
@@ -442,10 +451,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $fileSize = 58493;
         $fileName = 'link.jpg';
 
-        $this->objectManager->expects($this->at(3))
-            ->method('get')
-            ->with(\Magento\Downloadable\Helper\Download::class)
-            ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())
             ->method('setResource')
             ->with('link_url', 'url')
