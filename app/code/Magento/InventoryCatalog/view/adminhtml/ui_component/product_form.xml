@@ -98,7 +98,7 @@
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_code</dataScope>
-                        <label translate="true">ID</label>
+                        <label translate="true">Source Code</label>
                     </settings>
                 </field>
                 <field name="name" formElement="input" sortOrder="20">
