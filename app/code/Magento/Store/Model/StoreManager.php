@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
@@ -235,7 +236,9 @@ class StoreManager implements
     {
         $this->currentStoreId = null;
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
-        $this->scopeConfig->clean();
+        if ($this->scopeConfig instanceof Config) {
+            $this->scopeConfig->clean();
+        }
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
         $this->groupRepository->clean();
