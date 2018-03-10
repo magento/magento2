@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Console\Command\DiCompileCommand;
+use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
@@ -63,6 +64,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->objectManagerMock);
         $this->managerMock = $this->getMock('Magento\Setup\Module\Di\App\Task\Manager', [], [], '', false);
         $this->directoryListMock = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryListMock->expects($this->any())->method('getPath')->willReturnMap([
+                [\Magento\Framework\App\Filesystem\DirectoryList::SETUP, '/path (1)/to/setup/'],
+        ]);
         $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
@@ -78,8 +82,8 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->componentRegistrarMock->expects($this->any())->method('getPaths')->willReturnMap([
-            [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path/to/module/two']],
-            [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path/to/library/two']],
+            [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path (1)/to/module/two']],
+            [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
 
         $this->command = new DiCompileCommand(
@@ -136,7 +140,28 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Symfony\Component\Console\Helper\ProgressBar')
             ->willReturn($progressBar);
-        $this->managerMock->expects($this->exactly(7))->method('addOperation');
+
+        $this->managerMock->expects($this->exactly(7))->method('addOperation')
+            ->withConsecutive(
+                [OperationFactory::PROXY_GENERATOR, []],
+                [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
+                [OperationFactory::DATA_ATTRIBUTES_GENERATOR, []],
+                [OperationFactory::APPLICATION_CODE_GENERATOR, $this->callback(function ($subject) {
+                    $this->assertEmpty(array_diff($subject['excludePatterns'], [
+                        "#^(?:/path \(1\)/to/setup/)(/[\w]+)*/Test#",
+                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?Test#",
+                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?tests#",
+                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/Test#",
+                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/tests#"
+                    ]));
+                    return true;
+                })],
+                [OperationFactory::INTERCEPTION, $this->anything()],
+                [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
+                [OperationFactory::INTERCEPTION_CACHE, $this->anything()]
+            )
+        ;
+
         $this->managerMock->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
