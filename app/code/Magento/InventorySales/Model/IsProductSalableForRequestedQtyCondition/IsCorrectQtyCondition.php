@@ -16,6 +16,8 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 
 /**
  * @inheritdoc
+ *
+ *
  */
 class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
 {
@@ -44,61 +46,113 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
      */
     protected $mathDivision;
 
+    /**
+     * @var ProductSalabilityErrorFactory
+     */
+    private $productSalabilityErrorFactory;
+
+    /**
+     * @var IsProductSalableResultFactory
+     */
+    private $isProductSalableResultFactory;
+
     public function __construct(
         GetStockItemConfigurationInterface $getStockItemConfiguration,
         StockConfigurationInterface $configuration,
         GetReservationsQuantityInterface $getReservationsQuantity,
         GetStockItemDataInterface $getStockItemData,
-        MathDivision $mathDivision
+        MathDivision $mathDivision,
+        ProductSalabilityErrorFactory $productSalabilityErrorFactory,
+        IsProductSalableResultFactory $isProductSalableResultFactory
     ) {
         $this->getStockItemConfiguration = $getStockItemConfiguration;
         $this->configuration = $configuration;
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
         $this->mathDivision = $mathDivision;
+        $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
+        $this->isProductSalableResultFactory = $isProductSalableResultFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): bool
+    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface
     {
         $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         if (null === $stockItemConfiguration) {
-            return false;
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_correct_qty-no_config',
+                    'message' => __('Missing stock item configuration')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
         }
 
-        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
-
-        $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
-        if ($requestedQty > $qtyWithReservation) {
-            return false;
-        }
-
+        // Out-of-Stock Threshold
+        // TODO verify whether we should use < or <=
         $globalMinQty = $this->configuration->getMinQty();
         if (($stockItemConfiguration->isUseConfigMinQty() == 1 && $requestedQty < $globalMinQty)
             || ($stockItemConfiguration->isUseConfigMinQty() == 0
                 && $requestedQty < $stockItemConfiguration->getMinQty()
             )) {
-            return false;
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_correct_qty-out_of_stock_threshold',
+                    'message' => __('The requested qty is not available')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
         }
 
+        // Minimum Qty Allowed in Shopping Cart
+        // TODO verify whether we should use < or <=
+        $globalMinSaleQty = $this->configuration->getMinSaleQty();
+        if (($stockItemConfiguration->isUseConfigMinSaleQty() == 1 && $requestedQty < $globalMinSaleQty)
+            || ($stockItemConfiguration->isUseConfigMinSaleQty() == 0
+                && $requestedQty < $stockItemConfiguration->getMinSaleQty()
+            )) {
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_correct_qty-min_sale_qty',
+                    'message' => __('The requested qty is less than the minimun qty allowed in shopping cart')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
+        }
+
+        // Maximum Qty Allowed in Shopping Cart
+        // TODO verify whether we should use > or >=
         $globalMaxSaleQty = $this->configuration->getMaxSaleQty();
         if (($stockItemConfiguration->isUseConfigMaxSaleQty() == 1 && $requestedQty > $globalMaxSaleQty)
             || ($stockItemConfiguration->isUseConfigMaxSaleQty() == 0
                 && $requestedQty > $stockItemConfiguration->getMaxSaleQty()
             )) {
-            return false;
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_correct_qty-max_sale_qty',
+                    'message' =>__('The requested qty exceeds the maximum qty allowed in shopping cart')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
         }
 
+        // Qty Increments
         if ($this->mathDivision->getExactDivision($requestedQty, $this->configuration->getQtyIncrements()) !== 0
             || $this->mathDivision->getExactDivision(
                 $requestedQty,
                 $stockItemConfiguration->getQtyIncrements()
             ) !== 0) {
-            return false;
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'is_correct_qty-qty_increment',
+                    'message' => __('The requested qty is not a valid increment')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
         }
 
-        return true;
+        return $this->isProductSalableResultFactory->create(['errors' => []]);
     }
 }

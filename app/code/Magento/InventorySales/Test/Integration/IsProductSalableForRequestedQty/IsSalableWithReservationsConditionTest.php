@@ -110,7 +110,10 @@ class IsSalableWithReservationsConditionTest extends TestCase
      */
     public function testProductIsSalable(string $sku, int $stockId, float $qty, bool $isSalable)
     {
-        self::assertEquals($isSalable, $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty));
+        self::assertEquals(
+            $isSalable,
+            $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable()
+        );
     }
 
     /**
@@ -145,7 +148,7 @@ class IsSalableWithReservationsConditionTest extends TestCase
         $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),
         ]);
-        self::assertFalse($this->isProductSalableForRequestedQty->execute('SKU-1', 10, 1));
+        self::assertFalse($this->isProductSalableForRequestedQty->execute('SKU-1', 10, 1)->isSalable());
 
         $this->appendReservations->execute([
             // unreserve 8.5 units for cleanup

@@ -20,21 +20,45 @@ class ManageStockCondition implements IsProductSalableForRequestedQtyInterface
     private $manageStockCondition;
 
     /**
+     * @var ProductSalabilityErrorFactory
+     */
+    private $productSalabilityErrorFactory;
+
+    /**
+     * @var IsProductSalableResultFactory
+     */
+    private $isProductSalableResultFactory;
+
+    /**
      * ManageStockCondition constructor.
      * @param \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition $manageStockCondition
      */
     public function __construct(
-        \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition $manageStockCondition
+        \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition $manageStockCondition,
+        ProductSalabilityErrorFactory $productSalabilityErrorFactory,
+        IsProductSalableResultFactory $isProductSalableResultFactory
     ) {
         $this->manageStockCondition = $manageStockCondition;
+        $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
+        $this->isProductSalableResultFactory = $isProductSalableResultFactory;
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): bool
+    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface
     {
-        return $this->manageStockCondition->execute($sku, $stockId);
+        $isSalable = $this->manageStockCondition->execute($sku, $stockId);
+        if (!$isSalable) {
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'manage_stock-enabled',
+                    'message' => __('Manage stock is enabled')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
+        }
+        return $this->isProductSalableResultFactory->create(['errors' => []]);
     }
 }

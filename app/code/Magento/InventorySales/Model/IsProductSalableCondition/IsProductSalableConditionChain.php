@@ -36,6 +36,7 @@ class IsProductSalableConditionChain implements IsProductSalableInterface
     {
         $this->validateConditions($conditions);
         $conditions = $this->sortConditions($conditions);
+        // TODO just assign conditions, postpone sorting on fist execute call - no logic in constructors
         $this->conditions = array_column($conditions, 'object');
     }
 
