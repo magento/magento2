@@ -131,7 +131,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     /**
      * @return bool
      */
-    protected function shouldRedirectToCart()
+    private function shouldRedirectToCart()
     {
         return $this->_scopeConfig->isSetFlag(
             'checkout/cart/redirect_to_cart',
