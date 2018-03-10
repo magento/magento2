@@ -205,4 +205,15 @@ class Add extends \Magento\Checkout\Controller\Cart
     {
         return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
     }
+
+    /**
+     * @return bool
+     */
+    private function shouldRedirectToCart()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }
