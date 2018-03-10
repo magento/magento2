@@ -22,11 +22,19 @@ class Lists
     protected $allowedLocales;
 
     /**
+     * List of allowed currencies
+     *
+     * @var array
+     */
+    private $allowedCurrencies;
+
+    /**
      * @param ConfigInterface $localeConfig
      */
     public function __construct(ConfigInterface $localeConfig)
     {
         $this->allowedLocales = $localeConfig->getAllowedLocales();
+        $this->allowedCurrencies = $localeConfig->getAllowedCurrencies();
     }
 
     /**
@@ -64,6 +72,10 @@ class Lists
         $currencies = (new CurrencyBundle())->get(Resolver::DEFAULT_LOCALE)['Currencies'];
         $list = [];
         foreach ($currencies as $code => $data) {
+            $isAllowedCurrency = array_search($code, $this->allowedCurrencies) !== false;
+            if (!$isAllowedCurrency) {
+                continue;
+            }
             $list[$code] = $data[1] . ' (' . $code . ')';
         }
         asort($list);
