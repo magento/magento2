@@ -23,10 +23,12 @@ class Image extends \Magento\Framework\View\Element\Template
      * @deprecated since version 2.2-develop
      */
     protected $imageHelper;
+    
     /**
      * @deprecated since version 2.2-develop
      */
     protected $product;
+    
     /**
      * @deprecated since version 2.2-develop
      */
