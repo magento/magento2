@@ -56,77 +56,67 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
         $expectedResult1 = <<<TEXT
 <?php
 return [
-  'ns1' => 
-  [
-    's1' => 
-    [
-      0 => 's11',
-      1 => 's12',
+    'ns1' => [
+        's1' => [
+            0 => 's11',
+            1 => 's12',
+        ],
+        's2' => [
+            0 => 's21',
+            1 => 's22',
+        ],
     ],
-    's2' => 
-    [
-      0 => 's21',
-      1 => 's22',
+    /**
+     * For the section: ns2
+     * comment for namespace 2
+     */
+    'ns2' => [
+        's1' => [
+            0 => 's11',
+        ],
     ],
-  ],
-  /**
-   * For the section: ns2
-   * comment for namespace 2
-   */
-  'ns2' => 
-  [
-    's1' => 
-    [
-      0 => 's11',
-    ],
-  ],
-  'ns3' => 'just text',
-  'ns4' => 'just text',
+    'ns3' => 'just text',
+    'ns4' => 'just text',
 ];
 
 TEXT;
         $expectedResult2 = <<<TEXT
 <?php
 return [
-  /**
-   * For the section: ns1
-   * comment for' namespace 1
-   */
-  'ns1' => 
-  [
-    's1' => 
-    [
-      0 => 's11',
-      1 => 's12',
+    /**
+     * For the section: ns1
+     * comment for' namespace 1
+     */
+    'ns1' => [
+        's1' => [
+            0 => 's11',
+            1 => 's12',
+        ],
+        's2' => [
+            0 => 's21',
+            1 => 's22',
+        ],
     ],
-    's2' => 
-    [
-      0 => 's21',
-      1 => 's22',
+    /**
+     * For the section: ns2
+     * comment for namespace 2.
+     * Next comment for' namespace 2
+     */
+    'ns2' => [
+        's1' => [
+            0 => 's11',
+        ],
     ],
-  ],
-  /**
-   * For the section: ns2
-   * comment for namespace 2.
-   * Next comment for' namespace 2
-   */
-  'ns2' => 
-  [
-    's1' => 
-    [
-      0 => 's11',
-    ],
-  ],
-  /**
-   * For the section: ns3
-   * comment for" namespace 3
-   */
-  'ns3' => 'just text',
-  /**
-   * For the section: ns4
-   * comment for namespace 4
-   */
-  'ns4' => 'just text',
+    /**
+     * For the section: ns3
+     * comment for" namespace 3
+     */
+    'ns3' => 'just text',
+    /**
+     * For the section: ns4
+     * comment for namespace 4
+     */
+    'ns4' => 'just text',
 ];
 
 TEXT;
@@ -134,23 +124,23 @@ TEXT;
         $expectedResult3 = <<<TEXT
 <?php
 return [
-  'ns1' => [
-    's1' => [
-      's11',
-      's12'
+    'ns1' => [
+        's1' => [
+            's11',
+            's12'
+        ],
+        's2' => [
+            's21',
+            's22'
+        ]
     ],
-    's2' => [
-      's21',
-      's22'
-    ]
-  ],
-  'ns2' => [
-    's1' => [
-      's11'
-    ]
-  ],
-  'ns3' => 'just text',
-  'ns4' => 'just text'
+    'ns2' => [
+        's1' => [
+            's11'
+        ]
+    ],
+    'ns3' => 'just text',
+    'ns4' => 'just text'
 ];
 
 TEXT;

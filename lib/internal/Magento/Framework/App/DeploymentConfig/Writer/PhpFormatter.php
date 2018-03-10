@@ -12,9 +12,9 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 class PhpFormatter implements FormatterInterface
 {
     /**
-     * 2 space indentation for array formatting
+     * 4 space indentation for array formatting
      */
-    const INDENT = '  ';
+    const INDENT = '    ';
 
     /**
      * Format deployment configuration.
@@ -39,7 +39,7 @@ class PhpFormatter implements FormatterInterface
      * @param string $prefix
      * @return string
      */
-    private function formatData($data, $comments = [], $prefix = '  ')
+    private function formatData($data, $comments = [], $prefix = '    ')
     {
         $elements = [];
 
@@ -56,13 +56,12 @@ class PhpFormatter implements FormatterInterface
                     $elements[] = $prefix . " */";
                 }
 
-                $elements[] = $prefix . $this->varExportShort($key) . ' => ' .
-                    (!is_array($value) ? $this->varExportShort($value) . ',' : '');
-
                 if (is_array($value)) {
-                    $elements[] = $prefix . '[';
-                    $elements[] = $this->formatData($value, [], '  ' . $prefix);
+                    $elements[] = $prefix . $this->varExportShort($key) . ' => [';
+                    $elements[] = $this->formatData($value, [], '    ' . $prefix);
                     $elements[] = $prefix . '],';
+                } else {
+                    $elements[] = $prefix . $this->varExportShort($key) . ' => ' . $this->varExportShort($value) . ',';
                 }
             }
             return implode("\n", $elements);
