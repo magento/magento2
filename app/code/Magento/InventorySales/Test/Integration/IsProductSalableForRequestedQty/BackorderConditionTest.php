@@ -94,8 +94,8 @@ class BackorderConditionTest extends TestCase
         $sourceItem->setQuantity(-15);
         $this->sourceItemsSave->execute([$sourceItem]);
 
-        $this->assertTrue($this->isProductSalableForRequestedQty->execute('SKU-2', 20, 1));
-        $this->assertTrue($this->isProductSalableForRequestedQty->execute('SKU-2', 30, 1));
+        $this->assertTrue($this->isProductSalableForRequestedQty->execute('SKU-2', 20, 1)->isSalable());
+        $this->assertTrue($this->isProductSalableForRequestedQty->execute('SKU-2', 30, 1)->isSalable());
     }
 
     /**

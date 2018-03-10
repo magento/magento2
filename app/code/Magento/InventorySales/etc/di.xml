@@ -75,6 +75,10 @@
     <type name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
+                <item name="is_correct_qty" xsi:type="array">
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsCorrectQtyCondition</item>
+                </item>
                 <item name="back_order" xsi:type="array">
                     <item name="sort_order" xsi:type="number">10</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\BackOrderCondition</item>
@@ -83,11 +87,15 @@
                     <item name="sort_order" xsi:type="number">20</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ManageStockCondition</item>
                 </item>
-                <item name="is_correct_qty" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">40</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsCorrectQtyCondition</item>
+                <item name="is_salable_with_reservations" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">30</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsSalableWithReservationsCondition</item>
                 </item>
             </argument>
         </arguments>
     </type>
+    <!-- IsProductSalableResult -->
+    <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
+    <!-- ProductSalabilityError -->
+    <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
 </config>

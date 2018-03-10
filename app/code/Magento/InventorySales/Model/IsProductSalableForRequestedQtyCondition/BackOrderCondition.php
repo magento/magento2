@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
+use Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition as IsProductSalableBackOrderCondition;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 
 /**
@@ -14,21 +15,48 @@ use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
  */
 class BackOrderCondition implements IsProductSalableForRequestedQtyInterface
 {
-    /** @var \Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition */
+    /**
+     * @var IsProductSalableBackOrderCondition
+     */
     private $backOrderCondition;
 
+    /**
+     * @var ProductSalabilityErrorFactory
+     */
+    private $productSalabilityErrorFactory;
+
+    /**
+     * @var IsProductSalableResultFactory
+     */
+    private $isProductSalableResultFactory;
+
     public function __construct(
-        \Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition $backOrderCondition
+        IsProductSalableBackOrderCondition $backOrderCondition,
+        ProductSalabilityErrorFactory $productSalabilityErrorFactory,
+        IsProductSalableResultFactory $isProductSalableResultFactory
     ) {
         $this->backOrderCondition = $backOrderCondition;
+        $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
+        $this->isProductSalableResultFactory = $isProductSalableResultFactory;
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): bool
+    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface
     {
-        return $this->backOrderCondition->execute($sku, $stockId);
+        $isValid = $this->backOrderCondition->execute($sku, $stockId);
+        if (!$isValid) {
+            $errors = [
+                $this->productSalabilityErrorFactory->create([
+                    'code' => 'back_order-disabled',
+                    'message' => __('Backorders are disabled')
+                ])
+            ];
+            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
+        }
+
+        return $this->isProductSalableResultFactory->create(['errors' => []]);
     }
 }

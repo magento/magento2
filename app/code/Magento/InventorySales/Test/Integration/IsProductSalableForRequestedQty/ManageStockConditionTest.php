@@ -47,7 +47,7 @@ class ManageStockConditionTest extends TestCase
      */
     public function testExecuteWithManageStockFalse(string $sku, int $stockId, float $qty, bool $expectedResult)
     {
-        $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty);
+        $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
         self::assertEquals($expectedResult, $isSalable);
     }
 
