@@ -12,4 +12,8 @@
     <event name="website_delete_after">
         <observer name="delete_website_to_stock_link" instance="Magento\InventorySales\Observer\Website\DeleteWebsiteToStockLink"/>
     </event>
+    <event name="sales_quote_item_qty_set_after">
+        <observer name="inventory" disabled="true"/>
+        <observer name="validate_quote_item_qty" instance="Magento\InventorySales\Observer\SalesQuoteItem\QuantityValidatorObserver"/>
+    </event>
 </config>
