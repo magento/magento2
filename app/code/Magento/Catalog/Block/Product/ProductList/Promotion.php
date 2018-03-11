@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\Product\ProductList\CollectionLoader;
 
 class Promotion extends \Magento\Catalog\Block\Product\ListProduct
 {
@@ -29,6 +30,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param CollectionLoader $collectionLoader
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
      */
@@ -38,6 +40,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Url\Helper\Data $urlHelper,
+        CollectionLoader $collectionLoader,
         CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
@@ -48,6 +51,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
             $layerResolver,
             $categoryRepository,
             $urlHelper,
+            $collectionLoader,
             $data
         );
     }

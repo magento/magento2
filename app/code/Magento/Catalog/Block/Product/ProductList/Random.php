@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Product\ProductList\CollectionLoader;
 
 /**
  * Catalog product random items block
@@ -32,6 +33,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param CollectionLoader $collectionLoader
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      */
@@ -41,6 +43,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Url\Helper\Data $urlHelper,
+        CollectionLoader $collectionLoader,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
@@ -51,6 +54,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
             $layerResolver,
             $categoryRepository,
             $urlHelper,
+            $collectionLoader,
             $data
         );
     }

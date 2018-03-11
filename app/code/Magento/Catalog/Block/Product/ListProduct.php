@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\Product\ProductList\CollectionLoader;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ActionInterface;
@@ -69,11 +70,17 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $categoryRepository;
 
     /**
+     * @var CollectionLoader
+     */
+    protected $collectionLoader;
+
+    /**
      * @param Context $context
      * @param PostHelper $postDataHelper
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Data $urlHelper
+     * @param CollectionLoader $collectionLoader
      * @param array $data
      */
     public function __construct(
@@ -82,12 +89,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
+        CollectionLoader $collectionLoader,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $this->collectionLoader = $collectionLoader;
         parent::__construct(
             $context,
             $data
@@ -188,7 +197,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $this->addToolbarBlock($collection);
 
-        $collection->load();
+        $this->collectionLoader->load($collection);
 
         return parent::_beforeToHtml();
     }
@@ -463,7 +472,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-        
+
         $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
