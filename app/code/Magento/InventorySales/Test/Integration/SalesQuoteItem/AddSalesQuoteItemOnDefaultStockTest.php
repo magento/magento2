@@ -9,7 +9,6 @@ namespace Magento\InventorySales\Test\Integration\SalesQuoteItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
@@ -44,11 +43,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     private $productRepository;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
@@ -65,7 +59,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
     }
 
     /**
