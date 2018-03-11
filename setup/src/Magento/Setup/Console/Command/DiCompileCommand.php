@@ -221,7 +221,7 @@ class DiCompileCommand extends Command
                 $vendorPathsRegExps[] = $vendorDir
                     . '/(?:' . join('|', $vendorModules) . ')';
             }
-            $basePathsRegExps[] = $basePath
+            $basePathsRegExps[] = preg_quote($basePath, '#')
                 . '/(?:' . join('|', $vendorPathsRegExps) . ')';
         }
 
@@ -240,6 +240,10 @@ class DiCompileCommand extends Command
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
+        $libraryPaths = array_map(function ($libraryPath) {
+            return preg_quote($libraryPath, '#');
+        }, $libraryPaths);
+
         $excludedLibraryPaths = [
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
