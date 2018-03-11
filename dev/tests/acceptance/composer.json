@@ -1,5 +1,4 @@
 {
-    "name": "magento/magento2ce-functional-tests",
     "description": "Magento 2 (Open Source) Functional Tests",
     "type": "project",
     "version": "1.0.0-dev",
