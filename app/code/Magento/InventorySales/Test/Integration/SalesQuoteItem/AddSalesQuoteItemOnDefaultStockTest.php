@@ -90,7 +90,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         $product = $this->getProductBySku($productSku);
 
         self::expectException(LocalizedException::class);
-        self::expectExceptionMessage('This product is out of stock.');
         $this->quote->addProduct($product, $productQty);
         $quoteItemCount = count($this->quote->getAllItems());
         self::assertEquals(0, $quoteItemCount);
@@ -154,7 +153,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         self::assertEquals($expectedQtyInCart2, $quoteItem->getQty());
 
         self::expectException(LocalizedException::class);
-        self::expectExceptionMessage('This product is out of stock.');
         $this->quote->addProduct($product, $productQty3);
         /** @var CartItemInterface $quoteItem */
         $quoteItem = current($this->quote->getAllItems());

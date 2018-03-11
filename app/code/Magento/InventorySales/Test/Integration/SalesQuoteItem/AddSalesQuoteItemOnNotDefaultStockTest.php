@@ -85,7 +85,6 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @param int $stockId
      * @param float $qty
      * @param float $reservedQty
-     * @param bool $isSalable
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException
@@ -93,32 +92,24 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validation\ValidationException
      *
-     * @dataProvider productsDataProvider
+     * @dataProvider productsInStockDataProvider
      */
-    public function testAddProductToQuote(
+    public function testAddInStockProductToQuote(
         string $sku,
         int $stockId,
         float $qty,
-        float $reservedQty,
-        bool $isSalable
+        float $reservedQty
     ) {
         $quote = $this->getQuote($stockId);
         $this->appendReservation($sku, -$reservedQty, $stockId);
         $product = $this->getProductBySku($sku);
-        if ($isSalable) {
-            $quote->addProduct($product, $qty);
 
-            /** @var CartItemInterface $quoteItem */
-            $quoteItem = current($quote->getAllItems());
-            self::assertEquals($qty, $quoteItem->getQty());
-        } else {
-            self::expectException(LocalizedException::class);
-            self::expectExceptionMessage('This product is out of stock.');
-            $quote->addProduct($product, $qty);
+        $quote->addProduct($product, $qty);
 
-            $quoteItemCount = count($quote->getAllItems());
-            self::assertEquals(0, $quoteItemCount);
-        }
+        /** @var CartItemInterface $quoteItem */
+        $quoteItem = current($quote->getAllItems());
+        self::assertEquals($qty, $quoteItem->getQty());
+
         //cleanup
         $this->appendReservation($sku, $reservedQty, $stockId);
     }
@@ -127,14 +118,68 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @see ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @return array
      */
-    public function productsDataProvider(): array
+    public function productsInStockDataProvider(): array
     {
         return [
-            ['SKU-1', 10, 4, 1.5, true],
-            ['SKU-1', 20, 2.5, 2.5, false],
-            ['SKU-1', 30, 1.8, 4, false],
-            ['SKU-2', 30, 0.2, 4.5, true],
-            ['SKU-3', 20, 1.9, 1.5, false]
+            ['SKU-1', 10, 4, 1.5],
+            ['SKU-2', 30, 0.2, 4.5],
+            ['SKU-2', 30, 1, 1.7]
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param float $qty
+     * @param float $reservedQty
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
+     *
+     * @dataProvider notSalableProductsDataProvider
+     */
+    public function testAddOutOffStockProductToQuote(
+        string $sku,
+        int $stockId,
+        float $qty,
+        float $reservedQty
+    ) {
+        $quote = $this->getQuote($stockId);
+        $this->appendReservation($sku, -$reservedQty, $stockId);
+        $product = $this->getProductBySku($sku);
+
+        self::expectException(LocalizedException::class);
+        $quote->addProduct($product, $qty);
+
+        $quoteItemCount = count($quote->getAllItems());
+        self::assertEquals(0, $quoteItemCount);
+
+        //cleanup
+        $this->appendReservation($sku, $reservedQty, $stockId);
+    }
+
+    /**
+     * @see ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @return array
+     */
+    public function notSalableProductsDataProvider(): array
+    {
+        return [
+            ['SKU-1', 20, 2.5, 2.5],
+            ['SKU-1', 30, 1.8, 4],
+            ['SKU-3', 20, 1.9, 1.5]
         ];
     }
 
