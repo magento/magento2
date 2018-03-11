@@ -20,20 +20,23 @@ namespace Magento\Catalog\Block\Product;
 class Image extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @deprecated since version 2.2-develop
+     * @deprecated Property isn't used
+     * @var \Magento\Catalog\Helper\Image
      */
     protected $imageHelper;
-    
+
     /**
-     * @deprecated since version 2.2-develop
+     * @deprecated Property isn't used
+     * @var \Magento\Catalog\Model\Product
      */
     protected $product;
-    
+
     /**
-     * @deprecated since version 2.2-develop
+     * @deprecated Property isn't used
+     * @var array
      */
     protected $attributes = [];
-    
+
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
