@@ -49,11 +49,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     private $searchCriteriaBuilder;
 
     /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
      * @var DefaultStockProviderInterface
      */
     private $defaultStockProvider;
@@ -71,10 +66,6 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-        $this->quote = Bootstrap::getObjectManager()->create(
-            Quote::class,
-            ['data' => ['store_id' => 1, 'is_active' => 0, 'is_multi_shipping' => 0, 'id' => 1]]
-        );
     }
 
     /**
@@ -88,15 +79,15 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         // set reservation before (reserve -1.5 units, last 4)
         $this->appendReservation($productSku, -1.5);
         $product = $this->getProductBySku($productSku);
+        $quote = $this->getQuote();
 
         self::expectException(LocalizedException::class);
-        $this->quote->addProduct($product, $productQty);
-        $quoteItemCount = count($this->quote->getAllItems());
+        $quote->addProduct($product, $productQty);
+        $quoteItemCount = count($quote->getAllItems());
         self::assertEquals(0, $quoteItemCount);
 
         //cleanup
         $this->appendReservation($productSku, 1.5);
-        $this->quote->setItems([]);
     }
 
     /**
@@ -111,16 +102,16 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         // set reservation before (reserve -1.5 units, last 4)
         $this->appendReservation($productSku, -1.5);
         $product = $this->getProductBySku($productSku);
+        $quote = $this->getQuote();
 
-        $this->quote->addProduct($product, $productQty);
+        $quote->addProduct($product, $productQty);
 
         /** @var CartItemInterface $quoteItem */
-         $quoteItem = current($this->quote->getAllItems());
+         $quoteItem = current($quote->getAllItems());
          self::assertEquals($expectedQtyInCart, $quoteItem->getQty());
 
         //cleanup
         $this->appendReservation($productSku, 1.5);
-        $this->quote->setItems([]);
     }
 
     /**
@@ -139,28 +130,28 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
         // set reservation before (reserve -1.5 units, last 4)
         $this->appendReservation($productSku, -1.5);
         $product = $this->getProductBySku($productSku);
+        $quote = $this->getQuote();
 
         //last 3,5 in source
-        $this->quote->addProduct($product, $productQty1);
+        $quote->addProduct($product, $productQty1);
         /** @var CartItemInterface $quoteItem */
-        $quoteItem = current($this->quote->getAllItems());
+        $quoteItem = current($quote->getAllItems());
         self::assertEquals($expectedQtyInCart1, $quoteItem->getQty());
 
         //last 0 in source
-        $this->quote->addProduct($product, $productQty2);
+        $quote->addProduct($product, $productQty2);
         /** @var CartItemInterface $quoteItem */
-        $quoteItem = current($this->quote->getAllItems());
+        $quoteItem = current($quote->getAllItems());
         self::assertEquals($expectedQtyInCart2, $quoteItem->getQty());
 
         self::expectException(LocalizedException::class);
-        $this->quote->addProduct($product, $productQty3);
+        $quote->addProduct($product, $productQty3);
         /** @var CartItemInterface $quoteItem */
-        $quoteItem = current($this->quote->getAllItems());
+        $quoteItem = current($quote->getAllItems());
         self::assertEquals($expectedQtyInCart3, $quoteItem->getQty());
 
         //cleanup
         $this->appendReservation($productSku, 1.5);
-        $this->quote->setItems([]);
     }
 
     /**
@@ -190,6 +181,24 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
                 $this->defaultStockProvider->getId()
             )->setSku($productSku)->setQuantity($qty)->build(),
         ]);
+    }
+
+    /**
+     * @return Quote
+     */
+    private function getQuote(): Quote
+    {
+        return Bootstrap::getObjectManager()->create(
+            Quote::class,
+            [
+                'data' => [
+                    'store_id' => 1,
+                    'is_active' => 0,
+                    'is_multi_shipping' => 0,
+                    'id' => 1
+                ]
+            ]
+        );
     }
 
     protected function tearDown()
