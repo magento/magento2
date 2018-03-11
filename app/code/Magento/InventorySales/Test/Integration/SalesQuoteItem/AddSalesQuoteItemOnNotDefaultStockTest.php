@@ -24,6 +24,9 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
 {
     /**

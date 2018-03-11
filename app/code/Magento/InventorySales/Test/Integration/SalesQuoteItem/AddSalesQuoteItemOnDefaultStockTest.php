@@ -20,6 +20,9 @@ use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddSalesQuoteItemOnDefaultStockTest extends TestCase
 {
     /**
