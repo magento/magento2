@@ -122,8 +122,9 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
     {
         return [
             ['SKU-1', 10, 4, 1.5],
-            ['SKU-2', 30, 0.2, 4.5],
-            ['SKU-2', 30, 1, 1.7]
+            ['SKU-1', 20, 2, 1],
+            ['SKU-2', 30, 1.5, 3.5],
+            ['SKU-2', 30, 1, 1.7],
         ];
     }
 
@@ -179,6 +180,7 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         return [
             ['SKU-1', 20, 2.5, 2.5],
             ['SKU-1', 30, 1.8, 4],
+            ['SKU-2', 30, 1.5, 3.6],
             ['SKU-3', 20, 1.9, 1.5]
         ];
     }
