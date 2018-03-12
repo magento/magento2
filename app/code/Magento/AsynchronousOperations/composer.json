@@ -1,0 +1,33 @@
+{
+    "name": "magento/module-asynchronous-operations",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/framework": "100.3.*",
+        "magento/framework-bulk": "100.3.*",
+        "magento/module-authorization": "100.3.*",
+        "magento/module-backend": "100.3.*",
+        "magento/module-ui": "100.3.*",
+        "magento/module-user": "100.3.*",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+    },
+    "suggest": {
+        "magento/module-admin-notification": "100.3.*",
+        "magento/module-logging": "100.3.*"
+    },
+    "type": "magento2-module",
+    "version": "100.3.0-dev",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\AsynchronousOperations\\": ""
+        }
+    }
+}
