@@ -66,6 +66,6 @@
         <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAdminOrderEmail"/>
         <see selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderBillingAddress"/>
         <see selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAdminOrderShippingAddress"/>
-        <see selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="{{_defaultProduct.name}}" stepKey="seeAdminOrderProduct"/>
+        <see selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$createProduct.name$$" stepKey="seeAdminOrderProduct"/>
     </test>
 </tests>
