@@ -68,6 +68,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $body = $this->getResponse()->getBody();
         $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
 
+        self::assertArrayHasKey('errorcode', $result);
         self::assertEquals(0, $result['errorcode']);
         self::assertEquals('Disallowed file type.', $result['error']);
     }
