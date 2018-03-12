@@ -99,9 +99,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->with($this->layout)
             ->willReturn($layoutProcessed);
 
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue($jsonLayoutProcessed)
-        );
         $this->assertEquals(
             $jsonLayoutProcessed,
             $this->model->getJsLayout()
@@ -121,9 +118,6 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     {
         $checkoutConfig = ['checkout', 'config'];
         $this->configProvider->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
-        $this->serializer->expects($this->once())->method('serialize')->will(
-            $this->returnValue(json_encode($checkoutConfig))
-        );
 
         $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }
