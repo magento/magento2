@@ -8,7 +8,10 @@ namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\TestFramework\ObjectManager;
+use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ConfigurableProductViewTest extends GraphQlAbstract
@@ -83,6 +86,17 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             }
             category_ids                
             ... on ConfigurableProduct {
+              configurable_product_options{
+                id
+                attribute_id
+                label
+                position
+                is_use_default
+                values{
+                  value_index
+                }
+                product_id
+              }
                 configurable_product_links {
                     id
                     category_ids
@@ -188,6 +202,7 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertConfigurableProductLinks($response['products']['items'][0]);
+        $this->assertConfigurableProductOptions($response['products']['items'][0]);
     }
 
     /**
@@ -371,6 +386,50 @@ QUERY;
                 $configurableProductLinkArray['price']
             );
         }
+    }
+
+    private function assertConfigurableProductOptions($actualResponse)
+    {
+        $this->assertNotEmpty(
+            $actualResponse['configurable_product_options'],
+            "Precondition failed: 'configurable_product_options' must not be empty"
+        );
+        $productSku = 'configurable';
+        /** @var OptionRepositoryInterface $optionRepository */
+        $optionRepository = ObjectManager::getInstance()->get(OptionRepositoryInterface::class);
+        $configurableAttributeOptions = $optionRepository->getList($productSku);
+        $configurableAttributeOption = $configurableAttributeOptions[0];
+        /** @var Attribute $attribute */
+        //$attribute = ObjectManager::getInstance()->get(Attribute::class);
+        /** @var OptionInterface $option */
+        $option = ObjectManager::getInstance()->get(OptionInterface::class);
+
+        // TODO: uncomment the assertions once issue MAGETWO-88216 is fixed.
+        //$this->assertEquals($actualResponse['configurable_product_options'][0]['id'], $configurableAttributeOption->getId());
+        // $this->assertEquals($actualResponse['configurable_product_options'][0]['is_use_default'], (bool)$attribute->getIsUseDefault());
+        $this->assertEquals(
+            $actualResponse['configurable_product_options'][0]['attribute_id'],
+            $configurableAttributeOption->getAttributeId()
+        );
+        $this->assertEquals(
+            $actualResponse['configurable_product_options'][0]['label'],
+            $configurableAttributeOption->getLabel()
+        );
+        $this->assertEquals(
+            $actualResponse['configurable_product_options'][0]['position'],
+            $configurableAttributeOption->getPosition()
+        );
+        $this->assertEquals(
+            $actualResponse['configurable_product_options'][0]['product_id'],
+            $configurableAttributeOption->getProductId()
+        );
+     //  $this->assertEquals($actualResponse['configurable_product_options'][0]['is_use_default'], $option->getIsUseDefault());
+        /*foreach ($actualResponse['configurable_product_options'][0]['values'] as $value) {
+            $this->assertEquals(
+                $actualResponse ['configurable_product_options'][0]['values'][$value]['value_index'],
+                $configurableAttributeOption->getOptions()[$value]['value_index']
+            );
+        }*/
     }
 
     /**
