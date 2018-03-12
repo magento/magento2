@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Ui\DataProvider;
 
+use Magento\Backend\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -33,9 +33,9 @@ class SourceDataProvider extends DataProvider
     private $searchResultFactory;
 
     /**
-     * @var SessionManagerInterface
+     * @var Session
      */
-    private $sessionManager;
+    private $session;
 
     /**
      * @param string $name
@@ -47,7 +47,7 @@ class SourceDataProvider extends DataProvider
      * @param FilterBuilder $filterBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchResultFactory $searchResultFactory
-     * @param SessionManagerInterface $sessionManager
+     * @param Session $session
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -62,7 +62,7 @@ class SourceDataProvider extends DataProvider
         FilterBuilder $filterBuilder,
         SourceRepositoryInterface $sourceRepository,
         SearchResultFactory $searchResultFactory,
-        SessionManagerInterface $sessionManager,
+        Session $session,
         array $meta = [],
         array $data = []
     ) {
@@ -79,7 +79,7 @@ class SourceDataProvider extends DataProvider
         );
         $this->sourceRepository = $sourceRepository;
         $this->searchResultFactory = $searchResultFactory;
-        $this->sessionManager = $sessionManager;
+        $this->session = $session;
     }
 
     /**
@@ -101,11 +101,12 @@ class SourceDataProvider extends DataProvider
                 ];
                 $data = $dataForSingle;
             } else {
-                $sessionData = $this->sessionManager->getFormData(true);
-                if ($sessionData) {
-                    $data[null] = $sessionData;
-                } else {
-                    $data = [];
+                $sessionData = $this->session->getSourceFormData(true);
+                if (null !== $sessionData) {
+                    // For details see \Magento\Ui\Component\Form::getDataSourceData
+                    $data = [
+                        '' => $sessionData,
+                    ];
                 }
             }
         }
