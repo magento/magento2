@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryIndexer\Test\Integration\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\InventoryIndexer\Indexer\Source\SourceIndexer;
-use Magento\InventoryApi\Api\GetSalableProductQtyInterface;
+use Magento\InventoryIndexer\Model\GetStockItemData;
+use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -21,9 +21,9 @@ class SourceIndexerTest extends TestCase
     private $sourceIndexer;
 
     /**
-     * @var GetSalableProductQtyInterface
+     * @var GetStockItemData
      */
-    private $getSalableProductQty;
+    private $getStockItemData;
 
     /**
      * @var RemoveIndexData
@@ -33,9 +33,7 @@ class SourceIndexerTest extends TestCase
     protected function setUp()
     {
         $this->sourceIndexer = Bootstrap::getObjectManager()->get(SourceIndexer::class);
-
-        $this->getSalableProductQty = Bootstrap::getObjectManager()
-            ->get(GetSalableProductQtyInterface::class);
+        $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemData::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
@@ -50,53 +48,106 @@ class SourceIndexerTest extends TestCase
     }
 
     /**
+     * Source 'eu-1' is assigned on EU-stock(id:10) and Global-stock(id:30)
+     * Thus these stocks stocks be reindexed
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexRowDataProvider
      */
-    public function testReindexRow()
+    public function testReindexRow(string $sku, int $stockId, $expectedData)
     {
         $this->sourceIndexer->executeRow('eu-1');
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
+     * @return array
+     */
+    public function reindexRowDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-1', 30, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 30, [GetStockItemDataInterface::QUANTITY => 5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-3', 10, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
+            ['SKU-3', 30, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
+        ];
+    }
+
+    /**
+     * Source 'eu-1' and 'us-1' are assigned on EU-stock(id:10), US-stock(id:20) and Global-stock(id:30)
+     * Thus these stocks should be reindexed
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexListDataProvider
      */
-    public function testReindexList()
+    public function testReindexList(string $sku, int $stockId, $expectedData)
     {
         $this->sourceIndexer->executeList(['eu-1', 'us-1']);
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
-
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
     }
 
     /**
+     * All of stocks should be reindexed
+     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param array|null $expectedData
+     *
+     * @dataProvider reindexListDataProvider
      */
-    public function testReindexAll()
+    public function testReindexAll(string $sku, int $stockId, $expectedData)
     {
         $this->sourceIndexer->executeFull();
 
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 10));
-        self::assertEquals(8.5, $this->getSalableProductQty->execute('SKU-1', 30));
+        $stockItemData = $this->getStockItemData->execute($sku, $stockId);
+        self::assertEquals($expectedData, $stockItemData);
+    }
 
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 20));
-        self::assertEquals(5, $this->getSalableProductQty->execute('SKU-2', 30));
+    /**
+     * @return array
+     */
+    public function reindexListDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-1', 20, null],
+            ['SKU-1', 30, [GetStockItemDataInterface::QUANTITY => 8.5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-2', 10, null],
+            ['SKU-2', 20, [GetStockItemDataInterface::QUANTITY => 5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-2', 30, [GetStockItemDataInterface::QUANTITY => 5, GetStockItemDataInterface::IS_SALABLE => 1]],
+            ['SKU-3', 10, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
+            ['SKU-3', 20, null],
+            ['SKU-3', 30, [GetStockItemDataInterface::QUANTITY => 0, GetStockItemDataInterface::IS_SALABLE => 0]],
+        ];
     }
 }

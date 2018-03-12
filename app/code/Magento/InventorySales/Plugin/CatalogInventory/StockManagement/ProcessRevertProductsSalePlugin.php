@@ -10,8 +10,8 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\AppendReservationsInterface;
+use Magento\InventoryReservations\Model\ReservationBuilderInterface;
+use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 
@@ -73,8 +73,8 @@ class ProcessRevertProductsSalePlugin
             return [];
         }
         if (null === $websiteId) {
-            //TODO: is we need to throw exception?
-            throw new LocalizedException(__('$websiteId is required'));
+            //TODO: Do we need to throw exception?
+            throw new LocalizedException(__('$websiteId parameter is required'));
         }
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));

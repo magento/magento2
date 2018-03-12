@@ -44,20 +44,19 @@ class SaveSalesChannelsLinksPlugin
      * Saves Sales Channel Link for Stock
      *
      * @param StockRepositoryInterface $subject
-     * @param callable $proceed
+     * @param int $stockId
      * @param StockInterface $stock
      * @return int
      * @throws CouldNotSaveException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         StockRepositoryInterface $subject,
-        callable $proceed,
+        $stockId,
         StockInterface $stock
     ): int {
         $extensionAttributes = $stock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
-        $stockId = $proceed($stock);
         if (null !== $salesChannels) {
             try {
                 $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
@@ -66,6 +65,7 @@ class SaveSalesChannelsLinksPlugin
                 throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
             }
         }
+
         return $stockId;
     }
 }
