@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Type\Input;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
-use GraphQL\Type\Definition\InputType;
+use Magento\Framework\GraphQl\Type\Definition\InputType;
 
 class InputFactory
 {

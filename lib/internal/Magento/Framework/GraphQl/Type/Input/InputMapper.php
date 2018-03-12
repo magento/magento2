@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Type\Input;
 
 use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Config\Data\Argument;
-use GraphQL\Type\Definition\InputType;
+use Magento\Framework\GraphQl\Type\Definition\InputType;
 use Magento\Framework\GraphQl\TypeFactory;
 
 /**
@@ -50,12 +50,12 @@ class InputMapper
      * Determine an arguments type and structure for schema generation.
      *
      * @param Argument $argument
-     * @return InputType
+     * @return array
      */
-    public function getRepresentation(Argument $argument) : InputType
+    public function getRepresentation(Argument $argument) : array
     {
         $type = $argument->getType();
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         $calculateDefault = true;
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
@@ -73,12 +73,30 @@ class InputMapper
         ];
 
         if ($calculateDefault && $argument->getDefault() !== null) {
-            $calculatedArgument['defaultValue'] = $this->calculateDefaultValue($argument);
+            switch ($argument->getType()) {
+                case 'Int':
+                    $calculatedArgument['defaultValue'] = (int)$argument->getDefault();
+                    break;
+                case 'Float':
+                    $calculatedArgument['defaultValue'] = (float)$argument->getDefault();
+                    break;
+                case 'Boolean':
+                    $calculatedArgument['defaultValue'] = (bool)$argument->getDefault();
+                    break;
+                default:
+                    $calculatedArgument['defaultValue'] = $argument->getDefault();
+            }
         }
 
         return $calculatedArgument;
     }
 
+    /**
+     * Return object representation of field for passed in type.
+     *
+     * @param string $type
+     * @return InputType
+     */
     public function getFieldRepresentation(string $type) : InputType
     {
         $instance = $this->typeFactory->getScalar($type);
@@ -87,19 +105,5 @@ class InputMapper
             $instance = $this->inputFactory->create($configElement);
         }
         return $instance;
-    }
-
-    private function calculateDefaultValue(Argument $argument)
-    {
-        switch ($argument->getType()) {
-            case 'Int':
-                return (int)$argument->getDefault();
-            case 'Float':
-                return (float)$argument->getDefault();
-            case 'Boolean':
-                return (bool)$argument->getDefault();
-            default:
-                return $argument->getDefault();
-        }
     }
 }

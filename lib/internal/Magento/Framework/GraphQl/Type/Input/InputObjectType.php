@@ -11,7 +11,6 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\GraphQl\TypeFactory;
-use Magento\Framework\GraphQl\Type\Definition\NonNull;
 
 /**
  * Class InputObjectType

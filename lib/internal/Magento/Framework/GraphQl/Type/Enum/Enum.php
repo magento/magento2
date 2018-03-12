@@ -9,10 +9,12 @@ namespace Magento\Framework\GraphQl\Type\Enum;
 use Magento\Framework\GraphQl\Type\Definition\EnumType;
 use Magento\Framework\GraphQl\Config\Data\Enum as EnumStructure;
 
+/**
+ * Object representation of a GraphQL enum field
+ */
 class Enum extends EnumType
 {
     /**
-     * Enum constructor.
      * @param EnumStructure $structure
      */
     public function __construct(EnumStructure $structure)
