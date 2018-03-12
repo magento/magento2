@@ -9,7 +9,10 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 /**
  * Wrapper for GraphQl BooleanType
  */
-class BooleanType extends \GraphQL\Type\Definition\BooleanType implements TypeInterface
+class BooleanType extends \GraphQL\Type\Definition\BooleanType implements InputType, OutputType
 {
-
+    /**
+     * @var string
+     */
+    public $name = "Magento_Boolean";
 }

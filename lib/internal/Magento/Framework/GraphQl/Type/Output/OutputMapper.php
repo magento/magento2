@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Type\Output;
 
 use Magento\Framework\GraphQl\Config\ConfigInterface;
-use GraphQL\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\TypeFactory;
 
 /**
@@ -53,7 +53,7 @@ class OutputMapper
      */
     public function getTypeObject(string $type) : OutputType
     {
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->outputFactory->create($configElement);
@@ -67,9 +67,9 @@ class OutputMapper
      * @param string $type
      * @return OutputInterfaceObject|null
      */
-    public function getInterface(string $type) : OutputInterfaceObject
+    public function getInterface(string $type) : ?OutputInterfaceObject
     {
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->outputFactory->create($configElement);

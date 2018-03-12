@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 /**
  * Wrapper for GraphQl InputObjectType
  */
-class InputObjectType extends \GraphQL\Type\Definition\InputObjectType implements TypeInterface
+class InputObjectType extends \GraphQL\Type\Definition\InputObjectType implements InputType
 {
 
 }

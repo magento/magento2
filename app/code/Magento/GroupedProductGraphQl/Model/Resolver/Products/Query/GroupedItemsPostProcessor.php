@@ -60,7 +60,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
     /**
      * {@inheritDoc}
      */
-    public function process(array $resultData)
+    public function process(array $resultData) : array
     {
         $childrenSkus = [];
         foreach ($resultData as $product) {

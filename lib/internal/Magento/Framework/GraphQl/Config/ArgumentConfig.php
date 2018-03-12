@@ -52,7 +52,7 @@ class ArgumentConfig
      *
      * @return ValueParserInterface|null
      */
-    public function getValueParser()
+    public function getValueParser() : ?ValueParserInterface
     {
         return $this->valueParser;
     }

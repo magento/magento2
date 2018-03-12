@@ -7,9 +7,9 @@
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Wrapper for GraphQl ObjectType
+ * Interface for GraphQl OutputType only used for output
  */
-class ObjectType extends \GraphQL\Type\Definition\ObjectType implements OutputType
+interface OutputType extends \GraphQL\Type\Definition\OutputType, TypeInterface
 {
 
 }

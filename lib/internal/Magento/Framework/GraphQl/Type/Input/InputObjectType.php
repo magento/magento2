@@ -6,16 +6,17 @@
 
 namespace Magento\Framework\GraphQl\Type\Input;
 
-use GraphQL\Type\Definition\InputType;
+use Magento\Framework\GraphQl\Type\Definition\InputType;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\NonNull;
 
 /**
  * Class InputObjectType
  */
-class InputObjectType extends \GraphQL\Type\Definition\InputObjectType
+class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputObjectType
 {
     /**
      * @var TypeFactory
@@ -54,9 +55,9 @@ class InputObjectType extends \GraphQL\Type\Definition\InputObjectType
      *
      * @param Field $field
      * @param InputType $object
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @return TypeInterface|InputType
      */
-    private function processIsNullable(Field $field, InputType $object)
+    private function processIsNullable(Field $field, InputType $object) : TypeInterface
     {
         if ($field->isRequired()) {
             return $this->typeFactory->createNonNull($object);
@@ -69,9 +70,9 @@ class InputObjectType extends \GraphQL\Type\Definition\InputObjectType
      *
      * @param Field $field
      * @param InputType $object
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @return TypeInterface|InputType
      */
-    private function processIsList(Field $field, InputType $object)
+    private function processIsList(Field $field, InputType $object) : TypeInterface
     {
         if ($field->isList()) {
             return $this->typeFactory->createList($object);

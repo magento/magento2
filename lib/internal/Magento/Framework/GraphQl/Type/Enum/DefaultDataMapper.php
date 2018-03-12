@@ -27,7 +27,7 @@ class DefaultDataMapper implements DataMapperInterface
     /**
      * {@inheritDoc}
      */
-    public function getMappedEnums(string $enumName)
+    public function getMappedEnums(string $enumName) : array
     {
         return isset($this->map[$enumName]) ? $this->map[$enumName] : [];
     }

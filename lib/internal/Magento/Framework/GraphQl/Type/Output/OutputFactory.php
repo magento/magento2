@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Type\Output;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
-use GraphQL\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
 
 /**
  * Creates various output types based on structure's metadata.

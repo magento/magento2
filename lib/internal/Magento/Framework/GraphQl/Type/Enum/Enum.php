@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Type\Enum;
 
-use GraphQL\Type\Definition\EnumType;
+use Magento\Framework\GraphQl\Type\Definition\EnumType;
 use Magento\Framework\GraphQl\Config\Data\Enum as EnumStructure;
 
 class Enum extends EnumType

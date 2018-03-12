@@ -74,7 +74,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      * @param array $resultData
      * @return array
      */
-    public function process(array $resultData)
+    public function process(array $resultData) : array
     {
         $childrenSkus = [];
         $bundleMap = [];

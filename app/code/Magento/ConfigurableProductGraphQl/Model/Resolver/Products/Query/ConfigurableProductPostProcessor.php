@@ -61,7 +61,7 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
      * @param array $resultData
      * @return array
      */
-    public function process(array $resultData)
+    public function process(array $resultData) : array
     {
         $childrenIds = [];
         foreach ($resultData as $key => $product) {

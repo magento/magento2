@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Type\Output;
 
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
-use GraphQL\Type\Definition\OutputType;
+use Magento\Framework\GraphQl\Type\Definition\OutputType;
 
 /**
  * Takes types represented with structure objects and maps them to GraphQL type-readable array formats

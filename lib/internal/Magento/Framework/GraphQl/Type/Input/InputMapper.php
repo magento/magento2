@@ -50,9 +50,9 @@ class InputMapper
      * Determine an arguments type and structure for schema generation.
      *
      * @param Argument $argument
-     * @return array
+     * @return InputType
      */
-    public function getRepresentation(Argument $argument) : array
+    public function getRepresentation(Argument $argument) : InputType
     {
         $type = $argument->getType();
         $instance = $this->typeFactory->createScalar($type);
@@ -81,7 +81,7 @@ class InputMapper
 
     public function getFieldRepresentation(string $type) : InputType
     {
-        $instance = $this->typeFactory->createScalar($type);
+        $instance = $this->typeFactory->getScalar($type);
         if (!$instance) {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);

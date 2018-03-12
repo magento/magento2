@@ -27,7 +27,7 @@ class DefaultMapper implements MapperInterface
     /**
      * {@inheritDoc}
      */
-    public function getMappedTypes(string $entityName)
+    public function getMappedTypes(string $entityName) : array
     {
         return isset($this->map[$entityName]) ? $this->map[$entityName] : [];
     }

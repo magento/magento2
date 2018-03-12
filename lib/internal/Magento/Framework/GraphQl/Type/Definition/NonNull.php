@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 /**
  * Wrapper for GraphQl NonNull
  */
-class NonNull extends \GraphQL\Type\Definition\NonNull implements TypeInterface
+class NonNull extends \GraphQL\Type\Definition\NonNull implements InputType, OutputType
 {
 
 }

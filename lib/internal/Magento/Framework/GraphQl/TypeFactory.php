@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Type\Definition\EnumType;
 use Magento\Framework\GraphQl\Type\Definition\ListOfType;
 use Magento\Framework\GraphQl\Type\Definition\NonNull;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Factory for @see TypeInterface implementations
@@ -21,65 +21,95 @@ use GraphQL\Type\Definition\Type;
 class TypeFactory
 {
     /**
-     * @param string $type
-     * @return Type|null
+     * @var ScalarTypes
      */
-    public function createScalar(string $type)
+    private $scalarTypes;
+
+    /**
+     * TypeFactory constructor.
+     * @param ScalarTypes $scalarTypes
+     */
+    public function __construct(ScalarTypes $scalarTypes)
     {
-        $scalarTypes = Type::getInternalTypes();
-        return isset($scalarTypes[$type]) ? $scalarTypes[$type] : null;
+        $this->scalarTypes = $scalarTypes;
     }
 
     /**
-     * @param array $config
-     * @return TypeInterface
+     * Get instance of a scalar type as singleton
+     *
+     * @param string $type
+     * @return TypeInterface|null
      */
-    public function createObject(array $config)
+    public function getScalar(string $type) : ?TypeInterface
+    {
+        if ($this->scalarTypes->hasScalarTypeClass($type)) {
+            return $this->scalarTypes->getScalarTypeInstance($type);
+        }
+        return null;
+    }
+
+    /**
+     * Create an object type
+     *
+     * @param array $config
+     * @return ObjectType
+     */
+    public function createObject(array $config) : ObjectType
     {
         return new ObjectType($config);
     }
 
     /**
+     * Create an interface type
+     *
      * @param array $config
-     * @return TypeInterface
+     * @return InterfaceType
      */
-    public function createInterface(array $config)
+    public function createInterface(array $config) : InterfaceType
     {
         return new InterfaceType($config);
     }
 
     /**
+     * Create an input object type
+     *
      * @param array $config
-     * @return TypeInterface
+     * @return InputObjectType
      */
-    public function createInputObject(array $config)
+    public function createInputObject(array $config) : InputObjectType
     {
         return new InputObjectType($config);
     }
 
     /**
+     * Create an enum object type
+     *
      * @param array $config
-     * @return TypeInterface
+     * @return EnumType
      */
-    public function createEnum(array $config)
+    public function createEnum(array $config) : EnumType
     {
         return new EnumType($config);
     }
 
     /**
-     * @param TypeInterface|Type $definedType
-     * @return TypeInterface
+     * Create an list array type
+     *
+     * @param TypeInterface $definedType
+     * @return ListOfType
      */
-    public function createList(Type $definedType)
+    public function createList(TypeInterface $definedType) : ListOfType
     {
         return new ListOfType($definedType);
     }
 
     /**
-     * @param TypeInterface|Type $definedType
-     * @return TypeInterface
+     * Create a non null type
+     *
+     * @param TypeInterface $definedType
+     * @return NonNull
      */
-    public function createNonNull(Type $definedType)
+    public function createNonNull(TypeInterface $definedType) : NonNull
     {
         return new NonNull($definedType);
     }
