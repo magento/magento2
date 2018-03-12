@@ -14,7 +14,7 @@
             <stories value="Create a Unicode Named Simple Product via Admin"/>
             <title value="You should be able to create a unicode named simple product in admin."/>
             <description value="You should be able to create a unicode named simple product in admin."/>
-            <severity value="NORMAL"/>
+            <severity value="MAJOR" />
             <testCaseId value="MAGETWO-87504"/>
             <!--useCaseId value="USECASE-114"/-->
             <group value="product"/>
