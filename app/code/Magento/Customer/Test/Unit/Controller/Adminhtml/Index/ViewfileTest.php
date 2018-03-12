@@ -206,4 +206,53 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertSame($this->resultRawMock, $controller->execute());
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Page not found.
+     */
+    public function testExecuteInvalidFile()
+    {
+        $file = '../../../app/etc/env.php';
+        $decodedFile = base64_encode($file);
+        $fileName = 'customer/' . $file;
+        $path = 'path';
+
+        $this->requestMock->expects($this->atLeastOnce())->method('getParam')->with('file')->willReturn($decodedFile);
+
+        $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($fileName)->willReturn($path);
+
+        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->willReturn($this->directoryMock);
+
+        $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(false);
+
+        $this->objectManagerMock->expects($this->any())->method('get')
+            ->willReturnMap(
+                [
+                    [\Magento\Framework\Filesystem::class, $this->fileSystemMock],
+                    [\Magento\MediaStorage\Helper\File\Storage::class, $this->storage],
+                ]
+            );
+
+        $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
+        $fileFactoryMock = $this->createMock(
+            \Magento\Framework\App\Response\Http\FileFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $controller = $this->objectManager->getObject(
+            \Magento\Customer\Controller\Adminhtml\Index\Viewfile::class,
+            [
+                'context' => $this->contextMock,
+                'urlDecoder' => $this->urlDecoderMock,
+                'fileFactory' => $fileFactoryMock,
+            ]
+        );
+        $controller->execute();
+    }
 }

@@ -187,7 +187,7 @@
             </group>
         </section>
         <section id="web">
-            <group id="default_layouts" translate="label" type="text" sortOrder="300" showInDefault="1">
+            <group id="default_layouts" translate="label" type="text" sortOrder="35" showInDefault="1">
                 <label>Default Layouts</label>
                 <field id="default_product_layout" translate="label" type="select" sortOrder="10" showInDefault="1">
                     <label>Default Product Layout</label>
