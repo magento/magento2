@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85825"/>
             <!--Skip because of issue MAGETWO-88266-->
-            <group value="Cms"/>
+            <group value="skip"/>
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
