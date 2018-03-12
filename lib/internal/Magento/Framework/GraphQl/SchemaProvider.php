@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQl;
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Container for retrieving generated type object representations of a GraphQL Schema.
@@ -27,16 +28,24 @@ class SchemaProvider
     private $outputMapper;
 
     /**
+     * @var ScalarTypes
+     */
+    private $scalarTypes;
+
+    /**
      * SchemaProvider constructor.
      * @param ConfigInterface $config
      * @param OutputMapper $outputMapper
+     * @param ScalarTypes $scalarTypes
      */
     public function __construct(
         ConfigInterface $config,
-        OutputMapper $outputMapper
+        OutputMapper $outputMapper,
+        ScalarTypes $scalarTypes
     ) {
         $this->config = $config;
         $this->outputMapper = $outputMapper;
+        $this->scalarTypes = $scalarTypes;
     }
 
     /**
@@ -48,7 +57,11 @@ class SchemaProvider
     {
         $types = [];
         foreach ($this->config->getDeclaredTypeNames() as $typeName) {
-            $types[$typeName] = $this->outputMapper->getTypeObject($typeName);
+            if ($this->scalarTypes->hasScalarTypeClass($typeName)) {
+                $types[$typeName] = $this->scalarTypes->getScalarTypeInstance($typeName);
+            } else {
+                $types[$typeName] = $this->outputMapper->getTypeObject($typeName);
+            }
         }
         return $types;
     }

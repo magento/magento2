@@ -54,12 +54,8 @@ class OutputMapper
      */
     public function getTypeObject(string $type) : OutputType
     {
-        $instance = $this->typeFactory->getScalar($type);
-        if (!$instance) {
-            $configElement = $this->config->getTypeStructure($type);
-            $instance = $this->outputFactory->create($configElement);
-        }
-        return $instance;
+        $configElement = $this->config->getTypeStructure($type);
+        return $this->outputFactory->create($configElement);
     }
 
     /**
@@ -70,11 +66,8 @@ class OutputMapper
      */
     public function getInterface(string $type) : ?OutputInterfaceObject
     {
-        $instance = $this->typeFactory->getScalar($type);
-        if (!$instance) {
-            $configElement = $this->config->getTypeStructure($type);
-            $instance = $this->outputFactory->create($configElement);
-        }
+        $configElement = $this->config->getTypeStructure($type);
+        $instance = $this->outputFactory->create($configElement);
         if ($instance instanceof OutputInterfaceObject) {
             return $instance;
         } else {

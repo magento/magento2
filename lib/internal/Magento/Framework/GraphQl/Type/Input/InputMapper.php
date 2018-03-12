@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Config\Data\Argument;
 use Magento\Framework\GraphQl\Type\Definition\InputType;
 use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Class OutputMapper
@@ -33,18 +34,26 @@ class InputMapper
     private $typeFactory;
 
     /**
+     * @var ScalarTypes
+     */
+    private $scalarTypes;
+
+    /**
      * @param InputFactory $inputFactory
      * @param ConfigInterface $config
      * @param TypeFactory $typeFactory
+     * @param ScalarTypes $scalarTypes
      */
     public function __construct(
         InputFactory $inputFactory,
         ConfigInterface $config,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ScalarTypes $scalarTypes
     ) {
         $this->inputFactory = $inputFactory;
         $this->config = $config;
         $this->typeFactory = $typeFactory;
+        $this->scalarTypes = $scalarTypes;
     }
 
     /**
@@ -56,20 +65,31 @@ class InputMapper
     public function getRepresentation(Argument $argument) : array
     {
         $type = $argument->getType();
-        $instance = $this->typeFactory->getScalar($type);
         $calculateDefault = true;
-        if (!$instance) {
+        if ($this->scalarTypes->hasScalarTypeClass($type)) {
+            $instance = $this->scalarTypes->getScalarTypeInstance($type);
+            if ($argument->isList()) {
+                $instance = $argument->areItemsRequired() ? $this->scalarTypes->createNonNull($instance) : $instance;
+                $instance = $this->scalarTypes->createList($instance);
+            }
+            if ($argument->isRequired()) {
+                $instance = $this->scalarTypes->createNonNull($instance);
+            }
+        } else {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
             $calculateDefault = false;
+            if ($argument->isList()) {
+                $instance = $argument->areItemsRequired() ? $this->typeFactory->createNonNull($instance) : $instance;
+                $instance = $this->typeFactory->createList($instance);
+            }
+            if ($argument->isRequired()) {
+                $instance = $this->typeFactory->createNonNull($instance);
+            }
         }
 
-        if ($argument->isList()) {
-            $instance = $argument->areItemsRequired() ? $this->typeFactory->createNonNull($instance) : $instance;
-            $instance = $this->typeFactory->createList($instance);
-        }
         $calculatedArgument = [
-            'type' => $argument->isRequired() ? $this->typeFactory->createNonNull($instance) : $instance,
+            'type' => $instance,
             'description' => $argument->getDescription()
         ];
 
@@ -100,11 +120,11 @@ class InputMapper
      */
     public function getFieldRepresentation(string $type) : InputType
     {
-        $instance = $this->typeFactory->getScalar($type);
-        if (!$instance) {
+        if ($this->scalarTypes->hasScalarTypeClass($type)) {
+            return $this->scalarTypes->getScalarTypeInstance($type);
+        } else {
             $configElement = $this->config->getTypeStructure($type);
-            $instance = $this->inputFactory->create($configElement);
+            return $this->inputFactory->create($configElement);
         }
-        return $instance;
     }
 }

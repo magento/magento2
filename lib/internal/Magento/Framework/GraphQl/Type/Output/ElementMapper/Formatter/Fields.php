@@ -19,6 +19,7 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Config\FieldConfig;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Formats all fields configured for given type structure, if any.
@@ -56,12 +57,18 @@ class Fields implements FormatterInterface
     private $typeFactory;
 
     /**
+     * @var ScalarTypes
+     */
+    private $scalarTypes;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param FieldConfig $fieldConfig
      * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
      * @param TypeFactory $typeFactory
+     * @param ScalarTypes $scalarTypes
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -69,7 +76,8 @@ class Fields implements FormatterInterface
         ArgumentFactory $argumentFactory,
         OutputMapper $outputMapper,
         InputMapper $inputMapper,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ScalarTypes $scalarTypes
     ) {
         $this->objectManager = $objectManager;
         $this->fieldConfig = $fieldConfig;
@@ -77,6 +85,7 @@ class Fields implements FormatterInterface
         $this->outputMapper = $outputMapper;
         $this->inputMapper = $inputMapper;
         $this->typeFactory = $typeFactory;
+        $this->scalarTypes = $scalarTypes;
     }
 
     /**
@@ -88,7 +97,19 @@ class Fields implements FormatterInterface
         $config = [];
         /** @var Field $field */
         foreach ($typeStructure->getFields() as $field) {
-            $type = $this->getFieldType($typeStructure, $field, $outputType);
+            if ($typeStructure->getName() == $field->getType()) {
+                $type = $outputType;
+            } elseif ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
+                if ($field->isList()) {
+                    $type = new \Magento\Framework\GraphQl\Type\Definition\ListOfType(
+                        $this->scalarTypes->getScalarTypeInstance($field->getType())
+                    );
+                } else {
+                    $type = $this->scalarTypes->getScalarTypeInstance($field->getType());
+                }
+            } else {
+                $type = $this->getFieldType($typeStructure, $field, $outputType);
+            }
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),
                 'type' => $type,

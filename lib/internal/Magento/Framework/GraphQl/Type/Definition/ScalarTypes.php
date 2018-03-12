@@ -13,60 +13,49 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 class ScalarTypes
 {
     /**
-     * @var string[]
-     */
-    private $scalarTypes = [
-        'Boolean' => BooleanType::class,
-        'Float' => FloatType::class,
-        'ID' => IdType::class,
-        'Int' => IntType::class,
-        'String' => StringType::class
-    ];
-
-    /**
-     * @var TypeInterface
-     */
-    private $scalarTypesInstances = [
-
-    ];
-
-    /**
      * @param string $typeName
      * @return bool
      */
     public function hasScalarTypeClass(string $typeName) : bool
     {
-        return isset($this->scalarTypes[$typeName]) ? true : false;
+        $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
+        return isset($internalTypes[$typeName]) ? true : false;
     }
 
     /**
      * @param string $typeName
-     * @return string|null
+     * @return \GraphQL\Type\Definition\ScalarType
      * @throws \LogicException
      */
-    public function getScalarTypeClass(string $typeName) : string
+    public function getScalarTypeInstance(string $typeName) : \GraphQL\Type\Definition\ScalarType
     {
+        $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
         if ($this->hasScalarTypeClass($typeName)) {
-            return $this->scalarTypes[$typeName];
-        }
-        throw new \LogicException(sprintf('Scalar type class with name %s doesn\'t exist', $typeName));
-    }
-
-    /**
-     * @param string $typeName
-     * @return TypeInterface|null
-     * @throws \LogicException
-     */
-    public function getScalarTypeInstance(string $typeName) : TypeInterface
-    {
-        if ($this->hasScalarTypeClass($typeName)) {
-            if (!isset($this->scalarTypesInstances[$typeName])) {
-                $scalarClassName = $this->getScalarTypeClass($typeName);
-                $this->scalarTypesInstances[$typeName] = new $scalarClassName();
-            }
-            return $this->scalarTypesInstances[$typeName];
+            return $internalTypes[$typeName];
         } else {
             throw new \LogicException(sprintf('Scalar type %s doesn\'t exist', $typeName));
         }
+    }
+
+    /**
+     * Create an list array type
+     *
+     * @param \GraphQL\Type\Definition\ScalarType $definedType
+     * @return ListOfType
+     */
+    public function createList(\GraphQL\Type\Definition\ScalarType $definedType) : ListOfType
+    {
+        return new ListOfType($definedType);
+    }
+
+    /**
+     * Create a non null type
+     *
+     * @param \GraphQL\Type\Definition\ScalarType $definedType
+     * @return NonNull
+     */
+    public function createNonNull(\GraphQL\Type\Definition\ScalarType $definedType) : NonNull
+    {
+        return new NonNull($definedType);
     }
 }

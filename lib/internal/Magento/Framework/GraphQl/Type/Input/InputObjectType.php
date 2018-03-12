@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Class InputObjectType
@@ -23,24 +24,46 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
      */
     private $typeFactory;
 
+    /**
+     * @var ScalarTypes
+     */
+    private $scalarTypes;
+
+    /**
+     * @param InputMapper $inputMapper
+     * @param TypeStructure $structure
+     * @param TypeFactory $typeFactory
+     * @param ScalarTypes $scalarTypes
+     */
     public function __construct(
         InputMapper $inputMapper,
         TypeStructure $structure,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ScalarTypes $scalarTypes
     ) {
         $this->typeFactory = $typeFactory;
+        $this->scalarTypes = $scalarTypes;
         $config = [
             'name' => $structure->getName(),
             'description' => $structure->getDescription()
         ];
         foreach ($structure->getFields() as $field) {
-            if ($field->getType() == $structure->getName()) {
-                $type = $this;
+            if ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
+                $type = $this->scalarTypes->getScalarTypeInstance($field->getType());
+                if ($field->isList()) {
+                    $type = $this->scalarTypes->createList($type);
+                }
+                if ($field->isRequired()) {
+                    $type = $this->scalarTypes->createNonNull($type);
+                }
             } else {
-                $type = $inputMapper->getFieldRepresentation($field->getType());
+                if ($field->getType() == $structure->getName()) {
+                    $type = $this;
+                } else {
+                    $type = $inputMapper->getFieldRepresentation($field->getType());
+                }
+                $type = $this->processIsNullable($field, $this->processIsList($field, $type));
             }
-
-            $type = $this->processIsNullable($field, $this->processIsList($field, $type));
 
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),

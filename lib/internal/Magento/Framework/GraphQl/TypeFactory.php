@@ -14,41 +14,12 @@ use Magento\Framework\GraphQl\Type\Definition\EnumType;
 use Magento\Framework\GraphQl\Type\Definition\ListOfType;
 use Magento\Framework\GraphQl\Type\Definition\NonNull;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
  * Factory for @see TypeInterface implementations
  */
 class TypeFactory
 {
-    /**
-     * @var ScalarTypes
-     */
-    private $scalarTypes;
-
-    /**
-     * TypeFactory constructor.
-     * @param ScalarTypes $scalarTypes
-     */
-    public function __construct(ScalarTypes $scalarTypes)
-    {
-        $this->scalarTypes = $scalarTypes;
-    }
-
-    /**
-     * Get instance of a scalar type as singleton
-     *
-     * @param string $type
-     * @return TypeInterface|null
-     */
-    public function getScalar(string $type) : ?TypeInterface
-    {
-        if ($this->scalarTypes->hasScalarTypeClass($type)) {
-            return $this->scalarTypes->getScalarTypeInstance($type);
-        }
-        return null;
-    }
-
     /**
      * Create an object type
      *
