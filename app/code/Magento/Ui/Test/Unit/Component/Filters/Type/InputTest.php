@@ -111,8 +111,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
             ->method('addComponentDefinition')
             ->with(Input::NAME, ['extends' => Input::NAME]);
         $this->contextMock->expects($this->any())
-            ->method('getRequestParam')
-            ->with(UiContext::FILTER_VAR)
+            ->method('getFiltersParams')
             ->willReturn($filterData);
         $dataProvider = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
@@ -120,19 +119,40 @@ class InputTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
-        if ($expectedCondition !== null) {
-            $dataProvider->expects($this->any())
-                ->method('addFilter')
-                ->with($expectedCondition, $name);
-        }
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
             ->with($name, Input::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
+
+        if ($expectedCondition !== null) {
+            $this->filterBuilderMock->expects($this->once())
+                ->method('setConditionType')
+                ->with('like')
+                ->willReturnSelf();
+
+            $this->filterBuilderMock->expects($this->once())
+                ->method('setField')
+                ->with($name)
+                ->willReturnSelf();
+
+            $this->filterBuilderMock->expects($this->once())
+                ->method('setValue')
+                ->with($expectedCondition['like'])
+                ->willReturnSelf();
+
+            $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $this->filterBuilderMock->expects($this->once())
+                ->method('create')
+                ->willReturn($filterMock);
+        }
 
         $date = new Input(
             $this->contextMock,
@@ -160,7 +180,12 @@ class InputTest extends \PHPUnit\Framework\TestCase
             [
                 'test_date',
                 ['test_date' => 'some_value'],
-                ['like' => '%some_value%'],
+                ['like' => '%some\_value%'],
+            ],
+            [
+                'test_date',
+                ['test_date' => '%'],
+                ['like' => '%\%%'],
             ],
         ];
     }

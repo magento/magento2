@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ObjectManager;
@@ -581,7 +582,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function query($sql, $bind = [])
     {
         if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false && count($this->_splitMultiQuery($sql)) > 1) {
-            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new Phrase("Multiple queries can't be executed. Run a single query and try again.")
+            );
         }
         return $this->_query($sql, $bind);
     }
@@ -2017,11 +2020,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         switch ($strategy) {
-            case self::INSERT_ON_DUPLICATE:
+            case self::REPLACE:
                 $query = $this->_getReplaceSqlQuery($table, $columns, $values);
                 break;
             default:
-                $query = $this->_getInsertSqlQuery($table, $columns, $values);
+                $query = $this->_getInsertSqlQuery($table, $columns, $values, $strategy);
         }
 
         // execute the statement and return the number of affected rows
@@ -3688,16 +3691,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param array $columns
      * @param array $values
+     * @param null|int $strategy
      * @return string
      */
-    protected function _getInsertSqlQuery($tableName, array $columns, array $values)
+    protected function _getInsertSqlQuery($tableName, array $columns, array $values, $strategy = null)
     {
         $tableName = $this->quoteIdentifier($tableName, true);
         $columns   = array_map([$this, 'quoteIdentifier'], $columns);
         $columns   = implode(',', $columns);
         $values    = implode(', ', $values);
+        $strategy = $strategy === self::INSERT_IGNORE ? 'IGNORE' : '';
 
-        $insertSql = sprintf('INSERT INTO %s (%s) VALUES %s', $tableName, $columns, $values);
+        $insertSql = sprintf('INSERT %s INTO %s (%s) VALUES %s', $strategy, $tableName, $columns, $values);
 
         return $insertSql;
     }

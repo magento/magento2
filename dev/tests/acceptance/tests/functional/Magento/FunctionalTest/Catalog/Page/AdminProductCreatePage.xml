@@ -15,5 +15,6 @@
         <section name="AdminProductImagesSection"/>
         <section name="AdminAddProductsToOptionPanel"/>
         <section name="AdminProductMessagesSection"/>
+        <section name="AdminProductFormRelatedUpSellCrossSellSection"/>
     </page>
 </pages>

@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Cart;
 
 class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
@@ -35,7 +36,9 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the quote item.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("The quote item isn't found. Verify the item and try again.")
+                );
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Framework\DataObject($params));

@@ -41,6 +41,7 @@
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
         "pelago/emogrifier": "^2.0.0",
+        "php-amqplib/php-amqplib": "2.5.*",
         "phpseclib/phpseclib": "2.0.*",
         "ramsey/uuid": "3.6.1",
         "symfony/console": "~4.0.0",
@@ -89,7 +90,9 @@
         "magento/module-marketplace": "100.3.0-dev",
         "magento/module-admin-notification": "100.3.0-dev",
         "magento/module-advanced-pricing-import-export": "100.3.0-dev",
+        "magento/module-amqp": "100.3.0-dev",
         "magento/module-analytics": "100.3.0-dev",
+        "magento/module-asynchronous-operations": "100.3.0-dev",
         "magento/module-authorization": "100.3.0-dev",
         "magento/module-authorizenet": "100.3.0-dev",
         "magento/module-backend": "100.3.0-dev",
@@ -159,8 +162,10 @@
         "magento/module-integration": "100.3.0-dev",
         "magento/module-layered-navigation": "100.3.0-dev",
         "magento/module-media-storage": "100.3.0-dev",
+        "magento/module-message-queue": "100.3.0-dev",
         "magento/module-msrp": "100.3.0-dev",
         "magento/module-multishipping": "100.3.0-dev",
+        "magento/module-mysql-mq": "100.3.0-dev",
         "magento/module-new-relic-reporting": "100.3.0-dev",
         "magento/module-newsletter": "100.3.0-dev",
         "magento/module-offline-payments": "100.3.0-dev",
@@ -227,6 +232,9 @@
         "magento/language-pt_br": "100.3.0-dev",
         "magento/language-zh_hans_cn": "100.3.0-dev",
         "magento/framework": "100.3.0-dev",
+        "magento/framework-amqp": "100.1.0-dev",
+        "magento/framework-bulk": "100.3.0-dev",
+        "magento/framework-message-queue": "100.3.0-dev",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "components/jquery": "1.11.0",
         "blueimp/jquery-file-upload": "5.6.14",
@@ -265,7 +273,7 @@
             ]
         },
         "files": [
-            "app/registration.php"
+            "app/etc/NonComposerComponentRegistration.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",

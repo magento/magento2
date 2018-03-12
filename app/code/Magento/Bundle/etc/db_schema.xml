@@ -6,7 +6,7 @@
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_product_bundle_option" resource="default" engine="innodb"
            comment="Catalog Product Bundle Option">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -45,10 +45,6 @@
         <constraint xsi:type="foreign" name="CAT_PRD_BNDL_OPT_VAL_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID"
                     table="catalog_product_bundle_option_value" column="option_id"
                     referenceTable="catalog_product_bundle_option" referenceColumn="option_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CATALOG_PRODUCT_BUNDLE_OPTION_VALUE_OPTION_ID_STORE_ID">
-            <column name="option_id"/>
-            <column name="store_id"/>
-        </constraint>
         <constraint xsi:type="unique" name="CAT_PRD_BNDL_OPT_VAL_OPT_ID_PARENT_PRD_ID_STORE_ID">
             <column name="option_id"/>
             <column name="parent_product_id"/>

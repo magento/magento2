@@ -54,7 +54,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedMessage This product doesn't have tier price
+     * @expectedMessage Tier price is unavailable for this product.
      */
     public function testRemoveWhenTierPricesNotExists()
     {

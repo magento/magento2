@@ -105,12 +105,20 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         );
         $this->selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getSku', 'getSelectionPriceValue', 'getIsDefault', 'getSelectionQty', 'getSelectionPriceType']
+            [
+                'getSku',
+                'getSelectionPriceValue',
+                'getIsDefault',
+                'getSelectionQty',
+                'getSelectionPriceType',
+                'getSelectionCanChangeQty'
+            ]
         );
         $this->selection->expects($this->any())->method('getSku')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceValue')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionQty')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceType')->willReturn(1);
+        $this->selection->expects($this->any())->method('getSelectionCanChangeQty')->willReturn(1);
         $this->selectionsCollection = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
             ['getIterator', 'addAttributeToSort']
@@ -168,6 +176,19 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'additional_attributes' => $attributes
         ];
         $preparedRow = $preparedData->addData($dataRow, 1);
+
+        $bundleValues = [
+            'name=title',
+            'type=1',
+            'required=1',
+            'sku=1',
+            'price=1',
+            'default=',
+            'default_qty=1',
+            'price_type=percent',
+            'can_change_qty=1',
+        ];
+
         $expected = [
             'sku' => 'sku1',
             'additional_attributes' => 'attribute=1,attribute2="Text",attribute3=One,Two,Three',
@@ -176,7 +197,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             'bundle_sku_type' => 'fixed',
             'bundle_price_view' => 'As low as',
             'bundle_weight_type' => 'fixed',
-            'bundle_values' => 'name=title,type=1,required=1,sku=1,price=1,default=,default_qty=1,price_type=percent'
+            'bundle_values' => implode(',', $bundleValues)
         ];
         $this->assertEquals($expected, $preparedRow);
     }

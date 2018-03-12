@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\DateTime;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -11,7 +12,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Timezone library
@@ -41,7 +41,7 @@ class Timezone implements TimezoneInterface
     protected $_scopeResolver;
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
@@ -63,7 +63,7 @@ class Timezone implements TimezoneInterface
     /**
      * @param ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
-     * @param DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -71,7 +71,7 @@ class Timezone implements TimezoneInterface
     public function __construct(
         ScopeResolverInterface $scopeResolver,
         ResolverInterface $localeResolver,
-        DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
@@ -318,7 +318,10 @@ class Timezone implements TimezoneInterface
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
                 throw new LocalizedException(
-                    new Phrase('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
+                    new Phrase(
+                        'The DateTime object timezone needs to be the same as the "%1" timezone in config.',
+                        $this->getConfigTimezone()
+                    )
                 );
             }
         }

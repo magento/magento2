@@ -68,9 +68,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $swatchImageTypes = ['swatch_image', 'swatch_thumb'];
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @var array
      */
-    private $registeredThemesCache;
+    private $imageConfig;
 
     /**
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -211,7 +211,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         if ($isSwatch) {
             $image->keepFrame(true);
             $image->keepTransparency(true);
-            $image->backgroundColor('#FFF');
+            $image->backgroundColor([255, 255, 255]);
         }
         return $this;
     }
@@ -256,18 +256,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImageConfig()
     {
-        $imageConfig = [];
-        foreach ($this->getRegisteredThemes() as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
-            $imageConfig = array_merge(
-                $imageConfig,
-                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
+        if (!$this->imageConfig) {
+            $this->imageConfig = $this->viewConfig->getViewConfig()->getMediaEntities(
+                'Magento_Catalog',
+                Image::MEDIA_TYPE_CONFIG_NODE
             );
         }
-        return $imageConfig;
+
+        return $this->imageConfig;
     }
 
     /**
@@ -337,17 +333,5 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected function prepareFile($file)
     {
         return ltrim(str_replace('\\', '/', $file), '/');
-    }
-
-    /**
-     * @return \Magento\Theme\Model\ResourceModel\Theme\Collection
-     */
-    private function getRegisteredThemes()
-    {
-        if ($this->registeredThemesCache === null) {
-            $this->registeredThemesCache = $this->themeCollection->loadRegisteredThemes();
-        }
-
-        return $this->registeredThemesCache;
     }
 }

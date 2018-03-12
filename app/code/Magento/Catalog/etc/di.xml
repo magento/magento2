@@ -143,6 +143,12 @@
         <arguments>
             <argument name="catalogProductStatus" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status\Proxy</argument>
             <argument name="productLink" xsi:type="object">Magento\Catalog\Model\Product\Link\Proxy</argument>
+            <argument name="getCustomAttributeCodes" xsi:type="object">Magento\Catalog\Model\Entity\GetProductCustomAttributeCodes</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <arguments>
+            <argument name="getCustomAttributeCodes" xsi:type="object">Magento\Catalog\Model\Entity\GetCategoryCustomAttributeCodes</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
@@ -816,6 +822,9 @@
             <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Eav\Model\ResourceModel\ReadSnapshot">
+        <plugin name="catalogReadSnapshot" type="Magento\Catalog\Plugin\Model\ResourceModel\ReadSnapshotPlugin" />
+    </type>
     <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
