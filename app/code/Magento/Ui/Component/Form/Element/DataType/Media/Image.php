@@ -65,7 +65,7 @@ class Image extends Media
     {
         // dynamically set max file size based on php ini config if not present in XML
         $maxFileSize = $this->getConfiguration()['maxFileSize'] ?? $this->fileSize->getMaxFileSize();
-        $initialMediaGalleryOpenSubpath = $this->getConfiguration()['initialMediaGalleryOpenSubpath'] ?? null;
+        $initialMediaGalleryOpenSubpath = $this->getConfiguration()['initialMediaGalleryOpenSubpath'];
 
         $data = array_replace_recursive(
             $this->getData(),

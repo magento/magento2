@@ -68,7 +68,6 @@
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                             </uploaderConfig>
-                            <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
                         </settings>
                     </imageUploader>
                 </formElements>
@@ -165,7 +164,6 @@
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
                             </uploaderConfig>
-                            <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
                         </settings>
                     </imageUploader>
                 </formElements>
