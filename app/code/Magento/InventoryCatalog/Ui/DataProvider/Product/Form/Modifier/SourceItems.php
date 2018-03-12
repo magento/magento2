@@ -110,7 +110,7 @@ class SourceItems extends AbstractModifier
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],
-                'source_status' => $row['source_status'] ? __('Enabled') : __('Disabled')
+                'source_status' => $row['source_status'],
             ];
         }
         return $sourceItemsData;
