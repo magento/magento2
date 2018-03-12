@@ -17,6 +17,11 @@ use Magento\Framework\Registry;
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
+     * Max number of retries for saving duplicated block
+     */
+    const MAX_RETRIES = 100;
+
+    /**
      * @var DataPersistorInterface
      */
     protected $dataPersistor;
@@ -97,10 +102,21 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 } else if ($redirect == 'close') {
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
-                    $data['identifier'] = $data['identifier'] . '-1';
-                    $this->dataPersistor->set('cms_block', $data);
-                    $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
-                    return $resultRedirect->setPath('*/*/newAction');
+                    for ($numOfTries = 0; $numOfTries < self::MAX_RETRIES; $numOfTries++) {
+                        $data['identifier'] = $data['identifier'] . '-1';
+                        $this->dataPersistor->set('cms_block', $data);
+                        $model->setData($data);
+                        try {
+                            $this->blockRepository->save($model);
+                            $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
+                            return $resultRedirect->setPath('*/*/newAction');
+                        } catch (LocalizedException $e) {
+                            if ($e->getMessage() == __('A block identifier with the same properties already exists in the selected store.')) {
+                                continue;
+                            }
+                        }
+                    }
+                    $this->messageManager->addSuccessMessage(__('Block duplication failed. A block identifier is not unique.'));
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

@@ -45,6 +45,8 @@ Blocks,Blocks
 "Please correct the data sent.","Please correct the data sent."
 "A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
 "You saved the block.","You saved the block."
+"You duplicated the block.","You duplicated the block."
+"Block duplication failed. A block identifier is not unique.","Block duplication failed. A block identifier is not unique."
 "Something went wrong while saving the block.","Something went wrong while saving the block."
 "The page has been deleted.","The page has been deleted."
 "We can't find a page to delete.","We can't find a page to delete."
