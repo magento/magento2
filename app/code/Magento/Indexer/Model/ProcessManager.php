@@ -13,15 +13,20 @@ class ProcessManager
     /** @var bool */
     private $failInChildProcess = false;
 
-    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
+    /** @var \Magento\Framework\App\ResourceConnection */
     private $resource;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\App\ResourceConnection $resource = null
     ) {
+        if (null === $resource) {
+            $resource = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\ResourceConnection::class
+            );
+        }
         $this->resource = $resource;
     }
 
@@ -60,7 +65,7 @@ class ProcessManager
      */
     private function multiThreadsExecute($userFunctions, $threadsCount)
     {
-        $this->resource->getConnection()->closeConnection();
+        $this->resource->closeConnection(null);
         $threadNumber = 0;
         foreach ($userFunctions as $userFunction) {
             $pid = pcntl_fork();

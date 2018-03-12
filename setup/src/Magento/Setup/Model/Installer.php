@@ -769,7 +769,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
@@ -836,7 +836,7 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
-        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
+        $resource = $this->objectManagerProvider->get()->create(\Magento\Framework\Module\ModuleResource::class);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -968,7 +968,7 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -1012,7 +1012,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
-        $setup = $this->setupFactory->create($this->context->getResources());
+        $setup = $this->setupFactory->create();
         $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();
     }
