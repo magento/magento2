@@ -93,7 +93,7 @@
         </after>
 
         <comment userInput="Filter and edit simple product 1" stepKey="filterAndEditComment1"/>
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="productIndexPage"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple">
@@ -138,7 +138,7 @@
         </actionGroup>
 
         <comment userInput="Filter and edit config product" stepKey="filterAndEditComment2"/>
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="productIndexPage2"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial2"/>
         <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridConfig">

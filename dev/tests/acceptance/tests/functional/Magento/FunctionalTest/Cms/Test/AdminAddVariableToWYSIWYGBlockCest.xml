@@ -74,7 +74,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>

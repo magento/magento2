@@ -68,7 +68,7 @@
         <waitForPageLoad stepKey="waitForPage2" />
         <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" stepKey="waitForClearBtn" />
         <click selector="{{WidgetSection.ClearCompare}}" stepKey="clickClearCompareBtn" />
-        <waitForElementVisible selector="{{WidgetSection.AcceptClear}}" stepKey=""/>
+        <waitForElementVisible selector="{{WidgetSection.AcceptClear}}" stepKey="waitForAcceptBtn"/>
         <click selector="{{WidgetSection.AcceptClear}}" stepKey="acceptClearCompare" />
         <waitForPageLoad stepKey="waitForPage3" />
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
