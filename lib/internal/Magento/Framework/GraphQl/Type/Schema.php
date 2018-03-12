@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Type;
 
@@ -21,7 +22,16 @@ class Schema extends \GraphQL\Type\Schema
         parent::__construct($config);
     }
 
-    private function replaceScalarTypes($config) : array
+    /**
+     * Replace wrappers for scalar types with webonyx scalar types to prevent creation of two scalar types.
+     *
+     * Note that webonyx will try to inject it's own scalar types and because wrappers have the same name
+     * Example: String vs String - webonyx will trigger an exception.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function replaceScalarTypes(array $config) : array
     {
         $recur = function (&$value) use (&$recur) {
             if ($value instanceof \GraphQL\Type\Definition\ObjectType) {
