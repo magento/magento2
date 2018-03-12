@@ -538,7 +538,9 @@ abstract class AbstractType
                 unset($rowData[$attrCode]);
             }
 
-            if (isset($rowData[$attrCode]) && $rowData[$attrCode] === $this->_entityModel->getEmptyAttributeValueConstant()) {
+            if (isset($rowData[$attrCode])
+                && $rowData[$attrCode] === $this->_entityModel->getEmptyAttributeValueConstant())
+            {
                 $rowData[$attrCode] = null;
             }
         }
