@@ -153,8 +153,6 @@ class Fields implements FormatterInterface
     {
         if ($typeStructure->getName() == $field->getType()) {
             $type = $outputType;
-        } elseif ($field->isList()) {
-            $type = $this->outputMapper->getTypeObject($field->getItemType());
         } else {
             $type = $this->outputMapper->getTypeObject($field->getType());
         }

@@ -32,9 +32,9 @@ class Field
     private $required;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $itemType;
+    private $isList;
 
     /**
      * @var string
@@ -49,16 +49,16 @@ class Field
      * @param string $name
      * @param string $type
      * @param bool $required
-     * @param string|null $itemType
-     * @param string|null $resolver
-     * @param string|null $description
+     * @param bool $isList
+     * @param string $resolver
+     * @param string $description
      * @param array $arguments
      */
     public function __construct(
         string $name,
         string $type,
         bool $required,
-        string $itemType = "",
+        bool $isList,
         string $resolver = "",
         string $description = "",
         array $arguments = []
@@ -66,7 +66,7 @@ class Field
         $this->name = $name;
         $this->type = $type;
         $this->required = $required;
-        $this->itemType = $itemType;
+        $this->isList = $isList;
         $this->resolver = $resolver;
         $this->description = $description;
         $this->arguments = $arguments;
@@ -93,23 +93,13 @@ class Field
     }
 
     /**
-     * Get the item type of if the field is a list of items. Returns empty string otherwise.
-     *
-     * @return string
-     */
-    public function getItemType() : string
-    {
-        return $this->itemType;
-    }
-
-    /**
      * Return true if field is a list of items. False otherwise.
      *
      * @return bool
      */
     public function isList() : bool
     {
-        return !empty($this->itemType);
+        return $this->isList;
     }
 
     /**

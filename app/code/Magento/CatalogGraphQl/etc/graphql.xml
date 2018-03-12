@@ -8,8 +8,8 @@
         <field xsi:type="ObjectOutputField" name="products" type="Products" resolver="Magento\CatalogGraphQl\Model\Resolver\Products">
             <argument xsi:type="ScalarArgument" name="search" type="String" description="Text to be used in a full text search. If multiple keywords are specified, each keyword is evaluated separately."/>
             <argument xsi:type="ObjectArgument" name="filter" type="ProductFilterInput" description="Defines which search criteria to use to find the desired results. Each filter defines the field or fields to be searched, the condition type, and the search value."/>
-            <argument xsi:type="ScalarArgument" name="pageSize" type="Int" description="The maximum number of items to return. If no value is specified, the search returns 20 items."/>
-            <argument xsi:type="ScalarArgument" name="currentPage" type="Int" description="Specifies which page of results to return. If no value is specified, the first page is returned. If you specify a value that is greater than the number of available pages, an error is returned."/>
+            <argument xsi:type="ScalarArgument" name="pageSize" type="Int" default="20" description="The maximum number of items to return. If no value is specified, the search returns 20 items."/>
+            <argument xsi:type="ScalarArgument" name="currentPage" type="Int" default="0" description="Specifies which page of results to return. If no value is specified, the first page is returned. If you specify a value that is greater than the number of available pages, an error is returned."/>
             <argument xsi:type="ObjectArgument" name="sort" type="ProductSortInput" description="Specifies which field or fields to use for sorting the results. If you specify more than one field, Magento sorts by the first field listed. Then, if any items have the same value, those items will be sorted by the secondary field. The value for each field can be set to either ASC (ascending) or DESC (descending)."/>
         </field>
     </type>

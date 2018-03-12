@@ -54,7 +54,7 @@ class InputMapper
      */
     public function getRepresentation(Argument $argument) : array
     {
-        $type = $argument->isList() ? $argument->getItemType() : $argument->getType();
+        $type = $argument->getType();
         $instance = $this->typeFactory->createScalar($type);
         $calculateDefault = true;
         if (!$instance) {

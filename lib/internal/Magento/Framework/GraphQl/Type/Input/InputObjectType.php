@@ -35,8 +35,6 @@ class InputObjectType extends \GraphQL\Type\Definition\InputObjectType
         foreach ($structure->getFields() as $field) {
             if ($field->getType() == $structure->getName()) {
                 $type = $this;
-            } elseif ($field->isList()) {
-                $type = $inputMapper->getFieldRepresentation($field->getItemType());
             } else {
                 $type = $inputMapper->getFieldRepresentation($field->getType());
             }

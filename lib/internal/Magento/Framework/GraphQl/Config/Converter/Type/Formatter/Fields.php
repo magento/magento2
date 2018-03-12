@@ -65,7 +65,7 @@ class Fields implements FormatterInterface
             foreach ($entry['field'] as $field) {
                 $fields['fields'][$field['name']] = [
                     'name' => $field['name'],
-                    'type' => $field['type']
+                    'type' => isset($field['itemType']) ? $field['itemType'] : $field['type']
                 ];
                 $fields['fields'][$field['name']] = array_merge(
                     $fields['fields'][$field['name']],

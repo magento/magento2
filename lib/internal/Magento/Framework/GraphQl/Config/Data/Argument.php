@@ -114,16 +114,6 @@ class Argument
     }
 
     /**
-     * Get the item type if the argument is a list of input items.
-     *
-     * @return string
-     */
-    public function getItemType() : string
-    {
-        return $this->itemType;
-    }
-
-    /**
      * Return true if argument is a list of input items, otherwise false if it is a single object/scalar.
      *
      * @return bool
