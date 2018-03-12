@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurableProduct\Model\ResourceModel\IsSalableCondition;
+namespace Magento\InventoryConfigurableProduct\Model\ResourceModel\IsStockItemSalableCondition;
 
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface;
+use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 /**
  * //todo https://github.com/magento-engcom/msi/issues/524
  * Condition for configurable products.
  */
-class GetConfigurableCondition implements GetIsSalableConditionInterface
+class GetConfigurableCondition implements GetIsStockItemSalableConditionInterface
 {
     /**
      * @inheritdoc
