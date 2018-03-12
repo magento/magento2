@@ -27,5 +27,6 @@
                 <label translate="true">Salable Quantity</label>
             </settings>
         </column>
+        <column name="qty" class="Magento\InventoryCatalog\Ui\Component\Listing\Column\Quantity"/>
     </columns>
 </listing>

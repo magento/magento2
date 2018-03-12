@@ -75,4 +75,16 @@ class SalableQuantity extends Column
 
         return $dataSource;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepare()
+    {
+        if ($this->isSingleSourceMode->execute() === true) {
+            $this->unsetData();
+        } else {
+            parent::prepare();
+        }
+    }
 }

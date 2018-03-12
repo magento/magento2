@@ -85,6 +85,18 @@ class SourceItems extends Column
     }
 
     /**
+     * @inheritdoc
+     */
+    public function prepare()
+    {
+        if ($this->isSingleSourceMode->execute() === true) {
+            $this->unsetData();
+        } else {
+            parent::prepare();
+        }
+    }
+
+    /**
      * @param string $sku
      * @return array
      */
