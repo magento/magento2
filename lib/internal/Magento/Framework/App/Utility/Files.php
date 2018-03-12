@@ -162,7 +162,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
