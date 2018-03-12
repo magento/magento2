@@ -109,7 +109,9 @@
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="waitForSaveButtonVisible"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterSaveCmsPage" />
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>

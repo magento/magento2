@@ -75,6 +75,8 @@
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForPageLoad stepKey="waitForPageLoad5" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
