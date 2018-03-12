@@ -122,7 +122,12 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
             $indexScopeState = ObjectManager::getInstance()->get(State::class);
         }
         if (null === $processManager) {
-            $processManager = ObjectManager::getInstance()->get(ProcessManager::class);
+            $processManager = ObjectManager::getInstance()->create(
+                ProcessManager::class,
+                [
+                    'resource' => $this->fulltextResource
+                ]
+            );
         }
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeState;
@@ -168,7 +173,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
             };
 
         }
-        $this->fulltextResource->getConnection()->closeConnection();
+
         $this->processManager->execute($userFunctions, $this->threadsCount);
 
         $this->fulltextResource->resetSearchResults();

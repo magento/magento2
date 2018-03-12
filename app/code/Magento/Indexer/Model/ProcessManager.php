@@ -13,6 +13,18 @@ class ProcessManager
     /** @var bool */
     private $failInChildProcess = false;
 
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
+    private $resource;
+
+    /**
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+    ) {
+        $this->resource = $resource;
+    }
+
     /**
      * Execute user functions
      *
@@ -21,7 +33,7 @@ class ProcessManager
      */
     public function execute($userFunctions, $threadsCount)
     {
-        if ($threadsCount > 1 && function_exists('pcntl_fork')) {
+        if ($threadsCount > 1 && $this->isCanBeParalleled()) {
             $this->multiThreadsExecute($userFunctions, $threadsCount);
         } else {
             $this->simpleThreadExecute($userFunctions);
@@ -48,6 +60,7 @@ class ProcessManager
      */
     private function multiThreadsExecute($userFunctions, $threadsCount)
     {
+        $this->resource->getConnection()->closeConnection();
         $threadNumber = 0;
         foreach ($userFunctions as $userFunction) {
             $pid = pcntl_fork();
@@ -65,6 +78,16 @@ class ProcessManager
             throw new \RuntimeException('Fail in child process');
         }
 
+    }
+
+    /**
+     * Is process can be paralleled
+     *
+     * @return bool
+     */
+    private function isCanBeParalleled()
+    {
+        return function_exists('pcntl_fork');
     }
 
     /**
