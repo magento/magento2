@@ -16,7 +16,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Test Step for DeleteStoreEntity
+ * Test Step for DeleteWebsitesEntity.
  */
 class DeleteWebsitesEntityStep implements TestStepInterface
 {

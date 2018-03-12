@@ -22,7 +22,8 @@ class AssertResetFilterMessage extends \Magento\Mtf\Constraint\AbstractConstrain
     ) {
         \PHPUnit_Framework_Assert::assertContains(
             'restored the filter to its original state',
-            $catalogProductIndex->getMessagesBlock()->getErrorMessage()
+            $catalogProductIndex->getMessagesBlock()->getErrorMessage(),
+            "Can't find proper message"
         );
     }
 

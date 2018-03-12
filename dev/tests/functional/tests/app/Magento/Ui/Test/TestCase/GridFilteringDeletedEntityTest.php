@@ -17,13 +17,15 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 1. Create items
  *
  * Steps:
- * 1. Navigate to backend.
- * 2. Go to grid page
- * 3. Filter grid using provided columns
- * 5. Perform Asserts
+ * 1. Log in to Admin.
+ * 2. Go to grid page.
+ * 3. Apply filter by Store View.
+ * 4. Delete Website.
+ * 5. Go to grid page.
+ * 6. Perform Asserts.
  *
  * @group Ui
- * @ZephyrId MAGETWO-88982
+ * @ZephyrId MAGETWO-89042
  */
 class GridFilteringDeletedEntityTest extends Injectable
 {
