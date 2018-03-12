@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Catalog\Model\Product;
 
-class ProductStockDataProvider
+/**
+ * Retrieve qty of product
+ */
+class ProductQuantityProvider
 {
     /**
      * @var StockRegistryInterface
@@ -26,7 +28,6 @@ class ProductStockDataProvider
 
     /**
      * @param Product $product
-     *
      * @return array
      */
     public function execute(Product $product): array

@@ -5,17 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurableProduct\Plugin\ProductForm;
+namespace Magento\InventoryConfigurableProduct\Plugin\ConfigurableProduct\Ui\DataProvider\ProductFormModifier;
 
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductStockDataProvider;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductQuantityProvider;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
-use Magento\Inventory\Model\Source\Command\Get as GetSource;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
-class AdaptProductStockDataProvider
+/**
+ * Adapt product quantity provider for multi source inventory
+ */
+class AdaptProductQuantityProviderPlugin
 {
     /**
      * @var SourceItemRepositoryInterface
@@ -28,27 +30,27 @@ class AdaptProductStockDataProvider
     private $searchCriteriaBuilderFactory;
 
     /**
-     * @var GetSource
+     * @var SourceRepositoryInterface
      */
-    private $getSource;
+    private $sourceRepository;
 
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
-     * @param GetSource $getSource
+     * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
-        GetSource $getSource
+        SourceRepositoryInterface $sourceRepository
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
-        $this->getSource = $getSource;
+        $this->sourceRepository = $sourceRepository;
     }
 
     /**
-     * @param ProductStockDataProvider $subject
+     * @param ProductQuantityProvider $subject
      * @param callable $proceed
      * @param Product $product
      *
@@ -57,25 +59,24 @@ class AdaptProductStockDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        ProductStockDataProvider $subject,
+        ProductQuantityProvider $subject,
         callable $proceed,
         Product $product
     ) {
         $formSourceItems = [];
 
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
         $searchCriteria = $searchCriteriaBuilder->addFilter(SourceItemInterface::SKU, $product->getSku())->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
         foreach ($sourceItems as $sourceItem) {
-            $source = $this->getSource->execute($sourceItem->getSourceCode());
+            $source = $this->sourceRepository->get($sourceItem->getSourceCode());
 
-            $formSourceItem[SourceItemInterface::SOURCE_CODE] = $sourceItem->getSourceCode();
-            $formSourceItem['source'] = $source->getName();
-            $formSourceItem[SourceItemInterface::QUANTITY] = $sourceItem->getQuantity();
-
-            $formSourceItems[] = $formSourceItem;
+            $formSourceItems[] = [
+                SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
+                SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
+                'source' => $source->getName(),
+            ];
         }
 
         return $formSourceItems;

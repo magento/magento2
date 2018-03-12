@@ -85,9 +85,9 @@ class AssociatedProducts
     protected $imageHelper;
 
     /**
-     * @var ProductStockDataProvider
+     * @var ProductQuantityProvider
      */
-    private $productStockDataProvider;
+    private $productQuantityProvider;
 
     /**
      * @param LocatorInterface $locator
@@ -99,7 +99,7 @@ class AssociatedProducts
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
-     * @param ProductStockDataProvider $productStockDataProvider
+     * @param ProductQuantityProvider $productQuantityProvider
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -113,7 +113,7 @@ class AssociatedProducts
         CurrencyInterface $localeCurrency,
         JsonHelper $jsonHelper,
         ImageHelper $imageHelper,
-        ProductStockDataProvider $productStockDataProvider
+        ProductQuantityProvider $productQuantityProvider = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -124,8 +124,8 @@ class AssociatedProducts
         $this->localeCurrency = $localeCurrency;
         $this->jsonHelper = $jsonHelper;
         $this->imageHelper = $imageHelper;
-        $this->productStockDataProvider = $productStockDataProvider ?: ObjectManager::getInstance()
-            ->get(ProductStockDataProvider::class);
+        $this->productQuantityProvider = $productQuantityProvider ?: ObjectManager::getInstance()
+            ->get(ProductQuantityProvider::class);
     }
 
     /**
@@ -295,7 +295,7 @@ class AssociatedProducts
                         ) . '" target="_blank">' . $product->getName() . '</a>',
                         'sku' => $product->getSku(),
                         'name' => $product->getName(),
-                        'qty' => $this->productStockDataProvider->execute($product),
+                        'qty' => $this->productQuantityProvider->execute($product),
                         'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
@@ -434,6 +434,7 @@ class AssociatedProducts
      * @return float
      *
      * @deprecated
+     * @see \Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductQuantityProvider
      */
     protected function getProductStockQty(Product $product)
     {
