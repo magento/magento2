@@ -4,6 +4,19 @@
  * See COPYING.txt for license details.
  */
 return [
+    'character_data_between_type_elements' => [
+        '<?xml version="1.0"?><config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <type xsi:type="OutputInterface" name="CustomizableOptionInterface"
+         typeResolver="Magento\CatalogGraphQl\Model\CustomizableOptionTypeResolver">
+        <field xsi:type="ScalarOutputField" name="title" type="String" description="The displayed name of the option"/>
+       </type>Hello
+      <type xsi:type="OutputType" name="VirtualProduct">
+        <implements interface="CustomizableProductInterface" copyFields="true"/>
+    </type></config>',
+        [
+
+        ],
+    ],
     'type_InputType_with_invalid_attribute' => [
         '<?xml version="1.0"?><config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          <type xsi:type ="InputType" name="someInput" summary ="summary"></type></config>',
