@@ -129,7 +129,7 @@ class Tree extends \Magento\Backend\Block\Template
         $treePath = ['root'];
 
         if ($idEncodedPath = $this->getRequest()->getParam('current_tree_path')) {
-            $path = $this->_cmsWysiwygImages->idDecode($idEncodedPath);
+            $path = base64_decode($idEncodedPath);
         } else {
             $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
         }
