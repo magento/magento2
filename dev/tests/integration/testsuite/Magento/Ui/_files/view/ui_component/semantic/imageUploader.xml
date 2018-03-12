@@ -113,5 +113,6 @@
         </uploaderConfig>
 
         <openDialogTitle>string</openDialogTitle>
+        <initialMediaGalleryOpenSubpath>string</initialMediaGalleryOpenSubpath>
     </settings>
 </imageUploader>

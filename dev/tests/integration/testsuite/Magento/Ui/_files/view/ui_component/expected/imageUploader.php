@@ -49,6 +49,11 @@ return [
                             'value' => 'string',
                             'translate' => 'true'
                         ],
+                        'initialMediaGalleryOpenSubpath' => [
+                            'name' => 'initialMediaGalleryOpenSubpath',
+                            'xsi:type' => 'string',
+                            'value' => 'string',
+                        ],
                         'uploaderConfig' => [
                             'name' => 'uploaderConfig',
                             'xsi:type' => 'array',
