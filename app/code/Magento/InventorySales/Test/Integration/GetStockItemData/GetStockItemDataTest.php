@@ -49,6 +49,15 @@ class GetStockItemDataTest extends TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Could not receive Stock Item data
+     */
+    public function testGetStockItemDataException()
+    {
+        $this->getStockItemData->execute('SKU-1', 10);
+    }
+
+    /**
      * @return array
      */
     public function getStockItemDataDataProvider(): array
