@@ -31,7 +31,7 @@ class Argument implements ArgumentInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }

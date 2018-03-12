@@ -20,7 +20,7 @@ class ContentTypeProcessor implements HttpHeaderProcessorInterface
      * {@inheritDoc}
      * @throws LocalizedException
      */
-    public function processHeaderValue($headerValue)
+    public function processHeaderValue($headerValue) : void
     {
         if (!$headerValue || strpos($headerValue, 'application/json') === false) {
             throw new LocalizedException(

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl;
 
@@ -30,8 +31,9 @@ class HttpRequestProcessor
      * Process the headers from a request given from usually the controller
      *
      * @param Http $request
+     * @return void
      */
-    public function processHeaders(Http $request)
+    public function processHeaders(Http $request) : void
     {
         foreach ($this->headerProcessors as $headerName => $headerClass) {
             $headerClass->processHeaderValue($request->getHeader($headerName));

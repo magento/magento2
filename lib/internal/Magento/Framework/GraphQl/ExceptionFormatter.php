@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl;
 
@@ -49,7 +50,7 @@ class ExceptionFormatter
      * @return array
      * @throws \Throwable
      */
-    public function create(\Throwable $exception, $internalErrorMessage = null)
+    public function create(\Throwable $exception, $internalErrorMessage = null) : array
     {
         if (!$this->shouldShowDetail()) {
             $reportId = uniqid("graph-ql-");
@@ -72,7 +73,7 @@ class ExceptionFormatter
      *
      * @return bool
      */
-    public function shouldShowDetail()
+    public function shouldShowDetail() : bool
     {
         return $this->appState->getMode() === State::MODE_DEVELOPER;
     }
