@@ -70,7 +70,7 @@
             <argument name="Category"/>
         </arguments>
         <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(Category.Name)}}" stepKey="navigateToCreatedCategory" />
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSpinner" />

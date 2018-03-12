@@ -37,4 +37,33 @@
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
     </test>
+    <test name="AdminConfigDefaultCategoryLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="[CMS] Bluefoot Row MAGETWO-83767"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin are able to config default layout for Category Page from System Configuration"/>
+            <description value="Admin are able to select layout that will be applied by default to Category Page, so that he does not need to change it manually every time he create a page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89024"/>
+            <group value="category"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waittForDefaultCategoryLayout" />
+        <selectOption selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="2 columns with right bar" stepKey="select2ColumnsLayout"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <seeOptionIsSelected selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="see2ColumnsSelected" />
+    </test>
 </tests>

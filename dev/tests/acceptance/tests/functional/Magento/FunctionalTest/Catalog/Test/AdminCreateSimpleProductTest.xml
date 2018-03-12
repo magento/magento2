@@ -47,7 +47,7 @@
             <description value="Admin are able to select layout that will be applied by default to Product Page, so that he does not need to change it manually every time he create a page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89023"/>
-            <group value="Catalog"/>
+            <group value="product"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -58,8 +58,8 @@
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{WebSection.DefaultProductLayout}}" stepKey="DefaultProductLayout" />
-        <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select1ColumnsLayout"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout" />
+        <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select3ColumnsLayout"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="wait1"/>

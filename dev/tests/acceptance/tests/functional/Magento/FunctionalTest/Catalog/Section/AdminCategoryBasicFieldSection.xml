@@ -20,6 +20,10 @@
         <element name="ImagePlaceHolder" type="button" selector=".file-uploader-summary.product-image-wrapper"/>
         <element name="Upload" type="button" selector=".file-uploader-area input"/>
     </section>
+    <section name="CategoryDesignSection">
+        <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
+        <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
+    </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
