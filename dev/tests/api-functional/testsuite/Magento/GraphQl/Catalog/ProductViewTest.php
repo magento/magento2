@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -521,6 +522,43 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
+     */
+    public function testProductLinks()
+    {
+        $productSku = 'simple_with_cross';
+
+        $query = <<<QUERY
+       {
+           products(filter: {sku: {eq: "{$productSku}"}})
+           {
+               items {
+                   attribute_set_id
+                   type_id
+                   product_links
+                   {
+                       link_type
+                       linked_product_sku
+                       linked_product_type
+                       position
+                       sku
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $this->assertNotNull($response['products']['items'][0]['product_links'], "product_links must not be null");
+        $this->assertProductLinks($product, $response['products']['items'][0]['product_links'][0]);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
@@ -738,6 +776,26 @@ QUERY;
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
+        $this->assertResponseFields($actualResponse, $assertionMap);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertProductLinks($product, $actualResponse)
+    {
+        /** @var ProductLinkInterface $productLinks */
+        $productLinks = $product->getProductLinks();
+        $productLink = $productLinks[0];
+     //   $this->assertNotEmpty($actualResponse['product_links'],"Precondition failed: 'product_links' must not be empty");
+        $assertionMap = [
+            ['response_field' => 'link_type', 'expected_value' => $productLink->getLinkType()],
+            ['response_field' => 'linked_product_sku', 'expected_value' => $productLink->getLinkedProductSku()],
+            ['response_field' => 'linked_product_type', 'expected_value' => $productLink->getLinkedProductType()],
+            ['response_field' => 'position', 'expected_value' => $productLink->getPosition()],
+            ['response_field' => 'sku', 'expected_value' => $productLink->getSku()],
+        ];
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
 
