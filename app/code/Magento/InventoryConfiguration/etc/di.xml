@@ -6,14 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- IsSalableCondition -->
-    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
-        <arguments>
-            <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="manage_stock" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetManageStockCondition</item>
-                <!-- override source_item_status condition due to min_qty condition includes first (need to for proper work of chain) -->
-                <item name="source_item_status" xsi:type="object">Magento\InventoryConfiguration\Model\ResourceModel\IsSalableCondition\GetMinQtyStockCondition</item>
-            </argument>
-        </arguments>
-    </type>
+    <!-- Configuration query interfaces -->
+    <preference for="Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\GetStockItemConfiguration"/>
+    <preference for="Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface" type="Magento\InventoryConfiguration\Model\StockItemConfiguration"/>
+    <!-- Product types -->
+    <preference for="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface" type="Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType"/>
+    <preference for="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface" type="Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItems"/>
 </config>

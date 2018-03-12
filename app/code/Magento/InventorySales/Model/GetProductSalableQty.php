@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
-use Magento\Inventory\Model\GetStockItemDataInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 
 /**
@@ -47,7 +46,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
         if (null === $stockItemData) {
             return 0;
         }
-        $productQtyInStock = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
+        $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY] +
+            $this->getReservationsQuantity->execute($sku, $stockId);
         return $productQtyInStock;
     }
 }
