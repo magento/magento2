@@ -21,13 +21,13 @@ class CurrentPage implements ArgumentApplierInterface
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
     {
-        if (is_int($argument->getValue()) || is_string($argument->getValue())) {
-            $searchCriteria->setCurrentPage($argument->getValue());
+        if (is_int($argument) || is_string($argument)) {
+            $searchCriteria->setCurrentPage($argument);
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type Int', [$argument->getName()])
+                new Phrase('Argument %1 not of type Int', [$argument])
             );
         }
     }

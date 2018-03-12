@@ -6,8 +6,9 @@
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\GraphQl\Model\ResolverContextInterface;
-use Magento\GraphQl\Model\ResolverInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
@@ -51,7 +52,7 @@ class Products implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(array $args, ResolverContextInterface $context)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
     {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
 

@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite" />
+    <preference for="Magento\Framework\GraphQl\Argument\AstConverterInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\AstConverter" />
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>

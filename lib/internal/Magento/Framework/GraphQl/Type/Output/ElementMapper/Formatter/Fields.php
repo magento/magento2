@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 use GraphQL\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
@@ -84,44 +85,25 @@ class Fields implements FormatterInterface
     public function format(StructureInterface $typeStructure, OutputType $outputType)
     {
         $config = [];
+        /** @var Field $field */
         foreach ($typeStructure->getFields() as $field) {
             $type = $this->getFieldType($typeStructure, $field, $outputType);
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),
                 'type' => $type,
             ];
+
+            if (!empty($field->getDescription())) {
+                $config['fields'][$field->getName()]['description'] = $field->getDescription();
+            }
+
             if ($field->getResolver() != null) {
-                /** @var \Magento\GraphQl\Model\ResolverInterface $resolver */
+                /** @var ResolverInterface $resolver */
                 $resolver = $this->objectManager->get($field->getResolver());
 
                 $config['fields'][$field->getName()]['resolve'] =
                     function ($value, $args, $context, $info) use ($resolver, $field) {
-                        $infoData = [];
-                        foreach ($info->fieldNodes as $item) {
-                            $infoData[] = $item->toArray(true);
-                        }
-                        $this->clearInfo($infoData);
-
-                        $fieldArguments = [];
-                        $declaredArguments = $this->fieldConfig->getFieldConfig($field->getName(), $args);
-
-                        foreach ($declaredArguments as $argumentName => $declaredArgument) {
-                            $argumentValue = isset($args[$argumentName])
-                                ? $args[$argumentName]
-                                : $declaredArgument->getDefaultValue();
-                            if ($declaredArgument->getValueParser() && $argumentValue !== null) {
-                                $argumentValue = $declaredArgument->getValueParser()->parse($argumentValue);
-                            }
-
-                            if ($argumentValue !== null) {
-                                $fieldArguments[$argumentName] = $this->argumentFactory->create(
-                                    $argumentName,
-                                    $argumentValue
-                                );
-                            }
-                        }
-
-                        return $resolver->resolve($fieldArguments, $context);
+                        return $resolver->resolve($field, $value, $args, $context, $info);
                     };
             }
             $config = $this->formatArguments($field, $config);
@@ -198,21 +180,5 @@ class Fields implements FormatterInterface
         }
 
         return $config;
-    }
-
-    /**
-     * Clear superfluous information from request array.
-     *
-     * @param array $data
-     * @return void
-     */
-    private function clearInfo(array &$data)
-    {
-        unset($data['loc']);
-        foreach ($data as &$value) {
-            if (is_array($value)) {
-                $this->clearInfo($value);
-            }
-        }
     }
 }

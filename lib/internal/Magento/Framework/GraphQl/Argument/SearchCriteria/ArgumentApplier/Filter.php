@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
-use Magento\Framework\GraphQl\ArgumentInterface;
+use Magento\Framework\GraphQl\Argument\AstConverterInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\App\ObjectManager;
@@ -27,22 +27,30 @@ class Filter implements ArgumentApplierInterface
     private $filterGroupFactory;
 
     /**
-     * @param FilterGroupFactory|null $filterGroupFactory
+     * @var AstConverterInterface
      */
-    public function __construct($filterGroupFactory = null)
+    private $astConverter;
+
+    /**
+     * @param AstConverterInterface $astConverter
+     * @param FilterGroupFactory $filterGroupFactory
+     */
+    public function __construct(AstConverterInterface $astConverter, FilterGroupFactory $filterGroupFactory)
     {
-        $this->filterGroupFactory = $filterGroupFactory ?: ObjectManager::getInstance()
-            ->get(FilterGroupFactory::class);
+        $this->astConverter = $astConverter;
+        $this->filterGroupFactory = $filterGroupFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
     {
-        $filter = $argument->getValue();
-        if ($filter instanceof FilterArgumentValueInterface) {
-            $searchCriteria->setFilterGroups($this->filterGroupFactory->create($filter));
+        $filters = $this->astConverter->convert(\Magento\Catalog\Model\Product::ENTITY, $argument);
+        if (!empty($filters)) {
+            $filterGroups = $searchCriteria->getFilterGroups();
+            $filterGroups = array_merge($filterGroups, $this->filterGroupFactory->create($filters));
+            $searchCriteria->setFilterGroups($filterGroups);
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
                 new Phrase('Argument %1 not of type %2', [$argument->getName(), FilterArgumentValueInterface::class])

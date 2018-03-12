@@ -39,9 +39,9 @@ class Search implements ArgumentApplierInterface
     /**
      * {@inheritDoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
     {
-        $searchTerm = $argument->getValue();
+        $searchTerm = $argument;
         $searchTermFilter = $this->filterBuilder->setField('search_term')->setValue($searchTerm)->create();
         $this->filterGroupBuilder->addFilter($searchTermFilter);
         $filterGroups = $searchCriteria->getFilterGroups();

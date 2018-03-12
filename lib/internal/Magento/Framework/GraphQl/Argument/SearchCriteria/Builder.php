@@ -37,14 +37,14 @@ class Builder
     /**
      * Build a search criteria and apply arguments to it as filters
      *
-     * @param ArgumentInterface[] $arguments
+     * @param array $arguments
      * @return SearchCriteriaInterface
      */
     public function build(array $arguments)
     {
         $searchCriteria = $this->searchCriteriaFactory->create();
-        foreach ($arguments as $argument) {
-            $argumentApplier = $this->argumentApplierFactory->create($argument->getName());
+        foreach ($arguments as $argumentName => $argument) {
+            $argumentApplier = $this->argumentApplierFactory->create($argumentName);
             $argumentApplier->applyArgument($searchCriteria, $argument);
         }
         return $searchCriteria;

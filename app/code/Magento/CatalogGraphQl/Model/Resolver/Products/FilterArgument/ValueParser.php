@@ -36,7 +36,7 @@ class ValueParser implements ValueParserInterface
      */
     public function parse($value)
     {
-        $filters = $this->clauseConverter->getFilterFromAst(\Magento\Catalog\Model\Product::ENTITY, $value);
+        $filters = $this->clauseConverter->convert(\Magento\Catalog\Model\Product::ENTITY, $value);
         return $this->filterArgumentValueFactory->create($filters);
     }
 }

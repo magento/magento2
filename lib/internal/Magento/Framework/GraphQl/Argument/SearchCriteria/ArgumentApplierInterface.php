@@ -18,8 +18,8 @@ interface ArgumentApplierInterface
      * Apply a specific argument to a search criteria like filter, currentPage, etc.
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @param ArgumentInterface $argument
+     * @param mixed $argument
      * @return SearchCriteriaInterface
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument);
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument);
 }

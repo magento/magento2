@@ -41,13 +41,13 @@ class FilterGroupFactory
     /**
      * Create a filter groups from an AST
      *
-     * @param FilterArgumentValueInterface $arguments
+     * @param Connective $arguments
      * @return \Magento\Framework\Api\Search\FilterGroup[]
      * @throws GraphQlInputException
      */
-    public function create($arguments)
+    public function create(Connective $arguments)
     {
-        $filters = $arguments->getValue();
+        $filters = $arguments;
         /** @var \Magento\Framework\Api\Search\FilterGroup[] $searchCriteriaFilterGroups */
         $searchCriteriaFilterGroups = [];
 

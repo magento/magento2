@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
+use Magento\Framework\GraphQl\Argument\AstConverterInterface;
 use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\GraphQl\Model\EntityAttributeList;
@@ -18,7 +19,7 @@ use Magento\Framework\GraphQl\Config\Data\InterfaceType;
 /**
  * Converts the input value for "find" to a @see Connective format
  */
-class AstConverter
+class AstConverter implements AstConverterInterface
 {
     /**
      * @var ClauseFactory
@@ -140,7 +141,7 @@ class AstConverter
      * @param array $arguments
      * @return Connective
      */
-    public function getFilterFromAst(string $entityType, $arguments)
+    public function convert(string $entityType, $arguments)
     {
         $filters =  $this->getClausesFromAst(
             $this->referenceTypeFactory->create($entityType),

@@ -36,20 +36,20 @@ class Sort implements ArgumentApplierInterface
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
     {
-        if (is_array($argument->getValue())) {
+        if (is_array($argument)) {
             $sortOrders = [];
-            foreach ($argument->getValue() as $fieldName => $fieldValue) {
+            foreach ($argument as $fieldName => $fieldValue) {
                 /** @var SortOrder $sortOrder */
                 $sortOrders[] = $this->sortOrderBuilder->setField($fieldName)
                     ->setDirection($fieldValue == 'DESC' ? SortOrder::SORT_DESC : SortOrder::SORT_ASC)
                     ->create();
             }
             $searchCriteria->setSortOrders($sortOrders);
-        } elseif (!empty($argument->getValue())) {
+        } elseif (!empty($argument)) {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type array or null', [$argument->getName()])
+                new Phrase('Argument %1 not of type array or null', [$argument])
             );
         }
     }
