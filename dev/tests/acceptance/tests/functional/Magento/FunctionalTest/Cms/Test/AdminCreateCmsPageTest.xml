@@ -43,4 +43,32 @@
         <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
         <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
     </test>
+    <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="[CMS] Bluefoot Row MAGETWO-83767"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin are able to config default layout for CMS Page from System Configuration"/>
+            <description value="Admin are able to select layout that will be applied by default to CMS Page, so that he does not need to change it manually every time he create a page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89025"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
+        <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="Full Width" stepKey="selectFullWidth"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="Full Width" stepKey="seeFullWidth" />
+    </test>
 </tests>
