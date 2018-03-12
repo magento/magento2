@@ -99,8 +99,8 @@ class Tree extends \Magento\Backend\Block\Template
             'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root')
         ];
 
-        if ($current_tree_path = $this->getRequest()->getParam('current_tree_path')) {
-            $params['current_tree_path'] = $current_tree_path;
+        if ($currentTreePath = $this->getRequest()->getParam('current_tree_path')) {
+            $params['current_tree_path'] = $currentTreePath;
         }
 
         return $this->getUrl(
