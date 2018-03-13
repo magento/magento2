@@ -278,6 +278,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
+        $directories = Files::init()->readLists(__DIR__ . '/_files/whitelist/strict_type.txt');
+
+        if (empty($directories)) {
+            return;
+        }
+
         $toBeTestedFiles = array_diff(
             self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt'),
             Files::init()->readLists(self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt')

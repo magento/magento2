@@ -845,7 +845,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
-        $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()->get(StockItemImporterInterface::class);
+        $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
+            ->get(StockItemImporterInterface::class);
 
         parent::__construct(
             $jsonHelper,
