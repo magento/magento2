@@ -40,7 +40,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify that hidden input is present in multiselect and it allow indicate is multiselect is disabled.
+     * Verify that hidden input is present in multiselect when multiselect is disabled.
      *
      * @return void
      */
@@ -54,7 +54,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Verify that hidden input doesn't present in multiselect and it allow indicate is multiselect is disabled.
+     * Verify that hidden input is not present in multiselect when multiselect is not disabled.
      *
      * @covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
      * @return void
