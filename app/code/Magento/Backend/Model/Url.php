@@ -213,6 +213,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             $routeParams[self::SECRET_KEY_PARAM_NAME] = $secretKey;
         }
 
+        if (is_array($this->_getRouteParams())) {
+            $routeParams = array_merge($this->_getRouteParams(), $routeParams);
+        }
+
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
     }
 
