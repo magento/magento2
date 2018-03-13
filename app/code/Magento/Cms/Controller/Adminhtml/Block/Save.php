@@ -111,7 +111,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                             $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
                             return $resultRedirect->setPath('*/*/newAction');
                         } catch (LocalizedException $e) {
-                            if ($e->getMessage() == 
+                            if ($e->getMessage() ==
                                 __('A block identifier with the same properties already exists in the selected store.')
                             ) {
                                 continue;
