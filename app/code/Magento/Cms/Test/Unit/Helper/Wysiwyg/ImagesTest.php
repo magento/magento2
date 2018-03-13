@@ -110,7 +110,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     [WysiwygConfig::IMAGE_DIRECTORY, null, $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)],
-                    [null, null, $this->getAbsolutePath(null)]
+                    [null, null, $this->getAbsolutePath(null)],
                 ]
             );
 
@@ -124,7 +124,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                 [
                     'clearWebsiteCache', 'getDefaultStoreView', 'getGroup', 'getGroups',
                     'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',
-                    'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed'
+                    'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed',
                 ]
             )
             ->disableOriginalConstructor()
@@ -229,7 +229,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['', ''],
-            ['/test_path', 'L3Rlc3RfcGF0aA--']
+            ['/test_path', 'L3Rlc3RfcGF0aA--'],
         ];
     }
 
@@ -237,6 +237,15 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         $pathId = \Magento\Theme\Helper\Storage::NODE_ROOT;
         $this->assertEquals($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Path is invalid
+     */
+    public function testConvertIdToPathInvalid()
+    {
+        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 
     /**
@@ -258,7 +267,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         return [
             ['test', 3, 'tes...'],
             ['test', 4, 'test'],
-            ['test', 20, 'test']
+            ['test', 20, 'test'],
         ];
     }
 
@@ -280,7 +289,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         return [
             ['Mini text', 'Mini text'],
             ['20 symbols are here', '20 symbols are here'],
-            ['Some text for this unit test', 'Some text for this u...']
+            ['Some text for this unit test', 'Some text for this u...'],
         ];
     }
 
@@ -319,7 +328,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [true],
-            [false]
+            [false],
         ];
     }
 
@@ -346,7 +355,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                 [
                     ['/../wysiwyg/test_path', true],
                     ['/../wysiwyg/my.jpg', false],
-                    ['/../wysiwyg', true]
+                    ['/../wysiwyg', true],
                 ]
             );
         $this->directoryWriteMock->expects($this->any())
@@ -397,7 +406,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
             [null, 'PATH/wysiwyg', true],
             ['L3Rlc3RfcGF0aA--', 'PATH/wysiwyg/test_path', false],
             ['L215LmpwZw--', 'PATH/wysiwyg', false],
-            [null, 'PATH/wysiwyg', false]
+            [null, 'PATH/wysiwyg', false],
         ];
     }
 
@@ -450,15 +459,15 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                 'test.png',
                 true,
                 null,
-                '<img src="http://localhost/test.png" alt="" />'
+                '<img src="http://localhost/test.png" alt="" />',
             ],
             [
                 'http://localhost',
                 'test.png',
                 false,
                 '{{media url=&quot;/test.png&quot;}}',
-                '<img src="{{media url=&quot;/test.png&quot;}}" alt="" />'
-            ]
+                '<img src="{{media url=&quot;/test.png&quot;}}" alt="" />',
+            ],
         ];
     }
 
@@ -492,7 +501,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['http://localhost', 'test.png', true, 'http://localhost/test.png'],
-            ['http://localhost', 'test.png', false, '{{media url="/test.png"}}']
+            ['http://localhost', 'test.png', false, '{{media url="/test.png"}}'],
         ];
     }
 
