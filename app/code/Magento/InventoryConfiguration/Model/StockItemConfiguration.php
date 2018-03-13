@@ -138,7 +138,11 @@ class StockItemConfiguration implements StockItemConfigurationInterface
      */
     public function getQtyIncrements(): float
     {
-        return $this->stockItem->getQtyIncrements();
+        $qtyIncrements = $this->stockItem->getQtyIncrements();
+        if (false === $qtyIncrements) {
+            return 1;
+        }
+        return $qtyIncrements;
     }
 
     /**
