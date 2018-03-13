@@ -25,8 +25,8 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="file">magento.jpg</data>
         <data key="value">magento.jpg</data>
+        <data key="fileName">magento</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>
@@ -45,8 +45,20 @@
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
-        <data key="file">magento2.jpg</data>
         <data key="value">magento2.jpg</data>
+        <data key="fileName">magento2</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">1000</data>
+    </entity>
+    <entity name="ImageUpload3" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="value">magento3.jpg</data>
+        <data key="fileName">magento3</data>
+        <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
     </entity>

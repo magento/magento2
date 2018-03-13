@@ -8,8 +8,8 @@ namespace Magento\Store\Setup\Patch\Schema;
 
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
-use Magento\Setup\Model\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
 /**
  * Create stores and websites. Actually stores and websites are part of schema as
