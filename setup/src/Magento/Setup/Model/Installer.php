@@ -19,7 +19,6 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Setup\FilePermissions;
@@ -174,11 +173,6 @@ class Installer
     private $objectManagerProvider;
 
     /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var SetupConfigModel
      */
     private $setupConfigModel;
@@ -239,7 +233,6 @@ class Installer
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param Context $context
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
      * @param DbValidator $dbValidator
@@ -264,7 +257,6 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         ObjectManagerProvider $objectManagerProvider,
-        Context $context,
         SetupConfigModel $setupConfigModel,
         CleanupFiles $cleanupFiles,
         DbValidator $dbValidator,
@@ -287,7 +279,6 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
         $this->dbValidator = $dbValidator;
