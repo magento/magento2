@@ -79,7 +79,7 @@ class CreateCmsPageEntityMultipleStoreViewsTest extends Injectable
             $this->cmsIndex->open();
             $this->cmsIndex->getPageActionsBlock()->addNew();
             $this->cmsPageNew->getPageForm()->fill($cmsPageFixture);
-            $this->cmsPageNew->getPageMainActions()->save();
+            $this->cmsPageNew->getPageMainActions()->saveAndClose();
         }
 
         return ['cmsPages' => $cmsPageFixtures];

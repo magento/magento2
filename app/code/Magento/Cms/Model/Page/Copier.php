@@ -49,13 +49,13 @@ class Copier
     public function copy(PageInterface $model)
     {
         $data = $model->getData();
-        //unset page_id because we duplicate existing page
-        unset($data['page_id']);
         $newPage = $this->pageFactory->create()->setData($data);
         //add unique identifier - url key
-        $identifier = $newPage->getIdentifier() . '-1';
+        $newPage->setId(null);
+        $identifier = $newPage->getIdentifier() . uniqid();
         $title = $newPage->getTitle() . '-1';
         $newPage->setIdentifier($identifier);
+        $newPage->setIsActive(false);
         $newPage->setTitle($title);
         return $this->pageRepository->save($newPage);
     }
