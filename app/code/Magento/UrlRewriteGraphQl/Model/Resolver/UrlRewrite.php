@@ -6,9 +6,9 @@
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
-use Magento\GraphQl\Model\ResolverContextInterface;
-use Magento\GraphQl\Model\ResolverInterface;
-use Magento\GraphQl\Model\ContextInterface;
+use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Config\Data\Field;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -42,10 +42,10 @@ class UrlRewrite implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(array $args, ResolverContextInterface $context)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
     {
         if (isset($args['url'])) {
-            $urlRewrite = $this->findCanonicalUrl($args['url']->getValue());
+            $urlRewrite = $this->findCanonicalUrl($args['url']);
             if ($urlRewrite) {
                 return [
                     'id' => $urlRewrite->getEntityId(),
