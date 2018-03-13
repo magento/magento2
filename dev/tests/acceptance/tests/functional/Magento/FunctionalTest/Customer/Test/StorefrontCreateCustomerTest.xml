@@ -23,17 +23,8 @@
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
-        <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
-        <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
-        <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
-        <fillField  stepKey="fillLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
-        <fillField  stepKey="fillEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
-        <fillField  stepKey="fillPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
-        <fillField  stepKey="fillConfirmPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
-        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
-        <see stepKey="seeFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-        <see stepKey="seeEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
     </test>
 </tests>
