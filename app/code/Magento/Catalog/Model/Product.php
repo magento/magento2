@@ -121,6 +121,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_urlModel = null;
 
     /**
+     * @var ResourceModel\Product
+     */
+    protected $_resource;
+
+    /**
      * @var string
      */
     protected static $_url;
@@ -473,6 +478,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @deprecated because resource models should be used directly
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**

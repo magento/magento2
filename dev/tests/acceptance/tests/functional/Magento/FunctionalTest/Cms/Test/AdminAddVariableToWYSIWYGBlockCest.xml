@@ -12,6 +12,8 @@
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-42158-Variable with WYSIWYG"/>
             <group value="Cms"/>
+            <group value="skip"/>
+            <!-- Skipped; see MAGETWO-88218 -->
             <title value="Admin should be able to add variable to WYSIWYG content of Block"/>
             <description value="You should be able to add variable to WYSIWYG content Block"/>
             <testCaseId value="MAGETWO-84378"/>
@@ -72,7 +74,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
