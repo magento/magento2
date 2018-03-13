@@ -54,6 +54,6 @@
             <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
             <argument name="total" value="E2EB2CQuote.total"/>
         </actionGroup>
-        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="couponCancelCoupon"/>
+        <comment userInput="End of using coupon code" stepKey="endOfUsingCouponCode" after="cartAssertCartAfterCancelCoupon"/>
     </test>
 </tests>
