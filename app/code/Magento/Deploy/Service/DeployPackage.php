@@ -267,7 +267,7 @@ class DeployPackage
         $this->deployStaticFile->writeTmpFile('info.json', $package->getPath(), json_encode($info));
 
         if (!$skipLogging) {
-            $this->logger->notice($logMessage);
+            $this->logger->info($logMessage);
         }
     }
 }

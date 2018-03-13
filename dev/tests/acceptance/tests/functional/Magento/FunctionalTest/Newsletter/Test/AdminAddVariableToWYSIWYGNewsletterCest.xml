@@ -10,8 +10,9 @@
     <test name="AddVariableToNewsletter">
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
-            <stories value="MAGETWO-42158-Variables with WYSIWYG"/>
+            <stories value="MAGETWO-42158-Variable with WYSIWYG"/>
             <group value="Newsletter"/>
+            <group value="skip"/>
             <title value="Admin should be able to add variable to WYSIWYG Editor of Newsletter"/>
             <description value="Admin should be able to add variable to WYSIWYG Editor Newsletter"/>
             <testCaseId value="MAGETWO-84379"/>
@@ -37,7 +38,9 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad21"/>
+        <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
         <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
@@ -73,7 +76,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
+        <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>

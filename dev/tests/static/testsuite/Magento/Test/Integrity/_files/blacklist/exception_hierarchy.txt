@@ -12,3 +12,4 @@
 \Magento\Catalog\Model\Product\Image\NotLoadInfoImageException
 \Magento\Signifyd\Model\SignifydGateway\GatewayException
 \Magento\Signifyd\Model\SignifydGateway\ApiCallException
+\Magento\Framework\MessageQueue\ConnectionLostException
