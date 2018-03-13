@@ -12,5 +12,6 @@
         <element name="QtyInput" type="button" selector="input.input-text.qty"/>
         <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
+        <element name="AddToWishlist" type="button" selector="//a[@class='action towishlist']" timeout="30"/>
     </section>
 </sections>

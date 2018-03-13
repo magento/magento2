@@ -264,23 +264,36 @@ class General extends AbstractModifier
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
+            $commonFieldsMeta = [
+                'outputDateTimeToISO' => false,
+                'inputDateTimeFormat' => 'YYYY-MM-DD h:mm',
+                'options' => [
+                    'showsTime' => true,
+                ]
+            ];
 
             $meta = $this->arrayManager->merge(
                 $fromFieldPath . self::META_CONFIG_PATH,
                 $meta,
-                [
-                    'label' => __('Set Product as New From'),
-                    'additionalClasses' => 'admin__field-date',
-                ]
+                array_merge(
+                    [
+                        'label' => __('Set Product as New From'),
+                        'additionalClasses' => 'admin__field-date',
+                    ],
+                    $commonFieldsMeta
+                )
             );
             $meta = $this->arrayManager->merge(
                 $toFieldPath . self::META_CONFIG_PATH,
                 $meta,
-                [
-                    'label' => __('To'),
-                    'scopeLabel' => null,
-                    'additionalClasses' => 'admin__field-date',
-                ]
+                array_merge(
+                    [
+                        'label' => __('To'),
+                        'scopeLabel' => null,
+                        'additionalClasses' => 'admin__field-date',
+                    ],
+                    $commonFieldsMeta
+                )
             );
             $meta = $this->arrayManager->merge(
                 $fromContainerPath . self::META_CONFIG_PATH,

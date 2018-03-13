@@ -1298,7 +1298,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($colorAttributeCode, "blue");
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
         $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());

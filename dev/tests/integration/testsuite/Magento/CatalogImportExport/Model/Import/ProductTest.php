@@ -2115,4 +2115,32 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 : self::assertSame('0', $image['disabled']);
         }
     }
+
+    /**
+     * Test import product into multistore system when media is disabled.
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductsWithMultipleStoresWhenMediaIsDisabled()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_with_custom_store_media_disabled.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->assertTrue($this->_model->importData());
+    }
 }

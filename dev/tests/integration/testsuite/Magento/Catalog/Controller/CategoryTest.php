@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller;
 
+use Magento\Framework\App\ActionInterface;
+
 /**
  * Test class for \Magento\Catalog\Controller\Category.
  *
@@ -101,5 +103,23 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/category/view/id/8');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Test changing Store View on Category page.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/enable_using_store_codes.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
+     */
+    public function testChangeStoreView()
+    {
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setPostValue([ActionInterface::PARAM_NAME_URL_ENCODED => 1]);
+        $this->dispatch('fixturestore/catalog/category/view/id/555?___from_store=default');
+        $html = $this->getResponse()->getBody();
+        $this->assertContains('<span>Fixture Store</span>', $html);
     }
 }
