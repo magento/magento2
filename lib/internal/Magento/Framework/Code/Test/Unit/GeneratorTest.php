@@ -153,6 +153,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * We have to make sure `class_exists` works for third-party classes
+     */
+    public function testGenerateClassWithNonMagentoCode()
+    {
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
+        $this->model->setObjectManager($objectManagerMock);
+        $this->assertFalse(Generator::GENERATION_SUCCESS === $this->model->generateClass('\FooFactory'));
+    }
+
+    /**
      * Build SUT object
      *
      * @param Io $ioObject
