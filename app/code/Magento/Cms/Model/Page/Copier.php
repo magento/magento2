@@ -52,7 +52,7 @@ class Copier
         $newPage = $this->pageFactory->create()->setData($data);
         //add unique identifier - url key
         $newPage->setId(null);
-        $identifier = $newPage->getIdentifier() . uniqid();
+        $identifier = $newPage->getIdentifier() .  '-' . uniqid();
         $title = $newPage->getTitle() . '-1';
         $newPage->setIdentifier($identifier);
         $newPage->setIsActive(false);

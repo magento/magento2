@@ -98,7 +98,7 @@ class CreateCmsPageEntityTest extends Injectable
         $this->cmsIndex->open();
         $this->cmsIndex->getPageActionsBlock()->addNew();
         $this->cmsPageNew->getPageForm()->fill($cms);
-        $this->cmsPageNew->getPageMainActions()->saveAndClose();
+        $this->cmsPageNew->getPageMainActions()->save();
 
         return ['cms' => $cms];
     }
