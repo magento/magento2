@@ -16,4 +16,9 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="object">Magento\Catalog\Ui\BaseAllowedProductTypes</argument>
+        </arguments>
+    </type>
 </config>
