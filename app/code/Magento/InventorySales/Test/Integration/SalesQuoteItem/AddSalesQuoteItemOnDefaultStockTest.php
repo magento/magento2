@@ -117,29 +117,30 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
     public function testAddProductToQuoteMultipleTimes()
     {
         $productSku = 'SKU-1';
-        $productQty1 = 0.5;
-        $productQty2 = 3.5;
+        $productQty1 = 1;
+        $productQty2 = 2.5;
         $productQty3 = 3.2;
-        $expectedQtyInCart1 = 0.5;
-        $expectedQtyInCart2 = 4;
-        $expectedQtyInCart3 = 4;
+        $expectedQtyInCart1 = 1;
+        $expectedQtyInCart2 = 3.5;
+        $expectedQtyInCart3 = 3.5;
         // set reservation before (reserve -1.5 units, last 4)
         $this->appendReservation($productSku, -1.5);
         $product = $this->getProductBySku($productSku);
         $quote = $this->getQuote();
 
-        //last 3,5 in source
+        //(4 - 1) 3 in source
         $quote->addProduct($product, $productQty1);
         /** @var CartItemInterface $quoteItem */
         $quoteItem = current($quote->getAllItems());
         self::assertEquals($expectedQtyInCart1, $quoteItem->getQty());
 
-        //last 0 in source
+        //(3 - 2.5) 0.5 in source
         $quote->addProduct($product, $productQty2);
         /** @var CartItemInterface $quoteItem */
         $quoteItem = current($quote->getAllItems());
         self::assertEquals($expectedQtyInCart2, $quoteItem->getQty());
 
+        //(0.5 - 3.5) -3 out of stock
         self::expectException(LocalizedException::class);
         $quote->addProduct($product, $productQty3);
         /** @var CartItemInterface $quoteItem */
@@ -157,9 +158,7 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
      */
     private function getProductBySku(string $sku): ProductInterface
     {
-        $product = $this->productRepository->get($sku);
-        $product->setIsSalable(true);
-        return $product;
+        return $this->productRepository->get($sku);
     }
 
     /**

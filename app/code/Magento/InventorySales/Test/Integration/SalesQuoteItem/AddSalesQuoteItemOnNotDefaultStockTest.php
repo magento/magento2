@@ -195,9 +195,7 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      */
     private function getProductBySku(string $sku): ProductInterface
     {
-        $product = $this->productRepository->get($sku);
-        $product->setIsSalable(true);
-        return $product;
+        return $this->productRepository->get($sku);
     }
 
     /**
