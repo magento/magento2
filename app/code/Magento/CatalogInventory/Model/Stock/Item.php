@@ -32,7 +32,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventPrefix = 'cataloginventory_stock_item';
+    protected $_eventPrefix = 'cataloginventory_stock_item';
 
     const WEBSITE_ID = 'website_id';
 
@@ -43,7 +43,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventObject = 'item';
+    protected $_eventObject = 'item';
 
     /**
      * Store model manager
