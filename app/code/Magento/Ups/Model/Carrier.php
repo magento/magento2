@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Ups\Model;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -809,11 +807,9 @@ XMLRequest;
 
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
-                $negotiatedActive = $this->getConfigFlag(
-                        'negotiated_active'
-                    ) && $this->getConfigData(
-                        'shipper_number'
-                    ) && !empty($negotiatedArr);
+                $negotiatedActive = $this->getConfigFlag('negotiated_active')
+                    && $this->getConfigData('shipper_number')
+                    && !empty($negotiatedArr);
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
@@ -1332,11 +1328,8 @@ XMLAuth;
         }
 
         // ups support reference number only for domestic service
-        if ($this->_isUSCountry(
-                $request->getRecipientAddressCountryCode()
-            ) && $this->_isUSCountry(
-                $request->getShipperAddressCountryCode()
-            )
+        if ($this->_isUSCountry($request->getRecipientAddressCountryCode())
+            && $this->_isUSCountry($request->getShipperAddressCountryCode())
         ) {
             if ($request->getReferenceData()) {
                 $referenceData = $request->getReferenceData() . $request->getPackageId();
@@ -1365,7 +1358,7 @@ XMLAuth;
                 default:
                     break;
             }
-            if (!is_null($serviceOptionsNode)) {
+            if ($serviceOptionsNode !== null) {
                 $serviceOptionsNode->addChild(
                     'DeliveryConfirmation'
                 )->addChild(
@@ -1386,13 +1379,10 @@ XMLAuth;
             $this->getConfigData('shipper_number')
         );
 
-        if ($request->getPackagingType() != $this->configHelper->getCode(
-                'container',
-                'ULE'
-            ) &&
-            $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
-            ($request->getRecipientAddressCountryCode() == 'CA' ||
-                $request->getRecipientAddressCountryCode() == 'PR')
+        if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE')
+            && $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID
+            && ($request->getRecipientAddressCountryCode() == 'CA'
+                || $request->getRecipientAddressCountryCode() == 'PR')
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
@@ -1522,12 +1512,8 @@ XMLAuth;
             $result->setErrors($e->getMessage());
         }
 
-        if (isset(
-                $response->Response->Error
-            ) && in_array(
-                $response->Response->Error->ErrorSeverity,
-                ['Hard', 'Transient']
-            )
+        if (isset($response->Response->Error)
+            && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
         ) {
             $result->setErrors((string)$response->Response->Error->ErrorDescription);
         }
@@ -1702,7 +1688,7 @@ XMLAuth;
      */
     protected function _getDeliveryConfirmationLevel($countyDestination = null)
     {
-        if (is_null($countyDestination)) {
+        if ($countyDestination === null) {
             return null;
         }
 

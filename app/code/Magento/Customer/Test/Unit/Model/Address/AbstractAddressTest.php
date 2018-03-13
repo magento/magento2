@@ -327,31 +327,31 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         return [
             'firstname' => [
                 array_merge(array_diff_key($data, ['firstname' => '']), ['country_id' => $countryId++]),
-                ['firstname is a required field.'],
+                ['"firstname" is required. Enter and try again.'],
             ],
             'lastname' => [
                 array_merge(array_diff_key($data, ['lastname' => '']), ['country_id' => $countryId++]),
-                ['lastname is a required field.'],
+                ['"lastname" is required. Enter and try again.'],
             ],
             'street' => [
                 array_merge(array_diff_key($data, ['street' => '']), ['country_id' => $countryId++]),
-                ['street is a required field.'],
+                ['"street" is required. Enter and try again.'],
             ],
             'city' => [
                 array_merge(array_diff_key($data, ['city' => '']), ['country_id' => $countryId++]),
-                ['city is a required field.'],
+                ['"city" is required. Enter and try again.'],
             ],
             'telephone' => [
                 array_merge(array_diff_key($data, ['telephone' => '']), ['country_id' => $countryId++]),
-                ['telephone is a required field.'],
+                ['"telephone" is required. Enter and try again.'],
             ],
             'postcode' => [
                 array_merge(array_diff_key($data, ['postcode' => '']), ['country_id' => $countryId++]),
-                ['postcode is a required field.'],
+                ['"postcode" is required. Enter and try again.'],
             ],
             'country_id' => [
                 array_diff_key($data, ['country_id' => '']),
-                ['countryId is a required field.'],
+                ['"countryId" is required. Enter and try again.'],
             ],
             'validated' => [array_merge($data, ['country_id' => $countryId++]), true],
         ];

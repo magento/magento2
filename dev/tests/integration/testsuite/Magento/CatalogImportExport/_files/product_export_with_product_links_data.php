@@ -7,7 +7,7 @@
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 /** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
-/** Create product with mulselect attribute */
+/** Create product with multiselect attribute */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 
 $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
