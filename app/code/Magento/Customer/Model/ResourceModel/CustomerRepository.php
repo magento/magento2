@@ -127,8 +127,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         DataObjectHelper $dataObjectHelper,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null,
-        NotificationStorage $notificationStorage = null
+        CollectionProcessorInterface $collectionProcessor,
+        NotificationStorage $notificationStorage
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
