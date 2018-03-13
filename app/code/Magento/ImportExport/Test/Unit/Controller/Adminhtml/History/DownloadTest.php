@@ -153,7 +153,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Normal file name' => ['filename.csv', 'filename.csv'],
-            'Vulnerable file name' => ['../../../../../../../../etc/passwd', 'passwd'],
+            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd'],
             'Empty file name' => ['', ''],
         ];
     }
