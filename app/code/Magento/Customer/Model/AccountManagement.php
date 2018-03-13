@@ -626,6 +626,8 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function checkPasswordStrength($password)
     {
+        $this->eventManager->dispatch('customer_check_password_strength_before', [$password]);
+
         $length = $this->stringHelper->strlen($password);
         if ($length > self::MAX_PASSWORD_LENGTH) {
             throw new InputException(
@@ -658,6 +660,8 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
+
+        $this->eventManager->dispatch('customer_check_password_strength_after', [$password]);
     }
 
     /**
