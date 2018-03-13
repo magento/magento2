@@ -143,10 +143,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->dataObjectHelper = $dataObjectHelper;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?:
-            ObjectManager::getInstance()->get(CollectionProcessorInterface::class);
-        $this->notificationStorage = $notificationStorage ?:
-            ObjectManager::getInstance()->get(NotificationStorage::class);
+        $this->collectionProcessor = $collectionProcessor;
+        $this->notificationStorage = $notificationStorage;
     }
 
     /**
