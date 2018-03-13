@@ -66,6 +66,7 @@
         <waitForLoadingMaskToDisappear stepKey="wait2" />
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
         <seeOptionIsSelected selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="see2ColumnsSelected" />
     </test>
 </tests>

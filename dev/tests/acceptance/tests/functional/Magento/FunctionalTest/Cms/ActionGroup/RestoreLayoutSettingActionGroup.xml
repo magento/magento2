@@ -9,9 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="RestoreLayoutSetting">
-        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="waittForDefaultCMSLayout" after="expandDefaultLayouts" />
+        <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="selectOneColumn" before="clickSaveConfig"/>
     </actionGroup>
 </actionGroups>

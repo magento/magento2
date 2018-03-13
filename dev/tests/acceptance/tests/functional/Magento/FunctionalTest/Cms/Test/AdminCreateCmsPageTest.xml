@@ -73,6 +73,7 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
         <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
         <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="Full Width" stepKey="seeFullWidth" />
     </test>
 </tests>
