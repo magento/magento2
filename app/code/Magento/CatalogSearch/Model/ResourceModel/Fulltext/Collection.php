@@ -347,7 +347,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchResult = $this->searchResultFactory->create()->setItems([]);
         } catch (NonExistingRequestNameException $e) {
             $this->_logger->error($e->getMessage());
-            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+            throw new LocalizedException(__('An error occurred. For details, see the error log.'));
         }
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
@@ -366,15 +366,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 'search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->relevanceOrderDirection
             );
         }
+        return parent::_renderFiltersBefore();
+    }
 
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeLoad()
+    {
         /*
          * This order is required to force search results be the same
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
         $this->setOrder('entity_id');
-
-        return parent::_renderFiltersBefore();
+        return parent::_beforeLoad();
     }
 
     /**
@@ -435,7 +441,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     $result[$metrics['value']] = $metrics;
                 }
             } else {
-                throw new StateException(__('Bucket does not exist'));
+                throw new StateException(__("The bucket doesn't exist."));
             }
         }
         return $result;

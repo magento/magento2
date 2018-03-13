@@ -21,7 +21,7 @@ class Enum extends EnumType
             'name' => $structure->getName(),
         ];
         foreach ($structure->getValues() as $value) {
-            $config['values'][$value->getName()] = [
+            $config['values'][$value->getValue()] = [
                 'value' => $value->getValue()
             ];
         }

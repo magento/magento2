@@ -32,7 +32,7 @@
         <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
         <!--Main test-->
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />

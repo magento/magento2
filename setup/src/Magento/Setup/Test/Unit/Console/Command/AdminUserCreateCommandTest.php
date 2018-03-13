@@ -158,10 +158,13 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
     public function validateDataProvider()
     {
         return [
-            [[null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], ['First Name is a required field.']],
+            [
+                [null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'],
+                ['"First Name" is required. Enter and try again.']
+            ],
             [
                 ['John', null, null, 'test@test.com', '123123q', '123123q'],
-                ['User Name is a required field.', 'Last Name is a required field.'],
+                ['"User Name" is required. Enter and try again.', '"Last Name" is required. Enter and try again.'],
             ],
             [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
             [

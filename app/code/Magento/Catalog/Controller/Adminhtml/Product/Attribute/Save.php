@@ -139,7 +139,9 @@ class Save extends Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
+                    $this->messageManager->addErrorMessage(
+                        __('A "%1" attribute set name already exists. Create a new name and try again.', $name)
+                    );
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (LocalizedException $e) {

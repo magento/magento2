@@ -15,4 +15,9 @@ interface StructureInterface
      * @return string
      */
     public function getName() : string;
+
+    /**
+     * @return string
+     */
+    public function getDescription() : string;
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -484,7 +485,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          * Check that error message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['A customer with the same email already exists in an associated website.']),
+            $this->equalTo(['A customer with the same email address already exists in an associated website.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertEquals(

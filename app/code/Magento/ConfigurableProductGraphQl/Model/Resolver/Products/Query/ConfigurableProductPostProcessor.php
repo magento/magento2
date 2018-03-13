@@ -13,9 +13,9 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 
 /**
- * Retrieves simple product data for child products, and formats configurable data
+ * Retrieves simple product data for child products and formats configurable data
  */
-class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
+class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -65,11 +65,13 @@ class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Que
     {
         $childrenIds = [];
         foreach ($resultData as $key => $product) {
-            if ($product['type_id'] === Configurable::TYPE_CODE) {
+            if (isset($product['type_id']) && $product['type_id'] === Configurable::TYPE_CODE) {
                 $formattedChildIds = [];
-                foreach ($product['configurable_product_links'] as $childId) {
-                    $childrenIds[] = (int)$childId;
-                    $formattedChildIds[$childId] = null;
+                if (isset($product['configurable_product_links'])) {
+                    foreach ($product['configurable_product_links'] as $childId) {
+                        $childrenIds[] = (int)$childId;
+                        $formattedChildIds[$childId] = null;
+                    }
                 }
                 $resultData[$key]['configurable_product_links'] = $formattedChildIds;
             }
@@ -77,8 +79,22 @@ class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Que
 
         $this->searchCriteriaBuilder->addFilter('entity_id', $childrenIds, 'in');
         $childProducts = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
+        $resultData = $this->addChildData($childProducts->getItems(), $resultData);
+
+        return $resultData;
+    }
+
+    /**
+     * Format and add configurable child data to their matching products result items.
+     *
+     * @param \Magento\Catalog\Model\Product[] $childProducts
+     * @param array $resultData
+     * @return array
+     */
+    private function addChildData(array $childProducts, array $resultData)
+    {
         /** @var \Magento\Catalog\Model\Product $childProduct */
-        foreach ($childProducts->getItems() as $childProduct) {
+        foreach ($childProducts as $childProduct) {
             $childData = $this->formatter->format($childProduct);
             $childId = (int)$childProduct->getId();
             foreach ($resultData as $key => $item) {
@@ -94,7 +110,6 @@ class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Que
                 }
             }
         }
-
         return $resultData;
     }
 }

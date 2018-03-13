@@ -15,7 +15,8 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
 class AssertUserPasswordResetFailed extends AbstractConstraint
 {
     const TOO_MANY_RESET_REQUESTS_MESSAGE =
-        'Too many password reset requests. Please wait and try again or contact hello@example.com.';
+        'We received too many requests for password resets. '
+        . 'Please wait and try again later or contact hello@example.com.';
 
     /**
      * Assert that user reset password failed message is present on user login page.

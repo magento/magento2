@@ -10,9 +10,9 @@
          </field>
     </type>
     <type xsi:type="OutputType" name="EntityUrl">
-        <field xsi:type="ScalarOutputField" name="id" type="Int"/>
-        <field xsi:type="ScalarOutputField" name="canonical_url" type="String"/>
-        <field xsi:type="ObjectOutputField" name="type" type="UrlRewriteEntityTypeEnum"/>
+        <field xsi:type="ScalarOutputField" name="id" type="Int" description="The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID."/>
+        <field xsi:type="ScalarOutputField" name="canonical_url" type="String" description="The internal relative URL. If the specified url is a redirect, the query returns the redirected URL, not the original."/>
+        <field xsi:type="ObjectOutputField" name="type" type="UrlRewriteEntityTypeEnum" description="One of PRODUCT, CATEGORY, or CMS_PAGE."/>
     </type>
     <type xsi:type="Enum" name="UrlRewriteEntityTypeEnum"/>
 </config>

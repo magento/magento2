@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
@@ -202,7 +203,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                         if ($error === true) {
                             $attribute = $categoryResource->getAttribute($code)->getFrontend()->getLabel();
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('Attribute "%1" is required.', $attribute)
+                                __('The "%1" attribute is required. Enter and try again.', $attribute)
                             );
                         } else {
                             throw new \Exception($error);

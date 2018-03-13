@@ -201,12 +201,12 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
         $config->setData('directives_url_quoted', preg_quote($config->getData('directives_url')));
 
-        if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
-            $this->configProvider->processGalleryConfig($config);
-        }
-
         if (is_array($data)) {
             $config->addData($data);
+        }
+
+        if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
+            $this->configProvider->processGalleryConfig($config);
         }
         if ($config->getData('add_widgets')) {
             $this->configProvider->processWidgetConfig($config);

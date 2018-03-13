@@ -352,7 +352,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->model->setIsActive(false);
         $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
-            'You did not sign in correctly or your account is temporarily disabled.'
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
         );
         $this->model->verifyIdentity($password);
     }
@@ -372,7 +373,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())->method('hasAssigned2Role')->willReturn(false);
         $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
-            'You need more permissions to access this.'
+            'More permissions are needed to access this.'
         );
         $this->model->verifyIdentity($password);
     }
@@ -783,14 +784,14 @@ class UserTest extends \PHPUnit\Framework\TestCase
         if ($lockExpires) {
             $this->expectException(
                 \Magento\Framework\Exception\State\UserLockedException::class,
-                __('Your account is temporarily disabled.')
+                __('Your account is temporarily disabled. Please try again later.')
             );
         }
 
         if (!$verifyIdentityResult) {
             $this->expectException(
                 \Magento\Framework\Exception\AuthenticationException::class,
-                __('You have entered an invalid password for current user.')
+                __('The password entered for the current user is invalid. Verify the password and try again.')
             );
         }
 

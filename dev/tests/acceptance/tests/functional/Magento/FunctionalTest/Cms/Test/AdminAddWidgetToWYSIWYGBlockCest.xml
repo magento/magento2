@@ -24,7 +24,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{BlocksPage.url}}" stepKey="amOnNewBlockPage"/>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
@@ -50,7 +50,7 @@
         <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
         <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
         <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
         <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
@@ -72,7 +72,7 @@
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
         <waitForPageLoad stepKey="waitForPageLoad6" />
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>

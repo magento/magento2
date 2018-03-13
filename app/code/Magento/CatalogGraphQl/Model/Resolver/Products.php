@@ -57,7 +57,7 @@ class Products implements ResolverInterface
 
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(
-                __("One of 'search' or 'filter' input arguments needs to be specified in products request.")
+                __("'search' or 'filter' input argument is required.")
             );
         } elseif (isset($args['search'])) {
             $searchResult = $this->searchQuery->getResult($searchCriteria);
@@ -76,8 +76,7 @@ class Products implements ResolverInterface
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
             $currentPage = new GraphQlInputException(
                 __(
-                    'The value specified in the currentPage attribute is greater than the number'
-                    . ' of pages available (%1).',
+                    'currentPage value %1 specified is greater than the number of pages available.',
                     [$maxPages]
                 )
             );

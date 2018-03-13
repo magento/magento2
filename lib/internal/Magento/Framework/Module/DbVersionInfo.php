@@ -65,27 +65,6 @@ class DbVersionInfo
     }
 
     /**
-     * Get array of errors if DB is out of date, return [] if DB is current
-     *
-     * @return string[] Array of errors, each error contains module name, current version, required version,
-     *                  and type (schema or data).  The array will be empty if all schema and data are current.
-     */
-    public function getDbVersionErrors()
-    {
-        $errors = [];
-        foreach ($this->moduleList->getNames() as $moduleName) {
-            if (!$this->isSchemaUpToDate($moduleName)) {
-                $errors[] = $this->getSchemaInfo($moduleName);
-            }
-
-            if (!$this->isDataUpToDate($moduleName)) {
-                $errors[] = $this->getDataInfo($moduleName);
-            }
-        }
-        return $errors;
-    }
-
-    /**
      * Check if DB schema is up to date, version info if it is not.
      *
      * @param string $moduleName
@@ -103,6 +82,26 @@ class DbVersionInfo
             self::KEY_MODULE => $moduleName,
             self::KEY_TYPE => 'schema'
         ];
+    }
+
+    /**
+     * Get array of errors if DB is out of date, return [] if DB is current.
+     *
+     * @return string[] Array of errors, each error contains module name, current version, required version,
+     *                  and type (schema or data).  The array will be empty if all schema and data are current.
+     */
+    public function getDbVersionErrors()
+    {
+        $errors = [];
+        foreach ($this->moduleList->getNames() as $moduleName) {
+            if (!$this->isSchemaUpToDate($moduleName)) {
+                $errors[] = $this->getSchemaInfo($moduleName);
+            }
+            if (!$this->isDataUpToDate($moduleName)) {
+                $errors[] = $this->getDataInfo($moduleName);
+            }
+        }
+        return $errors;
     }
 
     /**

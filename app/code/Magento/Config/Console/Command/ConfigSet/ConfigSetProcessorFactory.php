@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
@@ -65,7 +66,9 @@ class ConfigSetProcessorFactory
     public function create($processorName)
     {
         if (!isset($this->processors[$processorName])) {
-            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $processorName));
+            throw new ConfigurationMismatchException(
+                __('The class for "%1" type wasn\'t declared. Enter the class and try again.', $processorName)
+            );
         }
 
         $object = $this->objectManager->create($this->processors[$processorName]);

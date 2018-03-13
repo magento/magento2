@@ -23,7 +23,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
+        <amOnPage url="{{AdminProductCreatePage(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
@@ -62,7 +62,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
+        <amOnPage url="{{AdminProductCreatePage(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
@@ -80,7 +80,7 @@
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" stepKey="assertInfo25"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="assertInfo26"/>
         <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" stepKey="assertInfo27"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo27"/>
+        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo28"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

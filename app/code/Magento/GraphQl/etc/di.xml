@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\GraphQl\ArgumentInterface" type="Magento\Framework\GraphQl\Argument" />
     <preference for="Magento\GraphQl\Model\ResolverContextInterface" type="Magento\GraphQl\Model\ResolverContext" />
     <preference for="Magento\Framework\GraphQl\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Type\Entity\DefaultMapper"/>
+    <preference for="Magento\Framework\GraphQl\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">

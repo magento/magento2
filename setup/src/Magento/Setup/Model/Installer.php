@@ -11,12 +11,12 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -27,6 +27,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
@@ -35,7 +36,6 @@ use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
-use Magento\Setup\Module\Setup;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
@@ -225,6 +225,16 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var DeclarationInstaller
+     */
+    private $declarationInstaller;
+
+    /**
+     * @var SchemaPersistor
+     */
+    private $schemaPersistor;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -249,6 +259,7 @@ class Installer
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
      *
+     * @param DeclarationInstaller|null $declarationInstaller
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -272,7 +283,8 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        DeclarationInstaller $declarationInstaller = null
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -296,6 +308,10 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->declarationInstaller = $declarationInstaller ?: $this->objectManagerProvider->get()->get(
+            DeclarationInstaller::class
+        );
+        $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
     /**
@@ -314,7 +330,7 @@ class Installer
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
-        $script[] = ['Installing database schema:', 'installSchema', []];
+        $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', []];
@@ -330,19 +346,18 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
-
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
 
-        while (list(, list($message, $method, $params)) = each($script)) {
+        foreach ($script as $item) {
+            list($message, $method, $params) = $item;
             $this->log->log($message);
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
-
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
             'Magento Admin URI: /'
@@ -760,11 +775,23 @@ class Installer
     }
 
     /**
-     * Installs DB schema
+     * Install Magento if declaration mode was enabled.
      *
+     * @param array $request
      * @return void
      */
-    public function installSchema()
+    public function declarativeInstallSchema(array $request)
+    {
+        $this->declarationInstaller->installSchema($request);
+    }
+
+    /**
+     * Installs DB schema
+     *
+     * @param array $request
+     * @return void
+     */
+    public function installSchema(array $request)
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
@@ -772,14 +799,34 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
+        $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema');
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
+
+        if ($this->convertationOfOldScriptsIsAllowed($request)) {
+            $schemaListener->setResource('default');
+            $this->schemaPersistor->persist($schemaListener);
+        }
+    }
+
+    /**
+     * Check whether all scripts will converted or not
+     *
+     * @param array $request
+     * @return bool
+     */
+    private function convertationOfOldScriptsIsAllowed(array $request)
+    {
+        return isset($request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY]) &&
+            $request[InstallCommand::CONVERT_OLD_SCRIPTS_KEY];
     }
 
     /**
      * Installs data fixtures
      *
      * @return void
-     * @throws \Exception
      */
     public function installDataFixtures()
     {
@@ -825,8 +872,7 @@ class Installer
      * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
      * @param string $type
      * @return void
-     * @throws \Exception
-     *
+     * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -841,7 +887,11 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
+        /** @var Mysql $adapter */
+        $adapter = $setup->getConnection();
+        $schemaListener = $adapter->getSchemaListener();
         foreach ($moduleNames as $moduleName) {
+            $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -1009,11 +1059,15 @@ class Installer
      */
     public function installAdminUser($data)
     {
-        $this->assertDbConfigExists();
-        $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
-        $setup = $this->setupFactory->create($this->context->getResources());
-        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
-        $adminAccount->save();
+        $adminUserModuleIsInstalled = (bool)$this->deploymentConfig->get('modules/Magento_User');
+        //Admin user data is not system data, so we need to install it only if schema for admin user was installed
+        if ($adminUserModuleIsInstalled) {
+            $this->assertDbConfigExists();
+            $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
+            $setup = $this->setupFactory->create($this->context->getResources());
+            $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
+            $adminAccount->save();
+        }
     }
 
     /**
@@ -1137,8 +1191,10 @@ class Installer
      */
     public function cleanupDb()
     {
-        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
-        if ($config) {
+        $cleanedUpDatabases = [];
+        $connections = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS, []);
+        //Do database cleanup for all shards
+        foreach ($connections as $config) {
             try {
                 $connection = $this->connectionFactory->create($config);
                 if (!$connection) {
@@ -1148,11 +1204,18 @@ class Installer
                 $this->log->log($e->getMessage() . ' - skipping database cleanup');
                 return;
             }
+
             $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-            $this->log->log("Cleaning up database {$dbName}");
-            $connection->query("DROP DATABASE IF EXISTS {$dbName}");
-            $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
-        } else {
+            //If for different shards one database was specified - no need to clean it few times
+            if (!in_array($dbName, $cleanedUpDatabases)) {
+                $this->log->log("Cleaning up database {$dbName}");
+                $connection->query("DROP DATABASE IF EXISTS {$dbName}");
+                $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+                $cleanedUpDatabases[] = $dbName;
+            }
+        }
+
+        if (empty($config)) {
             $this->log->log('No database connection defined - skipping database cleanup');
         }
     }

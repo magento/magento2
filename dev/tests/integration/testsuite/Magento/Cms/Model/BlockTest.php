@@ -90,6 +90,8 @@ class BlockTest extends TestCase
         $storeId = reset($blockData['stores']);
         $block   = $this->blockIdentifier->execute($blockData['identifier'], $storeId);
         $date    = $this->objectManager->get(DateTime::class)->date();
+        $this->markTestIncomplete('MAGETWO-87353: \Magento\Cms\Model\BlockTest::testUpdateTime randomly fails on CI. '
+            . 'Invalid assertion. Application node timestamp may significantly differ from DB node.');
         $this->assertEquals($date, $block->getUpdateTime());
     }
 

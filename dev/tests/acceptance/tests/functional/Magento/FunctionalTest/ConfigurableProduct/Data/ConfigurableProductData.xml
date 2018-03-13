@@ -15,6 +15,7 @@
         <data key="visibility">4</data>
         <data key="name" unique="suffix">configurable</data>
         <data key="price">123.00</data>
+        <data key="weight">2</data>
         <data key="urlKey" unique="suffix">configurableurlkey</data>
         <data key="status">1</data>
         <data key="quantity">100</data>

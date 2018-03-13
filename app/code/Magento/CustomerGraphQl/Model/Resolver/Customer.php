@@ -7,6 +7,7 @@
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -37,7 +38,7 @@ class Customer implements ResolverInterface
     public function resolve(array $args, ResolverContextInterface $context)
     {
         if ((!$context->getUserId()) || $context->getUserType() == 4) {
-            throw new GraphQlInputException(
+            throw new GraphQlAuthorizationException(
                 __(
                     'Current customer does not have access to the resource "%1"',
                     [\Magento\Customer\Model\Customer::ENTITY]

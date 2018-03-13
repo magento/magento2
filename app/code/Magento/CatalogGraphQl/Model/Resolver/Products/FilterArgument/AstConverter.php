@@ -6,6 +6,7 @@
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
 use Magento\Framework\GraphQl\Config\ConfigInterface;
+use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
@@ -114,17 +115,22 @@ class AstConverter
      */
     private function getCatalogProductFields()
     {
-        $productTypeSchema = $this->config->getTypeStructure('ProductInterface');
-        if (! $productTypeSchema instanceof InterfaceType) {
-            throw new \LogicException(__("ProductInterface type not defined in schema."));
+        $productTypeSchema = $this->config->getTypeStructure('SimpleProduct');
+        if (!$productTypeSchema instanceof Type) {
+            throw new \LogicException(__("SimpleProduct type not defined in schema."));
         }
 
-        $result = [];
-        foreach ($productTypeSchema->getFields() as $field) {
-            $result[$field->getName()] = 'String';
+        $fields = [];
+        foreach ($productTypeSchema->getInterfaces() as $interface) {
+            /** @var InterfaceType $interfaceStructure */
+            $interfaceStructure = $this->config->getTypeStructure($interface['interface']);
+
+            foreach ($interfaceStructure->getFields() as $field) {
+                $fields[$field->getName()] = 'String';
+            }
         }
 
-        return $result;
+        return $fields;
     }
 
     /**

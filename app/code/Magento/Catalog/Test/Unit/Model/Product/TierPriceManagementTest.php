@@ -192,7 +192,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @message Such product doesn't exist
+     * @message The product doesn't exist. Verify and try again.
      */
     public function testDeleteTierPriceFromNonExistingProduct()
     {
@@ -328,7 +328,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Values of following attributes are invalid: attr1, attr2
+     * @expectedExceptionMessage Values in the attr1, attr2 attributes are invalid. Verify the values and try again.
      */
     public function testSetThrowsExceptionIfDoesntValidate()
     {

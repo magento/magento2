@@ -176,7 +176,7 @@
                 </fileUploader>
             </formElements>
         </field>
-        <field name="description" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+        <field name="description" template="Magento_Catalog/field-wysiwyg" sortOrder="50" formElement="wysiwyg">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="wysiwygConfigData" xsi:type="array">

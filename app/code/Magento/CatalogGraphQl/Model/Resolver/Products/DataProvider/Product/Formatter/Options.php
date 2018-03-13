@@ -25,12 +25,23 @@ class Options implements FormatterInterface
         if (!empty($product->getOptions())) {
             /** @var Option $option */
             foreach ($product->getOptions() as $key => $option) {
+                unset($productData['options'][$key]);
                 $productData['options'][$key] = $option->getData();
+                $productData['options'][$key]['required'] = $option->getIsRequire();
                 $productData['options'][$key]['product_sku'] = $option->getProductSku();
+
                 $values = $option->getValues() ?: [];
                 /** @var Option\Value $value */
-                foreach ($values as $value) {
-                    $productData['options'][$key]['values'][] = $value->getData();
+                foreach ($values as $valueKey => $value) {
+                    $productData['options'][$key]['value'][$valueKey] = $value->getData();
+                    $productData['options'][$key]['value'][$valueKey]['price_type']
+                        = $value->getPriceType() !== null ? strtoupper($value->getPriceType()) : 'DYNAMIC';
+                }
+
+                if (empty($values)) {
+                    $productData['options'][$key]['value'] = $option->getData();
+                    $productData['options'][$key]['value']['price_type']
+                        = $option->getPriceType() !== null ? strtoupper($option->getPriceType()) : 'DYNAMIC';
                 }
             }
         }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
@@ -119,7 +120,6 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Please agree to all the terms and conditions before placing the order.
      */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
@@ -150,6 +150,10 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             $email,
             $this->paymentMock,
             $this->addressMock
+        );
+
+        $this->expectExceptionMessage(
+            "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
         );
     }
 

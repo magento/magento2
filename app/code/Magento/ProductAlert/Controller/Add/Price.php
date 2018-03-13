@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductAlert\Controller\Add;
 
 use Magento\ProductAlert\Controller\Add as AddController;
@@ -98,7 +99,10 @@ class Price extends AddController
             }
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addException(
+                $e,
+                __("The alert subscription couldn't update at this time. Please try again later.")
+            );
         }
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;

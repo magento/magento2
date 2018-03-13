@@ -9,14 +9,23 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
+                <item name="add_configurable_data" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ConfigurableOptions</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogGraphQl\Model\TypeResolverComposite">
+    <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
-                <item name="configurableProducttypeResolver" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\ConcreteTypeResolver</item>
+                <item name="configurable_product_type_resolver" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\ConfigurableProductTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="configurable" xsi:type="string">ConfigurableProduct</item>
+                </item>
             </argument>
         </arguments>
     </type>

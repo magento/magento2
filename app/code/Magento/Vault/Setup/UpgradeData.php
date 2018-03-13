@@ -26,7 +26,7 @@ class UpgradeData implements UpgradeDataInterface
         // data update for Vault module < 2.0.1
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             // update sets credit card as default token type
-            $setup->getConnection()->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
+            $setup->getConnection()->update($setup->getTable('vault_payment_token'), [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
             ], PaymentTokenInterface::TYPE . ' = ""');
         }
