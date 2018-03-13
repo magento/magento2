@@ -10,8 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Exception;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Apply patches per specific module

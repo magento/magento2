@@ -13,12 +13,6 @@
             <features value="Test Asserts"/>
             <group value="skip"/>
         </annotations>
-        <before>
-            <createData entity="Simple_US_Customer" stepKey="createData1"/>
-        </before>
-        <after>
-            <deleteData createDataKey="createData1" stepKey="deleteData1"/>
-        </after>
 
         <createData entity="Simple_US_Customer" stepKey="createData2"/>
         <amOnUrl url="https://www.yahoo.com" stepKey="amOnPage"/>
@@ -26,70 +20,58 @@
         <grabTextFrom selector="#uh-logo" stepKey="grabTextFrom1"/>
 
         <!-- asserts without variable replacement -->
-        <comment stepKey="c1" userInput="asserts without variable replacement"/>
-        <assertArrayHasKey stepKey="assertArrayHasKey" expected="apple" expectedType="string" actual="['orange' => 2, 'apple' => 1]" actualType="const" message="pass"/>
-        <assertArrayNotHasKey stepKey="assertArrayNotHasKey" expected="kiwi" expectedType="string" actual="['orange' => 2, 'apple' => 1]" message="pass"/>
-        <assertArraySubset stepKey="assertArraySubset" expected="[1, 2]" actual="[1, 2, 3, 5]" message="pass"/>
-        <assertContains stepKey="assertContains" expected="ab" expectedType="string" actual="['item1' => 'a', 'item2' => 'ab']" message="pass"/>
-        <assertCount stepKey="assertCount" expected="2" expectedType="int" actual="['a', 'b']" message="pass"/>
-        <assertEmpty stepKey="assertEmpty" actual="[]" message="pass"/>
-        <assertEquals stepKey="assertEquals1" expected="text" expectedType="variable" actual="Yahoo" actualType="string" message="pass"/>
-        <assertEquals stepKey="assertEquals2" expected="Yahoo" expectedType="string" actual="text" actualType="variable" message="pass"/>
-        <assertFalse stepKey="assertFalse1" actual="0" actualType="bool" message="pass"/>
-        <assertFileNotExists stepKey="assertFileNotExists1" actual="/out.txt" actualType="string" message="pass"/>
-        <assertFileNotExists stepKey="assertFileNotExists2" actual="text" actualType="variable" message="pass"/>
-        <assertGreaterOrEquals stepKey="assertGreaterOrEquals" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
-        <assertGreaterThan stepKey="assertGreaterThan" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
-        <assertGreaterThanOrEqual stepKey="assertGreaterThanOrEqual" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
-        <assertInternalType stepKey="assertInternalType1" expected="string" expectedType="string" actual="xyz" actualType="string" message="pass"/>
-        <assertInternalType stepKey="assertInternalType2" expected="int" expectedType="string" actual="21" actualType="int" message="pass"/>
-        <assertInternalType stepKey="assertInternalType3" expected="string" expectedType="string" actual="text" actualType="variable" message="pass"/>
-        <assertLessOrEquals stepKey="assertLessOrEquals" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
-        <assertLessThan stepKey="assertLessThan" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
-        <assertLessThanOrEqual stepKey="assertLessThanOrEqual" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
-        <assertNotContains stepKey="assertNotContains1" expected="bc" expectedType="string" actual="['item1' => 'a', 'item2' => 'ab']" message="pass"/>
-        <assertNotContains stepKey="assertNotContains2" expected="bc" expectedType="string" actual="text" actualType="variable" message="pass"/>
-        <assertNotEmpty stepKey="assertNotEmpty1" actual="[1, 2]" message="pass"/>
-        <assertNotEmpty stepKey="assertNotEmpty2" actual="text" actualType="variable" message="pass"/>
-        <assertNotEquals stepKey="assertNotEquals" expected="2" expectedType="int" actual="5" actualType="int" message="pass" delta=""/>
-        <assertNotNull stepKey="assertNotNull1" actual="abc" actualType="string" message="pass"/>
-        <assertNotNull stepKey="assertNotNull2" actual="text" actualType="variable" message="pass"/>
-        <assertNotRegExp stepKey="assertNotRegExp" expected="/foo/" expectedType="string" actual="bar" actualType="string" message="pass"/>
-        <assertNotSame stepKey="assertNotSame" expected="log" expectedType="string" actual="tag" actualType="string" message="pass"/>
-        <assertRegExp stepKey="assertRegExp" expected="/foo/" expectedType="string" actual="foo" actualType="string" message="pass"/>
-        <assertSame stepKey="assertSame" expected="bar" expectedType="string" actual="bar" actualType="string" message="pass"/>
-        <assertStringStartsNotWith stepKey="assertStringStartsNotWith" expected="a" expectedType="string" actual="banana" actualType="string" message="pass"/>
-        <assertStringStartsWith stepKey="assertStringStartsWith" expected="a" expectedType="string" actual="apple" actualType="string" message="pass"/>
-        <assertTrue stepKey="assertTrue" actual="1" actualType="bool" message="pass"/>
+        <assertArrayHasKey stepKey="assertArrayHasKey" message="pass">
+            <expectedResult type="string">apple</expectedResult>
+            <actualResult type="const">['orange' => 2, 'apple' => 1]</actualResult>
+        </assertArrayHasKey>
+        <assertEquals stepKey="assertEquals1" message="pass">
+            <expectedResult type="variable">grabTextFrom1</expectedResult>
+            <actualResult type="string">Copyright © 2013-2017 Magento, Inc. All rights reserved.</actualResult>
+        </assertEquals>
+        <assertFalse stepKey="assertFalse1" message="pass">
+            <actualResult type="bool">0</actualResult>
+        </assertFalse>
+        <assertGreaterOrEquals stepKey="assertGreaterOrEquals" message="pass">
+            <expectedResult type="int">2</expectedResult>
+            <actualResult type="int">5</actualResult>
+        </assertGreaterOrEquals>
+        <assertElementContainsAttribute stepKey="assertElementContainsAttribute1" selector="#username" attribute="class">
+            <expectedResult type="string">admin__control-text</expectedResult>
+        </assertElementContainsAttribute>
 
         <!-- string type that use created data -->
-        <comment stepKey="c2" userInput="string type that use created data"/>
-        <assertStringStartsWith stepKey="assert1" expected="D" expectedType="string" actual="$$createData1.lastname$$, $$createData1.firstname$$" actualType="string" message="fail"/>
-        <assertStringStartsNotWith stepKey="assert2" expected="W" expectedType="string" actual="$createData2.firstname$ $createData2.lastname$" actualType="string" message="pass"/>
-        <assertEquals stepKey="assert5" expected="$$createData1.lastname$$" expectedType="string" actual="$$createData1.lastname$$" actualType="string" message="pass"/>
+        <assertStringStartsWith stepKey="assert1" message="fail">
+            <expectedResult type="string">D</expectedResult>
+            <actualResult type="string">$$createData1.lastname$$, $$createData1.firstname$$</actualResult>
+        </assertStringStartsWith>
+        <assertStringStartsNotWith stepKey="assert2" message="pass">
+            <expectedResult type="string">W</expectedResult>
+            <actualResult type="string">$createData2.firstname$, $createData2.lastname$</actualResult>
+        </assertStringStartsNotWith>
+        <assertEquals stepKey="assert5" message="pass">
+            <expectedResult type="string">$$createData1.lastname$$</expectedResult>
+            <actualResult type="string">$$createData1.lastname$$</actualResult>
+        </assertEquals>
+        <assertElementContainsAttribute stepKey="assertElementContainsAttribute7" selector="#username" attribute="value">
+            <expectedResult type="const">$createData2.firstname$</expectedResult>
+        </assertElementContainsAttribute>
 
         <!-- array type that use created data -->
-        <comment stepKey="c3" userInput="array type that use created data"/>
-        <assertArraySubset stepKey="assert9" expected="[$$createData1.lastname$$, $$createData1.firstname$$]" expectedType="array" actual="[$$createData1.lastname$$, $$createData1.firstname$$, 1]" actualType="array" message="pass"/>
-        <assertArraySubset stepKey="assert10" expected="[$createData2.firstname$, $createData2.lastname$]" expectedType="array" actual="[$createData2.firstname$, $createData2.lastname$, 1]" actualType="array" message="pass"/>
-        <assertArrayHasKey stepKey="assert3" expected="lastname" expectedType="string" actual="['lastname' => $$createData1.lastname$$, 'firstname' => $$createData1.firstname$$]" actualType="array" message="pass"/>
-        <assertArrayHasKey stepKey="assert4" expected="lastname" expectedType="string" actual="['lastname' => $createData2.lastname$, 'firstname' => $createData2.firstname$]" actualType="array" message="pass"/>
-
-        <!-- comment this section before running this test -->
-        <comment stepKey="c4" userInput="comment this section before running this test"/>
-        <assertInstanceOf stepKey="assertInstanceOf" expected="User::class" actual="text" actualType="variable" message="pass"/>
-        <assertNotInstanceOf stepKey="assertNotInstanceOf" expected="User::class" actual="21" actualType="int" message="pass"/>
-        <assertFileExists stepKey="assertFileExists2" actual="text" actualType="variable" message="pass"/>
-        <assertFileExists stepKey="assert6" actual="AssertCest.php" actualType="string" message="pass"/>
-        <assertIsEmpty stepKey="assertIsEmpty" actual="text" actualType="variable" message="pass"/>
-        <assertNull stepKey="assertNull" actual="text" actualType="variable" message="pass"/>
-        <expectException stepKey="expectException" expected="new MyException('exception msg')" actual="function() {$this->doSomethingBad();}"/>
-        <fail stepKey="fail" message="fail"/>
-        <fail stepKey="assert7" message="$createData2.firstname$ $createData2.lastname$"/>
-        <fail stepKey="assert8" message="$$createData1.firstname$$ $$createData1.lastname$$"/>
-        <!-- comment end -->
-        <comment stepKey="c5" userInput="comment end"/>
-
-        <deleteData createDataKey="createData2" stepKey="deleteData2"/>
+        <assertArraySubset stepKey="assert9" message="pass">
+            <expectedResult type="array">[$$createData1.lastname$$, $$createData1.firstname$$]</expectedResult>
+            <actualResult type="array">[$$createData1.lastname$$, $$createData1.firstname$$, 1]</actualResult>
+        </assertArraySubset>
+        <assertArraySubset stepKey="assert10" message="pass">
+            <expectedResult type="array">[$createData2.firstname$, $createData2.lastname$]</expectedResult>
+            <actualResult type="array">[$createData2.firstname$, $createData2.lastname$, 1]</actualResult>
+        </assertArraySubset>
+        <assertArrayHasKey stepKey="assert3" message="pass">
+            <expectedResult type="string">lastname</expectedResult>
+            <actualResult type="array">['lastname' => $$createData1.lastname$$, 'firstname' => $$createData1.firstname$$]</actualResult>
+        </assertArrayHasKey>
+        <assertArrayHasKey stepKey="assert4" message="pass">
+            <expectedResult type="string">lastname</expectedResult>
+            <actualResult type="array">['lastname' => $createData2.lastname$, 'firstname' => $createData2.firstname$]</actualResult>
+        </assertArrayHasKey>
     </test>
 </tests>

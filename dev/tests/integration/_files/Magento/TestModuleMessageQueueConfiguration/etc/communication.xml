@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="deprecated.config.async.bool.topic" request="bool">
+        <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\AsyncHandler" method="methodWithBoolParam"/>
+        <handler name="handler2" type="Magento\TestModuleMessageQueueConfiguration\AsyncHandler" method="methodWithMixedParam"/>
+    </topic>
+    <topic name="deprecated.config.async.string.topic" request="string"/>
+    <topic name="deprecated.config.sync.string.topic" request="string" response="string">
+        <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\SyncHandler" method="methodWithStringParam"/>
+    </topic>
+    <topic name="deprecated.config.sync.bool.topic" schema="Magento\TestModuleMessageQueueConfiguration\SyncHandler::methodWithBoolParam">
+        <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\SyncHandler" method="methodWithBoolParam"/>
+    </topic>
+    <topic name="overlapping.topic.declaration" request="string">
+        <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\AsyncHandler" method="methodWithStringParam"/>
+    </topic>
+    <topic name="anotherTopic1" request="string"/>
+    <topic name="anotherTopic2" request="string"/>
+</config>
