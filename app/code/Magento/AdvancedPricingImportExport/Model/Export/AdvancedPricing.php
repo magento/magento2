@@ -270,17 +270,13 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $productsByStores = $this->loadCollection();
             if (!empty($productsByStores)) {
                 $productLinkField = $this->getProductEntityLinkField();
-                $anyStoreId = Store::DEFAULT_STORE_ID;
+                /** @var string[] $productLinkIds */
+                $productLinkIds = [];
 
-                $productLinkIds = array_map(
-                    function (array $productData) use (
-                        $anyStoreId,
-                        $productLinkField
-                    ) {
-                        return $productData[$anyStoreId][$productLinkField];
-                    },
-                    $productsByStores
-                );
+                foreach ($productsByStores as $productByStores) {
+                    $productLinkIds[]
+                        = array_pop($productByStores)[$productLinkField];
+                }
                 $productLinkIds = array_unique($productLinkIds);
                 $tierPricesData = $this->fetchTierPrices($productLinkIds);
                 $exportData = $this->prepareExportData(
@@ -364,7 +360,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $productLinkIdToSkuMap[$productData[Store::DEFAULT_STORE_ID][$this->getProductEntityLinkField()]]
                 = $productData[Store::DEFAULT_STORE_ID]['sku'];
         }
-        unset($productData);
 
         //Adding products' SKUs to tier price data.
         $linkedTierPricesData = [];
@@ -375,7 +370,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 [ImportAdvancedPricing::COL_SKU => $sku]
             );
         }
-        unset($sku, $tierPriceData);
 
         //Formatting data for export.
         $customExportData = [];
