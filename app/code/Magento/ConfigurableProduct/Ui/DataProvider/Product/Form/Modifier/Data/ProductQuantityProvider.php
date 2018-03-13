@@ -37,6 +37,6 @@ class ProductQuantityProvider
 
         $qty = $this->stockRegistry->getStockItem($productId, $websiteId)->getQty();
 
-        return [$qty];
+        return [['quantity' => $qty]];
     }
 }

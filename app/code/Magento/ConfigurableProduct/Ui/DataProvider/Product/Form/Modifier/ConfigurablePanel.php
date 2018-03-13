@@ -480,7 +480,10 @@ class ConfigurablePanel extends AbstractModifier
                         'quantity',
                         __('Quantity'),
                         ['dataScope' => 'qty'],
-                        ['dataScope' => 'qty']
+                        [
+                            'dataScope' => 'qty',
+                            'elementTmpl' => 'Magento_ConfigurableProduct/dynamic-rows/cells/cell-qty',
+                        ]
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
                     'status' => [
