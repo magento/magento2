@@ -102,8 +102,9 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 } else if ($redirect == 'close') {
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
+                    $data['is_active'] = Block::STATUS_DISABLED;
                     for ($numOfTries = 0; $numOfTries < self::MAX_RETRIES; $numOfTries++) {
-                        $data['identifier'] = $data['identifier'] . '-1';
+                        $data['identifier'] = $data['identifier'] . uniqid();
                         $this->dataPersistor->set('cms_block', $data);
                         $model->setData($data);
                         try {

@@ -42,7 +42,7 @@ class FormPageActions extends PageActions
      *
      * @var string
      */
-    protected $saveButton = '#save-button';
+    protected $saveButton = '#save';
 
     /**
      * "Delete" button.
