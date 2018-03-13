@@ -28,6 +28,7 @@ class IndexTableStructure
      * @param string $minPriceField
      * @param string $maxPriceField
      * @param string $tierPriceField
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $tableName,

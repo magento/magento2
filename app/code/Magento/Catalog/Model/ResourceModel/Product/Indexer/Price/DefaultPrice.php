@@ -53,14 +53,14 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $hasEntity = null;
 
     /**
-     * @var IndexTableStructure
+     * @var IndexTableStructureFactory
      */
-    private $finalPriceTable;
+    private $indexTableStructureFactory;
 
     /**
      * @var PriceModifierInterface[]
      */
-    private $priceModifiers;
+    private $priceModifiers = [];
 
     /**
      * DefaultPrice constructor.
@@ -88,26 +88,17 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->moduleManager = $moduleManager;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
 
-        if (!$indexTableStructureFactory) {
-            $indexTableStructureFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                IndexTableStructureFactory::class
-            );
+        $this->indexTableStructureFactory = $indexTableStructureFactory ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(IndexTableStructureFactory::class);
+        foreach ($priceModifiers as $priceModifier) {
+            if (!($priceModifier instanceof PriceModifierInterface)) {
+                throw new \InvalidArgumentException(
+                    'Argument \'priceModifiers\' must be of the type ' . PriceModifierInterface::class . '[]'
+                );
+            }
+
+            $this->priceModifiers[] = $priceModifier;
         }
-        $this->finalPriceTable = $indexTableStructureFactory->create([
-            'tableName' => $this->tableStrategy->getTableName('catalog_product_index_price_final'),
-            'entityField' => 'entity_id',
-            'customerGroupField' => 'customer_group_id',
-            'websiteField' => 'website_id',
-            'taxClassField' => 'tax_class_id',
-            'originalPriceField' => 'orig_price',
-            'finalPriceField' => 'price',
-            'minPriceField' => 'min_price',
-            'maxPriceField' => 'max_price',
-            'tierPriceField' => 'tier_price',
-        ]);
-        $this->priceModifiers = (function (PriceModifierInterface ...$priceModifier) {
-            return $priceModifier;
-        })(...array_values($priceModifiers));
     }
 
     /**
@@ -251,6 +242,32 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Create (if needed), clean and return structure of final price table
+     *
+     * @return IndexTableStructure
+     */
+    private function prepareFinalPriceTable()
+    {
+        $tableName = $this->_getDefaultFinalPriceTable();
+        $this->getConnection()->delete($tableName);
+
+        $finalPriceTable = $this->indexTableStructureFactory->create([
+            'tableName' => $tableName,
+            'entityField' => 'entity_id',
+            'customerGroupField' => 'customer_group_id',
+            'websiteField' => 'website_id',
+            'taxClassField' => 'tax_class_id',
+            'originalPriceField' => 'orig_price',
+            'finalPriceField' => 'price',
+            'minPriceField' => 'min_price',
+            'maxPriceField' => 'max_price',
+            'tierPriceField' => 'tier_price',
+        ]);
+
+        return $finalPriceTable;
+    }
+
+    /**
      * Retrieve website current dates table name
      *
      * @return string
@@ -283,12 +300,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
+        $finalPriceTable = $this->prepareFinalPriceTable();
 
         $select = $this->getSelect($entityIds, $type);
-        $query = $select->insertFromSelect($this->finalPriceTable->getTableName(), [], false);
+        $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
 
-        $this->applyDiscountPrices($entityIds);
+        $this->applyDiscountPrices($finalPriceTable, $entityIds);
 
         return $this;
     }
@@ -485,15 +503,16 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
-     * Apply discount prices to temporary final price index table.
+     * Apply discount prices to final price index table.
      *
-     * @param int|array $entityIds
+     * @param IndexTableStructure $finalPriceTable
+     * @param int|array|null $entityIds
      * @return void
      */
-    private function applyDiscountPrices($entityIds = null)
+    private function applyDiscountPrices(IndexTableStructure $finalPriceTable, $entityIds = null)
     {
         foreach ($this->priceModifiers as $priceModifier) {
-            $priceModifier->modifyPrice($this->finalPriceTable, (array) $entityIds);
+            $priceModifier->modifyPrice($finalPriceTable, (array) $entityIds);
         }
     }
 
@@ -506,6 +525,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function _applyCustomOption()
     {
         $connection = $this->getConnection();
+        $finalPriceTable = $this->_getDefaultFinalPriceTable();
         $coaTable = $this->_getCustomOptionAggregateTable();
         $copTable = $this->_getCustomOptionPriceTable();
 
@@ -513,7 +533,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->_prepareCustomOptionPriceTable();
 
         $select = $connection->select()->from(
-            ['i' => $this->finalPriceTable->getTableName()],
+            ['i' => $finalPriceTable],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['cw' => $this->getTable('store_website')],
@@ -580,7 +600,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection->query($query);
 
         $select = $connection->select()->from(
-            ['i' => $this->finalPriceTable->getTableName()],
+            ['i' => $finalPriceTable],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['cw' => $this->getTable('store_website')],
@@ -649,7 +669,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $query = $select->insertFromSelect($copTable);
         $connection->query($query);
 
-        $table = ['i' => $this->finalPriceTable->getTableName()];
+        $table = ['i' => $finalPriceTable];
         $select = $connection->select()->join(
             ['io' => $copTable],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
@@ -697,7 +717,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         ];
 
         $connection = $this->getConnection();
-        $table = $this->finalPriceTable->getTableName();
+        $table = $this->_getDefaultFinalPriceTable();
         $select = $connection->select()->from($table, $columns);
 
         if ($entityIds !== null) {
