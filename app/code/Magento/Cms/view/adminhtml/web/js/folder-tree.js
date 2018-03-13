@@ -84,7 +84,7 @@ define([
                 recursiveOpen = function () {
                     var el = $('[data-id="' + path.pop() + '"]');
 
-                    if (path.length > 1) {
+                    if (path.length) {
                         tree.jstree('open_node', el, recursiveOpen);
                     } else {
                         tree.jstree('open_node', el, function () {

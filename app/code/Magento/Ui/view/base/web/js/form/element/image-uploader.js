@@ -67,6 +67,10 @@ define([
                 '/store/' + this.mediaGallery.storeId +
                 '/type/image/use_storage_root/1?isAjax=true';
 
+            if (this.mediaGallery.initialOpenSubpath) {
+                openDialogUrl += '&current_tree_path=' + this.mediaGallery.initialOpenSubpath;
+            }
+
             browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
         },
 
