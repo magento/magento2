@@ -11,6 +11,7 @@
     <section name="AdminProductGridSection">
         <element name="loadingMask" type="text" selector=".admin__data-grid-loading-mask[data-component*='product_listing']"/>
         <element name="columnHeader" type="button" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]/thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="column" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
         <element name="productGridElement1" type="input" selector="#addselector" />
         <element name="productGridElement2" type="text" selector="#addselector" />
         <element name="productGridRows" type="text" selector="table.data-grid tr.data-row"/>
