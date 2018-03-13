@@ -85,7 +85,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
             $createdIntegrations[$integrationName] = $integration;
         }
 
-        // Rerun integration creation
+        // Rerun integration creation with the same data (data has not changed)
         $this->assertEquals(
             $newIntegrations,
             $this->integrationManager->processConfigBasedIntegrations($newIntegrations),
