@@ -50,7 +50,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
      *
      * @return array
      */
-    protected function getOptions()
+    private function getOptions()
     {
         $options = [
             [
