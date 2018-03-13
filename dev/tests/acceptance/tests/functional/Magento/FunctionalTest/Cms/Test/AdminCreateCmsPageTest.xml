@@ -45,7 +45,7 @@
     </test>
     <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
         <annotations>
-            <features value="[CMS] Bluefoot Row MAGETWO-83767"/>
+            <features value="[CMS] WYSIWYG update MAGETWO-36659"/>
             <stories value="Default layout configuration MAGETWO-88793"/>
             <title value="Admin are able to config default layout for CMS Page from System Configuration"/>
             <description value="Admin are able to select layout that will be applied by default to CMS Page, so that he does not need to change it manually every time he create a page"/>
@@ -57,12 +57,16 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
         <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="Full Width" stepKey="selectFullWidth"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
