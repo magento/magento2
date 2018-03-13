@@ -575,7 +575,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 true,
                 'Placeholder Value',
                 'Placeholder Value',
-                1,
+                0,
                 false,
                 true,
                 true
@@ -587,7 +587,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 true,
                 'Placeholder Value',
                 'Placeholder Value',
-                1,
+                0,
                 true,
                 true,
                 true
