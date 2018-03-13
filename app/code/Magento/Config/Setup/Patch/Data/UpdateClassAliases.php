@@ -7,8 +7,8 @@
 namespace Magento\Config\Setup\Patch\Data;
 
 use Magento\Framework\Module\Setup\Migration;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateClassAliases

@@ -63,8 +63,10 @@ class ParametersHolder
     {
         $installDir = TESTS_TEMP_DIR;
         $path = DirectoryList::PATH;
+        $var = "{$installDir}/var";
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$installDir}/etc"],
+            DirectoryList::VAR_DIR => [$path => $var],
         ];
         return $customDirs;
     }

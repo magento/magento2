@@ -22,8 +22,8 @@ use Magento\Sales\Setup\SalesOrderPaymentDataConverter;
 use Magento\Sales\Setup\SalesSetup;
 use Magento\Sales\Setup\SalesSetupFactory;
 use Magento\Sales\Setup\SerializedDataConverter;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class ConvertSerializedDataToJson

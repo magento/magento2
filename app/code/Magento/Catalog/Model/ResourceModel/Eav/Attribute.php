@@ -21,7 +21,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method int setSearchWeight(int $value)
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
- * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,6 +80,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected $_indexerEavProcessor;
 
     /**
+     * @var \Magento\Eav\Api\Data\AttributeExtensionFactory
+     */
+    private $eavAttributeFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -101,9 +105,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,12 +134,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productFlatIndexerHelper = $productFlatIndexerHelper;
         $this->attrLockValidator = $lockValidator;
+        $this->eavAttributeFactory = $eavAttributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
         parent::__construct(
             $context,
             $registry,
@@ -886,5 +894,19 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     {
         $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
         return $this;
+    }
+
+    /**
+     * @return \Magento\Eav\Api\Data\AttributeExtensionInterface
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->eavAttributeFactory->create();
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 }

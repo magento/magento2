@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\Bootstrap;
 
+use Magento\TestFramework\Annotation\AppIsolation;
+
 /**
  * Bootstrap of the custom DocBlock annotations.
  *

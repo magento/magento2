@@ -18,7 +18,7 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ModuleRegistryUninstaller;
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
