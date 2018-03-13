@@ -97,22 +97,6 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test search of grouped product after full reindex
-     *
-     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
-     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_grouped
-     */
-    public function testSearchGroupedProduct()
-    {
-        $expectedProductName = 'Grouped Product Simple 11 Simple 22';
-        $this->reindexAll();
-        $result = $this->searchByName('Grouped Product');
-        self::assertCount(1, $result);
-        self::assertEquals($expectedProductName, $result[0]['_source']['name']);
-    }
-
-    /**
      * @param string $text
      * @return array
      */
