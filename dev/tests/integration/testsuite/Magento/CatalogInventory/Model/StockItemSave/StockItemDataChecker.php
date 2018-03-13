@@ -11,11 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\HydratorInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use PHPUnit\Framework\Assert;
 
 class StockItemDataChecker
@@ -46,48 +42,24 @@ class StockItemDataChecker
     private $productFactory;
 
     /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
      * @param HydratorInterface $hydrator
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductInterfaceFactory $productFactory
-     * @param SourceItemRepositoryInterface $sourceItemRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         HydratorInterface $hydrator,
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
         ProductRepositoryInterface $productRepository,
-        ProductInterfaceFactory $productFactory,
-        SourceItemRepositoryInterface $sourceItemRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        ProductInterfaceFactory $productFactory
     ) {
         $this->hydrator = $hydrator;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
-        $this->sourceItemRepository = $sourceItemRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -103,7 +75,6 @@ class StockItemDataChecker
         $productLoadedByModel = $this->productFactory->create();
         $productLoadedByModel->load($product->getId());
         $this->doCheckStockItemData($product, $expectedData);
-        $this->checkIntegrityWithInventory($product, $expectedData);
     }
 
     /**
@@ -157,30 +128,5 @@ class StockItemDataChecker
                 );
             }
         }
-    }
-
-    /**
-     * @param Product $product
-     * @param array $expectedData
-     * @return void
-     */
-    private function checkIntegrityWithInventory(Product $product, array $expectedData)
-    {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
-            ->addFilter(SourceItemInterface::SKU, $product->getSku())
-            ->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-        Assert::assertCount(1, $sourceItems);
-
-        $sourceItem = reset($sourceItems);
-        Assert::assertEquals(
-            $expectedData[StockItemInterface::QTY],
-            $sourceItem->getQuantity()
-        );
-        Assert::assertEquals(
-            $expectedData[StockItemInterface::IS_IN_STOCK],
-            (int)$sourceItem->getStatus()
-        );
     }
 }

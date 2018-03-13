@@ -15,7 +15,6 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 class IndexNameResolver implements IndexNameResolverInterface
 {
     /**
-     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
      * Suffix for replica index table
      *
      * @var string
@@ -50,7 +49,6 @@ class IndexNameResolver implements IndexNameResolverInterface
     }
 
     /**
-     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
      * @param string $tableName
      * @return string
      */
