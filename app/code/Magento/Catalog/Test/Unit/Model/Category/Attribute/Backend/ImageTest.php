@@ -164,8 +164,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
         $object = new \Magento\Framework\DataObject(
             [
-                'test_attribute' => 'test1234.jpg',
-                '_additional_data_test_attribute' => [['name' => 'test1234.jpg', 'tmp_name' => 'test-test-1234']]
+                'test_attribute' => 'test1234.jpg'
             ]
         );
         $model->afterSave($object);
@@ -208,7 +207,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($exception));
         $object = new \Magento\Framework\DataObject(
             [
-                '_additional_data_test_attribute' => [['name' => 'test1234.jpg', 'tmp_name' => 'test-test-1234']]
+                'test_attribute' => 'test1234.jpg'
             ]
         );
         $model->afterSave($object);
