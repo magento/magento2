@@ -54,6 +54,7 @@
                 <item name="map" xsi:type="array">
                     <item name="source" xsi:type="string">source</item>
                     <item name="source_code" xsi:type="string">source_code</item>
+                    <item name="source_status" xsi:type="string">source_status</item>
                 </item>
             </item>
         </argument>
@@ -87,7 +88,13 @@
                     <dataType>text</dataType>
                     <label translate="true">Source</label>
                     <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                </settings>
+            </field>
+            <field name="source_status" formElement="input">
+                <settings>
                     <dataType>text</dataType>
+                    <label translate="true">Source Status</label>
+                    <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                 </settings>
             </field>
             <field name="quantity" formElement="input">

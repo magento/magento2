@@ -100,7 +100,7 @@ class SourceItems extends AbstractModifier
         $collection->join(
             ['s' => $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE)],
             sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_CODE, SourceItemInterface::SOURCE_CODE),
-            ['source_name' => SourceInterface::NAME]
+            ['source_name' => SourceInterface::NAME, 'source_status' => SourceInterface::ENABLED]
         );
 
         $sourceItemsData = [];
@@ -110,6 +110,7 @@ class SourceItems extends AbstractModifier
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],
+                'source_status' => $row['source_status'] ? __('Enabled') : __('Disabled')
             ];
         }
         return $sourceItemsData;
