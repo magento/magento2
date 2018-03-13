@@ -6,7 +6,7 @@
 
 /** This is project's console commands configuration for Robo task runner.
  *
- * @codingStandardsIgnoreFile
+ * @codingStandardsIgnoreStart
  * @see http://robo.li/
  */
 class RoboFile extends \Robo\Tasks
@@ -43,10 +43,17 @@ class RoboFile extends \Robo\Tasks
      * @param array $opts
      * @return void
      */
-    function generateTests($opts = ['config' => null])
+    function generateTests($opts = ['config' => null, 'force' => false])
     {
+        $GLOBALS['GENERATE_TESTS'] = true;
+
+        if ($opts['force'])
+        {
+            $GLOBALS['FORCE_PHP_GENERATE'] = true;
+        }
+
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles($opts['config']);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config']);
         $this->say("Generate Tests Command Run");
     }
 

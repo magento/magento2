@@ -106,8 +106,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\CacheInterface::class
         )->save(
             'test',
-            'catalog_product_999',
-            ['catalog_product_999']
+            'cat_p_999',
+            ['cat_p_999']
         );
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
         $this->_model->setId(999)->cleanCache();
@@ -115,7 +115,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Framework\App\CacheInterface::class
             )->load(
-                'catalog_product_999'
+                'cat_p_999'
             )
         );
     }

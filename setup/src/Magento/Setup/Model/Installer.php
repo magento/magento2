@@ -337,7 +337,8 @@ class Installer
 
         $this->log->log('Starting Magento installation:');
 
-        while (list(, list($message, $method, $params)) = each($script)) {
+        foreach ($script as $item) {
+            list($message, $method, $params) = $item;
             $this->log->log($message);
             call_user_func_array([$this, $method], $params);
             $this->logProgress();

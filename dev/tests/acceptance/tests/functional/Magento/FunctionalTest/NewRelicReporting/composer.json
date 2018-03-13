@@ -31,7 +31,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/NewRelicReporting"
+                "tests/functional/Magento/FunctionalTest/NewRelicReporting"
             ]
         ]
     }

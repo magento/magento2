@@ -6,16 +6,16 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SamplePaypalConfig" type="paypal_config_state">
-        <required-entity type="business_account">SampleBusinessAccount</required-entity>
-        <required-entity type="api_username">SampleApiUsername</required-entity>
-        <required-entity type="api_password">SampleApiPassword</required-entity>
-        <required-entity type="api_signature">SampleApiSignature</required-entity>
-        <required-entity type="api_authentication">SampleApiAuthentication</required-entity>
-        <required-entity type="sandbox_flag">SampleSandboxFlag</required-entity>
-        <required-entity type="use_proxy">SampleUseProxy</required-entity>
+        <requiredEntity type="business_account">SampleBusinessAccount</requiredEntity>
+        <requiredEntity type="api_username">SampleApiUsername</requiredEntity>
+        <requiredEntity type="api_password">SampleApiPassword</requiredEntity>
+        <requiredEntity type="api_signature">SampleApiSignature</requiredEntity>
+        <requiredEntity type="api_authentication">SampleApiAuthentication</requiredEntity>
+        <requiredEntity type="sandbox_flag">SampleSandboxFlag</requiredEntity>
+        <requiredEntity type="use_proxy">SampleUseProxy</requiredEntity>
     </entity>
     <entity name="SampleBusinessAccount" type="business_account">
         <data key="value">myBusinessAccount@magento.com</data>
@@ -41,10 +41,10 @@
 
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultPayPalConfig" type="paypal_config_state">
-        <required-entity type="business_account">DefaultBusinessAccount</required-entity>
-        <required-entity type="api_username">DefaultApiUsername</required-entity>
-        <required-entity type="api_password">DefaultApiPassword</required-entity>
-        <required-entity type="api_signature">DefaultApiSignature</required-entity>
+        <requiredEntity type="business_account">DefaultBusinessAccount</requiredEntity>
+        <requiredEntity type="api_username">DefaultApiUsername</requiredEntity>
+        <requiredEntity type="api_password">DefaultApiPassword</requiredEntity>
+        <requiredEntity type="api_signature">DefaultApiSignature</requiredEntity>
     </entity>
     <entity name="DefaultBusinessAccount" type="business_account">
         <data key="value"/>
@@ -58,4 +58,4 @@
     <entity name="DefaultApiSignature" type="api_signature">
         <data key="value"/>
     </entity>
-</config>
+</entities>

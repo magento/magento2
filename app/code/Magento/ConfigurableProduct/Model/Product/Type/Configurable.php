@@ -453,6 +453,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
+            // for new product do not load configurable attributes
+            if (!$product->getId()) {
+                return [];
+            }
             $configurableAttributes = $this->getConfigurableAttributeCollection($product);
             $this->extensionAttributesJoinProcessor->process($configurableAttributes);
             $configurableAttributes->orderByPosition()->load();
