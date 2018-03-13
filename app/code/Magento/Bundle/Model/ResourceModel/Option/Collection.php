@@ -27,6 +27,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_selectionsAppended = false;
 
     /**
+     * @var int[]
+     */
+    private $productIds = [];
+
+    /**
      * Init model and resource model
      *
      * @return void
@@ -94,6 +99,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setProductIdFilter($productId)
     {
+        $this->productIds[] = $productId;
+
+        return $this;
+    }
+
+    /**
+     * Add product ids filter to select.
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+
         $productTable = $this->getTable('catalog_product_entity');
         $linkField = $this->getConnection()->getAutoIncrementField($productTable);
         $this->getSelect()->join(
@@ -101,8 +120,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            "cpe.entity_id = ?",
-            $productId
+            "cpe.entity_id in (?)",
+            $this->productIds
         );
 
         return $this;

@@ -6,14 +6,15 @@
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
+use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\GraphQl\Argument\ArgumentValueInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\ArgumentInterface;
+use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\GraphQl\Model\ResolverInterface;
-use \Magento\GraphQl\Model\ResolverContextInterface;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -36,12 +37,12 @@ class CustomAttributeMetadata implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(array $args, ResolverContextInterface $context)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
     {
         $attributes['items'] = null;
         /** @var ArgumentInterface $attributeInputs */
         $attributeInputs = $args['attributes'];
-        foreach ($attributeInputs->getValue() as $attribute) {
+        foreach ($attributeInputs as $attribute) {
             if (!isset($attribute['attribute_code']) || !isset($attribute['entity_type'])) {
                 $attributes['items'][] = $this->createInputException($attribute);
                 continue;
@@ -53,6 +54,14 @@ class CustomAttributeMetadata implements ResolverInterface
                     __(
                         'Attribute code %1 of entity type %2 not configured to have a type.',
                         [$attribute['attribute_code'], $attribute['entity_type']]
+                    )
+                );
+                continue;
+            } catch (LocalizedException $exception) {
+                $attributes['items'][] = new GraphQlInputException(
+                    __(
+                        'Invalid entity_type specified: %1',
+                        [$attribute['entity_type']]
                     )
                 );
                 continue;
