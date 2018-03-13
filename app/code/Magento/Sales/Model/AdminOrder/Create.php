@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 /**
  * Order create model
@@ -1996,9 +1997,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
         if (!empty($this->_errors)) {
+            /** @var LoggerInterface $logger */
+            $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             foreach ($this->_errors as $error) {
+                $logger->error($error);
                 $this->messageManager->addError($error);
             }
+
             throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));
         }
 

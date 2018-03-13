@@ -143,6 +143,12 @@
         <arguments>
             <argument name="catalogProductStatus" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status\Proxy</argument>
             <argument name="productLink" xsi:type="object">Magento\Catalog\Model\Product\Link\Proxy</argument>
+            <argument name="getCustomAttributeCodes" xsi:type="object">Magento\Catalog\Model\Entity\GetProductCustomAttributeCodes</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <arguments>
+            <argument name="getCustomAttributeCodes" xsi:type="object">Magento\Catalog\Model\Entity\GetCategoryCustomAttributeCodes</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">

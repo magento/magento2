@@ -22,11 +22,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\PatchApplierInterface;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -34,6 +36,8 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplierFactory;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -235,6 +239,11 @@ class Installer
     private $schemaPersistor;
 
     /**
+     * @var PatchApplierFactory
+     */
+    private $patchApplierFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -283,8 +292,7 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck,
-        DeclarationInstaller $declarationInstaller = null
+        PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -308,9 +316,6 @@ class Installer
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
-        $this->declarationInstaller = $declarationInstaller ?: $this->objectManagerProvider->get()->get(
-            DeclarationInstaller::class
-        );
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
     }
 
@@ -333,7 +338,7 @@ class Installer
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        $script[] = ['Installing data...', 'installDataFixtures', []];
+        $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
@@ -342,7 +347,10 @@ class Installer
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
-        $script[] = ['Caches clearing:', 'cleanCaches', []];
+
+        if (!$this->isDryRun($request)) {
+            $script[] = ['Caches clearing:', 'cleanCaches', [$request]];
+        }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
@@ -370,6 +378,21 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
+    }
+
+    /**
+     * Get declaration installer. For upgrade process it must be created after deployment config update.
+     *
+     * @return DeclarationInstaller
+     */
+    private function getDeclarationInstaller()
+    {
+        if (!$this->declarationInstaller) {
+            $this->declarationInstaller = $this->objectManagerProvider->get()->get(
+                DeclarationInstaller::class
+            );
+        }
+        return $this->declarationInstaller;
     }
 
     /**
@@ -580,7 +603,6 @@ class Installer
     {
         /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
         $connection = $setup->getConnection();
-
         $setup->startSetup();
 
         $this->setupSessionTable($setup, $connection);
@@ -782,7 +804,7 @@ class Installer
      */
     public function declarativeInstallSchema(array $request)
     {
-        $this->declarationInstaller->installSchema($request);
+        $this->getDeclarationInstaller()->installSchema($request);
     }
 
     /**
@@ -800,7 +822,7 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
-        $this->handleDBSchemaData($setup, 'schema');
+        $this->handleDBSchemaData($setup, 'schema', $request);
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
@@ -826,16 +848,17 @@ class Installer
     /**
      * Installs data fixtures
      *
+     * @param array $request
      * @return void
      */
-    public function installDataFixtures()
+    public function installDataFixtures(array $request = [])
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->handleDBSchemaData($setup, 'data');
+        $this->handleDBSchemaData($setup, 'data', $request);
     }
 
     /**
@@ -871,12 +894,14 @@ class Installer
      *
      * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
      * @param string $type
+     * @param array $request
      * @return void
      * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function handleDBSchemaData($setup, $type)
+    private function handleDBSchemaData($setup, $type, array $request)
     {
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
@@ -890,7 +915,28 @@ class Installer
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
         $schemaListener = $adapter->getSchemaListener();
+        $this->patchApplierFactory = $this->objectManagerProvider->get()->create(
+            PatchApplierFactory::class,
+            [
+                'objectManager' => $this->objectManagerProvider->get()
+            ]
+        );
+        /** @var PatchApplier $patchApplier */
+        if ($type === 'schema') {
+            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
+        } elseif ($type === 'data') {
+            $patchApplier = $this->patchApplierFactory->create([
+                'moduleDataSetup' => $setup,
+                'objectManager' => $this->objectManagerProvider->get()
+            ]);
+        }
+
         foreach ($moduleNames as $moduleName) {
+            if ($this->isDryRun($request)) {
+                $this->log->log("Module '{$moduleName}':");
+                $this->logProgress();
+                continue;
+            }
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
@@ -903,11 +949,11 @@ class Installer
                     if ($upgrader) {
                         $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                    }
-                    if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer);
-                    } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer);
+                        if ($type === 'schema') {
+                            $resource->setDbVersion($moduleName, $configVer);
+                        } elseif ($type === 'data') {
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
                     }
                 }
             } elseif ($configVer) {
@@ -921,12 +967,25 @@ class Installer
                     $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
+            }
+
+            if ($configVer) {
                 if ($type === 'schema') {
                     $resource->setDbVersion($moduleName, $configVer);
                 } elseif ($type === 'data') {
                     $resource->setDataVersion($moduleName, $configVer);
                 }
             }
+
+            /**
+             * Applying data patches after old upgrade data scripts
+             */
+            if ($type === 'schema') {
+                $patchApplier->applySchemaPatch($moduleName);
+            } elseif ($type === 'data') {
+                $patchApplier->applyDataPatch($moduleName);
+            }
+
             $this->logProgress();
         }
 
@@ -938,6 +997,11 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
+            if ($this->isDryRun($request)) {
+                $this->log->log("Module '{$moduleName}':");
+                $this->logProgress();
+                continue;
+            }
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
@@ -963,6 +1027,18 @@ class Installer
     }
 
     /**
+     * Check whether Magento setup is run in dry-run mode
+     *
+     * @param array $request
+     * @return bool
+     */
+    private function isDryRun(array $request)
+    {
+        return isset($request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE]) &&
+            $request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE];
+    }
+
+    /**
      * Installs user configuration
      *
      * @param \ArrayObject|array $data
@@ -970,6 +1046,9 @@ class Installer
      */
     public function installUserConfig($data)
     {
+        if ($this->isDryRun($data)) {
+            return;
+        }
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);
@@ -1059,6 +1138,10 @@ class Installer
      */
     public function installAdminUser($data)
     {
+        if ($this->isDryRun($data)) {
+            return;
+        }
+
         $adminUserModuleIsInstalled = (bool)$this->deploymentConfig->get('modules/Magento_User');
         //Admin user data is not system data, so we need to install it only if schema for admin user was installed
         if ($adminUserModuleIsInstalled) {

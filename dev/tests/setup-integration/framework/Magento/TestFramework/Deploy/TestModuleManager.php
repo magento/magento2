@@ -5,6 +5,10 @@
  */
 namespace Magento\TestFramework\Deploy;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleListInterface;
+
 /**
  * The purpose of this class is adding test modules files to Magento code base.
  */
@@ -61,6 +65,27 @@ class TestModuleManager
     }
 
     /**
+     * Copy revision folder to main module
+     *
+     * @param string $moduleName
+     * @param string $revisionName
+     * @param string $dir
+     * @return void
+     */
+    public function addRevision($moduleName, $revisionName, $dir)
+    {
+        $modulePath = str_replace("Magento_", "", $moduleName);
+        $folder = MAGENTO_MODULES_PATH . $modulePath;
+        $desiredPath = $folder . '/' . $dir;
+        $revisionPath = $folder . '/revisions/' . $revisionName . '/';
+
+        if (!is_dir($desiredPath)) {
+            mkdir($desiredPath, 0777, true);
+        }
+        rename($revisionPath, $desiredPath);
+    }
+
+    /**
      * Update module version.
      *
      * @param string $moduleName   Like Magento_TestSetupModule
@@ -76,7 +101,15 @@ class TestModuleManager
         $revisionFile = MAGENTO_MODULES_PATH . $modulePath . "/revisions/" .
             $revisionName . DIRECTORY_SEPARATOR . $fileName;
 
-        if (file_exists($oldFile) && file_exists($revisionFile)) {
+        if (!file_exists($oldFile)) {
+            $dir = dirname($oldFile);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            touch($oldFile);
+        }
+
+        if (file_exists($revisionFile)) {
             unlink($oldFile);
             copy($revisionFile, $oldFile);
         } else {
@@ -99,6 +132,21 @@ class TestModuleManager
         if (is_dir($folder)) {
             \Magento\Framework\Filesystem\Io\File::rmdirRecursive($folder);
         }
+    }
+
+    /**
+     * There can be situation when config version of module can be cached
+     * So proposed to clean shared instance of
+     * @see ModuleList in order to achieve clean installation
+     */
+    public function cleanModuleList()
+    {
+        /**
+         * @var \Magento\TestFramework\ObjectManager $objectManager
+         */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->removeSharedInstance(ModuleList::class);
+        $objectManager->removeSharedInstance(ModuleListInterface::class);
     }
 
     /**

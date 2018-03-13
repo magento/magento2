@@ -28,6 +28,7 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
         <click selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <wait time="10" stepKey="waitForPageLoad" />
@@ -48,7 +49,7 @@
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
-        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <waitForText userInput="Home page" stepKey="waitForPageLoad9"/>
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <closeTab stepKey="closeTab"/>
         <after>

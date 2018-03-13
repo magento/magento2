@@ -130,17 +130,20 @@ class DbVersionInfo
      * @param string $moduleName
      * @param string|bool $version
      * @return bool
-     * @throws \UnexpectedValueException
      */
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        if (empty($module['setup_version'])) {
-            throw new \UnexpectedValueException("Setup version for module '$moduleName' is not specified");
-        }
-        $configVer = $module['setup_version'];
+        $configVer = isset($module['setup_version']) ? $module['setup_version'] : null;
 
-        return ($version !== false
-            && version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL);
+        if (empty($configVer)) {
+            /**
+             * If setup_version was removed, this means that we want to ignore old scripts and do installation only
+             * with declarative schema and data/schema patches
+             */
+            return true;
+        }
+
+        return version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL;
     }
 }

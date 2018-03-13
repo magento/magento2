@@ -546,7 +546,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = Glob::glob(
-            $this->_globalConfigDir . '/{di.xml,*/di.xml,vendor_path.php}',
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
             Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
@@ -626,7 +626,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir);
+            mkdir($dir, 0777, true);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));

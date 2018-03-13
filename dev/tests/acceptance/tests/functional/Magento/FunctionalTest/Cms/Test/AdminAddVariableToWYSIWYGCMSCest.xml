@@ -11,7 +11,7 @@
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-42158-Variable with WYSIWYG "/>
-            <group value="Cms"/>
+            <group value="skip"/>
             <title value="Insert default Magento variable into content of WYSIWYG on CMS Pages"/>
             <description value="Insert default Magento variable into content of WYSIWYG on CMS Pages"/>
             <severity value="CRITICAL"/>
@@ -71,7 +71,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />

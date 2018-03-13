@@ -65,21 +65,25 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $enableModuleCommand = 'php -f ' . BP . '/bin/magento module:enable ' . $moduleName
-            . ' -n -vvv --magento-init-params=' . $initParams['magento-init-params'];
+            . ' -n -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($enableModuleCommand);
     }
 
     /**
      * Execute upgrade magento command.
      *
+     * @param array $installParams
      * @return string
      */
-    public function upgrade()
+    public function upgrade($installParams = [])
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $enableModuleCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params='
-            . $initParams['magento-init-params'];
-        return $this->shell->execute($enableModuleCommand);
+        $upgradeCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params="'
+            . $initParams['magento-init-params'] . '"';
+        $installParams = $this->toCliArguments($installParams);
+        $upgradeCommand .= ' ' . implode(" ", array_keys($installParams));
+
+        return $this->shell->execute($upgradeCommand, array_values($installParams));
     }
 
     /**
@@ -143,6 +147,21 @@ class CliCommand
         $command = 'php -f ' . BP . '/bin/magento cache:clean ' .
             ' -vvv --magento-init-params=' .
             $initParams['magento-init-params'];
+
+        $this->shell->execute($command);
+    }
+
+    /**
+     * Uninstall module
+     *
+     * @param string $moduleName
+     */
+    public function uninstallModule($moduleName)
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $command = 'php -f ' . BP . '/bin/magento module:uninstall ' . $moduleName . ' --remove-data ' .
+            ' -vvv --non-composer --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command);
     }
