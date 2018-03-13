@@ -546,8 +546,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['section1/group1/field1' => 'some_value'],
-                false,
-                null,
+                'some_value',
+                'section1/group1/field1',
                 false,
                 'some_value',
                 null,
@@ -575,7 +575,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 true,
                 'Placeholder Value',
                 'Placeholder Value',
-                0,
+                1,
                 false,
                 true,
                 true
@@ -587,7 +587,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 true,
                 'Placeholder Value',
                 'Placeholder Value',
-                0,
+                1,
                 true,
                 true,
                 true
