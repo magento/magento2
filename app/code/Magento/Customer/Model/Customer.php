@@ -886,7 +886,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-            $this->setData('group_id', $groupId);
+            $this->setData('group_id', (int)$groupId);
         }
         return $this->getData('group_id');
     }
@@ -900,7 +900,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         if (!$this->getData('tax_class_id')) {
             $groupTaxClassId = $this->_groupRepository->getById($this->getGroupId())->getTaxClassId();
-            $this->setData('tax_class_id', $groupTaxClassId);
+            $this->setData('tax_class_id', (int)$groupTaxClassId);
         }
         return $this->getData('tax_class_id');
     }
@@ -949,10 +949,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         if ($ids === null) {
             $ids = [];
             if ((bool)$this->getSharingConfig()->isWebsiteScope()) {
-                $ids[] = $this->getWebsiteId();
+                $ids[] = (int)$this->getWebsiteId();
             } else {
                 foreach ($this->_storeManager->getWebsites() as $website) {
-                    $ids[] = $website->getId();
+                    $ids[] = (int)$website->getId();
                 }
             }
             $this->setData('shared_website_ids', $ids);
