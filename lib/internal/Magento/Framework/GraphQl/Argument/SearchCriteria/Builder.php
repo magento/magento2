@@ -7,7 +7,6 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
-use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 

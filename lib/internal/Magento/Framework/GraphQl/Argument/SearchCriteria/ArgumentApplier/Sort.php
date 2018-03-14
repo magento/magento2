@@ -7,7 +7,6 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
-use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;

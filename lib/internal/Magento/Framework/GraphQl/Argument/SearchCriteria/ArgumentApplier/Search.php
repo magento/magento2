@@ -11,7 +11,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplierInterface;
-use Magento\Framework\GraphQl\ArgumentInterface;
 
 class Search implements ArgumentApplierInterface
 {

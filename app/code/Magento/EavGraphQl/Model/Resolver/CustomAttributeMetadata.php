@@ -9,7 +9,6 @@ namespace Magento\EavGraphQl\Model\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -45,7 +44,6 @@ class CustomAttributeMetadata implements ResolverInterface
         ResolveInfo $info
     ) : ?array {
         $attributes['items'] = null;
-        /** @var ArgumentInterface $attributeInputs */
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs as $attribute) {
             if (!isset($attribute['attribute_code']) || !isset($attribute['entity_type'])) {
@@ -87,7 +85,7 @@ class CustomAttributeMetadata implements ResolverInterface
     }
 
     /**
-     * Create GraphQL input exception for an invalid AttributeInput ArgumentValueInterface
+     * Create GraphQL input exception for an invalid attribute input
      *
      * @param array $attribute
      * @return GraphQlInputException

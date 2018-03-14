@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Argument\Filter\Connective;
 use Magento\Framework\GraphQl\Argument\Filter\Operator;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\Search\FilterGroup;

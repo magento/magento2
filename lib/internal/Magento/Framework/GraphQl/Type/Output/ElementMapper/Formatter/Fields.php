@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
@@ -29,11 +28,6 @@ class Fields implements FormatterInterface
      * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var ArgumentFactory
-     */
-    private $argumentFactory;
 
     /**
      * @var OutputMapper
@@ -62,7 +56,6 @@ class Fields implements FormatterInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
      * @param TypeFactory $typeFactory
@@ -71,7 +64,6 @@ class Fields implements FormatterInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ArgumentFactory $argumentFactory,
         OutputMapper $outputMapper,
         InputMapper $inputMapper,
         TypeFactory $typeFactory,
@@ -79,7 +71,6 @@ class Fields implements FormatterInterface
         WrappedTypeProcessor $wrappedTypeProcessor
     ) {
         $this->objectManager = $objectManager;
-        $this->argumentFactory = $argumentFactory;
         $this->outputMapper = $outputMapper;
         $this->inputMapper = $inputMapper;
         $this->typeFactory = $typeFactory;
