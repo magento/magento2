@@ -99,7 +99,6 @@ class Fields implements FormatterInterface
 
     /**
      * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function format(StructureInterface $typeStructure, OutputType $outputType) : array
     {
@@ -112,7 +111,13 @@ class Fields implements FormatterInterface
                 if ($typeStructure->getName() == $field->getType()) {
                     $type = $outputType;
                 } else {
-                    $type = $this->getFieldType($typeStructure, $field, $outputType);
+                    if ($typeStructure->getName() == $field->getType()) {
+                        $type = $outputType;
+                    } else {
+                        $type = $this->outputMapper->getTypeObject($field->getType());
+                    }
+
+                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
                 }
             }
             $config['fields'][$field->getName()] = [
@@ -136,27 +141,6 @@ class Fields implements FormatterInterface
             $config = $this->formatArguments($field, $config);
         }
         return $config;
-    }
-
-    /**
-     * Determine field's type based on configured attributes.
-     *
-     * @param StructureInterface $typeStructure
-     * @param Field $field
-     * @param OutputType $outputType
-     * @return OutputType
-     */
-    private function getFieldType(StructureInterface $typeStructure, Field $field, OutputType $outputType) : OutputType
-    {
-        if ($typeStructure->getName() == $field->getType()) {
-            $type = $outputType;
-        } else {
-            $type = $this->outputMapper->getTypeObject($field->getType());
-        }
-
-        $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
-
-        return $type;
     }
 
     /**

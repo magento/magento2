@@ -74,23 +74,11 @@ class InputMapper
     public function getRepresentation(Argument $argument) : array
     {
         $type = $argument->getType();
-        $calculateDefault = true;
         if ($this->scalarTypes->hasScalarTypeClass($type)) {
-            //$instance = $this->scalarTypes->getScalarTypeInstance($type);
             $instance = $this->wrappedTypeProcessor->processScalarWrappedType($argument);
-
-//            if ($argument->isList()) {
-//                $instance = $argument->areItemsRequired() ? $this->scalarTypes->createNonNull($instance) : $instance;
-//                $instance = $this->scalarTypes->createList($instance);
-//            }
-//
-//            if ($argument->isRequired()) {
-//                $instance = $this->scalarTypes->createNonNull($instance);
-//            }
         } else {
             $configElement = $this->config->getTypeStructure($type);
             $instance = $this->inputFactory->create($configElement);
-            $calculateDefault = false;
             $instance = $this->wrappedTypeProcessor->processWrappedType($argument, $instance);
         }
 
@@ -99,7 +87,7 @@ class InputMapper
             'description' => $argument->getDescription()
         ];
 
-        if ($calculateDefault && $argument->getDefault() !== null) {
+        if (!$this->scalarTypes->hasScalarTypeClass($type) && $argument->getDefault() !== null) {
             switch ($argument->getType()) {
                 case 'Int':
                     $calculatedArgument['defaultValue'] = (int)$argument->getDefault();
@@ -126,11 +114,7 @@ class InputMapper
      */
     public function getFieldRepresentation(string $type) : InputType
     {
-        if ($this->scalarTypes->hasScalarTypeClass($type)) {
-            return $this->scalarTypes->getScalarTypeInstance($type);
-        } else {
-            $configElement = $this->config->getTypeStructure($type);
-            return $this->inputFactory->create($configElement);
-        }
+        $configElement = $this->config->getTypeStructure($type);
+        return $this->inputFactory->create($configElement);
     }
 }
