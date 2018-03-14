@@ -27,9 +27,9 @@ class TSampleRepository implements TSampleRepositoryInterface
      *
      * @var array
      */
-    protected $registry = [
+    protected $registry = array(
         
-    ];
+    );
 
     /**
      * Extension attributes join processor.
