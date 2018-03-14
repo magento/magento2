@@ -420,4 +420,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="sessionManager" xsi:type="object">Magento\Framework\Session\SessionManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Address\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="general" xsi:type="object">Magento\Customer\Model\Address\Validator\General</item>
+                <item name="country" xsi:type="object">Magento\Customer\Model\Address\Validator\Country</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
