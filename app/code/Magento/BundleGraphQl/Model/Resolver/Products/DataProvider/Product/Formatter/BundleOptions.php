@@ -40,8 +40,6 @@ class BundleOptions implements FormatterInterface
     {
         if ($product->getTypeId() === Bundle::TYPE_CODE) {
             $productData = $this->formatBundleAttributes($productData);
-            $extensionAttributes = $product->getExtensionAttributes();
-            $productData['bundle_product_options'] = $extensionAttributes->getBundleProductOptions();
         }
 
         return $productData;
@@ -64,7 +62,7 @@ class BundleOptions implements FormatterInterface
             $product['ship_bundle_items']
                 = $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $product['shipment_type']);
         }
-        if (isset($product['price_view'])) {
+        if (isset($product['price_type'])) {
             $product['dynamic_price'] = !(bool)$product['price_type'];
         }
         if (isset($product['sku_type'])) {
