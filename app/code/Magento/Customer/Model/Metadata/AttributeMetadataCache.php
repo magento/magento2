@@ -54,6 +54,11 @@ class AttributeMetadataCache
     private $serializer;
 
     /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    private $backendAuthSession;
+
+    /**
      * Constructor
      *
      * @param CacheInterface $cache
@@ -65,12 +70,14 @@ class AttributeMetadataCache
         CacheInterface $cache,
         StateInterface $state,
         SerializerInterface $serializer,
-        AttributeMetadataHydrator $attributeMetadataHydrator
+        AttributeMetadataHydrator $attributeMetadataHydrator,
+        \Magento\Backend\Model\Auth\Session $backendAuthSession
     ) {
         $this->cache = $cache;
         $this->state = $state;
         $this->serializer = $serializer;
         $this->attributeMetadataHydrator = $attributeMetadataHydrator;
+        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -86,6 +93,10 @@ class AttributeMetadataCache
             return $this->attributes[$entityType . $suffix];
         }
         if ($this->isEnabled()) {
+            if ($this->backendAuthSession->isLoggedIn()) {
+                $roleId = $this->backendAuthSession->getUser()->getRole()->getId();
+                $suffix = $suffix . '_ROLEID_' . $roleId;
+            }
             $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
             $serializedData = $this->cache->load($cacheKey);
             if ($serializedData) {
@@ -113,6 +124,10 @@ class AttributeMetadataCache
     {
         $this->attributes[$entityType . $suffix] = $attributes;
         if ($this->isEnabled()) {
+            if ($this->backendAuthSession->isLoggedIn()) {
+                $roleId = $this->backendAuthSession->getUser()->getRole()->getId();
+                $suffix = $suffix . '_ROLEID_' . $roleId;
+            }
             $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
             $attributesData = [];
             foreach ($attributes as $key => $attribute) {
