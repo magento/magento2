@@ -33,6 +33,63 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_configurable_product.php
+     */
+    public function testConfigurableShipOrder()
+    {
+        $productsQuantity = 1;
+
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/ship',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'execute',
+            ],
+        ];
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+        ];
+
+        $shipmentId = (int)$this->_webApiCall($serviceInfo, $requestData);
+        $this->assertNotEmpty($shipmentId);
+
+        try {
+            $shipment = $this->shipmentRepository->get($shipmentId);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->fail('Failed asserting that Shipment was created');
+        }
+
+        $orderedQty = 0;
+        /** @var \Magento\Sales\Model\Order\Item $item */
+        foreach ($existingOrder->getItems() as $item) {
+            if ($item->isDummy(true)) {
+                continue;
+            }
+            $orderedQty += $item->getQtyOrdered();
+        }
+
+        $this->assertEquals(
+            (int)$shipment->getTotalQty(),
+            (int)$orderedQty,
+            'Failed asserting that quantity of ordered and shipped items is equal'
+        );
+        $this->assertEquals(
+            $productsQuantity,
+            count($shipment->getItems()),
+            'Failed asserting that quantity of products and sales shipment items is equal'
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Sales/_files/order_new.php
      */
     public function testShipOrder()
