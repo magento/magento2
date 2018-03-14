@@ -24,7 +24,7 @@ interface ResolverInterface
      * @param $context
      * @param ResolveInfo $info
      * @throws \Exception
-    * @return array|null
+     * @return array|null
     */
     public function resolve(
         Field $field,
