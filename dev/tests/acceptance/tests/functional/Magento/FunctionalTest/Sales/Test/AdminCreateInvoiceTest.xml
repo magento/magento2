@@ -14,7 +14,7 @@
             <stories value="Create an Invoice via the Admin"/>
             <title value="Create Invoice"/>
             <description value="Should be able to create an invoice via the admin."/>
-            <severity value="NORMAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
         </annotations>
