@@ -39,10 +39,9 @@ class FormPageActions extends ParentFormPageActions
     /**
      * Click on "Save" button.
      *
-     * @param FixtureInterface|null $product [optional]
      * @return void
      */
-    public function save(FixtureInterface $product = null)
+    public function save()
     {
         $this->_rootElement->find($this->toggleButton, Locator::SELECTOR_CSS)->click();
         parent::save();
