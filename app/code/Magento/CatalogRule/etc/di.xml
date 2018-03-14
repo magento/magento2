@@ -130,7 +130,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
         <arguments>
             <argument name="priceModifiers" xsi:type="array">
-                <item name="0" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
+                <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
             </argument>
         </arguments>
     </type>
