@@ -48,10 +48,9 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     /**
      * Returns connection
      *
-     * @todo: make method protected
      * @return AdapterInterface
      */
-    public function getConnection()
+    protected function getConnection()
     {
         if (!$this->connection) {
             $this->connection = $this->_resources->getConnection('sales');

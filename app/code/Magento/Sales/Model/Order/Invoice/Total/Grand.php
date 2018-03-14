@@ -13,12 +13,6 @@ class Grand extends AbstractTotal
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
-        /**
-         * Check order grand total and invoice amounts
-         */
-        if ($invoice->isLast()) {
-            //
-        }
         return $this;
     }
 }
