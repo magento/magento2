@@ -14,7 +14,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $consolidatedConfigMock;
+    protected $consolidatedMock;
 
     /**
      * @var \Magento\Integration\Model\ConfigBasedIntegrationManager
@@ -26,26 +26,40 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $integrationService;
 
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
-        /**
-         * @var $objectManager \Magento\TestFramework\ObjectManager
-         */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->consolidatedConfigMock = $this->createMock(\Magento\Integration\Model\ConsolidatedConfig::class);
-        $objectManager->addSharedInstance(
-            $this->consolidatedConfigMock,
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->consolidatedMock = $this->createMock(\Magento\Integration\Model\ConsolidatedConfig::class);
+        $this->objectManager->addSharedInstance(
+            $this->consolidatedMock,
             \Magento\Integration\Model\ConsolidatedConfig::class
         );
-        $this->integrationManager = $objectManager->create(
+        $this->integrationManager = $this->objectManager->create(
             \Magento\Integration\Model\ConfigBasedIntegrationManager::class,
             []
         );
-        $this->integrationService = $objectManager->create(
+        $this->integrationService = $this->objectManager->create(
             \Magento\Integration\Api\IntegrationServiceInterface::class,
             []
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(\Magento\Integration\Model\ConsolidatedConfig::class);
+        parent::tearDown();
     }
 
     /**
@@ -54,7 +68,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
     public function testProcessConfigBasedIntegrations()
     {
         $newIntegrations = require __DIR__ . '/Config/Consolidated/_files/integration.php';
-        $this->consolidatedConfigMock
+        $this->consolidatedMock
             ->expects($this->any())
             ->method('getIntegrations')
             ->willReturn($newIntegrations);
