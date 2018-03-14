@@ -326,6 +326,11 @@ class AccountManagement implements AccountManagementInterface
     private $accountConfirmation;
 
     /**
+     * @var PasswordStrengthCheckerInterface
+     */
+    private $passwordStrengthChecker;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -350,12 +355,12 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param CredentialsValidator|null $credentialsValidator
-     * @param DateTimeFactory|null $dateTimeFactory
-     * @param AccountConfirmation|null $accountConfirmation
      * @param DateTimeFactory $dateTimeFactory
+     * @param AccountConfirmation|null $accountConfirmation
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
+     * @param PasswordStrengthCheckerInterface|null $passwordStrengthChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -387,7 +392,8 @@ class AccountManagement implements AccountManagementInterface
         AccountConfirmation $accountConfirmation = null,
         SessionManagerInterface $sessionManager = null,
         SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null
+        CollectionFactory $visitorCollectionFactory = null,
+        PasswordStrengthCheckerInterface $passwordStrengthChecker = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -423,6 +429,8 @@ class AccountManagement implements AccountManagementInterface
             ?: ObjectManager::getInstance()->get(SaveHandlerInterface::class);
         $this->visitorCollectionFactory = $visitorCollectionFactory
             ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->passwordStrengthChecker = $passwordStrengthChecker
+            ?: ObjectManager::getInstance()->get(PasswordStrengthCheckerInterface::class);
     }
 
     /**
@@ -626,42 +634,11 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function checkPasswordStrength($password)
     {
-        $this->eventManager->dispatch('customer_check_password_strength_before', [$password]);
+        $strengthResult = $this->passwordStrengthChecker->check($password);
 
-        $length = $this->stringHelper->strlen($password);
-        if ($length > self::MAX_PASSWORD_LENGTH) {
-            throw new InputException(
-                __(
-                    'Please enter a password with at most %1 characters.',
-                    self::MAX_PASSWORD_LENGTH
-                )
-            );
+        if (!$strengthResult->getIsValid()) {
+            throw new InputException($strengthResult->getMessage());
         }
-        $configMinPasswordLength = $this->getMinPasswordLength();
-        if ($length < $configMinPasswordLength) {
-            throw new InputException(
-                __(
-                    'Please enter a password with at least %1 characters.',
-                    $configMinPasswordLength
-                )
-            );
-        }
-        if ($this->stringHelper->strlen(trim($password)) != $length) {
-            throw new InputException(__('The password can\'t begin or end with a space.'));
-        }
-
-        $requiredCharactersCheck = $this->makeRequiredCharactersCheck($password);
-        if ($requiredCharactersCheck !== 0) {
-            throw new InputException(
-                __(
-                    'Minimum of different classes of characters in password is %1.' .
-                    ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                    $requiredCharactersCheck
-                )
-            );
-        }
-
-        $this->eventManager->dispatch('customer_check_password_strength_after', [$password]);
     }
 
     /**

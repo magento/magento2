@@ -49,6 +49,10 @@
                 type="Magento\Customer\Model\Authentication" />
     <preference for="Magento\Customer\Model\EmailNotificationInterface"
                 type="Magento\Customer\Model\EmailNotification" />
+    <preference for="Magento\Customer\Model\PasswordStrengthCheckerInterface"
+                type="Magento\Customer\Model\PasswordStrengthChecker"/>
+    <preference for="Magento\Customer\Model\PasswordStrengthChecker\ResultInterface"
+                type="Magento\Customer\Model\PasswordStrengthChecker\Result"/>
     <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
                 type="Magento\Customer\Helper\View" />
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
