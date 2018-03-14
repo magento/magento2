@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "515dea17aa476ce86a88aa67eb2e3263",
-    "content-hash": "17e237a86feb252b106b651946bd898f",
+    "hash": "ab176287e06df4501eabb23d308959cb",
+    "content-hash": "fc4d6d51bf1d69473aab77b19380d74e",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -672,17 +672,24 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.13.1",
+            "version": "dev-deprecated-7.2-code",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/zf1.git",
-                "reference": "e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf"
+                "url": "https://github.com/magento-engcom/zf1-php-7.2-support.git",
+                "reference": "1366f3fcca399f80c4b3195b8a0707ee460821c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf",
-                "reference": "e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf",
+                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/1366f3fcca399f80c4b3195b8a0707ee460821c7",
+                "reference": "1366f3fcca399f80c4b3195b8a0707ee460821c7",
                 "shasum": ""
+            },
+            "archive": {
+                "exclude": [
+                    "/demos",
+                    "/documentation",
+                    "/tests"
+                ]
             },
             "require": {
                 "php": ">=5.2.11"
@@ -702,7 +709,6 @@
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
@@ -712,10 +718,14 @@
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "ZF1",
-                "framework"
+                "framework",
+                "zf1"
             ],
-            "time": "2017-06-21 14:56:23"
+            "support": {
+                "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/deprecated-7.2-code",
+                "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
+            },
+            "time": "2018-03-12 19:46:30"
         },
         {
             "name": "monolog/monolog",
@@ -1027,6 +1037,55 @@
                 "rabbitmq"
             ],
             "time": "2015-08-11 12:30:09"
+        },
+        {
+            "name": "phpseclib/mcrypt_compat",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/mcrypt_compat.git",
+                "reference": "034ee0e920c70b589196d0bb0a7e8babae5fce08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/034ee0e920c70b589196d0bb0a7e8babae5fce08",
+                "reference": "034ee0e920c70b589196d0bb0a7e8babae5fce08",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "phpseclib/phpseclib": "~2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0"
+            },
+            "suggest": {
+                "ext-openssl": "Will enable faster cryptographic operations"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/mcrypt.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "homepage": "http://phpseclib.sourceforge.net"
+                }
+            ],
+            "description": "PHP 7.1 polyfill for the mcrypt extension from PHP <= 7.0",
+            "keywords": [
+                "cryptograpy",
+                "encryption",
+                "mcrypt"
+            ],
+            "time": "2018-01-13 23:07:52"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -6247,10 +6306,18 @@
             "time": "2018-01-29 19:49:41"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.14.0",
+            "alias_normalized": "1.14.0.0",
+            "version": "dev-deprecated-7.2-code",
+            "package": "magento/zendframework1"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
+        "magento/zendframework1": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
