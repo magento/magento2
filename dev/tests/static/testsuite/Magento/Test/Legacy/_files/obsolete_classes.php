@@ -4221,11 +4221,7 @@ return [
     ],
     ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
     ['Magento\Framework\MessageQueue\PublisherFactory'],
-<<<<<<< HEAD
     ['Magento\Framework\MessageQueue\PublisherProxy'],
     ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
-    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
-=======
-    ['Magento\Framework\MessageQueue\PublisherProxy']
->>>>>>> MAGETWO-88797-cms_block_duplication
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton']
 ];
