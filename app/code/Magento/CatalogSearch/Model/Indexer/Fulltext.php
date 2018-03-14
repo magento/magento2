@@ -78,11 +78,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $processManager;
 
     /**
-     * @var int
-     */
-    private $threadsCount;
-
-    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param StoreManagerInterface $storeManager
@@ -93,7 +88,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
      * @param ProcessManager $processManager
-     * @param int $threadsCount
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -105,8 +99,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         array $data,
         IndexSwitcherInterface $indexSwitcher = null,
         State $indexScopeState = null,
-        ProcessManager $processManager = null,
-        int $threadsCount = 4 //Will be moved to the env.php
+        ProcessManager $processManager = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -127,7 +120,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         $this->indexSwitcher = $indexSwitcher;
         $this->indexScopeState = $indexScopeState;
         $this->processManager = $processManager;
-        $this->threadsCount = $threadsCount;
     }
 
     /**
@@ -169,7 +161,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
 
         }
 
-        $this->processManager->execute($userFunctions, $this->threadsCount);
+        $this->processManager->execute($userFunctions);
 
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();

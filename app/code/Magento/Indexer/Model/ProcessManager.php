@@ -10,17 +10,27 @@ namespace Magento\Indexer\Model;
  */
 class ProcessManager
 {
+    /**
+     * Threads count environment variable name
+     */
+    const THREADS_COUNT = 'MAGE_INDEXER_THREADS_COUNT';
+
     /** @var bool */
     private $failInChildProcess = false;
 
     /** @var \Magento\Framework\App\ResourceConnection */
     private $resource;
 
+    /** @var int|null */
+    private $threadsCount;
+
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param int|null $threadsCount
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource = null
+        \Magento\Framework\App\ResourceConnection $resource = null,
+        int $threadsCount = null
     ) {
         if (null === $resource) {
             $resource = \Magento\Framework\App\ObjectManager::getInstance()->get(
@@ -28,18 +38,18 @@ class ProcessManager
             );
         }
         $this->resource = $resource;
+        $this->threadsCount = (int)$threadsCount;
     }
 
     /**
      * Execute user functions
      *
      * @param \Traversable $userFunctions
-     * @param int $threadsCount
      */
-    public function execute($userFunctions, $threadsCount)
+    public function execute($userFunctions)
     {
-        if ($threadsCount > 1 && $this->isCanBeParalleled()) {
-            $this->multiThreadsExecute($userFunctions, $threadsCount);
+        if ($this->threadsCount > 1 && $this->isCanBeParalleled()) {
+            $this->multiThreadsExecute($userFunctions);
         } else {
             $this->simpleThreadExecute($userFunctions);
         }
@@ -61,9 +71,8 @@ class ProcessManager
      * Execute user functions in in multiThreads mode
      *
      * @param \Traversable $userFunctions
-     * @param int $threadsCount
      */
-    private function multiThreadsExecute($userFunctions, $threadsCount)
+    private function multiThreadsExecute($userFunctions)
     {
         $this->resource->closeConnection(null);
         $threadNumber = 0;
@@ -72,7 +81,7 @@ class ProcessManager
             if ($pid == -1) {
                 throw new \RuntimeException('Unable to fork a new process');
             } elseif ($pid) {
-                $this->executeParentProcess($threadNumber, $threadsCount);
+                $this->executeParentProcess($threadNumber);
             } else {
                 $this->startChildProcess($userFunction);
             }
@@ -111,12 +120,11 @@ class ProcessManager
      * Execute parent process
      *
      * @param int $threadNumber
-     * @param int $threadsCount
      */
-    private function executeParentProcess(&$threadNumber, $threadsCount)
+    private function executeParentProcess(&$threadNumber)
     {
         $threadNumber++;
-        if ($threadNumber >= $threadsCount) {
+        if ($threadNumber >= $this->threadsCount) {
             pcntl_wait($status);
             if (pcntl_wexitstatus($status) !== 0) {
                 $this->failInChildProcess = true;
