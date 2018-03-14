@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab176287e06df4501eabb23d308959cb",
-    "content-hash": "fc4d6d51bf1d69473aab77b19380d74e",
+    "hash": "fa404416b0dfa6063cda27d6b6ea40be",
+    "content-hash": "80e74dc347ccd2c94e3b53a5d3dca08d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -56,20 +56,17 @@
         },
         {
             "name": "colinmollenhour/cache-backend-file",
-            "version": "1.4",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_File.git",
-                "reference": "51251b80a817790eb624fbe2afc882c14f3c4fb0"
+                "reference": "3146110d4d0f79e016a4f99c36794d5ed50c4652"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/51251b80a817790eb624fbe2afc882c14f3c4fb0",
-                "reference": "51251b80a817790eb624fbe2afc882c14f3c4fb0",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/3146110d4d0f79e016a4f99c36794d5ed50c4652",
+                "reference": "3146110d4d0f79e016a4f99c36794d5ed50c4652",
                 "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
             },
             "type": "magento-module",
             "autoload": {
@@ -88,7 +85,7 @@
             ],
             "description": "The stock Zend_Cache_Backend_File backend has extremely poor performance for cleaning by tags making it become unusable as the number of cached items increases. This backend makes many changes resulting in a huge performance boost, especially for tag cleaning.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_File",
-            "time": "2016-05-02 16:24:47"
+            "time": "2018-03-02 17:44:39"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
