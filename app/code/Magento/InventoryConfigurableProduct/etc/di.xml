@@ -12,8 +12,22 @@
             <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
         </arguments>
     </type>
-    <preference for="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk"
-                type="Magento\InventoryConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" />
+    <preference for="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" type="Magento\InventoryConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk"/>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="stock_status" xsi:type="object">Magento\InventoryConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\IsStockItemSalableConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\InventoryConfigurableProduct\Model\ResourceModel\IsStockItemSalableCondition\GetConfigurableCondition</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductQuantityProvider">
         <plugin name="adapt_product_quantity_provider"
                 type="Magento\InventoryConfigurableProduct\Plugin\ConfigurableProduct\Ui\DataProvider\ProductFormModifier\AdaptProductQuantityProviderPlugin"/>

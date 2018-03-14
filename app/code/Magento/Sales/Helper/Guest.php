@@ -178,6 +178,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
     {
         $breadcrumbs = $resultPage->getLayout()->getBlock('breadcrumbs');
+        if (!$breadcrumbs) {
+            return;
+        }
         $breadcrumbs->addCrumb(
             'home',
             [

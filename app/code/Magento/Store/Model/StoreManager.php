@@ -29,7 +29,7 @@ class StoreManager implements
     const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
 
     /**
-     * Wether single store mode enabled or not
+     * Whether single store mode enabled or not
      */
     const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 

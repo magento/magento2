@@ -28,7 +28,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTagsWithObject()
     {
-        $this->assertEquals([], $this->model->getTags(new \StdClass));
+        $this->assertEquals([], $this->model->getTags(new \stdClass));
     }
 
     public function testGetTagsWithIdentityInterface()

@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Test\Unit\Tree;
 
 class NodeTest extends \PHPUnit\Framework\TestCase
@@ -93,21 +94,21 @@ class NodeTest extends \PHPUnit\Framework\TestCase
                     'node_data' => null,
                     'keys' => null,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty array of node information',
+                'The node information is empty. Enter the information and try again.',
             ],
             [
                 [
                     'node_data' => null,
                     'keys' => true,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty array of node information'
+                'The node information is empty. Enter the information and try again.'
             ],
             [
                 [
                     'node_data' => true,
                     'keys' => null,
                 ], \Magento\Framework\Exception\LocalizedException::class,
-                'Empty keys array'
+                'Enter the encryption key and try again.'
             ]
         ];
     }

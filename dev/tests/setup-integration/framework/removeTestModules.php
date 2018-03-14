@@ -8,7 +8,9 @@
  * @var $testFrameworkDir string - Must be defined in parent script.
  */
 
-/** Copy test modules to app/code/Magento to make them visible for Magento instance */
+/**
+ * Copy test modules to app/code/Magento to make them visible for Magento instance.
+ */
 $pathToCommittedTestModules = $testFrameworkDir . '/../_files/Magento';
 $pathToInstalledMagentoInstanceModules = $testFrameworkDir . '/../../../../app/code/Magento';
 $iterator = new RecursiveIteratorIterator(

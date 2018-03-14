@@ -62,8 +62,9 @@
       <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
         <script>
         require([
-            'tinymce'
+            "wysiwygAdapter"
         ], function(tinyMCE){
+
             tinyMCE.init({
                 mode : "exact",
                 theme : "advanced",
