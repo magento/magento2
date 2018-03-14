@@ -53,10 +53,8 @@ class Copier
         //add unique identifier - url key
         $newPage->setId(null);
         $identifier = $newPage->getIdentifier() .  '-' . uniqid();
-        $title = $newPage->getTitle() . '-1';
         $newPage->setIdentifier($identifier);
         $newPage->setIsActive(false);
-        $newPage->setTitle($title);
         return $this->pageRepository->save($newPage);
     }
 }
