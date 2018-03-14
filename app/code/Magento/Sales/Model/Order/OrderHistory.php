@@ -6,13 +6,11 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Api\OrderHistoryInterface;
-
 /**
  * Class OrderHistory
  * @package Magento\Sales\Model\Order
  */
-class OrderHistory implements OrderHistoryInterface
+class OrderHistory
 {
     /**
      * Map history items as array
@@ -23,7 +21,7 @@ class OrderHistory implements OrderHistoryInterface
      * @param string $comment
      * @return array
      */
-    protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
+    private function _prepareHistoryItem($label, $notified, $created, $comment = '')
     {
         return ['title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created];
     }

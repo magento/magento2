@@ -8,8 +8,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Sales\Helper\Admin;
-use Magento\Sales\Api\OrderHistoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\Order\OrderHistory;
 
 /**
  * Order history tab
@@ -41,13 +41,13 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     /**
      * @var \Magento\Sales\Model\Order\History
      */
-    protected $history;
+    private $history;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
-     * @param \Magento\Sales\Api\OrderHistoryInterface $history
+     * @param \Magento\Sales\Model\Order\OrderHistory $history
      * @param array $data
      */
     public function __construct(
@@ -55,12 +55,12 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         Registry $registry,
         Admin $adminHelper,
         array $data = [],
-        OrderHistoryInterface $history = null
+        OrderHistory $history = null
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
         $this->adminHelper = $adminHelper;
-        $this->history = $history ?: ObjectManager::getInstance()->get(OrderHistoryInterface::class);
+        $this->history = $history ?: ObjectManager::getInstance()->get(OrderHistory::class);
     }
 
     /**
