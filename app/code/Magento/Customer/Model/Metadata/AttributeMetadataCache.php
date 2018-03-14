@@ -66,20 +66,20 @@ class AttributeMetadataCache
      * @param StateInterface $state
      * @param SerializerInterface $serializer
      * @param AttributeMetadataHydrator $attributeMetadataHydrator
-     * @param BackendSession $backendSessionFactory
+     * @param BackendSession $backendSession
      */
     public function __construct(
         CacheInterface $cache,
         StateInterface $state,
         SerializerInterface $serializer,
         AttributeMetadataHydrator $attributeMetadataHydrator,
-        BackendSession $backendSessionFactory
+        BackendSession $backendSession
     ) {
         $this->cache = $cache;
         $this->state = $state;
         $this->serializer = $serializer;
         $this->attributeMetadataHydrator = $attributeMetadataHydrator;
-        $this->backendAuthSession = $backendSessionFactory->create();
+        $this->backendAuthSession = $backendSession->create();
     }
 
     /**
