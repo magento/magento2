@@ -18,9 +18,6 @@ use Magento\Ui\Component\Form;
  */
 class InventoryConfigurablePanel extends AbstractModifier
 {
-    const RECORD = 'record';
-    const QUANTITY_CONTAINER = 'quantity_container';
-
     /**
      * @var LocatorInterface
      */
@@ -82,8 +79,7 @@ class InventoryConfigurablePanel extends AbstractModifier
         if ($this->allowedProductTypes->isAllowedProductType($this->locator->getProduct())) {
             $matrix = $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children'][ConfigurablePanel::CONFIGURABLE_MATRIX];
 
-            $matrix['children'][static::RECORD]['children'][static::QUANTITY_CONTAINER]
-                = $this->getQuantityContainerConfig();
+            $matrix['children']['record']['children']['quantity_container'] = $this->getQuantityContainerConfig();
 
             $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children'][ConfigurablePanel::CONFIGURABLE_MATRIX] = $matrix;
         }
