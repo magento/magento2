@@ -87,12 +87,13 @@ class ProcessManager
                 $this->startChildProcess($userFunction);
             }
         }
-        while(pcntl_waitpid(0, $status) != -1);
+        while (pcntl_waitpid(0, $status) != -1) {
+            //Waiting for the completion of child processes
+        }
 
         if ($this->failInChildProcess) {
             throw new \RuntimeException('Fail in child process');
         }
-
     }
 
     /**

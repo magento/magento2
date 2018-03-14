@@ -104,9 +104,9 @@ class ResourceConnection
     public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
     {
         if ($resourceName === null) {
-            foreach ($this->connections as $processConnectionName => $value) {
-                if ($this->connections[$processConnectionName] instanceof AdapterInterface) {
-                    $this->connections[$processConnectionName]->closeConnection();
+            foreach ($this->connections as $processConnection) {
+                if ($processConnection instanceof AdapterInterface) {
+                    $processConnection->closeConnection();
                 }
             }
             $this->connections = [];
