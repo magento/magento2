@@ -101,18 +101,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->productIds[] = $productId;
 
-        return $this;
-    }
-
-    /**
-     * Add product ids filter to select.
-     *
-     * @return $this
-     */
-    protected function _beforeLoad()
-    {
-        parent::_beforeLoad();
-
         $productTable = $this->getTable('catalog_product_entity');
         $linkField = $this->getConnection()->getAutoIncrementField($productTable);
         $this->getSelect()->join(
@@ -120,11 +108,23 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            "cpe.entity_id in (?)",
+            "cpe.entity_id = (?)",
             $this->productIds
         );
 
         return $this;
+    }
+
+    /**
+     * Clear product id's after load to insure valid future usage of collection.
+     *
+     * @return $this
+     */
+    protected function _afterLoad()
+    {
+        $this->productIds = [];
+
+        return parent::_afterLoad();
     }
 
     /**
