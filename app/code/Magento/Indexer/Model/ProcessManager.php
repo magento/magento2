@@ -71,6 +71,7 @@ class ProcessManager
      * Execute user functions in in multiThreads mode
      *
      * @param \Traversable $userFunctions
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function multiThreadsExecute($userFunctions)
     {
@@ -108,6 +109,7 @@ class ProcessManager
      * Start child process
      *
      * @param callable $userFunction
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function startChildProcess($userFunction)
     {

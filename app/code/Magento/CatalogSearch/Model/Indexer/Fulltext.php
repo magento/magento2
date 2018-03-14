@@ -88,6 +88,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
      * @param ProcessManager $processManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -158,7 +159,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
             $userFunctions[$storeId] = function () use ($storeId) {
                 return $this->executeFullByStore($storeId);
             };
-
         }
 
         $this->processManager->execute($userFunctions);
