@@ -2119,6 +2119,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $sku = $rowData[self::COL_SKU];
                 if ($this->skuProcessor->getNewSku($sku) !== null) {
                     $row = $this->formatStockDataForRow($rowData);
+                    $productIdsToReindex[] = $row['product_id'];
                 }
 
                 if (!isset($stockData[$sku])) {
@@ -2821,8 +2822,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $sku = $rowData[self::COL_SKU];
         $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
-        $productIdsToReindex[] = $row['product_id'];
-
         $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
         $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
