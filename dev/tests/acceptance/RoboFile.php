@@ -43,7 +43,7 @@ class RoboFile extends \Robo\Tasks
      * @param array $opts
      * @return void
      */
-    function generateTests($opts = ['config' => null, 'force' => false])
+    function generateTests($opts = ['config' => null, 'force' => false, 'nodes' => null])
     {
         $GLOBALS['GENERATE_TESTS'] = true;
 
@@ -53,7 +53,7 @@ class RoboFile extends \Robo\Tasks
         }
 
         require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config']);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config'], $opts['nodes']);
         $this->say("Generate Tests Command Run");
     }
 
