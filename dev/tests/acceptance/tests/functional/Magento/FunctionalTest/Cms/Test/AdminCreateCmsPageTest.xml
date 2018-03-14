@@ -35,7 +35,9 @@
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillFieldContent"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="waitForSaveButtonVisible"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>

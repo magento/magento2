@@ -82,6 +82,45 @@
         <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
         <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter1" visible="true"/>
+        <waitForPageLoad stepKey="waitForFilterReload"/>
+        <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
+        <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
+        <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
+        <waitForPageLoad stepKey="waitForPageLoad8" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad9" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearAfterClickingBtnChooser" />
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
+        <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
+        <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
+        <wait time="3" stepKey="wait1" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSaveCmsPage" />
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad11" />
         <!--see Default Variable on Storefront-->

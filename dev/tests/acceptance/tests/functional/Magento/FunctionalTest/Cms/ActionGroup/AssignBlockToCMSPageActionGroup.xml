@@ -45,6 +45,8 @@
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
         <waitForPageLoad stepKey="waitForPageLoad4" />
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
     </actionGroup>
 </actionGroups>

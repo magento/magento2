@@ -4220,4 +4220,6 @@ return [
     ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
     ['Magento\Framework\MessageQueue\PublisherFactory'],
     ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
 ];
