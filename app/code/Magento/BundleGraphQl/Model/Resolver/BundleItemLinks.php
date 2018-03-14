@@ -43,7 +43,7 @@ class BundleItemLinks implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?array
     {
         /** @var Collection $linkCollection */
         $linkCollection = $this->linkCollectionFactory->create();

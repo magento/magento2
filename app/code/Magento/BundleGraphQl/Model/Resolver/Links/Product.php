@@ -40,7 +40,7 @@ class Product implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?array
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($value['sku']);

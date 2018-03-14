@@ -54,7 +54,7 @@ class BundleItems implements ResolverInterface
      *
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?array
     {
         if ($value['type_id'] !== Type::TYPE_CODE) {
             return $value;
