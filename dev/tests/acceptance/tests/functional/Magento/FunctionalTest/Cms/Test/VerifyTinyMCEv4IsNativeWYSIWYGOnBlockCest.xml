@@ -38,7 +38,8 @@
         <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
         <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
         <see selector="{{TinyMCESection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
-        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>

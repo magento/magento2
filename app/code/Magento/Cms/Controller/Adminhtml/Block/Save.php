@@ -17,6 +17,11 @@ use Magento\Framework\Registry;
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
+     * Max number of retries for saving duplicated block
+     */
+    const MAX_RETRIES = 100;
+
+    /**
      * @var DataPersistorInterface
      */
     protected $dataPersistor;
@@ -64,6 +69,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
+        $redirect = $data['back'];
         if ($data) {
             if (isset($data['is_active']) && $data['is_active'] === 'true') {
                 $data['is_active'] = Block::STATUS_ENABLED;
@@ -91,10 +97,19 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
-                if ($this->getRequest()->getParam('back')) {
+                if ($redirect == 'continue') {
                     return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
+                } else if ($redirect == 'close') {
+                    return $resultRedirect->setPath('*/*/');
+                } else if ($redirect == 'duplicate') {
+                    $data['is_active'] = Block::STATUS_DISABLED;
+                    $data['identifier'] = $data['identifier'] . uniqid();
+                    $this->dataPersistor->set('cms_block', $data);
+                    $model->setData($data);
+                    $this->blockRepository->save($model);
+                    $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
+                    return $resultRedirect->setPath('*/*/edit/block_id/' . $model->getId());
                 }
-                return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {

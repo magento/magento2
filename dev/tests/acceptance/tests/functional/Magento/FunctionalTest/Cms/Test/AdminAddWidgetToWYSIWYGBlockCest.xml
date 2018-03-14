@@ -43,7 +43,8 @@
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
-        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
