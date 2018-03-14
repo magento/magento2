@@ -16,7 +16,7 @@ class ScalarTypes
      * @param string $typeName
      * @return bool
      */
-    public function hasScalarTypeClass(string $typeName) : bool
+    public function hasScalarTypeName(string $typeName) : bool
     {
         $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
         return isset($internalTypes[$typeName]) ? true : false;
@@ -30,7 +30,7 @@ class ScalarTypes
     public function getScalarTypeInstance(string $typeName) : \GraphQL\Type\Definition\Type
     {
         $internalTypes = \GraphQL\Type\Definition\Type::getInternalTypes();
-        if ($this->hasScalarTypeClass($typeName)) {
+        if ($this->hasScalarTypeName($typeName)) {
             return $internalTypes[$typeName];
         } else {
             throw new \LogicException(sprintf('Scalar type %s doesn\'t exist', $typeName));

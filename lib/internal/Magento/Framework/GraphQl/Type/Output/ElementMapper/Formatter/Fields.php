@@ -105,16 +105,16 @@ class Fields implements FormatterInterface
         $config = [];
         /** @var Field $field */
         foreach ($typeStructure->getFields() as $field) {
-            if ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
+            if ($this->scalarTypes->hasScalarTypeName($field->getTypeName())) {
                 $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
-                if ($typeStructure->getName() == $field->getType()) {
+                if ($typeStructure->getName() == $field->getTypeName()) {
                     $type = $outputType;
                 } else {
-                    if ($typeStructure->getName() == $field->getType()) {
+                    if ($typeStructure->getName() == $field->getTypeName()) {
                         $type = $outputType;
                     } else {
-                        $type = $this->outputMapper->getTypeObject($field->getType());
+                        $type = $this->outputMapper->getTypeObject($field->getTypeName());
                     }
 
                     $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);

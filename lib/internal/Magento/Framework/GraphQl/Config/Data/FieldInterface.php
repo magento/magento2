@@ -17,7 +17,7 @@ interface FieldInterface extends StructureInterface
      *
      * @return string
      */
-    public function getType() : string;
+    public function getTypeName() : string;
 
     /**
      * Return true if argument is a list of input items, otherwise false if it is a single object/scalar.

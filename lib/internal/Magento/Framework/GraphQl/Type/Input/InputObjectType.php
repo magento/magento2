@@ -57,13 +57,13 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
             'description' => $structure->getDescription()
         ];
         foreach ($structure->getFields() as $field) {
-            if ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
+            if ($this->scalarTypes->hasScalarTypeName($field->getTypeName())) {
                 $type = $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
-                if ($field->getType() == $structure->getName()) {
+                if ($field->getTypeName() == $structure->getName()) {
                     $type = $this;
                 } else {
-                    $type = $inputMapper->getFieldRepresentation($field->getType());
+                    $type = $inputMapper->getFieldRepresentation($field->getTypeName());
                 }
                 $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
             }

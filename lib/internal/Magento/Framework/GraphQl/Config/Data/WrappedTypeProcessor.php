@@ -64,7 +64,7 @@ class WrappedTypeProcessor
         TypeInterface $object = null
     ) : \GraphQL\Type\Definition\Type {
         if (!$object) {
-            $object = $this->scalarTypes->getScalarTypeInstance($field->getType());
+            $object = $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         }
         return $this->processScalarIsNullable($field, $this->processScalarIsList($field, $object));
     }
@@ -115,7 +115,7 @@ class WrappedTypeProcessor
         FieldInterface $field,
         \GraphQL\Type\Definition\Type $object = null
     ) : \GraphQL\Type\Definition\Type {
-        $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getType());
+        $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         if ($field->isRequired()) {
             return $this->scalarTypes->createNonNull($object);
         }
@@ -133,7 +133,7 @@ class WrappedTypeProcessor
         FieldInterface $field,
         \GraphQL\Type\Definition\Type $object = null
     ) : \GraphQL\Type\Definition\Type {
-        $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getType());
+        $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         if ($field->isList()) {
             if ($field instanceof \Magento\Framework\GraphQl\Config\Data\Argument) {
                 if ($field->areItemsRequired()) {
