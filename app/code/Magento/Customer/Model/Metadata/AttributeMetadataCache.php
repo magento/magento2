@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Backend\Model\Auth\SessionFactory as BackendSession;
 
 /**
  * Cache for attribute metadata
@@ -65,19 +66,20 @@ class AttributeMetadataCache
      * @param StateInterface $state
      * @param SerializerInterface $serializer
      * @param AttributeMetadataHydrator $attributeMetadataHydrator
+     * @param BackendSession $backendSessionFactory
      */
     public function __construct(
         CacheInterface $cache,
         StateInterface $state,
         SerializerInterface $serializer,
         AttributeMetadataHydrator $attributeMetadataHydrator,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
+        BackendSession $backendSessionFactory
     ) {
         $this->cache = $cache;
         $this->state = $state;
         $this->serializer = $serializer;
         $this->attributeMetadataHydrator = $attributeMetadataHydrator;
-        $this->backendAuthSession = $backendAuthSession;
+        $this->backendAuthSession = $backendSessionFactory->create();
     }
 
     /**
