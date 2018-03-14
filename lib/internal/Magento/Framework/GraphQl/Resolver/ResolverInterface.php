@@ -25,7 +25,7 @@ interface ResolverInterface
      * @param ResolveInfo $info
      * @throws \Exception
      * @return array|null
-    */
+     */
     public function resolve(
         Field $field,
         array $value = null,
