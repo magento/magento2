@@ -15,8 +15,8 @@ services:
   - rabbitmq
 language: php
 php:
-  - 7.0
   - 7.1
+  - 7.2
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
@@ -34,13 +34,13 @@ env:
     - TEST_SUITE=functional
 matrix:
   exclude:
-    - php: 7.0
+    - php: 7.1
       env: TEST_SUITE=static
-    - php: 7.0
+    - php: 7.1
       env: TEST_SUITE=js GRUNT_COMMAND=spec
-    - php: 7.0
+    - php: 7.1
       env: TEST_SUITE=js GRUNT_COMMAND=static
-    - php: 7.0
+    - php: 7.1
       env: TEST_SUITE=functional
 cache:
   apt: true
