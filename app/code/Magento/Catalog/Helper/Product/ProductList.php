@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
 /**
@@ -50,7 +48,9 @@ class ProductList
         \Magento\Framework\Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
+        $this->coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Registry::class
+        );
     }
 
     /**
@@ -60,7 +60,11 @@ class ProductList
      */
     public function getAvailableViewMode()
     {
-        switch ($this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        $value = $this->scopeConfig->getValue(
+            self::XML_PATH_LIST_MODE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        switch ($value) {
             case 'grid':
                 $availableMode = ['grid' => __('Grid')];
                 break;

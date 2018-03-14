@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Crontab;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -86,7 +87,7 @@ class CrontabManager implements CrontabManagerInterface
     public function saveTasks(array $tasks)
     {
         if (!$tasks) {
-            throw new LocalizedException(new Phrase('List of tasks is empty'));
+            throw new LocalizedException(new Phrase('The list of tasks is empty. Add tasks and try again.'));
         }
 
         $this->checkSupportedOs();
@@ -99,7 +100,7 @@ class CrontabManager implements CrontabManagerInterface
             }
 
             if (empty($task['command'])) {
-                throw new LocalizedException(new Phrase('Command should not be empty'));
+                throw new LocalizedException(new Phrase("The command shouldn't be empty. Enter and try again."));
             }
 
             $tasks[$key]['command'] = str_replace(
@@ -138,6 +139,11 @@ class CrontabManager implements CrontabManagerInterface
     private function generateSection($content, $tasks = [])
     {
         if ($tasks) {
+            // Add EOL symbol to previous line if not exist.
+            if (substr($content, -strlen(PHP_EOL)) !== PHP_EOL) {
+                $content .= PHP_EOL;
+            }
+
             $content .= $this->getTasksBlockStart() . PHP_EOL;
             foreach ($tasks as $task) {
                 $content .= $task['expression'] . ' ' . PHP_BINARY . ' ' . $task['command'] . PHP_EOL;

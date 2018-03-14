@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Block\System\Config\Form;
 
 /**
@@ -16,7 +14,8 @@ namespace Magento\Config\Block\System\Config\Form;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-class Field extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Field extends \Magento\Backend\Block\Template implements
+    \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Retrieve element HTML markup

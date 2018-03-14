@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;

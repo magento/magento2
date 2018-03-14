@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order\Address;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
@@ -84,7 +85,7 @@ class Validator
         $warnings = [];
         foreach ($this->required as $code => $label) {
             if (!$address->hasData($code)) {
-                $warnings[] = sprintf('%s is a required field', $label);
+                $warnings[] = sprintf('"%s" is required. Enter and try again.', $label);
             }
         }
         if (!filter_var($address->getEmail(), FILTER_VALIDATE_EMAIL)) {

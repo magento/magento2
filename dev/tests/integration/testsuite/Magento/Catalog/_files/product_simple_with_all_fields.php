@@ -16,23 +16,24 @@ $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductReposito
 $product = $productRepository->get('simple', true);
 $eavAttributeValues = [
     'category_ids' => [2],
-    'cost' => 123.234,
+    'cost' => 2.234,
     'country_of_manufacture' => 'US',
     'msrp' => 10.48,
     'gift_message_available' => 0,
-    'minimal_price' => 450,
     'msrp_display_actual_price_type' => 0,
     'news_from_date' => '2017-08-10',
     'news_to_date' => '2017-08-11',
     'old_id' => 35235,
     'options_container' => 'Options Container',
     'required_options' => 1,
-    'special_price' => 343.82,
-    'special_from_date' => '2017-01-02',
-    'special_to_date' => '2017-01-03'
+    'special_price' => 3.82,
+    'special_from_date' => date('Y-m-d', strtotime('-1 day')),
+    'special_to_date' => date('Y-m-d', strtotime('+1 day')),
+    'manufacturer' => 'Magento Inc.',
 ];
 
 foreach ($eavAttributeValues as $attributeCode => $attributeValue) {
     $product->setCustomAttribute($attributeCode, $attributeValue);
 }
+
 $productRepository->save($product);

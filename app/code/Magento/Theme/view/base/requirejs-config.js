@@ -25,9 +25,6 @@ var config = {
         'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
         'MutationObserver': ['es6-collections'],
-        'tinymce': {
-            'exports': 'tinymce'
-        },
         'moment': {
             'exports': 'moment'
         },
@@ -46,8 +43,7 @@ var config = {
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
-        'domReady': 'requirejs/domReady',
-        'tinymce': 'tiny_mce/tiny_mce_src'
+        'domReady': 'requirejs/domReady'
     },
     'deps': [
         'jquery/jquery-migrate'

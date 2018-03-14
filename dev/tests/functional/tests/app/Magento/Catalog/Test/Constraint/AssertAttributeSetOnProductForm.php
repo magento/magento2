@@ -66,7 +66,7 @@ class AssertAttributeSetOnProductForm extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $attributeSet->getAttributeSetName(),
             $formAttributeSet,
-            'Attribute Set not found on Product form.'
+            'The attribute set wasn\'t found on product form.'
             . "\nExpected: " . $attributeSet->getAttributeSetName()
             . "\nActual: " . $formAttributeSet
         );

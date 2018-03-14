@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserFailedLoginByPermissionMessage extends AbstractConstraint
 {
-    const FAILED_LOGIN_MESSAGE = 'You need more permissions to access this.';
+    const FAILED_LOGIN_MESSAGE = 'More permissions are needed to access this.';
 
     /**
      * Verify incorrect credentials message while login to admin.

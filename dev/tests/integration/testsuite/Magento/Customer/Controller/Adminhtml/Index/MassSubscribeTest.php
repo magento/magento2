@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Newsletter\Model\Subscriber;
@@ -75,7 +76,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
         $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
+            $this->equalTo(['An item needs to be selected. Select and try again.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
