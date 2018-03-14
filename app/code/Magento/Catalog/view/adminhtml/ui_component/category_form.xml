@@ -462,7 +462,7 @@
                 </imports>
             </settings>
         </field>
-        <field name="page_layout" sortOrder="190" formElement="select">
+        <field name="page_layout" sortOrder="190" formElement="select" class="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout">
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>
