@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Config as CatalogConfig;
@@ -2818,7 +2816,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @return array
      */
-    private function formatStockDataForRow(array $rowData) :array
+    private function formatStockDataForRow(array $rowData)
     {
         $sku = $rowData[self::COL_SKU];
         $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
