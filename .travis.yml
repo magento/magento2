@@ -11,6 +11,8 @@ addons:
   firefox: "46.0"
   hosts:
       - magento2.travis
+services:
+  - rabbitmq
 language: php
 php:
   - 7.0
