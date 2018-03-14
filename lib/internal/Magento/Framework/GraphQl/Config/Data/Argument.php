@@ -12,7 +12,7 @@ namespace Magento\Framework\GraphQl\Config\Data;
  *
  * Arguments of a type in GraphQL are used to gather client input to affect how a query will return data.
  */
-class Argument
+class Argument implements FieldInterface
 {
     /**
      * @var string
@@ -159,7 +159,7 @@ class Argument
      *
      * @return string|null
      */
-    public function getDefault() //: ?string
+    public function getDefault() : ?string
     {
         return $this->default;
     }

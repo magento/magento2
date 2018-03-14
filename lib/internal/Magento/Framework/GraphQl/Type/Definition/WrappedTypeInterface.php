@@ -8,9 +8,9 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Wrapper for GraphQl NonNull
+ * Interface for GraphQl WrappedType used to wrap other types like array or not null
  */
-class NonNull extends \GraphQL\Type\Definition\NonNull implements WrappedTypeInterface, InputType, OutputType
+interface WrappedTypeInterface extends \GraphQL\Type\Definition\WrappingType, TypeInterface
 {
 
 }

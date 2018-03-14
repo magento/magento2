@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Config\Data\Type as TypeStructure;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
+use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 
 /**
  * Class InputObjectType
@@ -30,39 +31,41 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
     private $scalarTypes;
 
     /**
+     * @var WrappedTypeProcessor
+     */
+    private $wrappedTypeProcessor;
+
+    /**
      * @param InputMapper $inputMapper
      * @param TypeStructure $structure
      * @param TypeFactory $typeFactory
      * @param ScalarTypes $scalarTypes
+     * @param WrappedTypeProcessor $wrappedTypeProcessor
      */
     public function __construct(
         InputMapper $inputMapper,
         TypeStructure $structure,
         TypeFactory $typeFactory,
-        ScalarTypes $scalarTypes
+        ScalarTypes $scalarTypes,
+        WrappedTypeProcessor $wrappedTypeProcessor
     ) {
         $this->typeFactory = $typeFactory;
         $this->scalarTypes = $scalarTypes;
+        $this->wrappedTypeProcessor = $wrappedTypeProcessor;
         $config = [
             'name' => $structure->getName(),
             'description' => $structure->getDescription()
         ];
         foreach ($structure->getFields() as $field) {
             if ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
-                $type = $this->scalarTypes->getScalarTypeInstance($field->getType());
-                if ($field->isList()) {
-                    $type = $this->scalarTypes->createList($type);
-                }
-                if ($field->isRequired()) {
-                    $type = $this->scalarTypes->createNonNull($type);
-                }
+                $type = $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
                 if ($field->getType() == $structure->getName()) {
                     $type = $this;
                 } else {
                     $type = $inputMapper->getFieldRepresentation($field->getType());
                 }
-                $type = $this->processIsNullable($field, $this->processIsList($field, $type));
+                $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
             }
 
             $config['fields'][$field->getName()] = [
@@ -71,35 +74,5 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
             ];
         }
         parent::__construct($config);
-    }
-
-    /**
-     * Return passed in type wrapped as a non null type if definition determines necessary.
-     *
-     * @param Field $field
-     * @param InputType $object
-     * @return TypeInterface|InputType
-     */
-    private function processIsNullable(Field $field, InputType $object) : TypeInterface
-    {
-        if ($field->isRequired()) {
-            return $this->typeFactory->createNonNull($object);
-        }
-        return $object;
-    }
-
-    /**
-     * Return passed in type wrapped as a list if definition determines necessary.
-     *
-     * @param Field $field
-     * @param InputType $object
-     * @return TypeInterface|InputType
-     */
-    private function processIsList(Field $field, InputType $object) : TypeInterface
-    {
-        if ($field->isList()) {
-            return $this->typeFactory->createList($object);
-        }
-        return $object;
     }
 }
