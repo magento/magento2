@@ -81,7 +81,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($this->_supportedCiphers as $cipher) {
             foreach ($this->_supportedModes as $mode) {
-                $result[] = [$cipher, $mode];
+                $result[$cipher . '-' . $mode] = [$cipher, $mode];
             }
         }
         return $result;
@@ -110,9 +110,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
                 $tooLongKey = str_repeat('-', $this->_getKeySize($cipher, $mode) + 1);
                 $tooShortInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) - 1);
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
-                $result[] = [$tooLongKey, $cipher, $mode, false];
-                $result[] = [$this->_key, $cipher, $mode, $tooShortInitVector];
-                $result[] = [$this->_key, $cipher, $mode, $tooLongInitVector];
+                $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
+                $result['key-' . $cipher . '-' . $mode . '-tooShortInitVector'] = [$this->_key, $cipher, $mode, $tooShortInitVector];
+                $result['key-' . $cipher . '-' . $mode . '-tooLongInitVector'] = [$this->_key, $cipher, $mode, $tooLongInitVector];
             }
         }
         return $result;
