@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Block\Adminhtml\Block\Edit;
 
 use Magento\Backend\Test\Block\FormPageActions as ParentFormPageActions;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Product Form page actions.

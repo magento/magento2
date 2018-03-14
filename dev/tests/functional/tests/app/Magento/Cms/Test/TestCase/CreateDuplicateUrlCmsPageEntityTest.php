@@ -106,7 +106,7 @@ class CreateDuplicateUrlCmsPageEntityTest extends Injectable
             $this->cmsIndex->open();
             $this->cmsIndex->getPageActionsBlock()->addNew();
             $this->cmsPageNew->getPageForm()->fill($cmsPage);
-            $this->cmsPageNew->getPageMainActions()->saveAndClose();
+            $this->cmsPageNew->getPageMainActions()->save();
         }
 
         return ['cmsPage' => $cmsPage];
