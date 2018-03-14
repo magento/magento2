@@ -42,8 +42,13 @@ class UrlRewrite implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?array {
         if (isset($args['url'])) {
             $urlRewrite = $this->findCanonicalUrl($args['url']);
             if ($urlRewrite) {

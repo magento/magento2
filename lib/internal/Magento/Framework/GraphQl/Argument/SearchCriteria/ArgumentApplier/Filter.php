@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
@@ -44,7 +45,7 @@ class Filter implements ArgumentApplierInterface
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
     {
         $filters = $this->astConverter->convert(\Magento\Catalog\Model\Product::ENTITY, $argument);
         if (!empty($filters)) {
@@ -56,5 +57,6 @@ class Filter implements ArgumentApplierInterface
                 new Phrase('Argument %1 not of type %2', [$argument->getName(), FilterArgumentValueInterface::class])
             );
         }
+        return $searchCriteria;
     }
 }

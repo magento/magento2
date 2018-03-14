@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
 use Magento\Framework\GraphQl\Argument\AstConverterInterface;
@@ -141,7 +143,7 @@ class AstConverter implements AstConverterInterface
      * @param array $arguments
      * @return Connective
      */
-    public function convert(string $entityType, $arguments)
+    public function convert(string $entityType, array $arguments) : Connective
     {
         $filters =  $this->getClausesFromAst(
             $this->referenceTypeFactory->create($entityType),

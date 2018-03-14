@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -32,7 +34,7 @@ class FilterArgumentValueFactory
      * @param Connective $connective
      * @return FilterArgumentValue
      */
-    public function create(Connective $connective)
+    public function create(Connective $connective) : FilterArgumentValue
     {
         return $this->objectManager->create(
             FilterArgumentValue::class,

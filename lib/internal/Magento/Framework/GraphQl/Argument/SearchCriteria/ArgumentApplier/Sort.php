@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
@@ -36,7 +37,7 @@ class Sort implements ArgumentApplierInterface
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
     {
         if (is_array($argument)) {
             $sortOrders = [];
@@ -52,5 +53,6 @@ class Sort implements ArgumentApplierInterface
                 new Phrase('Argument %1 not of type array or null', [$argument])
             );
         }
+        return $searchCriteria;
     }
 }

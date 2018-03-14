@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 /**
@@ -39,7 +41,7 @@ class Connective
      *
      * @return Operator
      */
-    public function getOperator()
+    public function getOperator() : Operator
     {
         return $this->operator;
     }
@@ -49,7 +51,7 @@ class Connective
      *
      * @return Connective[]|Clause[]
      */
-    public function getConditions()
+    public function getConditions(): array
     {
         return $this->conditions;
     }

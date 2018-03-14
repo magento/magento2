@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
@@ -21,7 +22,7 @@ class CurrentPage implements ArgumentApplierInterface
     /**
      * {@inheritdoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
     {
         if (is_int($argument) || is_string($argument)) {
             $searchCriteria->setCurrentPage($argument);
@@ -30,5 +31,6 @@ class CurrentPage implements ArgumentApplierInterface
                 new Phrase('Argument %1 not of type Int', [$argument])
             );
         }
+        return $searchCriteria;
     }
 }

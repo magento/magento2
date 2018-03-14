@@ -52,8 +52,13 @@ class Products implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?array {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
 
         if (!isset($args['search']) && !isset($args['filter'])) {

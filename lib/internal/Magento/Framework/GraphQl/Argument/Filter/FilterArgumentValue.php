@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
@@ -27,7 +28,7 @@ class FilterArgumentValue implements FilterArgumentValueInterface
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getValue() : Connective
     {
         return $this->value;
     }

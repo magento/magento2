@@ -37,8 +37,13 @@ class CustomAttributeMetadata implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?array {
         $attributes['items'] = null;
         /** @var ArgumentInterface $attributeInputs */
         $attributeInputs = $args['attributes'];

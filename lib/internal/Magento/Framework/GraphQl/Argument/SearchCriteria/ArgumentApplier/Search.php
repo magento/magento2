@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
@@ -39,7 +40,7 @@ class Search implements ArgumentApplierInterface
     /**
      * {@inheritDoc}
      */
-    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument)
+    public function applyArgument(SearchCriteriaInterface $searchCriteria, $argument) : SearchCriteriaInterface
     {
         $searchTerm = $argument;
         $searchTermFilter = $this->filterBuilder->setField('search_term')->setValue($searchTerm)->create();

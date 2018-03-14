@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\GraphQl\Argument\ArgumentValueInterface;
@@ -17,5 +19,5 @@ interface FilterArgumentValueInterface extends ArgumentValueInterface
      *
      * @return Connective
      */
-    public function getValue();
+    public function getValue() : Connective;
 }

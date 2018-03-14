@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
@@ -40,7 +41,7 @@ class Builder
      * @param array $arguments
      * @return SearchCriteriaInterface
      */
-    public function build(array $arguments)
+    public function build(array $arguments) : SearchCriteriaInterface
     {
         $searchCriteria = $this->searchCriteriaFactory->create();
         foreach ($arguments as $argumentName => $argument) {
