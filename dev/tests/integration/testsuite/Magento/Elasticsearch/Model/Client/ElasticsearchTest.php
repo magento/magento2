@@ -95,7 +95,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch5
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix composite_product_search
      */
     public function testSearchConfigurableProductBySimpleProductName()

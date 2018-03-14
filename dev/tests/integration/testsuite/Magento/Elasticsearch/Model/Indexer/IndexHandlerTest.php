@@ -111,7 +111,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test reindex process
-     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexAll()
@@ -128,7 +128,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexRowAfterEdit()
@@ -156,7 +156,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexRowAfterMassAction()
@@ -196,7 +196,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
      */
