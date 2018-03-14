@@ -15,6 +15,7 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\Model\Auth\SessionFactory;
 
 class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,6 +44,16 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeMetadataCache;
 
+    /**
+     * @var SessionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backendAuthSessionFactoryMock;
+
+    /**
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backendAuthSessionMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -50,13 +61,19 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
         $this->stateMock = $this->createMock(StateInterface::class);
         $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeMetadataHydratorMock = $this->createMock(AttributeMetadataHydrator::class);
+        $this->backendAuthSessionFactoryMock = $this->createPartialMock(
+            \Magento\Backend\Model\Auth\SessionFactory::class,
+            ['create']
+        );
+        $this->backendAuthSessionMock = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
         $this->attributeMetadataCache = $objectManager->getObject(
             AttributeMetadataCache::class,
             [
                 'cache' => $this->cacheMock,
                 'state' => $this->stateMock,
                 'serializer' => $this->serializerMock,
-                'attributeMetadataHydrator' => $this->attributeMetadataHydratorMock
+                'attributeMetadataHydrator' => $this->attributeMetadataHydratorMock,
+                'backendSession' => $this->backendAuthSessionFactoryMock
             ]
         );
     }
@@ -68,6 +85,12 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
+            ->willReturn(false);
+        $this->backendAuthSessionFactoryMock->expects($this->never())
+            ->method('create')
+            ->will($this->returnValue($this->backendAuthSessionMock));
+        $this->backendAuthSessionMock->expects($this->never())
+            ->method('isLoggedIn')
             ->willReturn(false);
         $this->cacheMock->expects($this->never())
             ->method('load');
@@ -85,6 +108,12 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
+        $this->backendAuthSessionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->backendAuthSessionMock));
+        $this->backendAuthSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($cacheKey)
@@ -107,6 +136,12 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
+        $this->backendAuthSessionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->backendAuthSessionMock));
+        $this->backendAuthSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($cacheKey)
@@ -145,6 +180,12 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
+        $this->backendAuthSessionFactoryMock->expects($this->never())
+            ->method('create')
+            ->will($this->returnValue($this->backendAuthSessionMock));
+        $this->backendAuthSessionMock->expects($this->never())
+            ->method('isLoggedIn')
+            ->willReturn(false);
         $this->attributeMetadataCache->save($entityType, $attributes, $suffix);
         $this->assertEquals(
             $attributes,
@@ -166,6 +207,13 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
+
+        $this->backendAuthSessionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->backendAuthSessionMock));
+        $this->backendAuthSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMetadataMock */
         $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);

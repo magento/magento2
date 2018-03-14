@@ -79,7 +79,7 @@ class AttributeMetadataCache
         $this->state = $state;
         $this->serializer = $serializer;
         $this->attributeMetadataHydrator = $attributeMetadataHydrator;
-        $this->backendAuthSession = $backendSession->create();
+        $this->backendAuthSession = $backendSession;
     }
 
     /**
@@ -95,8 +95,9 @@ class AttributeMetadataCache
             return $this->attributes[$entityType . $suffix];
         }
         if ($this->isEnabled()) {
-            if ($this->backendAuthSession->isLoggedIn()) {
-                $roleId = $this->backendAuthSession->getUser()->getRole()->getId();
+            $backendSession = $this->backendAuthSession->create();
+            if ($backendSession->isLoggedIn()) {
+                $roleId = $backendSession->getUser()->getRole()->getId();
                 $suffix = $suffix . '_ROLEID_' . $roleId;
             }
             $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
@@ -126,8 +127,9 @@ class AttributeMetadataCache
     {
         $this->attributes[$entityType . $suffix] = $attributes;
         if ($this->isEnabled()) {
-            if ($this->backendAuthSession->isLoggedIn()) {
-                $roleId = $this->backendAuthSession->getUser()->getRole()->getId();
+            $backendSession = $this->backendAuthSession->create();
+            if ($backendSession->isLoggedIn()) {
+                $roleId = $backendSession->getUser()->getRole()->getId();
                 $suffix = $suffix . '_ROLEID_' . $roleId;
             }
             $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
