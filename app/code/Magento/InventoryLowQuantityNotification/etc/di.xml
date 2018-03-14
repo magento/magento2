@@ -23,8 +23,6 @@
                 type="Magento\InventoryLowQuantityNotification\Plugin\Rss\AdaptNotifyStock"/>
     </type>
     <!-- LowStockCondition -->
-    <preference for="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionInterface"
-                type="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain"/>
     <type name="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">

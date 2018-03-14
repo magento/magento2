@@ -10,10 +10,10 @@ namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\Notif
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 
-class LowStockConditionChain implements LowStockConditionInterface
+class LowStockConditionChain
 {
     /**
-     * @var LowStockConditionInterface[]
+     * @var []
      */
     private $conditions = [];
 
@@ -32,13 +32,6 @@ class LowStockConditionChain implements LowStockConditionInterface
         ResourceConnection $resourceConnection,
         array $conditions = []
     ) {
-        foreach ($conditions as $getIsSalableCondition) {
-            if (!$getIsSalableCondition instanceof LowStockConditionInterface) {
-                throw new LocalizedException(
-                    __('Condition must implement %1', LowStockConditionInterface::class)
-                );
-            }
-        }
         $this->resourceConnection = $resourceConnection;
         $this->conditions = $conditions;
     }

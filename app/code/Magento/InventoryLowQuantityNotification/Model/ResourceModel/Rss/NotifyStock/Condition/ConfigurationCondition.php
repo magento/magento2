@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 
-class ConfigurationCondition implements LowStockConditionInterface
+class ConfigurationCondition
 {
     /**
      * @var StockConfigurationInterface

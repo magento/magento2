@@ -15,14 +15,14 @@ use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionInterface;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 class SelectBuilder
 {
     /**
-     * @var LowStockConditionInterface
+     * @var LowStockConditionChain
      */
     private $lowStockCondition;
 
@@ -32,11 +32,11 @@ class SelectBuilder
     private $resourceConnection;
 
     /**
-     * @param LowStockConditionInterface $lowStockCondition
+     * @param LowStockConditionChain $lowStockCondition
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        LowStockConditionInterface $lowStockCondition,
+        LowStockConditionChain $lowStockCondition,
         ResourceConnection $resourceConnection
     ) {
         $this->lowStockCondition = $lowStockCondition;

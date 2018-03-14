@@ -14,7 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 
-class NameAttributeCondition implements LowStockConditionInterface
+class NameAttributeCondition
 {
     /**
      * @var ResourceConnection
