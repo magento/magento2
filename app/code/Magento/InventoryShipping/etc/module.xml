@@ -6,5 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_InventoryShipping" setup_version="1.0.0"/>
+    <module name="Magento_InventoryShipping" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Shipping"/>
+            <module name="Magento_Sales"/>
+        </sequence>
+    </module>
 </config>

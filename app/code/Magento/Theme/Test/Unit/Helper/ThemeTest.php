@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Theme\Test\Unit\Helper;
 
 class ThemeTest extends \PHPUnit\Framework\TestCase
@@ -39,6 +37,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     public function getCssAssetsDataProvider()
     {
+        // @codingStandardsIgnoreStart
         return [
             [
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
@@ -104,6 +103,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -127,7 +127,10 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         );
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
-        $processorFactory = $this->createPartialMock(\Magento\Framework\View\Layout\ProcessorFactory::class, ['create']);
+        $processorFactory = $this->createPartialMock(
+            \Magento\Framework\View\Layout\ProcessorFactory::class,
+            ['create']
+        );
         $processorFactory->expects($this->any())
             ->method('create')
             ->with(['theme' => $theme])

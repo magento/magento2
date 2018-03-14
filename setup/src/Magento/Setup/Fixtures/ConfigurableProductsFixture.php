@@ -552,7 +552,7 @@ class ConfigurableProductsFixture extends Fixture
 
         if (count($skuPull) !== count(array_unique($skuPull))) {
             throw new ValidatorException(
-                __('Sku pattern for configurable product must be unique per attribute set')
+                __("The configurable product's SKU pattern must be unique in an attribute set.")
             );
         }
 
@@ -591,7 +591,9 @@ class ConfigurableProductsFixture extends Fixture
                 }
             }
         } else {
-            throw new ValidatorException(__('Configurable product config is invalid'));
+            throw new ValidatorException(
+                __('The configurable product config is invalid. Verify the product and try again.')
+            );
         }
 
         return $configurableConfigs;

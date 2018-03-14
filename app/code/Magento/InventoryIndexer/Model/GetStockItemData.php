@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 
@@ -20,6 +21,7 @@ class GetStockItemData implements GetStockItemDataInterface
      * @var ResourceConnection
      */
     private $resource;
+
     /**
      * @var StockIndexTableNameResolverInterface
      */
@@ -43,6 +45,7 @@ class GetStockItemData implements GetStockItemDataInterface
     public function execute(string $sku, int $stockId)
     {
         $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
+
         $connection = $this->resource->getConnection();
         $select = $connection->select()
             ->from(
@@ -53,6 +56,13 @@ class GetStockItemData implements GetStockItemDataInterface
                 ]
             )
             ->where(IndexStructure::SKU . ' = ?', $sku);
-        return $connection->fetchRow($select) ?: null;
+
+        try {
+            return $connection->fetchRow($select) ?: null;
+        } catch (\Exception $e) {
+            throw new LocalizedException(__(
+                'Could not receive Stock Item data'
+            ), $e);
+        }
     }
 }

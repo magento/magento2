@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
@@ -110,7 +108,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMockBuilder(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
@@ -131,26 +130,47 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
                 'getResultRedirectFactory', 'getFormKeyValidator'
             ]);
-        $this->response = $this->createPartialMock(\Magento\Framework\App\ResponseInterface::class, ['setRedirect', 'sendResponse']);
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create', 'get']);
-        $this->messageManager = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccess', 'addError']);
-        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice', 'getCommentText']);
+        $this->objectManager = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create', 'get']
+        );
+        $this->messageManager = $this->createPartialMock(
+            \Magento\Framework\Message\Manager::class,
+            ['addSuccess', 'addError']
+        );
+        $this->session = $this->createPartialMock(
+            \Magento\Backend\Model\Session::class,
+            ['setIsUrlNotice', 'getCommentText']
+        );
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
 
-        $this->resultRedirect = $this->createPartialMock(\Magento\Framework\Controller\Result\Redirect::class, ['setPath']);
+        $this->resultRedirect = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\Redirect::class,
+            ['setPath']
+        );
         $this->resultRedirect->expects($this->any())
             ->method('setPath')
             ->willReturn($this->resultRedirect);
 
-        $resultRedirectFactory = $this->createPartialMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create']);
+        $resultRedirectFactory = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
+            ['create']
+        );
         $resultRedirectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultRedirect);
 
-        $this->formKeyValidator = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey\Validator::class, ['validate']);
+        $this->formKeyValidator = $this->createPartialMock(
+            \Magento\Framework\Data\Form\FormKey\Validator::class,
+            ['validate']
+        );
 
         $this->context->expects($this->once())
             ->method('getMessageManager')
@@ -231,7 +251,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             $orderId = 10003;
             $tracking = [];
             $shipmentData = ['items' => [], 'send_email' => ''];
-            $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup']);
+            $shipment = $this->createPartialMock(
+                \Magento\Sales\Model\Order\Shipment::class,
+                ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup']
+            );
             $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['setCustomerNoteNotify', '__wakeup']);
 
             $this->request->expects($this->any())

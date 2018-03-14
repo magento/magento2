@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB;
 
 use Magento\Framework\DB\Tree\Node;
@@ -103,7 +104,9 @@ class Tree
                 $conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             }
         } else {
-            throw new LocalizedException(new Phrase('db object is not set in config'));
+            throw new LocalizedException(
+                new Phrase('The "db object" isn\'t set in config. Set the "db object" and try again.')
+            );
         }
 
         if (!empty($config['table'])) {

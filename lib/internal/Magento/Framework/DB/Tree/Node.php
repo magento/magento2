@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Tree;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -65,10 +66,14 @@ class Node
     public function __construct($nodeData, $keys)
     {
         if (empty($nodeData)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Empty array of node information'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('The node information is empty. Enter the information and try again.')
+            );
         }
         if (empty($keys)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Empty keys array'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase("The encryption key can't be empty. Enter the key and try again.")
+            );
         }
 
         $this->id = $nodeData[$keys['id']];

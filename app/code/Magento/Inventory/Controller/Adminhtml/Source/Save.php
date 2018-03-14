@@ -94,12 +94,15 @@ class Save extends Action
             foreach ($e->getErrors() as $localizedError) {
                 $this->messageManager->addErrorMessage($localizedError->getMessage());
             }
+            $this->_session->setSourceFormData($requestData);
             $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         } catch (CouldNotSaveException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
+            $this->_session->setSourceFormData($requestData);
             $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Could not save Source.'));
+            $this->_session->setSourceFormData($requestData);
             $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         }
         return $resultRedirect;

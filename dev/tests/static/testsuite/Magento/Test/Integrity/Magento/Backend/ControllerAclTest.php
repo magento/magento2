@@ -31,7 +31,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    private $whiteListetBackendControllers = [];
+    private $whiteListedBackendControllers = [];
 
     /**
      * List of ACL resources collected from acl.xml files.
@@ -57,7 +57,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
             if (substr($item, 0, 1) === '#') {
                 continue;
             }
-            $this->whiteListetBackendControllers[$item] = 1;
+            $this->whiteListedBackendControllers[$item] = 1;
         }
     }
 
@@ -83,7 +83,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
 
             $controllerClass = $this->getClassByFilePath($controllerPath);
             // skip whitelisted controllers.
-            if (isset($this->whiteListetBackendControllers[$controllerClass->getName()])) {
+            if (isset($this->whiteListedBackendControllers[$controllerClass->getName()])) {
                 continue;
             }
             // we don't have to check abstract classes.
