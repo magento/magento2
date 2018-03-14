@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 
 /**
- * Factory for @see TypeInterface implementations
+ * Processor for wrapped types for both custom and scalar types
  */
 class WrappedTypeProcessor
 {

@@ -9,14 +9,13 @@ namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\ArgumentFactory;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Config\FieldConfig;
 use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
@@ -100,12 +99,12 @@ class Fields implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(StructureInterface $typeStructure, OutputType $outputType) : array
+    public function format(TypeInterface $typeStructure, OutputType $outputType) : array
     {
         $config = [];
         /** @var Field $field */
         foreach ($typeStructure->getFields() as $field) {
-            if ($this->scalarTypes->hasScalarTypeName($field->getTypeName())) {
+            if ($this->scalarTypes->isScalarType($field->getTypeName())) {
                 $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
                 if ($typeStructure->getName() == $field->getTypeName()) {

@@ -73,11 +73,11 @@ class InputMapper
      */
     public function getRepresentation(Argument $argument) : array
     {
-        $type = $argument->getTypeName();
-        if ($this->scalarTypes->hasScalarTypeName($type)) {
+        $typeName = $argument->getTypeName();
+        if ($this->scalarTypes->isScalarType($typeName)) {
             $instance = $this->wrappedTypeProcessor->processScalarWrappedType($argument);
         } else {
-            $configElement = $this->config->getTypeStructure($type);
+            $configElement = $this->config->getTypeStructure($typeName);
             $instance = $this->inputFactory->create($configElement);
             $instance = $this->wrappedTypeProcessor->processWrappedType($argument, $instance);
         }
@@ -87,7 +87,7 @@ class InputMapper
             'description' => $argument->getDescription()
         ];
 
-        if (!$this->scalarTypes->hasScalarTypeName($type) && $argument->getDefault() !== null) {
+        if ($this->scalarTypes->isScalarType($typeName) && $argument->getDefault() !== null) {
             switch ($argument->getTypeName()) {
                 case 'Int':
                     $calculatedArgument['defaultValue'] = (int)$argument->getDefault();
@@ -104,17 +104,5 @@ class InputMapper
         }
 
         return $calculatedArgument;
-    }
-
-    /**
-     * Return object representation of field for passed in type.
-     *
-     * @param string $type
-     * @return InputType
-     */
-    public function getFieldRepresentation(string $type) : InputType
-    {
-        $configElement = $this->config->getTypeStructure($type);
-        return $this->inputFactory->create($configElement);
     }
 }

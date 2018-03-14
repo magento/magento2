@@ -57,7 +57,7 @@ class SchemaProvider
     {
         $types = [];
         foreach ($this->config->getDeclaredTypeNames() as $typeName) {
-            if ($this->scalarTypes->hasScalarTypeName($typeName)) {
+            if ($this->scalarTypes->isScalarType($typeName)) {
                 $types[$typeName] = $this->scalarTypes->getScalarTypeInstance($typeName);
             } else {
                 $types[$typeName] = $this->outputMapper->getTypeObject($typeName);

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Config\Data;
 
 /**
- * Defines contracts for output fields data objects that, combined, represent a configured GraphQL schema.
+ * Defines contract for output fields data as GraphQL objects.
  */
 interface OutputFieldInterface extends FieldInterface
 {

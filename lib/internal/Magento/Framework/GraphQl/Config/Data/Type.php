@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Config\Data;
 /**
  * Describes all the configured data of an Output or Input type in GraphQL.
  */
-class Type implements StructureInterface
+class Type implements TypeInterface
 {
     /**
      * @var string
