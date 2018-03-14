@@ -234,6 +234,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare final price temporary index table
      *
      * @return $this
+     * @deprecated
+     * @see prepareFinalPriceTable()
      */
     protected function _prepareDefaultFinalPriceTable()
     {
@@ -299,14 +301,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
-        $this->_prepareDefaultFinalPriceTable();
         $finalPriceTable = $this->prepareFinalPriceTable();
 
         $select = $this->getSelect($entityIds, $type);
         $query = $select->insertFromSelect($finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
 
-        $this->applyDiscountPrices($finalPriceTable, $entityIds);
+        $this->applyDiscountPrices($finalPriceTable);
 
         return $this;
     }
@@ -506,13 +507,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Apply discount prices to final price index table.
      *
      * @param IndexTableStructure $finalPriceTable
-     * @param int|array|null $entityIds
      * @return void
      */
-    private function applyDiscountPrices(IndexTableStructure $finalPriceTable, $entityIds = null)
+    private function applyDiscountPrices(IndexTableStructure $finalPriceTable)
     {
         foreach ($this->priceModifiers as $priceModifier) {
-            $priceModifier->modifyPrice($finalPriceTable, (array) $entityIds);
+            $priceModifier->modifyPrice($finalPriceTable);
         }
     }
 
