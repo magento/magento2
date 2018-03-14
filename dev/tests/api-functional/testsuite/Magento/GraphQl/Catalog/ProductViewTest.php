@@ -559,6 +559,90 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_list.php
+     */
+    public function testProductPrices()
+    {
+        $firstProductSku = 'simple-249';
+        $secondProductSku = 'simple-156';
+        $query = <<<QUERY
+       {
+           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           {
+               items {
+                   attribute_set_id
+                   created_at
+                   id
+                   name
+                   price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
+                   sku
+                   type_id
+                   updated_at
+                   ... on PhysicalProductInterface {
+                        weight
+                   }
+               }
+           }
+       }
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $firstProduct = $productRepository->get($firstProductSku, false, null, true);
+        $secondProduct = $productRepository->get($secondProductSku, false, null, true);
+        self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
+        self::assertCount(2, $response['products']['items']);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
@@ -863,11 +947,11 @@ QUERY;
                 ? $assertionData['expected_value']
                 : $assertionData;
             $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
+            self::assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $expectedValue,
                 $actualResponse[$responseField],
                 "Value of '{$responseField}' field in response does not match expected value: "

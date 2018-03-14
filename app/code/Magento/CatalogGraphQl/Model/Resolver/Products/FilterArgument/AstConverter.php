@@ -45,6 +45,10 @@ class AstConverter implements AstConverterInterface
      * @var ConfigInterface
      */
     private $config;
+    /**
+     * @var array
+     */
+    private $additionalAttributes;
 
     /**
      * @param ClauseFactory $clauseFactory
@@ -52,19 +56,22 @@ class AstConverter implements AstConverterInterface
      * @param ReferenceTypeFactory $referenceTypeFactory
      * @param EntityAttributeList $entityAttributeList
      * @param ConfigInterface $config
+     * @param array $additionalAttributes
      */
     public function __construct(
         ClauseFactory $clauseFactory,
         ConnectiveFactory $connectiveFactory,
         ReferenceTypeFactory $referenceTypeFactory,
         EntityAttributeList $entityAttributeList,
-        ConfigInterface $config
+        ConfigInterface $config,
+        array $additionalAttributes = ['min_price', 'max_price']
     ) {
         $this->clauseFactory = $clauseFactory;
         $this->connectiveFactory = $connectiveFactory;
         $this->referenceTypeFactory = $referenceTypeFactory;
         $this->entityAttributeList = $entityAttributeList;
         $this->config = $config;
+        $this->additionalAttributes = $additionalAttributes;
     }
 
     /**
@@ -129,6 +136,10 @@ class AstConverter implements AstConverterInterface
             foreach ($interfaceStructure->getFields() as $field) {
                 $fields[$field->getName()] = 'String';
             }
+        }
+
+        foreach ($this->additionalAttributes as $attribute) {
+            $fields[$attribute] = 'String';
         }
 
         return $fields;

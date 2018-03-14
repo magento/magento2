@@ -298,6 +298,8 @@
         <field xsi:type="ObjectInputField" name="description" type="FilterTypeInput" description="A detailed information about the product. The value can include simple HTML tags."/>
         <field xsi:type="ObjectInputField" name="short_description" type="FilterTypeInput" description="A short description of the product. Its use depends on the theme."/>
         <field xsi:type="ObjectInputField" name="price" type="FilterTypeInput" description="The numeric price of the product. Do not include the currency code."/>
+        <field xsi:type="ObjectInputField" name="min_price" type="FilterTypeInput" description="The numeric minimal price of the product. Do not include the currency code."/>
+        <field xsi:type="ObjectInputField" name="max_price" type="FilterTypeInput" description="The numeric maximal price of the product. Do not include the currency code."/>
         <field xsi:type="ObjectInputField" name="special_price" type="FilterTypeInput" description="The discounted price of the product"/>
         <field xsi:type="ObjectInputField" name="special_from_date" type="FilterTypeInput" description="The beginning date that a product has a special price."/>
         <field xsi:type="ObjectInputField" name="special_to_date" type="FilterTypeInput" description="The end date that a product has a special price."/>

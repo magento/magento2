@@ -45,6 +45,12 @@ class Price implements FormatterInterface
      */
     public function format(Product $product, array $productData = [])
     {
+        /**
+         * This is workaround, because indexers do not work with catalogules,
+         * and after filtering price will be incorrect, so we need to load it with catalogules one
+         * more time
+         */
+        $product->unsetData('minimal_price');
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);

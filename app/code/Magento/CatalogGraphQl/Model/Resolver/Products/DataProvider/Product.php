@@ -6,19 +6,12 @@
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\TierPrice;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\SearchResultInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
-use Magento\GraphQl\Model\EntityAttributeList;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
@@ -82,21 +75,15 @@ class Product
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         $collection->load();
-
         $collection->addCategoryIds();
-        $collection->addFinalPrice();
         $collection->addMediaGalleryData();
-        $collection->addMinimalPrice();
-        $collection->addPriceData();
         $collection->addWebsiteNamesToResult();
         $collection->addOptionsToResult();
-        $collection->addTaxPercents();
         $collection->addWebsiteNamesToResult();
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
-
         return $searchResult;
     }
 }
