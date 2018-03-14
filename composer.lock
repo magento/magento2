@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "713d37577c51e070639ac6ccff118414",
-    "content-hash": "0e32ec1f156e383fef6f5a64de8c514e",
+    "hash": "0691c1c5d615906efcb4dd137b9f8202",
+    "content-hash": "e4dfd4b35590fb10b27c4cfe388385dd",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -669,16 +669,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-deprecated-7.2-code",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento-engcom/zf1-php-7.2-support.git",
-                "reference": "1366f3fcca399f80c4b3195b8a0707ee460821c7"
+                "reference": "df32cb041603119a448d4634f7d545ab85a8f68a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/1366f3fcca399f80c4b3195b8a0707ee460821c7",
-                "reference": "1366f3fcca399f80c4b3195b8a0707ee460821c7",
+                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/df32cb041603119a448d4634f7d545ab85a8f68a",
+                "reference": "df32cb041603119a448d4634f7d545ab85a8f68a",
                 "shasum": ""
             },
             "archive": {
@@ -719,10 +719,10 @@
                 "zf1"
             ],
             "support": {
-                "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/deprecated-7.2-code",
+                "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/master",
                 "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
             },
-            "time": "2018-03-12 19:46:30"
+            "time": "2018-03-14 21:49:31"
         },
         {
             "name": "monolog/monolog",
@@ -6303,14 +6303,7 @@
             "time": "2018-01-29 19:49:41"
         }
     ],
-    "aliases": [
-        {
-            "alias": "1.14.0",
-            "alias_normalized": "1.14.0.0",
-            "version": "dev-deprecated-7.2-code",
-            "package": "magento/zendframework1"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
