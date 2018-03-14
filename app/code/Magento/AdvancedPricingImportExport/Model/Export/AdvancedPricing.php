@@ -269,15 +269,13 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         try {
             $productsByStores = $this->loadCollection();
             if (!empty($productsByStores)) {
-                $productLinkField = $this->getProductEntityLinkField();
-                /** @var string[] $productLinkIds */
+                $linkField = $this->getProductEntityLinkField();
                 $productLinkIds = [];
 
-                foreach ($productsByStores as $productByStores) {
-                    $productLinkIds[]
-                        = array_pop($productByStores)[$productLinkField];
+                foreach ($productsByStores as $product) {
+                    $productLinkIds[array_pop($product)[$linkField]] = true;
                 }
-                $productLinkIds = array_unique($productLinkIds);
+                $productLinkIds = array_keys($productLinkIds);
                 $tierPricesData = $this->fetchTierPrices($productLinkIds);
                 $exportData = $this->prepareExportData(
                     $productsByStores,
