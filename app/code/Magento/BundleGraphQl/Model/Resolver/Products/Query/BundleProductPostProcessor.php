@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\BundleGraphQl\Model\Resolver\Products\Query;
 
@@ -217,7 +218,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
                                 'is_default' => (bool)$link->getIsDefault(),
                                 'price_type' => $this->enumLookup->getEnumValueFromField(
                                     'PriceTypeEnum',
-                                    $link->getPriceType()
+                                    (string)$link->getPriceType()
                                 ) ?: 'DYNAMIC',
                                 'can_change_quantity' => $link->getCanChangeQuantity()
                             ];
@@ -372,7 +373,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      * @param array $bundleMap Map of parent skus and their children they contain [$parentSku => [$child1, $child2...]]
      * @return array
      */
-    private function addChildData(array $childrenProducts, array $resultData, array $bundleMap)
+    private function addChildData(array $childrenProducts, array $resultData, array $bundleMap) : array
     {
         foreach ($childrenProducts as $childProduct) {
             $childData = $this->formatter->format($childProduct);

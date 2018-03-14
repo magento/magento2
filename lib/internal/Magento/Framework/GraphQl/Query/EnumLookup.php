@@ -38,14 +38,14 @@ class EnumLookup
     }
 
     /**
-     * Convert a field value from a db query to an enum value declared as an item in the graphql.xml schema
+     * Convert a field value from a db query to an enum value declared as an item in the graphql schema
      *
      * @param string $enumName
-     * @param int|string|bool|float|null $fieldValue
-     * @return int|string|bool|float|null
+     * @param string $fieldValue
+     * @return string|null
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getEnumValueFromField(string $enumName, $fieldValue) : string
+    public function getEnumValueFromField(string $enumName, string $fieldValue) : ?string
     {
         $priceViewEnum = $this->typeConfig->getTypeStructure($enumName);
         if ($priceViewEnum instanceof Enum) {
@@ -60,5 +60,6 @@ class EnumLookup
                 new Phrase('Enum type "%1" not defined', [$enumName])
             );
         }
+        return null;
     }
 }

@@ -36,8 +36,13 @@ class Customer implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?array {
         /** @var ResolverContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == 4) {
             throw new GraphQlAuthorizationException(

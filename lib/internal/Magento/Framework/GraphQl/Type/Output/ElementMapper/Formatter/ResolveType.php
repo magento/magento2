@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Config\Data\InterfaceType;
@@ -34,7 +34,7 @@ class ResolveType implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(StructureInterface $typeStructure, OutputType $outputType) : array
+    public function format(TypeInterface $typeStructure, OutputType $outputType) : array
     {
         $config = [];
         if ($typeStructure instanceof InterfaceType) {

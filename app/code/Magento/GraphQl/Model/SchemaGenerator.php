@@ -7,9 +7,7 @@
 namespace Magento\GraphQl\Model;
 
 use Magento\Framework\GraphQl\Type\SchemaFactory;
-use Magento\Framework\GraphQl\Config\FieldConfig;
 use Magento\GraphQl\Model\Type\Generator;
-use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\TypeFactory;
 
 /**
@@ -23,16 +21,6 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $typeGenerator;
 
     /**
-     * @var ArgumentFactory
-     */
-    private $argumentFactory;
-
-    /**
-     * @var FieldConfig
-     */
-    private $fieldConfig;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
@@ -44,21 +32,15 @@ class SchemaGenerator implements SchemaGeneratorInterface
 
     /**
      * @param Generator $typeGenerator
-     * @param ArgumentFactory $argumentFactory
-     * @param FieldConfig $fieldConfig
      * @param TypeFactory $typeFactory
      * @param SchemaFactory $schemaFactory
      */
     public function __construct(
         Generator $typeGenerator,
-        ArgumentFactory $argumentFactory,
-        FieldConfig $fieldConfig,
         TypeFactory $typeFactory,
         SchemaFactory $schemaFactory
     ) {
         $this->typeGenerator = $typeGenerator;
-        $this->argumentFactory = $argumentFactory;
-        $this->fieldConfig = $fieldConfig;
         $this->typeFactory = $typeFactory;
         $this->schemaFactory = $schemaFactory;
     }

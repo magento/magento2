@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Config\Data;
 /**
  * Structured data object of a GraphQL field. Fields are used to describe possible values for a type/interface.
  */
-class Field
+class Field implements OutputFieldInterface
 {
     /**
      * @var string
@@ -88,7 +88,7 @@ class Field
      *
      * @return string
      */
-    public function getType() : string
+    public function getTypeName() : string
     {
         return $this->type;
     }
@@ -138,7 +138,7 @@ class Field
      *
      * @return string|null
      */
-    public function getDescription()
+    public function getDescription() : string
     {
         return $this->description;
     }

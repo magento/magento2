@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
@@ -57,7 +59,7 @@ class Clause
      *
      * @return ReferenceType
      */
-    public function getReferencedType()
+    public function getReferencedType() : ReferenceType
     {
         return $this->referenceType;
     }
@@ -67,7 +69,7 @@ class Clause
      *
      * @return string
      */
-    public function getFieldName()
+    public function getFieldName() : string
     {
         return $this->fieldName;
     }
@@ -77,7 +79,7 @@ class Clause
      *
      * @return string
      */
-    public function getClauseType()
+    public function getClauseType(): string
     {
         return $this->clauseType;
     }
@@ -85,9 +87,9 @@ class Clause
     /**
      * Get the clause value
      *
-     * @return string|array
+     * @return string
      */
-    public function getClauseValue()
+    public function getClauseValue() : string
     {
         return $this->clauseValue;
     }

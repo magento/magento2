@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
@@ -61,12 +62,11 @@ class Search
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResult
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria)
+    public function getResult(SearchCriteriaInterface $searchCriteria) : SearchResult
     {
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
-        // for MAGETWO-85611
         $searchCriteria->setPageSize(PHP_INT_MAX);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);

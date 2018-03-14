@@ -111,4 +111,31 @@ QUERY;
 
         $this->graphQlQuery($query);
     }
+
+    public function testInvalidEntityTypeException()
+    {
+        $query
+            = <<<QUERY
+  {
+  customAttributeMetadata(attributes:[
+    {
+      attribute_code:"sku"
+      entity_type:"invalid"
+    }
+  ])
+    {
+      items{        
+      attribute_code
+      attribute_type
+      entity_type
+    }      
+    }  
+  }
+QUERY;
+        $this->expectException(\Exception::class);
+
+        $this->expectExceptionMessage('Invalid entity_type specified: invalid');
+
+        $this->graphQlQuery($query);
+    }
 }

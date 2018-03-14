@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter\Clause;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -34,8 +36,11 @@ class ReferenceTypeFactory
      * @param ReferenceType|null $referenceType
      * @return ReferenceType
      */
-    public function create(string $entityType, string $linkField = null, ReferenceType $referenceType = null)
-    {
+    public function create(
+        string $entityType,
+        string $linkField = null,
+        ReferenceType $referenceType = null
+    ) : ? ReferenceType {
         return $this->objectManager->create(
             ReferenceType::class,
             [

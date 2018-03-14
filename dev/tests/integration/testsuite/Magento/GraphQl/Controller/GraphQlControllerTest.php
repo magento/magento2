@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
 use Magento\Framework\GraphQl\HttpRequestProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -37,7 +38,7 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-   /** @var \Magento\Framework\App\Request\Http $request  */
+    /** @var \Magento\Framework\App\Request\Http $request */
     private $request;
 
     /**
@@ -45,11 +46,7 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
      */
     private $graphql;
 
-    /** @var  array */
-    private $serverArray;
-
-
-    /** @var SerializerInterface  */
+    /** @var SerializerInterface */
     private $jsonSerializer;
 
     protected function setUp()
@@ -85,17 +82,17 @@ class GraphQlControllerTest extends \PHPUnit\Framework\TestCase
        }
 QUERY;
         $postData = [
-            'query' => $query,
-            'variables'=> null,
-            'operationName'=> null
+            'query'         => $query,
+            'variables'     => null,
+            'operationName' => null
         ];
         /** @var Http $request */
         $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
         $request->setPathInfo('/graphql');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-                    ->addHeaders(['Content-Type' => 'application/json']
-                    );
+            ->addHeaders(['Content-Type' => 'application/json']
+            );
         $request->setHeaders($headers);
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
@@ -103,4 +100,60 @@ QUERY;
         $this->assertEquals($output['data']['products']['items'][0]['sku'], $product->getSku());
         $this->assertEquals($output['data']['products']['items'][0]['name'], $product->getName());
     }
+
+
+    public function testOutputErrorsWithMessageCategoryAndTrace()
+    {
+        $query
+            = <<<QUERY
+  {
+  customAttributeMetadata(attributes:[
+    {
+      attribute_code:"sku"
+      entity_type:"invalid"
+    }
+  ])
+    {
+      items{        
+      attribute_code
+      attribute_type
+      entity_type
+    }      
+    }  
+  }
+QUERY;
+
+
+        $postData = [
+            'query'         => $query,
+            'variables'     => null,
+            'operationName' => null
+        ];
+        /** @var Http $request */
+        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request->setPathInfo('/graphql');
+        $request->setContent(json_encode($postData));
+        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+            ->addHeaders(['Content-Type' => 'application/json']
+            );
+        $request->setHeaders($headers);
+        $response = $this->graphql->dispatch($request);
+        $outputResponse = $this->jsonSerializer->unserialize($response->getContent());
+        if(isset($outputResponse['errors'][0])) {
+            if(is_array($outputResponse['errors'][0])) {
+                foreach($outputResponse['errors'] as $error) {
+                    $this->assertEquals($error['category'], \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY);
+                    if (isset($error['message'])) {
+                        $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
+                }
+                if(isset($error['trace']))
+                {
+                if(is_array($error['trace']))
+                 $this->assertNotEmpty($error['trace']);
+                }
+             }
+          }
+        }
+    }
 }
+

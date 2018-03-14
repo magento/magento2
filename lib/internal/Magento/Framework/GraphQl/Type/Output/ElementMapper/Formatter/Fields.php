@@ -8,18 +8,16 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\ArgumentFactory;
-use Magento\Framework\GraphQl\Config\Data\StructureInterface;
+use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Config\FieldConfig;
 use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
+use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 
 /**
  * Formats all fields configured for given type structure, if any.
@@ -30,16 +28,6 @@ class Fields implements FormatterInterface
      * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var FieldConfig
-     */
-    private $fieldConfig;
-
-    /**
-     * @var ArgumentFactory
-     */
-    private $argumentFactory;
 
     /**
      * @var OutputMapper
@@ -62,53 +50,56 @@ class Fields implements FormatterInterface
     private $scalarTypes;
 
     /**
+     * @var WrappedTypeProcessor
+     */
+    private $wrappedTypeProcessor;
+
+    /**
      * @param ObjectManagerInterface $objectManager
-     * @param FieldConfig $fieldConfig
-     * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
      * @param TypeFactory $typeFactory
      * @param ScalarTypes $scalarTypes
+     * @param WrappedTypeProcessor $wrappedTypeProcessor
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        FieldConfig $fieldConfig,
-        ArgumentFactory $argumentFactory,
         OutputMapper $outputMapper,
         InputMapper $inputMapper,
         TypeFactory $typeFactory,
-        ScalarTypes $scalarTypes
+        ScalarTypes $scalarTypes,
+        WrappedTypeProcessor $wrappedTypeProcessor
     ) {
         $this->objectManager = $objectManager;
-        $this->fieldConfig = $fieldConfig;
-        $this->argumentFactory = $argumentFactory;
         $this->outputMapper = $outputMapper;
         $this->inputMapper = $inputMapper;
         $this->typeFactory = $typeFactory;
         $this->scalarTypes = $scalarTypes;
+        $this->wrappedTypeProcessor = $wrappedTypeProcessor;
     }
 
     /**
      * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function format(StructureInterface $typeStructure, OutputType $outputType) : array
+    public function format(TypeInterface $typeStructure, OutputType $outputType) : array
     {
         $config = [];
         /** @var Field $field */
         foreach ($typeStructure->getFields() as $field) {
-            if ($typeStructure->getName() == $field->getType()) {
-                $type = $outputType;
-            } elseif ($this->scalarTypes->hasScalarTypeClass($field->getType())) {
-                if ($field->isList()) {
-                    $type = new \Magento\Framework\GraphQl\Type\Definition\ListOfType(
-                        $this->scalarTypes->getScalarTypeInstance($field->getType())
-                    );
-                } else {
-                    $type = $this->scalarTypes->getScalarTypeInstance($field->getType());
-                }
+            if ($this->scalarTypes->isScalarType($field->getTypeName())) {
+                $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
-                $type = $this->getFieldType($typeStructure, $field, $outputType);
+                if ($typeStructure->getName() == $field->getTypeName()) {
+                    $type = $outputType;
+                } else {
+                    if ($typeStructure->getName() == $field->getTypeName()) {
+                        $type = $outputType;
+                    } else {
+                        $type = $this->outputMapper->getTypeObject($field->getTypeName());
+                    }
+
+                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
+                }
             }
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),
@@ -131,57 +122,6 @@ class Fields implements FormatterInterface
             $config = $this->formatArguments($field, $config);
         }
         return $config;
-    }
-
-    /**
-     * Return passed in type wrapped as a non null type if definition determines necessary.
-     *
-     * @param Field $field
-     * @param OutputType $object
-     * @return OutputType
-     */
-    private function processIsNullable(Field $field, OutputType $object) : OutputType
-    {
-        if ($field->isRequired()) {
-            return $this->typeFactory->createNonNull($object);
-        }
-        return $object;
-    }
-
-    /**
-     * Return passed in type wrapped as a list if definition determines necessary.
-     *
-     * @param Field $field
-     * @param OutputType $object
-     * @return OutputType
-     */
-    private function processIsList(Field $field, OutputType $object) : OutputType
-    {
-        if ($field->isList()) {
-            return $this->typeFactory->createList($object);
-        }
-        return $object;
-    }
-
-    /**
-     * Determine field's type based on configured attributes.
-     *
-     * @param StructureInterface $typeStructure
-     * @param Field $field
-     * @param OutputType $outputType
-     * @return OutputType
-     */
-    private function getFieldType(StructureInterface $typeStructure, Field $field, OutputType $outputType) : OutputType
-    {
-        if ($typeStructure->getName() == $field->getType()) {
-            $type = $outputType;
-        } else {
-            $type = $this->outputMapper->getTypeObject($field->getType());
-        }
-
-        $type = $this->processIsNullable($field, $this->processIsList($field, $type));
-
-        return $type;
     }
 
     /**

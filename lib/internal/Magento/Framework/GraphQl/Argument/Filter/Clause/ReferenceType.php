@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\Filter\Clause;
 
@@ -46,7 +47,7 @@ class ReferenceType
      *
      * @return ReferenceType
      */
-    public function getReferenceType()
+    public function getReferenceType() : ReferenceType
     {
         return $this->referenceType;
     }
@@ -56,7 +57,7 @@ class ReferenceType
      *
      * @return string
      */
-    public function getLinkField()
+    public function getLinkField() : string
     {
         return $this->linkField;
     }
@@ -66,7 +67,7 @@ class ReferenceType
      *
      * @return string
      */
-    public function getEntityType()
+    public function getEntityType() : string
     {
         return $this->entityType;
     }
