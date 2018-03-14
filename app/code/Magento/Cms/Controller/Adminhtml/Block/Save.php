@@ -103,25 +103,12 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
                     $data['is_active'] = Block::STATUS_DISABLED;
-                    for ($numOfTries = 0; $numOfTries < self::MAX_RETRIES; $numOfTries++) {
-                        $data['identifier'] = $data['identifier'] . uniqid();
-                        $this->dataPersistor->set('cms_block', $data);
-                        $model->setData($data);
-                        try {
-                            $this->blockRepository->save($model);
-                            $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
-                            return $resultRedirect->setPath('*/*/edit/block_id/' . $model->getId());
-                        } catch (LocalizedException $e) {
-                            if ($e->getMessage() ==
-                                __('A block identifier with the same properties already exists in the selected store.')
-                            ) {
-                                continue;
-                            }
-                        }
-                    }
-                    $this->messageManager->addSuccessMessage(
-                        __('Block duplication failed. A block identifier is not unique.')
-                    );
+                    $data['identifier'] = $data['identifier'] . uniqid();
+                    $this->dataPersistor->set('cms_block', $data);
+                    $model->setData($data);
+                    $this->blockRepository->save($model);
+                    $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
+                    return $resultRedirect->setPath('*/*/edit/block_id/' . $model->getId());
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
