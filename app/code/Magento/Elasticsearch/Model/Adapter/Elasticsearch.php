@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter;
 
 use Magento\Framework\App\ObjectManager;
 
 /**
  * Elasticsearch adapter
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
 {
@@ -110,7 +112,7 @@ class Elasticsearch
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We were unable to perform the search because of a search engine misconfiguration.')
+                __('The search failed because of a search engine misconfiguration.')
             );
         }
     }

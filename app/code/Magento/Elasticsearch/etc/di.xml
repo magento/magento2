@@ -114,6 +114,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Search\Model\EngineResolver">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">elasticsearch</item>
+                <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
         <arguments>
             <argument name="entityId" xsi:type="string">_id</argument>

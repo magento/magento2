@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
@@ -67,7 +68,7 @@ class IndexNameResolver
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new LocalizedException(
-                __('We were unable to perform the search because of a search engine misconfiguration.')
+                __('The search failed because of a search engine misconfiguration.')
             );
         }
     }

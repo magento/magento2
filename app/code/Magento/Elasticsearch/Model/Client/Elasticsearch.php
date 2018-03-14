@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -44,7 +45,7 @@ class Elasticsearch implements ClientInterface
         if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
             ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
             throw new LocalizedException(
-                __('We were unable to perform the search because of a search engine misconfiguration.')
+                __('The search failed because of a search engine misconfiguration.')
             );
         }
 
