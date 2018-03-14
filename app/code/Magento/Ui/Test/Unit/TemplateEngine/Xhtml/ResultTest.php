@@ -89,9 +89,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->template->expects($this->once())
             ->method('append')
             ->with('<script type="text/x-magento-init"><![CDATA[{"*": {"Magento_Ui/js/core/app": '
-                . '["text before <![CDATA[cdata text]]]]><![CDATA[>"]'
+                . '["text before \u003C![CDATA[cdata text]]\u003E"]'
                 . '}}]]></script>');
-        
+
         $this->testModel->appendLayoutConfiguration();
     }
 }
