@@ -38,22 +38,32 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Generate all Tests in PHP.
+     * Generate all Tests in PHP OR Generate set of tests via passing array of tests
      *
+     * @param array $tests
      * @param array $opts
      * @return void
      */
-    function generateTests($opts = ['config' => null, 'force' => false, 'nodes' => null])
+
+    function generateTests(array $tests, $opts = ['config' => null, 'force' => false, 'nodes' => null])
+
     {
         $GLOBALS['GENERATE_TESTS'] = true;
-
+        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
+        $testsObjects = [];
+        if (!empty($tests))
+        {
+            foreach ($tests as $test)
+            {
+                $testsObjects[] = Magento\FunctionalTestingFramework\Test\Handlers\TestObjectHandler::getInstance()->getObject($test);
+            }
+        }
         if ($opts['force'])
         {
             $GLOBALS['FORCE_PHP_GENERATE'] = true;
         }
 
-        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllTestFiles($opts['config'], $opts['nodes']);
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance(null, $testsObjects)->createAllTestFiles($opts['config'], $opts['nodes']);
         $this->say("Generate Tests Command Run");
     }
 
@@ -197,4 +207,6 @@ class RoboFile extends \Robo\Tasks
     {
         $this->_exec('php pre-install.php');
     }
+
+
 }
