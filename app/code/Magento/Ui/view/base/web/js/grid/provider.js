@@ -30,6 +30,9 @@ define([
             listens: {
                 params: 'onParamsChange',
                 requestConfig: 'updateRequestConfig'
+            },
+            ignoreTmpls: {
+                data: true
             }
         },
 
