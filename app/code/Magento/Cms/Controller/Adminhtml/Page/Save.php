@@ -44,15 +44,9 @@ class Save extends \Magento\Backend\App\Action
     private $pageRepository;
 
     /**
-     * @var Page\Copier
-     */
-    private $copier;
-
-    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
-     * @param Page\Copier $copier
      * @param \Magento\Cms\Model\PageFactory|null $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
      */
@@ -60,13 +54,11 @@ class Save extends \Magento\Backend\App\Action
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
-        \Magento\Cms\Model\Page\Copier $copier,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
         \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
-        $this->copier = $copier;
         $this->pageFactory = $pageFactory
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
@@ -124,7 +116,12 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->pageRepository->save($model);
                 if ($redirectBack === 'duplicate') {
-                    $newPage = $this->copier->copy($model);
+                    $newPage = $this->pageFactory->create()->setData($data);
+                    $newPage->setId(null);
+                    $identifier = $model->getIdentifier() . '-' . uniqid();
+                    $newPage->setIdentifier($identifier);
+                    $newPage->setIsActive(false);
+                    $this->pageRepository->save($newPage);
                     $this->messageManager->addSuccessMessage(__('You duplicated the page'));
                 }
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));

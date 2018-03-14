@@ -17,11 +17,6 @@ use Magento\Framework\Registry;
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * Max number of retries for saving duplicated block
-     */
-    const MAX_RETRIES = 100;
-
-    /**
      * @var DataPersistorInterface
      */
     protected $dataPersistor;
@@ -102,13 +97,13 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 } else if ($redirect == 'close') {
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
-                    $data['is_active'] = Block::STATUS_DISABLED;
-                    $data['identifier'] = $data['identifier'] . uniqid();
-                    $this->dataPersistor->set('cms_block', $data);
-                    $model->setData($data);
-                    $this->blockRepository->save($model);
+                    $duplicateModel = $this->blockFactory->create()->setData($data);
+                    $duplicateModel->setID(null);
+                    $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());
+                    $duplicateModel->setIsActive(Block::STATUS_DISABLED);
+                    $this->blockRepository->save($duplicateModel);
+                    $id = $duplicateModel->getId();
                     $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
-                    return $resultRedirect->setPath('*/*/edit/block_id/' . $model->getId());
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -117,7 +112,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             }
 
             $this->dataPersistor->set('cms_block', $data);
-            return $resultRedirect->setPath('*/*/edit', ['block_id' => $this->getRequest()->getParam('block_id')]);
+            return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
         }
         return $resultRedirect->setPath('*/*/');
     }
