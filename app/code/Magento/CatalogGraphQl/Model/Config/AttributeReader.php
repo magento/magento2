@@ -57,7 +57,7 @@ class AttributeReader implements ReaderInterface
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function read($scope = null)
+    public function read($scope = null) : array
     {
         $targetStructures = $this->mapper->getMappedTypes(\Magento\Catalog\Model\Product::ENTITY);
         $config =[];

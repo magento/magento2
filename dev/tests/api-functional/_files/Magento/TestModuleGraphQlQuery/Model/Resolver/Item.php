@@ -7,9 +7,11 @@
 namespace Magento\TestModuleGraphQlQuery\Model\Resolver;
 
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
-use Magento\GraphQl\Model\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\TestModuleGraphQlQuery\Api\Data\ItemInterface;
 use Magento\TestModuleGraphQlQuery\Model\Entity\ItemFactory;
+use Magento\Framework\GraphQl\Config\Data\Field;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class Item implements ResolverInterface
 {
@@ -34,15 +36,19 @@ class Item implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(array $args, \Magento\GraphQl\Model\ResolverContextInterface $context)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?array {
         $id = 0;
-        /** @var \Magento\Framework\GraphQl\ArgumentInterface $arg */
-        foreach ($args as $arg) {
-            if ($arg->getName() === "id") {
-                $id = (int)$arg->getValue();
+        foreach ($args as $key => $argValue) {
+            if ($key === "id") {
+                $id = (int)$argValue;
             }
         }
 

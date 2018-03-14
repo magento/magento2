@@ -89,7 +89,7 @@ class ProductPlugin
      * @return SearchResultsInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetList(Product $subject, SearchResultsInterface $result)
+    public function afterGetList(Product $subject, SearchResultsInterface $result) : SearchResultsInterface
     {
         $processConfigurableData = false;
         /** @var ProductInterface $product */

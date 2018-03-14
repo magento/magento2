@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
@@ -19,7 +20,7 @@ class EntityIdToId implements FormatterInterface
      *
      * {@inheritdoc}
      */
-    public function format(Product $product, array $productData = [])
+    public function format(Product $product, array $productData = []) : array
     {
         $productData['id'] = $product->getId();
         unset($productData['entity_id']);

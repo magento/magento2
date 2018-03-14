@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
@@ -21,11 +20,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatte
 class Filter
 {
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var SearchResultFactory
      */
     private $searchResultFactory;
@@ -34,11 +28,6 @@ class Filter
      * @var Product
      */
     private $productDataProvider;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
 
     /**
      * @var FormatterInterface
@@ -51,25 +40,19 @@ class Filter
     private $postProcessors;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FormatterInterface $formatter
      * @param PostFetchProcessorInterface[] $postProcessors
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         FormatterInterface $formatter,
         array $postProcessors = []
     ) {
-        $this->productRepository = $productRepository;
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->postProcessors = $postProcessors;
         $this->formatter = $formatter;
     }
@@ -80,7 +63,7 @@ class Filter
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResult
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria)
+    public function getResult(SearchCriteriaInterface $searchCriteria) : SearchResult
     {
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
@@ -106,13 +89,13 @@ class Filter
     }
 
     /**
-     * Paginates array of Ids pulled back in search based off search criteria and total count.
+     * Paginate an array of Ids that get pulled back in search based off search criteria and total count.
      *
      * @param array $ids
      * @param SearchCriteriaInterface $searchCriteria
      * @return int[]
      */
-    private function paginateList(array $ids, SearchCriteriaInterface $searchCriteria)
+    private function paginateList(array $ids, SearchCriteriaInterface $searchCriteria) : array
     {
         $length = $searchCriteria->getPageSize();
         // Search starts pages from 0

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
 
@@ -36,7 +37,7 @@ class BundleOptions implements FormatterInterface
      *
      * {@inheritdoc}
      */
-    public function format(Product $product, array $productData = [])
+    public function format(Product $product, array $productData = []) : array
     {
         if ($product->getTypeId() === Bundle::TYPE_CODE) {
             $productData = $this->formatBundleAttributes($productData);
@@ -54,7 +55,7 @@ class BundleOptions implements FormatterInterface
      * @return array
      * @throws RuntimeException
      */
-    private function formatBundleAttributes(array $product)
+    private function formatBundleAttributes(array $product) : array
     {
         if (isset($product['price_view'])) {
             $product['price_view']

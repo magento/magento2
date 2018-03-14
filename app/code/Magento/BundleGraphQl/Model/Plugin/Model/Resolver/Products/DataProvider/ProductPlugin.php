@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\BundleGraphQl\Model\Plugin\Model\Resolver\Products\DataProvider;
 
@@ -82,7 +83,7 @@ class ProductPlugin
      * @return SearchResultsInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetList(Product $subject, SearchResultsInterface $result)
+    public function afterGetList(Product $subject, SearchResultsInterface $result) : SearchResultsInterface
     {
         $products = [];
         $productList = $result->getItems();
@@ -121,7 +122,7 @@ class ProductPlugin
      * @param \Magento\Catalog\Model\Product[] $products
      * @return array
      */
-    private function getOptionsCollectionByStoreId(array $products)
+    private function getOptionsCollectionByStoreId(array $products) : array
     {
         /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
         $optionsCollection = $this->bundleOption->create()->getResourceCollection();
@@ -179,7 +180,7 @@ class ProductPlugin
      * @param array $optionsMap
      * @return array
      */
-    private function hydrateLinks(array $optionsMap)
+    private function hydrateLinks(array $optionsMap) : array
     {
         $parentIds = [];
         $optionIds = [];

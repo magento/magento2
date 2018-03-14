@@ -3,22 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\TierPrice;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\SearchResultInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
-use Magento\GraphQl\Model\EntityAttributeList;
+use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
@@ -67,9 +61,9 @@ class Product
      * Gets list of product data with full data set
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
+     * @return SearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
