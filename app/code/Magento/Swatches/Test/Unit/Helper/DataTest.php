@@ -64,6 +64,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->imageHelperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->imageHelperMock->expects($this->any())
+            ->method('init')
+            ->willReturn($this->imageHelperMock);
         $this->productCollectionFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create']
@@ -375,19 +378,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
                     [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
                 ]);
-            $this->imageHelperMock->expects($this->atLeastOnce())
+            $this->imageHelperMock->expects($this->any())
                 ->method('setImageFile')
                 ->willReturnSelf();
-            $this->imageHelperMock->expects($this->atLeastOnce())
+            $this->imageHelperMock->expects($this->any())
                 ->method('constrainOnly')
                 ->willReturnSelf();
-            $this->imageHelperMock->expects($this->atLeastOnce())
+            $this->imageHelperMock->expects($this->any())
                 ->method('keepAspectRatio')
                 ->willReturnSelf();
-            $this->imageHelperMock->expects($this->atLeastOnce())
+            $this->imageHelperMock->expects($this->any())
                 ->method('keepFrame')
                 ->willReturnSelf();
-            $this->imageHelperMock->expects($this->atLeastOnce())
+            $this->imageHelperMock->expects($this->any())
                 ->method('getUrl')
                 ->willReturnMap($mediaUrls);
         }
@@ -448,13 +451,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $simpleProducts = [];
         for ($i = 0; $i < 2; $i++) {
-            $simpleProduct = $this->getMock(
+            $simpleProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['hasData', 'getMediaGalleryEntries'])
+                ->getMock();
+
+           /* $simpleProduct = $this->getMock(
                 \Magento\Catalog\Model\Product::class,
                 ['hasData', 'getMediaGalleryEntries'],
                 [],
                 '',
                 false
-            );
+            );*/
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];
