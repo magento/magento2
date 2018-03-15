@@ -84,8 +84,8 @@ class Download extends ImportController
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addErrorMessage(__('Incorrect file name.'));
 
-            return $this->getResultRedirect();        }
-
+            return $this->getResultRedirect();
+        }
         try {
             $fileContents = $this->sampleFileProvider->getFileContents($entityName);
         } catch (NoSuchEntityException $e) {

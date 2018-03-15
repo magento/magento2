@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\MultiDimensionalIndexer;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Index Name object
@@ -43,7 +44,7 @@ class IndexName
         foreach ($dimensions as $dimension) {
             if (!$dimension instanceof Dimension) {
                 throw new LocalizedException(
-                    __('Dimension have to be instance of Dimension class.')
+                    new Phrase('Dimension have to be instance of Dimension class.')
                 );
             }
         }
