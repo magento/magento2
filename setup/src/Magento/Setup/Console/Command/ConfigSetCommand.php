@@ -126,6 +126,7 @@ class ConfigSetCommand extends AbstractSetupCommand
                 $output->writeln('<info>You made no changes to the configuration.</info>');
             }
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
