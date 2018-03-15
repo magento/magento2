@@ -56,6 +56,12 @@ interface StockItemConfigurationInterface
     public function isQtyDecimal(): bool;
 
     /**
+     * @param bool $isQtyDecimal
+     * @return StockItemConfigurationInterface
+     */
+    public function setIsQtyDecimal(bool $isQtyDecimal): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isShowDefaultNotificationMessage(): bool;
@@ -66,9 +72,21 @@ interface StockItemConfigurationInterface
     public function isUseConfigMinQty(): bool;
 
     /**
+     * @param bool $useConfigMinQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigMinQty(bool $useConfigMinQty): StockItemConfigurationInterface;
+
+    /**
      * @return float
      */
     public function getMinQty(): float;
+
+    /**
+     * @param float $minQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setMinQty(float $minQty): StockItemConfigurationInterface;
 
     /**
      * @return bool
@@ -76,9 +94,21 @@ interface StockItemConfigurationInterface
     public function isUseConfigMinSaleQty(): bool;
 
     /**
+     * @param bool $useConfigMinSaleQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigMinSaleQty(bool $useConfigMinSaleQty): StockItemConfigurationInterface;
+
+    /**
      * @return float
      */
     public function getMinSaleQty(): float;
+
+    /**
+     * @param float $minSaleQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setMinSaleQty(float $minSaleQty): StockItemConfigurationInterface;
 
     /**
      * @return bool
@@ -86,14 +116,32 @@ interface StockItemConfigurationInterface
     public function isUseConfigMaxSaleQty(): bool;
 
     /**
+     * @param bool $useConfigMaxSaleQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigMaxSaleQty(bool $useConfigMaxSaleQty): StockItemConfigurationInterface;
+
+    /**
      * @return float
      */
     public function getMaxSaleQty(): float;
 
     /**
+     * @param float $maxSaleQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setMaxSaleQty(float $maxSaleQty): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isUseConfigBackorders(): bool;
+
+    /**
+     * @param bool $useConfigBackorders
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigBackorders(bool $useConfigBackorders): StockItemConfigurationInterface;
 
     /**
      * Retrieve backorders status
@@ -103,9 +151,21 @@ interface StockItemConfigurationInterface
     public function getBackorders(): int;
 
     /**
+     * @param int $backOrders
+     * @return StockItemConfigurationInterface
+     */
+    public function setBackorders(int $backOrders): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isUseConfigNotifyStockQty(): bool;
+
+    /**
+     * @param bool $useConfigNotifyStockQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigNotifyStockQty(bool $useConfigNotifyStockQty): StockItemConfigurationInterface;
 
     /**
      * @return float
@@ -113,9 +173,21 @@ interface StockItemConfigurationInterface
     public function getNotifyStockQty(): float;
 
     /**
+     * @param float $notifyStockQty
+     * @return StockItemConfigurationInterface
+     */
+    public function setNotifyStockQty(float $notifyStockQty): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isUseConfigQtyIncrements(): bool;
+
+    /**
+     * @param bool $useConfigQtyIncrements
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigQtyIncrements(bool $useConfigQtyIncrements): StockItemConfigurationInterface;
 
     /**
      * Retrieve Quantity Increments data wrapper
@@ -125,9 +197,21 @@ interface StockItemConfigurationInterface
     public function getQtyIncrements(): float;
 
     /**
+     * @param float $qtyIncrements
+     * @return StockItemConfigurationInterface
+     */
+    public function setQtyIncrements(float $qtyIncrements): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isUseConfigEnableQtyInc(): bool;
+
+    /**
+     * @param bool $useConfigEnableQtyInc
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigEnableQtyInc(bool $useConfigEnableQtyInc): StockItemConfigurationInterface;
 
     /**
      * @return bool
@@ -135,9 +219,21 @@ interface StockItemConfigurationInterface
     public function isEnableQtyIncrements(): bool;
 
     /**
+     * @param $enableQtyIncrements
+     * @return StockItemConfigurationInterface
+     */
+    public function setEnableQtyIncrements(bool $enableQtyIncrements): StockItemConfigurationInterface;
+
+    /**
      * @return bool
      */
     public function isUseConfigManageStock(): bool;
+
+    /**
+     * @param bool $useConfigManageStock
+     * @return StockItemConfigurationInterface
+     */
+    public function setUseConfigManageStock(bool $useConfigManageStock): StockItemConfigurationInterface;
 
     /**
      * @return bool
@@ -145,9 +241,21 @@ interface StockItemConfigurationInterface
     public function isManageStock(): bool;
 
     /**
+     * @param bool $manageStock
+     * @return StockItemConfigurationInterface
+     */
+    public function setManageStock(bool $manageStock): StockItemConfigurationInterface;
+
+    /**
      * @return string
      */
     public function getLowStockDate(): string;
+
+    /**
+     * @param string $lowStockDate
+     * @return StockItemConfigurationInterface
+     */
+    public function setLowStockDate(string $lowStockDate): StockItemConfigurationInterface;
 
     /**
      * @return bool
@@ -155,7 +263,19 @@ interface StockItemConfigurationInterface
     public function isDecimalDivided(): bool;
 
     /**
+     * @param bool $isDecimalDivided
+     * @return StockItemConfigurationInterface
+     */
+    public function setIsDecimalDivided(bool $isDecimalDivided): StockItemConfigurationInterface;
+
+    /**
      * @return int
      */
-    public function getStockStatusChangedAuto(): int;
+    public function getStockStatusChangedAuto(): bool;
+
+    /**
+     * @param int $stockStatusChangedAuto
+     * @return StockItemConfigurationInterface
+     */
+    public function setStockStatusChangedAuto(int $stockStatusChangedAuto): StockItemConfigurationInterface;
 }
