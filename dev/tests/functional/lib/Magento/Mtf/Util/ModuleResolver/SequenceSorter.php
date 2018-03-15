@@ -22,7 +22,7 @@ class SequenceSorter implements SequenceSorterInterface
      */
     public function __construct()
     {
-//        $this->initObjectManager();
+        $this->initObjectManager();
     }
 
     /**
@@ -59,20 +59,20 @@ class SequenceSorter implements SequenceSorterInterface
      */
     public function sort(array $paths)
     {
-//        $sortedPaths = [];
-//        $modules = array_keys($this->getModuleSequence());
-//        foreach ($modules as $module) {
-//            foreach ($paths as $key => $path) {
-//                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', DIRECTORY_SEPARATOR, $module));
-//                $path = realpath($path);
-//                if (strpos($path, $modulePath) !== false) {
-//                    $sortedPaths[] = $path;
-//                    unset($paths[$key]);
-//                }
-//            }
-//        }
-//        $sortedPaths = array_merge($sortedPaths, $paths);
+        $sortedPaths = [];
+        $modules = array_keys($this->getModuleSequence());
+        foreach ($modules as $module) {
+            foreach ($paths as $key => $path) {
+                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', DIRECTORY_SEPARATOR, $module));
+                $path = realpath($path);
+                if (strpos($path, $modulePath) !== false) {
+                    $sortedPaths[] = $path;
+                    unset($paths[$key]);
+                }
+            }
+        }
+        $sortedPaths = array_merge($sortedPaths, $paths);
 
-        return $paths;
+        return $sortedPaths;
     }
 }
