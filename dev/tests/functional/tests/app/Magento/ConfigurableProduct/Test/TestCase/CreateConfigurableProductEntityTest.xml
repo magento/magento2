@@ -237,7 +237,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductImages" />
         </variation>
-        <variation name="CreateConfigurableProductEntityTestVariation15" summary="Create Configurable Product with 1 out of stock and several in stock options with displaying out of stock ones">
+        <variation name="CreateConfigurableProductEntityTestVariation15" summary="Create Configurable Product with 1 out of stock and several in stock options with displaying out of stock ones" ticketId="MAGETWO-89274">
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">three_new_options_with_out_of_stock_product</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>

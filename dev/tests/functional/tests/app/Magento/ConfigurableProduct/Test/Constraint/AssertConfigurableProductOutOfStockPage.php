@@ -32,10 +32,8 @@ class AssertConfigurableProductOutOfStockPage extends AssertProductPage
         $priceBlock = $this->productView->getPriceBlock();
         $fixturePrice = $this->getLowestConfigurablePrice();
 
-        if ($fixturePrice === null) {
-            if ($priceBlock->isVisible()) {
-                return "Price block for '{$this->product->getName()}' product' is visible.";
-            }
+        if ($fixturePrice === null && $priceBlock->isVisible()) {
+            return "Price block for '{$this->product->getName()}' product' is visible.";
         } else {
             if (!$priceBlock->isVisible()) {
                 return "Price block for '{$this->product->getName()}' product' is not visible.";
