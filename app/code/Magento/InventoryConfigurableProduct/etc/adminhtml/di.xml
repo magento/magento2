@@ -9,7 +9,7 @@
     <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-                <item name="quantity_per_stock" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
+                <item name="inventoryConfigurablePanel" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
             </argument>
         </arguments>
     </type>
