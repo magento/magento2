@@ -105,7 +105,7 @@ class ResourceConnection
     {
         if ($resourceName === null) {
             foreach ($this->connections as $processConnection) {
-                if ($processConnection instanceof AdapterInterface) {
+                if ($processConnection !== null) {
                     $processConnection->closeConnection();
                 }
             }
@@ -113,7 +113,7 @@ class ResourceConnection
         } else {
             $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
             if (isset($this->connections[$processConnectionName])) {
-                if ($this->connections[$processConnectionName] instanceof AdapterInterface) {
+                if ($this->connections[$processConnectionName] !== null) {
                     $this->connections[$processConnectionName]->closeConnection();
                 }
                 $this->connections[$processConnectionName] = null;
