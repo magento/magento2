@@ -98,4 +98,28 @@
     <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
     <!-- ProductSalabilityError -->
     <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
+    <!-- IsProductSalableForRequestedQtyConditionOnPlaceOrder -->
+    <virtualType name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChainOnPlaceOrder" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="back_order" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">10</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\BackOrderCondition</item>
+                </item>
+                <item name="manage_stock" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">20</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ManageStockCondition</item>
+                </item>
+                <item name="is_salable_with_reservations" xsi:type="array">
+                    <item name="sort_order" xsi:type="number">30</item>
+                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsSalableWithReservationsCondition</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin">
+        <arguments>
+            <argument name="isProductSalableForRequestedQty" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
+        </arguments>
+    </type>
 </config>
