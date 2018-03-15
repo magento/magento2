@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -50,15 +48,6 @@ class InventoryConfigurablePanel extends AbstractModifier
      */
     private $locator;
 
-    /**
-     * @var ConfigurableType
-     */
-    private $configurableType;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
@@ -66,25 +55,19 @@ class InventoryConfigurablePanel extends AbstractModifier
      * @param SourceRepositoryInterface $sourceRepository
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
-     * @param ConfigurableType $configurableType
-     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         SourceRepositoryInterface $sourceRepository,
         IsSingleSourceModeInterface $isSingleSourceMode,
-        LocatorInterface $locator,
-        ConfigurableType $configurableType,
-        ProductRepositoryInterface $productRepository
+        LocatorInterface $locator
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->sourceRepository = $sourceRepository;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
-        $this->configurableType = $configurableType;
-        $this->productRepository = $productRepository;
     }
 
     /**
