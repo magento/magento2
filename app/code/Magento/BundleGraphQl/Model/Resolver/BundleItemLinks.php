@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * {@inheritdoc}
@@ -31,19 +33,29 @@ class BundleItemLinks implements ResolverInterface
     private $enumLookup;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param CollectionFactory $linkCollectionFactory
      * @param EnumLookup $enumLookup
+     * @param ValueFactory $valueFactory
      */
-    public function __construct(CollectionFactory $linkCollectionFactory, EnumLookup $enumLookup)
-    {
+    public function __construct(
+        CollectionFactory $linkCollectionFactory,
+        EnumLookup $enumLookup,
+        ValueFactory $valueFactory
+    ) {
         $this->linkCollectionFactory = $linkCollectionFactory;
         $this->enumLookup = $enumLookup;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?array
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
     {
         /** @var Collection $linkCollection */
         $linkCollection = $this->linkCollectionFactory->create();
@@ -81,6 +93,10 @@ class BundleItemLinks implements ResolverInterface
             $links[] = $data;
         }
 
-        return $links;
+        $result = function () use ($links) {
+            return $links;
+        };
+
+        return $this->valueFactory->create($result);
     }
 }

@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -25,12 +27,16 @@ class CustomAttributeMetadata implements ResolverInterface
      */
     private $type;
 
+    private $valueFactory;
+
     /**
      * @param Type $type
+     * @param ValueFactory $valueFactory
      */
-    public function __construct(Type $type)
+    public function __construct(Type $type, ValueFactory $valueFactory)
     {
         $this->type = $type;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -42,7 +48,7 @@ class CustomAttributeMetadata implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?array {
+    ) : ?Value {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs as $attribute) {
@@ -81,7 +87,11 @@ class CustomAttributeMetadata implements ResolverInterface
             ];
         }
 
-        return $attributes;
+        $result = function () use ($attributes) {
+            return $attributes;
+        };
+
+        return $this->valueFactory->create($result);
     }
 
     /**

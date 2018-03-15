@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -36,18 +38,26 @@ class Products implements ResolverInterface
     private $filterQuery;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
-        Filter $filterQuery
+        Filter $filterQuery,
+        ValueFactory $valueFactory
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -59,7 +69,7 @@ class Products implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?array {
+    ) : ?Value {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
 
         if (!isset($args['search']) && !isset($args['filter'])) {
@@ -89,7 +99,7 @@ class Products implements ResolverInterface
             );
         }
 
-        return [
+        $data = [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
@@ -97,5 +107,11 @@ class Products implements ResolverInterface
                 'current_page' => $currentPage
             ]
         ];
+
+        $result = function () use ($data) {
+            return $data;
+        };
+
+        return $this->valueFactory->create($result);
     }
 }

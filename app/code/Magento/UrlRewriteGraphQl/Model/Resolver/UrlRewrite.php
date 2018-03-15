@@ -9,6 +9,7 @@ namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -48,7 +49,7 @@ class UrlRewrite implements ResolverInterface
         array $args = null,
         $context,
         ResolveInfo $info
-    ) : ?array {
+    ) : ?Value {
         if (isset($args['url'])) {
             $urlRewrite = $this->findCanonicalUrl($args['url']);
             if ($urlRewrite) {

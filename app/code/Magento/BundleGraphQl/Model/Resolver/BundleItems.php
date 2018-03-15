@@ -12,6 +12,8 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Bundle\Model\OptionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -35,18 +37,26 @@ class BundleItems implements ResolverInterface
     private $storeManager;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param OptionFactory $bundleOption
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param StoreManagerInterface $storeManager
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
         OptionFactory $bundleOption,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ValueFactory $valueFactory
     ) {
         $this->bundleOption = $bundleOption;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->storeManager = $storeManager;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -54,10 +64,10 @@ class BundleItems implements ResolverInterface
      *
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?array
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
     {
         if ($value['type_id'] !== Type::TYPE_CODE) {
-            return $value;
+            return null;
         }
 
         /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
@@ -69,7 +79,7 @@ class BundleItems implements ResolverInterface
 
         $this->extensionAttributesJoinProcessor->process($optionsCollection);
         if (empty($optionsCollection->getData())) {
-            return [];
+            return null;
         }
 
         $options = [];
@@ -81,6 +91,10 @@ class BundleItems implements ResolverInterface
             $options[$option->getId()]['sku'] = $value['sku'];
         }
 
-        return $options;
+        $result = function () use ($options) {
+            return $options;
+        };
+
+        return $this->valueFactory->create($result);
     }
 }

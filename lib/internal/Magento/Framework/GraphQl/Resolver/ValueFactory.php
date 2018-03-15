@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Framework\GraphQl\Resolver;
+use Magento\Framework\ObjectManagerInterface;
+
+/**
+ * Create @see Value to return data from passed in callback to GraphQL library
+ */
+class ValueFactory
+{
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
+     * Create value with passed in callback that returns data as parameter;
+     *
+     * @param callable $callback
+     * @return Value
+     */
+    public function create(callable $callback)
+    {
+        return $this->objectManager->create(Value::class, ['callback' => $callback]);
+    }
+}
