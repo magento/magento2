@@ -91,13 +91,6 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             );
         }
 
-        if ($this->isMinQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
-            return $this->createErrorResult(
-                'is_correct_qty-out_of_stock_threshold',
-                __('The requested qty is not available')
-            );
-        }
-
         if ($this->isMinSaleQuantityCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-min_sale_qty',
@@ -138,27 +131,6 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
             ])
         ];
         return $this->productSalableResultFactory->create(['errors' => $errors]);
-    }
-
-    /**
-     * @param StockItemConfigurationInterface $stockItemConfiguration
-     * @param float $requestedQty
-     * @return bool
-     */
-    private function isMinQuantityCheckFailed(
-        StockItemConfigurationInterface $stockItemConfiguration,
-        float $requestedQty
-    ) : bool {
-        // Out-of-Stock Threshold
-        // TODO verify whether we should use < or <=
-        $globalMinQty = $this->configuration->getMinQty();
-        if (($stockItemConfiguration->isUseConfigMinQty() == 1 && $requestedQty < $globalMinQty)
-            || ($stockItemConfiguration->isUseConfigMinQty() == 0
-                && $requestedQty < $stockItemConfiguration->getMinQty()
-            )) {
-            return true;
-        }
-        return false;
     }
 
     /**
