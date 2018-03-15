@@ -107,56 +107,6 @@
                     </validation>
                 </settings>
             </field>
-            <container name="quantity_below_group" component="Magento_Ui/js/form/components/group" template="ui/group/group">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string">Notify for Quantity Below</item>
-                        <item name="dataScope" xsi:type="string">quantity_below_group</item>
-                    </item>
-                </argument>
-                <field name="notify_stock_qty" formElement="input">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="deferredTmpl" xsi:type="boolean">true</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <dataScope>notify_stock_qty</dataScope>
-                        <dataType>text</dataType>
-                        <imports>
-                            <link name="disabled">${$.parentName}.notify_stock_qty_use_default:checked</link>
-                        </imports>
-                    </settings>
-                </field>
-                <field name="notify_stock_qty_use_default" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
-                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
-                            <item name="value" xsi:type="string">1</item>
-                            <item name="deferredTmpl" xsi:type="boolean">true</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <dataScope>notify_stock_qty_use_default</dataScope>
-                        <links>
-                            <link name="linkedValue">${$.provider}:${$.parentScope}.notify_stock_qty</link>
-                        </links>
-                    </settings>
-                    <formElements>
-                        <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
-                            <settings>
-                                <description translate="true">Use config</description>
-                                <valueMap>
-                                    <map name="true" xsi:type="string">1</map>
-                                    <map name="false" xsi:type="string">0</map>
-                                </valueMap>
-                            </settings>
-                        </checkbox>
-                    </formElements>
-                </field>
-            </container>
             <actionDelete name="actionDelete" component="Magento_Ui/js/dynamic-rows/action-delete" template="ui/dynamic-rows/cells/action-delete">
                 <settings>
                     <dataType>text</dataType>

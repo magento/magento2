@@ -28,8 +28,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\ProductQuantityProvider">
-        <plugin name="adapt_product_quantity_provider"
-                type="Magento\InventoryConfigurableProduct\Plugin\ConfigurableProduct\Ui\DataProvider\ProductFormModifier\AdaptProductQuantityProviderPlugin"/>
-    </type>
 </config>
