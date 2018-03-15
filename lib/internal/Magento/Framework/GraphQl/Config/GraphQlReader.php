@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Config;
 
@@ -35,7 +36,7 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         $this->fileName = $fileName;
     }
 
-    public function read($scope = null)
+    public function read($scope = null) : array
     {
         $result = [];
         $scope = $scope ?: $this->defaultScope;
@@ -96,7 +97,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
     }
 
 
-    private function readEnumTypeMeta(\GraphQL\Type\Definition\EnumType $typeMeta)
+    /**
+     * @param \GraphQL\Type\Definition\EnumType $typeMeta
+     * @return array
+     */
+    private function readEnumTypeMeta(\GraphQL\Type\Definition\EnumType $typeMeta) : array
     {
         $result = [
             'name' => $typeMeta->name,
@@ -114,12 +119,20 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 
-    private function isScalarType($type)
+    /**
+     * @param string $type
+     * @return bool
+     */
+    private function isScalarType(string $type) : bool
     {
         return in_array($type, ['String', 'Int', 'Float', 'Boolean', 'ID']);
     }
 
-    private function readObjectTypeMeta(\GraphQL\Type\Definition\ObjectType $typeMeta)
+    /**
+     * @param \GraphQL\Type\Definition\ObjectType $typeMeta
+     * @return array
+     */
+    private function readObjectTypeMeta(\GraphQL\Type\Definition\ObjectType $typeMeta) : array
     {
         $typeName = $typeMeta->name;
         $result = [
@@ -146,7 +159,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 
-    private function readInputObjectTypeMeta(\GraphQL\Type\Definition\InputObjectType $typeMeta)
+    /**
+     * @param \GraphQL\Type\Definition\InputObjectType $typeMeta
+     * @return array
+     */
+    private function readInputObjectTypeMeta(\GraphQL\Type\Definition\InputObjectType $typeMeta) : array
     {
         $typeName = $typeMeta->name;
         $result = [
@@ -161,7 +178,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 
-    private function readInterfaceTypeMeta(\GraphQL\Type\Definition\InterfaceType $typeMeta)
+    /**
+     * @param \GraphQL\Type\Definition\InterfaceType $typeMeta
+     * @return array
+     */
+    private function readInterfaceTypeMeta(\GraphQL\Type\Definition\InterfaceType $typeMeta) : array
     {
         $typeName = $typeMeta->name;
         $result = [
@@ -182,7 +203,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 
-    private function readFieldMeta(\GraphQL\Type\Definition\FieldDefinition $fieldMeta)
+    /**
+     * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
+     * @return array
+     */
+    private function readFieldMeta(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : array
     {
         $fieldName = $fieldMeta->name;
         $fieldTypeMeta = $fieldMeta->getType();
@@ -216,7 +241,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 
-    private function readInputObjectFieldMeta(\GraphQL\Type\Definition\InputObjectField $fieldMeta)
+    /**
+     * @param \GraphQL\Type\Definition\InputObjectField $fieldMeta
+     * @return array
+     */
+    private function readInputObjectFieldMeta(\GraphQL\Type\Definition\InputObjectField $fieldMeta) : array
     {
         $fieldName = $fieldMeta->name;
         $typeMeta = $fieldMeta->getType();
@@ -234,10 +263,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
     /**
      * @param $meta
      * @param string $parameterType Argument|OutputField|InputField
-     * @return mixed
+     * @return array
      */
-    private function readTypeMeta($meta, $parameterType = 'Argument')
+    private function readTypeMeta($meta, $parameterType = 'Argument') : array
     {
+        $result = [];
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {
             $result['required'] = true;
             $meta = $meta->getWrappedType();
@@ -255,7 +285,7 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
             $result['description'] = $itemTypeMeta->description;
             $itemTypeName = $itemTypeMeta->name;
             $result['itemType'] = $itemTypeName;
-            if ($this->isScalarType($itemTypeMeta)) {
+            if ($this->isScalarType((string)$itemTypeMeta)) {
                 $result['type'] = 'ScalarArray' . $parameterType;
             } else {
                 $result['type'] = 'ObjectArray' . $parameterType;
@@ -271,7 +301,7 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
      * @return string|null
      */
-    private function readFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta)
+    private function readFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : ?string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $fieldMeta->astNode->directives;
@@ -291,7 +321,7 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
      * @param \GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta
      * @return string|null
      */
-    private function readInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta)
+    private function readInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta) : ?string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $interfaceTypeMeta->astNode->directives;
@@ -311,7 +341,7 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
      * @param string $graphQlSchemaContent
      * @return array [$typeName => $typeDeclaration, ...]
      */
-    private function parseTypes($graphQlSchemaContent)
+    private function parseTypes($graphQlSchemaContent) : array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
         $typeNamePattern = '[_A-Za-z][_0-9A-Za-z]*';
