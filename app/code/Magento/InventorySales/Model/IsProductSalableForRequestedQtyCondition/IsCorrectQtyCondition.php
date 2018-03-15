@@ -143,12 +143,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         float $requestedQty
     ) : bool {
         // Minimum Qty Allowed in Shopping Cart
-        // TODO verify whether we should use < or <=
-        $globalMinSaleQty = $this->configuration->getMinSaleQty();
-        if (($stockItemConfiguration->isUseConfigMinSaleQty() == 1 && $requestedQty < $globalMinSaleQty)
-            || ($stockItemConfiguration->isUseConfigMinSaleQty() == 0
-                && $requestedQty < $stockItemConfiguration->getMinSaleQty()
-            )) {
+        if ($stockItemConfiguration->getMinSaleQty() && $requestedQty < $stockItemConfiguration->getMinSaleQty()) {
             return true;
         }
         return false;
@@ -164,12 +159,7 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         float $requestedQty
     ) : bool {
         // Maximum Qty Allowed in Shopping Cart
-        // TODO verify whether we should use > or >=
-        $globalMaxSaleQty = $this->configuration->getMaxSaleQty();
-        if (($stockItemConfiguration->isUseConfigMaxSaleQty() == 1 && $requestedQty > $globalMaxSaleQty)
-            || ($stockItemConfiguration->isUseConfigMaxSaleQty() == 0
-                && $requestedQty > $stockItemConfiguration->getMaxSaleQty()
-            )) {
+        if ($stockItemConfiguration->getMaxSaleQty() && $requestedQty > $stockItemConfiguration->getMaxSaleQty()) {
             return true;
         }
         return false;
