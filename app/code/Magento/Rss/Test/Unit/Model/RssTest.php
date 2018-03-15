@@ -119,11 +119,11 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $this->rss->setDataProvider($dataProvider);
         $result = $this->rss->createRssXml();
         $this->assertContains('<?xml version="1.0" encoding="UTF-8"?>', $result);
-        $this->assertContains('<title><![CDATA[Feed Title]]></title>', $result);
-        $this->assertContains('<title><![CDATA[Feed 1 Title]]></title>', $result);
+        $this->assertContains('<title>Feed Title</title>', $result);
+        $this->assertContains('<title>Feed 1 Title</title>', $result);
         $this->assertContains('<link>http://magento.com/rss/link</link>', $result);
         $this->assertContains('<link>http://magento.com/rss/link/id/1</link>', $result);
-        $this->assertContains('<description><![CDATA[Feed Description]]></description>', $result);
+        $this->assertContains('<description>Feed Description</description>', $result);
         $this->assertContains('<description><![CDATA[Feed 1 Description]]></description>', $result);
     }
 }
