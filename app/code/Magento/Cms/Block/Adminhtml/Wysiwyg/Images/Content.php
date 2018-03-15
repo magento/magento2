@@ -94,7 +94,6 @@ class Content extends \Magento\Backend\Block\Widget\Container
     {
         return $this->getUrl('cms/*/contents', [
             'type' => $this->getRequest()->getParam('type'),
-            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
         ]);
     }
 
@@ -143,9 +142,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     protected function getDeletefolderUrl()
     {
-        return $this->getUrl('cms/*/deleteFolder', [
-            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
-        ]);
+        return $this->getUrl('cms/*/deleteFolder');
     }
 
     /**
@@ -165,9 +162,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getOnInsertUrl()
     {
-        return $this->getUrl('cms/*/onInsert', [
-            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root'),
-        ]);
+        return $this->getUrl('cms/*/onInsert');
     }
 
     /**

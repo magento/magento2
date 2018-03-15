@@ -95,9 +95,7 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        $params = [
-            'use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root')
-        ];
+        $params = [];
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
