@@ -88,7 +88,31 @@ class ProcessRegisterProductsSalePlugin
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
 
+        $this->checkItemsQuantity($items, $productSkus, $stockId);
         $reservations = [];
+        foreach ($productSkus as $productId => $sku) {
+            $reservations[] = $this->reservationBuilder
+                ->setSku($sku)
+                ->setQuantity(-(float)$items[$productId])
+                ->setStockId($stockId)
+                ->build();
+        }
+        $this->appendReservations->execute($reservations);
+
+        return [];
+    }
+
+    /**
+     * Check is all items salable
+     *
+     * @param array $items
+     * @param array $productSkus
+     * @param int $stockId
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkItemsQuantity(array $items, array $productSkus, int $stockId)
+    {
         foreach ($productSkus as $productId => $sku) {
             $qty = (float)$items[$productId];
             $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
@@ -97,14 +121,6 @@ class ProcessRegisterProductsSalePlugin
                     __('Not all of your products are available in the requested quantity.')
                 );
             }
-            $reservations[] = $this->reservationBuilder
-                ->setSku($sku)
-                ->setQuantity(-$qty)
-                ->setStockId($stockId)
-                ->build();
         }
-        $this->appendReservations->execute($reservations);
-
-        return [];
     }
 }
