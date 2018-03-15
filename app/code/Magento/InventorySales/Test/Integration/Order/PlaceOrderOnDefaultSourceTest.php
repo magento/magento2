@@ -14,26 +14,27 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 
-class PlaceOrderOnNotDefaultSourceTest extends TestCase
+class PlaceOrderOnDefaultSourceTest extends TestCase
 {
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
     /**
      * @var CleanupReservationsInterface
      */
@@ -70,16 +71,6 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
     private $reservationBuilder;
 
     /**
-     * @var StockRepositoryInterface
-     */
-    private $stockRepository;
-
-    /**
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -97,13 +88,12 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
     protected function setUp()
     {
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
-        $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-        $this->storeRepository = Bootstrap::getObjectManager()->get(StoreRepositoryInterface::class);
         $this->cartManagement = Bootstrap::getObjectManager()->get(CartManagementInterface::class);
         $this->cartRepository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->cartItemFactory = Bootstrap::getObjectManager()->get(CartItemInterfaceFactory::class);
+        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
@@ -112,12 +102,7 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @throws CouldNotSaveException
@@ -128,11 +113,10 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
     public function testPlaceOrderWithInStockProduct()
     {
         $sku = 'SKU-1';
-        $stockId = 10;
-        $quoteItemQty = 4;
+        $quoteItemQty = 5.5;
         $reservedDuringCheckoutQty = 1.5;
 
-        $cart = $this->getCartByStockId($stockId);
+        $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
         $cartItem =
             $this->cartItemFactory->create(
@@ -149,25 +133,20 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
-        $this->appendReservation($sku, -$reservedDuringCheckoutQty, $stockId);
+        $this->appendReservation($sku, -$reservedDuringCheckoutQty);
 
         $orderId = $this->cartManagement->placeOrder($cart->getId());
 
         self::assertNotNull($orderId);
 
         //cleanup
-        $this->appendReservation($sku, $reservedDuringCheckoutQty, $stockId);
+        $this->appendReservation($sku, $reservedDuringCheckoutQty);
         $this->deleteOrderById((int)$orderId);
     }
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/quote.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
      * @throws CouldNotSaveException
@@ -178,11 +157,10 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
     public function testPlaceOrderWithOutOffStockProduct()
     {
         $sku = 'SKU-1';
-        $stockId = 10;
-        $quoteItemQty = 4;
-        $reservedDuringCheckoutQty = 3.8;
+        $quoteItemQty = 5.5;
+        $reservedDuringCheckoutQty = 4.9;
 
-        $cart = $this->getCartByStockId($stockId);
+        $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
         $cartItem =
             $this->cartItemFactory->create(
@@ -200,7 +178,7 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
         $this->cartRepository->save($cart);
 
         //append reservation during checkout to make laking quantity in stock
-        $this->appendReservation($sku, -$reservedDuringCheckoutQty, $stockId);
+        $this->appendReservation($sku, -$reservedDuringCheckoutQty);
 
         self::expectException(LocalizedException::class);
         $orderId = $this->cartManagement->placeOrder($cart->getId());
@@ -208,51 +186,38 @@ class PlaceOrderOnNotDefaultSourceTest extends TestCase
         self::assertNull($orderId);
 
         //cleanup
-        $this->appendReservation($sku, $reservedDuringCheckoutQty, $stockId);
+        $this->appendReservation($sku, $reservedDuringCheckoutQty);
     }
 
     /**
      * @param string $productSku
      * @param float $qty
-     * @param int $stockId
      * @return void
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws ValidationException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
-    private function appendReservation(string $productSku, float $qty, int $stockId)
+    private function appendReservation(string $productSku, float $qty)
     {
         $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId($stockId)->setSku($productSku)->setQuantity($qty)->build(),
+            $this->reservationBuilder->setStockId(
+                $this->defaultStockProvider->getId()
+            )->setSku($productSku)->setQuantity($qty)->build(),
         ]);
     }
 
     /**
-     * @param int $stockId
      * @return CartInterface
      * @throws NoSuchEntityException
      */
-    private function getCartByStockId(int $stockId): CartInterface
+    private function getCart(): CartInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('reserved_order_id', 'test_order_1')
             ->create();
         /** @var CartInterface $cart */
         $cart = current($this->cartRepository->getList($searchCriteria)->getItems());
-        /** @var StockInterface $stock */
-        $stock = $this->stockRepository->get($stockId);
-        /** @var SalesChannelInterface[] $salesChannels */
-        $salesChannels = $stock->getExtensionAttributes()->getSalesChannels();
-        $storeCode = 'store_for_';
-        foreach ($salesChannels as $salesChannel) {
-            if ($salesChannel->getType() == SalesChannelInterface::TYPE_WEBSITE) {
-                $storeCode .= $salesChannel->getCode();
-                break;
-            }
-        }
-        /** @var StoreInterface $store */
-        $store = $this->storeRepository->get($storeCode);
-        $cart->setStoreId($store->getId());
+        $cart->setStoreId(1);
 
         return $cart;
     }
