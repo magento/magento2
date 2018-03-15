@@ -51,6 +51,7 @@ class Field implements OutputFieldInterface
      * @param string $type
      * @param bool $required
      * @param bool $isList
+     * @param $itemType $itemType
      * @param string $resolver
      * @param string $description
      * @param array $arguments
@@ -60,12 +61,13 @@ class Field implements OutputFieldInterface
         string $type,
         bool $required,
         bool $isList,
-        string $resolver = "",
-        string $description = "",
+        string $itemType = '',
+        string $resolver = '',
+        string $description = '',
         array $arguments = []
     ) {
         $this->name = $name;
-        $this->type = $type;
+        $this->type = $isList ? $itemType : $type;
         $this->required = $required;
         $this->isList = $isList;
         $this->resolver = $resolver;

@@ -61,6 +61,7 @@ class Argument implements FieldInterface
      * @param string $description
      * @param bool $required
      * @param bool $isList
+     * @param $itemType $itemType
      * @param bool $itemsRequired
      * @param string $default
      */
@@ -71,11 +72,12 @@ class Argument implements FieldInterface
         string $description,
         bool $required,
         bool $isList,
+        string $itemType = '',
         bool $itemsRequired = false,
         string $default = null
     ) {
         $this->name = $name;
-        $this->type = $type;
+        $this->type = $isList ? $itemType : $type;
         $this->baseType = $baseType;
         $this->description = $description;
         $this->required = $required;
