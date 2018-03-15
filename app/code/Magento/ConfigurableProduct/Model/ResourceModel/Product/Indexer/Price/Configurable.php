@@ -19,13 +19,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     protected function reindex($entityIds = null)
     {
         if ($this->hasEntity() || !empty($entityIds)) {
-            $requiredEntityIds = $entityIds;
-            if ($entityIds !== null) {
-                $childrenIds = $this->getRelationsByParent($entityIds);
-                $requiredEntityIds = array_merge($entityIds, $childrenIds);
-            }
-
-            $this->prepareFinalPriceDataForType($requiredEntityIds, null);
+            $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
             $this->_applyCustomOption();
             $this->_applyConfigurableOption($entityIds);
             $this->_movePriceDataToIndexTable($entityIds);
@@ -94,7 +88,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $this->_prepareConfigurableOptionPriceTable();
 
         $select = $connection->select()->from(
-            ['i' => $finalPriceTable],
+            ['i' => $this->getIdxTable()],
             []
         )->join(
             ['l' => $this->getTable('catalog_product_super_link')],
@@ -109,8 +103,8 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
                 'le.entity_id',
                 'customer_group_id',
                 'website_id',
-                'MIN(price)',
-                'MAX(price)',
+                'MIN(final_price)',
+                'MAX(final_price)',
                 'MIN(tier_price)',
 
             ]
