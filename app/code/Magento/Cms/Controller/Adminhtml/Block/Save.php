@@ -98,7 +98,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                     return $resultRedirect->setPath('*/*/');
                 } else if ($redirect == 'duplicate') {
                     $duplicateModel = $this->blockFactory->create()->setData($data);
-                    $duplicateModel->setID(null);
+                    $duplicateModel->setId(null);
                     $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());
                     $duplicateModel->setIsActive(Block::STATUS_DISABLED);
                     $this->blockRepository->save($duplicateModel);

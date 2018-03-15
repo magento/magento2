@@ -18,12 +18,12 @@ class LayoutList implements \Magento\Framework\Option\ArrayInterface
     /**
      * @var array
      */
-    protected $options;
+    private $options;
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Layout
      */
-    protected $layoutSource;
+    private $layoutSource;
 
     /**
      * @param Layout $layoutSource
