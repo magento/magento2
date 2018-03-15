@@ -4223,5 +4223,6 @@ return [
     ['Magento\Framework\MessageQueue\PublisherFactory'],
     ['Magento\Framework\MessageQueue\PublisherProxy'],
     ['Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton'],
-    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton']
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton'],
+    ['Zend_Feed', 'Zend\Feed']
 ];
