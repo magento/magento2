@@ -12,7 +12,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class for testing not synchronized DataProvider.
- *
  */
 class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
 {
