@@ -536,6 +536,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
+     * @deprecated
      */
     protected $_stockResItemFac;
 
@@ -707,7 +708,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Stock Item Importer
      *
-     * @var StockItemImporterInterface $stockItemImporter
+     * @var StockItemImporterInterface
      */
     private $stockItemImporter;
 
@@ -759,13 +760,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param TransactionManagerInterface $transactionManager
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Model\Product\Url $productUrl
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
-     * @param StockItemImporterInterface $stockItemImporter
      * @param ImageTypeProcessor $imageTypeProcessor
      * @param MediaGalleryProcessor $mediaProcessor
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param StockItemImporterInterface|null $stockItemImporter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

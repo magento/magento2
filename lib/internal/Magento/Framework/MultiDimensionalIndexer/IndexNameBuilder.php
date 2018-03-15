@@ -18,22 +18,16 @@ class IndexNameBuilder
 {
     /**
      * Index id parameter name. Used internally in this object
-     *
-     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
     private static $indexId = 'indexId';
 
     /**
      * Dimensions parameter name. Used internally in this object
-     *
-     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
     private static $dimensions = 'dimensions';
 
     /**
      * Alias parameter name. Used internally in this object
-     *
-     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
     private static $alias = 'alias';
 

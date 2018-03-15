@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\MultiDimensionalIndexer;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Index Name object
  *
@@ -33,9 +35,19 @@ class IndexName
      * @param string $indexId
      * @param Dimension[] $dimensions
      * @param Alias $alias
+     *
+     * @throws LocalizedException
      */
     public function __construct(string $indexId, array $dimensions, Alias $alias)
     {
+        foreach ($dimensions as $dimension) {
+            if (!$dimension instanceof Dimension) {
+                throw new LocalizedException(
+                    __('Dimension have to be instance of Dimension class.')
+                );
+            }
+        }
+
         $this->indexId = $indexId;
         $this->dimensions = $dimensions;
         $this->alias = $alias;

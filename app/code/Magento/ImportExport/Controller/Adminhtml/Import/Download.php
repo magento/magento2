@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 
@@ -43,14 +44,12 @@ class Download extends ImportController
     private $sampleFileProvider;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
-     * @param \Magento\ImportExport\Model\Import\SampleFileProvider $sampleFileProvider
      * @param ComponentRegistrar $componentRegistrar
+     * @param \Magento\ImportExport\Model\Import\SampleFileProvider|null $sampleFileProvider
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -81,14 +80,19 @@ class Download extends ImportController
     {
         $entityName = $this->getRequest()->getParam('filename');
 
+        if (preg_match('/^\w+$/', $entityName) == 0) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $this->messageManager->addErrorMessage(__('Incorrect file name.'));
+
+            return $this->getResultRedirect();        }
+
         try {
             $fileContents = $this->sampleFileProvider->getFileContents($entityName);
         } catch (NoSuchEntityException $e) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('*/import');
-            return $resultRedirect;
+
+            return $this->getResultRedirect();
         }
 
         $fileSize = $this->sampleFileProvider->getSize($entityName);
@@ -106,5 +110,16 @@ class Download extends ImportController
         $resultRaw = $this->resultRawFactory->create();
         $resultRaw->setContents($fileContents);
         return $resultRaw;
+    }
+
+    /**
+     * @return Redirect
+     */
+    private function getResultRedirect(): Redirect
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('*/import');
+
+        return $resultRedirect;
     }
 }

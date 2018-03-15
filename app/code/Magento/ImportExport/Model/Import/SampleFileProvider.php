@@ -10,7 +10,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
- * Import Sample File Provider model
+ * Import Sample File Provider model.
+ * This class support only *.csv.
  */
 class SampleFileProvider
 {
@@ -78,7 +79,7 @@ class SampleFileProvider
     }
 
     /**
-     * @param $entityName
+     * @param string $entityName
      * @return string $entityName
      * @throws NoSuchEntityException
      */
