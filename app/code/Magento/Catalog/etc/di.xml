@@ -1073,4 +1073,9 @@
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <arguments>
+            <argument name="resource" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product</argument>
+        </arguments>
+    </type>
 </config>
