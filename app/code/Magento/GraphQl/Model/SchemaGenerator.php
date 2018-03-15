@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Model;
 
 use Magento\Framework\GraphQl\Type\SchemaFactory;
+use Magento\Framework\GraphQl\Type\Schema;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\TypeFactory;
 
@@ -47,9 +49,8 @@ class SchemaGenerator implements SchemaGeneratorInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function generate()
+    public function generate() : Schema
     {
         $schemaConfig = $this->typeGenerator->generateTypes();
 

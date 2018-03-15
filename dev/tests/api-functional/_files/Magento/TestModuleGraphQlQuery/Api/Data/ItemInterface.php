@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\TestModuleGraphQlQuery\Api\Data;
 
@@ -15,37 +16,37 @@ interface ItemInterface extends ExtensibleDataInterface
     /**
      * @return int
      */
-    public function getItemId();
+    public function getItemId() : int;
 
     /**
      * @param int $itemId
-     * @return $this
+     * @return ItemInterface
      */
-    public function setItemId($itemId);
+    public function setItemId($itemId) : ItemInterface;
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * @param string $name
-     * @return $this
+     * @return ItemInterface
      */
-    public function setName($name);
+    public function setName($name) : ItemInterface;
 
     /**
      * @return \Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes() : ?\Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface;
 
     /**
      * Set an extension attributes object.
      *
      * @param \Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface $extensionAttributes
-     * @return $this
+     * @return ItemInterface
      */
     public function setExtensionAttributes(
         \Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface $extensionAttributes
-    );
+    ) : ItemInterface;
 }

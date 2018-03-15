@@ -89,7 +89,7 @@ class DownloadableOptions implements FormatterInterface
      * @param LinkCollection $links
      * @return array
      */
-    private function formatLinks(LinkCollection $links)
+    private function formatLinks(LinkCollection $links) : array
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
@@ -116,7 +116,7 @@ class DownloadableOptions implements FormatterInterface
      * @param Collection $samples
      * @return array
      */
-    private function formatSamples(Collection $samples)
+    private function formatSamples(Collection $samples) : array
     {
         $resultData = [];
         foreach ($samples as $sampleKey => $sample) {

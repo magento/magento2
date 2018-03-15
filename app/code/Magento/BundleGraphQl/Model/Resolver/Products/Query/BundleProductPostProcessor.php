@@ -238,7 +238,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      * @param array $bundleProducts
      * @return array
      */
-    private function getBundleOptionsMap(array $bundleProducts)
+    private function getBundleOptionsMap(array $bundleProducts) : array
     {
         $uniqueKey = $this->getProductLinkField();
         /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
@@ -297,7 +297,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      * @param array $optionsMap
      * @return array
      */
-    private function hydrateLinks(array $optionsMap)
+    private function hydrateLinks(array $optionsMap) : array
     {
         $parentIds = [];
         $optionIds = [];
@@ -407,7 +407,7 @@ class BundleProductPostProcessor implements \Magento\Framework\GraphQl\Query\Pos
      *
      * @return string
      */
-    private function getProductLinkField()
+    private function getProductLinkField() : string
     {
         if (empty($this->productLinkField)) {
             $this->productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();

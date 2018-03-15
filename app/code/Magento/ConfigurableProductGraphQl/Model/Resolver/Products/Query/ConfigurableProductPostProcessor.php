@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Products\Query;
 
@@ -91,7 +92,7 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
      * @param array $resultData
      * @return array
      */
-    private function addChildData(array $childProducts, array $resultData)
+    private function addChildData(array $childProducts, array $resultData) : array
     {
         /** @var \Magento\Catalog\Model\Product $childProduct */
         foreach ($childProducts as $childProduct) {
