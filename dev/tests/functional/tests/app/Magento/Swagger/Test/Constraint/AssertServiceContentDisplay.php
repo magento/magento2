@@ -30,7 +30,7 @@ class AssertServiceContentDisplay extends AbstractConstraint
              */
             $operationSelector = 'li[id$="%s%s"]';
             $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $swaggerPage->isElementVisible($operationSelector),
                 'REST API service endpoints on swagger page.'
             );

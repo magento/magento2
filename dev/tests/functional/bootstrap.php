@@ -9,7 +9,7 @@ defined('MTF_BP') || define('MTF_BP', str_replace('\\', '/', (__DIR__)));
 defined('MTF_TESTS_PATH') || define('MTF_TESTS_PATH', MTF_BP . '/tests/app/');
 defined('MTF_STATES_PATH') || define('MTF_STATES_PATH', MTF_BP . '/lib/Magento/Mtf/App/State/');
 
-require_once __DIR__ . '/../../../app/bootstrap.php';
+//require_once __DIR__ . '/../../../app/bootstrap.php';
 restore_error_handler();
 $vendorAutoload = __DIR__ . '/vendor/autoload.php';
 
@@ -51,7 +51,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

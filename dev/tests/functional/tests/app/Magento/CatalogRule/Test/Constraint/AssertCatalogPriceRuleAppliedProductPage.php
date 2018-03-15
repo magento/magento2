@@ -59,7 +59,7 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
                 $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
             }
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 empty($diff),
                 implode(' ', $diff)
             );

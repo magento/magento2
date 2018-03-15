@@ -2,13 +2,19 @@
     "config": {
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:magento/mtf.git"
+        }
+    ],
     "require": {
-        "php": "7.0.2|~7.0.6|~7.1.0",
-        "magento/mtf": "1.0.0-rc59",
+        "php": "7.0.2|~7.0.6|~7.1.0|~7.2.0",
+        "magento/mtf": "dev-develop-PhpUnit70",
         "allure-framework/allure-phpunit": "~1.2.0",
         "doctrine/annotations": "1.4.*",
-        "phpunit/phpunit": "~4.8.0|~5.5.0",
-        "phpunit/phpunit-selenium": ">=1.2"
+        "phpunit/phpunit": "~6.5.0",
+        "phpunit/phpunit-selenium": "~4.1.0"
     },
     "suggest": {
         "netwing/selenium-server-standalone": "dev-master",
