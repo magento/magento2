@@ -95,7 +95,7 @@
         </arguments>
     </type>
     <!-- IsProductSalableResult -->
-    <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
     <!-- ProductSalabilityError -->
-    <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
 </config>

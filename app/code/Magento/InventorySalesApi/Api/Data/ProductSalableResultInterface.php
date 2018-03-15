@@ -5,9 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
+namespace Magento\InventorySalesApi\Api\Data;
 
-interface IsProductSalableResultInterface
+/**
+ * Represents result of service Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface::execute
+ *
+ * @api
+ */
+interface ProductSalableResultInterface
 {
     /**
      * @return bool

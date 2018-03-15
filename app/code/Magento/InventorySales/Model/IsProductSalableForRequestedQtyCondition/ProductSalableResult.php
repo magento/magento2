@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-class IsProductSalableResult implements IsProductSalableResultInterface
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface;
+
+class ProductSalableResult implements ProductSalableResultInterface
 {
     /**
      * @var ProductSalabilityErrorInterface[]

@@ -7,47 +7,53 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition as IsProductSalableManageStockCondition;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 
 /**
  * @inheritdoc
  */
 class ManageStockCondition implements IsProductSalableForRequestedQtyInterface
 {
-    /** @var \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition */
+    /**
+     * @var IsProductSalableManageStockCondition
+     */
     private $manageStockCondition;
 
     /**
-     * @var ProductSalabilityErrorFactory
+     * @var ProductSalabilityErrorInterfaceFactory
      */
     private $productSalabilityErrorFactory;
 
     /**
-     * @var IsProductSalableResultFactory
+     * @var ProductSalableResultInterfaceFactory
      */
-    private $isProductSalableResultFactory;
+    private $productSalableResultFactory;
 
     /**
-     * ManageStockCondition constructor.
-     * @param \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition $manageStockCondition
+     * @param IsProductSalableManageStockCondition $manageStockCondition
+     * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
+     * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
      */
     public function __construct(
-        \Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition $manageStockCondition,
-        ProductSalabilityErrorFactory $productSalabilityErrorFactory,
-        IsProductSalableResultFactory $isProductSalableResultFactory
+        IsProductSalableManageStockCondition $manageStockCondition,
+        ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory,
+        ProductSalableResultInterfaceFactory $productSalableResultFactory
     ) {
         $this->manageStockCondition = $manageStockCondition;
         $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
-        $this->isProductSalableResultFactory = $isProductSalableResultFactory;
+        $this->productSalableResultFactory = $productSalableResultFactory;
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface
+    public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
         $isSalable = $this->manageStockCondition->execute($sku, $stockId);
         if (!$isSalable) {
@@ -57,8 +63,8 @@ class ManageStockCondition implements IsProductSalableForRequestedQtyInterface
                     'message' => __('Manage stock is enabled')
                 ])
             ];
-            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
+            return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
-        return $this->isProductSalableResultFactory->create(['errors' => []]);
+        return $this->productSalableResultFactory->create(['errors' => []]);
     }
 }

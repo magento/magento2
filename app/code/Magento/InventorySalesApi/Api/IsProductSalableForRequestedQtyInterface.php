@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api;
 
-use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableResultInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
 
 /**
  * Service which detects whether a certain Qty of Product is salable for a given Stock (stock data + reservations)
@@ -24,5 +24,5 @@ interface IsProductSalableForRequestedQtyInterface
      * @param float $requestedQty
      * @return bool
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface;
+    public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface;
 }
