@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\StockState;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Model\StockStateProvider;
+use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -77,28 +77,33 @@ class CheckQuoteItemQtyPlugin
     }
 
     /**
-     * @param StockStateProvider $subject
+     * @param StockStateInterface $subject
      * @param \Closure $proceed
-     * @param StockItemInterface $stockItem
-     * @param int|float $qty
-     * @param int|float $summaryQty
-     * @param int|float $origQty
+     * @param $productId
+     * @param $itemQty
+     * @param $qtyToCheck
+     * @param $origQty
+     * @param null $scopeId
      *
-     * @return int
+     * @return DataObject
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCheckQuoteItemQty(
-        StockStateProvider $subject,
+        StockStateInterface $subject,
         \Closure $proceed,
-        StockItemInterface $stockItem,
-        $qty,
-        $summaryQty,
-        $origQty = 0
+        $productId,
+        $itemQty,
+        $qtyToCheck,
+        $origQty,
+        $scopeId = null
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
 
-        $qty = $this->getNumber($qty);
-        $productSku = $this->getSkuByProductId($stockItem->getProductId());
+        $qty = $this->getNumber($qtyToCheck);
+        $productSku = $this->getSkuByProductId((int)$productId);
         $stockId = $this->getStockId();
 
         $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
