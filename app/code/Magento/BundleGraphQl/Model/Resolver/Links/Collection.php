@@ -87,7 +87,7 @@ class Collection
     }
 
     /**
-     * Fetch product data and return in array format. Keys for products will be their option Ids.
+     * Fetch link data and return in array format. Keys for links will be their option Ids.
      *
      * @return array
      */
