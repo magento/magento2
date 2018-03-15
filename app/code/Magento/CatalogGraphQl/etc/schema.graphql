@@ -1,0 +1,599 @@
+type Query {
+    products(search: String, filter: ProductFilterInput, pageSize: Int, currentPage: Int, sort: ProductSortInput): Products @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products")
+}
+
+enum CurrencyEnum {
+    AFN
+    ALL
+    AZN
+    DZD
+    AOA
+    ARS
+    AMD
+    AWG
+    AUD
+    BSD
+    BHD
+    BDT
+    BBD
+    BYR
+    BZD
+    BMD
+    BTN
+    BOB
+    BAM
+    BWP
+    BRL
+    GBP
+    BND
+    BGN
+    BUK
+    BIF
+    KHR
+    CAD
+    CVE
+    CZK
+    KYD
+    GQE
+    CLP
+    CNY
+    COP
+    KMF
+    CDF
+    CRC
+    HRK
+    CUP
+    DKK
+    DJF
+    DOP
+    XCD
+    EGP
+    SVC
+    ERN
+    EEK
+    ETB
+    EUR
+    FKP
+    FJD
+    GMD
+    GEK
+    GEL
+    GHS
+    GIP
+    GTQ
+    GNF
+    GYD
+    HTG
+    HNL
+    HKD
+    HUF
+    ISK
+    INR
+    IDR
+    IRR
+    IQD
+    ILS
+    JMD
+    JPY
+    JOD
+    KZT
+    KES
+    KWD
+    KGS
+    LAK
+    LVL
+    LBP
+    LSL
+    LRD
+    LYD
+    LTL
+    MOP
+    MKD
+    MGA
+    MWK
+    MYR
+    MVR
+    LSM
+    MRO
+    MUR
+    MXN
+    MDL
+    MNT
+    MAD
+    MZN
+    MMK
+    NAD
+    NPR
+    ANG
+    YTL
+    NZD
+    NIC
+    NGN
+    KPW
+    NOK
+    OMR
+    PKR
+    PAB
+    PGK
+    PYG
+    PEN
+    PHP
+    PLN
+    QAR
+    RHD
+    RON
+    RUB
+    RWF
+    SHP
+    STD
+    SAR
+    RSD
+    SCR
+    SLL
+    SGD
+    SKK
+    SBD
+    SOS
+    ZAR
+    KRW
+    LKR
+    SDG
+    SRD
+    SZL
+    SEK
+    CHF
+    SYP
+    TWD
+    TJS
+    TZS
+    THB
+    TOP
+    TTD
+    TND
+    TMM
+    USD
+    UGX
+    UAH
+    AED
+    UYU
+    UZS
+    VUV
+    VEB
+    VEF
+    VND
+    CHE
+    CHW
+    XOF
+    WST
+    YER
+    ZMK
+    ZWD
+    TRY
+    AZM
+    ROL
+    TRL
+    XPF
+}
+
+type Price {
+    amount: Money
+    adjustments: [PriceAdjustment]
+}
+
+type PriceAdjustment {
+    amount: Money
+    code: PriceAdjustmentCodesEnum
+    description: PriceAdjustmentDescriptionEnum
+}
+
+enum PriceAdjustmentCodesEnum {
+    TAX
+}
+
+enum PriceAdjustmentDescriptionEnum {
+    INCLUDED
+    EXCLUDED
+}
+
+enum PriceTypeEnum {
+    FIXED
+    PERCENT
+    DYNAMIC
+}
+
+type Money {
+    value: Float
+    currency: CurrencyEnum
+}
+
+type ProductPrices {
+    minimalPrice: Price
+    maximalPrice: Price
+    regularPrice: Price
+}
+
+type ProductCategoryLinks {
+    position: Int
+    category_id: String
+}
+
+
+type ProductLinks implements ProductLinksInterface {
+    sku: String
+    link_type: String
+    linked_product_sku: String
+    linked_product_type: String
+    position: Int
+}
+
+interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") {
+    sku: String
+    link_type: String
+    linked_product_sku: String
+    linked_product_type: String
+    position: Int
+}
+
+type ProductTierPrices {
+    customer_group_id: String
+    qty: Float
+    value: Float
+    percentage_value: Float
+    website_id: Float
+}
+
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
+    id: Int
+    name: String
+    sku: String
+    description: String
+    short_description: String
+    special_price: Float
+    special_from_date: String
+    special_to_date: String
+    attribute_set_id: Int
+    meta_title: String
+    meta_keyword: String
+    meta_description: String
+    image: String
+    small_image: String
+    thumbnail: String
+    new_from_date: String
+    new_to_date: String
+    tier_price: Float
+    custom_design: String
+    custom_design_from: String
+    custom_design_to: String
+    custom_layout_update: String
+    custom_layout: String
+    page_layout: String
+    category_ids: [Int]
+    options_container: String
+    image_label: String
+    small_image_label: String
+    thumbnail_label: String
+    created_at: String
+    updated_at: String
+    country_of_manufacture: String
+    type_id: String
+    website_ids: [Int]
+    category_links: [ProductCategoryLinks]
+    product_links: [ProductLinksInterface]
+    media_gallery_entries: [MediaGalleryEntry]
+    tier_prices: [ProductTierPrices]
+    price: ProductPrices
+    gift_message_available: String
+    manufacturer: Int
+}
+
+interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
+    weight: Float
+}
+
+
+type CustomizableAreaOption implements CustomizableOptionInterface {
+    value: CustomizableAreaValue
+    product_sku: String
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableAreaValue {
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+    max_characters: Int
+}
+
+type CustomizableDateOption implements CustomizableOptionInterface {
+    value: CustomizableDateValue
+    product_sku: String
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableDateValue {
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+}
+
+type CustomizableDropDownOption implements CustomizableOptionInterface {
+    value: [CustomizableDropDownValue]
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableDropDownValue {
+    option_type_id: Int
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+    title: String
+    sort_order: Int
+}
+
+type CustomizableFieldOption implements CustomizableOptionInterface {
+    value: CustomizableFieldValue
+    product_sku: String
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableFieldValue {
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+    max_characters: Int
+}
+
+type CustomizableFileOption implements CustomizableOptionInterface {
+    value: CustomizableFileValue
+    product_sku: String
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableFileValue {
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+    file_extension: String
+    image_size_x: Int
+    image_size_y: Int
+}
+
+interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") {
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
+    options: [CustomizableOptionInterface]
+}
+
+type CustomizableRadioOption implements CustomizableOptionInterface {
+    value: [CustomizableRadioValue]
+    title: String
+    required: Boolean
+    sort_order: Int
+}
+
+type CustomizableRadioValue {
+    option_type_id: Int
+    price: Float
+    price_type: PriceTypeEnum
+    sku: String
+    title: String
+    sort_order: Int
+}
+
+type VirtualProduct implements ProductInterface, CustomizableProductInterface {
+    id: Int
+    name: String
+    sku: String
+    description: String
+    short_description: String
+    special_price: Float
+    special_from_date: String
+    special_to_date: String
+    attribute_set_id: Int
+    meta_title: String
+    meta_keyword: String
+    meta_description: String
+    image: String
+    small_image: String
+    thumbnail: String
+    new_from_date: String
+    new_to_date: String
+    tier_price: Float
+    custom_design: String
+    custom_design_from: String
+    custom_design_to: String
+    custom_layout_update: String
+    custom_layout: String
+    page_layout: String
+    category_ids: [Int]
+    options_container: String
+    image_label: String
+    small_image_label: String
+    thumbnail_label: String
+    created_at: String
+    updated_at: String
+    country_of_manufacture: String
+    type_id: String
+    website_ids: [Int]
+    category_links: [ProductCategoryLinks]
+    product_links: [ProductLinksInterface]
+    media_gallery_entries: [MediaGalleryEntry]
+    tier_prices: [ProductTierPrices]
+    price: ProductPrices
+    gift_message_available: String
+    options: [CustomizableOptionInterface]
+    manufacturer: Int
+}
+
+type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
+    id: Int
+    name: String
+    sku: String
+    description: String
+    short_description: String
+    special_price: Float
+    special_from_date: String
+    special_to_date: String
+    attribute_set_id: Int
+    meta_title: String
+    meta_keyword: String
+    meta_description: String
+    image: String
+    small_image: String
+    thumbnail: String
+    new_from_date: String
+    new_to_date: String
+    tier_price: Float
+    custom_design: String
+    custom_design_from: String
+    custom_design_to: String
+    custom_layout_update: String
+    custom_layout: String
+    page_layout: String
+    category_ids: [Int]
+    options_container: String
+    image_label: String
+    small_image_label: String
+    thumbnail_label: String
+    created_at: String
+    updated_at: String
+    country_of_manufacture: String
+    type_id: String
+    website_ids: [Int]
+    category_links: [ProductCategoryLinks]
+    product_links: [ProductLinksInterface]
+    media_gallery_entries: [MediaGalleryEntry]
+    tier_prices: [ProductTierPrices]
+    price: ProductPrices
+    gift_message_available: String
+    weight: Float
+    options: [CustomizableOptionInterface]
+    manufacturer: Int
+}
+
+type Products {
+    items: [ProductInterface]
+    page_info: SearchResultPageInfo
+    total_count: Int
+}
+
+
+input ProductFilterInput {
+    name: FilterTypeInput
+    sku: FilterTypeInput
+    description: FilterTypeInput
+    short_description: FilterTypeInput
+    price: FilterTypeInput
+    special_price: FilterTypeInput
+    special_from_date: FilterTypeInput
+    special_to_date: FilterTypeInput
+    weight: FilterTypeInput
+    manufacturer: FilterTypeInput
+    meta_title: FilterTypeInput
+    meta_keyword: FilterTypeInput
+    meta_description: FilterTypeInput
+    image: FilterTypeInput
+    small_image: FilterTypeInput
+    thumbnail: FilterTypeInput
+    tier_price: FilterTypeInput
+    news_from_date: FilterTypeInput
+    news_to_date: FilterTypeInput
+    custom_design: FilterTypeInput
+    custom_design_from: FilterTypeInput
+    custom_design_to: FilterTypeInput
+    custom_layout_update: FilterTypeInput
+    page_layout: FilterTypeInput
+    category_ids: FilterTypeInput
+    options_container: FilterTypeInput
+    required_options: FilterTypeInput
+    has_options: FilterTypeInput
+    image_label: FilterTypeInput
+    small_image_label: FilterTypeInput
+    thumbnail_label: FilterTypeInput
+    created_at: FilterTypeInput
+    updated_at: FilterTypeInput
+    country_of_manufacture: FilterTypeInput
+    custom_layout: FilterTypeInput
+    gift_message_available: FilterTypeInput
+    or: ProductFilterInput
+}
+
+type ProductMediaGalleryEntriesContent {
+    base64_encoded_data: String
+    type: String
+    name: String
+}
+
+type ProductMediaGalleryEntriesVideoContent {
+    media_type: String
+    video_provider: String
+    video_url: String
+    video_title: String
+    video_description: String
+    video_metadata: String
+}
+
+input ProductSortInput {
+    name: SortEnum
+    sku: SortEnum
+    description: SortEnum
+    short_description: SortEnum
+    price: SortEnum
+    special_price: SortEnum
+    special_from_date: SortEnum
+    special_to_date: SortEnum
+    weight: SortEnum
+    manufacturer: SortEnum
+    meta_title: SortEnum
+    meta_keyword: SortEnum
+    meta_description: SortEnum
+    image: SortEnum
+    small_image: SortEnum
+    thumbnail: SortEnum
+    tier_price: SortEnum
+    news_from_date: SortEnum
+    news_to_date: SortEnum
+    custom_design: SortEnum
+    custom_design_from: SortEnum
+    custom_design_to: SortEnum
+    custom_layout_update: SortEnum
+    page_layout: SortEnum
+    category_ids: SortEnum
+    options_container: SortEnum
+    required_options: SortEnum
+    has_options: SortEnum
+    image_label: SortEnum
+    small_image_label: SortEnum
+    thumbnail_label: SortEnum
+    created_at: SortEnum
+    updated_at: SortEnum
+    country_of_manufacture: SortEnum
+    custom_layout: SortEnum
+    gift_message_available: SortEnum
+}
+
+type MediaGalleryEntry {
+    id: Int
+    media_type: String
+    label: String
+    position: Int
+    disabled: Boolean
+    types: [String]
+    file: String
+    content: ProductMediaGalleryEntriesContent
+    video_content: ProductMediaGalleryEntriesVideoContent
+}

@@ -1,0 +1,14 @@
+type EntityUrl {
+    id: Int
+    canonical_url: String
+    type: UrlRewriteEntityTypeEnum
+}
+
+type Query {
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
+}
+
+enum UrlRewriteEntityTypeEnum {
+    PRODUCT
+    CATEGORY
+}
