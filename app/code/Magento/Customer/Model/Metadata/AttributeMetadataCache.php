@@ -55,7 +55,7 @@ class AttributeMetadataCache
     private $serializer;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var \Magento\Backend\Model\Auth\SessionFactory
      */
     private $backendAuthSession;
 

@@ -16,7 +16,11 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\Auth\SessionFactory;
+use Magento\Backend\Model\Auth\Session;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -62,10 +66,10 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeMetadataHydratorMock = $this->createMock(AttributeMetadataHydrator::class);
         $this->backendAuthSessionFactoryMock = $this->createPartialMock(
-            \Magento\Backend\Model\Auth\SessionFactory::class,
+            SessionFactory::class,
             ['create']
         );
-        $this->backendAuthSessionMock = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
+        $this->backendAuthSessionMock = $this->createMock(Session::class);
         $this->attributeMetadataCache = $objectManager->getObject(
             AttributeMetadataCache::class,
             [
@@ -87,11 +91,9 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
         $this->backendAuthSessionFactoryMock->expects($this->never())
-            ->method('create')
-            ->will($this->returnValue($this->backendAuthSessionMock));
+            ->method('create');
         $this->backendAuthSessionMock->expects($this->never())
-            ->method('isLoggedIn')
-            ->willReturn(false);
+            ->method('isLoggedIn');
         $this->cacheMock->expects($this->never())
             ->method('load');
         $this->assertFalse($this->attributeMetadataCache->load($entityType, $suffix));
@@ -181,11 +183,9 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
         $this->backendAuthSessionFactoryMock->expects($this->never())
-            ->method('create')
-            ->will($this->returnValue($this->backendAuthSessionMock));
+            ->method('create');
         $this->backendAuthSessionMock->expects($this->never())
-            ->method('isLoggedIn')
-            ->willReturn(false);
+            ->method('isLoggedIn');
         $this->attributeMetadataCache->save($entityType, $attributes, $suffix);
         $this->assertEquals(
             $attributes,
