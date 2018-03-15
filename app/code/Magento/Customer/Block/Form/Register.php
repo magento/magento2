@@ -6,6 +6,9 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Model\ResourceModel\Address as CustomerAddress;
+use Magento\Customer\Model\ResourceModel\Attribute as CustomerAttribute;
 
 /**
  * Customer register form block
@@ -16,6 +19,13 @@ use Magento\Customer\Model\AccountManagement;
  */
 class Register extends \Magento\Directory\Block\Data
 {
+    /**
+     * Configuration paths for email templates and identities
+     *
+     * @deprecated
+     */
+    const XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS = 'customer/create_account/show_address_fields';
+
     /**
      * @var \Magento\Customer\Model\Session
      */
@@ -32,7 +42,17 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
-     * Constructor
+     * @var CustomerAddress
+     */
+    private $addressResource;
+
+    /**
+     * @var CustomerAttribute
+     */
+    private $customerAttribute;
+
+    /**
+     * Initialize dependencies.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
@@ -44,6 +64,8 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
+     * @param CustomerAddress|null $addressResource
+     * @param CustomerAttribute|null $customerAttribute
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -57,11 +79,15 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        array $data = []
+        array $data = [],
+        CustomerAddress $addressResource = null,
+        CustomerAttribute $customerAttribute = null
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
+        $this->addressResource = $addressResource ?: ObjectManager::getInstance()->get(CustomerAddress::class);
+        $this->customerAttribute = $customerAttribute ?: ObjectManager::getInstance()->get(CustomerAttribute::class);
         parent::__construct(
             $context,
             $directoryHelper,
@@ -219,5 +245,27 @@ class Register extends \Magento\Directory\Block\Data
     public function getRequiredCharacterClassesNumber()
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
+    }
+
+    /**
+     * Determine if Address Fields have to be shown
+     *
+     * @return bool
+     */
+    public function isShowAddressFields()
+    {
+        return $this->_scopeConfig->getValue(self::XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS);
+    }
+
+    /**
+     * Return if Address Field is used in form
+     *
+     * @param string $formCode
+     * @return bool
+     */
+    public function isAddressFieldUsedInForm($attributeCode, $formCode = 'customer_register_address')
+    {
+        $attribute = $this->addressResource->getAttribute($attributeCode);
+        return (in_array($formCode, $this->customerAttribute->getUsedInForms($attribute)));
     }
 }
