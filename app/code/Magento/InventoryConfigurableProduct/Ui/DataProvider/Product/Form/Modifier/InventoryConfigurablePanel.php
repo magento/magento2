@@ -16,9 +16,6 @@ use Magento\Ui\Component\Form;
  */
 class InventoryConfigurablePanel extends AbstractModifier
 {
-    const RECORD = 'record';
-    const QUANTITY_CONTAINER = 'quantity_container';
-
     /**
      * @inheritdoc
      */
@@ -55,10 +52,9 @@ class InventoryConfigurablePanel extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $children = 'children';
-        $meta[ConfigurablePanel::GROUP_CONFIGURABLE][$children]
-            [ConfigurablePanel::CONFIGURABLE_MATRIX][$children]
-            [static::RECORD][$children][static::QUANTITY_CONTAINER] = $this->getQuantityContainerConfig();
+        $matrix = $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children'][ConfigurablePanel::CONFIGURABLE_MATRIX];
+        $matrix['children']['record']['children']['quantity_container'] = $this->getQuantityContainerConfig();
+        $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children'][ConfigurablePanel::CONFIGURABLE_MATRIX] = $matrix;
 
         return $meta;
     }
