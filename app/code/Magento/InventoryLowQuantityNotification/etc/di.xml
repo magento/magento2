@@ -18,10 +18,6 @@
         <plugin name="rss_adapt_description_provider"
                 type="Magento\InventoryLowQuantityNotification\Plugin\Rss\AdaptDescriptionProvider"/>
     </type>
-    <type name="Magento\Catalog\Model\Rss\Product\NotifyStock">
-        <plugin name="rss_adapt_notify_stock"
-                type="Magento\InventoryLowQuantityNotification\Plugin\Rss\AdaptNotifyStock"/>
-    </type>
     <!-- LowStockCondition -->
     <type name="Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\Condition\LowStockConditionChain">
         <arguments>

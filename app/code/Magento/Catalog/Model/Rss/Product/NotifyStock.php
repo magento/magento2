@@ -3,10 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Rss\Product;
-
-use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class NotifyStock
@@ -78,15 +75,5 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
             ['collection' => $collection]
         );
         return $collection;
-    }
-
-    /**
-     * Get items collection for rss feed.
-     *
-     * @return AbstractDb
-     */
-    public function getItemsCollection()
-    {
-        return $this->getProductsCollection();
     }
 }

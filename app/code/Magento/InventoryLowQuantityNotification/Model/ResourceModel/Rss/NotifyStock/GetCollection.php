@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss;
+namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
@@ -13,7 +13,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder;
 
-class GetAdaptedNotifyStockCollection
+class GetCollection
 {
     /**
      * @var CollectionFactory
@@ -56,11 +56,6 @@ class GetAdaptedNotifyStockCollection
         $collection->addFieldToSelect(SourceItemInterface::QUANTITY, 'qty');
 
         $this->selectBuilder->build($collection->getSelect());
-
-        $this->eventManager->dispatch(
-            'rss_catalog_notify_stock_collection_select',
-            ['collection' => $collection]
-        );
 
         return $collection;
     }

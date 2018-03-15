@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Test\Integration\Model;
 
-use Magento\Catalog\Block\Adminhtml\Rss\NotifyStock;
+use Magento\InventoryLowQuantityNotification\Block\Adminhtml\Rss\NotifyStock;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryLowQuantityNotificationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\Store\Model\Store;

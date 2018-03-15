@@ -3,41 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Block\Adminhtml\Rss;
 
+namespace Magento\InventoryLowQuantityNotification\Block\Adminhtml\Rss;
+
+use Magento\Backend\Block\AbstractBlock;
+use Magento\Backend\Block\Context;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\GetCollection;
 
-/**
- * Class NotifyStock
- * @package Magento\Catalog\Block\Adminhtml\Rss
- */
-class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataProviderInterface
+class NotifyStock extends AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @var UrlBuilderInterface
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\NotifyStock
+     * @var GetCollection
      */
-    protected $rssModel;
+    protected $getCollection;
 
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Catalog\Model\Rss\Product\NotifyStock $rssModel
-     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+     * @param Context $context
+     * @param GetCollection $getCollection
+     * @param UrlBuilderInterface $rssUrlBuilder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Catalog\Model\Rss\Product\NotifyStock $rssModel,
-        \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
+        Context $context,
+        GetCollection $getCollection,
+        UrlBuilderInterface $rssUrlBuilder,
         array $data = []
     ) {
-        $this->rssUrlBuilder = $rssUrlBuilder;
-        $this->rssModel = $rssModel;
         parent::__construct($context, $data);
+
+        $this->rssUrlBuilder = $rssUrlBuilder;
+        $this->getCollection = $getCollection;
     }
 
     /**
@@ -58,15 +61,22 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
         $title = __('Low Stock Products');
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
-        foreach ($this->rssModel->getProductsCollection() as $item) {
-            /* @var $item \Magento\Catalog\Model\Product */
+        foreach ($this->getCollection->execute() as $item) {
             $url = $this->getUrl(
                 'catalog/product/edit',
                 ['id' => $item->getId(), '_secure' => true, '_nosecret' => true]
             );
-            $qty = 1 * $item->getQty();
-            $description = __('%1 has reached a quantity of %2.', $item->getName(), $qty);
-            $data['entries'][] = ['title' => $item->getName(), 'link' => $url, 'description' => $description];
+            $qty = 1 * $item->getData('qty');
+
+            $description = __(
+                '%1 has reached a quantity of %2 in source %3(Source Code: %4).',
+                $item->getData('name'),
+                $qty,
+                $item->getData('source_name'),
+                $item->getData(SourceItemInterface::SOURCE_CODE)
+            );
+
+            $data['entries'][] = ['title' => $item->getData('name'), 'link' => $url, 'description' => $description];
         }
 
         return $data;
