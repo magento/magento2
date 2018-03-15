@@ -28,7 +28,8 @@ class IndexTableStructure extends DataObject
     /**
      * @inheritdoc
      */
-    public function __construct(array $data = []) {
+    public function __construct(array $data = [])
+    {
         $requiredFields = [
             'table_name',
             'entity_field',
