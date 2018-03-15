@@ -31,6 +31,7 @@
     </type>
     <type name="Magento\CatalogInventory\Api\StockStateInterface">
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>
+        <plugin name="suggest_qty" type="Magento\InventorySales\Plugin\StockState\SuggestQtyPlugin"/>
     </type>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>

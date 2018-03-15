@@ -82,8 +82,6 @@ class CheckQuoteItemQtyPlugin
      * @param $productId
      * @param $itemQty
      * @param $qtyToCheck
-     * @param $origQty
-     * @param null $scopeId
      *
      * @return DataObject
      * @throws LocalizedException
@@ -95,16 +93,19 @@ class CheckQuoteItemQtyPlugin
         \Closure $proceed,
         $productId,
         $itemQty,
-        $qtyToCheck,
-        $origQty,
-        $scopeId = null
+        $qtyToCheck
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
 
         $qty = $this->getNumber($qtyToCheck);
-        $productSku = $this->getSkuByProductId((int)$productId);
-        $stockId = $this->getStockId();
+
+        $skus = $this->getSkusByProductIds->execute([$productId]);
+        $productSku = $skus[$productId];
+
+        $websiteCode = $this->storeManager->getWebsite()->getCode();
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stockId = $stock->getStockId();
 
         $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
 
@@ -131,30 +132,5 @@ class CheckQuoteItemQtyPlugin
         }
 
         return $qty;
-    }
-
-    /**
-     * @param int $productId
-     *
-     * @return string
-     */
-    private function getSkuByProductId(int $productId): string
-    {
-        $skus = $this->getSkusByProductIds->execute([$productId]);
-
-        return $skus[$productId];
-    }
-
-    /**
-     * @return int|null
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function getStockId()
-    {
-        $websiteCode = $this->storeManager->getWebsite()->getCode();
-        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
-
-        return $stock->getStockId();
     }
 }
