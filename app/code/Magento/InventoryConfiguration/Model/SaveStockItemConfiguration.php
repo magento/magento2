@@ -40,7 +40,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, StockItemConfigurationInterface $stockItemConfiguration)
+    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration)
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
@@ -71,6 +71,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
             ],
             [
                 StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
+                StockItemInterface::STOCK_ID . ' = ?' => $stockId,
                 'website_id = ?' => 0,
             ]
         );

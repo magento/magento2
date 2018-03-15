@@ -21,5 +21,5 @@ interface SaveStockItemConfigurationInterface
      * @param StockItemConfigurationInterface $stockItemConfiguration
      * @return void
      */
-    public function execute(string $sku, StockItemConfigurationInterface $stockItemConfiguration);
+    public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration);
 }

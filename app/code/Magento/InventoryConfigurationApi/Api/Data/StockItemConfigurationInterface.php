@@ -16,8 +16,6 @@ interface StockItemConfigurationInterface
     const BACKORDERS_YES_NONOTIFY = 1;
     const BACKORDERS_YES_NOTIFY = 2;
 
-    const SKU = 'sku';
-    const STOCK_ID = 'stock_id';
     const IS_QTY_DECIMAL = 'is_qty_decimal';
     const SHOW_DEFAULT_NOTIFICATION_MESSAGE = 'show_default_notification_message';
 
