@@ -1,0 +1,155 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\InventorySales\Plugin\StockState;
+
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\StockStateProvider;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
+class CheckQuoteItemQtyPlugin
+{
+    /**
+     * @var ObjectFactory
+     */
+    private $objectFactory;
+
+    /**
+     * @var FormatInterface
+     */
+    private $format;
+
+    /**
+     * @var IsProductSalableForRequestedQtyInterface
+     */
+    private $isProductSalableForRequestedQty;
+
+    /**
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
+
+    /**
+     * @var StockResolverInterface
+     */
+    private $stockResolver;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param ObjectFactory $objectFactory
+     * @param FormatInterface $format
+     * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
+     * @param StockResolverInterface $stockResolver
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(
+        ObjectFactory $objectFactory,
+        FormatInterface $format,
+        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
+        GetSkusByProductIdsInterface $getSkusByProductIds,
+        StockResolverInterface $stockResolver,
+        StoreManagerInterface $storeManager
+    ) {
+        $this->objectFactory = $objectFactory;
+        $this->format = $format;
+        $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
+        $this->getSkusByProductIds = $getSkusByProductIds;
+        $this->stockResolver = $stockResolver;
+        $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @param StockStateProvider $subject
+     * @param \Closure $proceed
+     * @param StockItemInterface $stockItem
+     * @param int|float $qty
+     * @param int|float $summaryQty
+     * @param int|float $origQty
+     *
+     * @return int
+     */
+    public function aroundCheckQuoteItemQty(
+        StockStateProvider $subject,
+        \Closure $proceed,
+        StockItemInterface $stockItem,
+        $qty,
+        $summaryQty,
+        $origQty = 0
+    ) {
+        $result = $this->objectFactory->create();
+        $result->setHasError(false);
+
+        $qty = $this->getNumber($qty);
+        $productSku = $this->getSkuByProductId($stockItem->getProductId());
+        $stockId = $this->getStockId();
+
+        $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
+
+        if ($isSalableResult->isSalable() === false) {
+            /** @var ProductSalabilityError $error */
+            foreach ($isSalableResult->getErrors() as $error) {
+                $result->setHasError(true)->setMessage($error->getMessage())->setQuoteMessage($error->getMessage())
+                       ->setQuoteMessageIndex('qty');
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string|float|int|null $qty
+     *
+     * @return float|null
+     */
+    private function getNumber($qty)
+    {
+        if (!is_numeric($qty)) {
+            return $this->format->getNumber($qty);
+        }
+
+        return $qty;
+    }
+
+    /**
+     * @param int $productId
+     *
+     * @return string
+     */
+    private function getSkuByProductId(int $productId): string
+    {
+        $skus = $this->getSkusByProductIds->execute([$productId]);
+
+        return $skus[$productId];
+    }
+
+    /**
+     * @return int|null
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function getStockId()
+    {
+        $websiteCode = $this->storeManager->getWebsite()->getCode();
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+
+        return $stock->getStockId();
+    }
+}
