@@ -27,15 +27,23 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
     private $getReservationsQuantity;
 
     /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
      * @param GetStockItemDataInterface $getStockItemData
      * @param GetReservationsQuantityInterface $getReservationsQuantity
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
         GetStockItemDataInterface $getStockItemData,
-        GetReservationsQuantityInterface $getReservationsQuantity
+        GetReservationsQuantityInterface $getReservationsQuantity,
+        GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
     }
 
     /**
@@ -49,7 +57,9 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
             return false;
         }
 
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $qtyWithReservation = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
-        return (bool)$stockItemData['is_salable'] && $qtyWithReservation > 0.0001;
+        return (bool)$stockItemData['is_salable'] && $qtyWithReservation > $stockItemConfiguration->getMinQty();
     }
 }
