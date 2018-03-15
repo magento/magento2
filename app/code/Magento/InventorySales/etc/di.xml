@@ -99,7 +99,7 @@
     <!-- ProductSalabilityError -->
     <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
     <!-- IsProductSalableForRequestedQtyConditionOnPlaceOrder -->
-    <virtualType name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChainOnPlaceOrder" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
+    <virtualType name="IsProductSalableForRequestedQtyConditionChainOnPlaceOrder" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
                 <item name="back_order" xsi:type="array">
@@ -119,7 +119,7 @@
     </virtualType>
     <type name="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin">
         <arguments>
-            <argument name="isProductSalableForRequestedQty" xsi:type="object">Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
+            <argument name="isProductSalableForRequestedQty" xsi:type="object">IsProductSalableForRequestedQtyConditionChainOnPlaceOrder</argument>
         </arguments>
     </type>
 </config>
