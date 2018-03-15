@@ -18,7 +18,6 @@ use Magento\TestFramework\ObjectManager;
 
 /**
  * Class for testing asynchronous inserts into grid.
- *
  */
 class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
 {
