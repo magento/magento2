@@ -8,11 +8,11 @@
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="PhysicalProductInterface" copyFields="true"/>
         <implements interface="CustomizableProductInterface" copyFields="true"/>
-        <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum" description="One of PRICE_RANGE or AS_LOW_AS"/>
-        <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean" description="Indicates whether the bundle product has a dynamic price."/>
-        <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean" description="Indicates whether the bundle product has a dynamic SKU."/>
-        <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum" description="Indicates whether to ship bundle items together or individually."/>
-        <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean" description="Indicates whether the bundle product has a dynamically calculated weight."/>
+        <field xsi:type="ObjectOutputField" name="price_view" type="PriceViewEnum" resolver="Magento\BundleGraphQl\Model\Resolver\Product\Fields\PriceView" description="One of PRICE_RANGE or AS_LOW_AS"/>
+        <field xsi:type="ScalarOutputField" name="dynamic_price" type="Boolean" resolver="Magento\BundleGraphQl\Model\Resolver\Product\Fields\DynamicPrice" description="Indicates whether the bundle product has a dynamic price."/>
+        <field xsi:type="ScalarOutputField" name="dynamic_sku" type="Boolean" resolver="Magento\BundleGraphQl\Model\Resolver\Product\Fields\DynamicSku" description="Indicates whether the bundle product has a dynamic SKU."/>
+        <field xsi:type="ObjectOutputField" name="ship_bundle_items" type="ShipBundleItemsEnum" resolver="Magento\BundleGraphQl\Model\Resolver\Product\Fields\ShipBundleItems" description="Indicates whether to ship bundle items together or individually."/>
+        <field xsi:type="ScalarOutputField" name="dynamic_weight" type="Boolean" resolver="Magento\BundleGraphQl\Model\Resolver\Product\Fields\DynamicWeight" description="Indicates whether the bundle product has a dynamically calculated weight."/>
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="BundleItem" resolver="Magento\BundleGraphQl\Model\Resolver\BundleItems" description="An array containing information about individual bundle items."/>
     </type>
     <type xsi:type="OutputType" name="BundleItem">
