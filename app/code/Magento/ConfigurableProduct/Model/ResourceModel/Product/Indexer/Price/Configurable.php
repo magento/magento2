@@ -137,7 +137,6 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             $subSelect->where('le.entity_id IN (?)', $entityIds);
         }
 
-
         $select = $connection->select();
         $select
             ->from(['sub' => new \Zend_Db_Expr('(' . (string)$subSelect . ')')], '')
