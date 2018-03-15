@@ -71,8 +71,9 @@
         </arguments>
     </type>
     <!-- IsProductSalableForRequestedQtyCondition -->
-    <preference for="Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain"/>
-    <type name="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
+    <preference for="Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface" type="IsProductSalableForRequestedQtyConditionChainOnAddToCart"/>
+    <!-- IsProductSalableForRequestedQtyConditionOnAddToCart -->
+    <virtualType name="IsProductSalableForRequestedQtyConditionChainOnAddToCart" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
         <arguments>
             <argument name="conditions" xsi:type="array">
                 <item name="is_correct_qty" xsi:type="array">
@@ -93,7 +94,7 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <!-- IsProductSalableResult -->
     <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
     <!-- ProductSalabilityError -->
