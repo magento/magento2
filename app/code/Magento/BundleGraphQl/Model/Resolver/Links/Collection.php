@@ -91,7 +91,7 @@ class Collection
      *
      * @return array
      */
-    private function fetch()
+    private function fetch() : array
     {
         if (empty($this->optionIds) || empty($this->parentIds) || !empty($this->links)) {
             return $this->links;
