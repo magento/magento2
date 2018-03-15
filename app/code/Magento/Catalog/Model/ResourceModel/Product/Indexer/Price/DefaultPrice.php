@@ -254,16 +254,18 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->getConnection()->delete($tableName);
 
         $finalPriceTable = $this->indexTableStructureFactory->create([
-            'tableName' => $tableName,
-            'entityField' => 'entity_id',
-            'customerGroupField' => 'customer_group_id',
-            'websiteField' => 'website_id',
-            'taxClassField' => 'tax_class_id',
-            'originalPriceField' => 'orig_price',
-            'finalPriceField' => 'price',
-            'minPriceField' => 'min_price',
-            'maxPriceField' => 'max_price',
-            'tierPriceField' => 'tier_price',
+            'data' => [
+                'table_name' => $tableName,
+                'entity_field' => 'entity_id',
+                'customer_group_field' => 'customer_group_id',
+                'website_field' => 'website_id',
+                'tax_class_field' => 'tax_class_id',
+                'original_price_field' => 'orig_price',
+                'final_price_field' => 'price',
+                'min_price_field' => 'min_price',
+                'max_price_field' => 'max_price',
+                'tier_price_field' => 'tier_price',
+            ]
         ]);
 
         return $finalPriceTable;

@@ -109,7 +109,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             // Prepare replica table for indexation.
             $this->_defaultIndexerResource->getConnection()->truncateTable($replicaTable);
 
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
                 $indexer->getTableStrategy()->setUseIdxTable(false);
                 $connection = $indexer->getConnection();
@@ -135,9 +135,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                         $idxTableName = $this->_defaultIndexerResource->getIdxTable();
                         $this->_emptyTable($idxTableName);
 
-                        if ($indexer->getIsComposite()) {
-                            $this->_copyRelationIndexData($entityIds);
-                        }
                         $this->_prepareTierPriceIndex($entityIds);
 
                         // Reindex entities by id
