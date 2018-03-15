@@ -11,7 +11,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/browser',
+    'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
