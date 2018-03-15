@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
@@ -69,7 +70,7 @@ class Customer implements ResolverInterface
             $result = function () use ($data) {
                 return $data;
             };
-            $this->valueFactory->create($result);
+            return $this->valueFactory->create($result);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
         }

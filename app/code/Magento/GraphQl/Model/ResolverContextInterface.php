@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Model;
 
@@ -23,7 +24,7 @@ interface ResolverContextInterface extends ExtensibleDataInterface
      *
      * @return int
      */
-    public function getUserType();
+    public function getUserType() : int;
 
     /**
      * Set type of a user
@@ -31,39 +32,39 @@ interface ResolverContextInterface extends ExtensibleDataInterface
      * @see \Magento\Authorization\Model\UserContextInterface for corespondent values
      *
      * @param int $typeId
-     * @return $this
+     * @return ResolverContextInterface
      */
-    public function setUserType(int $typeId);
+    public function setUserType(int $typeId) : ResolverContextInterface;
 
     /**
      * Get id of the user
      *
      * @return int
      */
-    public function getUserId();
+    public function getUserId() : int;
 
     /**
      * Set id of a user
      *
      * @param int $userId
-     * @return $this
+     * @return ResolverContextInterface
      */
-    public function setUserId(int $userId);
+    public function setUserId(int $userId) : ResolverContextInterface;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes() : ?\Magento\GraphQl\Model\ResolverContextExtensionInterface;
 
     /**
      * Set an extension attributes object.
      *
      * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
-     * @return $this
+     * @return ResolverContextInterface
      */
     public function setExtensionAttributes(
         \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
-    );
+    ) : ResolverContextInterface;
 }

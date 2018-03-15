@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\GraphQl\Test\Unit\Model\Config;
 
 class XsdTest extends \PHPUnit\Framework\TestCase
@@ -18,7 +20,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     private $xsdValidator;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
@@ -31,15 +33,19 @@ class XsdTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
+     * @return void
      * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
      */
-    public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
+    public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError) : void
     {
         $actualError = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
         $this->assertEquals($expectedError, $actualError);
     }
 
-    public function testSchemaCorrectlyIdentifiesValidXml()
+    /**
+     * @return void
+     */
+    public function testSchemaCorrectlyIdentifiesValidXml() : void
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/graphql_simple_configurable.xml');
         $actualResult = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
@@ -48,8 +54,9 @@ class XsdTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Data provider with invalid xml array according to graphql.xsd
+     * @return array
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider() : array
     {
         return include __DIR__ . '/_files/invalidGraphQlXmlArray.php';
     }

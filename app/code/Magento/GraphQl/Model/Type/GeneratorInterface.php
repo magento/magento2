@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Model\Type;
 
@@ -16,5 +17,5 @@ interface GeneratorInterface
      *
      * @return array Represented as ['fields' => ['fieldName' => Type, {...}], 'types' => Types[]]
      */
-    public function generateTypes();
+    public function generateTypes() : array;
 }

@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Model\Type;
 
-use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\SchemaProvider;
 
 /**
@@ -15,31 +15,23 @@ use Magento\Framework\GraphQl\SchemaProvider;
 class Generator implements GeneratorInterface
 {
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
      * @var SchemaProvider
      */
     private $schemaProvider;
 
     /**
-     * @param TypeFactory $typeFactory
      * @param SchemaProvider $schemaProvider
      */
     public function __construct(
-        TypeFactory $typeFactory,
         SchemaProvider $schemaProvider
     ) {
-        $this->typeFactory = $typeFactory;
         $this->schemaProvider = $schemaProvider;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateTypes()
+    public function generateTypes() : array
     {
         $types = [];
         foreach ($this->schemaProvider->getTypes() as $name => $type) {

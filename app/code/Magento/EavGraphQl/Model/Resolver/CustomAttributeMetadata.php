@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
@@ -100,7 +101,7 @@ class CustomAttributeMetadata implements ResolverInterface
      * @param array $attribute
      * @return GraphQlInputException
      */
-    private function createInputException(array $attribute)
+    private function createInputException(array $attribute) : GraphQlInputException
     {
         $isCodeSet = isset($attribute['attribute_code']);
         $isEntitySet = isset($attribute['entity_type']);

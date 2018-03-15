@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
@@ -12,6 +13,7 @@ use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
@@ -29,15 +31,23 @@ class UrlRewrite implements ResolverInterface
     private $storeManager;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param StoreManagerInterface $storeManager
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ValueFactory $valueFactory
     ) {
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -53,11 +63,16 @@ class UrlRewrite implements ResolverInterface
         if (isset($args['url'])) {
             $urlRewrite = $this->findCanonicalUrl($args['url']);
             if ($urlRewrite) {
-                return [
+                $urlRewriteReturnArray = [
                     'id' => $urlRewrite->getEntityId(),
                     'canonical_url' => $urlRewrite->getTargetPath(),
                     'type' => $this->sanitizeType($urlRewrite->getEntityType())
                 ];
+                $result = function () use ($urlRewriteReturnArray) {
+                    return $urlRewriteReturnArray;
+                };
+
+                return $this->valueFactory->create($result);
             }
         }
         return null;
@@ -69,7 +84,7 @@ class UrlRewrite implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findCanonicalUrl(string $requestPath)
+    private function findCanonicalUrl(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         $urlRewrite = $this->findUrlFromRequestPath($requestPath);
         if ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
@@ -89,7 +104,7 @@ class UrlRewrite implements ResolverInterface
      * @param string $requestPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findUrlFromRequestPath(string $requestPath)
+    private function findUrlFromRequestPath(string $requestPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -105,7 +120,7 @@ class UrlRewrite implements ResolverInterface
      * @param string $targetPath
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
-    private function findUrlFromTargetPath(string $targetPath)
+    private function findUrlFromTargetPath(string $targetPath) : ?\Magento\UrlRewrite\Service\V1\Data\UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -119,9 +134,9 @@ class UrlRewrite implements ResolverInterface
      * Sanitize the type to fit schema specifications
      *
      * @param string $type
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @return string
      */
-    private function sanitizeType(string $type)
+    private function sanitizeType(string $type) : string
     {
         return strtoupper(str_replace('-', '_', $type));
     }

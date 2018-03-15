@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\BundleGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Bundle\Model\Selection;
 use Magento\Framework\GraphQl\Config\Data\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;

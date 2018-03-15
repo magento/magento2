@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\TestModuleGraphQlQuery\Model\Entity;
 
@@ -27,16 +28,16 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements It
     /**
      * @return int
      */
-    public function getItemId()
+    public function getItemId() : int
     {
         return $this->_data['item_id'];
     }
 
     /**
      * @param int $itemId
-     * @return $this
+     * @return ItemInterface
      */
-    public function setItemId($itemId)
+    public function setItemId($itemId) : ItemInterface
     {
         return $this->setData('item_id', $itemId);
     }
@@ -44,21 +45,21 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements It
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->_data['name'];
     }
 
     /**
      * @param string $name
-     * @return $this
+     * @return ItemInterface
      */
-    public function setName($name)
+    public function setName($name) : ItemInterface
     {
         return $this->setData('name', $name);
     }
 
-    public function getExtensionAttributes()
+    public function getExtensionAttributes() : ?\Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
@@ -71,7 +72,7 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements It
 
     public function setExtensionAttributes(
         \Magento\TestModuleGraphQlQuery\Api\Data\ItemExtensionInterface $extensionAttributes
-    ) {
-        $this->_setExtensionAttributes($extensionAttributes);
+    ) : ItemInterface {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
