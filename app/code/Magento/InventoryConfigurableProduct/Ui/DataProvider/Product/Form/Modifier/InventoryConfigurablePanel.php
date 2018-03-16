@@ -56,8 +56,8 @@ class InventoryConfigurablePanel extends AbstractModifier
     public function modifyData(array $data)
     {
         if ($this->isSingleSourceMode->execute() === false) {
-
             $productId = $this->locator->getProduct()->getId();
+
             if (isset($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX])) {
                 foreach ($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX] as $key => $productArray) {
                     $qtyPerSource =
