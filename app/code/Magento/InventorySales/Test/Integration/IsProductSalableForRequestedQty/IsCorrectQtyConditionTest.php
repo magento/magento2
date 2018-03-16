@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
+use Magento\CatalogInventory\Model\Stock as LegacyStock;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
@@ -85,7 +86,7 @@ class IsCorrectQtyConditionTest extends TestCase
 
         $stockItemConfiguration->setUseConfigMinQty(true);
         $stockItemConfiguration->setMinQty(10); // set this to show it is ignored since we use config min qty set to 5
-        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, LegacyStock::DEFAULT_STOCK_ID, $stockItemConfiguration);
 
         $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
         $this->assertEquals($expectedResult, $result->isSalable());
@@ -93,14 +94,14 @@ class IsCorrectQtyConditionTest extends TestCase
         // rollback changes
         $stockItemConfiguration->setUseConfigMinQty($origUseConfigMinQty);
         $stockItemConfiguration->setMinQty($origMinQty);
-        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, LegacyStock::DEFAULT_STOCK_ID, $stockItemConfiguration);
     }
 
     public function executeWithUseConfigMinQtyDataProvider(): array
     {
         return [
-            ['SKU-1', 10, 4, false],
-            ['SKU-1', 10, 5, true],
+            ['SKU-1', 10, 4, false], // 8.5 available, out-of-stock threshold is 5, 3.5 currently available
+            ['SKU-1', 10, 3, true],
         ];
     }
 
@@ -121,8 +122,8 @@ class IsCorrectQtyConditionTest extends TestCase
         $origMinQty = $stockItemConfiguration->getMinQty();
 
         $stockItemConfiguration->setUseConfigMinQty(false);
-        $stockItemConfiguration->setMinQty(8);
-        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
+        $stockItemConfiguration->setMinQty(6);
+        $this->saveStockItemConfig->execute($sku, LegacyStock::DEFAULT_STOCK_ID, $stockItemConfiguration);
 
         $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
         $this->assertEquals($expectedResult, $result->isSalable());
@@ -130,14 +131,14 @@ class IsCorrectQtyConditionTest extends TestCase
         // rollback changes
         $stockItemConfiguration->setUseConfigMinQty($origUseConfigMinQty);
         $stockItemConfiguration->setMinQty($origMinQty);
-        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, LegacyStock::DEFAULT_STOCK_ID, $stockItemConfiguration);
     }
 
     public function executeWithMinQtyDataProvider(): array
     {
         return [
             ['SKU-1', 10, 5, false],
-            ['SKU-1', 10, 8, true],
+            ['SKU-1', 10, 2, true],
         ];
     }
 
