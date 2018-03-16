@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class ProductDataProvider
@@ -33,12 +34,18 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $addFilterStrategies;
 
     /**
+     * @var PoolInterface
+     */
+    private $pool;
+
+    /**
      * Construct
      *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param PoolInterface $pool
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
@@ -49,6 +56,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        PoolInterface $pool,
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
@@ -58,6 +66,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
+        $this->pool = $pool;
     }
 
     /**
@@ -109,5 +118,20 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         } else {
             parent::addFilter($filter);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->pool->getModifiersInstances() as $modifier) {
+            $meta = $modifier->modifyMeta($meta);
+        }
+
+        return $meta;
     }
 }
