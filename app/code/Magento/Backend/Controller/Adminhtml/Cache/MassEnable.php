@@ -17,6 +17,13 @@ use Magento\Framework\App\ObjectManager;
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::toggling_cache_type';
+
+    /**
      * @var State
      */
     private $state;

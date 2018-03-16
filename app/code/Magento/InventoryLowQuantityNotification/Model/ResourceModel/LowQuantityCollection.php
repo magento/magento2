@@ -21,6 +21,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,11 @@ class LowQuantityCollection extends AbstractCollection
     private $stockConfiguration;
 
     /**
+     * @var GetAllowedProductTypesForSourceItemsInterface
+     */
+    private $getAllowedProductTypesForSourceItems;
+
+    /**
      * @var AttributeRepositoryInterface
      */
     private $attributeRepository;
@@ -47,6 +53,7 @@ class LowQuantityCollection extends AbstractCollection
      * @param ManagerInterface $eventManager
      * @param AttributeRepositoryInterface $attributeRepository
      * @param StockConfigurationInterface $stockConfiguration
+     * @param GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems
      * @param AdapterInterface|null $connection
      * @param AbstractDb|null $resource
      */
@@ -57,11 +64,14 @@ class LowQuantityCollection extends AbstractCollection
         ManagerInterface $eventManager,
         AttributeRepositoryInterface $attributeRepository,
         StockConfigurationInterface $stockConfiguration,
+        GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems,
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
+        // should be before parent constructor call
         $this->attributeRepository = $attributeRepository;
         $this->stockConfiguration = $stockConfiguration;
+        $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
 
         parent::__construct(
             $entityFactory,
@@ -158,8 +168,7 @@ class LowQuantityCollection extends AbstractCollection
      */
     private function addProductTypeFilter()
     {
-        $types = array_keys(array_filter($this->stockConfiguration->getIsQtyTypeIds()));
-        $this->addFieldToFilter('type_id', $types);
+        $this->addFieldToFilter('type_id', $this->getAllowedProductTypesForSourceItems->execute());
     }
 
     /**

@@ -11,8 +11,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\InventoryCatalog\Model\UpdateSourceItemBasedOnLegacyStockItem;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
@@ -26,9 +26,9 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     private $resourceConnection;
 
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var  ProductRepositoryInterface
@@ -43,18 +43,18 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     /**
      * @param UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem
      * @param ResourceConnection $resourceConnection
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         UpdateSourceItemBasedOnLegacyStockItem $updateSourceItemBasedOnLegacyStockItem,
         ResourceConnection $resourceConnection,
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         ProductRepositoryInterface $productRepository
     ) {
         $this->updateSourceItemBasedOnLegacyStockItem = $updateSourceItemBasedOnLegacyStockItem;
         $this->resourceConnection = $resourceConnection;
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->productRepository = $productRepository;
     }
 
@@ -76,7 +76,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
             $proceed($legacyStockItem);
 
             $typeId = $this->getTypeId($legacyStockItem);
-            if ($this->isSourceItemsManagementAllowedForProductType->execute($typeId)) {
+            if ($this->isSourceItemsAllowedForProductType->execute($typeId)) {
                 $this->updateSourceItemBasedOnLegacyStockItem->execute($legacyStockItem);
             }
 

@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Bundle\Model\OptionRepository;
@@ -89,7 +87,10 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionResourceMock = $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\Option::class, ['delete', '__wakeup', 'save', 'removeOptionSelections']);
+        $this->optionResourceMock = $this->createPartialMock(
+            \Magento\Bundle\Model\ResourceModel\Option::class,
+            ['delete', '__wakeup', 'save', 'removeOptionSelections']
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->linkManagementMock = $this->createMock(\Magento\Bundle\Api\ProductLinkManagementInterface::class);
         $this->optionListMock = $this->createMock(\Magento\Bundle\Model\Product\OptionList::class);
@@ -115,7 +116,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for bundle product
+     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetThrowsExceptionIfProductIsSimple()
     {
@@ -133,7 +134,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested option doesn't exist
+     * @expectedExceptionMessage The option that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetThrowsExceptionIfOptionDoesNotExist()
     {
@@ -166,7 +167,10 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $optionId = 100;
         $optionData = ['title' => 'option title'];
 
-        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance', 'getStoreId', 'getPriceType', '__wakeup', 'getSku']);
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeId', 'getTypeInstance', 'getStoreId', 'getPriceType', '__wakeup', 'getSku']
+        );
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
@@ -222,7 +226,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete option with id 1
+     * @expectedExceptionMessage The option with "1" ID can't be deleted.
      */
     public function testDeleteThrowsExceptionIfCannotDelete()
     {
@@ -291,7 +295,6 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId', 'getResource']
         );
         $optionCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($optionMock);
-
 
         $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
@@ -379,7 +382,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save option
+     * @expectedExceptionMessage The option couldn't be saved.
      */
     public function testSaveCanNotSave()
     {
@@ -453,7 +456,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for bundle product
+     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetListException()
     {

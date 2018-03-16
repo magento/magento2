@@ -86,8 +86,6 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
      */
     public function afterExecute(AppendReservationsInterface $subject, $result, array $reservations)
     {
-        // TODO: 'https://github.com/magento-engcom/msi/issues/368'
-        return;
         if ($this->stockConfiguration->canSubtractQty()) {
             foreach ($reservations as $reservation) {
                 if ($this->defaultStockProvider->getId() !== $reservation->getStockId()) {

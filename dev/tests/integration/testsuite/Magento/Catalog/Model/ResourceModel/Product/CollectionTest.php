@@ -124,4 +124,29 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
         $this->assertEquals(5, $tierPrices[2]->getValue());
     }
+
+    /**
+     * Checks a case if table for join specified as an array.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testJoinTable()
+    {
+        $this->collection->joinTable(
+            ['alias' => 'url_rewrite'],
+            'entity_id = entity_id',
+            ['request_path'],
+            '{{table}}.entity_type = \'product\'',
+            'left'
+        );
+        $sql = (string) $this->collection->getSelect();
+        $productTable = $this->collection->getTable('catalog_product_entity');
+        $urlRewriteTable = $this->collection->getTable('url_rewrite');
+
+        $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
+            . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
+            . ' AND (alias.entity_type = \'product\')';
+
+        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
 /**
@@ -218,7 +219,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($orderIdParam)
             ->willThrowException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'))
+                new \Magento\Framework\Exception\NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                )
             );
         $this->initOrderFail();
         $this->prepareRedirect();

@@ -28,7 +28,7 @@ class DeployPackage
     private $appState;
 
     /**
-     * Locale resolver inetrface
+     * Locale resolver interface
      *
      * Check if given locale code is a valid one
      *

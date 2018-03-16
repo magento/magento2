@@ -5,10 +5,13 @@
     "version": "100.0.0-dev",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-webapi": "100.3.*",
+        "magento/module-authorization": "100.3.*",
+        "magento/module-store": "100.3.*",
         "magento/module-eav": "100.3.*",
-        "magento/module-catalog": "100.2.*",
         "magento/framework": "100.3.*"
+    },
+    "suggest": {
+        "magento/module-webapi": "100.3.*"
     },
     "license": [
         "OSL-3.0",

@@ -10,15 +10,15 @@ namespace Magento\InventoryCatalog\Observer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Save source product relations during product persistence via controller
@@ -29,9 +29,9 @@ use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 class ProcessSourceItemsObserver implements ObserverInterface
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var SourceItemsProcessor
@@ -59,7 +59,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private $sourceItemRepository;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param SourceItemsProcessor $sourceItemsProcessor
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param DefaultSourceProviderInterface $defaultSourceProvider
@@ -67,14 +67,14 @@ class ProcessSourceItemsObserver implements ObserverInterface
      * @param SourceItemRepositoryInterface $sourceItemRepository
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         SourceItemsProcessor $sourceItemsProcessor,
         IsSingleSourceModeInterface $isSingleSourceMode,
         DefaultSourceProviderInterface $defaultSourceProvider,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         SourceItemRepositoryInterface $sourceItemRepository
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->sourceItemsProcessor = $sourceItemsProcessor;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->defaultSourceProvider = $defaultSourceProvider;
@@ -92,7 +92,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
         /** @var Save $controller */

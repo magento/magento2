@@ -16,7 +16,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  - original_price - product price before any calculations
  *  - calculation_price - prices for item totals calculation
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
- *  - original_custom_price - original defined value of custom price without any convertion
+ *  - original_custom_price - original defined value of custom price without any conversion
  *
  * @api
  * @method float getDiscountAmount()

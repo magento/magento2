@@ -111,7 +111,8 @@
 ############################################
 ## enable rewrites
 
-    Options +FollowSymLinks
+    # The following line has better security but add some performance overhead - see https://httpd.apache.org/docs/2.4/en/misc/perf-tuning.html
+    Options -FollowSymLinks +SymLinksIfOwnerMatch
     RewriteEngine on
 
 ############################################

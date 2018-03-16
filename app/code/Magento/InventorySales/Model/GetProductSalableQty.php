@@ -46,7 +46,8 @@ class GetProductSalableQty implements GetProductSalableQtyInterface
         if (null === $stockItemData) {
             return 0;
         }
-        $productQtyInStock = $stockItemData['quantity'] + $this->getReservationsQuantity->execute($sku, $stockId);
+        $productQtyInStock = $stockItemData[GetStockItemDataInterface::QUANTITY] +
+            $this->getReservationsQuantity->execute($sku, $stockId);
         return $productQtyInStock;
     }
 }
