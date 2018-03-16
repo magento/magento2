@@ -20,6 +20,8 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Selection setPosition(int $value)
  * @method int getIsDefault()
  * @method \Magento\Bundle\Model\Selection setIsDefault(int $value)
+ * @method int getWebsiteId()
+ * @method \Magento\Bundle\Model\Selection setWebsiteId(int $value)
  * @method int getSelectionPriceType()
  * @method \Magento\Bundle\Model\Selection setSelectionPriceType(int $value)
  * @method float getSelectionPriceValue()

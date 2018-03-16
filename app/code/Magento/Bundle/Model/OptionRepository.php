@@ -248,6 +248,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         if (is_array($option->getProductLinks())) {
             $productLinks = $option->getProductLinks();
             foreach ($productLinks as $productLink) {
+                $productLink->setWebsiteId($this->storeManager->getStore($product->getStoreId())->getWebsiteId());
                 if (!$productLink->getId() && !$productLink->getSelectionId()) {
                     $linksToAdd[] = $productLink;
                 } else {
