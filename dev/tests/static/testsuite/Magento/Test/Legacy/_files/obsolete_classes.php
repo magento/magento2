@@ -4220,4 +4220,5 @@ return [
     ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
     ['Magento\Framework\MessageQueue\PublisherFactory'],
     ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Zend_Feed', 'Zend\Feed'],
 ];
