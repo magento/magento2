@@ -138,11 +138,23 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn($parentIds);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn($childIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($ids)
+            ->willReturn($parentIds);
+        $eavSource->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $ids)))
+            ->willReturn($childIds);
 
-        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($reindexIds)->willReturn($parentIds);
-        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($reindexIds)->willReturn($childIds);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByChild')
+            ->with($reindexIds)
+            ->willReturn($parentIds);
+        $eavDecimal->expects($this->once())
+            ->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $reindexIds)))
+            ->willReturn($childIds);
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
