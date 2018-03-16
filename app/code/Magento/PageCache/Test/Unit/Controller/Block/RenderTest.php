@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
 /**
@@ -62,8 +60,12 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Layout\ProcessorInterface::class
+        );
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Layout\LayoutCacheKeyInterface::class
+        );
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()->getMock();
@@ -77,7 +79,9 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($this->layoutProcessorMock));
+        $this->layoutMock->expects($this->any())
+            ->method('getUpdate')
+            ->will($this->returnValue($this->layoutProcessorMock));
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
@@ -134,10 +138,16 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
-        $blockInstance1 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
+        $blockInstance1 = $this->createPartialMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            ['toHtml']
+        );
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
 
-        $blockInstance2 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
+        $blockInstance2 = $this->createPartialMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            ['toHtml']
+        );
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));

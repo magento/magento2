@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductLink" dataType="product_link" type="create">
         <field key="sku">string</field>
@@ -28,4 +28,4 @@
             <value>product_link_extension_attribute</value>
         </array>
     </operation>
-</config>
+</operations>

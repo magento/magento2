@@ -12,6 +12,15 @@
 <?php if ($block->getButtonsHtml('header')): ?>
     <div class="page-form-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
+<?php if ($block->getButtonsHtml('toolbar')): ?>
+    <div class="page-main-actions">
+        <div class="page-actions">
+            <div class="page-actions-buttons">
+                <?= $block->getButtonsHtml('toolbar') ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 <?= $block->getFormHtml() ?>
 <?php if ($block->hasFooterButtons()): ?>
     <div class="content-footer">

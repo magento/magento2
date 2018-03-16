@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -237,7 +238,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
-                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
             }
             if ($editMode) {
                 $product->setData('_edit_mode', true);
@@ -270,7 +273,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             $product->load($productId);
             if (!$product->getId()) {
-                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
             }
             $this->cacheProduct($cacheKey, $product);
         }
@@ -393,7 +398,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tmpFilePath = $mediaConfig->getTmpMediaShortUrl($relativeFilePath);
 
         if (!$product->hasGalleryAttribute()) {
-            throw new StateException(__('Requested product does not support images.'));
+            throw new StateException(
+                __("The product that was requested doesn't exist. Verify the product and try again.")
+            );
         }
 
         $imageFileUri = $this->getMediaGalleryProcessor()->addImage(
@@ -460,7 +467,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $linkedSku = $link->getLinkedProductSku();
                     if (!isset($linkedProductIds[$linkedSku])) {
                         throw new NoSuchEntityException(
-                            __('Product with SKU "%1" does not exist', $linkedSku)
+                            __('The Product with the "%1" SKU doesn\'t exist.', $linkedSku)
                         );
                     }
                     $linkDataArray['product_id'] = $linkedProductIds[$linkedSku];
@@ -532,7 +539,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         foreach ($newEntries as $newEntry) {
             if (!isset($newEntry['content'])) {
-                throw new InputException(__('The image content is not valid.'));
+                throw new InputException(__('The image content is invalid. Verify the content and try again.'));
             }
             /** @var ImageContentInterface $contentDataObject */
             $contentDataObject = $this->contentFactory->create()
@@ -638,7 +645,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
+            throw new \Magento\Framework\Exception\CouldNotSaveException(
+                __('The product was unable to be saved. Please try again.'),
+                $e
+            );
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
@@ -660,7 +670,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
-                __('Unable to remove product %1', $sku)
+                __('The "%1" product couldn\'t be removed.', $sku)
             );
         }
         unset($this->instances[$sku]);

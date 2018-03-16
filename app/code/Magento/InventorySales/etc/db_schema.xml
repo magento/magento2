@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="inventory_stock_sales_channel" resource="default" engine="innodb">
+        <column xsi:type="varchar" name="type" nullable="false" length="64"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="64"/>
+        <column xsi:type="int" name="stock_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+        <constraint xsi:type="foreign" name="INVENTORY_STOCK_SALES_CHANNEL_STOCK_ID_INVENTORY_STOCK_STOCK_ID"
+                    table="inventory_stock_sales_channel" column="stock_id" referenceTable="inventory_stock"
+                    referenceColumn="stock_id" onDelete="CASCADE"/>
+        <constraint xsi:type="primary" name="IDX_PRIMARY">
+            <column name="type"/>
+            <column name="code"/>
+        </constraint>
+    </table>
+</schema>
