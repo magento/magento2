@@ -121,4 +121,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Config\GraphQlReader\TypeReader">
+        <arguments>
+            <argument name="typeReaders" xsi:type="array">
+                <item name="enum_type" xsi:type="object">Magento\Framework\GraphQl\Config\GraphQlReader\Reader\EnumType</item>
+                <item name="object_type" xsi:type="object">Magento\Framework\GraphQl\Config\GraphQlReader\Reader\ObjectType</item>
+                <item name="input_object" xsi:type="object">Magento\Framework\GraphQl\Config\GraphQlReader\Reader\InputObjectType</item>
+                <item name="interface_type" xsi:type="object">Magento\Framework\GraphQl\Config\GraphQlReader\Reader\InterfaceType</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
