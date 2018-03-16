@@ -13,6 +13,7 @@ addons:
       - magento2.travis
 services:
   - rabbitmq
+  - elasticsearch
 language: php
 php:
   - 7.0
