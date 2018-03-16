@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
@@ -45,28 +46,28 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param PoolInterface $pool
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        PoolInterface $pool,
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $pool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
-        $this->pool = $pool;
+        $this->pool = $pool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
