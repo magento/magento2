@@ -59,6 +59,7 @@
         "zendframework/zend-db": "^2.8.2",
         "zendframework/zend-di": "^2.6.1",
         "zendframework/zend-eventmanager": "^2.6.3",
+        "zendframework/zend-feed": "^2.9.0",
         "zendframework/zend-form": "^2.10.0",
         "zendframework/zend-http": "^2.6.0",
         "zendframework/zend-i18n": "^2.7.3",
