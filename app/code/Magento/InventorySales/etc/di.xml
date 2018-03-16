@@ -89,8 +89,8 @@
             </argument>
         </arguments>
     </type>
-    <!-- IsProductSalableResult -->
-    <preference for="Magento\InventorySalesApi\Api\Data\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
+    <!-- ProductSalableResult -->
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalableResult"/>
     <!-- ProductSalabilityError -->
-    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError"/>
 </config>
