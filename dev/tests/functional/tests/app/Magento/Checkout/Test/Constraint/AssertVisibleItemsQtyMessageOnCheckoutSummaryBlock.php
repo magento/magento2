@@ -55,7 +55,7 @@ class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstra
 
         $count = $reviewBlock->getVisibleItemsCounter();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $counterMessage,
             $count,
             'Wrong counter text of visible Cart items in mini shopping cart'

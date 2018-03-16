@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "66fc91f3b9a36c2147f412694f21ed41",
+    "content-hash": "2771fad0a15e2894a259dca0ced002f3",
     "packages": [
         {
             "name": "allure-framework/allure-codeception",
@@ -1641,11 +1641,11 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento/magento2-functional-testing-framework.git",
-                "reference": "d467837508bc109e4551e8a830ed0997c007d4e4"
+                "reference": "10d547a984cde1e1e9d9100c658011b467b10010"
             },
             "require": {
                 "codeception/codeception": "~2.3.4",
@@ -1653,7 +1653,7 @@
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
                 "mustache/mustache": "~2.5",
-                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0"
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.3",
@@ -1701,7 +1701,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2018-03-13T15:38:21+00:00"
+            "time": "2018-03-14T19:09:58+00:00"
         },
         {
             "name": "moontoast/math",
@@ -4426,7 +4426,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0"
     },
     "platform-dev": []
 }

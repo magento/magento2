@@ -51,7 +51,7 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
         $customerFixtureData = $customer->getData();
         $diff = array_diff($customerFixtureData, $customerFormData);
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($diff),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in account information page."
         );
