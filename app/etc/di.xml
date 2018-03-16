@@ -202,9 +202,6 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
-    <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader" />
-    <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
-    <preference for="Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface" type="Magento\Setup\Model\Declaration\Schema\SchemaConfig" />
     <preference for="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher" />
     <preference for="Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
@@ -780,6 +777,7 @@
             <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
             <argument name="pageLayoutFileSource" xsi:type="object">pageLayoutFileCollectorAggregated</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
+            <argument name="layoutCacheKey" xsi:type="object">Magento\Framework\View\Layout\LayoutCacheKeyInterface</argument>
         </arguments>
     </type>
     <type name="CSSmin">
