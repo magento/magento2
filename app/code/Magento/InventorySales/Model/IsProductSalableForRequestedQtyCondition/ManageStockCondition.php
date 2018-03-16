@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
-
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\InventorySales\Model\IsProductSalableCondition\ManageStockCondition as IsProductSalableManageStockCondition;
 use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;

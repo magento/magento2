@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Model\IsProductSalableCondition;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
  * @inheritdoc
