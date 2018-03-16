@@ -48,7 +48,6 @@ class InventoryConfigurablePanel extends AbstractModifier
      */
     private $locator;
 
-
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
@@ -75,14 +74,16 @@ class InventoryConfigurablePanel extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $productId = $this->locator->getProduct()->getId();
-        if (isset($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX])) {
-            foreach ($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX] as $key => $productArray) {
-                $qtyPerSource = $this->getQuantityPerSource($productArray[ProductInterface::SKU]);
-                $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['qty_per_source'] = $qtyPerSource;
+        if ($this->isSingleSourceMode->execute() === false) {
+
+            $productId = $this->locator->getProduct()->getId();
+            if (isset($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX])) {
+                foreach ($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX] as $key => $productArray) {
+                    $qtyPerSource = $this->getQuantityPerSource($productArray[ProductInterface::SKU]);
+                    $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['qty_per_source'] = $qtyPerSource;
+                }
             }
         }
-
         return $data;
     }
 

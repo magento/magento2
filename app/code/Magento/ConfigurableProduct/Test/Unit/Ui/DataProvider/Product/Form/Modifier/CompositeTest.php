@@ -176,9 +176,9 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     ['modifier1', $this->createModifierMock($meta, ['modifier1_meta'])],
-                    ['modifier2', $this->createModifierMock(['modifier1_meta'], $meta)]
+                    ['modifier2', $this->createModifierMock(['modifier1_meta'], $meta)],
                 ]
-            );;
+            );
 
         $this->assertSame($meta, $this->createCompositeModifier($modifiers)->modifyMeta($meta));
     }
