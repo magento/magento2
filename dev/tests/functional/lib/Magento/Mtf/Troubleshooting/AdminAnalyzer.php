@@ -74,7 +74,7 @@ class AdminAnalyzer extends \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        \PHPUnit_Util_Configuration::getInstance(MTF_PHPUNIT_FILE)->handlePHPConfiguration();
+        \PHPUnit\Util\Configuration::getInstance(MTF_PHPUNIT_FILE)->handlePHPConfiguration();
         $this->output = $this->objectManager->create(
             \Magento\Mtf\Console\Output::class,
             ['output' => $output]

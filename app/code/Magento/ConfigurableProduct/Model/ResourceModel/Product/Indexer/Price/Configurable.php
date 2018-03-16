@@ -133,6 +133,10 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             ['le' => $this->getTable('catalog_product_entity')],
             'le.' . $linkField . ' = l.parent_id',
             ['parent_id' => 'entity_id']
+        )->join(
+            ['i' => $this->_getDefaultFinalPriceTable()],
+            'le.entity_id = i.entity_id',
+            []
         );
 
         $select = $connection->select();
