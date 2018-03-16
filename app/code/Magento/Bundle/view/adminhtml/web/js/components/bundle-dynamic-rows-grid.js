@@ -33,7 +33,7 @@ define([
          * @param {String} inputType - changed.
          */
         onInputTypeChange: function (inputType) {
-            if (this.defaultRecords.moreThanOne && (inputType === 'radio' || inputType === 'select') ) {
+            if (this.defaultRecords.moreThanOne && (inputType === 'radio' || inputType === 'select')) {
                 _.each(this.defaultRecords.use, function (index, counter) {
                     this.source.set(
                         this.dataScope + '.bundle_selections.' + index + '.' + this.isDefaultFieldScope,
