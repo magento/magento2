@@ -47,7 +47,7 @@ class AssertWidgetOnFrontendInCatalog extends AbstractConstraint
             $widgetText = $widget->getParameters()['anchor_text'];
         }
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogCategoryView->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget is absent on Category page.'
         );
