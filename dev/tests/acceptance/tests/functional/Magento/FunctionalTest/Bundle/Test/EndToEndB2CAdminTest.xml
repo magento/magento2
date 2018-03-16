@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
         <test name="EndToEndB2CAdminTest">
             <!--Create Bundle Product-->
-            <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageBundle" after="seeSimpleProductInGrid"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle" after="seeSimpleProductInGrid"/>
             <waitForPageLoad stepKey="waitForProductPageLoadBundle" after="visitAdminProductPageBundle"/>
             <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct" after="waitForProductPageLoadBundle">
                 <argument name="product" value="BundleProduct"/>
