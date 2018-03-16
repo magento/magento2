@@ -15,5 +15,10 @@
         <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
         <element name="splitButtonMenu" type="button" selector="//ul[@data-ui-id='save-button-dropdown-menu']" timeout="10"/>
         <element name="expandSplitButton" type="button" selector="//button[@data-ui-id='save-button-dropdown']" timeout="10"/>
+        <element name="cmsPageTitle" type="text" selector=".page-header .page-title"/>
+        <element name="pageTitle" type="input" selector="//*[@name='title']"/>
+        <element name="showHideEditor" type="button" selector="//*[@id='togglecms_page_form_content']"/>
+        <element name="content" type="input" selector="//textarea[@name='content']"/>
+        <element name="spinner" type="input" selector='//div[@data-component="cms_page_form.cms_page_form"]' />
     </section>
 </sections>

@@ -115,6 +115,7 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $this->pageRepository->save($model);
+                $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 if ($redirectBack === 'duplicate') {
                     $newPage = $this->pageFactory->create()->setData($data);
                     $newPage->setId(null);
@@ -122,9 +123,8 @@ class Save extends \Magento\Backend\App\Action
                     $newPage->setIdentifier($identifier);
                     $newPage->setIsActive(false);
                     $this->pageRepository->save($newPage);
-                    $this->messageManager->addSuccessMessage(__('You duplicated the page'));
+                    $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
                 }
-                $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
                 if ($redirectBack === 'duplicate' && isset($newPage)) {
                     return $resultRedirect->setPath(
