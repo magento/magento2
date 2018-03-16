@@ -28,7 +28,7 @@ class AssertStoreSuccessDeleteMessage extends AbstractConstraint
      */
     public function processAssert(StoreIndex $storeIndex)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $storeIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success delete message is displayed.'
