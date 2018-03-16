@@ -7,23 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder;
 
-class GetCollection
+/**
+ * Get source items collection for notify stock.
+ */
+class GetSourceItemsCollection
 {
     /**
      * @var CollectionFactory
      */
     private $collectionFactory;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
 
     /**
      * @var SelectBuilder
@@ -32,16 +28,13 @@ class GetCollection
 
     /**
      * @param CollectionFactory $collectionFactory
-     * @param ManagerInterface $eventManager
      * @param SelectBuilder $selectBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        ManagerInterface $eventManager,
         SelectBuilder $selectBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->eventManager = $eventManager;
         $this->selectBuilder = $selectBuilder;
     }
 

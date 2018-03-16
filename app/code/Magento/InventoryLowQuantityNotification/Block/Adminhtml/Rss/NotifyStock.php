@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Block\Adminhtml\Rss;
 
@@ -11,7 +12,7 @@ use Magento\Backend\Block\Context;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\GetCollection;
+use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\GetSourceItemsCollection;
 
 class NotifyStock extends AbstractBlock implements DataProviderInterface
 {
@@ -21,26 +22,26 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     protected $rssUrlBuilder;
 
     /**
-     * @var GetCollection
+     * @var GetSourceItemsCollection
      */
-    protected $getCollection;
+    protected $getSourceItemsCollection;
 
     /**
      * @param Context $context
-     * @param GetCollection $getCollection
+     * @param GetSourceItemsCollection $getSourceItemsCollection
      * @param UrlBuilderInterface $rssUrlBuilder
      * @param array $data
      */
     public function __construct(
         Context $context,
-        GetCollection $getCollection,
+        GetSourceItemsCollection $getSourceItemsCollection,
         UrlBuilderInterface $rssUrlBuilder,
         array $data = []
     ) {
         parent::__construct($context, $data);
 
         $this->rssUrlBuilder = $rssUrlBuilder;
-        $this->getCollection = $getCollection;
+        $this->getSourceItemsCollection = $getSourceItemsCollection;
     }
 
     /**
@@ -61,7 +62,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
         $title = __('Low Stock Products');
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
-        foreach ($this->getCollection->execute() as $item) {
+        foreach ($this->getSourceItemsCollection->execute() as $item) {
             $url = $this->getUrl(
                 'catalog/product/edit',
                 ['id' => $item->getId(), '_secure' => true, '_nosecret' => true]
