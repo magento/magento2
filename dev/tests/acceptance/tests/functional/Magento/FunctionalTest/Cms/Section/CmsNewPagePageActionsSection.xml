@@ -20,7 +20,6 @@
         <element name="showHideEditor" type="button" selector="//*[@id='togglecms_page_form_content']"/>
         <element name="content" type="input" selector="//textarea[@name='content']"/>
         <element name="spinner" type="input" selector='//div[@data-component="cms_page_form.cms_page_form"]' />
-        <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
         <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
     </section>
 </sections>
