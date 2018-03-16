@@ -100,7 +100,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $data = parent::_prepareDataForTable($object, $table);
         $ifNullSql = $this->getConnection()->getIfNullSql('qty');
-        if (!$object->isObjectNew() && $object->getQtyCorrection()) {
+        if (!$object->isObjectNew() && null !== $object->getQtyCorrection()) {
             if ($object->getQty() === null) {
                 $data['qty'] = null;
             } elseif ($object->getQtyCorrection() < 0) {

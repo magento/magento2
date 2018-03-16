@@ -20,6 +20,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     const PRODUCT_ID = 'product_id';
     const STOCK_ID = 'stock_id';
     const QTY = 'qty';
+    const ORIGINAL_INVENTORY_QTY = 'original_inventory_qty';
     const IS_QTY_DECIMAL = 'is_qty_decimal';
     const SHOW_DEFAULT_NOTIFICATION_MESSAGE = 'show_default_notification_message';
 
