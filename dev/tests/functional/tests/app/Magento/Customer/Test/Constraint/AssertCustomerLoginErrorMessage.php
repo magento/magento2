@@ -29,7 +29,7 @@ class AssertCustomerLoginErrorMessage extends AbstractConstraint
     public function processAssert(
         CustomerAccountLogin $customerLogin
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $customerLogin->getMessages()->getErrorMessage(),
             'Wrong error message is displayed.'
