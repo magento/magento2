@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="EditTextEditorProductAttributeCest">
+    <test name="AdminEditTextEditorProductAttribute">
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
@@ -16,7 +16,6 @@
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
