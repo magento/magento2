@@ -4230,4 +4230,5 @@ return [
         'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
     ],
+    ['Zend_Feed', 'Zend\Feed'],
 ];
