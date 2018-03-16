@@ -85,8 +85,8 @@ class SampleFileProvider
      */
     private function getPath(string $entityName): string
     {
-        $directoryRead = $this->getDirectoryRead($entityName);
         $moduleName = $this->getModuleName($entityName);
+        $directoryRead = $this->getDirectoryRead($entityName);
         $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $entityName . '.csv';
 

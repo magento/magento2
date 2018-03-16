@@ -536,7 +536,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated
+     * @deprecated this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 

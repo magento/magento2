@@ -58,6 +58,7 @@ class DeleteButton implements ButtonProviderInterface
     /**
      * @param RequestInterface $request
      * @param UrlInterface $urlBuilder
+     * @param Escaper $escaper
      * @param string $confirmationMessage
      * @param string $idFieldName
      * @param string $deleteRoutePath
@@ -87,7 +88,7 @@ class DeleteButton implements ButtonProviderInterface
     public function getButtonData()
     {
         $data = [];
-        $fieldId = $this->request->getParam($this->idFieldName);
+        $fieldId = $this->escaper->escapeJs($this->escaper->escapeHtml($this->request->getParam($this->idFieldName)));
         if (null !== $fieldId) {
             $url = $this->urlBuilder->getUrl($this->deleteRoutePath);
             $escapedMessage = $this->escaper->escapeJs($this->escaper->escapeHtml($this->confirmationMessage));

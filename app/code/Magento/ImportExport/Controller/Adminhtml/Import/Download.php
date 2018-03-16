@@ -81,15 +81,13 @@ class Download extends ImportController
         $entityName = $this->getRequest()->getParam('filename');
 
         if (preg_match('/^\w+$/', $entityName) == 0) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $this->messageManager->addErrorMessage(__('Incorrect file name.'));
+            $this->messageManager->addErrorMessage(__('Incorrect entity name.'));
 
             return $this->getResultRedirect();
         }
         try {
             $fileContents = $this->sampleFileProvider->getFileContents($entityName);
         } catch (NoSuchEntityException $e) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
 
             return $this->getResultRedirect();
