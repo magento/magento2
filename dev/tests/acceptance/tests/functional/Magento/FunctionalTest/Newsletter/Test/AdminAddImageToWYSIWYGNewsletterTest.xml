@@ -48,7 +48,10 @@
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <!--Preview the newsletter template-->
-        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
+        <fillField selector="{{BasicFieldNewsletterSection.searchInput}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillSearch"/>
+        <click selector="{{BasicFieldNewsletterSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview"/>
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
         <waitForPageLoad stepKey="waitForPageLoad9"/>
