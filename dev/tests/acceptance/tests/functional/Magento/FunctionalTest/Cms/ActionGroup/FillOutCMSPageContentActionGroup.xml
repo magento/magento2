@@ -8,8 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillOutCMSPageContent">
-        <fillField selector="{{CmsNewPagePageBasicFieldsSection.blockTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
-        <fillField selector="{{CmsNewPagePageBasicFieldsSection.identifier}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldIdentifier"/>
-        <fillField selector="{{CmsNewPagePageBasicFieldsSection.TextArea}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillContentField"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_duplicatedCMSPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_duplicatedCMSPage.content}}" stepKey="fillFieldContent"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_duplicatedCMSPage.identifier}}" stepKey="fillFieldUrlKey"/>
     </actionGroup>
 </actionGroups>
