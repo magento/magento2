@@ -8,10 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
 use Magento\Framework\DB\Select;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder\ApplyConfigurationCondition;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder\ApplyNameAttributeCondition;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder\ApplyStatusAttributeCondition;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder\BaseSelectProvider;
 
 class SelectBuilder
 {

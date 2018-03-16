@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder;
+namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ResourceConnection;

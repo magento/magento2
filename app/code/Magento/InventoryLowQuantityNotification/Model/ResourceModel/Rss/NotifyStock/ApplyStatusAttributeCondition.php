@@ -5,17 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock\SelectBuilder;
+namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 
-class ApplyNameAttributeCondition
+class ApplyStatusAttributeCondition
 {
+    /**
+     * @var Status
+     */
+    private $productStatus;
+
     /**
      * @var ResourceConnection
      */
@@ -32,18 +38,21 @@ class ApplyNameAttributeCondition
     private $storeManager;
 
     /**
+     * @param Status $productStatus
      * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
+        Status $productStatus,
         ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
         StoreManagerInterface $storeManager
     ) {
+        $this->productStatus = $productStatus;
         $this->resourceConnection = $resourceConnection;
-        $this->storeManager = $storeManager;
         $this->eavConfig = $eavConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -53,13 +62,17 @@ class ApplyNameAttributeCondition
     public function execute(Select $select)
     {
         $storeId = $this->storeManager->getStore()->getId();
-        $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::NAME)->getAttributeId();
+        $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::STATUS)->getAttributeId();
         $connection = $this->resourceConnection->getConnection();
-
+        $statusVisibilityCondition = $connection->prepareSqlCondition(
+            'product_int.value',
+            ['in' => $this->productStatus->getVisibleStatusIds()]
+        );
         $condition = implode(
             [
-                $connection->prepareSqlCondition('product_varchar.store_id', $storeId),
-                $connection->prepareSqlCondition('product_varchar.attribute_id', $attributeId),
+                $statusVisibilityCondition,
+                $connection->prepareSqlCondition('product_int.store_id', $storeId),
+                $connection->prepareSqlCondition('product_int.attribute_id', $attributeId),
             ],
             ' ' . Select::SQL_AND . ' '
         );
