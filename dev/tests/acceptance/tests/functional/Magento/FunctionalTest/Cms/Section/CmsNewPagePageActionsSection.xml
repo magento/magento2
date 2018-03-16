@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CmsNewPagePageActionsSection">
         <element name="savePage" type="button" selector="#save_and_close" timeout="10"/>
+        <element name="reset" type="button" selector="#reset"/>
         <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
         <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
         <element name="splitButtonMenu" type="button" selector="//ul[@data-ui-id='save-button-dropdown-menu']" timeout="10"/>

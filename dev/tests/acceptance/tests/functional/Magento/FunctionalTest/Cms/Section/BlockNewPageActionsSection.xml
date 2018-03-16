@@ -15,4 +15,10 @@
         <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
         <element name="expandSplitButton" type="button" selector="//button[@data-ui-id='save-button-dropdown']" timeout="10"/>
     </section>
+    <section name="BlockWYSIWYGSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecms_block_form_content"/>
+    </section>
+    <section name="BlockContentSection">
+        <element name="TextArea" type="input" selector="#cms_block_form_content"/>
+    </section>
 </sections>

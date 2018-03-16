@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicateCmsBlockTest">
+        <annotations>
+            <features value=""/>
+            <stories value="CMS Block Duplication and Reset Removal MAGETWO-88797"/>
+            <title value="Create a CMS Page"/>
+            <description value="You should be able to duplicate a Block via the Admin."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89185"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="amOnBlocksGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="clickAddNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
+        <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
+        <click selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" stepKey="clickSaveAndDuplicate" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="You saved the block." stepKey="seeSavedBlockMsg"/>
+        <see userInput="You duplicated the block." stepKey="seeDuplicatedBlockMsg"/>
+        <!--<see selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />-->
+        <grabTextFrom selector="input[name=identifier]" stepKey="grabTextFromIdentifier" />
+        <see userInput="{{_defaultBlock.content}}" stepKey="seeContent" />
+    </test>
+</tests>
