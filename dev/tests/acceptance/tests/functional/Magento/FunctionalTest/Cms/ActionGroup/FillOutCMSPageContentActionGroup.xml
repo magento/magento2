@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillOutCMSPageContent">
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.blockTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.identifier}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldIdentifier"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.TextArea}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillContentField"/>
+    </actionGroup>
+</actionGroups>

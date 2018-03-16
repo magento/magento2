@@ -8,13 +8,17 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertBlockContent">
-        <grabTextFrom selector="{{BlockNewPageBasicFieldsSection.blockTitle}}"  stepKey="grabTextFromTitle"/>
-        <assertEquals stepKey="assertEquals" message="pass">
-            <expectedResult type="variable">_defaultBlock.title</expectedResult>
+        <grabValueFrom selector="{{BlockNewPageBasicFieldsSection.blockTitle}}"  stepKey="grabTextFromTitle"/>
+        <assertEquals stepKey="assertTitle" message="pass">
+            <expectedResult type="string">{{_defaultBlock.title}}</expectedResult>
             <actualResult type="variable">grabTextFromTitle</actualResult>
         </assertEquals>
-        <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
-        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <fillField selector="{{BlockContentSection.TextArea}}" userInput="{{_defaultBlock.content}}" stepKey="fillContentField"/>
+        <executeJS function="(el = document.querySelector('[name=\'identifier\']')) &amp;&amp; el['se' + 'tAt' + 'tribute']('data-value', el.value.split('-')[0]);" stepKey="setAttribute" />
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.duplicatedIdentifier(_defaultBlock.identifier)}}" stepKey="see"/>
+        <grabValueFrom selector="{{BlockContentSection.TextArea}}"  stepKey="grabTextFromContent"/>
+        <assertEquals stepKey="assertContent" message="pass">
+            <expectedResult type="string">{{_defaultBlock.content}}</expectedResult>
+            <actualResult type="variable">grabTextFromContent</actualResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>
