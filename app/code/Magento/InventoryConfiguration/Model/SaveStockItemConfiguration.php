@@ -51,7 +51,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
                 StockItemInterface::IS_QTY_DECIMAL => $stockItemConfiguration->isQtyDecimal(),
                 StockItemInterface::USE_CONFIG_MIN_QTY => $stockItemConfiguration->isUseConfigMinQty(),
                 StockItemInterface::MIN_QTY => $stockItemConfiguration->getMinQty(),
-                StockItemInterface::USE_CONFIG_MIN_SALE_QTY => $stockItemConfiguration->isUseConfigMinQty(),
+                StockItemInterface::USE_CONFIG_MIN_SALE_QTY => $stockItemConfiguration->isUseConfigMinSaleQty(),
                 StockItemInterface::MIN_SALE_QTY => $stockItemConfiguration->getMinSaleQty(),
                 StockItemInterface::USE_CONFIG_MAX_SALE_QTY => $stockItemConfiguration->isUseConfigMaxSaleQty(),
                 StockItemInterface::MAX_SALE_QTY => $stockItemConfiguration->getMaxSaleQty(),
