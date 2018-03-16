@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
@@ -33,11 +32,6 @@ class IsCorrectQtyConditionTest extends TestCase
     private $isProductSalableForRequestedQty;
 
     /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -46,7 +40,6 @@ class IsCorrectQtyConditionTest extends TestCase
 
         $this->getStockItemConfig = Bootstrap::getObjectManager()->get(GetStockItemConfigurationInterface::class);
         $this->saveStockItemConfig = Bootstrap::getObjectManager()->get(SaveStockItemConfigurationInterface::class);
-        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->isProductSalableForRequestedQty
             = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
     }
@@ -92,7 +85,7 @@ class IsCorrectQtyConditionTest extends TestCase
 
         $stockItemConfiguration->setUseConfigMinQty(true);
         $stockItemConfiguration->setMinQty(10); // set this to show it is ignored since we use config min qty set to 5
-        $this->saveStockItemConfig->execute($sku, $this->defaultStockProvider->getId(), $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
 
         $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
         $this->assertEquals($expectedResult, $result->isSalable());
@@ -100,7 +93,7 @@ class IsCorrectQtyConditionTest extends TestCase
         // rollback changes
         $stockItemConfiguration->setUseConfigMinQty($origUseConfigMinQty);
         $stockItemConfiguration->setMinQty($origMinQty);
-        $this->saveStockItemConfig->execute($sku, $this->defaultStockProvider->getId(), $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
     }
 
     public function executeWithUseConfigMinQtyDataProvider(): array
@@ -129,7 +122,7 @@ class IsCorrectQtyConditionTest extends TestCase
 
         $stockItemConfiguration->setUseConfigMinQty(false);
         $stockItemConfiguration->setMinQty(8);
-        $this->saveStockItemConfig->execute($sku, $this->defaultStockProvider->getId(), $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
 
         $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
         $this->assertEquals($expectedResult, $result->isSalable());
@@ -137,7 +130,7 @@ class IsCorrectQtyConditionTest extends TestCase
         // rollback changes
         $stockItemConfiguration->setUseConfigMinQty($origUseConfigMinQty);
         $stockItemConfiguration->setMinQty($origMinQty);
-        $this->saveStockItemConfig->execute($sku, $this->defaultStockProvider->getId(), $stockItemConfiguration);
+        $this->saveStockItemConfig->execute($sku, $stockId, $stockItemConfiguration);
     }
 
     public function executeWithMinQtyDataProvider(): array
