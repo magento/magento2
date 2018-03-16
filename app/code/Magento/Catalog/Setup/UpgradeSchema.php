@@ -132,6 +132,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->removeAttributeSetRelation($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.5', '<')) {
+            $this->addGenerallIndexOnGalleryValueTable($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -523,6 +527,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             'value_id'
         );
+
         $this->addForeignKeys($setup);
     }
 
@@ -719,6 +724,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->getConnection()->dropForeignKey(
             $setup->getTable('catalog_product_entity'),
             $setup->getFkName('catalog_product_entity', 'attribute_set_id', 'eav_attribute_set', 'attribute_set_id')
+        );
+    }
+
+    /**
+     * Adds index for table catalog_product_entity_media_gallery_value
+     * It was added because it suits best for selecting media data for products
+     *
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Gallery::createBatchBaseSelect
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addGenerallIndexOnGalleryValueTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addIndex(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+            $setup->getConnection()->getIndexName($setup->getTable(Gallery::GALLERY_VALUE_TABLE), ['entity_id', 'value_id', 'store_id']),
+            ['entity_id', 'value_id', 'store_id']
         );
     }
 }
