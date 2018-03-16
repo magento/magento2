@@ -6,6 +6,7 @@
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
 
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,7 +28,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceCollection;
+    private $resourceCollectionMock;
 
     /**
      * @var  \Magento\Framework\Phrase
@@ -48,9 +49,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceCollection = $this->getMockBuilder(
-            \Magento\Variable\Model\ResourceModel\Variable\Collection::class
-        )
+        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
@@ -58,7 +57,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             [
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock,
-                'resourceCollection' => $this->resourceCollection,
+                'resourceCollection' => $this->resourceCollectionMock,
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -129,7 +128,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
         ];
 
-        $this->resourceCollection->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
         $this->escaperMock->expects($this->once())
@@ -146,13 +145,15 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         ];
 
         $transformedOptions = [
-            'label' => __('Custom Variables'),
-            'value' => [
-                ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+                ],
             ],
         ];
 
-        $this->resourceCollection->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
         $this->escaperMock->expects($this->atLeastOnce())
