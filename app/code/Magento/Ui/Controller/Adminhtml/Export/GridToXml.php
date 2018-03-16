@@ -84,7 +84,6 @@ class GridToXml extends Action
                     ->getDataProvider()
                     ->getConfigData();
                 if (isset($dataProviderConfig['aclResource'])) {
-
                     return $this->_authorization->isAllowed(
                         $dataProviderConfig['aclResource']
                     );
