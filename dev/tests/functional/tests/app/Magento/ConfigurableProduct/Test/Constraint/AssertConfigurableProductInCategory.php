@@ -28,14 +28,14 @@ class AssertConfigurableProductInCategory extends AssertProductInCategory
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
         $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
         $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             number_format($price, 2, '.', ''),
             $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice(),
             'Product regular price on category page is not correct.'
         );
 
         if ($product->hasData('special_price')) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 number_format($product->getSpecialPrice(), 2, '.', ''),
                 $priceBlock->getSpecialPrice(),
                 'Product special price on category page is not correct.'
