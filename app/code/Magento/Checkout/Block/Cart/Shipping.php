@@ -64,7 +64,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         foreach ($this->layoutProcessors as $processor) {
             $this->jsLayout = $processor->process($this->jsLayout);
         }
-        return \Zend_Json::encode($this->jsLayout);
+        return json_encode($this->jsLayout, JSON_HEX_TAG);
     }
 
     /**

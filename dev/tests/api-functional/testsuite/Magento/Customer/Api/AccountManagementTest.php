@@ -157,7 +157,7 @@ class AccountManagementTest extends WebapiAbstract
     private function initSubscriber()
     {
         $this->subscriber = Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Subscriber'
+            \Magento\Newsletter\Model\Subscriber::class
         );
     }
 

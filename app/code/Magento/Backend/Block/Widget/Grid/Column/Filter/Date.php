@@ -125,7 +125,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
 
     /**
      * @param string|null $index
-     * @return string
+     * @return array|string|int|float|null
      */
     public function getEscapedValue($index = null)
     {
@@ -136,6 +136,11 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
                 $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );
         }
+
+        if (is_string($value)) {
+            return $this->escapeHtml($value);
+        }
+
         return $value;
     }
 
