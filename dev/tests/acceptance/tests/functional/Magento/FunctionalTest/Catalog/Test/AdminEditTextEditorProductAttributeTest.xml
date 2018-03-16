@@ -73,7 +73,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>
+        <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
