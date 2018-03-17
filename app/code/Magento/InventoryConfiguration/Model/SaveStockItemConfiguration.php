@@ -12,7 +12,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
