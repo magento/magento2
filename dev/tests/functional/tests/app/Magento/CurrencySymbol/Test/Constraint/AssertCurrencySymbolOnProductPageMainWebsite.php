@@ -35,7 +35,7 @@ class AssertCurrencySymbolOnProductPageMainWebsite extends AbstractConstraint
         $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
         $symbolOnPage = $priceBlock->getCurrencySymbol();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $currencySymbol['mainWebsite'],
             $symbolOnPage,
             'Wrong Currency Symbol is displayed on Product page on the Main Website.'
