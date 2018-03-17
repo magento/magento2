@@ -351,6 +351,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load subscriber data from resource model by email and store
+     *
+     * @param string $subscriberEmail
+     * @param int $storeId
+     * @return $this
+     */
+    public function loadByEmailAndStore($subscriberEmail, $storeId)
+    {
+        $this->addData($this->getResource()->loadByEmailAndStore($subscriberEmail, $storeId));
+        return $this;
+    }
+
+    /**
      * Load subscriber info by customerId
      *
      * @param int $customerId
@@ -362,6 +375,29 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $customerData = $this->customerRepository->getById($customerId);
             $customerData->setStoreId($this->_storeManager->getStore()->getId());
             $data = $this->getResource()->loadByCustomerData($customerData);
+            $this->addData($data);
+            if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
+                $this->setCustomerId($customerData->getId());
+                $this->setSubscriberConfirmCode($this->randomSequence());
+                $this->save();
+            }
+        } catch (NoSuchEntityException $e) {
+        }
+        return $this;
+    }
+
+    /**
+     * Load subscriber info by customerId and Store
+     *
+     * @param int $customerId
+     * @return $this
+     */
+
+    public function loadByCustomerIdAndStore($customerId)
+    {
+        try {
+            $customerData = $this->customerRepository->getById($customerId);
+            $data = $this->getResource()->loadByCustomerDataAndStore($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
                 $this->setCustomerId($customerData->getId());
@@ -394,22 +430,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Subscribes by email
+     * Subscribes by email and Store
      *
      * @param string $email
+     * @param int $storeId
      * @throws \Exception
      * @return int
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function subscribe($email)
+    public function subscribe($email, $storeId)
     {
-        $this->loadByEmail($email);
-
-        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
-            return $this->getStatus();
-        }
+        $this->loadByEmailAndStore($email, $storeId);
 
         if (!$this->getId()) {
             $this->setSubscriberConfirmCode($this->randomSequence());
@@ -473,6 +506,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
     }
 
+
     /**
      * Unsubscribes loaded subscription
      *
@@ -533,6 +567,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Saving customer subscription status
      *
      * @param int $customerId
+     * @param int $subscribe
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
      * @return  $this
      *
@@ -547,7 +582,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $this->loadByCustomerId($customerId);
+        $this->loadByCustomerIdAndStore($customerId);
         if (!$subscribe && !$this->getId()) {
             return $this;
         }
@@ -604,20 +639,14 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
         $sendSubscription = $sendInformationEmail;
-        if ($sendSubscription === null xor $sendSubscription && $this->isStatusChanged()) {
+        if ($sendSubscription === null xor $sendSubscription) {
             try {
-                switch ($status) {
-                    case self::STATUS_UNSUBSCRIBED:
-                        $this->sendUnsubscriptionEmail();
-                        break;
-                    case self::STATUS_SUBSCRIBED:
-                        $this->sendConfirmationSuccessEmail();
-                        break;
-                    case self::STATUS_NOT_ACTIVE:
-                        if ($isConfirmNeed) {
-                            $this->sendConfirmationRequestEmail();
-                        }
-                        break;
+                if ($isConfirmNeed) {
+                    $this->sendConfirmationRequestEmail();
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                    $this->sendUnsubscriptionEmail();
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
+                    $this->sendConfirmationSuccessEmail();
                 }
             } catch (MailException $e) {
                 // If we are not able to send a new account email, this should be ignored
