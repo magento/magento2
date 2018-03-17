@@ -9,6 +9,7 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
@@ -28,20 +29,32 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
      */
     private $getProductIdsBySkus;
 
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetProductIdsBySkusInterface $getProductIdsBySkus
+        GetProductIdsBySkusInterface $getProductIdsBySkus,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration)
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+
+        // TODO We ignore $stockId and use $legacyStockId until we have proper multi-stock item configuration
+        $legacyStockId = $this->defaultStockProvider->getId();
 
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
@@ -70,7 +83,7 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
             ],
             [
                 StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
-                StockItemInterface::STOCK_ID . ' = ?' => $stockId,
+                StockItemInterface::STOCK_ID . ' = ?' => $legacyStockId,
                 'website_id = ?' => 0,
             ]
         );

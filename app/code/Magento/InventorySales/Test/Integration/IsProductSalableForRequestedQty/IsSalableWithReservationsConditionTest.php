@@ -7,12 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
@@ -43,34 +40,14 @@ class IsSalableWithReservationsConditionTest extends TestCase
     private $isProductSalableForRequestedQty;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var GetStockItemConfigurationInterface
      */
-    private $productRepository;
+    private $getStockItemConfiguration;
 
     /**
-     * @var StockItemRepositoryInterface
+     * @var SaveStockItemConfigurationInterface
      */
-    private $stockItemRepository;
-
-    /**
-     * @var StockItemCriteriaInterfaceFactory
-     */
-    private $stockItemCriteriaFactory;
-
-    /**
-     * @var SourceItemRepositoryInterface
-     */
-    private $sourceItemRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var SourceItemsSaveInterface
-     */
-    private $sourceItemsSave;
+    private $saveStockItemConfiguration;
 
     /**
      * @inheritdoc
@@ -84,14 +61,12 @@ class IsSalableWithReservationsConditionTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductSalableForRequestedQty
             = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->stockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
-        $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
-            StockItemCriteriaInterfaceFactory::class
+        $this->getStockItemConfiguration = Bootstrap::getObjectManager()->get(
+            GetStockItemConfigurationInterface::class
         );
-        $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-        $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+        $this->saveStockItemConfiguration = Bootstrap::getObjectManager()->get(
+            SaveStockItemConfigurationInterface::class
+        );
     }
 
     /**
@@ -130,6 +105,97 @@ class IsSalableWithReservationsConditionTest extends TestCase
             ['SKU-2', 30, 1, true],
             ['SKU-3', 10, 1, false],
             ['SKU-3', 20, 1, false],
+            ['SKU-3', 30, 1, false],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param bool $isSalable
+     *
+     * @dataProvider productIsSalableWithUseConfigMinQtyDataProvider
+     */
+    public function testProductIsSalableWithUseConfigMinQty(string $sku, int $stockId, float $qty, bool $isSalable)
+    {
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $stockItemConfiguration->setUseConfigMinQty(true);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+
+        self::assertEquals(
+            $isSalable,
+            $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function productIsSalableWithUseConfigMinQtyDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, 3, true],
+            ['SKU-1', 10, 4, false],
+            ['SKU-1', 30, 3, true],
+            ['SKU-1', 30, 4, false],
+            ['SKU-2', 20, 1, false],
+            ['SKU-2', 30, 1, false],
+            ['SKU-3', 10, 1, false],
+            ['SKU-3', 30, 1, false],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     *
+     * @param string $sku
+     * @param int $stockId
+     * @param bool $isSalable
+     *
+     * @dataProvider productIsSalableWithMinQtyDataProvider
+     */
+    public function testProductIsSalableWithMinQty(string $sku, int $stockId, float $qty, bool $isSalable)
+    {
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
+        $stockItemConfiguration->setUseConfigMinQty(false);
+        $stockItemConfiguration->setMinQty(5);
+        $this->saveStockItemConfiguration->execute($sku, $stockId, $stockItemConfiguration);
+
+        self::assertEquals(
+            $isSalable,
+            $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function productIsSalableWithMinQtyDataProvider(): array
+    {
+        return [
+            ['SKU-1', 10, 3, true],
+            ['SKU-1', 10, 4, false],
+            ['SKU-1', 30, 3, true],
+            ['SKU-1', 30, 4, false],
+            ['SKU-2', 20, 1, false],
+            ['SKU-2', 30, 1, false],
+            ['SKU-3', 10, 1, false],
             ['SKU-3', 30, 1, false],
         ];
     }
