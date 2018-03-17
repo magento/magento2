@@ -104,7 +104,9 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
-            throw new LocalizedException(__('Legacy stock item is not found'));
+            // TODO:
+            return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
+            #throw new LocalizedException(__('Legacy stock item is not found'));
         }
 
         $stockItems = $stockItemCollection->getItems();
