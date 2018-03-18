@@ -13,7 +13,7 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
- * Invalidate source items index on global inventory configuration changes
+ * Invalidate inventory index on global inventory configuration changes
  */
 class UpdateSourceItemsUponConfigChangeObserver implements ObserverInterface
 {
