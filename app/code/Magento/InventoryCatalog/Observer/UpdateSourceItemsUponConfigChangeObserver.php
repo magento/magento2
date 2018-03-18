@@ -9,31 +9,36 @@ namespace Magento\InventoryCatalog\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\InventoryIndexer\Indexer\Stock\StockIndexer;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
- * Update source items index on global inventory configuration changes
+ * Invalidate source items index on global inventory configuration changes
  */
 class UpdateSourceItemsUponConfigChangeObserver implements ObserverInterface
 {
     /**
-     * @var StockIndexer
+     * @var IndexerRegistry
      */
-    private $stockIndexer;
+    private $indexerRegistry;
 
     /**
-     * @param StockIndexer $stockIndexer
+     * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(StockIndexer $stockIndexer)
+    public function __construct(IndexerRegistry $indexerRegistry)
     {
-        $this->stockIndexer = $stockIndexer;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
      * @param EventObserver $observer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(EventObserver $observer)
     {
-        $this->stockIndexer->executeFull();
+        $indexer = $this->indexerRegistry->get(InventoryIndexer::INDEXER_ID);
+        if ($indexer->isValid()) {
+            $indexer->invalidate();
+        }
     }
 }
