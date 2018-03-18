@@ -152,11 +152,11 @@ class PhpCookieManager implements CookieManagerInterface
             $params['name'] = $name;
             if ($value == '') {
                 throw new FailureToSendException(
-                    new Phrase('Unable to delete the cookie with cookieName = %name', $params)
+                    new Phrase('The cookie with "%name" cookieName couldn\'t be deleted.', $params)
                 );
             } else {
                 throw new FailureToSendException(
-                    new Phrase('Unable to send the cookie with cookieName = %name', $params)
+                    new Phrase('The cookie with "%name" cookieName couldn\'t be sent. Please try again later.', $params)
                 );
             }
         }

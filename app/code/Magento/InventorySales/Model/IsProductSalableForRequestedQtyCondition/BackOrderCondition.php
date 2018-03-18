@@ -9,6 +9,9 @@ namespace Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition;
 
 use Magento\InventorySales\Model\IsProductSalableCondition\BackOrderCondition as IsProductSalableBackOrderCondition;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface;
+use Magento\InventorySalesApi\Api\Data\ProductSalableResultInterfaceFactory;
+use Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterfaceFactory;
 
 /**
  * @inheritdoc
@@ -21,30 +24,35 @@ class BackOrderCondition implements IsProductSalableForRequestedQtyInterface
     private $backOrderCondition;
 
     /**
-     * @var ProductSalabilityErrorFactory
+     * @var ProductSalabilityErrorInterfaceFactory
      */
     private $productSalabilityErrorFactory;
 
     /**
-     * @var IsProductSalableResultFactory
+     * @var ProductSalableResultInterfaceFactory
      */
-    private $isProductSalableResultFactory;
+    private $productSalableResultFactory;
 
+    /**
+     * @param IsProductSalableBackOrderCondition $backOrderCondition
+     * @param ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory
+     * @param ProductSalableResultInterfaceFactory $productSalableResultFactory
+     */
     public function __construct(
         IsProductSalableBackOrderCondition $backOrderCondition,
-        ProductSalabilityErrorFactory $productSalabilityErrorFactory,
-        IsProductSalableResultFactory $isProductSalableResultFactory
+        ProductSalabilityErrorInterfaceFactory $productSalabilityErrorFactory,
+        ProductSalableResultInterfaceFactory $productSalableResultFactory
     ) {
         $this->backOrderCondition = $backOrderCondition;
         $this->productSalabilityErrorFactory = $productSalabilityErrorFactory;
-        $this->isProductSalableResultFactory = $isProductSalableResultFactory;
+        $this->productSalableResultFactory = $productSalableResultFactory;
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(string $sku, int $stockId, float $requestedQty): IsProductSalableResultInterface
+    public function execute(string $sku, int $stockId, float $requestedQty): ProductSalableResultInterface
     {
         $isValid = $this->backOrderCondition->execute($sku, $stockId);
         if (!$isValid) {
@@ -54,9 +62,9 @@ class BackOrderCondition implements IsProductSalableForRequestedQtyInterface
                     'message' => __('Backorders are disabled')
                 ])
             ];
-            return $this->isProductSalableResultFactory->create(['errors' => $errors]);
+            return $this->productSalableResultFactory->create(['errors' => $errors]);
         }
 
-        return $this->isProductSalableResultFactory->create(['errors' => []]);
+        return $this->productSalableResultFactory->create(['errors' => []]);
     }
 }

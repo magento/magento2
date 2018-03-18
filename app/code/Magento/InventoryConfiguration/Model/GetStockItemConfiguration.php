@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\CatalogInventory\Api\StockRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
@@ -27,16 +25,6 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
      * @var GetStockItemDataInterface
      */
     private $getStockItemData;
-
-    /**
-     * @var StockCriteriaInterfaceFactory
-     */
-    private $legacyStockCriteriaFactory;
-
-    /**
-     * @var StockRepositoryInterface
-     */
-    private $legacyStockRepository;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
@@ -54,43 +42,29 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
     private $getProductIdsBySkus;
 
     /**
-     * @var StockConfigurationInterface
-     */
-    private $legacyStockConfiguration;
-
-    /**
      * @var StockItemConfigurationFactory
      */
     private $stockItemConfigurationFactory;
 
     /**
-     * @param GetStockItemDataInterface $getStockItemData
-     * @param StockCriteriaInterfaceFactory $legacyStockCriteriaFactory
-     * @param StockRepositoryInterface $legacyStockRepository
-     * @param StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory
-     * @param StockItemRepositoryInterface $legacyStockItemRepository
-     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
-     * @param StockConfigurationInterface $legacyStockConfiguration
-     * @param StockItemConfigurationFactory $stockItemConfigurationFactory
+     * @var DefaultStockProviderInterface
      */
+    private $defaultStockProvider;
+
     public function __construct(
         GetStockItemDataInterface $getStockItemData,
-        StockCriteriaInterfaceFactory $legacyStockCriteriaFactory,
-        StockRepositoryInterface $legacyStockRepository,
         StockItemCriteriaInterfaceFactory $legacyStockItemCriteriaFactory,
         StockItemRepositoryInterface $legacyStockItemRepository,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
-        StockConfigurationInterface $legacyStockConfiguration,
-        StockItemConfigurationFactory $stockItemConfigurationFactory
+        StockItemConfigurationFactory $stockItemConfigurationFactory,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getStockItemData = $getStockItemData;
-        $this->legacyStockCriteriaFactory = $legacyStockCriteriaFactory;
-        $this->legacyStockRepository = $legacyStockRepository;
         $this->legacyStockItemCriteriaFactory = $legacyStockItemCriteriaFactory;
         $this->legacyStockItemRepository = $legacyStockItemRepository;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
-        $this->legacyStockConfiguration = $legacyStockConfiguration;
         $this->stockItemConfigurationFactory = $stockItemConfigurationFactory;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -123,35 +97,20 @@ class GetStockItemConfiguration implements GetStockItemConfigurationInterface
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
         $searchCriteria->addFilter(StockItemInterface::PRODUCT_ID, StockItemInterface::PRODUCT_ID, $productId);
 
-        $legacyStockId = $this->resolveLegacyStockId();
+        // TODO We use $legacyStockId until we have proper multi-stock item configuration
+        $legacyStockId = $this->defaultStockProvider->getId();
+
         $searchCriteria->addFilter(StockItemInterface::STOCK_ID, StockItemInterface::STOCK_ID, $legacyStockId);
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
         if ($stockItemCollection->getTotalCount() === 0) {
             // TODO:
             return \Magento\Framework\App\ObjectManager::getInstance()->create(StockItemInterface::class);
-            throw new LocalizedException(__('Legacy stock item is not found'));
+            #throw new LocalizedException(__('Legacy stock item is not found'));
         }
 
         $stockItems = $stockItemCollection->getItems();
         $stockItem = reset($stockItems);
         return $stockItem;
-    }
-
-    /**
-     * In legacy approach configuration has been saved only for default stock
-     *
-     * @return int
-     */
-    private function resolveLegacyStockId(): int
-    {
-        $scopeId = $this->legacyStockConfiguration->getDefaultScopeId();
-
-        $criteria = $this->legacyStockCriteriaFactory->create();
-        $criteria->setScopeFilter($scopeId);
-        $collection = $this->legacyStockRepository->getList($criteria);
-
-        $legacyStock = current($collection->getItems());
-        return (int)$legacyStock->getStockId();
     }
 }

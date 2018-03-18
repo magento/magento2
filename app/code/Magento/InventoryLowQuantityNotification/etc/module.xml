@@ -9,6 +9,7 @@
     <module name="Magento_InventoryLowQuantityNotification" setup_version="1.0.0" >
         <sequence>
             <module name="Magento_Inventory"/>
+            <module name="Magento_InventoryCatalog"/>
         </sequence>
     </module>
 </config>

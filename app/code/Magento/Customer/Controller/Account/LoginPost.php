@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
@@ -175,12 +176,16 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'You did not sign in correctly or your account is temporarily disabled.'
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
-                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
+                    $message = __(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (LocalizedException $e) {

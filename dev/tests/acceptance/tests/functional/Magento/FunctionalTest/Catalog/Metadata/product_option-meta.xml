@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductOption" dataType="product_option" type="create">
         <field key="product_sku">string</field>
@@ -44,4 +44,4 @@
             <value>product_option_value</value>
         </array>
     </operation>
-</config>
+</operations>

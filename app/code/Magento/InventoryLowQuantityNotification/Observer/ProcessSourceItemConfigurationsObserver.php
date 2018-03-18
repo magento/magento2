@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Save source relations (configuration) during product persistence via controller
@@ -22,9 +22,9 @@ use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterfac
 class ProcessSourceItemConfigurationsObserver implements ObserverInterface
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
 
     /**
      * @var SourceItemsConfigurationProcessor
@@ -32,15 +32,15 @@ class ProcessSourceItemConfigurationsObserver implements ObserverInterface
     private $sourceItemsConfigurationProcessor;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
-     * @param SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param SourceItemsConfigurationProcessor $sourceItemsConfigurationProcessor
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
-        SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        SourceItemsConfigurationProcessor $sourceItemsConfigurationProcessor
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
-        $this->sourceItemsConfigurationProcessor = $processSourceItemsConfigurationObserver;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->sourceItemsConfigurationProcessor = $sourceItemsConfigurationProcessor;
     }
 
     /**
@@ -51,7 +51,7 @@ class ProcessSourceItemConfigurationsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === false) {
+        if ($this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return;
         }
 

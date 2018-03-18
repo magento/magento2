@@ -11,6 +11,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $websiteCodes = ['eu_website', 'us_website', 'global_website'];
 
+$store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$store->load('default');
+$rootCategoryId = $store->getRootCategoryId();
+
 foreach ($websiteCodes as $key => $websiteCode) {
     /** @var Website $website */
     $website = Bootstrap::getObjectManager()->create(Website::class);
@@ -40,6 +44,7 @@ foreach ($websiteCodes as $key => $websiteCode) {
     $group->setCode('store_view_' . $websiteCode);
     $group->setWebsiteId($website->getId());
     $group->setDefaultStoreId($store->getId());
+    $group->setRootCategoryId($rootCategoryId);
     $group->save();
 
     $website->setDefaultGroupId($group->getId());

@@ -109,11 +109,19 @@
                         <label translate="true">Name</label>
                     </settings>
                 </field>
-                <field name="status" formElement="select" sortOrder="30">
+                <field name="source_status" formElement="input" sortOrder="30">
+                    <settings>
+                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <dataType>text</dataType>
+                        <dataScope>source_status</dataScope>
+                        <label translate="true">Source Status</label>
+                    </settings>
+                </field>
+                <field name="status" formElement="select" sortOrder="40">
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
-                        <label translate="true">Status</label>
+                        <label translate="true">Source Item Status</label>
                     </settings>
                     <formElements>
                         <select>
@@ -123,14 +131,14 @@
                         </select>
                     </formElements>
                 </field>
-                <field name="quantity" formElement="input" sortOrder="40">
+                <field name="quantity" formElement="input" sortOrder="50">
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>quantity</dataScope>
                         <label translate="true">Qty</label>
                     </settings>
                 </field>
-                <field name="actionDelete" formElement="actionDelete" sortOrder="50">
+                <field name="actionDelete" formElement="actionDelete" sortOrder="90">
                     <settings>
                         <label translate="true">Unassign</label>
                     </settings>

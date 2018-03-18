@@ -402,13 +402,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('wishlist/shared/cart')
             ->willReturn($url);
 
-        $exptected = [
+        $expected = [
             'item' => $wishlistItemId,
             'qty' => $wishlistItemQty,
         ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, $exptected)
+            ->with($url, $expected)
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
@@ -49,10 +50,14 @@ class DbTable extends \SessionHandler
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new SessionException(new Phrase('Write DB connection is not available'));
+            throw new SessionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
         if (!$this->connection->isTableExists($this->_sessionTable)) {
-            throw new SessionException(new Phrase('DB storage table does not exist'));
+            throw new SessionException(
+                new Phrase("The database storage table doesn't exist. Verify the table and try again.")
+            );
         }
     }
 

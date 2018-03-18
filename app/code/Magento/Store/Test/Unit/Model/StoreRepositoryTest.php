@@ -76,7 +76,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested store is not found
+     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
      */
     public function testGetWithException()
     {
@@ -128,7 +128,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested store is not found
+     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
      */
     public function testGetByIdWithException()
     {

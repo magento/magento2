@@ -41,12 +41,17 @@ $stockData = [
         'manage_stock' => true
     ],
 ];
+$productsData = [
+    1 => 'Orange',
+    2 => 'Blue',
+    3 => 'White',
+];
 
 for ($i = 1; $i <= 3; $i++) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId(4)
-        ->setName('Simple Product ' . $i)
+        ->setName('Simple Product ' . $i . ' ' . $productsData[$i])
         ->setSku('SKU-' . $i)
         ->setPrice(10)
         ->setStockData($stockData['SKU-' . $i])
