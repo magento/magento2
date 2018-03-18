@@ -116,7 +116,7 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
     public function testPlaceOrderWithInStockProduct()
     {
         $sku = 'SKU-1';
-        $quoteItemQty = 5.5;
+        $quoteItemQty = 3.8;
         $reservedDuringCheckoutQty = 1.5;
 
         $cart = $this->getCart();
