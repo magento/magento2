@@ -124,7 +124,9 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+                $subscriber = $this->_subscriberFactory->create()->loadByEmailAndStore($email, $websiteId);
+
                 if ($subscriber->getId()
                     && $subscriber->getSubscriberStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED
                 ) {
@@ -133,7 +135,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                     );
                 }
 
-                $status = $this->_subscriberFactory->create()->subscribe($email);
+                $status = $this->_subscriberFactory->create()->subscribe($email,$websiteId);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
                     $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
                 } else {

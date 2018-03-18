@@ -89,6 +89,9 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
+        $context->expects($this->once())
+            ->method('getLocale')
+            ->willReturn('en_US');
 
         $this->areaListMock->expects($this->once())
             ->method('getArea')
@@ -106,10 +109,15 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('setContentType')
             ->with('json');
 
+<<<<<<< HEAD
+        $this->translateMock->expects($this->once())->method('setLocale')->with('en_US')->willReturnSelf();
+        $this->translateMock->expects($this->once())->method('loadData')->with($areaCode, true);
+=======
         $this->translateMock
             ->expects($this->once())
             ->method('loadData')
             ->willReturn($this->translateMock);
+>>>>>>> upstream/2.2-develop
 
         $this->model->process($chain);
     }

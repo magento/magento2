@@ -6,16 +6,61 @@
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
+<<<<<<< HEAD
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+=======
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\DB\Sequence\SequenceInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+<<<<<<< HEAD
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+=======
+use Magento\Quote\Model\Quote;
+>>>>>>> upstream/2.2-develop
 use Magento\SalesSequence\Model\Manager;
 
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
+<<<<<<< HEAD
+     * @var ResourceConnection
+=======
+     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteMock;
+
+    /**
+     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
+     */
+    private $sequenceManagerMock;
+
+    /**
+<<<<<<< HEAD
+     * @var Mysql
+=======
+     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
+     */
+    private $sequenceMock;
+
+    /**
+<<<<<<< HEAD
+     * @var Select
+=======
+     * @var \Magento\Quote\Model\ResourceModel\Quote
+>>>>>>> upstream/2.2-develop
+     */
+    private $quote;
+
+    /**
+<<<<<<< HEAD
      * @var Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteMock;
@@ -31,11 +76,53 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $sequenceMock;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @var QuoteResource
      */
-    private $quote;
+    private $model;
 
-    /**
+    protected function setUp()
+    {
+        $objectManagerHelper = new ObjectManager($this);
+        $this->selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('where');
+
+        $this->adapterMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resourceMock->expects(
+            $this->any()
+        )->method(
+            'getConnection'
+        )->will(
+            $this->returnValue($this->adapterMock)
+        );
+
+        $context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects(
+            $this->once()
+        )->method(
+            'getResources'
+        )->will(
+            $this->returnValue($this->resourceMock)
+        );
+
+        $snapshot = $this->getMockBuilder(Snapshot::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $relationComposite = $this->getMockBuilder(RelationComposite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+=======
      * {@inheritdoc}
      */
     protected function setUp()
@@ -49,6 +136,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $relationComposite = $this->getMockBuilder(RelationComposite::class)
             ->disableOriginalConstructor()
             ->getMock();
+>>>>>>> upstream/2.2-develop
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,12 +146,24 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
+        $this->model = $objectManagerHelper->getObject(
+            QuoteResource::class,
+            [
+                'context' => $context,
+                'entitySnapshot' => $snapshot,
+                'entityRelationComposite' => $relationComposite,
+                'sequenceManager' => $this->sequenceManagerMock,
+                'connectionName' => null,
+            ]
+=======
         $this->quote = new \Magento\Quote\Model\ResourceModel\Quote(
             $context,
             $snapshot,
             $relationComposite,
             $this->sequenceManagerMock,
             null
+>>>>>>> upstream/2.2-develop
         );
     }
 
@@ -87,6 +187,41 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->willReturn($reservedOrderId);
 
         $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId($this->quoteMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function getReservedOrderIdDataProvider(): array
+    {
+        return [
+            [\Magento\Sales\Model\Order::ENTITY, 1, '1000000001'],
+            [\Magento\Sales\Model\Order::ENTITY, 2, '2000000001'],
+            [\Magento\Sales\Model\Order::ENTITY, 3, '3000000001']
+        ];
+    }
+
+    /**
+     * /**
+     * @param $entityType
+     * @param $storeId
+     * @param $reservedOrderId
+     * @dataProvider getReservedOrderIdDataProvider
+     */
+    public function testGetReservedOrderId($entityType, $storeId, $reservedOrderId)
+    {
+        $this->sequenceManagerMock->expects($this->once())
+            ->method('getSequence')
+            ->with($entityType, $storeId)
+            ->willReturn($this->sequenceMock);
+        $this->quoteMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->sequenceMock->expects($this->once())
+            ->method('getNextValue')
+            ->willReturn($reservedOrderId);
+
+        $this->assertEquals($reservedOrderId, $this->model->getReservedOrderId($this->quoteMock));
     }
 
     /**

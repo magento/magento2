@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\CatalogImportExport\Model\Import\Product
  *
@@ -892,7 +890,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         }
     }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
     /**
      * Export CSV string to array
      *
@@ -910,7 +911,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $data['header'] = str_getcsv($line);
             } else {
                 $row = array_combine($data['header'], str_getcsv($line));
-                if (!is_null($entityId) && !empty($row[$entityId])) {
+                if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
                     $data['data'][] = $row;
@@ -1727,20 +1728,28 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $product1 = $productRepository->get('simple1');
         $this->assertEquals('\'", =|', $product1->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product1->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product1->getData('multiselect_attribute')
+        );
 
         $product2 = $productRepository->get('simple2');
         $this->assertEquals('', $product2->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product2->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product2->getData('multiselect_attribute')
+        );
     }
 
     /**
-     * Import and check data from file
+     * Import and check data from file.
      *
      * @param string $fileName
      * @param int $expectedErrors
+<<<<<<< HEAD
+     * @return void
+=======
+>>>>>>> upstream/2.2-develop
      */
     private function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
@@ -2115,6 +2124,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 : self::assertSame('0', $image['disabled']);
         }
     }
+<<<<<<< HEAD
+=======
 
     /**
      * Test import product into multistore system when media is disabled.
@@ -2143,4 +2154,5 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() === 0);
         $this->assertTrue($this->_model->importData());
     }
+>>>>>>> upstream/2.2-develop
 }

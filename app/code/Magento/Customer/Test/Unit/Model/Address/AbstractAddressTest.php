@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+use Magento\Customer\Model\Address\CompositeValidator;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -44,6 +46,12 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
+<<<<<<< HEAD
+    /** @var \Magento\Customer\Model\Address\CompositeValidator|\PHPUnit_Framework_MockObject_MockObject  */
+    private $compositeValidatorMock;
+
+=======
+>>>>>>> upstream/2.2-develop
     protected function setUp()
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
@@ -73,6 +81,10 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+<<<<<<< HEAD
+        $this->compositeValidatorMock = $this->createMock(CompositeValidator::class);
+=======
+>>>>>>> upstream/2.2-develop
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\AbstractAddress::class,
             [
@@ -84,7 +96,8 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
                 'regionFactory' => $this->regionFactoryMock,
                 'countryFactory' => $this->countryFactoryMock,
                 'resource' => $this->resourceMock,
-                'resourceCollection' => $this->resourceCollectionMock
+                'resourceCollection' => $this->resourceCollectionMock,
+                'compositeValidator' => $this->compositeValidatorMock,
             ]
         );
     }
@@ -280,11 +293,18 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $data
      * @param array|bool $expected
+<<<<<<< HEAD
+     * @return void
+=======
+>>>>>>> upstream/2.2-develop
      *
      * @dataProvider validateDataProvider
      */
     public function testValidate(array $data, $expected)
     {
+<<<<<<< HEAD
+        $this->compositeValidatorMock->method('validate')->with($this->model)->willReturn($expected);
+=======
         $countryId = isset($data['country_id']) ? $data['country_id'] : null;
         $attributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $attributeMock->expects($this->any())
@@ -301,6 +321,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryDataMock->expects($this->any())
             ->method('isRegionRequired');
+>>>>>>> upstream/2.2-develop
 
         $countryCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
             ->disableOriginalConstructor()
@@ -372,27 +393,31 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         return [
             'firstname' => [
                 array_merge(array_diff_key($data, ['firstname' => '']), ['country_id' => $countryId++]),
-                ['firstname is a required field.'],
+                ['"firstname" is required. Enter and try again.'],
             ],
             'lastname' => [
                 array_merge(array_diff_key($data, ['lastname' => '']), ['country_id' => $countryId++]),
-                ['lastname is a required field.'],
+                ['"lastname" is required. Enter and try again.'],
             ],
             'street' => [
                 array_merge(array_diff_key($data, ['street' => '']), ['country_id' => $countryId++]),
-                ['street is a required field.'],
+                ['"street" is required. Enter and try again.'],
             ],
             'city' => [
                 array_merge(array_diff_key($data, ['city' => '']), ['country_id' => $countryId++]),
-                ['city is a required field.'],
+                ['"city" is required. Enter and try again.'],
             ],
             'telephone' => [
                 array_merge(array_diff_key($data, ['telephone' => '']), ['country_id' => $countryId++]),
-                ['telephone is a required field.'],
+                ['"telephone" is required. Enter and try again.'],
             ],
             'postcode' => [
                 array_merge(array_diff_key($data, ['postcode' => '']), ['country_id' => $countryId++]),
-                ['postcode is a required field.'],
+                ['"postcode" is required. Enter and try again.'],
+            ],
+            'region_id' => [
+                array_merge($data, ['country_id' => $countryId++, 'region_id' => 2]),
+                ['Invalid value of "2" provided for the regionId field.'],
             ],
             'region_id' => [
                 array_merge($data, ['country_id' => $countryId++, 'region_id' => 2]),
@@ -400,7 +425,7 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
             ],
             'country_id' => [
                 array_diff_key($data, ['country_id' => '']),
-                ['countryId is a required field.'],
+                ['"countryId" is required. Enter and try again.'],
             ],
             'validated' => [array_merge($data, ['country_id' => $countryId++]), true],
         ];

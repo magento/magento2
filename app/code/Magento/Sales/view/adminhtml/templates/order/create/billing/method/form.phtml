@@ -56,11 +56,15 @@
             'Magento_Sales/order/create/form'
         ], function(mage) {
             mage.apply();
+<<<<<<< HEAD
+            order.setPaymentMethod('<?= $block->escapeHtml($block->getSelectedMethodCode()); ?>');
+=======
         <?php if ($_methodsCount != 1) : ?>
             order.setPaymentMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
         <?php else : ?>
             payment.switchMethod('<?= $block->escapeHtml($currentSelectedMethod); ?>');
         <?php endif; ?>
+>>>>>>> upstream/2.2-develop
         });
     </script>
 <?php else : ?>

@@ -231,7 +231,6 @@ define([
             }
 
             if (event.type !== 'fieldStateChange') {
-
                 return false;
             }
 

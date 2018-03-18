@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
+=======
     "name": "magento/magento2ce-functional-tests",
+>>>>>>> upstream/2.2-develop
     "description": "Magento 2 (Open Source) Functional Tests",
     "type": "project",
     "version": "1.0.0-dev",
@@ -23,6 +26,11 @@
         "symfony/process": ">=2.7 <3.4",
         "henrikbjorn/lurker": "^1.2",
         "magento/magento2-functional-testing-framework": "~2.1.1",
+<<<<<<< HEAD
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
+        "vlucas/phpdotenv": "~2.4"
+    },
+=======
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "vlucas/phpdotenv": "~2.4"
     },
@@ -135,6 +143,7 @@
         "magento/magento2-functional-test-module-widget": "100.0.0-dev",
         "magento/magento2-functional-test-module-wishlist": "100.0.0-dev"
     },
+>>>>>>> upstream/2.2-develop
     "autoload": {
         "psr-4": {
             "Magento\\": "tests/functional/Magento"

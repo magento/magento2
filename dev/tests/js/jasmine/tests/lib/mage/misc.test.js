@@ -69,13 +69,13 @@ define([
         it('Check convertToMomentFormat function for all Magento supported locales', function () {
 
             var fixture,
-            localeValues,
-            format,
-            expectedValue,
-            momentFormat,
-            dt,
-            m,
-            p;
+                localeValues,
+                format,
+                expectedValue,
+                momentFormat,
+                dt,
+                m,
+                p;
 
             fixture = {
                 'af_ZA': {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 /**
@@ -175,8 +173,10 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
         foreach ($addressData as $key => $value) {
             $totalsMock->setData($key, $value);
         }
-        $this->assertEquals($this->quoteDetailsItemDataObject,
-            $this->commonTaxCollector->getShippingDataObject($shippingAssignmentMock, $totalsMock, $useBaseCurrency));
+        $this->assertEquals(
+            $this->quoteDetailsItemDataObject,
+            $this->commonTaxCollector->getShippingDataObject($shippingAssignmentMock, $totalsMock, $useBaseCurrency)
+        );
 
         if ($shippingAmount) {
             $this->assertEquals($expectedDiscountAmount, $this->quoteDetailsItemDataObject->getDiscountAmount());

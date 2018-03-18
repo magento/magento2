@@ -114,7 +114,11 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects(static::never())
             ->method('save');
 
+<<<<<<< HEAD
+        $this->expectException(LocalizedException::class, $expectedMessage);
+=======
         $this->expectException(LocalizedException::class);
+>>>>>>> upstream/2.2-develop
         $this->expectExceptionMessage($expectedMessage);
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
@@ -161,8 +165,13 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                 'expectedMessage' => "Please update your modules: "
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
+<<<<<<< HEAD
+                    . "Magento_Module3 schema: code version - 1.0.0, database version - 2.0.0\n"
+                    . "Magento_Module4 data: code version - 1.0.0, database version - 1.0.1",
+=======
                     . "Magento_Module3 db schema version: defined in codebase - 1.0.0, currently installed - 2.0.0\n"
                     . "Magento_Module4 db data version: defined in codebase - 1.0.0, currently installed - 1.0.1",
+>>>>>>> upstream/2.2-develop
             ],
             'some versions too high, some too low' => [
                 'errors' => [
@@ -182,7 +191,11 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
                 'expectedMessage' => "Please update your modules: "
                     . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n"
+<<<<<<< HEAD
+                    . "Magento_Module1 schema: code version - 1.0.0, database version - 2.0.0"
+=======
                     . "Magento_Module1 db schema version: defined in codebase - 1.0.0, currently installed - 2.0.0"
+>>>>>>> upstream/2.2-develop
             ]
         ];
     }

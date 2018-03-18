@@ -106,6 +106,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertContains('simple ""1""', $exportData);
+        $this->assertContains('Category with slash\/ symbol', $exportData);
     }
 
     /**
@@ -322,6 +323,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             }
         }
     }
+<<<<<<< HEAD
+=======
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
@@ -407,4 +410,5 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
         return $optionItems;
     }
+>>>>>>> upstream/2.2-develop
 }

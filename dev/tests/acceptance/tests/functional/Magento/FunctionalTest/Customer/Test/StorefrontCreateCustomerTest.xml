@@ -23,6 +23,11 @@
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
+<<<<<<< HEAD
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+=======
         <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
@@ -35,5 +40,6 @@
         <see stepKey="seeFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         <see stepKey="seeLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         <see stepKey="seeEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+>>>>>>> upstream/2.2-develop
     </test>
 </tests>

@@ -39,7 +39,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($voidHandler->handle($subject));
     }
 
-    public function testHandleSomeAmoutWasPaid()
+    public function testHandleSomeAmountWasPaid()
     {
         $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $subject = [

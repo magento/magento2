@@ -245,16 +245,27 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $quoteId = 2311;
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+<<<<<<< HEAD
+        $quoteAddress = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates']
+        );
+        $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
+=======
 
         $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCollectShippingRates'])
             ->getMock();
+>>>>>>> upstream/2.2-develop
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteAddress);
+<<<<<<< HEAD
+=======
         $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
+>>>>>>> upstream/2.2-develop
 
         $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 
@@ -320,7 +331,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store
+     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerFromAnotherStore()
     {
@@ -364,7 +375,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
+     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerToNonanonymousCart()
     {
@@ -413,7 +424,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerNoSuchCustomer()
     {
@@ -463,6 +473,10 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId);
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
+
+        $this->expectExceptionMessage(
+            "The customer can't be assigned to the cart because the customer already has an active cart."
+        );
     }
 
     public function testAssignCustomer()
@@ -585,9 +599,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->willReturn($convertedBilling);
+<<<<<<< HEAD
+        $billingAddress->expects($this->once())->method('getId')->willReturn(4);
+        $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
+
+=======
 
         $billingAddress->expects($this->once())->method('getId')->willReturn(4);
         $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
+>>>>>>> upstream/2.2-develop
         $this->quoteItemToOrderItem->expects($this->once())->method('convert')
             ->with($quoteItem, ['parent_item' => null])
             ->willReturn($convertedQuoteItem);
@@ -596,7 +616,10 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
         $shippingAddress->expects($this->once())->method('getId')->willReturn(5);
         $convertedShipping->expects($this->once())->method('setData')->with('quote_address_id', 5);
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
         $order = $this->prepareOrderFactory(
             $baseOrder,
             $convertedBilling,
@@ -872,22 +895,22 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \Magento\Sales\Api\Data\OrderInterface $baseOrder
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
+     * @param OrderAddressInterface $billingAddress
      * @param array $addresses
      * @param $payment
      * @param array $items
      * @param $quoteId
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @param OrderAddressInterface $shippingAddress
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareOrderFactory(
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
-        \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress,
+        OrderAddressInterface $billingAddress,
         array $addresses,
         $payment,
         array $items,
         $quoteId,
-        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null,
+        OrderAddressInterface $shippingAddress = null,
         $customerId = null
     ) {
         $order = $this->createPartialMock(
@@ -1043,7 +1066,10 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
         $shippingAddress->expects($this->once())->method('getId')->willReturn(5);
         $convertedShipping->expects($this->once())->method('setData')->with('quote_address_id', 5);
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
         $order = $this->prepareOrderFactory(
             $baseOrder,
             $convertedBilling,

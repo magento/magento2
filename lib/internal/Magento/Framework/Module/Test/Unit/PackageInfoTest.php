@@ -5,8 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use Magento\Framework\Module\ModuleList;
-use \Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\PackageInfo;
 
 class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +25,11 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
     private $packageInfo;
 
     /**
+<<<<<<< HEAD
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+=======
      * @var \Magento\Framework\Serialize\Serializer\Json| \PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $serializerMock;
 

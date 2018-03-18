@@ -15,6 +15,7 @@
                 <conversion_color>FFFFFF</conversion_color>
                 <conversion_value_type>1</conversion_value_type>
                 <conversion_value>0</conversion_value>
+                <send_currency>0</send_currency>
                 <languages>
                     <ar>ar</ar>
                     <bg>bg</bg>

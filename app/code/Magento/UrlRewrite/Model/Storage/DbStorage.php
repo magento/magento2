@@ -148,6 +148,14 @@ class DbStorage extends AbstractStorage
      */
     private function deleteOldUrls(array $urls)
     {
+<<<<<<< HEAD
+        foreach ($this->createFilterDataBasedOnUrls($urls) as $type => $urlData) {
+            $urlData[UrlRewrite::ENTITY_TYPE] = $type;
+            // prevent query locking in a case when nothing to delete
+            if ($this->connection->fetchRow($this->prepareSelect($urlData))) {
+                $this->deleteByData($urlData);
+            }
+=======
         $oldUrlsSelect = $this->connection->select();
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
@@ -172,6 +180,7 @@ class DbStorage extends AbstractStorage
                 ) . ' = ?',
                 $url->getStoreId()
             );
+>>>>>>> upstream/2.2-develop
         }
 
         // prevent query locking in a case when nothing to delete

@@ -233,7 +233,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             ->willReturn($sourceClassExists);
         if ($resultClassExists) {
             $definedClassesMock->expects($this->once())
-                ->method('isClassLoadableFromDisc')
+                ->method('isClassLoadableFromDisk')
                 ->with($this->resultClass)
                 ->willReturn($resultClassExists);
         }

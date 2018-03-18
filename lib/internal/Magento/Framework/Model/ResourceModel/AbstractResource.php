@@ -25,9 +25,15 @@ abstract class AbstractResource
     protected $serializer;
 
     /**
+<<<<<<< HEAD
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $_logger;
+=======
      * @var LoggerInterface
      */
     private $logger;
+>>>>>>> upstream/2.2-develop
 
     /**
      * Constructor
@@ -262,6 +268,17 @@ abstract class AbstractResource
     /**
      * Get logger
      *
+<<<<<<< HEAD
+     * @return \Psr\Log\LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if (null === $this->_logger) {
+            $this->_logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->_logger;
+=======
      * @return LoggerInterface
      * @deprecated 100.2.0
      * @since 100.2.0
@@ -272,5 +289,6 @@ abstract class AbstractResource
             $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
         }
         return $this->logger;
+>>>>>>> upstream/2.2-develop
     }
 }

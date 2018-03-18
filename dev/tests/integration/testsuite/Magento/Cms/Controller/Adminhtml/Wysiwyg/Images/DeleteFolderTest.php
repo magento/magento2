@@ -61,6 +61,10 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->execute();
+<<<<<<< HEAD
+
+=======
+>>>>>>> upstream/2.2-develop
         $this->assertFalse(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
@@ -71,6 +75,28 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+     * Execute method with traversal directory path to check that there is no ability to remove folder which is not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongDirectoryName()
+    {
+        $directoryName = '/../../../etc/';
+        $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $directoryName)
+            )
+        );
+    }
+
+    /**
+=======
+>>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     public static function tearDownAfterClass()

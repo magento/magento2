@@ -6,6 +6,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Model\Config\Structure;
 
 use Magento\Framework\DataObject;
@@ -97,7 +98,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
                 );
             }
         }
@@ -131,13 +135,19 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     {
         $object = new DataObject();
         $document = new \DOMDocument();
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
         try {
             $document->loadXML($content);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Config\Dom\ValidationException($e->getMessage());
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
         $this->compiler->compile($document->documentElement, $object, $object);
 
         return $document->saveXML();

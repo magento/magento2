@@ -14,7 +14,11 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Psr\Log\LoggerInterface;
 
 /**
+<<<<<<< HEAD
+ * Controller to record that the current admin user has seen the release notification content
+=======
  * Class MarkUserNotified
+>>>>>>> upstream/2.2-develop
  */
 class MarkUserNotified extends Action
 {
@@ -85,6 +89,12 @@ class MarkUserNotified extends Action
         return $resultJson->setData($responseContent);
     }
 
+<<<<<<< HEAD
+    /**
+     * @return bool
+     */
+=======
+>>>>>>> upstream/2.2-develop
     protected function _isAllowed()
     {
         return parent::_isAllowed();

@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action\Context;
@@ -41,6 +42,10 @@ class AddressSave extends Order
      * @var RegionFactory
      */
     private $regionFactory;
+<<<<<<< HEAD
+
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @param Context $context
      * @param Registry $coreRegistry
@@ -124,7 +129,11 @@ class AddressSave extends Order
             return $resultRedirect->setPath('sales/*/');
         }
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> upstream/2.2-develop
     /**
      * Update region data
      *

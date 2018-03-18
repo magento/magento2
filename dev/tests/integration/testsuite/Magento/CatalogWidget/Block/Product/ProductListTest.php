@@ -86,6 +86,9 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         $this->performAssertions(2);
     }
 
+<<<<<<< HEAD
+        // Load products collection filtered using specified conditions and perform assertions
+=======
     /**
      * Check product collection includes correct amount of products.
      *
@@ -95,6 +98,7 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
     private function performAssertions(int $count)
     {
         // Load products collection filtered using specified conditions and perform assertions.
+>>>>>>> upstream/2.2-develop
         $productCollection = $this->block->createCollection();
         $productCollection->load();
         $this->assertEquals(

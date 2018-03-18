@@ -108,6 +108,7 @@ class Save extends \Magento\Backend\App\Action
         }
 
         $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+        $responseAjax = new \Magento\Framework\DataObject();
 
         $responseAjax = new \Magento\Framework\DataObject();
 

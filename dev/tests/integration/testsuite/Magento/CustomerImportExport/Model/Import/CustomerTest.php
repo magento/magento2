@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -114,9 +112,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $existingCustomer = $objectManager->get(
             \Magento\Framework\Registry::class
-        )->registry(
-                '_fixture/Magento_ImportExport_Customer'
-            );
+        )->registry('_fixture/Magento_ImportExport_Customer');
 
         $updatedCustomer = $customers[$existingCustomer->getId()];
 
@@ -264,8 +260,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 1);
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_DUPLICATE_EMAIL_SITE]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_DUPLICATE_EMAIL_SITE])
         );
     }
 
@@ -276,8 +271,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_EMAIL]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_EMAIL])
         );
     }
 
@@ -288,8 +282,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_WEBSITE]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_WEBSITE])
         );
     }
 
@@ -300,8 +293,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_STORE]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_STORE])
         );
     }
 
@@ -312,8 +304,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_PASSWORD_LENGTH]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_PASSWORD_LENGTH])
         );
     }
 
@@ -342,8 +333,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 1);
         $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_VALUE_IS_REQUIRED]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_VALUE_IS_REQUIRED])
         );
     }
 
@@ -355,8 +345,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateRow($this->_customerData, 0);
         $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
         $this->assertNotEmpty(
-            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_CUSTOMER_NOT_FOUND]
-            )
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_CUSTOMER_NOT_FOUND])
         );
     }
 }

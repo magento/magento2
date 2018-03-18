@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
@@ -26,7 +24,10 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\AdminOrder\Product;
+<<<<<<< HEAD
+=======
 use Magento\Quote\Model\QuoteFactory;
+>>>>>>> upstream/2.2-develop
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -37,6 +38,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOMER_ID = 1;
 
+<<<<<<< HEAD
+    /**
+     * @var Create
+     */
+    private $adminOrderCreate;
+=======
     /**
      * @var Create
      */
@@ -51,6 +58,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteFactory;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @var SessionQuote|MockObject
@@ -89,12 +97,24 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+<<<<<<< HEAD
+        $this->sessionQuote = $this->createMock(SessionQuote::class);
+        $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
+=======
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->quoteFactory = $this->createPartialMock(QuoteFactory::class, ['create']);
+>>>>>>> upstream/2.2-develop
         $this->customerFactory = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
 
         $this->itemUpdater = $this->createMock(Updater::class);
 
+<<<<<<< HEAD
+        $this->customerMapper = $this->getMockBuilder(Mapper::class)
+            ->setMethods(['toFlatArray'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+=======
         $this->quoteRepository = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getForCustomer'])
@@ -110,6 +130,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+>>>>>>> upstream/2.2-develop
         $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
@@ -172,8 +193,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $quote = $this->createMock(Quote::class);
         $quote->method('getCustomer')->willReturn($customer);
+<<<<<<< HEAD
+        $quote->method('addData')->with(
+=======
         $quote->method('addData')
             ->with(
+>>>>>>> upstream/2.2-develop
             [
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
@@ -182,7 +207,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
+<<<<<<< HEAD
+                ['group_id' => 1],
+                CustomerInterface::class
+=======
                 ['group_id' => 1], CustomerInterface::class
+>>>>>>> upstream/2.2-develop
             );
 
         $this->formFactory->method('create')
@@ -285,6 +315,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $address->method('setFreeShipping')
             ->with(0)
             ->willReturnSelf();
+<<<<<<< HEAD
+
+        $object = $this->adminOrderCreate->applyCoupon($couponCode);
+        self::assertEquals($this->adminOrderCreate, $object);
+=======
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         self::assertEquals($this->adminOrderCreate, $object);
@@ -315,5 +350,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->willReturn($cartResult);
 
         $this->assertEquals($cartResult, $this->adminOrderCreate->getCustomerCart());
+>>>>>>> upstream/2.2-develop
     }
 }

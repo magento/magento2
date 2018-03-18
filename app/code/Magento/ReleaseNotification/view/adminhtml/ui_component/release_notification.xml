@@ -35,31 +35,65 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
+<<<<<<< HEAD
+        <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\NotificationDataProvider" name="release_notification_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <modal name="notification_modal_1" component="Magento_ReleaseNotification/js/modal/component">
+=======
         <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\DataProvider" name="release_notification_data_source"/>
     </dataSource>
     <modal name="release_notification_modal" component="Magento_ReleaseNotification/js/modal/component">
+>>>>>>> upstream/2.2-develop
         <settings>
             <onCancel>actionCancel</onCancel>
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
+<<<<<<< HEAD
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+=======
                 <option name="title" xsi:type="string" translate="true">What's new with Magento 2.2.2</option>
+>>>>>>> upstream/2.2-develop
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
                 <option name="autoOpen" xsi:type="boolean">true</option>
             </options>
         </settings>
+<<<<<<< HEAD
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+=======
         <fieldset name="release_notification_fieldset">
             <settings>
                 <label/>
             </settings>
             <container name="release_notification_text" template="ui/form/components/complex">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
+<<<<<<< HEAD
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+=======
                         <p>Magento 2.2.2 offers advanced new features, including:</p>
                         <br />
                         <div class="analytics-highlight">
@@ -85,22 +119,35 @@
                 </argument>
             </container>
             <container name="release_notification_buttons">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                     </item>
                 </argument>
+<<<<<<< HEAD
+                <button name="notification_button_next" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_next" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_1</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -114,27 +161,56 @@
             </container>
         </fieldset>
     </modal>
+<<<<<<< HEAD
+    <modal name="notification_modal_2" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+=======
     <modal name="analytics_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">analytics-subscription-modal</option>
                 <option name="title" xsi:type="string" translate="true">Advanced Reporting</option>
+>>>>>>> upstream/2.2-develop
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
                 <option name="autoOpen" xsi:type="boolean">false</option>
             </options>
         </settings>
+<<<<<<< HEAD
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+=======
         <fieldset name="release_notification_fieldset">
             <settings>
                 <label/>
             </settings>
             <container name="release_notification_text" template="ui/form/components/complex">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+<<<<<<< HEAD
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+=======
                         <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting
                         provides you with a dynamic suite of reports with rich insights about the health of your
                         business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
@@ -148,22 +224,35 @@
                 </argument>
             </container>
             <container name="release_notification_buttons">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                     </item>
                 </argument>
+<<<<<<< HEAD
+                <button name="notification_button_back" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_back" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_1</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = release_notification_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -174,17 +263,29 @@
                         <title><![CDATA[< Back]]></title>
                     </settings>
                 </button>
+<<<<<<< HEAD
+                <button name="notification_button_next" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_next" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -198,28 +299,56 @@
             </container>
         </fieldset>
     </modal>
+<<<<<<< HEAD
+    <modal name="notification_modal_3" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+=======
     <modal name="instant_purchase_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">instant-purchase-modal</option>
                 <option name="title" xsi:type="string" translate="true">Instant Purchase</option>
+>>>>>>> upstream/2.2-develop
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
                 <option name="autoOpen" xsi:type="boolean">false</option>
             </options>
         </settings>
+<<<<<<< HEAD
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+=======
         <fieldset name="release_notification_fieldset">
             <settings>
                 <label/>
             </settings>
             <container name="release_notification_text" template="ui/form/components/complex">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
+<<<<<<< HEAD
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+=======
                         <p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
                         Logged-in customers can use previously-stored payment credentials and shipping information
                         to skip steps, making the process faster and easier, especially for mobile shoppers. Key
@@ -239,22 +368,35 @@
                 </argument>
             </container>
             <container name="release_notification_buttons">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                     </item>
                 </argument>
+<<<<<<< HEAD
+                <button name="notification_button_back" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_back" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_2</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -265,17 +407,29 @@
                         <title><![CDATA[< Back]]></title>
                     </settings>
                 </button>
+<<<<<<< HEAD
+                <button name="notification_button_next" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_next" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -289,28 +443,56 @@
             </container>
         </fieldset>
     </modal>
+<<<<<<< HEAD
+    <modal name="notification_modal_4" component="Magento_ReleaseNotification/js/modal/component">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <options>
+                <option name="modalClass" xsi:type="string">release-notification-modal</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
+=======
     <modal name="email_marketing_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">email-marketing-modal</option>
                 <option name="title" xsi:type="string" translate="true">Email Marketing Automation</option>
+>>>>>>> upstream/2.2-develop
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
                 <option name="autoOpen" xsi:type="boolean">false</option>
             </options>
         </settings>
+<<<<<<< HEAD
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+=======
         <fieldset name="release_notification_fieldset">
             <settings>
                 <label/>
             </settings>
             <container name="release_notification_text" template="ui/form/components/complex">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
+<<<<<<< HEAD
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
+                    </item>
+                </argument>
+            </container>
+            <container name="notification_buttons">
+=======
                         <p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
                         dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
                         ensures every customer’s journey is captured, segmented, and personalized, enabling you to
@@ -328,22 +510,35 @@
                 </argument>
             </container>
             <container name="release_notification_buttons">
+>>>>>>> upstream/2.2-develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                     </item>
                 </argument>
+<<<<<<< HEAD
+                <button name="notification_button_back" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_back" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_3</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
+>>>>>>> upstream/2.2-develop
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -354,14 +549,23 @@
                         <title><![CDATA[< Back]]></title>
                     </settings>
                 </button>
+<<<<<<< HEAD
+                <button name="notification_button_next" displayArea="actions-secondary">
+=======
                 <button name="release_notification_button_next" displayArea="actions-secondary">
+>>>>>>> upstream/2.2-develop
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+<<<<<<< HEAD
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+=======
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
                                     <item name="actionName" xsi:type="string">closeReleaseNotes</item>
+>>>>>>> upstream/2.2-develop
                                 </item>
                             </item>
                         </item>

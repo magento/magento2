@@ -118,9 +118,17 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             $salesConnection->commit();
             $checkoutConnection->commit();
         } catch (\Exception $e) {
+<<<<<<< HEAD
+            $this->getLogger()->critical($e);
+            throw new CouldNotSaveException(
+                __('A server error stopped your order from being placed. Please try to place your order again.'),
+                $e
+            );
+=======
             $salesConnection->rollBack();
             $checkoutConnection->rollBack();
             throw $e;
+>>>>>>> upstream/2.2-develop
         }
         
         return $orderId;

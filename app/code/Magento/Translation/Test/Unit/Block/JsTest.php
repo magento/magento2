@@ -65,4 +65,14 @@ class JsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('frontend/Magento/luma/en_EN');
         $this->assertEquals('frontend/Magento/luma/en_EN', $this->model->getTranslationFilePath());
     }
+
+    public function testGetTranslationFileVersion()
+    {
+        $version = sha1('translationFile');
+
+        $this->fileManagerMock->expects($this->once())
+            ->method('getTranslationFileVersion')
+            ->willReturn($version);
+        $this->assertEquals($version, $this->model->getTranslationFileVersion());
+    }
 }

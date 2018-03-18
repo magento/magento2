@@ -55,7 +55,7 @@ class Wysiwyg extends AbstractElement
             \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
-                'rows' => 20,
+                'rows' => isset($config['rows']) ? $config['rows'] : 20,
                 'name' => $data['name'],
                 'config' => $wysiwygConfig->getConfig($wysiwygConfigData),
                 'wysiwyg' => isset($config['wysiwyg']) ? $config['wysiwyg'] : null,

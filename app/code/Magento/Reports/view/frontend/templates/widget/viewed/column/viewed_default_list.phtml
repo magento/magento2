@@ -38,60 +38,59 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
         <ol class="product-items" id="widget-viewed-<?= /* @escapeNotVerified */ $suffix ?>">
-            <?php $iterator = 1; ?>
             <?php foreach ($items as $_product): ?>
-                <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
-                <div class="product-item-info">
-                    <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
-                       title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
-                        <?= $block->getImage($_product, $image)->toHtml() ?>
-                    </a>
-                    <div class="product-item-details">
-                        <strong class="product-item-name">
-                            <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
-                               title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>"
-                               class="product-item-link">
-                                <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
-                            </a>
-                        </strong>
-                        <?php /* @escapeNotVerified */ echo $block->getProductPriceHtml(
-                            $_product,
-                            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
-                            \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
-                            [
-                                'price_id_suffix' => '-widget-viewed-' . $suffix
-                            ]
-                        ) ?>
-                        <div class="product-item-actions">
-                            <?php if ($_product->isSaleable()): ?>
-                            <div class="actions-primary">
-                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
-                                    <button class="action tocart primary"
-                                            data-mage-init='{"redirectUrl": {"url": "<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_product) ?>"}}'
-                                            type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
-                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                    </button>
+                <li class="product-item">
+                    <div class="product-item-info">
+                        <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                           title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                            <?= $block->getImage($_product, $image)->toHtml() ?>
+                        </a>
+                        <div class="product-item-details">
+                            <strong class="product-item-name">
+                                <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                                   title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>"
+                                   class="product-item-link">
+                                    <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                                </a>
+                            </strong>
+                            <?php /* @escapeNotVerified */ echo $block->getProductPriceHtml(
+                                $_product,
+                                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                                \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                [
+                                    'price_id_suffix' => '-widget-viewed-' . $suffix
+                                ]
+                            ) ?>
+                            <div class="product-item-actions">
+                                <?php if ($_product->isSaleable()): ?>
+                                <div class="actions-primary">
+                                    <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                        <button class="action tocart primary"
+                                                data-mage-init='{"redirectUrl": {"url": "<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_product) ?>"}}'
+                                                type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
+                                            <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                        </button>
+                                    <?php else: ?>
+                                        <?php
+                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                            $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                        ?>
+                                        <button type="button" class="action tocart primary" data-post='<?= /* @escapeNotVerified */ $postData ?>'>
+                                            <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
                                 <?php else: ?>
-                                    <?php
-                                        $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                        $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
-                                    ?>
-                                    <button type="button" class="action tocart primary" data-post='<?= /* @escapeNotVerified */ $postData ?>'>
-                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
-                                    </button>
+                                    <?php if ($_product->getIsSalable()): ?>
+                                        <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
+                                    <?php else: ?>
+                                        <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
-                            <?php else: ?>
-                                <?php if ($_product->getIsSalable()): ?>
-                                    <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
-                                <?php else: ?>
-                                    <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
-                                <?php endif; ?>
-                            <?php endif; ?>
                         </div>
                     </div>
-                </div>
-                <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
+                </li>
             <?php endforeach; ?>
         </ol>
     </div>

@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Contact\Controller\Index;
 
 use Magento\Contact\Model\ConfigInterface;
@@ -119,13 +120,13 @@ class Post extends \Magento\Contact\Controller\Index
     {
         $request = $this->getRequest();
         if (trim($request->getParam('name')) === '') {
-            throw new LocalizedException(__('Name is missing'));
+            throw new LocalizedException(__('Enter the Name and try again.'));
         }
         if (trim($request->getParam('comment')) === '') {
-            throw new LocalizedException(__('Comment is missing'));
+            throw new LocalizedException(__('Enter the comment and try again.'));
         }
         if (false === \strpos($request->getParam('email'), '@')) {
-            throw new LocalizedException(__('Invalid email address'));
+            throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
         }
         if (trim($request->getParam('hideit')) !== '') {
             throw new \Exception();

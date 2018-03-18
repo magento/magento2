@@ -14,11 +14,19 @@ class BlockNamesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
+<<<<<<< HEAD
+        /**
+         * Test validate that blocks without name doesn't exist in layout file
+         *
+         * @param string $layoutFile
+         */
+=======
             /**
              * Test validate that blocks without name doesn't exist in layout file
              *
              * @param string $layoutFile
              */
+>>>>>>> upstream/2.2-develop
             function ($layoutFile) {
                 $dom = new \DOMDocument();
                 $dom->load($layoutFile);

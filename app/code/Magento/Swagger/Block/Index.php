@@ -8,7 +8,11 @@ namespace Magento\Swagger\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
+<<<<<<< HEAD
+ * Block for swagger index page
+=======
  * Class Index
+>>>>>>> upstream/2.2-develop
  *
  * @api
  */

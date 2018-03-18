@@ -18,6 +18,10 @@ use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
+<<<<<<< HEAD
+ * Class ShipmentDocumentFactoryTest
+=======
+>>>>>>> upstream/2.2-develop
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
@@ -130,6 +134,17 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->itemMock->expects($this->once())->method('getOrderItemId')->willReturn(1);
         $this->itemMock->expects($this->once())->method('getQty')->willReturn(10);
+<<<<<<< HEAD
+        $this->itemMock->expects($this->once())
+            ->method('getOrderItemId')
+            ->willReturn(1);
+
+        $this->itemMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn(10);
+
+=======
+>>>>>>> upstream/2.2-develop
         $this->shipmentFactoryMock->expects($this->once())
             ->method('create')
             ->with(

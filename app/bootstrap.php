@@ -59,7 +59,11 @@ if (
         : trim(file_get_contents(BP . '/var/profiler.flag'));
 
     \Magento\Framework\Profiler::applyConfig(
+<<<<<<< HEAD
+        (isset($_SERVER['MAGE_PROFILER']) && strlen($_SERVER['MAGE_PROFILER'])) ? $_SERVER['MAGE_PROFILER'] : trim(file_get_contents(BP . '/var/profiler.flag')),
+=======
         $profilerFlag,
+>>>>>>> upstream/2.2-develop
         BP,
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     );

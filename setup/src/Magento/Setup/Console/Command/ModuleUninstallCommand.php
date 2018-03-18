@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
@@ -17,6 +18,7 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ModuleRegistryUninstaller;
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,6 +40,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_BACKUP_MEDIA = 'backup-media';
     const INPUT_KEY_BACKUP_DB = 'backup-db';
+<<<<<<< HEAD
+    const INPUT_KEY_NON_COMPOSER_MODULE = 'non-composer';
+=======
+>>>>>>> upstream/2.2-develop
 
     /**
      * Deployment Configuration
@@ -108,6 +114,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $maintenanceModeEnabler;
 
     /**
+<<<<<<< HEAD
+     * @var PatchApplier
+     */
+    private $patchApplier;
+
+    /**
+=======
+>>>>>>> upstream/2.2-develop
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -145,6 +159,22 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
         $this->maintenanceModeEnabler =
             $maintenanceModeEnabler ?: $this->objectManager->get(MaintenanceModeEnabler::class);
+<<<<<<< HEAD
+    }
+
+    /**
+     * @return PatchApplier
+     */
+    private function getPatchApplier()
+    {
+        if (!$this->patchApplier) {
+            $this->patchApplier = $this
+                ->objectManager->get(PatchApplier::class);
+        }
+
+        return $this->patchApplier;
+=======
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -177,6 +207,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 InputOption::VALUE_NONE,
                 'Take complete database backup'
             ),
+            new InputOption(
+                self::INPUT_KEY_NON_COMPOSER_MODULE,
+                null,
+                InputOption::VALUE_NONE,
+                'All modules, that will be past here will be non composer based'
+            )
         ];
         $this->setName('module:uninstall')
             ->setDescription('Uninstalls modules installed by composer')
@@ -195,6 +231,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -203,16 +240,25 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 '<error>You cannot run this command because the Magento application is not installed.</error>'
             );
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $modules = $input->getArgument(self::INPUT_KEY_MODULES);
+
+        if ($input->getOption(self::INPUT_KEY_NON_COMPOSER_MODULE)) {
+            foreach ($modules as $moduleName) {
+                $this->getPatchApplier()->revertDataPatches($moduleName);
+            }
+
+            return Cli::RETURN_SUCCESS;
+        }
+
         // validate modules input
         $messages = $this->validate($modules);
         if (!empty($messages)) {
             $output->writeln($messages);
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         // check dependencies
@@ -220,7 +266,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         if (!empty($dependencyMessages)) {
             $output->writeln($dependencyMessages);
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $helper = $this->getHelper('question');
@@ -229,7 +275,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             false
         );
         if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $result = $this->maintenanceModeEnabler->executeInMaintenanceMode(
@@ -260,11 +306,20 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
                     $this->moduleUninstaller->uninstallCode($output, $modules);
                     $this->cleanup($input, $output);
+<<<<<<< HEAD
+
+                    return Cli::RETURN_SUCCESS;
+                } catch (\Exception $e) {
+                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+                    return Cli::RETURN_FAILURE;
+=======
                     return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
                 } catch (\Exception $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
                     return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+>>>>>>> upstream/2.2-develop
                 }
             },
             $output,

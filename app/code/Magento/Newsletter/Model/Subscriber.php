@@ -98,7 +98,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
+<<<<<<< HEAD
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+=======
      * @var DateTime
+>>>>>>> upstream/2.2-develop
      */
     private $dateTime;
 
@@ -145,7 +149,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+=======
      * @param DateTime|null $dateTime
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -162,13 +170,20 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
+=======
         DateTime $dateTime = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
+        $this->dateTime = $dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime\DateTime::class
+        );
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
@@ -351,6 +366,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load subscriber data from resource model by email and store
+     *
+     * @param string $subscriberEmail
+     * @param int $storeId
+     * @return $this
+     */
+    public function loadByEmailAndStore($subscriberEmail, $storeId)
+    {
+        $this->addData($this->getResource()->loadByEmailAndStore($subscriberEmail, $storeId));
+        return $this;
+    }
+
+    /**
      * Load subscriber info by customerId
      *
      * @param int $customerId
@@ -362,6 +390,29 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $customerData = $this->customerRepository->getById($customerId);
             $customerData->setStoreId($this->_storeManager->getStore()->getId());
             $data = $this->getResource()->loadByCustomerData($customerData);
+            $this->addData($data);
+            if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
+                $this->setCustomerId($customerData->getId());
+                $this->setSubscriberConfirmCode($this->randomSequence());
+                $this->save();
+            }
+        } catch (NoSuchEntityException $e) {
+        }
+        return $this;
+    }
+
+    /**
+     * Load subscriber info by customerId and Store
+     *
+     * @param int $customerId
+     * @return $this
+     */
+
+    public function loadByCustomerIdAndStore($customerId)
+    {
+        try {
+            $customerData = $this->customerRepository->getById($customerId);
+            $data = $this->getResource()->loadByCustomerDataAndStore($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
                 $this->setCustomerId($customerData->getId());
@@ -394,18 +445,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Subscribes by email
+     * Subscribes by email and Store
      *
      * @param string $email
+     * @param int $storeId
      * @throws \Exception
      * @return int
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function subscribe($email)
+    public function subscribe($email, $storeId)
     {
-        $this->loadByEmail($email);
+        $this->loadByEmailAndStore($email, $storeId);
 
         if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
             return $this->getStatus();
@@ -473,6 +525,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
     }
 
+
     /**
      * Unsubscribes loaded subscription
      *
@@ -533,6 +586,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Saving customer subscription status
      *
      * @param int $customerId
+     * @param int $subscribe
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
      * @return  $this
      *
@@ -547,7 +601,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $this->loadByCustomerId($customerId);
+        $this->loadByCustomerIdAndStore($customerId);
         if (!$subscribe && !$this->getId()) {
             return $this;
         }

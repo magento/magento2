@@ -111,6 +111,66 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
+<<<<<<< HEAD
+    public function testGetVariablesOptionArrayNoGroup()
+    {
+        $origOptions = [
+            ['value' => 'VAL', 'label' => 'LBL']
+        ];
+
+        $transformedOptions = [
+            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+        ];
+
+        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->any())
+            ->method('toOptionArray')
+            ->willReturn($origOptions);
+        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
+            ->setMethods(['getCollection'])
+            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
+            ->getMock();
+        $mockVariable->expects($this->any())
+            ->method('getCollection')
+            ->willReturn($collectionMock);
+        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray());
+    }
+
+    public function testGetVariablesOptionArrayWithGroup()
+    {
+        $origOptions = [
+            ['value' => 'VAL', 'label' => 'LBL']
+        ];
+
+        $transformedOptions = [
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+                ]
+            ]
+        ];
+
+        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->any())
+            ->method('toOptionArray')
+            ->willReturn($origOptions);
+        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
+            ->setMethods(['getCollection'])
+            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
+            ->getMock();
+        $mockVariable->expects($this->any())
+            ->method('getCollection')
+            ->willReturn($collectionMock);
+        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
+    }
+
+=======
+>>>>>>> upstream/2.2-develop
     public function validateDataProvider()
     {
         $variable = [

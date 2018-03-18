@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -119,6 +120,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected $dataObjectHelper;
 
+    /** @var CompositeValidator */
+    private $compositeValidator;
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -136,6 +140,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CompositeValidator $compositeValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +160,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CompositeValidator $compositeValidator = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -166,6 +173,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
+            ->get(CompositeValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -565,6 +574,17 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Validate address attribute values.
      *
+<<<<<<< HEAD
+     * @return array|bool
+     */
+    public function validate()
+    {
+        if ($this->getShouldIgnoreValidation()) {
+            return true;
+        }
+
+        $errors = $this->compositeValidator->validate($this);
+=======
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -659,8 +679,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                 }
             }
         }
+>>>>>>> upstream/2.2-develop
 
-        if (empty($errors) || $this->getShouldIgnoreValidation()) {
+        if (empty($errors)) {
             return true;
         }
 

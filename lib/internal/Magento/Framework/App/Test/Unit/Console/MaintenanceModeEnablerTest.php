@@ -103,7 +103,11 @@ class MaintenanceModeEnablerTest extends TestCase
             ->getMock();
 
         $maintenanceMode->method('isOn')->willReturnCallback(function () use (&$isOn) {
+<<<<<<< HEAD
+            return $isOn;
+=======
                 return $isOn;
+>>>>>>> upstream/2.2-develop
         });
         $maintenanceMode->method('set')->willReturnCallback(function ($newValue) use (&$isOn) {
             $isOn = (bool)$newValue;

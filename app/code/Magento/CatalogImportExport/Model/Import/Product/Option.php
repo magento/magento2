@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -950,7 +948,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
         foreach ($multiRowData as $optionData) {
-
             $combinedData = array_merge($rowData, $optionData);
 
             if ($this->_isRowWithCustomOption($combinedData)) {
@@ -1213,12 +1210,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
+<<<<<<< HEAD
+=======
                 if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
                     $nextOptionId = $optionId;
                     $nextValueId = $valueId;
                 }
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
+>>>>>>> upstream/2.2-develop
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 foreach ($multiRowData as $optionData) {
                     $combinedData = array_merge($rowData, $optionData);
@@ -1325,9 +1325,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $optionData = null;
 
         if ($this->_rowIsMain) {
+<<<<<<< HEAD
+            $optionData = $this->_getOptionData($rowData, $this->_rowProductId, $nextOptionId, $this->_rowType);
+=======
             $optionData = empty($rowData[Product::COL_STORE_VIEW_CODE])
                 ? $this->_getOptionData($rowData, $this->_rowProductId, $nextOptionId, $this->_rowType)
                 : '';
+>>>>>>> upstream/2.2-develop
 
             if (!$this->_isRowHasSpecificType($this->_rowType)
                 && ($priceData = $this->_getPriceData($rowData, $nextOptionId, $this->_rowType))
@@ -1377,24 +1381,46 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $typeValues[$prevOptionId][] = $specificTypeData['value'];
 
                 // ensure default title is set
+<<<<<<< HEAD
+                if (!isset($typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
+                    $typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] =
+                        $specificTypeData['title'];
+=======
                 if (!isset($typeTitles[$nextValueId][Store::DEFAULT_STORE_ID])) {
                     $typeTitles[$nextValueId][Store::DEFAULT_STORE_ID] = $specificTypeData['title'];
+>>>>>>> upstream/2.2-develop
                 }
 
                 if ($specificTypeData['price']) {
                     if ($this->_isPriceGlobal) {
+<<<<<<< HEAD
+                        $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] =
+                            $specificTypeData['price'];
+                    } else {
+                        // ensure default price is set
+                        if (!isset($typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
+                            $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] =
+                                $specificTypeData['price'];
+=======
                         $typePrices[$nextValueId][Store::DEFAULT_STORE_ID] = $specificTypeData['price'];
                     } else {
                         // ensure default price is set
                         if (!isset($typePrices[$nextValueId][Store::DEFAULT_STORE_ID])) {
                             $typePrices[$nextValueId][Store::DEFAULT_STORE_ID] = $specificTypeData['price'];
+>>>>>>> upstream/2.2-develop
                         }
                         $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
                     }
                 }
                 $nextValueId++;
             }
+<<<<<<< HEAD
+            $parentValueId = $nextValueId - $parentCount[$prevOptionId]
+                + $childCount[$this->_rowStoreId][$prevOptionId];
+            $specificTypeData = $this->_getSpecificTypeData($rowData, $parentValueId, false);
+=======
             $specificTypeData = $this->_getSpecificTypeData($rowData, 0, false);
+>>>>>>> upstream/2.2-develop
             //For others stores
             if ($specificTypeData) {
                 $typeTitles[$nextValueId++][$this->_rowStoreId] = $specificTypeData['title'];
@@ -1644,14 +1670,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getPriceData(array $rowData, $optionId, $type)
     {
-        if (in_array(
-                'price',
-                $this->_specificTypes[$type]
-            ) && isset(
-                $rowData[self::COLUMN_PREFIX . 'price']
-            ) && strlen(
-                $rowData[self::COLUMN_PREFIX . 'price']
-            ) > 0
+        if (in_array('price', $this->_specificTypes[$type])
+            && isset($rowData[self::COLUMN_PREFIX . 'price'])
+            && strlen($rowData[self::COLUMN_PREFIX . 'price']) > 0
         ) {
             $priceData = [
                 'option_id' => $optionId,

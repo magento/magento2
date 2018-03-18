@@ -215,6 +215,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $_eavConfig;
+
+    /**
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
      */
     protected $_orderHistoryFactory;
@@ -1769,7 +1774,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasInvoices()
     {
-        return $this->getInvoiceCollection()->count();
+        return (bool)$this->getInvoiceCollection()->count();
     }
 
     /**
@@ -1779,7 +1784,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasShipments()
     {
-        return $this->getShipmentsCollection()->count();
+        return (bool)$this->getShipmentsCollection()->count();
     }
 
     /**
@@ -1789,7 +1794,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function hasCreditmemos()
     {
-        return $this->getCreditmemosCollection()->count();
+        return (bool)$this->getCreditmemosCollection()->count();
     }
 
     /**

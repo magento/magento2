@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
@@ -237,8 +236,15 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getPrice($flag = false)
     {
+<<<<<<< HEAD
+        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+=======
         if ($flag) {
             return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, BasePrice::PRICE_CODE);
+>>>>>>> upstream/2.2-develop
         }
         return $this->_getData(self::KEY_PRICE);
     }
@@ -250,7 +256,17 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getRegularPrice()
     {
+<<<<<<< HEAD
+        if ($this->getPriceType() == self::TYPE_PERCENT) {
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()
+                ->getPrice('regular_price')->getAmount()->getValue();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+        }
+        return $this->_getData(self::KEY_PRICE);
+=======
         return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, RegularPrice::PRICE_CODE);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

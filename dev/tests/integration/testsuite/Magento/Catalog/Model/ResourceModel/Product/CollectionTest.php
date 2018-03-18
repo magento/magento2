@@ -126,6 +126,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
      * @dataProvider addAttributeToSortDataProvider
@@ -162,6 +164,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+>>>>>>> upstream/2.2-develop
      * Checks a case if table for join specified as an array.
      *
      * @throws \Magento\Framework\Exception\LocalizedException

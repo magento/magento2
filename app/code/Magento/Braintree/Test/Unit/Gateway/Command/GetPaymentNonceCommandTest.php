@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
@@ -155,7 +156,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage No available payment tokens
+     * @expectedExceptionMessage No payment tokens are available.
      */
     public function testExecuteWithExceptionForTokenManagement()
     {
@@ -168,8 +169,14 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
         $this->subjectReader->method('readCustomerId')
             ->willReturn($customerId);
 
+<<<<<<< HEAD
+        $exception = new \Exception('No payment tokens are available.');
+        $this->tokenManagement->expects(static::once())
+            ->method('getByPublicHash')
+=======
         $exception = new \Exception('No available payment tokens');
         $this->tokenManagement->method('getByPublicHash')
+>>>>>>> upstream/2.2-develop
             ->willThrowException($exception);
 
         $this->paymentToken->expects(self::never())

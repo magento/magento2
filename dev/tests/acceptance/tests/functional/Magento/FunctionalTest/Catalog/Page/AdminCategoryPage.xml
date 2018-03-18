@@ -10,8 +10,19 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="AdminCategoryPage" url="catalog/category/" area="admin" module="Catalog">
         <section name="AdminCategorySidebarActionSection"/>
+<<<<<<< HEAD
+        <section name="AdminCategoryMainActionsSection"/>
         <section name="AdminCategorySidebarTreeSection"/>
         <section name="AdminCategoryBasicFieldSection"/>
         <section name="AdminCategorySEOSection"/>
+        <section name="AdminCategoryProductsSection"/>
+        <section name="AdminCategoryProductsGridSection"/>
+        <section name="AdminCategoryModalSection"/>
+        <section name="AdminCategoryMessagesSection"/>
+=======
+        <section name="AdminCategorySidebarTreeSection"/>
+        <section name="AdminCategoryBasicFieldSection"/>
+        <section name="AdminCategorySEOSection"/>
+>>>>>>> upstream/2.2-develop
     </page>
 </pages>

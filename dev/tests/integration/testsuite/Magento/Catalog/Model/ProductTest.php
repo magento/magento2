@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -481,8 +482,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $validationResult = $this->_model->validate();
         $this->assertCount(1, $validationResult);
+
         $this->assertContains(
-            'The value of attribute "' . $attribute->getDefaultFrontendLabel() . '" must be unique',
+            'The value of the "' . $attribute->getDefaultFrontendLabel() .
+            '" attribute isn\'t unique. Set a unique value and try again.',
             $validationResult
         );
     }

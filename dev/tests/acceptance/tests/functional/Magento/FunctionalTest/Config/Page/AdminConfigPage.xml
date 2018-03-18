@@ -9,4 +9,10 @@
     <page name="AdminConfigPage" url="admin/system_config/" area="admin" module="Magento_Config">
         <section name="AdminConfigSection"/>
     </page>
+<<<<<<< HEAD
+    <page name="AdminContentManagementPage" url="admin/system_config/edit/section/cms/" area="admin" module="Magento_Config">
+        <section name="ContentManagementSection"/>
+    </page>
+=======
+>>>>>>> upstream/2.2-develop
 </pages>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -132,7 +133,6 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
@@ -173,6 +173,10 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+
+        $this->expectExceptionMessage(
+            'A server error stopped your order from being placed. Please try to place your order again.'
+        );
     }
 
     public function testSavePaymentInformation()
@@ -217,7 +221,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $email = 'email@magento.com';

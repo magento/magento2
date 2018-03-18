@@ -182,7 +182,7 @@ foreach ($oldOptions as $option) {
 
 $product->setOptions($options);
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productRepository->save($product);
 

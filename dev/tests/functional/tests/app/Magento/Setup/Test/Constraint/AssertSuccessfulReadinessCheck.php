@@ -52,21 +52,29 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
      */
     public function processAssert(SetupWizard $setupWizard)
     {
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::UPDATER_APPLICATION_MESSAGE,
             $setupWizard->getReadiness()->getUpdaterApplicationCheck(),
             'Updater application check is incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::CRON_SCRIPT_MESSAGE,
             $setupWizard->getReadiness()->getCronScriptCheck(),
             'Cron scripts are incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::DEPENDENCY_CHECK_MESSAGE,
             $setupWizard->getReadiness()->getDependencyCheck(),
             'Dependency check is incorrect.'
         );
+<<<<<<< HEAD
+        \PHPUnit\Framework\Assert::assertContains(
+            self::PHP_VERSION_MESSAGE,
+            $setupWizard->getReadiness()->getPhpVersionCheck(),
+            'PHP version is incorrect.'
+        );
+        \PHPUnit\Framework\Assert::assertContains(
+=======
         if ($setupWizard->getReadiness()->isPhpVersionCheckVisible()) {
             \PHPUnit_Framework_Assert::assertContains(
                 self::PHP_VERSION_MESSAGE,
@@ -76,11 +84,12 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
         }
 
         \PHPUnit_Framework_Assert::assertContains(
+>>>>>>> upstream/2.2-develop
             self::PHP_SETTING_REGEXP,
             $setupWizard->getReadiness()->getSettingsCheck(),
             'PHP settings check failed.'
         );
-        \PHPUnit_Framework_Assert::assertRegExp(
+        \PHPUnit\Framework\Assert::assertRegExp(
             self::PHP_EXTENSIONS_REGEXP,
             $setupWizard->getReadiness()->getPhpExtensionsCheck(),
             'PHP extensions missed.'

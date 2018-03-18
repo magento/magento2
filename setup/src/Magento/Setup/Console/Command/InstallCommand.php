@@ -6,13 +6,20 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Framework\Setup\Declaration\Schema\Request;
+use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+<<<<<<< HEAD
+use Symfony\Component\Console\Input\ArrayInput;
+=======
 use Magento\Setup\Model\ConfigModel;
+>>>>>>> upstream/2.2-develop
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -39,6 +46,28 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
+<<<<<<< HEAD
+     * List of comma-separated module names. That must be enabled during installation.
+     * Available magic param all.
+     */
+    const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
+
+    /**
+     * List of comma-separated module names. That must be avoided during installation.
+     * List of comma-separated module names. That must be avoided during installation.
+     * Avaiable magic param all.
+     */
+    const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
+
+    /**
+     * If this flag is enabled, than all your old scripts with format:
+     * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
+     */
+    const CONVERT_OLD_SCRIPTS_KEY = 'convert_old_scripts';
+
+    /**
+=======
+>>>>>>> upstream/2.2-develop
      * Parameter indicating command for interactive setup
      */
     const INPUT_KEY_INTERACTIVE_SETUP = 'interactive';
@@ -49,6 +78,19 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
 
     /**
+<<<<<<< HEAD
+     * Parameter says that in this mode all destructive operations, like column removal will be dumped
+     */
+    const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
+
+    /**
+     * Parameter allows to restore data, that was dumped with safe mode before
+     */
+    const INPUT_KEY_DATA_RESTORE = 'data-restore';
+
+    /**
+=======
+>>>>>>> upstream/2.2-develop
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -124,11 +166,63 @@ class InstallCommand extends AbstractSetupCommand
                 'Use sample data'
             ),
             new InputOption(
+<<<<<<< HEAD
+                Request::DUMP_ENABLE_OPTIONS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Should removed columns be dumped or recovered columns data reverted.'
+            ),
+            new InputOption(
+                self::INPUT_KEY_ENABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be included during installation. '
+                . 'Avaiable magic param "all".'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DISABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be avoided during installation. '
+                . 'Avaiable magic param "all".'
+            ),
+            new InputOption(
+                self::CONVERT_OLD_SCRIPTS_KEY,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Allows to convert old scripts (InstallSchema, UpgradeSchema) to db_schema.xml format',
+                false
+            ),
+            new InputOption(
+=======
+>>>>>>> upstream/2.2-develop
                 self::INPUT_KEY_INTERACTIVE_SETUP,
                 self::INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT,
                 InputOption::VALUE_NONE,
                 'Interactive Magento instalation'
             ),
+<<<<<<< HEAD
+            new InputOption(
+                OperationsExecutor::KEY_SAFE_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Safe installation of Magento with dumps on destructive operations, like column removal'
+            ),
+            new InputOption(
+                OperationsExecutor::KEY_DATA_RESTORE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Restore removed data from dumps'
+            ),
+            new InputOption(
+                DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Magento Installation will be run in dry-run mode',
+                false
+            ),
+=======
+>>>>>>> upstream/2.2-develop
         ]);
         $this->setName('setup:install')
             ->setDescription('Installs the Magento application')

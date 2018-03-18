@@ -133,13 +133,19 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
+        $this->braintreeAdapterMock->expects($this->once())
+            ->method('search')
+            ->willReturn($transactions);
+=======
         $this->braintreeAdapter->method('search')
             ->willReturn($transations);
+>>>>>>> upstream/2.2-develop
 
         $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
@@ -163,13 +169,19 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithNullLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapper->method('getFilter')
             ->willReturn(new BraintreeSearchNodeStub());
 
+<<<<<<< HEAD
+        $this->braintreeAdapterMock->expects($this->once())
+            ->method('search')
+            ->willReturn($transactions);
+=======
         $this->braintreeAdapter->method('search')
             ->willReturn($transations);
+>>>>>>> upstream/2.2-develop
 
         $this->entityFactory->expects(self::exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')

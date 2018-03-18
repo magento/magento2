@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -199,7 +200,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $image = $this->curl->read();
         if (empty($image)) {
             throw new LocalizedException(
-                __('Could not get preview image information. Please check your connection and try again.')
+                __('The preview image information is unavailable. Check your connection and try again.')
             );
         }
         $this->fileUtility->saveFile($localFilePath, $image);

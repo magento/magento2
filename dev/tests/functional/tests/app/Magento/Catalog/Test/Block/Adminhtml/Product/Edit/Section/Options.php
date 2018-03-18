@@ -347,7 +347,8 @@ class Options extends Section
     {
         $option = substr($inputType, strpos($inputType, "/") + 1);
         $option = str_replace([' ', '&'], "", $option);
-        if ($end = strpos($option, '-')) {
+        $end = strpos($option, '-');
+        if ($end !== false) {
             $option = substr($option, 0, $end) . ucfirst(substr($option, ($end + 1)));
         }
 

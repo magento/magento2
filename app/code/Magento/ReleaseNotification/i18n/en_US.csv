@@ -1,6 +1,20 @@
 "Next >","Next >"
 "< Back","< Back"
 "Done","Done"
+<<<<<<< HEAD
+"Sorry, we had a problem loading our “What’s new” content.","Sorry, we had a problem loading our “What’s new” content."
+"<![CDATA[
+    <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+    <p>To learn more about new features, see our latest Release Notes in
+    <a href=""http://devdocs.magento.com/magento-release-information.html""
+    target=""_blank"">DevDocs' Release Information</a>.
+    </p>]]>","<![CDATA[
+    <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+    <p>To learn more about new features, see our latest Release Notes in
+    <a href=""http://devdocs.magento.com/magento-release-information.html""
+    target=""_blank"">DevDocs' Release Information</a>.
+    </p>]]>"
+=======
 "What's new with Magento 2.2.2","What's new with Magento 2.2.2"
 "<p>Magento 2.2.2 offers advanced new features, including:</p>
     <br />
@@ -110,3 +124,4 @@
     <li><span>Built-in solution for transactional emails.</span></li>
     <li><span>Telephone support and advice from marketing experts included.</span></li>
     </ul>"
+>>>>>>> upstream/2.2-develop

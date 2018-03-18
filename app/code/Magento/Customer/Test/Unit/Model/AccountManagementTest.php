@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountManagement;
@@ -192,6 +193,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
+        $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
+        $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
+
+=======
+>>>>>>> upstream/2.2-develop
         $this->visitorCollectionFactory = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
         )
@@ -205,9 +212,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
+=======
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
 
+>>>>>>> upstream/2.2-develop
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             \Magento\Customer\Model\AccountManagement::class,
@@ -242,13 +252,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
             ]
         );
-        $reflection = new \ReflectionClass(get_class($this->accountManagement));
-        $reflectionProperty = $reflection->getProperty('authentication');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->accountManagement, $this->authenticationMock);
-        $reflectionProperty = $reflection->getProperty('emailNotification');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->accountManagement, $this->emailNotificationMock);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'authentication',
+            $this->authenticationMock
+        );
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'emailNotification',
+            $this->emailNotificationMock
+        );
     }
 
     /**
@@ -704,14 +717,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'testNumber' => 1,
                 'password' => 'qwer',
                 'minPasswordLength' => 5,
-                'minCharacterSetsNum' => 1
+                'minCharacterSetsNum' => 1,
             ],
             [
                 'testNumber' => 2,
                 'password' => 'wrfewqedf1',
                 'minPasswordLength' => 5,
-                'minCharacterSetsNum' => 3
-            ]
+                'minCharacterSetsNum' => 3,
+            ],
         ];
     }
 
@@ -743,7 +756,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                             AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                             'default',
                             null,
-                            $minCharacterSetsNum],
+                            $minCharacterSetsNum,
+                        ],
                     ]
                 )
             );
@@ -756,7 +770,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         if ($testNumber == 1) {
             $this->expectException(
                 \Magento\Framework\Exception\InputException::class,
-                'Please enter a password with at least ' . $minPasswordLength . ' characters.'
+                'The password needs at least ' . $minPasswordLength . ' characters. '
+                . 'Create a new password and try again.'
             );
         }
 
@@ -826,7 +841,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                         AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                         'default',
                         null,
-                        $minCharacterSetsNum],
+                        $minCharacterSetsNum,
+                    ],
                     [
                         AccountManagement::XML_PATH_REGISTER_EMAIL_TEMPLATE,
                         ScopeInterface::SCOPE_STORE,
@@ -837,8 +853,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                         AccountManagement::XML_PATH_REGISTER_EMAIL_IDENTITY,
                         ScopeInterface::SCOPE_STORE,
                         1,
-                        $sender
-                    ]
+                        $sender,
+                    ],
                 ]
             );
         $this->string->expects($this->any())
@@ -1247,7 +1263,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage resetPasswordLinkToken is a required field
+     * @expectedExceptionMessage "resetPasswordLinkToken" is required. Enter and try again.
      */
     public function testValidateResetPasswordTokenBadResetPasswordLinkToken()
     {
@@ -1256,7 +1272,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InputMismatchException
-     * @expectedExceptionMessage Reset password token mismatch
+     * @expectedExceptionMessage The password token is mismatched. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenMismatch()
     {
@@ -1269,7 +1285,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\ExpiredException
-     * @expectedExceptionMessage Reset password token expired
+     * @expectedExceptionMessage The password token is expired. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenExpired()
     {
@@ -1318,11 +1334,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-
-        $this->customerSecure
-            ->expects($this->any())
+        $this->customerSecure->expects($this->any())
             ->method('getRpToken')
             ->willReturn('newStringToken');
+<<<<<<< HEAD
+        $pastDateTime = '2016-10-25 00:00:00';
+        $this->customerSecure->expects($this->any())
+            ->method('getRpTokenCreatedAt')
+            ->willReturn($pastDateTime);
+=======
 
         $pastDateTime = '2016-10-25 00:00:00';
 
@@ -1331,13 +1351,17 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getRpTokenCreatedAt')
             ->willReturn($pastDateTime);
 
+>>>>>>> upstream/2.2-develop
         $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getResetPasswordLinkExpirationPeriod'])
             ->getMock();
 
         $this->prepareDateTimeFactory();
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
         $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['destroy', 'start', 'writeClose'])
@@ -1355,11 +1379,31 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $dateTime = '2017-10-25 18:57:08';
         $timestamp = '1508983028';
+<<<<<<< HEAD
+        $dateTimeMock = $this->getMockBuilder(\DateTime::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['format', 'getTimestamp', 'setTimestamp'])
+            ->getMock();
+
+=======
         $dateTimeMock = $this->createMock(\DateTime::class);
+>>>>>>> upstream/2.2-develop
         $dateTimeMock->expects($this->any())
             ->method('format')
             ->with(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             ->willReturn($dateTime);
+<<<<<<< HEAD
+        $dateTimeMock->expects($this->any())
+            ->method('getTimestamp')
+            ->willReturn($timestamp);
+        $dateTimeMock->expects($this->any())
+            ->method('setTimestamp')
+            ->willReturnSelf();
+        $dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+=======
 
         $dateTimeMock
             ->expects($this->any())
@@ -1372,6 +1416,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $dateTimeFactory = $this->createMock(DateTimeFactory::class);
+>>>>>>> upstream/2.2-develop
         $dateTimeFactory->expects($this->any())->method('create')->willReturn($dateTimeMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -1394,10 +1439,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'transportBuilder' => $this->transportBuilder,
             ]
         );
-        $reflection = new \ReflectionClass(get_class($this->accountManagement));
-        $reflectionProperty = $reflection->getProperty('authentication');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->accountManagement, $this->authenticationMock);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->accountManagement,
+            'authentication',
+            $this->authenticationMock
+        );
     }
 
     /**
@@ -1456,7 +1502,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                         AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
                         'default',
                         null,
-                        1
+                        1,
                     ],
                 ]
             );
@@ -1478,8 +1524,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getSessionId'])
             ->getMock();
+<<<<<<< HEAD
+        $visitor->expects($this->atLeastOnce())->method('getSessionId')
+            ->willReturnOnConsecutiveCalls('session_id_1', 'session_id_2');
+=======
         $visitor->expects($this->at(0))->method('getSessionId')->willReturn('session_id_1');
         $visitor->expects($this->at(1))->method('getSessionId')->willReturn('session_id_2');
+>>>>>>> upstream/2.2-develop
         $visitorCollection = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
         )
@@ -1488,8 +1539,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
         $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($visitorCollection);
+<<<<<<< HEAD
+        $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
+            ->withConsecutive(
+                ['session_id_1'],
+                ['session_id_2']
+            );
+=======
         $this->saveHandler->expects($this->at(0))->method('destroy')->with('session_id_1');
         $this->saveHandler->expects($this->at(1))->method('destroy')->with('session_id_2');
+>>>>>>> upstream/2.2-develop
 
         $this->assertTrue($this->accountManagement->changePassword($email, $currentPassword, $newPassword));
     }
@@ -1516,6 +1575,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->atLeastOnce())->method('retrieveSecureData')
             ->willReturn($this->customerSecure);
 
+<<<<<<< HEAD
+        $this->customerSecure->expects($this->once())->method('setRpToken')->with(null);
+        $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
+        $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
+=======
         $this->customerSecure->expects($this->once())
             ->method('setRpToken')
             ->with(null);
@@ -1525,6 +1589,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->customerSecure->expects($this->any())
             ->method('setPasswordHash')
             ->willReturn(null);
+>>>>>>> upstream/2.2-develop
 
         $this->sessionManager->expects($this->atLeastOnce())->method('destroy');
         $this->sessionManager->expects($this->atLeastOnce())->method('start');
@@ -1534,8 +1599,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getSessionId'])
             ->getMock();
+<<<<<<< HEAD
+        $visitor->expects($this->atLeastOnce())->method('getSessionId')
+            ->willReturnOnConsecutiveCalls('session_id_1', 'session_id_2');
+=======
         $visitor->expects($this->at(0))->method('getSessionId')->willReturn('session_id_1');
         $visitor->expects($this->at(1))->method('getSessionId')->willReturn('session_id_2');
+>>>>>>> upstream/2.2-develop
         $visitorCollection = $this->getMockBuilder(
             \Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory::class
         )
@@ -1544,8 +1614,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
         $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($visitorCollection);
+<<<<<<< HEAD
+        $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
+            ->withConsecutive(
+                ['session_id_1'],
+                ['session_id_2']
+            );
+=======
         $this->saveHandler->expects($this->at(0))->method('destroy')->with('session_id_1');
         $this->saveHandler->expects($this->at(1))->method('destroy')->with('session_id_2');
+>>>>>>> upstream/2.2-develop
         $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));
     }
 
@@ -1624,10 +1702,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(
                 [
                     'customer_customer_authenticated',
-                    ['model' => $customerModel, 'password' => $password]
+                    ['model' => $customerModel, 'password' => $password],
                 ],
                 [
-                    'customer_data_object_login', ['customer' => $customerData]
+                    'customer_data_object_login', ['customer' => $customerData],
                 ]
             );
 
@@ -1882,6 +1960,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         return $dateTime;
     }
+<<<<<<< HEAD
+=======
 
     public function testCreateAccountUnexpectedValueException()
     {
@@ -1980,4 +2060,5 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->accountManagement->createAccount($customer);
     }
+>>>>>>> upstream/2.2-develop
 }

@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+<<<<<<< HEAD
+use Magento\Framework\Mview\View\StateInterface;
+=======
 use Magento\Framework\DB\Ddl\TriggerFactory;
 use Magento\Framework\Mview\ViewInterface;
+>>>>>>> upstream/2.2-develop
 
 class Subscription implements SubscriptionInterface
 {
@@ -55,6 +57,14 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = [];
 
     /**
+     * List of columns that can be updated in a subscribed table
+     * without creating a new change log entry
+     *
+     * @var array
+     */
+    private $ignoredUpdateColumns = [];
+
+    /**
      * @var Resource
      */
     protected $resource;
@@ -83,7 +93,11 @@ class Subscription implements SubscriptionInterface
         ViewInterface $view,
         $tableName,
         $columnName,
+<<<<<<< HEAD
+        $ignoredUpdateColumns = []
+=======
         array $ignoredUpdateColumns = []
+>>>>>>> upstream/2.2-develop
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -196,10 +210,43 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
+        $columns = [];
+        if ($this->connection->isTableExists($this->getTableName())
+            && $describe = $this->connection->describeTable($this->getTableName())
+        ) {
+            foreach ($describe as $column) {
+                if (in_array($column['COLUMN_NAME'], $this->ignoredUpdateColumns)) {
+                    continue;
+                }
+                $columns[] = sprintf(
+                    'NEW.%1$s != OLD.%1$s',
+                    $this->connection->quoteIdentifier($column['COLUMN_NAME'])
+                );
+            }
+        }
+
         switch ($event) {
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 break;
+<<<<<<< HEAD
+            case Trigger::EVENT_UPDATE:
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
+                if ($columns) {
+                    $trigger = sprintf(
+                        "IF (%s) THEN %s END IF;",
+                        implode(' OR ', $columns),
+                        $trigger
+                    );
+                }
+                break;
+            case Trigger::EVENT_DELETE:
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
+                break;
+            default:
+                return '';
+        }
+=======
 
             case Trigger::EVENT_UPDATE:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
@@ -234,6 +281,7 @@ class Subscription implements SubscriptionInterface
                 return '';
         }
 
+>>>>>>> upstream/2.2-develop
         return sprintf(
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),

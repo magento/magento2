@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Directory\Model\Currency;
@@ -172,7 +170,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+<<<<<<< HEAD
+        $this->attributeList = $this->createMock(
+            \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class
+        );
+=======
         $this->attributeList = $this->createMock(\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class);
+>>>>>>> upstream/2.2-develop
         $this->attributeList->method('getAttributes')->willReturn([]);
 
         $this->address = $objectManager->getObject(
@@ -194,7 +198,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->setQuote($this->quote);
     }
 
-    public function testValidateMiniumumAmountDisabled()
+    public function testValidateMinimumAmountDisabled()
     {
         $storeId = 1;
 
@@ -210,7 +214,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountVirtual()
+    public function testValidateMinimumAmountVirtual()
     {
         $storeId = 1;
         $scopeConfigValues = [
@@ -234,7 +238,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmount()
+    public function testValidateMinimumAmount()
     {
         $storeId = 1;
         $scopeConfigValues = [
@@ -257,7 +261,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountNegative()
+    public function testValidateMinimumAmountNegative()
     {
         $storeId = 1;
         $scopeConfigValues = [

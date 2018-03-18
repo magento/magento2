@@ -38,3 +38,6 @@ Image,Image
 "Image Position","Image Position"
 "Default Store View","Default Store View"
 Admin,Admin
+"The value of Admin must be unique.","The value of Admin must be unique."
+"The value of Admin must be unique. (%1)","The value of Admin must be unique. (%1)"
+Description,Description

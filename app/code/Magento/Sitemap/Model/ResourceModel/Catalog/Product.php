@@ -221,13 +221,21 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             );
             // Store scope attribute value
+<<<<<<< HEAD
+            $columnValue = $this->getConnection()->getIfNullSql('t2_'  . $attributeCode . '.value', $columnValue);
+=======
             $columnValue = $this->getConnection()->getIfNullSql('t2_' . $attributeCode . '.value', $columnValue);
+>>>>>>> upstream/2.2-develop
         }
 
         // Add attribute value to result set if needed
         if (isset($column)) {
             $this->_select->columns([
+<<<<<<< HEAD
+               $column => $columnValue
+=======
                 $column => $columnValue
+>>>>>>> upstream/2.2-develop
             ]);
         }
     }
@@ -298,7 +306,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $imageIncludePolicy = $this->_sitemapData->getProductImageIncludePolicy($store->getId());
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name', 'name');
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'thumbnail', 'thumbnail');
             } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {

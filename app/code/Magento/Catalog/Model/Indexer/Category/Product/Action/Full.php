@@ -87,6 +87,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
+<<<<<<< HEAD
+     *
+=======
+>>>>>>> upstream/2.2-develop
      * Clear the table we'll be writing de-normalized data into
      * to prevent archived data getting in the way of actual data.
      *
@@ -117,7 +121,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
+<<<<<<< HEAD
+     *
+     * @deprecated Not used anymore.
+     * @see clearCurrentTable()
+=======
      * @deprecated 102.0.1 Not needed anymore.
+>>>>>>> upstream/2.2-develop
      */
     protected function getSelectUnnecessaryData()
     {
@@ -143,6 +153,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return void
      *
+<<<<<<< HEAD
+     * @deprecated Not used anymore.
+     * @see clearCurrentTable()
+     */
+    protected function removeUnnecessaryData()
+    {
+        //Called for backward compatibility.
+        $this->getSelectUnnecessaryData();
+=======
      * @deprecated 102.0.1 Not needed anymore.
      */
     protected function removeUnnecessaryData()
@@ -151,6 +170,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->getSelectUnnecessaryData();
         //This method is useless,
         //left it here just in case somebody's using it in child classes.
+>>>>>>> upstream/2.2-develop
     }
 
     /**
@@ -251,6 +271,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 )
             );
             $this->publishData();
+            //Called for backward compatibility.
             $this->removeUnnecessaryData();
         }
     }

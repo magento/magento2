@@ -12,6 +12,16 @@
         <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
         <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
         <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+<<<<<<< HEAD
+        <element name="ContentTab" type="input" selector="input[name='name']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+    </section>
+    <section name="CategoryContentSection">
+        <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
+        <element name="ImagePlaceHolder" type="button" selector=".file-uploader-summary.product-image-wrapper"/>
+        <element name="Upload" type="button" selector=".file-uploader-area input"/>
+=======
+>>>>>>> upstream/2.2-develop
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>

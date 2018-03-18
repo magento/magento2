@@ -69,12 +69,21 @@ class Tree extends \Magento\Backend\Block\Template
         );
         $jsonArray = [];
         foreach ($collection as $item) {
-            $jsonArray[] = [
+            $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
+
+            $hasNestedDirectories = count(glob($item->getFilename() . '/*', GLOB_ONLYDIR)) > 0;
+
+            // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
+            if (!$hasNestedDirectories) {
+                $data['state'] = 'leaf';
+            }
+
+            $jsonArray[] = $data;
         }
         return $this->serializer->serialize($jsonArray);
     }
@@ -86,7 +95,10 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('cms/*/treeJson');
+        return $this->getUrl(
+            'cms/*/treeJson',
+            ['use_storage_root' => (int) $this->getRequest()->getParam('use_storage_root')]
+        );
     }
 
     /**

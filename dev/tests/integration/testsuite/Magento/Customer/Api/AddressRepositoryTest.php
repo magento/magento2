@@ -208,8 +208,13 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(3, $errors);
+<<<<<<< HEAD
+            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
+            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
+=======
             $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
             $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+>>>>>>> upstream/2.2-develop
             $this->assertEquals(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -230,11 +235,19 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             $errors = $exception->getErrors();
             $this->assertCount(3, $errors);
             $this->assertEquals(
+<<<<<<< HEAD
+                '"firstname" is required. Enter and try again.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                '"lastname" is required. Enter and try again.',
+=======
                 'firstname is a required field.',
                 $errors[0]->getLogMessage()
             );
             $this->assertEquals(
                 'lastname is a required field.',
+>>>>>>> upstream/2.2-develop
                 $errors[1]->getLogMessage()
             );
             $this->assertEquals(

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use Magento\Framework\DB\Select;
@@ -52,9 +50,16 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+<<<<<<< HEAD
+        $this->select = $this->createPartialMock(
+            \Magento\Framework\DB\Select::class,
+            ['from', 'where', 'deleteFromSelect']
+        );
+=======
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
+>>>>>>> upstream/2.2-develop
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->resource->expects($this->any())
@@ -64,7 +69,8 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
@@ -469,9 +475,73 @@ class DbStorageTest extends \PHPUnit\Framework\TestCase
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
+<<<<<<< HEAD
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('entity_id IN (?)', ['entity_1']);
+
+        $this->select->expects($this->at(2))
+            ->method('where')
+            ->with('store_id IN (?)', ['store_id_1']);
+
+        $this->select->expects($this->at(3))
+            ->method('where')
+            ->with('entity_type IN (?)', 'product');
+
+        $this->select->expects($this->at(5))
+            ->method('where')
+            ->with('entity_id IN (?)', ['entity_1']);
+
+        $this->select->expects($this->at(6))
+            ->method('where')
+            ->with('store_id IN (?)', ['store_id_1']);
+
+        $this->select->expects($this->at(7))
+            ->method('where')
+            ->with('entity_type IN (?)', 'product');
+
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->willReturn(['some-data']);
+
+        $this->select->expects($this->at(8))
+            ->method('deleteFromSelect')
+            ->with('table_name')
+            ->will($this->returnValue('sql delete query'));
+
+        $this->select->expects($this->at(10))
+            ->method('where')
+            ->with('entity_id IN (?)', ['entity_2']);
+
+        $this->select->expects($this->at(11))
+            ->method('where')
+            ->with('store_id IN (?)', ['store_id_2']);
+
+        $this->select->expects($this->at(12))
+            ->method('where')
+            ->with('entity_type IN (?)', 'category');
+
+        $this->select->expects($this->at(14))
+            ->method('where')
+            ->with('entity_id IN (?)', ['entity_2']);
+
+        $this->select->expects($this->at(15))
+            ->method('where')
+            ->with('store_id IN (?)', ['store_id_2']);
+
+        $this->select->expects($this->at(16))
+            ->method('where')
+            ->with('entity_type IN (?)', 'category');
+
+        $this->select->expects($this->at(17))
+            ->method('deleteFromSelect')
+            ->with('table_name')
+            ->will($this->returnValue('sql delete query'));
+=======
         $this->select->expects($this->any())
             ->method($this->anything())
             ->willReturnSelf();
+>>>>>>> upstream/2.2-develop
 
         $this->resource->expects($this->any())
             ->method('getTableName')

@@ -1,15 +1,26 @@
 {
     "name": "magento/module-sample-data",
     "description": "Sample Data fixtures",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+<<<<<<< HEAD
+        "magento/framework": "100.3.*"
+=======
         "magento/framework": "101.0.*"
+>>>>>>> upstream/2.2-develop
     },
     "suggest": {
-        "magento/sample-data-media": "Sample Data version:100.2.*"
+        "magento/sample-data-media": "Sample Data version:100.3.*"
     },
     "type": "magento2-module",
+<<<<<<< HEAD
+    "version": "100.3.0-dev",
+=======
     "version": "100.2.1",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

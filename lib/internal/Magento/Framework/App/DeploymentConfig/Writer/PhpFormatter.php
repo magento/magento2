@@ -12,9 +12,15 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 class PhpFormatter implements FormatterInterface
 {
     /**
+<<<<<<< HEAD
+     * 2 space indentation for array formatting.
+     */
+    const INDENT = '  ';
+=======
      * 4 space indentation for array formatting
      */
     const INDENT = '    ';
+>>>>>>> upstream/2.2-develop
 
     /**
      * Format deployment configuration.
@@ -39,7 +45,11 @@ class PhpFormatter implements FormatterInterface
      * @param string $prefix
      * @return string
      */
+<<<<<<< HEAD
+    private function formatData($data, $comments = [], $prefix = '  ')
+=======
     private function formatData($data, $comments = [], $prefix = '    ')
+>>>>>>> upstream/2.2-develop
     {
         $elements = [];
 
@@ -56,12 +66,22 @@ class PhpFormatter implements FormatterInterface
                     $elements[] = $prefix . " */";
                 }
 
+<<<<<<< HEAD
+                $elements[] = $prefix . $this->varExportShort($key) . ' => ' .
+                    (!is_array($value) ? $this->varExportShort($value) . ',' : '');
+
+                if (is_array($value)) {
+                    $elements[] = $prefix . '[';
+                    $elements[] = $this->formatData($value, [], '  ' . $prefix);
+                    $elements[] = $prefix . '],';
+=======
                 if (is_array($value)) {
                     $elements[] = $prefix . $this->varExportShort($key) . ' => [';
                     $elements[] = $this->formatData($value, [], '    ' . $prefix);
                     $elements[] = $prefix . '],';
                 } else {
                     $elements[] = $prefix . $this->varExportShort($key) . ' => ' . $this->varExportShort($value) . ',';
+>>>>>>> upstream/2.2-develop
                 }
             }
             return implode("\n", $elements);
@@ -75,10 +95,17 @@ class PhpFormatter implements FormatterInterface
      * default var_export functionality.
      *
      * @param mixed $var
+<<<<<<< HEAD
+     * @param integer $depth
+     * @return string
+     */
+    private function varExportShort($var, int $depth = 0)
+=======
      * @param int $depth
      * @return string
      */
     private function varExportShort($var, int $depth = 0): string
+>>>>>>> upstream/2.2-develop
     {
         if (!is_array($var)) {
             return var_export($var, true);

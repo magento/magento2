@@ -72,6 +72,10 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
+<<<<<<< HEAD
+
+=======
+>>>>>>> upstream/2.2-develop
         $this->assertTrue(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
@@ -82,6 +86,51 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+     * Execute method with traversal directory path to check that there is no ability to create file not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongPath()
+    {
+        $dirPath = '/../../../etc/';
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getStorage()->getSession()->setCurrentPath($dirPath);
+        $this->model->execute();
+
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $dirPath . $this->fileName)
+            )
+        );
+    }
+
+    /**
+     * Execute method with traversal file path to check that there is no ability to create file not
+     * under media directory.
+     *
+     * @return void
+     */
+    public function testExecuteWithWrongFileName()
+    {
+        $newFilename = '/../../../../etc/new_file.png';
+        $_FILES['image']['name'] = $newFilename;
+        $_FILES['image']['tmp_name'] = __DIR__ . DIRECTORY_SEPARATOR . $this->fileName;
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $newFilename)
+            )
+        );
+    }
+
+    /**
+=======
+>>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     public static function tearDownAfterClass()

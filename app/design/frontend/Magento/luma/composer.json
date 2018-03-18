@@ -1,13 +1,24 @@
 {
     "name": "magento/theme-frontend-luma",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+<<<<<<< HEAD
+        "magento/framework": "100.3.*",
+        "magento/theme-frontend-blank": "100.3.*"
+    },
+    "type": "magento2-theme",
+    "version": "100.3.0-dev",
+=======
         "magento/theme-frontend-blank": "100.2.*",
         "magento/framework": "101.0.*"
     },
     "type": "magento2-theme",
     "version": "100.2.2",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

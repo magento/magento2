@@ -200,6 +200,15 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+<<<<<<< HEAD
+    <route url="/V1/customers/resetPassword" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPassword"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+=======
+>>>>>>> upstream/2.2-develop
     <route url="/V1/customers/:customerId/confirm" method="GET">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="getConfirmationStatus"/>
         <resources>

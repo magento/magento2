@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
 /**
@@ -44,7 +42,10 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->productContextMock = $this->createPartialMock(\Magento\Catalog\Block\Product\Context::class, ['getLayout', 'getStockRegistry', 'getImageBuilder']);
+        $this->productContextMock = $this->createPartialMock(
+            \Magento\Catalog\Block\Product\Context::class,
+            ['getLayout', 'getStockRegistry', 'getImageBuilder']
+        );
         $arrayUtilsMock = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
         $this->layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
         $this->stockRegistryMock = $this->getMockForAbstractClass(
@@ -118,9 +119,10 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->method('render')
             ->will($this->returnValue($expectedPriceHtml));
 
-        $this->assertEquals($expectedPriceHtml, $this->block->getProductPriceHtml(
-            $product, 'price_code', 'zone_code'
-        ));
+        $this->assertEquals(
+            $expectedPriceHtml,
+            $this->block->getProductPriceHtml($product, 'price_code', 'zone_code')
+        );
     }
 
     /**

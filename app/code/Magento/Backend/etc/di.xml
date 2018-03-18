@@ -99,6 +99,10 @@
                     <item name="class" xsi:type="string">Magento\Backend\Model\Search\Order</item>
                     <item name="acl" xsi:type="string">Magento_Sales::sales</item>
                 </item>
+                <item name="config" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Config</item>
+                    <item name="acl" xsi:type="string">Magento_Config::config</item>
+                </item>
             </argument>
         </arguments>
     </type>

@@ -243,7 +243,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $entityTypeId = $entityType->getId();
         }
         if (empty($entityTypeId)) {
-            throw new LocalizedException(__('Invalid entity supplied'));
+            throw new LocalizedException(__('The entity supplied is invalid. Verify the entity and try again.'));
         }
         $this->_getResource()->loadByCode($this, $entityTypeId, $code);
         $this->_afterLoad();
@@ -550,7 +550,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $backend = $this->_universalFactory->create($this->getBackendModel());
             if (!$backend) {
-                throw new LocalizedException(__('Invalid backend model specified: %1', $this->getBackendModel()));
+                throw new LocalizedException(
+                    __(
+                        'The "%1" backend model is invalid. Verify the backend model and try again.',
+                        $this->getBackendModel()
+                    )
+                );
             }
             $this->_backend = $backend->setAttribute($this);
         }

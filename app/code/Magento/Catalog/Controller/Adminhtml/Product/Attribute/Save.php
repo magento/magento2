@@ -9,6 +9,21 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
+<<<<<<< HEAD
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Controller\Result\Json;
+=======
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Helper\Product;
@@ -19,6 +34,7 @@ use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\Cache\FrontendInterface;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -67,19 +83,32 @@ class Save extends Attribute
      * @var LayoutFactory
      */
     private $layoutFactory;
+    /**
+     * @var Presentation
+     */
+    private $presentation;
 
     /**
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
      * @param Registry $coreRegistry
+<<<<<<< HEAD
+     * @param PageFactory $resultPageFactory
+     * @param BuildFactory $buildFactory
+=======
      * @param BuildFactory $buildFactory
      * @param PageFactory $resultPageFactory
+>>>>>>> upstream/2.2-develop
      * @param AttributeFactory $attributeFactory
      * @param ValidatorFactory $validatorFactory
      * @param CollectionFactory $groupCollectionFactory
      * @param FilterManager $filterManager
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
+<<<<<<< HEAD
+     * @param Presentation|null $presentation
+=======
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,7 +122,12 @@ class Save extends Attribute
         CollectionFactory $groupCollectionFactory,
         FilterManager $filterManager,
         Product $productHelper,
+<<<<<<< HEAD
+        LayoutFactory $layoutFactory,
+        Presentation $presentation = null
+=======
         LayoutFactory $layoutFactory
+>>>>>>> upstream/2.2-develop
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -103,6 +137,7 @@ class Save extends Attribute
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
     }
 
     /**
@@ -130,7 +165,13 @@ class Save extends Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
+<<<<<<< HEAD
+                    $this->messageManager->addErrorMessage(
+                        __('A "%1" attribute set name already exists. Create a new name and try again.', $name)
+                    );
+=======
                     $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
+>>>>>>> upstream/2.2-develop
                     $this->_session->setAttributeData($data);
 
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
@@ -197,7 +238,10 @@ class Save extends Attribute
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
+<<<<<<< HEAD
+=======
 
+>>>>>>> upstream/2.2-develop
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
@@ -223,6 +267,11 @@ class Save extends Attribute
                 );
             }
 
+<<<<<<< HEAD
+            $data = $this->presentation->convertPresentationDataToInputType($data);
+
+=======
+>>>>>>> upstream/2.2-develop
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
 
             if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {

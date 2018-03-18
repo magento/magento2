@@ -26,6 +26,10 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
         <amOnPage stepKey="s9" url="{{AdminSystemStorePage.url}}"/>
+<<<<<<< HEAD
+        <waitForPageLoad stepKey="waitForPageLoad" />
+=======
+>>>>>>> upstream/2.2-develop
 
         <click stepKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="s15" time="10"/>

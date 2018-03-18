@@ -29,6 +29,11 @@ class ColumnsRendererTest extends \PHPUnit\Framework\TestCase
     protected $selectMock;
 
     /**
+     * @var \Zend_Db_Expr
+     */
+    protected $sqlWildcard;
+
+    /**
      * Set up
      *
      * @return void

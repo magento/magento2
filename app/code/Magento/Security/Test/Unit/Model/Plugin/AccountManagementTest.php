@@ -62,8 +62,13 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ['performSecurityCheck']
         );
 
+<<<<<<< HEAD
+        $this->accountManagement =  $this->createMock(AccountManagement::class);
+        $this->scope =  $this->createMock(ScopeInterface::class);
+=======
         $this->accountManagement = $this->createMock(AccountManagement::class);
         $this->scope = $this->createMock(ScopeInterface::class);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

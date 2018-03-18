@@ -114,7 +114,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerateClassWithExistName($fileExists)
     {
         $this->definedClassesMock->expects($this->any())
-            ->method('isClassLoadableFromDisc')
+            ->method('isClassLoadableFromDisk')
             ->willReturn(true);
 
         $resultClassFileName = '/Magento/Path/To/Class.php';
