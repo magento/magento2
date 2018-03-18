@@ -23,7 +23,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setDown() {
+    protected function setDown()
+    {
         /* Refresh stores memory cache after store deletion */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Store\Model\StoreManagerInterface::class
@@ -51,7 +52,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testJoinUrlRewriteNotOnDefaultStore()
     {
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Store\Model\Store::class);
         $storeId = $store->load('second_category_store', 'code')->getId();
         $categories = $this->collection->setStoreId($storeId)->joinUrlRewrite()->addPathFilter('1/2/3');
         $this->assertCount(1, $categories);
