@@ -32,6 +32,9 @@ use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PlaceOrderOnNotDefaultSourceTest extends TestCase
 {
     /**
