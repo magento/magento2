@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector\Http;
 
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
+<<<<<<< HEAD
 use Magento\Framework\Serialize\Serializer\Json;
 
 class JsonConverterTest extends \PHPUnit\Framework\TestCase
@@ -61,13 +62,38 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
             [null, ['body']],
             [['unserializedBody'], ['unserializedBody']]
         ];
+=======
+
+/**
+ * Class JsonConverterTest
+ */
+class JsonConverterTest extends \PHPUnit\Framework\TestCase
+{
+    public function testConverterContainsHeader()
+    {
+        $converter = new JsonConverter();
+        $this->assertEquals(JsonConverter::CONTENT_TYPE_HEADER, $converter->getContentTypeHeader());
+    }
+
+    public function testConvertBody()
+    {
+        $body = '{"token": "secret-token"}';
+        $converter = new JsonConverter();
+        $this->assertEquals(json_decode($body, 1), $converter->fromBody($body));
+>>>>>>> upstream/2.2-develop
     }
 
     public function testConvertData()
     {
+<<<<<<< HEAD
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturn('serializedResult');
         $this->assertEquals('serializedResult', $this->converter->toBody(["token" => "secret-token"]));
+=======
+        $data = ["token" => "secret-token"];
+        $converter = new JsonConverter();
+        $this->assertEquals(json_encode($data), $converter->toBody($data));
+>>>>>>> upstream/2.2-develop
     }
 }

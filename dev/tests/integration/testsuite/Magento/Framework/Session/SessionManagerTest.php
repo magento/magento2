@@ -80,7 +80,10 @@ namespace Magento\Framework\Session {
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+<<<<<<< HEAD
             /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
+=======
+>>>>>>> upstream/2.2-develop
             $this->appState = $this->getMockBuilder(State::class)
                 ->setMethods(['getAreaCode'])
                 ->disableOriginalConstructor()
@@ -90,7 +93,11 @@ namespace Magento\Framework\Session {
             $this->_sidResolver = $this->objectManager->create(
                 \Magento\Framework\Session\SidResolver::class,
                 [
+<<<<<<< HEAD
                     'appState' => $this->appState,
+=======
+                    'appState' => $this->appState
+>>>>>>> upstream/2.2-develop
                 ]
             );
 

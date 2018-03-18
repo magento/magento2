@@ -12,6 +12,7 @@
         <element name="header" type="button" selector="div[data-index=content]"/>
         <element name="contentHeading" type="input" selector="input[name=content_heading]"/>
         <element name="content" type="input" selector="#cms_page_form_content"/>
+<<<<<<< HEAD
         <element name="TextArea" type="text" selector="#text_form_content"/>
     </section>
     <section name="CmsWYSIWYGSection">
@@ -20,5 +21,7 @@
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
+=======
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

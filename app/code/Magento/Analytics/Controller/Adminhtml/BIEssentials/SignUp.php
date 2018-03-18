@@ -10,6 +10,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
+<<<<<<< HEAD
+=======
+ * Class SignUp
+ *
+>>>>>>> upstream/2.2-develop
  * Provides link to BI Essentials signup
  */
 class SignUp extends Action
@@ -27,11 +32,14 @@ class SignUp extends Action
     private $config;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
     const ADMIN_RESOURCE = 'Magento_Analytics::bi_essentials';
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @param Context $context
      * @param ScopeConfigInterface $config
      */
@@ -44,6 +52,19 @@ class SignUp extends Action
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Check admin permissions for this controller
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Analytics::bi_essentials');
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Provides link to BI Essentials signup
      *
      * @return \Magento\Framework\Controller\AbstractResult

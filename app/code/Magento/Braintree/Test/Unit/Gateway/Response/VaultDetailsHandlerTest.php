@@ -9,8 +9,12 @@ use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
+<<<<<<< HEAD
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
+=======
+use Magento\Braintree\Gateway\SubjectReader;
+>>>>>>> upstream/2.2-develop
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

@@ -492,6 +492,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 unset($categoryData[$attributeCode]);
 
                 $fileName = $category->getData($attributeCode);
+<<<<<<< HEAD
                 $fileInfo = $this->getFileInfo();
 
                 if ($fileInfo->isExist($fileName)) {
@@ -506,6 +507,14 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                         $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
                     }
 
+=======
+                if ($this->getFileInfo()->isExist($fileName)) {
+                    $stat = $this->getFileInfo()->getStat($fileName);
+                    $mime = $this->getFileInfo()->getMimeType($fileName);
+
+                    $categoryData[$attributeCode][0]['name'] = $fileName;
+                    $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+>>>>>>> upstream/2.2-develop
                     $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
                     $categoryData[$attributeCode][0]['type'] = $mime;
                 }

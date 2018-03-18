@@ -192,7 +192,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $this->_collection->setPageSize($limit);
         }
         if ($this->getCurrentOrder()) {
+<<<<<<< HEAD
             if (($this->getCurrentOrder()) == 'position') {
+=======
+            if ($this->getCurrentOrder() == 'position') {
+>>>>>>> upstream/2.2-develop
                 $this->_collection->addAttributeToSort(
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
@@ -689,7 +693,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
             'modeDefault' => $defaultMode,
             'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
-            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'orderDefault' => $this->getOrderField(),
             'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
         ];

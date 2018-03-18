@@ -47,7 +47,11 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
+<<<<<<< HEAD
      * Constructor.
+=======
+     * Constructor
+>>>>>>> upstream/2.2-develop
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig

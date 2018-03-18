@@ -8,7 +8,11 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<<<<<<< HEAD
     <entity name="productAttributeWysiwyg" type="ProductAttribute">
+=======
+    <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
+>>>>>>> upstream/2.2-develop
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">textarea</data>
         <data key="scope">global</data>
@@ -31,6 +35,7 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">select</data>
@@ -73,4 +78,6 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
 </entities>

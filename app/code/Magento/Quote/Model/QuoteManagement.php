@@ -233,6 +233,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
@@ -411,17 +415,24 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function resolveItems(QuoteEntity $quote)
     {
-        $quoteItems = [];
-        foreach ($quote->getAllItems() as $quoteItem) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $quoteItem */
-            $quoteItems[$quoteItem->getId()] = $quoteItem;
-        }
         $orderItems = [];
-        foreach ($quoteItems as $quoteItem) {
-            $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
-                $orderItems[$quoteItem->getParentItemId()] : null;
-            $orderItems[$quoteItem->getId()] =
-                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
+        foreach ($quote->getAllItems() as $quoteItem) {
+            $itemId = $quoteItem->getId();
+
+            if (!empty($orderItems[$itemId])) {
+                continue;
+            }
+
+            $parentItemId = $quoteItem->getParentItemId();
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $parentItem */
+            if ($parentItemId && !isset($orderItems[$parentItemId])) {
+                $orderItems[$parentItemId] = $this->quoteItemToOrderItem->convert(
+                    $quoteItem->getParentItem(),
+                    ['parent_item' => null]
+                );
+            }
+            $parentItem = isset($orderItems[$parentItemId]) ? $orderItems[$parentItemId] : null;
+            $orderItems[$itemId] = $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);
     }

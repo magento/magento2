@@ -48,6 +48,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 10
         ],
+        [
+            ProductInterface::SKU => [
+                'rest' => 'sku%252fwith%252fslashes',
+                'soap' => 'sku%2fwith%2fslashes'
+            ],
+            ProductInterface::NAME => 'Simple Product with Sku with Slashes',
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 10
+        ],
     ];
 
     /**
@@ -134,6 +143,20 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [$productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])],
             [$productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])],
         ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_sku_with_slash.php
+     */
+    public function testGetBySkuWithSlash()
+    {
+        $productData = $this->productData[2];
+        $response = $this->getProduct($productData[ProductInterface::SKU][TESTS_WEB_API_ADAPTER]);
+        $productData[ProductInterface::SKU] = rawurldecode($productData[ProductInterface::SKU]['soap']);
+        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
+            $this->assertEquals($productData[$key], $response[$key]);
+        }
+        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
     }
 
     /**
@@ -305,6 +328,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test that Product Repository can correctly create simple product, if product type not specified in request.
+     *
+     * @return void
+     */
+    public function testCreateWithoutSpecifiedType()
+    {
+        $price = 3.62;
+        $weight = 12.2;
+        $sku = 'simple_product_without_specified_type';
+        $product = [
+            'sku' => $sku,
+            'name' => 'Simple Product Without Specified Type',
+            'price' => $price,
+            'weight' => $weight,
+            'attribute_set_id' => 4,
+        ];
+        $response = $this->saveProduct($product);
+        $this->assertSame($sku, $response[ProductInterface::SKU]);
+        $this->assertSame(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $response[ProductInterface::TYPE_ID]);
+        $this->assertSame($price, $response[ProductInterface::PRICE]);
+        $this->assertSame($weight, $response[ProductInterface::WEIGHT]);
+        //Clean up.
+        $this->deleteProduct($product[ProductInterface::SKU]);
+    }
+
+    /**
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
@@ -314,10 +363,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
+<<<<<<< HEAD
         $this->expectException(
             'Exception',
             "The product that was requested doesn't exist. Verify the product and try again."
         );
+=======
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Requested product doesn\'t exist');
+>>>>>>> upstream/2.2-develop
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);

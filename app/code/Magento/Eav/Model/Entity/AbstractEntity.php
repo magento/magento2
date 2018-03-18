@@ -486,13 +486,35 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Adding attribute to entity by scope.
+     *
+     * @param AbstractAttribute $attribute
+     * @param DataObject|null $entity
+     * @return $this
+     */
+    public function addAttributeByScope(AbstractAttribute $attribute, $entity = null)
+    {
+        $suffix = $entity !== null ? $this->getAttributesCacheSuffix($entity) : '0-0';
+        $attributeCode = $attribute->getAttributeCode();
+        $this->attributesByScope[$suffix][$attributeCode] = $attribute;
+        return $this->addAttribute($attribute);
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Get attributes by scope
      *
      * @return array
      */
     private function getAttributesByScope($suffix)
     {
+<<<<<<< HEAD
         return (isset($this->attributesByScope[$suffix]) && !empty($this->attributesByScope[$suffix]))
+=======
+        return !empty($this->attributesByScope[$suffix])
+>>>>>>> upstream/2.2-develop
             ? $this->attributesByScope[$suffix]
             : $this->getAttributesByCode();
     }
@@ -508,7 +530,11 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeSetId = $object->getAttributeSetId() ?: 0;
         $storeId = $object->getStoreId() ?: 0;
         return $storeId . '-' . $attributeSetId;
+<<<<<<< HEAD
     }
+=======
+     }
+>>>>>>> upstream/2.2-develop
 
     /**
      * Retrieve partial load flag

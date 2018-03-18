@@ -353,6 +353,10 @@ class AccountManagement implements AccountManagementInterface
      * @param CredentialsValidator|null $credentialsValidator
      * @param DateTimeFactory|null $dateTimeFactory
      * @param AccountConfirmation|null $accountConfirmation
+<<<<<<< HEAD
+=======
+     * @param DateTimeFactory $dateTimeFactory
+>>>>>>> upstream/2.2-develop
      * @param SessionManagerInterface|null $sessionManager
      * @param SaveHandlerInterface|null $saveHandler
      * @param CollectionFactory|null $visitorCollectionFactory
@@ -580,14 +584,29 @@ class AccountManagement implements AccountManagementInterface
                     $this->getEmailNotification()->passwordResetConfirmation($customer);
                     break;
                 default:
+<<<<<<< HEAD
                     $this->handleUnknownTemplate($template);
                     break;
+=======
+                    throw new InputException(__(
+                        'Invalid value of "%value" provided for the %fieldName field. '.
+                        'Possible values: %template1 or %template2.',
+                        [
+                            'value' => $template,
+                            'fieldName' => 'template',
+                            'template1' => AccountManagement::EMAIL_REMINDER,
+                            'template2' => AccountManagement::EMAIL_RESET
+                        ]
+                    ));
+>>>>>>> upstream/2.2-develop
             }
+
             return true;
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
             $this->logger->critical($e);
         }
+
         return false;
     }
 
@@ -873,6 +892,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
         }
     }
 
@@ -1160,10 +1181,10 @@ class AccountManagement implements AccountManagementInterface
          * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
          */
         $types = [
-            self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED             => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
             self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMED              => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMATION           => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
     }
@@ -1197,6 +1218,7 @@ class AccountManagement implements AccountManagementInterface
             $email = $customer->getEmail();
         }
 
+<<<<<<< HEAD
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
@@ -1207,6 +1229,13 @@ class AccountManagement implements AccountManagementInterface
             ))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
+=======
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)->setTemplateOptions(
+            ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
+        )->setTemplateVars($templateParams)->setFrom(
+            $this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
+        )->addTo($email, $this->customerViewHelper->getCustomerName($customer))->getTransport();
+>>>>>>> upstream/2.2-develop
 
         $transport->sendMessage();
 
@@ -1398,10 +1427,15 @@ class AccountManagement implements AccountManagementInterface
         // No need to flatten the custom attributes or nested objects since the only usage is for email templates and
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
+<<<<<<< HEAD
         $customerData = $this->dataProcessor->buildOutputDataArray(
             $customer,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
+=======
+        $customerData =
+            $this->dataProcessor->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
+>>>>>>> upstream/2.2-develop
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;
@@ -1437,7 +1471,11 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * Destroy all active customer sessions by customer id (current session will not be destroyed).
+<<<<<<< HEAD
      * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
+=======
+     * Customer sessions which should be deleted are collecting  from the "customer_visitor" table considering
+>>>>>>> upstream/2.2-develop
      * configured session lifetime.
      *
      * @param string|int $customerId

@@ -101,6 +101,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
+    /**
+     * @var NotificationStorage
+     */
+    private $notificationStorage;
+
     protected function setUp()
     {
         $this->customerResourceModel =

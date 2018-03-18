@@ -6,14 +6,15 @@
 
 namespace Magento\Ups\Model;
 
-use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Framework\HTTP\ClientFactory;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Ups\Helper\Config;
-use Magento\Framework\Xml\Security;
 
 /**
  * UPS shipping implementation
@@ -124,8 +125,13 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @inheritdoc
      */
     protected $_debugReplacePrivateDataKeys = [
-        'UserId', 'Password'
+        'UserId', 'Password', 'AccessLicenseNumber'
     ];
+
+    /**
+     * @var ClientFactory
+     */
+    private $httpClientFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -145,6 +151,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
+     * @param ClientFactory $httpClientFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -167,10 +174,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
+        ClientFactory $httpClientFactory,
         array $data = []
     ) {
-        $this->_localeFormat = $localeFormat;
-        $this->configHelper = $configHelper;
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
@@ -189,6 +195,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $stockRegistry,
             $data
         );
+        $this->httpClientFactory = $httpClientFactory;
+        $this->_localeFormat = $localeFormat;
+        $this->configHelper = $configHelper;
     }
 
     /**
@@ -313,7 +322,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         //for UPS, puero rico state for US will assume as puerto rico country
         if ($destCountry == self::USA_COUNTRY_ID && ($request->getDestPostcode() == '00912' ||
-            $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
+                $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
         ) {
             $destCountry = self::PUERTORICO_COUNTRY_ID;
         }
@@ -728,16 +737,9 @@ XMLRequest;
         if ($xmlResponse === null) {
             $debugData['request'] = $xmlParams;
             try {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-                $xmlResponse = curl_exec($ch);
-
+                $client = $this->httpClientFactory->create();
+                $client->post($url, $xmlRequest);
+                $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
             } catch (\Exception $e) {
@@ -921,7 +923,7 @@ XMLRequest;
         $accessKey = $this->getConfigData('access_license_number');
 
         $this->_xmlAccessRequest = <<<XMLAuth
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <AccessRequest xml:lang="en-US">
   <AccessLicenseNumber>$accessKey</AccessLicenseNumber>
   <UserId>$userId</UserId>
@@ -971,12 +973,11 @@ XMLAuth;
         $url = $this->getConfigData('tracking_xml_url');
 
         foreach ($trackings as $tracking) {
-            $xmlRequest = $this->_xmlAccessRequest;
 
             /**
              * RequestOption==>'activity' or '1' to request all activities
              */
-            $xmlRequest .= <<<XMLAuth
+            $xmlRequest = <<<XMLAuth
 <?xml version="1.0" ?>
 <TrackRequest xml:lang="en-US">
     <Request>
@@ -987,19 +988,12 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
-            $debugData = ['request' => $xmlRequest];
-
+            $debugData['request'] = parent::filterDebugData($this->_xmlAccessRequest) . $xmlRequest;
             try {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                $xmlResponse = curl_exec($ch);
+                $client = $this->httpClientFactory->create();
+                $client->post($url, $this->_xmlAccessRequest . $xmlRequest);
+                $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
-                curl_close($ch);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
@@ -1368,21 +1362,22 @@ XMLAuth;
             }
         }
 
-        $shipmentPart->addChild(
-            'PaymentInformation'
-        )->addChild(
-            'Prepaid'
-        )->addChild(
-            'BillShipper'
-        )->addChild(
-            'AccountNumber',
-            $this->getConfigData('shipper_number')
-        );
+        $shipmentPart->addChild('PaymentInformation')
+            ->addChild('Prepaid')
+            ->addChild('BillShipper')
+            ->addChild('AccountNumber', $this->getConfigData('shipper_number'));
 
+<<<<<<< HEAD
         if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE')
             && $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID
             && ($request->getRecipientAddressCountryCode() == 'CA'
                 || $request->getRecipientAddressCountryCode() == 'PR')
+=======
+        if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE') &&
+            $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
+            ($request->getRecipientAddressCountryCode() == 'CA' ||
+                $request->getRecipientAddressCountryCode() == 'PR')
+>>>>>>> upstream/2.2-develop
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
@@ -1393,10 +1388,7 @@ XMLAuth;
         $labelPart->addChild('LabelPrintMethod')->addChild('Code', 'GIF');
         $labelPart->addChild('LabelImageFormat')->addChild('Code', 'GIF');
 
-        $this->setXMLAccessRequest();
-        $xmlRequest = $this->_xmlAccessRequest . $xmlRequest->asXml();
-
-        return $xmlRequest;
+        return $xmlRequest->asXml();
     }
 
     /**
@@ -1413,18 +1405,12 @@ XMLAuth;
         $request = $xmlRequest->addChild('Request');
         $request->addChild('RequestAction', 'ShipAccept');
         $xmlRequest->addChild('ShipmentDigest', $shipmentConfirmResponse->ShipmentDigest);
-        $debugData = ['request' => $xmlRequest->asXML()];
+        $debugData = ['request' => parent::filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXML()];
 
         try {
-            $ch = curl_init($this->getShipAcceptUrl());
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_xmlAccessRequest . $xmlRequest->asXML());
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-            $xmlResponse = curl_exec($ch);
-
+            $client = $this->httpClientFactory->create();
+            $client->post($this->getShipAcceptUrl(), $this->_xmlAccessRequest . $xmlRequest->asXML());
+            $xmlResponse = $client->getBody();
             $debugData['result'] = $xmlResponse;
             $this->_setCachedQuotes($xmlRequest, $xmlResponse);
         } catch (\Exception $e) {
@@ -1481,27 +1467,22 @@ XMLAuth;
     {
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
-        $xmlRequest = $this->_formShipmentRequest($request);
+        $rawXmlRequest = $this->_formShipmentRequest($request);
+        $this->setXMLAccessRequest();
+        $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
 
         if ($xmlResponse === null) {
+            $debugData['request'] = parent::filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
             $url = $this->getShipConfirmUrl();
-
-            $debugData = ['request' => $xmlRequest];
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
-            $xmlResponse = curl_exec($ch);
-            if ($xmlResponse === false) {
-                throw new \Exception(curl_error($ch));
-            } else {
+            $client = $this->httpClientFactory->create();
+            try {
+                $client->post($url, $xmlRequest);
+                $xmlResponse = $client->getBody();
                 $debugData['result'] = $xmlResponse;
                 $this->_setCachedQuotes($xmlRequest, $xmlResponse);
+            } catch (\Exception $e) {
+                $debugData['result'] = ['code' => $e->getCode(), 'error' => $e->getMessage()];
             }
         }
 
@@ -1513,7 +1494,14 @@ XMLAuth;
         }
 
         if (isset($response->Response->Error)
+<<<<<<< HEAD
             && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
+=======
+            && in_array(
+                $response->Response->Error->ErrorSeverity,
+                ['Hard', 'Transient']
+            )
+>>>>>>> upstream/2.2-develop
         ) {
             $result->setErrors((string)$response->Response->Error->ErrorDescription);
         }
@@ -1581,20 +1569,20 @@ XMLAuth;
                     ];
                 }
                 $containerTypes = $containerTypes + [
-                    '03' => __('UPS Tube'),
-                    '04' => __('PAK'),
-                    '2a' => __('Small Express Box'),
-                    '2b' => __('Medium Express Box'),
-                    '2c' => __('Large Express Box'),
-                ];
+                        '03' => __('UPS Tube'),
+                        '04' => __('PAK'),
+                        '2a' => __('Small Express Box'),
+                        '2b' => __('Medium Express Box'),
+                        '2c' => __('Large Express Box'),
+                    ];
             }
 
             return ['00' => __('Customer Packaging')] + $containerTypes;
         } elseif ($countryShipper == self::USA_COUNTRY_ID &&
             $countryRecipient == self::PUERTORICO_COUNTRY_ID &&
             ($method == '03' ||
-            $method == '02' ||
-            $method == '01')
+                $method == '02' ||
+                $method == '01')
         ) {
             // Container types should be the same as for domestic
             $params->setCountryRecipient(self::USA_COUNTRY_ID);

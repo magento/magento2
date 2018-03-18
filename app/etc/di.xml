@@ -1380,6 +1380,7 @@
             </argument>
         </arguments>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory">
         <arguments>
             <argument name="typeFactories" xsi:type="array">
@@ -1647,4 +1648,11 @@
     </type>
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
+=======
+    <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+>>>>>>> upstream/2.2-develop
 </config>

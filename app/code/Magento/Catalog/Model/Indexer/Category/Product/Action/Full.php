@@ -52,7 +52,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchSizeManagementInterface|null $batchSizeManagement
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @param int|null $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
      */
@@ -88,7 +87,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
+<<<<<<< HEAD
      *
+=======
+>>>>>>> upstream/2.2-develop
      * Clear the table we'll be writing de-normalized data into
      * to prevent archived data getting in the way of actual data.
      *
@@ -119,9 +121,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
+<<<<<<< HEAD
      *
      * @deprecated Not used anymore.
      * @see clearCurrentTable()
+=======
+     * @deprecated 102.0.1 Not needed anymore.
+>>>>>>> upstream/2.2-develop
      */
     protected function getSelectUnnecessaryData()
     {
@@ -147,6 +153,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return void
      *
+<<<<<<< HEAD
      * @deprecated Not used anymore.
      * @see clearCurrentTable()
      */
@@ -154,6 +161,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         //Called for backward compatibility.
         $this->getSelectUnnecessaryData();
+=======
+     * @deprecated 102.0.1 Not needed anymore.
+     */
+    protected function removeUnnecessaryData()
+    {
+        //Called for backwards compatibility.
+        $this->getSelectUnnecessaryData();
+        //This method is useless,
+        //left it here just in case somebody's using it in child classes.
+>>>>>>> upstream/2.2-develop
     }
 
     /**

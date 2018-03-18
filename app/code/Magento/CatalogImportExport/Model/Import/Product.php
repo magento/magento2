@@ -8,10 +8,15 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
+<<<<<<< HEAD
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+=======
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+>>>>>>> upstream/2.2-develop
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -704,11 +709,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
+<<<<<<< HEAD
      * @var ImageTypeProcessor
      */
     private $imageTypeProcessor;
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Provide ability to process and save images during import.
      *
      * @var MediaGalleryProcessor
@@ -754,7 +762,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
+<<<<<<< HEAD
      * @param ImageTypeProcessor $imageTypeProcessor
+=======
+>>>>>>> upstream/2.2-develop
      * @param MediaGalleryProcessor $mediaProcessor
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -800,7 +811,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $data = [],
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null,
+<<<<<<< HEAD
         ImageTypeProcessor $imageTypeProcessor = null,
+=======
+>>>>>>> upstream/2.2-develop
         MediaGalleryProcessor $mediaProcessor = null
     ) {
         $this->_eventManager = $eventManager;
@@ -832,10 +846,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
+<<<<<<< HEAD
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
 
+=======
+        $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CatalogConfig::class);
+        $this->mediaProcessor = $mediaProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(MediaGalleryProcessor::class);
+>>>>>>> upstream/2.2-develop
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -1692,7 +1713,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $storeId = !empty($rowData[self::COL_STORE])
                     ? $this->getStoreIdByCode($rowData[self::COL_STORE])
                     : Store::DEFAULT_STORE_ID;
+<<<<<<< HEAD
                 if (isset($rowData['_media_is_disabled'])) {
+=======
+                if (isset($rowData['_media_is_disabled']) && strlen(trim($rowData['_media_is_disabled']))) {
+>>>>>>> upstream/2.2-develop
                     $disabledImages = array_flip(
                         explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled'])
                     );
@@ -2037,8 +2062,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
+<<<<<<< HEAD
      * @param bool $renameFileOff [optional] boolean to pass.
      * Default is false which will set not to rename the file after import.
+=======
+     * @param bool $renameFileOff
+>>>>>>> upstream/2.2-develop
      * @return string
      */
     protected function uploadMediaFiles($fileName, $renameFileOff = false)
@@ -2680,9 +2709,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+<<<<<<< HEAD
      * Validate data rows and save bunches to DB
      *
      * @return $this|AbstractEntity
+=======
+     * {@inheritdoc}
+>>>>>>> upstream/2.2-develop
      */
     protected function _saveValidatedBunches()
     {
@@ -2825,9 +2858,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function updateMediaGalleryLabels(array $labels)
     {
+<<<<<<< HEAD
         if (!empty($labels)) {
             $this->mediaProcessor->updateMediaGalleryLabels($labels);
         }
+=======
+        if (empty($labels)) {
+            return;
+        }
+        $this->mediaProcessor->updateMediaGalleryLabels($labels);
+>>>>>>> upstream/2.2-develop
     }
 
     /**

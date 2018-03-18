@@ -5,18 +5,16 @@
  */
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\Locale;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate static files, compile
  *
- * Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+ * Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -50,21 +48,6 @@ class Filesystem
      * Default theme when no theme is stored in configuration
      */
     const DEFAULT_THEME = 'Magento/blank';
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader
-     */
-    private $reader;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -107,40 +90,52 @@ class Filesystem
     private $locale;
 
     /**
+<<<<<<< HEAD
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
      * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+=======
+>>>>>>> upstream/2.2-develop
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
      * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\ShellInterface $shell
+<<<<<<< HEAD
      * @param UserCollection|null $userCollection
      * @param Locale|null $locale
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+=======
+     * @param UserCollection $userCollection
+     * @param Locale $locale
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig\Writer $writer,
-        \Magento\Framework\App\DeploymentConfig\Reader $reader,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
         \Magento\Framework\ShellInterface $shell,
+<<<<<<< HEAD
         UserCollection $userCollection = null,
         Locale $locale = null
+=======
+        UserCollection $userCollection,
+        Locale $locale
+>>>>>>> upstream/2.2-develop
     ) {
-        $this->writer = $writer;
-        $this->reader = $reader;
-        $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
+<<<<<<< HEAD
         $this->userCollection = $userCollection ?: $this->objectManager->get(UserCollection::class);
         $this->locale = $locale ?: $this->objectManager->get(Locale::class);
+=======
+        $this->userCollection = $userCollection;
+        $this->locale = $locale;
+>>>>>>> upstream/2.2-develop
         $this->functionCallPath =
             PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -154,7 +149,7 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+        // Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
@@ -224,15 +219,25 @@ class Filesystem
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         return array_map(
             function ($locale) {
                 if (!$this->locale->isValid($locale)) {
                     throw new \InvalidArgumentException(
+<<<<<<< HEAD
                         $locale . ' argument has invalid value, run info:language:list for list of available locales'
                     );
                 }
 
+=======
+                        $locale .
+                        ' argument has invalid value, run info:language:list for list of available locales'
+                    );
+                }
+>>>>>>> upstream/2.2-develop
                 return $locale;
             },
             array_unique($usedLocales)

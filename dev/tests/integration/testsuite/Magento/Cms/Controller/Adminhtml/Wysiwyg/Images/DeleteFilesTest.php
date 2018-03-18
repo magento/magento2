@@ -69,7 +69,10 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         $this->assertFalse(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
@@ -78,6 +81,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Execute method with traversal file path to check that there is no ability to remove file which is not
      * under media directory.
      *
@@ -99,6 +103,8 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     public static function tearDownAfterClass()

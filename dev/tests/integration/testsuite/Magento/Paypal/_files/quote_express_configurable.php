@@ -11,7 +11,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+require __DIR__ . '/product_configurable.php';
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -19,7 +19,7 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var $product \Magento\Catalog\Model\Product */
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
-$product = $productRepository->get('configurable');
+$product = $productRepository->get('configurable_express');
 
 /** @var $options Collection */
 $options = $objectManager->create(Collection::class);
@@ -29,7 +29,7 @@ $requestInfo = new \Magento\Framework\DataObject(
     [
         'product' => 1,
         'selected_configurable_option' => 1,
-        'qty' => 100,
+        'qty' => 1,
         'super_attribute' => [
             $attribute->getId() => $option->getId()
         ]

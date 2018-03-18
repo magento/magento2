@@ -13,6 +13,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ReportValidatorTest
+ */
+>>>>>>> upstream/2.2-develop
 class ReportValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**

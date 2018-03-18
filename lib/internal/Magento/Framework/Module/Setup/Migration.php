@@ -159,7 +159,11 @@ class Migration
         ];
         $this->_compositeModules = $compositeModules;
         $this->setup = $setup;
+<<<<<<< HEAD
         $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+=======
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+>>>>>>> upstream/2.2-develop
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
@@ -703,7 +707,11 @@ class Migration
      * @return string|int|float|bool|array|null
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+<<<<<<< HEAD
      * @deprecated
+=======
+     * @deprecated 101.0.1
+>>>>>>> upstream/2.2-develop
      * @see \Magento\Framework\Module\Setup\Migration::jsonDecode
      */
     protected function _jsonDecode($encodedValue, $objectDecodeType = 1)
@@ -712,8 +720,12 @@ class Migration
     }
 
     /**
+<<<<<<< HEAD
      * Decodes the given $encodedValue string which is
      * encoded in the JSON format
+=======
+     * Decodes the given $encodedValue string which is encoded in the JSON format
+>>>>>>> upstream/2.2-develop
      *
      * @param string $encodedValue
      * @return string|int|float|bool|array|null

@@ -2528,6 +2528,7 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+<<<<<<< HEAD
     ['create_function', ''],
     ['configure', 'Magento\Framework\MessageQueue\BatchConsumer'],
     [
@@ -2567,4 +2568,7 @@ return [
             'configure',
             'Magento\Framework\MessageQueue\ConsumerInterface'
         ],
+=======
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed']
+>>>>>>> upstream/2.2-develop
 ];

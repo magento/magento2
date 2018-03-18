@@ -61,6 +61,8 @@ $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType($product->getTypeId());
 $orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
+$orderItem->setName($product->getName());
+$orderItem->setSku($simpleProduct->getSku());
 $orderItemSimple->setProductId($simpleProduct->getId());
 $orderItemSimple->setParentItem($orderItem);
 $orderItemSimple->setStoreId(0);

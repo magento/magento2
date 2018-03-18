@@ -42,7 +42,10 @@ class AddressSave extends Order
      * @var RegionFactory
      */
     private $regionFactory;
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
     /**
      * @param Context $context
      * @param Registry $coreRegistry
@@ -126,7 +129,11 @@ class AddressSave extends Order
             return $resultRedirect->setPath('sales/*/');
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/2.2-develop
     /**
      * Update region data
      *

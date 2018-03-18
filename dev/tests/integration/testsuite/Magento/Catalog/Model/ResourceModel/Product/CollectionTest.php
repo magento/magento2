@@ -126,6 +126,45 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
+     *
+     * @dataProvider addAttributeToSortDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
+     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
+     * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
+     */
+    public function testAddAttributeToSort(string $productSku, string $order)
+    {
+        /** @var Collection $productCollection */
+        $this->collection->addAttributeToSort('is_saleable', $order);
+        self::assertEquals(2, $this->collection->count());
+        self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
+    }
+
+    /**
+     * Provide test data for testAddAttributeToSort().
+     *
+     * @return array
+     */
+    public function addAttributeToSortDataProvider()
+    {
+        return [
+            [
+                'product_sku' => 'simple_saleable',
+                'order' => Collection::SORT_ORDER_DESC,
+            ],
+            [
+                'product_sku' => 'simple_not_saleable',
+                'order' => Collection::SORT_ORDER_ASC,
+            ]
+        ];
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Checks a case if table for join specified as an array.
      *
      * @throws \Magento\Framework\Exception\LocalizedException

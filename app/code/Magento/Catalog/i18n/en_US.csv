@@ -615,7 +615,7 @@ Submit,Submit
 "We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
 "Configure Product","Configure Product"
 OK,OK
-"This value does not follow the specified format (for example, 200X300).","This value does not follow the specified format (for example, 200X300)."
+"This value does not follow the specified format (for example, 200x300).","This value does not follow the specified format (for example, 200x300)."
 "Select type of option.","Select type of option."
 "Please add rows to option.","Please add rows to option."
 "Please select items.","Please select items."

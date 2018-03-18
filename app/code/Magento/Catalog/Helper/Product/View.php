@@ -109,9 +109,12 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function preparePageMetadata(ResultPage $resultPage, $product)
     {
+<<<<<<< HEAD
         $pageLayout = $resultPage->getLayout();
         $pageLayout->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
 
+=======
+>>>>>>> upstream/2.2-develop
         $pageConfig = $resultPage->getConfig();
 
         $title = $product->getMetaTitle();
@@ -142,7 +145,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
 
+<<<<<<< HEAD
         $pageMainTitle = $pageLayout->getBlock('page.main.title');
+=======
+        $pageMainTitle = $resultPage->getLayout()->getBlock('page.main.title');
+>>>>>>> upstream/2.2-develop
         if ($pageMainTitle) {
             $pageMainTitle->setPageTitle($product->getName());
         }

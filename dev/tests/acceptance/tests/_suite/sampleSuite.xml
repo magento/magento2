@@ -16,9 +16,15 @@
         <include>
             <module name="Catalog" />
             <group name="login" />
+<<<<<<< HEAD
         </include>
         <exclude>
             <test name="AddImageToWYSIWYGCatalogEditor"/>
+=======
+            <test name="AdminCreateCustomerTest"/>
+        </include>
+        <exclude>
+>>>>>>> upstream/2.2-develop
             <module name="Catalog" file="AdminCreateCategoryTest.xml" />
         </exclude>
     </suite>

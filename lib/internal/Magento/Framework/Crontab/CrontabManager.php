@@ -87,7 +87,11 @@ class CrontabManager implements CrontabManagerInterface
     public function saveTasks(array $tasks)
     {
         if (!$tasks) {
+<<<<<<< HEAD
             throw new LocalizedException(new Phrase('The list of tasks is empty. Add tasks and try again.'));
+=======
+            throw new LocalizedException(new Phrase('List of tasks is empty'));
+>>>>>>> upstream/2.2-develop
         }
 
         $this->checkSupportedOs();

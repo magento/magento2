@@ -239,9 +239,13 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
             && $attribute->isValueEmpty($attribute->getDefaultValue())
         ) {
             $label = $attribute->getFrontend()->getLabel();
+<<<<<<< HEAD
             throw new LocalizedException(
                 __('The "%1" attribute value is empty. Set the attribute and try again.', $label)
             );
+=======
+            throw new LocalizedException(__('The value of attribute "%1" must be set', $label));
+>>>>>>> upstream/2.2-develop
         }
 
         if ($attribute->getIsUnique()

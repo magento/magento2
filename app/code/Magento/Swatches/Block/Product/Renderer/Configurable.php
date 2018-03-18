@@ -119,6 +119,12 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $configurableAttributeData,
             $data
         );
+
+        $this->addData(
+            [
+                'cache_lifetime' => isset($data['cache_lifetime']) ? $data['cache_lifetime'] : 3600
+            ]
+        );
     }
 
     /**

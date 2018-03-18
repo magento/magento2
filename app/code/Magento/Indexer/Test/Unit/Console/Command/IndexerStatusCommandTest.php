@@ -27,7 +27,11 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private function attachViewToIndexerMock($indexerMock, array $data)
     {
+<<<<<<< HEAD
         /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $changelog */
+=======
+         /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $changelog */
+>>>>>>> upstream/2.2-develop
         $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -101,7 +105,11 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
                 ['helpers' => [$objectManager->getObject(TableHelper::class)]]
             )
         );
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> upstream/2.2-develop
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
 

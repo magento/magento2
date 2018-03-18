@@ -15,6 +15,12 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class RetryTest
+ */
+>>>>>>> upstream/2.2-develop
 class RetryTest extends \PHPUnit\Framework\TestCase
 {
     /**

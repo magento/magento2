@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+<<<<<<< HEAD
 
+=======
+// @codingStandardsIgnoreFile
+>>>>>>> upstream/2.2-develop
 return [
     'root' => [
         'node_one' => [
@@ -21,11 +25,15 @@ return [
             'one' => ['id' => 'one', 'name' => 'name1', 'value' => '1'],
             'two' => ['id' => 'two', 'name' => 'name2', 'value' => '2'],
             'three' => ['id' => 'three', 'name' => 'name3', 'value' => 'value_from_new_line'],
+<<<<<<< HEAD
             'four' => [
                 'id' => 'four',
                 'name' => 'name4',
                 'value' => 'auto_formatted_by_ide_value_due_to_line_size_restriction'
             ],
+=======
+            'four' => ['id' => 'four', 'name' => 'name4', 'value' => 'auto_formatted_by_ide_value_due_to_line_size_restriction'],
+>>>>>>> upstream/2.2-develop
         ],
         'someOtherVal' => '',
         'someDataVal' => '',

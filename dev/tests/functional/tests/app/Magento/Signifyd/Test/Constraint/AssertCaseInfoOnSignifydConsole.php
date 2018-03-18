@@ -63,7 +63,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkDeviceData()
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertTrue(
+=======
+        \PHPUnit_Framework_Assert::assertTrue(
+>>>>>>> upstream/2.2-develop
             $this->signifydCases->getCaseInfoBlock()->isAvailableDeviceData(),
             'Device data are not available on case page in Signifyd console.'
         );
@@ -77,7 +81,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkShippingPrice($shippingPrice)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertContains(
+=======
+        \PHPUnit_Framework_Assert::assertContains(
+>>>>>>> upstream/2.2-develop
             $shippingPrice,
             $this->signifydCases->getCaseInfoBlock()->getShippingPrice(),
             'Shipping price is incorrect on case page in Signifyd console.'
@@ -92,7 +100,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkGuaranteeDisposition($guaranteeDisposition)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $guaranteeDisposition,
             $this->signifydCases->getCaseInfoBlock()->getGuaranteeDisposition(),
             'Guarantee disposition is incorrect on case page in Signifyd console.'
@@ -107,7 +119,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkCvvResponse($cvvResponse)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $cvvResponse,
             $this->signifydCases->getCaseInfoBlock()->getCvvResponse(),
             'CVV response is incorrect on case page in Signifyd console.'
@@ -122,7 +138,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkAvsResponse($avsResponse)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $avsResponse,
             $this->signifydCases->getCaseInfoBlock()->getAvsResponse(),
             'AVS response is incorrect on case page in Signifyd console.'
@@ -137,7 +157,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkOrderId($orderId)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $orderId,
             $this->signifydCases->getCaseInfoBlock()->getOrderId(),
             'Order id is incorrect on case page in Signifyd console.'
@@ -152,7 +176,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkOrderAmount($amount)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             number_format($amount, 2),
             $this->signifydCases->getCaseInfoBlock()->getOrderAmount(),
             'Order amount is incorrect on case page in Signifyd console.'
@@ -167,7 +195,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkOrderAmountCurrency($currency)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $currency,
             $this->signifydCases->getCaseInfoBlock()->getOrderAmountCurrency(),
             'Order amount currency is incorrect on case page in Signifyd console.'
@@ -182,7 +214,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkCardHolder($customerFullName)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertEquals(
+=======
+        \PHPUnit_Framework_Assert::assertEquals(
+>>>>>>> upstream/2.2-develop
             $customerFullName,
             $this->signifydCases->getCaseInfoBlock()->getCardHolder(),
             'Card holder name is incorrect on case page in Signifyd console.'
@@ -197,7 +233,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     private function checkBillingAddress(SignifydAddress $billingAddress)
     {
+<<<<<<< HEAD
         \PHPUnit\Framework\Assert::assertContains(
+=======
+        \PHPUnit_Framework_Assert::assertContains(
+>>>>>>> upstream/2.2-develop
             $billingAddress->getStreet(),
             $this->signifydCases->getCaseInfoBlock()->getBillingAddress(),
             'Billing address is incorrect on case page in Signifyd console.'

@@ -414,28 +414,40 @@ class DataProvider
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $this->connection->select()->from(
-                    ['t_default' => $tableName],
-                    [$linkField, 'attribute_id']
+
+                $select = $this->connection->select()->from(
+                    ['t' => $tableName],
+                    [
+                        $linkField => 't.' . $linkField,
+                        'attribute_id' => 't.attribute_id',
+                        'value' => $this->unifyField($ifStoreValue, $backendType),
+                    ]
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
-                        't_default.' . $linkField . '=t_store.' . $linkField .
-                        ' AND t_default.attribute_id=t_store.attribute_id' .
+                        't.' . $linkField . '=t_store.' . $linkField .
+                        ' AND t.attribute_id=t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
                         $storeId
                     ),
-                    ['value' => $this->unifyField($ifStoreValue, $backendType)]
+                    []
+                )->joinLeft(
+                    ['t_default' => $tableName],
+                    $this->connection->quoteInto(
+                        't.' . $linkField . '=t_default.' . $linkField .
+                        ' AND t.attribute_id=t_default.attribute_id' .
+                        ' AND t_default.store_id = ?',
+                        0
+                    ),
+                    []
                 )->where(
-                    't_default.store_id = ?',
-                    0
-                )->where(
-                    't_default.attribute_id IN (?)',
+                    't.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    't_default.' . $linkField . ' IN (?)',
+                    't.' . $linkField . ' IN (?)',
                     array_keys($productLinkFieldsToEntityIdMap)
-                );
+                )->distinct();
+                $selects[] = $select;
             }
         }
 
@@ -478,9 +490,9 @@ class DataProvider
     public function getProductChildIds($productId, $typeId)
     {
         $typeInstance = $this->getProductTypeInstance($typeId);
-        $relation = $typeInstance->isComposite(
-            $this->getProductEmulator($typeId)
-        ) ? $typeInstance->getRelationInfo() : false;
+        $relation = $typeInstance->isComposite($this->getProductEmulator($typeId))
+            ? $typeInstance->getRelationInfo()
+            : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
             $select = $this->connection->select()->from(
@@ -599,15 +611,26 @@ class DataProvider
         if (false !== $value) {
             $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
             if (null === $optionValue) {
+<<<<<<< HEAD
                 $value = $this->filterAttributeValue($value);
+=======
+                $value = preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+>>>>>>> upstream/2.2-develop
             } else {
                 $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
         }
+<<<<<<< HEAD
 
         return $value;
     }
 
+=======
+
+        return $value;
+    }
+
+>>>>>>> upstream/2.2-develop
     /**
      * Get attribute option value
      *
@@ -629,15 +652,19 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
+<<<<<<< HEAD
                 $this->attributeOptions[$optionKey] = array_map(function ($value) {
                     return $this->filterAttributeValue($value);
                 }, $this->attributeOptions[$optionKey]);
+=======
+>>>>>>> upstream/2.2-develop
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
 
         return $this->attributeOptions[$optionKey][$valueId] ?? null;
+<<<<<<< HEAD
     }
 
     /**
@@ -649,5 +676,7 @@ class DataProvider
     private function filterAttributeValue($value)
     {
         return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+=======
+>>>>>>> upstream/2.2-develop
     }
 }

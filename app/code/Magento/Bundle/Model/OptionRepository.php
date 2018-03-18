@@ -211,9 +211,13 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             }
         } else {
             if (!$existingOption->getOptionId()) {
+<<<<<<< HEAD
                 throw new NoSuchEntityException(
                     __("The option that was requested doesn't exist. Verify the entity and try again.")
                 );
+=======
+                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
+>>>>>>> upstream/2.2-develop
             }
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));

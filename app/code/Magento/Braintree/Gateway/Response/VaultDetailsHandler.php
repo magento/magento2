@@ -7,9 +7,13 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
+<<<<<<< HEAD
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+=======
+use Magento\Braintree\Gateway\SubjectReader;
+>>>>>>> upstream/2.2-develop
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;

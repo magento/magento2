@@ -154,7 +154,11 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if (is_string($value)) {
                 return $this->escapeHtml($value);
             }
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> upstream/2.2-develop
             return $value;
         }
 

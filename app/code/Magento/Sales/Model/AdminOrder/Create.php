@@ -14,7 +14,10 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\Order;
+<<<<<<< HEAD
 use Psr\Log\LoggerInterface;
+=======
+>>>>>>> upstream/2.2-develop
 
 /**
  * Order create model
@@ -680,7 +683,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function getCustomerWishlist($cacheReload = false)
     {
+<<<<<<< HEAD
         if ($this->_wishlist !== null && !$cacheReload) {
+=======
+        if (($this->_wishlist !== null) && !$cacheReload) {
+>>>>>>> upstream/2.2-develop
             return $this->_wishlist;
         }
 
@@ -714,9 +721,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->_cart = $this->quoteFactory->create();
 
         $customerId = (int)$this->getSession()->getCustomerId();
+        $storeId = (int)$this->getSession()->getStoreId();
         if ($customerId) {
             try {
-                $this->_cart = $this->quoteRepository->getForCustomer($customerId);
+                $this->_cart = $this->quoteRepository->getForCustomer($customerId, [$storeId]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $this->_cart->setStore($this->getSession()->getStore());
                 $customerData = $this->customerRepository->getById($customerId);
@@ -807,7 +815,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     break;
                 case 'cart':
                     $cart = $this->getCustomerCart();
+<<<<<<< HEAD
                     if ($cart && $item->getOptionByCode('additional_options') === null) {
+=======
+                    if ($cart && ($item->getOptionByCode('additional_options') === null)) {
+>>>>>>> upstream/2.2-develop
                         //options and info buy request
                         $product = $this->_objectManager->create(
                             \Magento\Catalog\Model\Product::class
@@ -1474,9 +1486,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $billingAddress = $this->_objectManager->create(Address::class)
             ->setData($address)
             ->setAddressType(Address::TYPE_BILLING);
+<<<<<<< HEAD
 
         $this->_setQuoteAddress($billingAddress, $address);
 
+=======
+
+        $this->_setQuoteAddress($billingAddress, $address);
+
+>>>>>>> upstream/2.2-develop
         /**
          * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
          * that is why it should be added after _setQuoteAddress call
@@ -1488,7 +1506,18 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
             $address['save_in_address_book'] = 0;
             $this->setShippingAddress($address);
+<<<<<<< HEAD
         }
+
+        // not assigned billing address should be saved as new
+        // but if quote already has the billing address it won't be overridden
+        if (empty($billingAddress->getCustomerAddressId())) {
+            $billingAddress->setCustomerAddressId(null);
+            $quote->getBillingAddress()->setCustomerAddressId(null);
+=======
+>>>>>>> upstream/2.2-develop
+        }
+        $quote->setBillingAddress($billingAddress);
 
         // not assigned billing address should be saved as new
         // but if quote already has the billing address it won't be overridden

@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutPaymentSection">
+<<<<<<< HEAD
         <element name="billingAddress" type="text" selector="div.billing-address-details"/>
         <element name="cartItems" type="text" selector="ol.minicart-items"/>
         <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
@@ -25,5 +26,10 @@
         <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
         <element name="shipToInfomation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="shippingMethodInfomation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
+=======
+        <element name="cartItems" type="text" selector=".minicart-items"/>
+        <element name="billingAddress" type="text" selector="div.billing-address-details"/>
+        <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

@@ -7,10 +7,8 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
@@ -19,10 +17,8 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -117,11 +113,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $fileSystem;
 
     /**
+     * @deprecated
+     * @see \Magento\Catalog\Model\MediaGalleryProcessor
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
+     * @deprecated
+     * @see \Magento\Catalog\Model\MediaGalleryProcessor
      * @var ImageProcessorInterface
      */
     protected $imageProcessor;
@@ -132,7 +132,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @var ProductRepository\MediaGalleryProcessor
      */
     protected $mediaGalleryProcessor;
 
@@ -334,12 +334,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
+            if (isset($productData['price']) && !isset($productData['product_type'])) {
+                $product->setTypeId(Product\Type::TYPE_SIMPLE);
+            }
             if ($this->storeManager->hasSingleStore()) {
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
-            unset($this->instances[$productData['sku']]);
-            $product = $this->get($productData['sku']);
+            if (!empty($productData['id'])) {
+                unset($this->instancesById[$productData['id']]);
+                $product = $this->getById($productData['id']);
+            } else {
+                unset($this->instances[$productData['sku']]);
+                $product = $this->get($productData['sku']);
+            }
         }
 
         foreach ($productData as $key => $value) {
@@ -376,6 +384,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+<<<<<<< HEAD
      * @param ProductInterface $product
      * @param array $newEntry
      * @return $this
@@ -425,6 +434,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * Process product links, creating new links, updating and deleting existing links
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
@@ -483,6 +494,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+<<<<<<< HEAD
      * Process Media gallery data before save product.
      *
      * Compare Media Gallery Entries Data with existing Media Gallery
@@ -560,6 +572,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -569,7 +583,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         try {
-            $existingProduct = $this->get($product->getSku());
+            $existingProduct = $product->getId() ? $this->getById($product->getId()) : $this->get($product->getSku());
 
             $product->setData(
                 $this->resourceModel->getLinkField(),
@@ -590,12 +604,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
             $productLinks = $product->getProductLinks();
         }
-        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        if (!isset($productDataArray['store_id'])) {
+            $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (isset($productDataArray['media_gallery'])) {
-            $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
+        if (isset($productDataArray['media_gallery_entries'])) {
+            $this->getMediaGalleryProcessor()->processMediaGallery(
+                $product,
+                $productDataArray['media_gallery_entries']
+            );
         }
 
         if (!$product->getOptionsReadonly()) {
@@ -770,13 +789,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @return Product\Gallery\Processor
+     * @return ProductRepository\MediaGalleryProcessor
      */
     private function getMediaGalleryProcessor()
     {
         if (null === $this->mediaGalleryProcessor) {
             $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
+                ->get(ProductRepository\MediaGalleryProcessor::class);
         }
         return $this->mediaGalleryProcessor;
     }

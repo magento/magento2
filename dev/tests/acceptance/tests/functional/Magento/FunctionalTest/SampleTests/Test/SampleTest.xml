@@ -56,7 +56,11 @@
         <dontSeeCookie userInput="cookieName" stepKey="dontSeeCookie1"/>
         <dontSeeCookie userInput="cookieName" parameterArray="['domainName' => 'stuff']" stepKey="dontSeeCookie2"/>
         <dontSeeCurrentUrlEquals url="/stuff" stepKey="dontSeeCurrentUrlEquals"/>
+<<<<<<< HEAD
         <dontSeeCurrentUrlMatches regex="~$/users/(\d+)~" stepKey="dontSeeCurrentUrlMatches"/>
+=======
+        <dontSeeCurrentUrlMatches  regex="~$/users/(\d+)~" stepKey="dontSeeCurrentUrlMatches"/>
+>>>>>>> upstream/2.2-develop
         <dontSeeElement selector=".error" stepKey="dontSeeElement1"/>
         <dontSeeElement selector="input" parameterArray="['name' => 'login']" stepKey="dontSeeElement2"/>
         <dontSeeElementInDOM selector="#stuff" stepKey="dontSeeElementInDOM1"/>

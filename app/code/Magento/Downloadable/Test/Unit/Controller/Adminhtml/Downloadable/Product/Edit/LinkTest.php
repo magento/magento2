@@ -129,7 +129,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                     'must-revalidate, post-check=0, pre-check=0',
                     true,
                 ],
+<<<<<<< HEAD
                 ['Content-type', 'text/html'],
+=======
+                ['Content-type', 'application/octet-stream'],
+>>>>>>> upstream/2.2-develop
                 ['Content-Length', $fileSize],
                 ['Content-Disposition', 'attachment; filename=' . $fileName]
             )
@@ -148,12 +152,21 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
             ->will($this->returnValue($fileName));
+<<<<<<< HEAD
         $this->downloadHelper->expects($this->once())->method('getContentType')
             ->willReturn('text/html');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
             ->will($this->returnValue($fileSize));
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
             ->will($this->returnValue('inline'));
+=======
+        $this->downloadHelper->expects($this->never())->method('getContentType')
+            ->will($this->returnSelf('file'));
+        $this->downloadHelper->expects($this->once())->method('getFileSize')
+            ->will($this->returnValue($fileSize));
+        $this->downloadHelper->expects($this->never())->method('getContentDisposition')
+            ->will($this->returnValue(null));
+>>>>>>> upstream/2.2-develop
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());
         $this->linkModel->expects($this->once())->method('load')
@@ -192,11 +205,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
             ->will($this->returnValue('link.jpg'));
-        $this->downloadHelper->expects($this->once())->method('getContentType')
+        $this->downloadHelper->expects($this->never())->method('getContentType')
             ->will($this->returnSelf('url'));
         $this->downloadHelper->expects($this->once())->method('getFileSize')
             ->will($this->returnValue(null));
-        $this->downloadHelper->expects($this->once())->method('getContentDisposition')
+        $this->downloadHelper->expects($this->never())->method('getContentDisposition')
             ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('output')
             ->will($this->returnSelf());

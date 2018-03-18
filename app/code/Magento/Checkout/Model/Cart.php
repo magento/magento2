@@ -18,7 +18,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
+<<<<<<< HEAD
  * @see \Magento\Quote\Api\Data\CartInterface
+=======
+>>>>>>> upstream/2.2-develop
  */
 class Cart extends DataObject implements CartInterface
 {

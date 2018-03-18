@@ -193,6 +193,7 @@
     <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
         <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
+<<<<<<< HEAD
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav\CompositeConfigProcessor">
         <arguments>
             <argument name="eavWysiwygDataProcessors" xsi:type="array">
@@ -200,4 +201,6 @@
             </argument>
         </arguments>
     </type>
+=======
+>>>>>>> upstream/2.2-develop
 </config>

@@ -13,6 +13,12 @@ use Magento\Framework\DB\Sql\JsonSerializableExpression;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class SelectHydratorTest
+ */
+>>>>>>> upstream/2.2-develop
 class SelectHydratorTest extends \PHPUnit\Framework\TestCase
 {
     /**

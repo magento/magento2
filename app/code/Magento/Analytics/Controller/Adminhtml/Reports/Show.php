@@ -24,11 +24,14 @@ class Show extends Action
     private $reportUrlProvider;
 
     /**
+<<<<<<< HEAD
      * @inheritdoc
      */
     const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @param Context $context
      * @param ReportUrlProvider $reportUrlProvider
      */
@@ -41,6 +44,19 @@ class Show extends Action
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Check admin permissions for this controller.
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Analytics::analytics_settings');
+    }
+
+    /**
+>>>>>>> upstream/2.2-develop
      * Redirect to resource with reports.
      *
      * @return Redirect $resultRedirect

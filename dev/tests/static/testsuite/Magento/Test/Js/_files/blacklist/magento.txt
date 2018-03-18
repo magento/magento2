@@ -1,4 +1,5 @@
 app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js
+<<<<<<< HEAD
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/backbone-min.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/handlebars.min-v4.0.10.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/highlight.9.1.0.pack.js
@@ -14,6 +15,12 @@ app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/object-assign-polly
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/swagger-oauth.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/underscore-min.js
 app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
+=======
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-bundle.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-standalone-preset.js
+
+// TO REFACTORING
+>>>>>>> upstream/2.2-develop
 app/code/Magento/Authorizenet/view/adminhtml/web/js/direct-post.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/product/composite/configure.js
 app/code/Magento/Rule/view/adminhtml/web/rules.js

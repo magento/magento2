@@ -7,8 +7,10 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Subscriber model
@@ -96,7 +98,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Date
+<<<<<<< HEAD
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+=======
+     * @var DateTime
+>>>>>>> upstream/2.2-develop
      */
     private $dateTime;
 
@@ -143,7 +149,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+<<<<<<< HEAD
      * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+=======
+     * @param DateTime|null $dateTime
+>>>>>>> upstream/2.2-develop
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -160,7 +170,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+<<<<<<< HEAD
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
+=======
+        DateTime $dateTime = null
+>>>>>>> upstream/2.2-develop
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
@@ -173,6 +187,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -444,6 +459,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     {
         $this->loadByEmailAndStore($email, $storeId);
 
+        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
+            return $this->getStatus();
+        }
+
         if (!$this->getId()) {
             $this->setSubscriberConfirmCode($this->randomSequence());
         }
@@ -639,14 +658,20 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
         $sendSubscription = $sendInformationEmail;
-        if ($sendSubscription === null xor $sendSubscription) {
+        if ($sendSubscription === null xor $sendSubscription && $this->isStatusChanged()) {
             try {
-                if ($isConfirmNeed) {
-                    $this->sendConfirmationRequestEmail();
-                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
-                    $this->sendUnsubscriptionEmail();
-                } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
-                    $this->sendConfirmationSuccessEmail();
+                switch ($status) {
+                    case self::STATUS_UNSUBSCRIBED:
+                        $this->sendUnsubscriptionEmail();
+                        break;
+                    case self::STATUS_SUBSCRIBED:
+                        $this->sendConfirmationSuccessEmail();
+                        break;
+                    case self::STATUS_NOT_ACTIVE:
+                        if ($isConfirmNeed) {
+                            $this->sendConfirmationRequestEmail();
+                        }
+                        break;
                 }
             } catch (MailException $e) {
                 // If we are not able to send a new account email, this should be ignored

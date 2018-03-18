@@ -39,7 +39,10 @@
         <data key="email" unique="prefix">John.Doe@example.com</data>
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
+<<<<<<< HEAD
         <data key="fullname">John Doe</data>
+=======
+>>>>>>> upstream/2.2-develop
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>

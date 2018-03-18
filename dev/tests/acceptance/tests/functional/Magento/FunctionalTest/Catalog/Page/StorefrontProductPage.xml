@@ -8,6 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+<<<<<<< HEAD
     <page name="StorefrontProductPage" url="/{{var1}}.html" area="storefront" module="Catalog" parameterized="true">
         <section name="StorefrontProductInfoMainSection" />
         <section name="StorefrontProductInfoDetailsSection" />
@@ -15,5 +16,9 @@
         <section name="StorefrontProductImageSection" />
         <section name="StorefrontMessagesSection" />
         <section name="StorefrontProductRelatedProductsSection"/>
+=======
+    <page name="StorefrontProductPage" url="/{{var1}}.html" area="storefront" module="Category" parameterized="true">
+        <section name="StorefrontProductPageSection"/>
+>>>>>>> upstream/2.2-develop
     </page>
 </pages>

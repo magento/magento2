@@ -11,6 +11,7 @@
     <section name="CheckoutShippingSection">
         <element name="selectedShippingAddress" type="text" selector=".shipping-address-item.selected-item"/>
         <element name="newAddressButton" type="button" selector="#checkout-step-shipping button"/>
+<<<<<<< HEAD
         <element name="email" type="input" selector="#customer-email"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
@@ -21,5 +22,7 @@
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="next" type="button" selector="button.button.action.continue.primary"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
+=======
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

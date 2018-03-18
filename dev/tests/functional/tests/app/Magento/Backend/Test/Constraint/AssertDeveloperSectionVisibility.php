@@ -41,23 +41,39 @@ class AssertDeveloperSectionVisibility extends AbstractConstraint
         $configEdit->open();
         if ($_ENV['mage_mode'] === 'production') {
             foreach ($this->groups as $group) {
+<<<<<<< HEAD
                 \PHPUnit\Framework\Assert::assertFalse(
+=======
+                \PHPUnit_Framework_Assert::assertFalse(
+>>>>>>> upstream/2.2-develop
                     $configEdit->getForm()->isGroupVisible('dev', $group),
                     sprintf('%s group should be hidden in production mode.', $group)
                 );
             }
+<<<<<<< HEAD
             \PHPUnit\Framework\Assert::assertTrue(
+=======
+            \PHPUnit_Framework_Assert::assertTrue(
+>>>>>>> upstream/2.2-develop
                 $configEdit->getForm()->getGroup('dev', 'debug')->isFieldVisible('dev', 'debug_debug', 'logging'),
                 '"Log to File" should be presented in production mode.'
             );
         } else {
             foreach ($this->groups as $group) {
+<<<<<<< HEAD
                 \PHPUnit\Framework\Assert::assertTrue(
+=======
+                \PHPUnit_Framework_Assert::assertTrue(
+>>>>>>> upstream/2.2-develop
                     $configEdit->getForm()->isGroupVisible('dev', $group),
                     sprintf('%s group should be visible in developer mode.', $group)
                 );
             }
+<<<<<<< HEAD
             \PHPUnit\Framework\Assert::assertTrue(
+=======
+            \PHPUnit_Framework_Assert::assertTrue(
+>>>>>>> upstream/2.2-develop
                 $configEdit->getForm()->isGroupVisible('dev', 'debug'),
                 'Debug group should be visible in developer mode.'
             );

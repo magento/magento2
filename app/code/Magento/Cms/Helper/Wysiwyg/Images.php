@@ -170,7 +170,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->getStorageRoot();
         } else {
             $path = $this->getStorageRoot() . $this->idDecode($id);
+<<<<<<< HEAD
             if (preg_match('/\.\.(\\\|\/)/', $path)) {
+=======
+            if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) !== false) {
+>>>>>>> upstream/2.2-develop
                 throw new \InvalidArgumentException('Path is invalid');
             }
 
@@ -185,7 +189,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
+<<<<<<< HEAD
         $checkResult = (object) [];
+=======
+        $checkResult = new \stdClass();
+>>>>>>> upstream/2.2-develop
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',
@@ -215,6 +223,10 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 $html = $fileUrl;
             } else {
                 $directive = $this->urlEncoder->encode($directive);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/2.2-develop
                 $html = $this->_backendData->getUrl(
                     'cms/wysiwyg/directive',
                     [

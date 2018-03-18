@@ -13,6 +13,12 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ColumnsResolverTest
+ */
+>>>>>>> upstream/2.2-develop
 class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**

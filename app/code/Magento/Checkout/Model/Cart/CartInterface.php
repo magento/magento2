@@ -12,8 +12,12 @@ use Magento\Quote\Model\Quote;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+<<<<<<< HEAD
  * @deprecated 100.1.0 Use \Magento\Quote\Api\Data\CartInterface instead
  * @see \Magento\Quote\Api\Data\CartInterface
+=======
+ * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
+>>>>>>> upstream/2.2-develop
  */
 interface CartInterface
 {

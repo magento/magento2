@@ -373,9 +373,13 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             $this->_registerPaymentAuthorization();
             return;
         }
+<<<<<<< HEAD
         if ('order' === $reason) {
             throw new Exception('The "order" authorizations aren\'t implemented.');
         }
+=======
+
+>>>>>>> upstream/2.2-develop
         // case when was placed using PayPal standard
         if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()
             && !$this->getRequestData('transaction_entity')

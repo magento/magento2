@@ -504,18 +504,8 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
 
-        //@see http://php.net/manual/en/function.session-regenerate-id.php#53480 workaround
         if ($this->isSessionExists()) {
-            $oldSessionId = session_id();
-            session_regenerate_id();
-            $newSessionId = session_id();
-            session_id($oldSessionId);
-            session_destroy();
-
-            $oldSession = $_SESSION;
-            session_id($newSessionId);
-            session_start();
-            $_SESSION = $oldSession;
+            session_regenerate_id(true);
         } else {
             session_start();
         }

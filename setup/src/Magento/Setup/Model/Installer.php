@@ -1138,6 +1138,7 @@ class Installer
      */
     public function installAdminUser($data)
     {
+<<<<<<< HEAD
         if ($this->isDryRun($data)) {
             return;
         }
@@ -1151,6 +1152,13 @@ class Installer
             $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
             $adminAccount->save();
         }
+=======
+        $this->assertDbConfigExists();
+        $data += ['db-prefix' => $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)];
+        $setup = $this->setupFactory->create($this->context->getResources());
+        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
+        $adminAccount->save();
+>>>>>>> upstream/2.2-develop
     }
 
     /**

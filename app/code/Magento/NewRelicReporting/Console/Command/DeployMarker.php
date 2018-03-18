@@ -48,6 +48,7 @@ class DeployMarker extends Command
     {
         $this->setName("newrelic:create:deploy-marker");
         $this->setDescription("Check the deploy queue for entries and create an appropriate deploy marker.")
+<<<<<<< HEAD
              ->addArgument(
                  'message',
                  InputArgument::REQUIRED,
@@ -63,6 +64,23 @@ class DeployMarker extends Command
                  InputArgument::OPTIONAL,
                  'Deployment User'
              );
+=======
+            ->addArgument(
+                'message',
+                InputArgument::REQUIRED,
+                'Deploy Message?'
+            )
+            ->addArgument(
+                'changelog',
+                InputArgument::REQUIRED,
+                'Change Log?'
+            )
+            ->addArgument(
+                'user',
+                InputArgument::OPTIONAL,
+                'Deployment User'
+            );
+>>>>>>> upstream/2.2-develop
         parent::configure();
     }
 
@@ -73,7 +91,11 @@ class DeployMarker extends Command
     {
         $this->deploymentsFactory->create()->setDeployment(
             $input->getArgument('message'),
+<<<<<<< HEAD
             $input->getArgument('change_log'),
+=======
+            $input->getArgument('changelog'),
+>>>>>>> upstream/2.2-develop
             $this->serviceShellUser->get($input->getArgument('user'))
         );
         $output->writeln('<info>NewRelic deployment information sent</info>');

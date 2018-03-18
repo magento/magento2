@@ -10,6 +10,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
 
 /**
+<<<<<<< HEAD
+=======
+ * Class ConditionResolver
+ *
+>>>>>>> upstream/2.2-develop
  * Mapper for WHERE conditions
  */
 class ConditionResolver

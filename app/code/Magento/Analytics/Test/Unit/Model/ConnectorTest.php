@@ -9,6 +9,12 @@ use Magento\Analytics\Model\Connector;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Analytics\Model\Connector\SignUpCommand;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class SignUpCommandTest
+ */
+>>>>>>> upstream/2.2-develop
 class ConnectorTest extends \PHPUnit\Framework\TestCase
 {
     /**

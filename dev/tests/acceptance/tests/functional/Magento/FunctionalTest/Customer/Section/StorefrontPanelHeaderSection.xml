@@ -9,7 +9,10 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontPanelHeaderSection">
+<<<<<<< HEAD
         <element name="WelcomeMessage" type="text" selector=".greet.welcome span"/>
+=======
+>>>>>>> upstream/2.2-develop
         <element name="createAnAccountLink" type="select" selector=".panel.header li:nth-child(3)"/>
     </section>
 </sections>

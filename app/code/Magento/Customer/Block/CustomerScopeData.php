@@ -33,9 +33,13 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+<<<<<<< HEAD
      * @param Json|null $serializer
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+=======
+     * @since 100.2.0
+>>>>>>> upstream/2.2-develop
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

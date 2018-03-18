@@ -97,7 +97,15 @@ define([
                 success: function (res) {
                     var eventData, parameters;
 
+<<<<<<< HEAD
                     $(document).trigger('ajax:addToCart', form.data().productSku, form, res);
+=======
+                    $(document).trigger('ajax:addToCart', {
+                        'sku': form.data().productSku,
+                        'form': form,
+                        'response': res
+                    });
+>>>>>>> upstream/2.2-develop
 
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);

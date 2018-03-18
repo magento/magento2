@@ -110,6 +110,8 @@ class Save extends \Magento\Backend\App\Action
         $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
         $responseAjax = new \Magento\Framework\DataObject();
 
+        $responseAjax = new \Magento\Framework\DataObject();
+
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));

@@ -9,6 +9,12 @@ use Magento\Analytics\ReportXml\Config;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+<<<<<<< HEAD
+=======
+/**
+ * Class ConfigTest
+ */
+>>>>>>> upstream/2.2-develop
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**

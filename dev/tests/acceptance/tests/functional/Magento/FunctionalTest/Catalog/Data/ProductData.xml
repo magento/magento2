@@ -21,6 +21,7 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ApiSimpleProduct" type="product">
         <data key="sku" unique="suffix">api-simple-product</data>
         <data key="type_id">simple</data>
@@ -38,6 +39,8 @@
         <requiredEntity type="custom_attribute">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute">ApiProductShortDescription</requiredEntity>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
     <entity name="SimpleProduct" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
@@ -46,8 +49,11 @@
         <data key="price">123.00</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
+<<<<<<< HEAD
         <data key="quantity">1000</data>
         <data key="weight">1</data>
+=======
+>>>>>>> upstream/2.2-develop
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -65,6 +71,7 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+<<<<<<< HEAD
     <entity name="ApiSimpleOne" type="product2">
         <data key="sku" unique="suffix">api-simple-product</data>
         <data key="type_id">simple</data>
@@ -113,11 +120,14 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductUrlKey</requiredEntity>
     </entity>
+=======
+>>>>>>> upstream/2.2-develop
     <entity name="ImageUpload" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
+<<<<<<< HEAD
         <data key="file">magento-logo.png</data>
     </entity>
     <entity name="ProductWithUnicode" type="product">
@@ -132,5 +142,8 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+=======
+        <data key="file">logo.png</data>
+>>>>>>> upstream/2.2-develop
     </entity>
 </entities>

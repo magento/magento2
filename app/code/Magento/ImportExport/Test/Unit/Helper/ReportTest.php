@@ -148,6 +148,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @dataProvider importFileExistsDataProvider
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Filename has not permitted symbols in it
@@ -157,6 +158,14 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     public function testImportFileExistsException($fileName)
     {
         $this->report->importFileExists($fileName);
+=======
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     */
+    public function testImportFileExistsException()
+    {
+        $this->report->importFileExists('some_folder/../another_folder');
+>>>>>>> upstream/2.2-develop
     }
 
     public function testImportFileExists()
@@ -165,6 +174,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Dataprovider for testImportFileExistsException()
      *
      * @return array
@@ -179,6 +189,13 @@ class ReportTest extends \PHPUnit\Framework\TestCase
                 'fileName' => 'some_folder\..\another_folder',
             ],
         ];
+=======
+     * @expectedException \InvalidArgumentException
+     */
+    public function testImportFileExistsExceptionInverted()
+    {
+        $this->report->importFileExists('some_folder\..\another_folder');
+>>>>>>> upstream/2.2-develop
     }
 
     /**

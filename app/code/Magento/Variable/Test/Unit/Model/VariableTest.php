@@ -7,21 +7,34 @@ namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Unit test for class Magento\Variable\Model\Variable.
+ */
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Variable\Model\Variable */
+    /**
+     * @var \Magento\Variable\Model\Variable
+     */
     private $model;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $escaperMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $resourceMock;
 
-    /** @var  \Magento\Framework\Phrase */
+    /**
+     * @var \Magento\Framework\Phrase
+     */
     private $validationFailedPhrase;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     private $objectManager;
 
     protected function setUp()
@@ -98,6 +111,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
+<<<<<<< HEAD
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
@@ -155,6 +169,8 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
     }
 
+=======
+>>>>>>> upstream/2.2-develop
     public function validateDataProvider()
     {
         $variable = [

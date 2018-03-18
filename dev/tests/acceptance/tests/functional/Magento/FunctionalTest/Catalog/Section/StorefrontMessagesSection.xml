@@ -9,6 +9,10 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontMessagesSection">
+<<<<<<< HEAD
         <element name="success" type="text" selector="div.message-success.success.message"/>
+=======
+        <element name="test" type="input" selector=".test"/>
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

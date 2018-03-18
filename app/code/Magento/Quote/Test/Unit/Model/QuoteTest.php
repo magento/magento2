@@ -146,6 +146,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $itemProcessor;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderIncrementIdChecker;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -249,6 +254,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->itemProcessor = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
+<<<<<<< HEAD
         $this->extensionAttributesJoinProcessorMock = $this->createMock(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
         );
@@ -256,6 +262,13 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create']
         );
+=======
+        $this->extensionAttributesJoinProcessorMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
+        $this->customerDataFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['create']);
+        $this->orderIncrementIdChecker = $this->getMockBuilder(\Magento\Sales\Model\OrderIncrementIdChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+>>>>>>> upstream/2.2-develop
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote::class,
@@ -280,6 +293,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
                     'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                     'customerDataFactory' => $this->customerDataFactoryMock,
                     'itemProcessor' => $this->itemProcessor,
+                    'orderIncrementIdChecker' => $this->orderIncrementIdChecker,
                     'data' => [
                         'reserved_order_id' => 1000001
                     ]
@@ -1230,9 +1244,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testReserveOrderId($isReservedOrderIdExist, $reservedOrderId)
     {
-        $this->resourceMock
+        $this->orderIncrementIdChecker
             ->expects($this->once())
-            ->method('isOrderIncrementIdUsed')
+            ->method('isIncrementIdUsed')
             ->with(1000001)->willReturn($isReservedOrderIdExist);
         $this->resourceMock->expects($this->any())->method('getReservedOrderId')->willReturn($reservedOrderId);
         $this->quote->reserveOrderId();

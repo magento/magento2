@@ -10,8 +10,11 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
+<<<<<<< HEAD
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+=======
+>>>>>>> upstream/2.2-develop
 use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
@@ -64,6 +67,7 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $successHandler->method('handleResponse')
             ->willReturn(true);
+<<<<<<< HEAD
         $serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -89,6 +93,15 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
                 ),
                 'logger' => $this->loggerMock
             ]
+=======
+
+        $this->notifyDataChangedCommand = new NotifyDataChangedCommand(
+            $this->analyticsTokenMock,
+            $this->httpClientMock,
+            $this->configMock,
+            new ResponseResolver(new JsonConverter(), [201 => $successHandler]),
+            $this->loggerMock
+>>>>>>> upstream/2.2-develop
         );
     }
 

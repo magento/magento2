@@ -41,7 +41,9 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
         $helper->setResource($resource, $resourceType);
 
         $fileName = $helper->getFilename();
-        $contentType = $helper->getContentType();
+        //For security reasons we're making browsers to download the file
+        //instead of opening it.
+        $contentType = 'application/octet-stream';
 
         /** @var HttpResponse $response */
         $response = $this->getResponse();
@@ -64,6 +66,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
         if ($fileSize = $helper->getFileSize()) {
             $response->setHeader('Content-Length', $fileSize);
         }
+<<<<<<< HEAD
         //Setting disposition as state in the config or forcing it for HTML.
         /** @var string|null $contentDisposition */
         $contentDisposition = $helper->getContentDisposition();
@@ -74,6 +77,10 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
             'Content-Disposition',
             $contentDisposition . '; filename=' . $fileName
         );
+=======
+
+        $response->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+>>>>>>> upstream/2.2-develop
         //Rendering
         $response->clearBody();
         $response->sendHeaders();

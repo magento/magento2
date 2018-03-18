@@ -218,8 +218,15 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertNotEquals(0, $this->accountManagement->getDefaultBillingAddress($customerId));
         $this->assertNull($this->accountManagement->getDefaultShippingAddress($customerId));
 
+        $urlPatternParts = [
+            $this->_baseControllerUrl . 'edit',
+            'id/' . $customerId,
+            'back/1',
+        ];
+        $urlPattern = '/^' . str_replace('/', '\/', implode('(/.*/)|/', $urlPatternParts)) . '/';
+
         $this->assertRedirect(
-            $this->stringStartsWith($this->_baseControllerUrl . 'edit/id/' . $customerId . '/back/1')
+            $this->matchesRegularExpression($urlPattern)
         );
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
@@ -388,13 +395,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com'
+            ],
             $customerId,
             $newEmail
         );
         $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
-            'customer' => ['entity_id' => $customerId,
+            'customer' => [
+                'entity_id' => $customerId,
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -434,7 +445,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $transportBuilderMock = $this->prepareEmailMock(
             2,
             'change_email_template',
-            'support',
+            [
+                'name' => 'CustomerSupport',
+                'email' => 'support@example.com'
+            ],
             $customerId,
             $newEmail
         );
@@ -751,7 +765,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      *
      * @param int $occurrenceNumber
      * @param string $templateId
-     * @param string $sender
+     * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
      * @return \PHPUnit_Framework_MockObject_MockObject

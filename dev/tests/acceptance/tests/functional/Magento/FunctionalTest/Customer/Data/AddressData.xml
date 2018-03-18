@@ -41,7 +41,10 @@
             <item>7700 West Parmer Lane</item>
         </array>
         <data key="city">Austin</data>
+<<<<<<< HEAD
         <data key="state">Texas</data>
+=======
+>>>>>>> upstream/2.2-develop
         <data key="country_id">US</data>
         <data key="postcode">78729</data>
         <data key="telephone">512-345-6789</data>

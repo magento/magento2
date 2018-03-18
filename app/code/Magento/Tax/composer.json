@@ -6,6 +6,7 @@
     },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+<<<<<<< HEAD
         "magento/framework": "100.3.*",
         "magento/module-backend": "100.3.*",
         "magento/module-catalog": "101.2.*",
@@ -20,12 +21,32 @@
         "magento/module-sales": "100.3.*",
         "magento/module-shipping": "100.3.*",
         "magento/module-store": "100.3.*"
+=======
+        "magento/module-config": "101.0.*",
+        "magento/module-store": "100.2.*",
+        "magento/module-catalog": "102.0.*",
+        "magento/module-customer": "101.0.*",
+        "magento/module-backend": "100.2.*",
+        "magento/module-directory": "100.2.*",
+        "magento/module-checkout": "100.2.*",
+        "magento/module-shipping": "100.2.*",
+        "magento/module-eav": "101.0.*",
+        "magento/module-sales": "101.0.*",
+        "magento/module-reports": "100.2.*",
+        "magento/module-page-cache": "100.2.*",
+        "magento/module-quote": "101.0.*",
+        "magento/framework": "101.0.*"
+>>>>>>> upstream/2.2-develop
     },
     "suggest": {
         "magento/module-tax-sample-data": "Sample Data version:100.3.*"
     },
     "type": "magento2-module",
+<<<<<<< HEAD
     "version": "100.3.0-dev",
+=======
+    "version": "100.2.3",
+>>>>>>> upstream/2.2-develop
     "license": [
         "OSL-3.0",
         "AFL-3.0"

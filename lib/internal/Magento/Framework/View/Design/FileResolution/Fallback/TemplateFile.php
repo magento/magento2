@@ -12,7 +12,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
 use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
+=======
+use Magento\Framework\Config\ConfigOptionsListConstants;
+>>>>>>> upstream/2.2-develop
 
 /**
  * Provider of template view files
@@ -107,11 +111,20 @@ class TemplateFile extends File
      */
     private function getMinifiedTemplateInProduction($template)
     {
+<<<<<<< HEAD
         $forceMinification = $this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
             || $this->deploymentConfig->getConfigData(Constants::CONFIG_PATH_FORCE_HTML_MINIFICATION);
 
         return $forceMinification ?
             $this->templateMinifier->getMinified($template)
             : $this->templateMinifier->getPathToMinified($template);
+=======
+        if ($this->deploymentConfig->getConfigData(
+            ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION
+        )) {
+            return $this->templateMinifier->getMinified($template);
+        }
+        return $this->templateMinifier->getPathToMinified($template);
+>>>>>>> upstream/2.2-develop
     }
 }

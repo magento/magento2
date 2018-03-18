@@ -178,6 +178,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_id' => $customer->getStoreId()
                 ]
             );
+<<<<<<< HEAD
 
         if ($result) {
             return $result;
@@ -219,6 +220,8 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'store_Id' => $customer->getStoreId()
                 ]
             );
+=======
+>>>>>>> upstream/2.2-develop
 
         if ($result) {
             return $result;

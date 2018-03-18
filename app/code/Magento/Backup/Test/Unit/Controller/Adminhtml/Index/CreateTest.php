@@ -67,7 +67,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
      */
+<<<<<<< HEAD
     private $maintenanceModeMock;
+=======
+    private $maintenanceMode;
+>>>>>>> upstream/2.2-develop
 
     /**
      * @var \Magento\Framework\Backup\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -75,7 +79,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $backupFactoryMock;
 
     /**
+<<<<<<< HEAD
      * @var \Magento\Backup\Controller\Adminhtml\Index\Create
+=======
+     * @var \Magento\Backup\Controller\Adminhtml\Index\Create|\PHPUnit_Framework_MockObject_MockObject
+>>>>>>> upstream/2.2-develop
      */
     private $createController;
 
@@ -110,7 +118,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getExtensionByType', 'getBackupsDir'])
             ->getMock();
+<<<<<<< HEAD
         $this->maintenanceModeMock = $this->getMockBuilder(\Magento\Framework\App\MaintenanceMode::class)
+=======
+        $this->maintenanceMode = $this->getMockBuilder(\Magento\Framework\App\MaintenanceMode::class)
+>>>>>>> upstream/2.2-develop
             ->disableOriginalConstructor()
             ->setMethods(['set'])
             ->getMock();
@@ -126,7 +138,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'response' => $this->responseMock,
                 'session' => $this->sessionMock,
                 'helper' => $this->dataBackendHelperMock,
+<<<<<<< HEAD
                 'maintenanceMode' => $this->maintenanceModeMock,
+=======
+                'maintenanceMode' => $this->maintenanceMode,
+>>>>>>> upstream/2.2-develop
             ]
         );
         $this->createController = $this->objectManager->getObject(
@@ -154,6 +170,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('isPost')
             ->willReturn(false);
+<<<<<<< HEAD
+=======
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('maintenance_mode')
+            ->willReturn(true);
+>>>>>>> upstream/2.2-develop
         $this->dataBackendHelperMock->expects($this->any())
             ->method('getUrl')
             ->with($redirectUrl, [])
@@ -198,7 +221,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('representJson')
             ->with($response)
             ->willReturnSelf();
+<<<<<<< HEAD
         $this->maintenanceModeMock->expects($this->any())
+=======
+        $this->maintenanceMode->expects($this->any())
+>>>>>>> upstream/2.2-develop
             ->method('set')
             ->with(true)
             ->willReturn(false);

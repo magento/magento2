@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
+<<<<<<< HEAD
         <element name="stock" type="input" selector=".stock.available"/>
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
@@ -17,10 +18,21 @@
         <element name="productImage" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[@class='fotorama__img']"/>
         <element name="productDescription" type="text" selector="//div[@id='product.info.description']//div[@class='value']"/>
         <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//div[@class='value']"/>
+=======
+        <element name="productName" type="text" selector=".base"/>
+        <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
+        <element name="productPrice" type="text" selector=".price"/>
+        <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
+        <element name="productDescription" type="text" selector="//div[@id='product.info.description']//p[1]"/>
+        <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//p"/>
+>>>>>>> upstream/2.2-develop
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
         <element name="mediaDescription" type="text" selector=".product.attribute.description>div>p>img"/>
         <element name="mediaShortDescription" type="text" selector=".product.attribute.overview>div>p>img"/>
+<<<<<<< HEAD
         <element name="productAddToCompare" type="button" selector="a.action.tocompare"/>
+=======
+>>>>>>> upstream/2.2-develop
     </section>
 </sections>

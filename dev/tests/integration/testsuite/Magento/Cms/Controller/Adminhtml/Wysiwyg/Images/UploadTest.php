@@ -72,7 +72,10 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/2.2-develop
         $this->assertTrue(
             $this->mediaDirectory->isExist(
                 $this->mediaDirectory->getRelativePath(
@@ -83,6 +86,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+<<<<<<< HEAD
      * Execute method with traversal directory path to check that there is no ability to create file not
      * under media directory.
      *
@@ -125,6 +129,8 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+=======
+>>>>>>> upstream/2.2-develop
      * @inheritdoc
      */
     public static function tearDownAfterClass()

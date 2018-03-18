@@ -14,5 +14,9 @@
         <section name="CheckoutOrderSummarySection"/>
         <section name="CheckoutSuccessMainSection"/>
         <section name="CheckoutPaymentSection"/>
+<<<<<<< HEAD
+=======
+        <section name="CheckoutGuestShippingInfoSection"/>
+>>>>>>> upstream/2.2-develop
     </page>
 </pages>

@@ -342,9 +342,15 @@ class Option extends Widget
                                 $_value->getStoreTitle() === null,
                                 $_value->getOptionTypeId()
                             );
+<<<<<<< HEAD
                             $value['optionValues'][$i]['scopeTitleDisabled'] = $_value->getStoreTitle() === null
                                 ? 'disabled'
                                 : null;
+=======
+                            $value['optionValues'][$i]['scopeTitleDisabled'] = (
+                                $_value->getStoreTitle() === null
+                            ) ? 'disabled' : null;
+>>>>>>> upstream/2.2-develop
                             if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
                                 $value['optionValues'][$i]['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
                                     $_value->getOptionId(),
@@ -353,9 +359,15 @@ class Option extends Widget
                                     $_value->getOptionTypeId(),
                                     ['$(this).up(1).previous()']
                                 );
+<<<<<<< HEAD
                                 $value['optionValues'][$i]['scopePriceDisabled'] = $_value->getStorePrice() === null
                                     ? 'disabled'
                                     : null;
+=======
+                                $value['optionValues'][$i]['scopePriceDisabled'] = (
+                                    $_value->getStorePrice() === null
+                                ) ? 'disabled' : null;
+>>>>>>> upstream/2.2-develop
                             }
                         }
                         $i++;

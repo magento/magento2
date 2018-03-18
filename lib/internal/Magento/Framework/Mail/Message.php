@@ -29,8 +29,13 @@ class Message implements MailMessageInterface
      */
     public function __construct($charset = 'utf-8')
     {
+<<<<<<< HEAD
         $this->zendMessage = new \Zend\Mail\Message();
         $this->zendMessage->setEncoding($charset);
+=======
+        parent::__construct($charset);
+        $this->setHeaderEncoding(\Zend_Mime::ENCODING_BASE64);
+>>>>>>> upstream/2.2-develop
     }
 
     /**
