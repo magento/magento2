@@ -90,10 +90,10 @@
             </argument>
         </arguments>
     </virtualType>
-    <!-- IsProductSalableResult -->
-    <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
+    <!-- ProductSalableResult -->
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalableResult"/>
     <!-- ProductSalabilityError -->
-    <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError"/>
     <!-- IsProductSalableForRequestedQtyConditionOnPlaceOrder -->
     <virtualType name="IsProductSalableForRequestedQtyConditionChainOnPlaceOrder" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain">
         <arguments>
