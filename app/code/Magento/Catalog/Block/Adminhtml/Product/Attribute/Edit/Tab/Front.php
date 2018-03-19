@@ -126,17 +126,6 @@ class Front extends Generic
         );
 
         $fieldset->addField(
-            'is_wysiwyg_enabled',
-            'select',
-            [
-                'name' => 'is_wysiwyg_enabled',
-                'label' => __('Enable WYSIWYG'),
-                'title' => __('Enable WYSIWYG'),
-                'values' => $yesnoSource,
-            ]
-        );
-
-        $fieldset->addField(
             'is_html_allowed_on_front',
             'select',
             [

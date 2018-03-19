@@ -1,0 +1,22 @@
+{
+  "inventory_low_stock_notification_configuration": {
+    "column": {
+      "source_code": true,
+      "sku": true,
+      "notify_stock_qty": true
+    },
+    "constraint": {
+      "FK_B83B2F43C515D94DE6B92EEF9143CBA8": true,
+      "IDX_PRIMARY": true
+    }
+  },
+  "patch_list": {
+    "column": {
+      "patch_id": true,
+      "patch_name": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}

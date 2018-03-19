@@ -78,11 +78,6 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
-    <type name="Magento\CatalogInventory\Setup\UpgradeData">
-        <arguments>
-            <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
             <argument name="baseSelectProcessors" xsi:type="array">

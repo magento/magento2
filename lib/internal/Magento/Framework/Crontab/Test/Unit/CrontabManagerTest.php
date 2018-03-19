@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Crontab\Test\Unit;
 
 use Magento\Framework\Crontab\CrontabManager;
@@ -192,7 +193,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage List of tasks is empty
+     * @expectedExceptionMessage The list of tasks is empty. Add tasks and try again.
      */
     public function testSaveTasksWithEmptyTasksList()
     {
@@ -219,7 +220,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Command should not be empty
+     * @expectedExceptionMessage The command shouldn't be empty. Enter and try again.
      */
     public function testSaveTasksWithoutCommand()
     {
@@ -332,6 +333,17 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
                     ['command' => '{magentoRoot}run.php % cron:run | grep -v "Ran \'jobs\' by schedule"']
                 ],
                 'content' => $content,
+                'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
+                    . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
+                    . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
+            ],
+            [
+                'tasks' => [
+                    ['command' => '{magentoRoot}run.php % cron:run | grep -v "Ran \'jobs\' by schedule"']
+                ],
+                'content' => '* * * * * /bin/php /var/www/cron.php',
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'

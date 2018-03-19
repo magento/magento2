@@ -19,7 +19,6 @@ use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Magento 2 CLI Application.
@@ -158,6 +157,12 @@ class Cli extends Console\Application
     {
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        $requestParams = $this->serviceManager->get('magento-init-params');
+        $appBootstrapKey = Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
+
+        if (isset($requestParams[$appBootstrapKey]) && !isset($params[$appBootstrapKey])) {
+            $params[$appBootstrapKey] = $requestParams[$appBootstrapKey];
+        }
 
         $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 

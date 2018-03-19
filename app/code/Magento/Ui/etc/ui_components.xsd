@@ -36,6 +36,7 @@
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/form.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/hidden.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/htmlContent.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/imageUploader.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/input.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/insertForm.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/insertListing.xsd"/>

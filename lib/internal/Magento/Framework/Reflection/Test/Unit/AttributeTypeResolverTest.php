@@ -84,7 +84,6 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Class "\Some\Class" does not exist. Please note that namespace must be specified.
      */
     public function testResolveObjectTypeWithConfiguredAttributeAndNonExistedClass()
     {
@@ -106,5 +105,9 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
         $this->model->resolveObjectType($code, $value, $context);
+
+        $this->expectExceptionMessage(
+            'The "\Some\Class" class doesn\'t exist and the namespace must be specified. Verify and try again.'
+        );
     }
 }

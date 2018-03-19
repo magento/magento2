@@ -7,7 +7,7 @@ namespace Magento\Framework\Mail;
 
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Phrase;
-use Zend\Mail\Message;
+use Zend\Mail\Message as ZendMessage;
 use Zend\Mail\Transport\Sendmail;
 
 class Transport implements \Magento\Framework\Mail\TransportInterface
@@ -39,7 +39,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     {
         try {
             $this->zendTransport->send(
-                Message::fromString($this->message->getRawMessage())
+                ZendMessage::fromString($this->message->getRawMessage())
             );
         } catch (\Exception $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);

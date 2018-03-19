@@ -58,7 +58,8 @@ define([
             _.each(data, function (item) {
                 items.push({
                     'source': item.name,
-                    'source_code': item[this.identifier]
+                    'source_code': item[this.identifier],
+                    'source_status': parseInt(item.enabled, 10) ? $.mage.__('Enabled') : $.mage.__('Disabled')
                 });
             }.bind(this));
 

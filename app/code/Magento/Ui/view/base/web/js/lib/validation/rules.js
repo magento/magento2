@@ -84,8 +84,10 @@ define([
         ],
         'range-words': [
             function (value, params) {
-                return utils.stripHtml(value).match(/\b\w+\b/g).length >= params[0] &&
-                    value.match(/bw+b/g).length < params[1];
+                var match = utils.stripHtml(value).match(/\b\w+\b/g) || [];
+
+                return match.length >= params[0] &&
+                    match.length <= params[1];
             },
             $.mage.__('Please enter between {0} and {1} words.')
         ],
@@ -244,7 +246,7 @@ define([
         ],
         'stripped-min-length': [
             function (value, param) {
-                return $(value).text().length >= param;
+                return _.isUndefined(value) || value.length === 0 || utils.stripHtml(value).length >= param;
             },
             $.mage.__('Please enter at least {0} characters')
         ],
@@ -360,7 +362,7 @@ define([
         ],
         'pattern': [
             function (value, param) {
-                return param.test(value);
+                return new RegExp(param).test(value);
             },
             $.mage.__('Invalid format.')
         ],

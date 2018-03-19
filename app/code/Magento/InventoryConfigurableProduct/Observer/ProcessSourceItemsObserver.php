@@ -14,7 +14,6 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Observer\SourceItemsProcessor;
-use Magento\InventoryLowQuantityNotification\Observer\SourceItemsConfigurationProcessor;
 
 /**
  * Process source items for configurable children products during product saving via controller.
@@ -28,20 +27,12 @@ class ProcessSourceItemsObserver implements ObserverInterface
     private $sourceItemsProcessor;
 
     /**
-     * @var SourceItemsConfigurationProcessor
-     */
-    private $sourceItemsConfigurationProcessor;
-
-    /**
      * @param SourceItemsProcessor $sourceItemsProcessor
-     * @param SourceItemsConfigurationProcessor $sourceItemsConfigurationProcessor
      */
     public function __construct(
-        SourceItemsProcessor $sourceItemsProcessor,
-        SourceItemsConfigurationProcessor $sourceItemsConfigurationProcessor
+        SourceItemsProcessor $sourceItemsProcessor
     ) {
         $this->sourceItemsProcessor = $sourceItemsProcessor;
-        $this->sourceItemsConfigurationProcessor = $sourceItemsConfigurationProcessor;
     }
 
     /**
@@ -58,16 +49,15 @@ class ProcessSourceItemsObserver implements ObserverInterface
         }
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
-        $configurableMatrix = $controller->getRequest()->getParam('configurable-matrix-serialized', []);
+        $configurableMatrix = $controller->getRequest()->getParam('configurable-matrix-serialized', '');
 
         if ($configurableMatrix != "") {
             $productsData = json_decode($configurableMatrix, true);
             foreach ($productsData as $productData) {
                 $sku = $productData[ProductInterface::SKU];
-                $sourceItems = $productData['qty'];
+                $sourceItems = $productData['qty_per_source'] ?? [];
 
                 $this->processSourceItems($sourceItems, $sku);
-                $this->processSourceItemsConfiguration($sourceItems, $sku);
             }
         }
     }
@@ -88,24 +78,5 @@ class ProcessSourceItemsObserver implements ObserverInterface
         }
 
         $this->sourceItemsProcessor->process($productSku, $sourceItems);
-    }
-
-    /**
-     * @param array $sourceItems
-     * @param string $sku
-     *
-     * @return void
-     */
-    private function processSourceItemsConfiguration(array $sourceItems, string $sku)
-    {
-        foreach ($sourceItems as $key => $sourceItem) {
-            if (isset($sourceItem['quantity_below_group'])) {
-                $sourceItems[$key] = array_merge($sourceItems[$key], $sourceItem['quantity_below_group']);
-            } else {
-                unset($sourceItems[$key]);
-            }
-        }
-
-        $this->sourceItemsConfigurationProcessor->process($sku, $sourceItems);
     }
 }

@@ -26,10 +26,16 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
      */
     public function testHiddenFieldPresentInMultiSelect()
     {
-        $this->_model->setDisabled(true);
+        $fieldName = 'fieldName';
+        $fieldId = 'fieldId';
         $this->_model->setCanBeEmpty(true);
+        $this->_model->setName($fieldName);
+        $this->_model->setId($fieldId);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('<input type="hidden"', $elementHtml);
+        $this->assertContains(
+            '<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"',
+            $elementHtml
+        );
     }
 
     /**

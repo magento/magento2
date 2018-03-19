@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\InventoryShipping\Block\Adminhtml\Shipment\AlgorithmSelectionButton" name="adminhtml.new.shipment.algorithm.selection.button" template="Magento_InventoryShipping::shipment/button_script.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="default" template="Magento_InventoryShipping::shipment/items/default.phtml"/>
+    </body>
+</page>
