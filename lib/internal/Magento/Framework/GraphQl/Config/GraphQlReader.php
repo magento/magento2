@@ -9,8 +9,9 @@ namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeReader;
+use Magento\Framework\Config\ReaderInterface;
 
-class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
+class GraphQlReader implements ReaderInterface
 {
     /**
      * File locator
@@ -104,8 +105,11 @@ class GraphQlReader implements \Magento\Framework\Config\ReaderInterface
         $typeNamePattern = '[_A-Za-z][_0-9A-Za-z]*';
         $typeDefinitionPattern = '.*\{[^\}]*\}';
         $spacePattern = '[\s\t\n\r]*';
+        $annotationsPattern = '(@.*[\s\t\n\r]*){0,}';
+
         preg_match_all(
-            "/{$typeKindsPattern}{$spacePattern}({$typeNamePattern}){$spacePattern}{$typeDefinitionPattern}/i",
+            "/{$typeKindsPattern}{$spacePattern}({$typeNamePattern})"
+            . "{$spacePattern}{$annotationsPattern}{$typeDefinitionPattern}/i",
             $graphQlSchemaContent,
             $matches
         );

@@ -487,8 +487,8 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
 
 type Products {
     items: [ProductInterface]
-    page_info: SearchResultPageInfo
-    total_count: Int
+    page_info: SearchResultPageInfo @doc(text: "An object that includes the `page_info` and `cu..")
+    total_count: Int @doc(text: "The number of products returned.")
 }
 
 
@@ -532,7 +532,7 @@ input ProductFilterInput {
     or: ProductFilterInput
 }
 
-type ProductMediaGalleryEntriesContent {
+type ProductMediaGalleryEntriesContent @doc(text: "The number of products returned.") {
     base64_encoded_data: String
     type: String
     name: String
@@ -586,7 +586,9 @@ input ProductSortInput {
     gift_message_available: SortEnum
 }
 
-type MediaGalleryEntry {
+type MediaGalleryEntry
+@doc(description: "The number of products returned.")
+{
     id: Int
     media_type: String
     label: String
