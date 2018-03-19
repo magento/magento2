@@ -281,10 +281,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($duplicateBlockMock);
 
         $duplicateBlockMock->expects($this->atLeastOnce())
-            ->method('setData')
-            ->willReturnSelf();
-
-        $duplicateBlockMock->expects($this->atLeastOnce())
             ->method('setId')
             ->with(null)
             ->willReturnSelf();

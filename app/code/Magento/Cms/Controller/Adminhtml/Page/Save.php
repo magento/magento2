@@ -11,9 +11,6 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -117,7 +114,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 if ($redirectBack === 'duplicate') {
-                    $newPage = $this->pageFactory->create()->setData($data);
+                    $newPage = $this->pageFactory->create(['data' => $data]);
                     $newPage->setId(null);
                     $identifier = $model->getIdentifier() . '-' . uniqid();
                     $newPage->setIdentifier($identifier);
