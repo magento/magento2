@@ -44,4 +44,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Model\UrlInput\LinksProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Ui\Model\UrlInput\DefaultLink</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
