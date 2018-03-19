@@ -28,7 +28,7 @@ class AssertChangePasswordFailMessage extends AbstractConstraint
      */
     public function processAssert(CustomerAccountEdit $customerAccountEdit)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::FAIL_MESSAGE,
             $customerAccountEdit->getMessages()->getErrorMessage()
         );

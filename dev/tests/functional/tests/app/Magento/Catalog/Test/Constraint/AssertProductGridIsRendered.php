@@ -21,7 +21,7 @@ class AssertProductGridIsRendered extends \Magento\Mtf\Constraint\AbstractConstr
         \Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex $catalogProductIndex
     ) {
         $productId = $catalogProductIndex->open()->getProductGrid()->getFirstItemId();
-        \PHPUnit_Framework_Assert::assertNotNull(
+        \PHPUnit\Framework\Assert::assertNotNull(
             $productId,
             'Product grid is not rendered correctly.'
         );

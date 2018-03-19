@@ -4220,5 +4220,15 @@ return [
     ['Magento\Framework\MessageQueue\Config\Reader', 'Magento\Framework\MessageQueue\Config\Reader\Xml'],
     ['Magento\Framework\MessageQueue\PublisherFactory'],
     ['Magento\Framework\MessageQueue\PublisherProxy'],
+    ['Magento\Search\Block\SearchData', 'Magento\AdvancedSearch\Block\SearchData'],
+    ['Magento\Search\Block\Recommendations', 'Magento\AdvancedSearch\Block\Recommendations'],
+    ['Magento\Search\Block\SearchDataInterface', 'Magento\AdvancedSearch\Block\SearchDataInterface'],
+    ['Magento\Search\Block\Suggestions', 'Magento\AdvancedSearch\Block\Suggestions'],
+    ['Magento\Search\Model\SearchDataProvider', 'Magento\AdvancedSearch\Model\SearchDataProvider'],
+    ['Magento\Search\Model\SearchDataProviderInterface', 'Magento\AdvancedSearch\Model\SearchDataProviderInterface'],
+    [
+        'Magento\Elasticsearch\Test\Unit\Model\SearchAdapter\ConnectionManagerTest',
+        'Magento\Elasticsearch\Test\Unit\SearchAdapter\ConnectionManagerTest'
+    ],
     ['Zend_Feed', 'Zend\Feed'],
 ];
