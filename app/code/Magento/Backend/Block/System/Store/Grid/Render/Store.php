@@ -28,6 +28,6 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         '">' .
         $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />' .
-        '(Code: ' . $row->getStoreCode() . ')';
+        '(' . __('Code') . ': ' . $row->getStoreCode() . ')';
     }
 }
