@@ -83,7 +83,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
         foreach ($sourceItems as $key => $sourceItem) {
             if (!isset($sourceItem[SourceItemInterface::STATUS])) {
                 $sourceItems[$key][SourceItemInterface::STATUS] =
-                    $sourceItems[$key][SourceItemInterface::QUANTITY] ? 1 : 0;
+                    $sourceItems[$key][SourceItemInterface::QUANTITY] > 0 ? 1 : 0;
             }
         }
 
