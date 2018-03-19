@@ -13,7 +13,7 @@
             <stories value="B2C admin - MAGETWO-75412"/>
             <group value="e2e"/>
             <!--Skipped; see MAGETWO-88963-->
-            <group value="skip"/>
+            <!-- <group value="skip"/> -->
             <title value="Pass End to End B2C Admin scenario"/>
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>

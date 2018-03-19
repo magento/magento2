@@ -22,7 +22,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84373"/>
             <!--Skip because of issue MAGETWO-88266-->
-            <group value="skip"/>
+            <!-- <group value="skip"/> -->
         </annotations>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
         <waitForPageLoad stepKey="wait1"/>
