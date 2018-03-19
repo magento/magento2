@@ -53,7 +53,7 @@
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad  stepKey="wait4"/>
         <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" stepKey="assertMediaDescription"/>
-        <seeElementInDOM selector="{{StorefrontCMSPageSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
+        <seeElementInDOM selector="{{StorefrontCMSPageSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

@@ -51,7 +51,7 @@
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
-        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
