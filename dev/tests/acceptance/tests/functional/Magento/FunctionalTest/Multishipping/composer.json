@@ -33,7 +33,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/Multishipping"
+                "tests/functional/Magento/FunctionalTest/Multishipping"
             ]
         ]
     }

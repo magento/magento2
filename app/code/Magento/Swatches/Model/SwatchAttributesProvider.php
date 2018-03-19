@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Model;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use \Magento\Swatches\Helper\Data as SwatchesHelper;
+use Magento\Swatches\Helper\Data as SwatchesHelper;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -37,20 +39,29 @@ class SwatchAttributesProvider
     private $attributesPerProduct;
 
     /**
+     * @var SwatchAttributeType
+     */
+    private $swatchTypeChecker;
+
+    /**
      * SwatchAttributesProvider constructor.
      *
      * @param Configurable         $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
      * @param SwatchesHelper|null    $swatchHelper
+     * @param SwatchAttributeType|null $swatchTypeChecker
      */
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        SwatchesHelper $swatchHelper = null
+        SwatchesHelper $swatchHelper = null,
+        SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
         $this->swatchesHelper = $swatchHelper ?: ObjectManager::getInstance()->create(SwatchesHelper::class);
+        $this->swatchTypeChecker = $swatchTypeChecker
+            ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
     }
 
     /**
@@ -71,10 +82,13 @@ class SwatchAttributesProvider
 
             $swatchAttributes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
-                if ($this->hasSwatchAttribute($configurableAttribute->getProductAttribute())) {
-                    if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
-                        $swatchAttributes[$configurableAttribute->getAttributeId()]
-                            = $configurableAttribute->getProductAttribute();
+                if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
+                    /** @var AbstractAttribute $productAttribute */
+                    $productAttribute = $configurableAttribute->getProductAttribute();
+                    if ($productAttribute !== null
+                        && $this->swatchTypeChecker->isSwatchAttribute($productAttribute)
+                    ) {
+                        $swatchAttributes[$configurableAttribute->getAttributeId()] = $productAttribute;
                     }
                 }
             }

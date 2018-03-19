@@ -71,6 +71,13 @@ class Engine implements EngineInterface
     }
 
     /**
+     * Is attribute filterable as term cache
+     *
+     * @var array
+     */
+    private $termFilterableAttributeAttributeCache = [];
+
+    /**
      * Is Attribute Filterable as Term
      *
      * @param \Magento\Catalog\Model\Entity\Attribute $attribute
@@ -78,10 +85,16 @@ class Engine implements EngineInterface
      */
     private function isTermFilterableAttribute($attribute)
     {
-        return ($attribute->getIsVisibleInAdvancedSearch()
-            || $attribute->getIsFilterable()
-            || $attribute->getIsFilterableInSearch())
-        && in_array($attribute->getFrontendInput(), ['select', 'multiselect']);
+        $attributeId = $attribute->getAttributeId();
+        if (!isset($this->termFilterableAttributeAttributeCache[$attributeId])) {
+            $this->termFilterableAttributeAttributeCache[$attributeId] =
+                in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+                && ($attribute->getIsVisibleInAdvancedSearch()
+                    || $attribute->getIsFilterable()
+                    || $attribute->getIsFilterableInSearch());
+        }
+
+        return $this->termFilterableAttributeAttributeCache[$attributeId];
     }
 
     /**

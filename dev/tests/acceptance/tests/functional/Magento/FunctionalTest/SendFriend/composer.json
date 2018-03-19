@@ -28,7 +28,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/SendFriend"
+                "tests/functional/Magento/FunctionalTest/SendFriend"
             ]
         ]
     }

@@ -12,6 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Provide tests for ProductRepository model.
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,11 +26,27 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->productRepository = Bootstrap::getObjectManager()
+            ->get(ProductRepositoryInterface::class);
+        $this->productResource = Bootstrap::getObjectManager()
+            ->get(ProductResource::class);
+    }
+
+    /**
+     * @return Product
+     */
+    private function createProduct(): Product
+    {
+        return Bootstrap::getObjectManager()->create(Product::class);
     }
 
     /**
@@ -39,14 +58,90 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testUpdateProductSku()
     {
         $newSku = 'simple-edited';
-        $productId = Bootstrap::getObjectManager()->get(ProductResource::class)->getIdBySku('simple');
-        $initialProduct = Bootstrap::getObjectManager()->create(Product::class)->load($productId);
+        $productId = $this->productResource->getIdBySku('simple');
+        $initialProduct = $this->createProduct()->load($productId);
 
         $initialProduct->setSku($newSku);
         $this->productRepository->save($initialProduct);
 
-        $updatedProduct = Bootstrap::getObjectManager()->create(Product::class);
+        $updatedProduct = $this->createProduct();
         $updatedProduct->load($productId);
         self::assertSame($newSku, $updatedProduct->getSku());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @dataProvider provideAttributesForUpdate
+     * @param string $code
+     * @param mixed $newValue
+     * @param mixed $expected
+     * @return void
+     * @throws
+     */
+    public function testUpdateAttributes(string $code, $newValue, $expected)
+    {
+        $productId = $this->productResource->getIdBySku('simple_ms_1');
+        $product = $this->createProduct()->load($productId);
+        $product->setData($code, $newValue);
+
+        $this->productRepository->save($product);
+
+        $product = $this->createProduct()->load($productId);
+        $this->assertEquals($expected, $product->getData($code));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideAttributesForUpdate(): array
+    {
+        return [
+            ['description', 'New description', 'New description'],
+            [
+                'multiselect_attribute',
+                ['option_1', 'option_4'],
+                'option_1,option_4'
+            ]
+        ];
+    }
+
+    /**
+     * Check Product Repository able to correctly create product without specified type.
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testCreateWithoutSpecifiedType()
+    {
+        /** @var Product $product */
+        $product = Bootstrap::getObjectManager()->get(ProductFactory::class)->create();
+        $product->setName('Simple without specified type');
+        $product->setSku('simple_without_specified_type');
+        $product->setPrice(1.12);
+        $product->setWeight(1.23);
+        $product->setAttributeSetId(4);
+        $product = $this->productRepository->save($product);
+
+        self::assertSame('1.1200', $product->getPrice());
+        self::assertSame('1.2300', $product->getWeight());
+        self::assertSame('simple', $product->getTypeId());
+    }
+
+    /**
+     * Tests product repository update should use provided store code.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductUpdate()
+    {
+        $sku = 'simple';
+        $nameUpdated = 'updated';
+        $product = $this->productRepository->get($sku, false, 0);
+        $product->setName($nameUpdated);
+        $this->productRepository->save($product);
+        $product = $this->productRepository->get($sku, false, 0);
+        self::assertEquals(
+            $nameUpdated,
+            $product->getName()
+        );
     }
 }

@@ -124,4 +124,65 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
         $this->assertEquals(5, $tierPrices[2]->getValue());
     }
+
+    /**
+     * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
+     *
+     * @dataProvider addAttributeToSortDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
+     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
+     * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
+     */
+    public function testAddAttributeToSort(string $productSku, string $order)
+    {
+        /** @var Collection $productCollection */
+        $this->collection->addAttributeToSort('is_saleable', $order);
+        self::assertEquals(2, $this->collection->count());
+        self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
+    }
+
+    /**
+     * Provide test data for testAddAttributeToSort().
+     *
+     * @return array
+     */
+    public function addAttributeToSortDataProvider()
+    {
+        return [
+            [
+                'product_sku' => 'simple_saleable',
+                'order' => Collection::SORT_ORDER_DESC,
+            ],
+            [
+                'product_sku' => 'simple_not_saleable',
+                'order' => Collection::SORT_ORDER_ASC,
+            ]
+        ];
+    }
+
+    /**
+     * Checks a case if table for join specified as an array.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testJoinTable()
+    {
+        $this->collection->joinTable(
+            ['alias' => 'url_rewrite'],
+            'entity_id = entity_id',
+            ['request_path'],
+            '{{table}}.entity_type = \'product\'',
+            'left'
+        );
+        $sql = (string) $this->collection->getSelect();
+        $productTable = $this->collection->getTable('catalog_product_entity');
+        $urlRewriteTable = $this->collection->getTable('url_rewrite');
+
+        $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
+            . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
+            . ' AND (alias.entity_type = \'product\')';
+
+        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
 }
