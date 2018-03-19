@@ -29,7 +29,7 @@ class AssertBillingAddressSameAsShippingCheckbox extends AbstractConstraint
             ->getBillingBlock()
             ->getSameAsShippingCheckboxValue();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $billingCheckboxState,
             $actualResult,
             '"Same as Shipping" checkbox has wrong value'

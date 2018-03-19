@@ -105,7 +105,7 @@ class AssertCustomVariableInPage extends AbstractConstraint
      */
     protected function checkVariable($htmlValue, $pageContent)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $htmlValue,
             $pageContent,
             'Wrong content is displayed on frontend page'

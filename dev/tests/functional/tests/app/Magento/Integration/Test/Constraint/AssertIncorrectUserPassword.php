@@ -27,7 +27,7 @@ class AssertIncorrectUserPassword extends AbstractConstraint
         IntegrationIndex $integrationIndexPage
     ) {
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::ERROR_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'
