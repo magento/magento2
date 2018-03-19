@@ -92,11 +92,11 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
-                if ($redirect == 'continue') {
+                if ($redirect ==='continue') {
                     return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
-                } else if ($redirect == 'close') {
+                } else if ($redirect === 'close') {
                     return $resultRedirect->setPath('*/*/');
-                } else if ($redirect == 'duplicate') {
+                } else if ($redirect === 'duplicate') {
                     $duplicateModel = $this->blockFactory->create(['data' => $data]);
                     $duplicateModel->setId(null);
                     $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());

@@ -30,7 +30,10 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
                                 'targetName' => 'cms_page_form.cms_page_form',
                                 'actionName' => 'save',
                                 'params' => [
-                                    false
+                                    true,
+                                    [
+                                        'back' => 'continue'
+                                    ]
                                 ]
                             ]
                         ]
@@ -84,7 +87,10 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
                                     'targetName' => 'cms_page_form.cms_page_form',
                                     'actionName' => 'save',
                                     'params' => [
-                                        true
+                                        true,
+                                        [
+                                            'back' => 'close'
+                                        ]
                                     ]
                                 ]
                             ]

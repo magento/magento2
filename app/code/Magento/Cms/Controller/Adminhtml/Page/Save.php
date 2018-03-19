@@ -68,13 +68,11 @@ class Save extends \Magento\Backend\App\Action
      * Save action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        $redirectBack = $this->getRequest()->getParam('back', false);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
@@ -113,29 +111,8 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
-                if ($redirectBack === 'duplicate') {
-                    $newPage = $this->pageFactory->create(['data' => $data]);
-                    $newPage->setId(null);
-                    $identifier = $model->getIdentifier() . '-' . uniqid();
-                    $newPage->setIdentifier($identifier);
-                    $newPage->setIsActive(false);
-                    $this->pageRepository->save($newPage);
-                    $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
-                }
                 $this->dataPersistor->clear('cms_page');
-                if ($redirectBack === 'duplicate' && isset($newPage)) {
-                    return $resultRedirect->setPath(
-                        '*/*/edit',
-                        [
-                            'page_id' => $newPage->getId(),
-                            '_current' => true
-                        ]
-                    );
-                }
-                if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-                }
-                return $resultRedirect->setPath('*/*/');
+                return $this->processPageReturn($model, $data, $resultRedirect);
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
             } catch (\Exception $e) {
@@ -146,5 +123,36 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Process and set the page return
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    private function processPageReturn($model, $data, $resultRedirect)
+    {
+        $redirect = $data['back'];
+        if ($redirect === 'duplicate') {
+            $newPage = $this->pageFactory->create(['data' => $data]);
+            $newPage->setId(null);
+            $identifier = $newPage->getIdentifier() . '-' . uniqid();
+            $newPage->setIdentifier($identifier);
+            $newPage->setIsActive(false);
+            $this->pageRepository->save($newPage);
+            $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
+            $resultRedirect->setPath(
+                '*/*/edit',
+                [
+                    'page_id' => $newPage->getId(),
+                    '_current' => true
+                ]
+            );
+        } else if ($redirect === 'continue') {
+            $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
+        } else if ($redirect === 'close') {
+            $resultRedirect->setPath('*/*/');
+        }
+        return $resultRedirect;
     }
 }
