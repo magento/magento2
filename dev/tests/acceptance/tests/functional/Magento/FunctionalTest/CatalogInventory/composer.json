@@ -32,7 +32,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/CatalogInventory"
+                "tests/functional/Magento/FunctionalTest/CatalogInventory"
             ]
         ]
     }

@@ -1135,15 +1135,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [
-            self::CACHE_TAG . '_' . $this->getId(),
-        ];
-        if (!$this->getId() || $this->hasDataChanges()
-            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
-        ) {
-            $identities[] = self::CACHE_TAG;
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+        $identities = [];
+        if ($this->getId()) {
+            $identities[] = self::CACHE_TAG . '_' . $this->getId();
+
+            if ($this->hasDataChanges() || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)) {
+                $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
+            }
+            
+            if ($this->isObjectNew()) {
+                $identities[] = self::CACHE_TAG;
+            }
         }
+
         return $identities;
     }
 

@@ -28,7 +28,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/Directory"
+                "tests/functional/Magento/FunctionalTest/Directory"
             ]
         ]
     }

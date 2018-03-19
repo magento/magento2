@@ -126,4 +126,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface" type="Magento\CatalogRule\Model\Indexer\IndexerTableSwapper" />
 </config>

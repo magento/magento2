@@ -6,11 +6,11 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontMiniCartSection">
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="show" type="button" selector="a.showcart"/>
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout"/>
     </section>
-</config>
+</sections>

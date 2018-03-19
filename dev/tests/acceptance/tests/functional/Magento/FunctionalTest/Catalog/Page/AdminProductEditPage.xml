@@ -6,11 +6,11 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminProductEditPage" url="admin/catalog/product/new" module="Magento_Catalog">
+    <page name="AdminProductEditPage" url="catalog/product/new/set/4/type/simple/" area="admin" module="Magento_Catalog">
         <section name="AdminProductFormSection"/>
         <section name="AdminProductFormActionSection"/>
         <section name="AdminMessagesSection"/>
     </page>
-</config>
+</pages>

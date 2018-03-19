@@ -28,7 +28,7 @@ Shipments,Shipments
 "Cannot add tracking number.","Cannot add tracking number."
 "You created the shipping label.","You created the shipping label."
 "An error occurred while creating shipping label.","An error occurred while creating shipping label."
-"You sent the shipment.","You sent the shipment."
+"An email confirming the order is underway has been sent to the customer.","An email confirming the order is underway has been sent to the customer."
 "Cannot send shipment information.","Cannot send shipment information."
 "There are no shipping labels related to selected orders.","There are no shipping labels related to selected orders."
 "New Shipment","New Shipment"

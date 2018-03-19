@@ -23,7 +23,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/RequireJs"
+                "tests/functional/Magento/FunctionalTest/RequireJs"
             ]
         ]
     }
