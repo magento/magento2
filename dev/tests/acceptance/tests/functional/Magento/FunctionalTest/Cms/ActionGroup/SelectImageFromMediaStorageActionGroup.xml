@@ -27,8 +27,6 @@
         <waitForElementVisible selector="{{MediaGallerySection.FolderName}}" stepKey="waitForPopUp" />
         <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName" />
         <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName" />
-        <wait time="2" stepKey="waitForModalToTransitionOffScreenAndUnloadItself" />
-        <executeJS function="jQuery('{{MediaGallerySection.AcceptFolderName}}').click()" stepKey="clickMediaGalleryOKButtonProgrammaticallyWithJQuery"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
         <waitForPageLoad stepKey="waitForLoadingArrowToExpand" time="15" />
         <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
