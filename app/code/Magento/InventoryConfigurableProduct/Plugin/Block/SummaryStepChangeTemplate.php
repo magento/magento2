@@ -10,6 +10,9 @@ namespace Magento\InventoryConfigurableProduct\Plugin\Block;
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 
+/**
+ * Change template if not single store mode.
+ */
 class SummaryStepChangeTemplate
 {
     /**
@@ -18,12 +21,20 @@ class SummaryStepChangeTemplate
     private $isSingleSourceMode;
 
     /**
+     * @var string
+     */
+    private $multiSourceTemplate;
+
+    /**
      * @param IsSingleSourceModeInterface $isSingleSourceMode
+     * @param string $multiSourceTemplate
      */
     public function __construct(
-        IsSingleSourceModeInterface $isSingleSourceMode
+        IsSingleSourceModeInterface $isSingleSourceMode,
+        string $multiSourceTemplate
     ) {
         $this->isSingleSourceMode = $isSingleSourceMode;
+        $this->multiSourceTemplate = $multiSourceTemplate;
     }
 
     /**
@@ -36,7 +47,7 @@ class SummaryStepChangeTemplate
     public function beforeSetTemplate(Summary $bulk, string $template)
     {
         if ($this->isSingleSourceMode->execute() === false) {
-            $template = 'Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml';
+            $template = $this->multiSourceTemplate;
         }
 
         return $template;

@@ -17,8 +17,18 @@
         <plugin name="adapt_configurable_wizard_bulk_block_to_msi"
                 type="Magento\InventoryConfigurableProduct\Plugin\Block\BulkStepChangeTemplate"/>
     </type>
+    <type name="Magento\InventoryConfigurableProduct\Plugin\Block\BulkStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml</argument>
+        </arguments>
+    </type>
     <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary">
         <plugin name="adapt_configurable_wizard_summary_block_to_msi"
                 type="Magento\InventoryConfigurableProduct\Plugin\Block\SummaryStepChangeTemplate"/>
+    </type>
+    <type name="Magento\InventoryConfigurableProduct\Plugin\Block\SummaryStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml</argument>
+        </arguments>
     </type>
 </config>
