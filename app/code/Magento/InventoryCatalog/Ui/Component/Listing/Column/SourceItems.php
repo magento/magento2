@@ -74,7 +74,7 @@ class SourceItems extends Column
     {
         if ($dataSource['data']['totalRecords'] > 0 && $this->isSingleSourceMode->execute() === false) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['qty'] = $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
+                $row['quantity_per_source'] = $this->isSourceItemsAllowedForProductType->execute($row['type_id']) === true
                     ? $this->getSourceItemsData($row['sku'])
                     : [];
             }
