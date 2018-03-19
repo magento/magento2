@@ -28,7 +28,7 @@ class AssertRecentStatisticsUpdatedMessage extends AbstractConstraint
     public function processAssert(Statistics $reportStatistics)
     {
         $successMessage = $reportStatistics->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::RECENT_STATISTICS_UPDATED_MESSAGE,
             $successMessage,
             'Wrong success message is displayed.'

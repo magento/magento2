@@ -92,10 +92,11 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
      * Cover getFile when mode is default
      * @param string $mode
      * @param integer $onDemandInProduction
+     * @param integer $forceMinification
      * @param string $method
      * @dataProvider getMinifiedDataProvider
      */
-    public function testGetFileWhenModifiedNeeded($mode, $onDemandInProduction, $method)
+    public function testGetFileWhenModifiedNeeded($mode, $onDemandInProduction, $forceMinification, $method)
     {
         $this->assetConfig
             ->expects($this->once())
@@ -108,8 +109,10 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
 
         $this->deploymentConfigMock->expects($this->any())
             ->method('getConfigData')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
-            ->willReturn($onDemandInProduction);
+            ->willReturnMap([
+                [ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION, $onDemandInProduction],
+                [ConfigOptionsListConstants::CONFIG_PATH_FORCE_HTML_MINIFICATION, $forceMinification],
+            ]);
         $this->state->expects($this->once())
             ->method('getMode')
             ->willReturn($mode);
@@ -156,10 +159,11 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     public function getMinifiedDataProvider()
     {
         return [
-            'default with on demand' => [State::MODE_DEFAULT, 1, 'getMinified'],
-            'default without on demand' => [State::MODE_DEFAULT, 0, 'getMinified'],
-            'production with on demand' => [State::MODE_PRODUCTION, 1, 'getMinified'],
-            'production without on demand' => [State::MODE_PRODUCTION, 0, 'getPathToMinified'],
+            'default with on demand' => [State::MODE_DEFAULT, 1, 1, 'getMinified'],
+            'default without on demand' => [State::MODE_DEFAULT, 0, 0, 'getMinified'],
+            'production with on demand' => [State::MODE_PRODUCTION, 1, 0, 'getMinified'],
+            'production without on demand' => [State::MODE_PRODUCTION, 0, 0, 'getPathToMinified'],
+            'production without on demand with minified' => [State::MODE_PRODUCTION, 0, 1, 'getMinified'],
         ];
     }
 }
