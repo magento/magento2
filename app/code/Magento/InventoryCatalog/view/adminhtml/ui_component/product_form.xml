@@ -112,7 +112,7 @@
                 </field>
                 <field name="source_status" formElement="input" sortOrder="30">
                     <settings>
-                        <elementTmpl>Magento_InventoryCatalog/components/cell-status</elementTmpl>
+                        <elementTmpl>Magento_InventoryCatalog/product/form/cell-status</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_status</dataScope>
                         <label translate="true">Source Status</label>

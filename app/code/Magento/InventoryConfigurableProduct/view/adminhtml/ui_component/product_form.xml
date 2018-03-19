@@ -60,13 +60,14 @@
         <component name="sources_visibility_checker" component="Magento_InventoryConfigurableProduct/js/components/sources-visibility-checker">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="formElement" xsi:type="string">container</item>
                     <item name="sourcesIndex" xsi:type="string">sources</item>
-                    <item name="listens" xsi:type="array">
-                        <item name="${$.namespace}.${$.namespace}.configurable.configurable-matrix:visible" xsi:type="string">applySourcesConfiguration</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <listens>
+                    <link name="${$.namespace}.${$.namespace}.configurable.configurable-matrix:visible">applySourcesConfiguration</link>
+                </listens>
+            </settings>
         </component>
     </modal>
 </form>

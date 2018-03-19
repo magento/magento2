@@ -4,9 +4,10 @@
  */
 
 define([
+    'underscore',
     'uiRegistry',
     'uiComponent'
-], function (registry, component) {
+], function (_, registry, component) {
     'use strict';
 
     return component.extend({
@@ -18,7 +19,10 @@ define([
          * Hide source tab if convert product to configurable and show it if to simple.
          */
         applySourcesConfiguration: function (visibleMatrix) {
-            registry.get('index = ' + this.sourcesIndex).visible(!visibleMatrix);
+            var source = registry.get('index = ' + this.sourcesIndex);
+            if (!_.isUndefined(source)) {
+                source.visible(!visibleMatrix);
+            }
         }
     });
 });
