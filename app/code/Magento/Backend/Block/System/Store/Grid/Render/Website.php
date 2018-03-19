@@ -25,6 +25,6 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
         '">' .
         $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />' .
-        '(Code: ' . $row->getCode() . ')';
+        '(' . __('Code') . ': ' . $row->getCode() . ')';
     }
 }
