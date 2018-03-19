@@ -170,7 +170,10 @@ class ProductGenerator
                 ],
             ],
         ];
-        if (count($fixtureMap['website_ids'](1, 0)) === 1) {
+        if (
+            !is_array($fixtureMap['website_ids'](1, 0)) ||
+            count($fixtureMap['website_ids'](1, 0)) === 1
+        ) {
             // Get website id from fixture in case when one site is assigned per product
             $customTableMap['catalog_product_website'] = [
                 'fields' => [

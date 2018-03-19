@@ -177,7 +177,7 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        $colStops = null;
+        $colStops = [];
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
@@ -205,7 +205,7 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        $colBrakes = []
+        array $colBrakes = []
     ) {
         $html = '';
 

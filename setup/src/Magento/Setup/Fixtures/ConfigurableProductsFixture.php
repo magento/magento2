@@ -722,6 +722,8 @@ class ConfigurableProductsFixture extends Fixture
         if ($searchTerms !== null) {
             $searchTerms = array_key_exists(0, $searchTerms['search_term'])
                 ? $searchTerms['search_term'] : [$searchTerms['search_term']];
+        } else {
+            $searchTerms = [];
         }
         return $searchTerms;
     }
@@ -845,7 +847,7 @@ class ConfigurableProductsFixture extends Fixture
             $minAmountOfWordsDescription,
             $descriptionPrefix
         ) {
-            $count = $searchTerms === null
+            $count = !$searchTerms
                 ? 0
                 : round(
                     $searchTerms[$index % count($searchTerms)]['count'] * (
