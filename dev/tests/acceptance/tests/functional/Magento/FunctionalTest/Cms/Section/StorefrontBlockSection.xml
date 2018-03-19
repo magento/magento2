@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontBlockSection">
         <element name="mediaDescription" type="text" selector=".widget.block.block-static-block>p>img"/>
+        <element name="ImageSource" type="text" selector="//img[contains(@src,'{{var1}}') and not(contains(@src,'{{var2}}/'))]" parameterized="true"/>
     </section>
 </sections>

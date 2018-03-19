@@ -16,6 +16,7 @@
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
@@ -66,6 +67,11 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGrid" />
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.enabledFilters}}" visible="true" stepKey="clearAllExistingFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterFilterIsCleared"/>
+        <fillField selector="{{AdminProductGridFilterSection.basicSearchFilter}}" userInput="{{_defaultProduct.name}}" stepKey="addSearchFilterForTestProduct"/>
+        <click selector="{{AdminProductGridFilterSection.basicSearchFilterButton}}" stepKey="clickOnBasicSearchFilterButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="waitForPageLoad11"/>

@@ -16,6 +16,8 @@
             <description value="Admin should be able to add image to WYSIWYG content of CMS Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85825"/>
+            <!--Skip because of issue MAGETWO-88266-->
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -35,12 +37,12 @@
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="attachImage" stepKey="attachImage1">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="deleteImage" stepKey="deleteImage"/>
 
         <actionGroup ref="attachImage" stepKey="attachImage2">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
         <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
@@ -51,6 +53,7 @@
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad  stepKey="wait4"/>
         <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCMSPageSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>

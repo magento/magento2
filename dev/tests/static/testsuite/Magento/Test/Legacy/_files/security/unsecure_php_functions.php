@@ -39,7 +39,32 @@ return [
     ],
     'md5' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            /*
+             * Usage of md5 in MessageQueue key generation algorithm
+             * added to exclude list to avoid backward incompatible changes
+             */
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'MessageQueue/Rpc/Publisher.php',
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'MessageQueue/MessageController.php',
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'MessageQueue/Publisher.php',
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_AsynchronousOperations',
+                'path' => 'Model/ResourceModel/System/Message/Collection/Synchronized/Plugin.php'
+            ]
+        ]
     ],
     'srand' => [
         'replacement' => '',
