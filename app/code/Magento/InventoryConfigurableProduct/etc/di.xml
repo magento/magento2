@@ -13,7 +13,6 @@
         </arguments>
     </type>
     <preference for="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" type="Magento\InventoryConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk"/>
-
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
             <argument name="baseSelectProcessors" xsi:type="array">
