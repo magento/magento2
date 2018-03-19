@@ -111,6 +111,30 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Load subscriber from DB by email and storeId
+     *
+     * @param string $subscriberEmail
+     * @param int $storeId
+     * @return array
+     */
+    public function loadByEmailAndStore($subscriberEmail, $storeId)
+    {
+        $select = $this->connection->select()
+            ->from($this->getMainTable())
+            ->where('subscriber_email=:subscriber_email')
+            ->where('store_id=:store_Id');
+
+        $result = $this->connection
+            ->fetchRow($select, ['subscriber_email' => $subscriberEmail, 'store_Id' => $storeId]);
+
+        if (!$result) {
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
      * Load subscriber by customer
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
@@ -147,6 +171,52 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     'subscriber_email' => $customer->getEmail(),
                     'store_id' => $customer->getStoreId()
+                ]
+            );
+
+        if ($result) {
+            return $result;
+        }
+
+        return [];
+    }
+
+    /**
+     * Load subscriber by customer
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @return array
+     */
+    public function loadByCustomerDataAndStore(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    {
+        $select = $this->connection
+            ->select()->from($this->getMainTable())
+            ->where('customer_id=:customer_id and store_id=:store_id');
+
+        $result = $this->connection
+            ->fetchRow(
+                $select,
+                [
+                    'customer_id' => $customer->getId(),
+                    'store_id' => $customer->getStoreId()
+                ]
+            );
+
+        if ($result) {
+            return $result;
+        }
+
+        $select = $this->connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('subscriber_email=:subscriber_email and store_id=:store_id');
+
+        $result = $this->connection
+            ->fetchRow(
+                $select,
+                [
+                    'subscriber_email' => $customer->getEmail(),
+                    'store_Id' => $customer->getStoreId()
                 ]
             );
 
