@@ -749,7 +749,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ['entity_id', 'value_id', 'store_id']
         );
 
-        if(!array_key_exists($newIndexName, $existingKeys)) {
+        if (!array_key_exists($newIndexName, $existingKeys)) {
             $entityIdKeyName = $setup->getConnection()->getIndexName(
                 $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
                 ['entity_id']
