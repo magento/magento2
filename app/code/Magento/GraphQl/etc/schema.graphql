@@ -20,7 +20,9 @@ input FilterTypeInput {
     nin: [String]
 }
 
-type SearchResultPageInfo {
+type SearchResultPageInfo
+@doc(description:"Comment for SearchResultPageInfo")
+{
     page_size: Int
     current_page: Int
 }
