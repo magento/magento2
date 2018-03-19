@@ -103,6 +103,9 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         float $qty,
         float $reservedQty
     ) {
+        $this->markTestSkipped(
+            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
+        );
         $quote = $this->getQuote($stockId);
         $this->appendReservation($sku, -$reservedQty, $stockId);
         $product = $this->getProductBySku($sku);
@@ -160,6 +163,9 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         float $qty,
         float $reservedQty
     ) {
+        $this->markTestSkipped(
+            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
+        );
         $quote = $this->getQuote($stockId);
         $this->appendReservation($sku, -$reservedQty, $stockId);
         $product = $this->getProductBySku($sku);

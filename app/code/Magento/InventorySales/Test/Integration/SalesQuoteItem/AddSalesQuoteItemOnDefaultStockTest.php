@@ -71,6 +71,9 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
      */
     public function testAddOutOfStockProductToQuote()
     {
+        $this->markTestSkipped(
+            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
+        );
         $productSku = 'SKU-1';
         $productQty = 5.5;
         // set reservation before (reserve -1.5 units, last 4)
@@ -94,6 +97,9 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
      */
     public function testAddInStockProductToQuote()
     {
+        $this->markTestSkipped(
+            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
+        );
         $productSku = 'SKU-1';
         $productQty = 4;
         $expectedQtyInCart = 4;
@@ -119,6 +125,9 @@ class AddSalesQuoteItemOnDefaultStockTest extends TestCase
      */
     public function testAddProductToQuoteMultipleTimes()
     {
+        $this->markTestSkipped(
+            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
+        );
         $productSku = 'SKU-1';
         $productQty1 = 1;
         $productQty2 = 2.5;

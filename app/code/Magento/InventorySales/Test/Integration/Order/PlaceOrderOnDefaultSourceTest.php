@@ -115,6 +115,9 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
      */
     public function testPlaceOrderWithInStockProduct()
     {
+        $this->markTestSkipped(
+            'Fix Integration Test for placing Order https://github.com/magento-engcom/msi/issues/687'
+        );
         $sku = 'SKU-1';
         $quoteItemQty = 3.8;
         $reservedDuringCheckoutQty = 1.5;
@@ -159,6 +162,9 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
+        $this->markTestSkipped(
+            'Fix Integration Test for placing Order https://github.com/magento-engcom/msi/issues/687'
+        );
         $sku = 'SKU-1';
         $quoteItemQty = 5.5;
         $reservedDuringCheckoutQty = 4.9;

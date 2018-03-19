@@ -69,6 +69,8 @@ class SuggestQtyPlugin
      * @param \Closure $proceed
      * @param int $productId
      * @param float $qty
+     * @param int|null $scopeId
+     * @return float
      *
      * @return float
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -77,10 +79,10 @@ class SuggestQtyPlugin
         StockStateInterface $subject,
         \Closure $proceed,
         $productId,
-        $qty
+        $qty,
+        $scopeId
     ): float {
         try {
-
             $skus = $this->getSkusByProductIds->execute([$productId]);
             $productSku = $skus[$productId];
 

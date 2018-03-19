@@ -79,9 +79,11 @@ class CheckQuoteItemQtyPlugin
     /**
      * @param StockStateInterface $subject
      * @param \Closure $proceed
-     * @param $productId
-     * @param $itemQty
-     * @param $qtyToCheck
+     * @param int $productId
+     * @param float $itemQty
+     * @param float $qtyToCheck
+     * @param float $origQty
+     * @param int|null $scopeId
      *
      * @return DataObject
      * @throws LocalizedException
@@ -93,7 +95,9 @@ class CheckQuoteItemQtyPlugin
         \Closure $proceed,
         $productId,
         $itemQty,
-        $qtyToCheck
+        $qtyToCheck,
+        $origQty,
+        $scopeId
     ) {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
