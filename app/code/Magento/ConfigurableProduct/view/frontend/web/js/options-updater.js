@@ -1,7 +1,8 @@
 define([
     'jquery',
+    'underscore',
     'Magento_Customer/js/customer-data'
-], function ($, customerData) {
+], function ($, _, customerData) {
     'use strict';
 
     var selectors = {
@@ -23,7 +24,7 @@ define([
         if (!(data && data.items && data.items.length && productId)) {
             return false;
         }
-        changedProductOptions = data.items.find(function (item) {
+        changedProductOptions = _.find(data.items, function (item) {
             return item['product_id'] === productId;
         });
         changedProductOptions = changedProductOptions && changedProductOptions.options &&
