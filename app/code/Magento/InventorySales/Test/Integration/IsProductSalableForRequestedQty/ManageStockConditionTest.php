@@ -5,18 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Test\Integration\IsProductSalable;
+namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
-use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ManageConfigConditionTest extends TestCase
+class ManageStockConditionTest extends TestCase
 {
     /**
-     * @var IsProductSalableInterface
+     * @var IsProductSalableForRequestedQtyInterface
      */
-    private $isProductSalable;
+    private $isProductSalableForRequestedQty;
 
     /**
      * @inheritdoc
@@ -25,7 +25,8 @@ class ManageConfigConditionTest extends TestCase
     {
         parent::setUp();
 
-        $this->isProductSalable = Bootstrap::getObjectManager()->get(IsProductSalableInterface::class);
+        $this->isProductSalableForRequestedQty
+            = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
     }
 
     /**
@@ -44,9 +45,9 @@ class ManageConfigConditionTest extends TestCase
      *
      * @dataProvider executeWithManageStockFalseDataProvider
      */
-    public function testExecuteWithManageStockFalse(string $sku, int $stockId, bool $expectedResult)
+    public function testExecuteWithManageStockFalse(string $sku, int $stockId, float $qty, bool $expectedResult)
     {
-        $isSalable = $this->isProductSalable->execute($sku, $stockId);
+        $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
         self::assertEquals($expectedResult, $isSalable);
     }
 
@@ -56,15 +57,15 @@ class ManageConfigConditionTest extends TestCase
     public function executeWithManageStockFalseDataProvider(): array
     {
         return [
-            ['SKU-1', 10, true],
-            ['SKU-1', 20, false],
-            ['SKU-1', 30, true],
-            ['SKU-2', 10, false],
-            ['SKU-2', 20, true],
-            ['SKU-2', 30, true],
-            ['SKU-3', 10, true],
-            ['SKU-3', 20, false],
-            ['SKU-3', 30, true],
+            ['SKU-1', 10, 1, true],
+            ['SKU-1', 20, 1, false],
+            ['SKU-1', 30, 1, true],
+            ['SKU-2', 10, 1, false],
+            ['SKU-2', 20, 1, true],
+            ['SKU-2', 30, 1, true],
+            ['SKU-3', 10, 1, true],
+            ['SKU-3', 20, 1, false],
+            ['SKU-3', 30, 1, true],
         ];
     }
 }

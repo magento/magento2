@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Model\IsProductSalableCondition;
 use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
  * @inheritdoc
@@ -27,15 +28,23 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
     private $getReservationsQuantity;
 
     /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfiguration;
+
+    /**
      * @param GetStockItemDataInterface $getStockItemData
      * @param GetReservationsQuantityInterface $getReservationsQuantity
+     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      */
     public function __construct(
         GetStockItemDataInterface $getStockItemData,
-        GetReservationsQuantityInterface $getReservationsQuantity
+        GetReservationsQuantityInterface $getReservationsQuantity,
+        GetStockItemConfigurationInterface $getStockItemConfiguration
     ) {
         $this->getStockItemData = $getStockItemData;
         $this->getReservationsQuantity = $getReservationsQuantity;
+        $this->getStockItemConfiguration = $getStockItemConfiguration;
     }
 
     /**
@@ -49,8 +58,11 @@ class IsSalableWithReservationsCondition implements IsProductSalableInterface
             return false;
         }
 
+        /** @var StockItemConfigurationInterface $stockItemConfiguration */
+        $stockItemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
         $qtyWithReservation = $stockItemData[GetStockItemDataInterface::QUANTITY] +
             $this->getReservationsQuantity->execute($sku, $stockId);
-        return (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] && $qtyWithReservation > 0.0001;
+        return (bool)$stockItemData[GetStockItemDataInterface::IS_SALABLE] &&
+            $qtyWithReservation > $stockItemConfiguration->getMinQty();
     }
 }
