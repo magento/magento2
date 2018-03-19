@@ -301,4 +301,5 @@ return [
     'variable'                                    => 'Magento\Variable',
     'variable_value'                              => 'Magento\Variable',
     'job_queue'                                   => 'Magento\Queue',
+    'catalogsearch_recommendations'               => 'Magento\AdvancedSearch',
 ];
