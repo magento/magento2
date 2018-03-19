@@ -81,6 +81,6 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installSchema($input->getOptions());
-        return null;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

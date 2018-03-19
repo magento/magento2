@@ -44,7 +44,7 @@ class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
             $counterMessage = sprintf(self::ITEMS_COUNTER_MASSAGE, $totalItemsCountInShoppingCart);
         }
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $counterMessage,
             $sidebar->getVisibleItemsCounter(),
             'Wrong counter text of visible Cart items in mini shopping cart'

@@ -10,7 +10,7 @@ use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\JsonPersistor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

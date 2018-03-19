@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Model\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

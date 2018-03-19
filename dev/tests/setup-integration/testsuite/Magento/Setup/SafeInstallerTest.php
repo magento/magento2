@@ -7,9 +7,9 @@
 namespace Magento\Setup;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
-use Magento\Setup\Model\Declaration\Schema\Sharding;
+use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
+use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\DescribeTable;
 use Magento\TestFramework\Deploy\TestModuleManager;
@@ -69,7 +69,7 @@ class SafeInstallerTest extends SetupTestCase
         );
         $this->cliCommad->upgrade(
             [
-                '--safe-mode' => true,
+                'safe-mode' => true,
             ]
         );
         //Move new db_schema.xml with restored title field
@@ -81,7 +81,7 @@ class SafeInstallerTest extends SetupTestCase
         );
         $this->cliCommad->upgrade(
             [
-                '--data-restore' => true,
+                'data-restore' => true,
             ]
         );
         $testTableSelect = $adapter->select()->from($testTableName);

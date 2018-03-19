@@ -9,8 +9,8 @@ namespace Magento\Vault\Setup\Patch\Data;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Patch\DataPatchInterface;
-use Magento\Setup\Model\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class SetCreditCardAsDefaultTokenType
