@@ -176,14 +176,14 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/carts/:quoteId/items" method="POST">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+    <route url="/V1/carts/:cartId/items" method="POST">
+        <service class="Magento\Quote\Model\Webapi\SaveCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Model\Webapi\SaveCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
@@ -203,13 +203,13 @@
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/items" method="POST">
-        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Model\Webapi\SaveGuestCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Model\Webapi\SaveGuestCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -232,7 +232,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/items" method="POST">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Model\Webapi\SaveCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -241,7 +241,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Model\Webapi\SaveCartItemWithCartIdInterface" method="saveForCart"/>
         <resources>
             <resource ref="self" />
         </resources>
