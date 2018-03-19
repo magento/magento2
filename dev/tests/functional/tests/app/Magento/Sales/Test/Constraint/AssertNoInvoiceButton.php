@@ -28,7 +28,7 @@ class AssertNoInvoiceButton extends AbstractConstraint
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $salesOrderView->getPageActions()->isActionButtonVisible('Invoice'),
             'Invoice button is present on order view page.'
         );
