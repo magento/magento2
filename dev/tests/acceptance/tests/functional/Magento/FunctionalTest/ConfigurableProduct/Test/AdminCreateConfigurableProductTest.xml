@@ -18,7 +18,8 @@
             <testCaseId value="MAGETWO-26041"/>
             <group value="configurable"/>
             <group value="product"/>
-            <!-- <group value="skip"/> -->
+            <!-- Skipped, see https://jira.corp.magento.com/browse/MQE-889 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>

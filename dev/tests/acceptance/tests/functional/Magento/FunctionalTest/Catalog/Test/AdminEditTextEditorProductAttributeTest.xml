@@ -16,6 +16,8 @@
             <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-85745"/>
+            <!-- Skipped, see https://jira.corp.magento.com/browse/MQE-890 -->
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
