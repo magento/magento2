@@ -56,4 +56,7 @@
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
+    <section name="MediaGallerySection">
+        <element name="CategoryFolderOpen" type="button" selector="//li[@id='Y2F0YWxvZy9jYXRlZ29yeQ--' and contains(@class, 'jstree-open')]"  />
+    </section>
 </sections>
