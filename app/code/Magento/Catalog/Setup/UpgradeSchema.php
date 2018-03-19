@@ -20,19 +20,6 @@ use Magento\Framework\DB\Ddl\Table;
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     */
-    public function __construct(\Magento\Framework\EntityManager\MetadataPool $metadataPool)
-    {
-        $this->metadataPool = $metadataPool;
-    }
-
-    /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -41,6 +28,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addSupportVideoMediaAttributes($setup);
             $this->removeGroupPrice($setup);
@@ -752,17 +740,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addGeneralIndexOnGalleryValueTable(SchemaSetupInterface $setup)
     {
-        $productLinkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
-        
-        $setup->getConnection()->addIndex(
-            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
-            $setup->getConnection()->getIndexName(
-                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
-                ['entity_id', 'value_id', 'store_id']
-            ),
-            [$productLinkField, 'value_id', 'store_id']
+        $existingKeys = $setup->getConnection()->getIndexList(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE)
         );
+
+        $newIndexName = $setup->getConnection()->getIndexName(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+            ['entity_id', 'value_id', 'store_id']
+        );
+
+        if(!array_key_exists($newIndexName, $existingKeys)) {
+            $entityIdKeyName = $setup->getConnection()->getIndexName(
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                ['entity_id']
+            );
+
+            if (array_key_exists($entityIdKeyName, $existingKeys)) {
+                $keyColumns = $existingKeys[$entityIdKeyName]['COLUMNS_LIST'];
+                $linkField = reset($keyColumns);
+
+                $setup->getConnection()->addIndex(
+                    $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                    $newIndexName,
+                    [$linkField, 'value_id', 'store_id']
+                );
+            }
+        }
     }
 }
