@@ -33,7 +33,7 @@ class AssertUserFailedLoginMessage extends AbstractConstraint
         $adminAuth->getLoginBlock()->fill($customAdmin);
         $adminAuth->getLoginBlock()->submit();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::FAILED_LOGIN_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'

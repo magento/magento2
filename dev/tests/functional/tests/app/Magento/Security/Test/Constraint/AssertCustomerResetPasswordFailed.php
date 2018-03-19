@@ -26,7 +26,7 @@ class AssertCustomerResetPasswordFailed extends AbstractConstraint
      */
     public function processAssert(CustomerAccountForgotPassword $customerForgotPassword)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::TOO_MANY_RESET_REQUESTS_MESSAGE,
             $customerForgotPassword->getMessagesBlock()->getErrorMessage(),
             'Wrong customer reset password failed message is displayed.'
