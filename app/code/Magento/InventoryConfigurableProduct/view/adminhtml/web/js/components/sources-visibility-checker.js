@@ -20,6 +20,7 @@ define([
          */
         applySourcesConfiguration: function (visibleMatrix) {
             var source = registry.get('index = ' + this.sourcesIndex);
+
             if (!_.isUndefined(source)) {
                 source.visible(!visibleMatrix);
             }
