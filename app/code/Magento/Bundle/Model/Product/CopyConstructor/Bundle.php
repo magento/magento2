@@ -27,6 +27,17 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
         $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions() ?: [];
         $duplicatedBundleOptions = [];
         foreach ($bundleOptions as $key => $bundleOption) {
+            $productLinks = $bundleOption->getProductLinks();
+            if($productLinks)
+            {
+                foreach ($productLinks as $productLink)
+                {
+                    $productLink->setSelectionId(NULL);
+                    $productLink->setOptionId(NULL);
+                }
+            }
+            $bundleOption->setOptionId(null);
+            $bundleOption->setParentId(null);
             $duplicatedBundleOptions[$key] = clone $bundleOption;
         }
         $duplicate->getExtensionAttributes()->setBundleProductOptions($duplicatedBundleOptions);
