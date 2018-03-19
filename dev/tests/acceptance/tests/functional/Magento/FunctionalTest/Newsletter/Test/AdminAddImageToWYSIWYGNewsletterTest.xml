@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <test name="AdminAddImageToWYSIWYGNewsletter">
+    <test name="AdminAddImageToWYSIWYGNewsletterTest">
         <annotations>
             <features value="MAGETWO-36659-[CMS] WYSIWYG update"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84377"/>
             <!--Skipped because of MAGETWO-88232-->
-            <!-- <group value="skip"/> -->
+            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
