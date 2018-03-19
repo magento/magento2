@@ -382,7 +382,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->getMockForAbstractClass(\Iterator::class));
 
         $dataSourceModel = new \ReflectionProperty(
-            'Magento\CustomerImportExport\Model\Import\Address',
+            \Magento\CustomerImportExport\Model\Import\Address::class,
             '_dataSourceModel'
         );
         $dataSourceModel->setAccessible(true);

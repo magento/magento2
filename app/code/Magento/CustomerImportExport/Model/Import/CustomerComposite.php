@@ -304,7 +304,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             ];
         }
         $source->rewind();
-        $this->_addressEntity->prepareCustomerData(new \ArrayObject($rows));
+        $this->_addressEntity->prepareCustomerData($rows);
 
         return parent::validateData();
     }
