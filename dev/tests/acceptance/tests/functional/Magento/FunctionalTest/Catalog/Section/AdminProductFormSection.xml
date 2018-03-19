@@ -19,6 +19,20 @@
         <element name="contentTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
+        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
+        <element name="save" type="button" selector="#save"/>
+        <element name="attributeTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[text()='Attributes']"/>
+        <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
+        <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
+        <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
+        <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
+    </section>
+    <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
+    </section>
+    <section name="AdminAddRelatedProductsModalSection">
+        <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'product_form_product_form_related_related_modal')]//button/span[contains(text(), 'Add Selected Products')]" timeout="30"/>
     </section>
     <section name="ProductWYSIWYGSection">
         <element name="Switcher" type="button" selector="//select[@id='dropdown-switcher']"/>

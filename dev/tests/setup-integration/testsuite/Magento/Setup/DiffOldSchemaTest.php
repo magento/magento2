@@ -6,9 +6,9 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\Diff\DiffFactory;
-use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
+use Magento\Framework\Setup\Declaration\Schema\Diff\DiffFactory;
+use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
