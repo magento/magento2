@@ -12,9 +12,9 @@ use Magento\Framework\DB\Select;
 class SelectBuilder
 {
     /**
-     * @var BaseSelectProvider
+     * @var ApplyBaseJoins
      */
-    private $baseSelectProvider;
+    private $applyBaseJoins;
 
     /**
      * @var ApplyStatusAttributeCondition
@@ -32,20 +32,18 @@ class SelectBuilder
     private $applyConfigurationCondition;
 
     /**
-     * SelectBuilder constructor.
-     *
-     * @param BaseSelectProvider $baseSelectProvider
+     * @param ApplyBaseJoins $applyBaseJoins
      * @param ApplyStatusAttributeCondition $applyStatusAttributeCondition
      * @param ApplyNameAttributeCondition $applyNameAttributeCondition
      * @param ApplyConfigurationCondition $applyConfigurationCondition
      */
     public function __construct(
-        BaseSelectProvider $baseSelectProvider,
+        ApplyBaseJoins $applyBaseJoins,
         ApplyStatusAttributeCondition $applyStatusAttributeCondition,
         ApplyNameAttributeCondition $applyNameAttributeCondition,
         ApplyConfigurationCondition $applyConfigurationCondition
     ) {
-        $this->baseSelectProvider = $baseSelectProvider;
+        $this->applyBaseJoins = $applyBaseJoins;
         $this->applyStatusAttributeCondition = $applyStatusAttributeCondition;
         $this->applyNameAttributeCondition = $applyNameAttributeCondition;
         $this->applyConfigurationCondition = $applyConfigurationCondition;
@@ -58,8 +56,7 @@ class SelectBuilder
      */
     public function build(Select $select)
     {
-        $this->baseSelectProvider->build($select);
-
+        $this->applyBaseJoins->execute($select);
         $this->applyConfigurationCondition->execute($select);
         $this->applyNameAttributeCondition->execute($select);
         $this->applyStatusAttributeCondition->execute($select);

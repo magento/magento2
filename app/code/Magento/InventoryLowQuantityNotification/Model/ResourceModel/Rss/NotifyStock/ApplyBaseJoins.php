@@ -18,7 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
-class BaseSelectProvider
+class ApplyBaseJoins
 {
     /**
      * @var ResourceConnection
@@ -39,7 +39,7 @@ class BaseSelectProvider
      *
      * @return void
      */
-    public function build(Select $select)
+    public function execute(Select $select)
     {
         $sourceItemConfigurationTable = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION;
         $configurationJoinCondition =

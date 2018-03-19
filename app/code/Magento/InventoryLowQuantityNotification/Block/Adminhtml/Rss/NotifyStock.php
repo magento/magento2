@@ -19,12 +19,12 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     /**
      * @var UrlBuilderInterface
      */
-    protected $rssUrlBuilder;
+    private $rssUrlBuilder;
 
     /**
      * @var GetSourceItemsCollection
      */
-    protected $getSourceItemsCollection;
+    private $getSourceItemsCollection;
 
     /**
      * @param Context $context
@@ -67,7 +67,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
                 'catalog/product/edit',
                 ['id' => $item->getId(), '_secure' => true, '_nosecret' => true]
             );
-            $qty = 1 * $item->getData('qty');
+            $qty = (float)$item->getData('qty');
 
             $description = __(
                 '%1 has reached a quantity of %2 in source %3(Source Code: %4).',
@@ -84,7 +84,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -92,7 +92,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -100,7 +100,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFeeds()
     {
@@ -108,7 +108,7 @@ class NotifyStock extends AbstractBlock implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
