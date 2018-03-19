@@ -1211,6 +1211,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $typeTitles = [];
             $parentCount = [];
             $childCount = [];
+            $optionsToRemove = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
@@ -1220,6 +1221,16 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
                 $multiRowData = $this->_getMultiRowFormat($rowData);
+                if ($rowData[self::COLUMN_SKU] != '' && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
+                    $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
+                    if (!isset($products[$this->_rowProductId])) {
+                        $products[$this->_rowProductId] = $this->_getProductData($rowData, $this->_rowProductId);
+                        if (array_key_exists('custom_options', $rowData) && !isset($rowData['custom_options'])) {
+                            $optionsToRemove[] = $this->_rowProductId;
+                        }
+                    }
+                }
+
                 foreach ($multiRowData as $optionData) {
                     $combinedData = array_merge($rowData, $optionData);
 
@@ -1252,7 +1263,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
                 }
             }
-
+            // Remove options for products with empty "custom_options" row
+            $this->_deleteEntities($optionsToRemove);
             // Save prepared custom options data !!!
             if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                 $this->_deleteEntities(array_keys($products));
@@ -1333,10 +1345,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 && ($priceData = $this->_getPriceData($rowData, $nextOptionId, $this->_rowType))
             ) {
                 $prices[$nextOptionId] = $priceData;
-            }
-
-            if (!isset($products[$this->_rowProductId])) {
-                $products[$this->_rowProductId] = $this->_getProductData($rowData, $this->_rowProductId);
             }
 
             $prevOptionId = $nextOptionId++;
@@ -1523,12 +1531,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _parseRequiredData(array $rowData)
     {
-        if ($rowData[self::COLUMN_SKU] != '' && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
-            $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-        } elseif (!isset($this->_rowProductId)) {
+        if (!isset($this->_rowProductId)) {
             return false;
         }
-
         // Init store
         if (!empty($rowData[self::COLUMN_STORE])) {
             if (!isset($this->_storeCodeToId[$rowData[self::COLUMN_STORE]])) {
