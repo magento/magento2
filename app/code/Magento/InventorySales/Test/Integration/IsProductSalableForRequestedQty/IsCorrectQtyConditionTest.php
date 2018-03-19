@@ -7,14 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Test\Integration\IsProductSalableForRequestedQty;
 
-use Magento\InventoryReservations\Model\GetReservationsQuantityInterface;
-use Magento\InventorySales\Model\GetStockItemDataInterface;
+use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class IsCorrectQtyConditionTest extends TestCase
 {
+    /**
+     * @var GetStockItemConfigurationInterface
+     */
+    private $getStockItemConfig;
+
+    /**
+     * @var SaveStockItemConfigurationInterface
+     */
+    private $saveStockItemConfig;
+
     /**
      * @var IsProductSalableForRequestedQtyInterface
      */
@@ -27,6 +37,8 @@ class IsCorrectQtyConditionTest extends TestCase
     {
         parent::setUp();
 
+        $this->getStockItemConfig = Bootstrap::getObjectManager()->get(GetStockItemConfigurationInterface::class);
+        $this->saveStockItemConfig = Bootstrap::getObjectManager()->get(SaveStockItemConfigurationInterface::class);
         $this->isProductSalableForRequestedQty
             = Bootstrap::getObjectManager()->get(IsProductSalableForRequestedQtyInterface::class);
     }
@@ -53,27 +65,6 @@ class IsCorrectQtyConditionTest extends TestCase
         ];
     }
     
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
-     * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 5
-     * @dataProvider executeWithUseConfigMinQtyDataProvider
-     */
-    public function testExecuteWithUseConfigMinQty($sku, $stockId, $requestedQty, bool $expectedResult)
-    {
-        $result = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $requestedQty);
-        $this->assertEquals($expectedResult, $result->isSalable());
-    }
-
-    public function testExecuteWithMinQty()
-    {
-        $this->markTestIncomplete('Still to implement');
-    }
-
     public function testExecuteWithUseConfigMinSaleQty()
     {
         $this->markTestIncomplete('Still to implement');
@@ -97,15 +88,5 @@ class IsCorrectQtyConditionTest extends TestCase
     public function testExecuteWithQtyIncrements()
     {
         $this->markTestIncomplete('Still to implement');
-    }
-
-    public function executeWithUseConfigMinQtyDataProvider(): array
-    {
-        return [
-            ['SKU-1', 10, 4, false],
-            ['SKU-1', 10, 5, true],
-            ['SKU-3', 10, 4, false],
-            ['SKU-3', 10, 8, false],
-        ];
     }
 }

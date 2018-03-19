@@ -66,11 +66,6 @@
                     <item name="sort_order" xsi:type="number">30</item>
                     <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\IsSalableWithReservationsCondition</item>
                 </item>
-                <!-- should be after is_salable_with_reservations condition -->
-                <item name="min_qty" xsi:type="array">
-                    <item name="sort_order" xsi:type="number">40</item>
-                    <item name="object" xsi:type="object">Magento\InventorySales\Model\IsProductSalableCondition\MinQtyStockCondition</item>
-                </item>
             </argument>
         </arguments>
     </type>
@@ -98,8 +93,8 @@
             </argument>
         </arguments>
     </type>
-    <!-- IsProductSalableResult -->
-    <preference for="Magento\InventorySales\Model\IsProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableResult"/>
+    <!-- ProductSalableResult -->
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalableResultInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalableResult"/>
     <!-- ProductSalabilityError -->
-    <preference for="Magento\InventorySales\Model\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\ProductSalabilityError"/>
+    <preference for="Magento\InventorySalesApi\Api\Data\ProductSalabilityErrorInterface" type="Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError"/>
 </config>
