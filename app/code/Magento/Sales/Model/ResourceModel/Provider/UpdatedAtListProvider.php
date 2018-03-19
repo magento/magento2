@@ -9,9 +9,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
- * Provides latest updated entities ids list
+ * Retrieves ID's of not synced by `updated_at` column entities.
+ * The result should contain list of entities ID's from the main table which have `updated_at` column greater
+ * than in the grid table.
  */
-class UpdatedIdListProvider implements NotSyncedDataProviderInterface
+class UpdatedAtListProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var ResourceConnection
@@ -24,12 +26,11 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
     private $connection;
 
     /**
-     * NotSyncedDataProvider constructor.
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(
-        ResourceConnection $resourceConnection
-    ) {
+    public function __construct(ResourceConnection $resourceConnection)
+    {
+        $this->connection = $resourceConnection->getConnection('sales');
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -40,35 +41,20 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
     {
         $mainTableName = $this->resourceConnection->getTableName($mainTableName);
         $gridTableName = $this->resourceConnection->getTableName($gridTableName);
-        $select = $this->getConnection()->select()
+        $select = $this->connection->select()
             ->from($mainTableName, [$mainTableName . '.entity_id'])
-            ->joinLeft(
+            ->joinInner(
                 [$gridTableName => $gridTableName],
                 sprintf(
-                    '%s.%s = %s.%s',
+                    '%s.entity_id = %s.entity_id AND %s.updated_at > %s.updated_at',
                     $mainTableName,
-                    'entity_id',
                     $gridTableName,
-                    'entity_id'
+                    $mainTableName,
+                    $gridTableName
                 ),
                 []
-            )
-            ->where($gridTableName . '.entity_id IS NULL');
+            );
 
-        return $this->getConnection()->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
-    }
-
-    /**
-     * Returns connection.
-     *
-     * @return AdapterInterface
-     */
-    private function getConnection()
-    {
-        if (!$this->connection) {
-            $this->connection = $this->resourceConnection->getConnection('sales');
-        }
-
-        return $this->connection;
+        return $this->connection->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
     }
 }
