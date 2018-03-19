@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\Product\Exception;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -133,7 +134,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.2.5', '<')) {
-            $this->addGenerallIndexOnGalleryValueTable($setup);
+            $this->addGeneralIndexOnGalleryValueTable($setup);
         }
 
         $setup->endSetup();
@@ -735,12 +736,30 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function addGenerallIndexOnGalleryValueTable(SchemaSetupInterface $setup)
+    private function addGeneralIndexOnGalleryValueTable(SchemaSetupInterface $setup)
     {
-        $setup->getConnection()->addIndex(
-            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
-            $setup->getConnection()->getIndexName($setup->getTable(Gallery::GALLERY_VALUE_TABLE), ['entity_id', 'value_id', 'store_id']),
-            ['entity_id', 'value_id', 'store_id']
+
+        $existingKeys = $setup->getConnection()->getIndexList(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE)
         );
+
+        $entityIdKeyName = $setup->getConnection()->getIndexName(
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+            ['entity_id']
+        );
+
+        if (array_key_exists($entityIdKeyName, $existingKeys)) {
+            $keyColumns = $existingKeys[$entityIdKeyName]['COLUMNS_LIST'];
+            $linkField = reset($keyColumns);
+
+            $setup->getConnection()->addIndex(
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                $setup->getConnection()->getIndexName(
+                    $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
+                    ['entity_id', 'value_id', 'store_id']
+                ),
+                [$linkField, 'value_id', 'store_id']
+            );
+        }
     }
 }
