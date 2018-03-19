@@ -16,6 +16,17 @@
 
             <group id="test_group" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="10">
                 <label>Test Group</label>
+                <field id="test_field_encrypted" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                    <config_path>test_section/test_group/test_field_encrypted</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="test_field_serialized" translate="label comment" showInDefault="1" showInWebsite="0" showInStore="0" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                    <config_path>test_section/test_group/test_field_serialized</config_path>
+                    <frontend_model>Magento\Config\Block\System\Config\FieldArray</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized</backend_model>
+                </field>
                 <field id="test_field" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
                     <label>Test Field</label>
                     <config_path>test_section/test_group/test_field</config_path>
