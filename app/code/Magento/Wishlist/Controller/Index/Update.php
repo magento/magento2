@@ -8,6 +8,10 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Model\LocaleQuantityProcessor;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 
 class Update extends \Magento\Wishlist\Controller\AbstractIndex
 {
@@ -27,21 +31,31 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
     protected $quantityProcessor;
 
     /**
+     * @var StockItemRepositoryInterface
+     */
+    protected $stockItemRepository;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+        Validator $formKeyValidator,
+        WishlistProviderInterface $wishlistProvider,
+        LocaleQuantityProcessor $quantityProcessor,
+        StockItemRepositoryInterface $stockItemRepository = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
         parent::__construct($context);
+        $this->stockItemRepository = $stockItemRepository ?: $this->_objectManager->get(
+            StockItemRepositoryInterface::class
+        );
     }
 
     /**
@@ -88,6 +102,10 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                 $qty = null;
                 if (isset($post['qty'][$itemId])) {
                     $qty = $this->quantityProcessor->process($post['qty'][$itemId]);
+                    if (is_double($qty)) {
+                        $stockItem = $this->stockItemRepository->get($itemId);
+                        $qty = !$stockItem->getIsQtyDecimal() ? floor($qty) : $qty;
+                    }
                 }
                 if ($qty === null) {
                     $qty = $item->getQty();
