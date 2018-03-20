@@ -173,6 +173,7 @@ class MessageValidator
     private function getRealType($message)
     {
         $type = is_object($message) ? get_class($message) : gettype($message);
+        $type = $type == 'boolean' ? 'bool' : $type;
         return $type == "integer" ? "int" : $type;
     }
 
