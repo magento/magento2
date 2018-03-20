@@ -281,6 +281,9 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->resource->bindValueToEntity($valueId, $entityId);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testLoadGallery()
     {
         $productId = 5;
@@ -344,13 +347,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 [
                     '`value`.`label`',
                     '`default_value`.`label`',
-                    'IFNULL(`value`.`label`, `default_value`.`label`)']
-                ,
+                    'IFNULL(`value`.`label`, `default_value`.`label`)'
+                ],
                 [
                     '`value`.`position`',
                     '`default_value`.`position`',
-                    'IFNULL(`value`.`position`, `default_value`.`position`)']
-                ,
+                    'IFNULL(`value`.`position`, `default_value`.`position`)'
+                ],
                 [
                     '`value`.`disabled`',
                     '`default_value`.`disabled`',
