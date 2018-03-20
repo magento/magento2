@@ -6,17 +6,18 @@
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
-use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\TestFramework\ObjectManager;
-use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ConfigurableProductViewTest extends GraphQlAbstract
 {
+    /**
+     * @var array
+     */
+    private $configurableOptions = [];
+
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_category_and_weight.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -184,6 +185,11 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                 video_url
               }
             }
+          }
+          attributes {
+            label
+            code
+            value_index
           }
         }
       }
@@ -392,6 +398,23 @@ QUERY;
                 ],
                 $variantArray['product']['price']
             );
+            $configurableOptions = $this->getConfigurableOptions();
+            foreach ($variantArray['attributes'] as $attribute) {
+                $hasAssertion = false;
+                foreach ($configurableOptions as $option) {
+                    foreach ($option['options'] as $value) {
+                        if ((int)$value['value_index'] === (int)$attribute['value_index']) {
+                            $this->assertEquals((int)$attribute['value_index'], (int)$value['value_index']);
+                            $this->assertEquals($attribute['label'], $value['label']);
+                            $hasAssertion = true;
+                        }
+                    }
+                    $this->assertEquals($attribute['code'], $option['attribute_code']);
+                }
+                if (!$hasAssertion) {
+                    $this->fail('variant did not contain correct attributes');
+                }
+            }
         }
     }
 
@@ -401,17 +424,8 @@ QUERY;
             $actualResponse['configurable_options'],
             "Precondition failed: 'configurable_product_options' must not be empty"
         );
-        $productSku = 'configurable';
-        /** @var ProductRepositoryInterface $productRepo */
-        $productRepo = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepo->get($productSku);
-        $configurableAttributeOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
-        foreach ($configurableAttributeOptions as $option) {
-            $configurableAttributeOption = $option->getData();
-            $configurableAttributeOption['id'] = $option->getId();
-            $configurableAttributeOption['attribute_code'] = $option->getProductAttribute()->getAttributeCode();
-            break;
-        }
+        $configurableAttributeOptions = $this->getConfigurableOptions();
+        $configurableAttributeOption = array_shift($configurableAttributeOptions);
 
         $this->assertEquals(
             $actualResponse['configurable_options'][0]['id'],
@@ -458,6 +472,10 @@ QUERY;
                 $value['use_default_value'],
                 $configurableAttributeOption['options'][$key]['use_default_value']
             );
+            $this->assertEquals(
+                (int)$value['value_index'],
+                (int)$configurableAttributeOption['options'][$key]['value_index']
+            );
         }
     }
 
@@ -484,5 +502,32 @@ QUERY;
                 . var_export($expectedValue, true)
             );
         }
+    }
+
+    private function getConfigurableOptions()
+    {
+        if (!empty($this->configurableOptions)) {
+            return $this->configurableOptions;
+        }
+        $productSku = 'configurable';
+        /** @var ProductRepositoryInterface $productRepo */
+        $productRepo = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepo->get($productSku);
+        $configurableAttributeOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        $configurableAttributeOptionsData = [];
+        foreach ($configurableAttributeOptions as $option) {
+            $configurableAttributeOptionsData[$option->getId()] = $option->getData();
+            $configurableAttributeOptionsData[$option->getId()]['id'] = $option->getId();
+            $configurableAttributeOptionsData[$option->getId()]['attribute_code']
+                = $option->getProductAttribute()->getAttributeCode();
+            unset($configurableAttributeOptionsData[$option->getId()]['values']);
+            foreach ($option->getValues() as $value) {
+                $configurableAttributeOptionsData[$option->getId()]['values'][$value->getId()] = $value->getData();
+                $configurableAttributeOptionsData[$option->getId()]['values'][$value->getId()]['label']
+                    = $value->getLabel();
+            }
+        }
+
+        return $this->configurableOptions = $configurableAttributeOptionsData;
     }
 }
