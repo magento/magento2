@@ -9,7 +9,7 @@ namespace Magento\Webapi\Controller\Rest;
 /**
  *  Request Processor Pool
  */
-class RequestProcessorPool implements RequestProcessorInterface
+class RequestProcessorPool
 {
 
     /**
@@ -20,7 +20,7 @@ class RequestProcessorPool implements RequestProcessorInterface
     /**
      * Initial dependencies
      *
-     * @param array $requestProcessors
+     * @param RequestProcessorInterface[] $requestProcessors
      */
     public function __construct($requestProcessors = [])
     {
@@ -30,46 +30,24 @@ class RequestProcessorPool implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Webapi\Exception
+     * return RequestProcessorInterface
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function getProcessor(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        $processed = false;
-
         /**
          * @var RequestProcessorInterface $processor
          */
         foreach ($this->requestProcessors as $processor) {
-            if (strpos(ltrim($request->getPathInfo(), '/'), $processor->getProcessorPath()) === 0) {
-                $processor->process($request);
-                $processed = true;
-                break;
+            if ($processor->canProcess($request)) {
+                return $processor;
             }
         }
-        if (!$processed) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Specified request cannot be processed.'),
-                null,
-                400
-            );
-        }
-    }
 
-    /**
-     * Get array of rest processors from di.xml
-     *
-     * @return array
-     */
-    public function getProcessors()
-    {
-        return $this->requestProcessors;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProcessorPath()
-    {
-        return null;
+        throw new \Magento\Framework\Webapi\Exception(
+            __('Specified request cannot be processed.'),
+            0,
+            \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST
+        );
     }
 }

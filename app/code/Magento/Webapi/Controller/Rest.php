@@ -182,9 +182,10 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $path = $this->_pathProcessor->process($request->getPathInfo());
         $this->_request->setPathInfo($path);
         $this->areaList->getArea($this->_appState->getAreaCode())
-                       ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+            ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            $this->requestProcessorPool->process($this->_request);
+            $processor = $this->requestProcessorPool->getProcessor($this->_request);
+            $processor->process($this->_request);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
@@ -208,7 +209,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return Route
      * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
+     * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
     {
@@ -245,7 +246,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
      * @deprecated 100.1.0
-     * @see Magento\Webapi\Controller\Rest\RequestValidator::validate
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
     {

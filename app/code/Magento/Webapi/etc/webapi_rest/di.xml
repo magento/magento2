@@ -75,8 +75,14 @@
     <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
         <arguments>
             <argument name="requestProcessors" xsi:type="array">
-                <item name="syncSchema" xsi:type="object">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
-                <item name="sync" xsi:type="object">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
+                <item name="syncSchema" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Controller\Rest\SchemaRequestProcessor</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                </item>
+                <item name="sync" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Controller\Rest\SynchronousRequestProcessor</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
             </argument>
         </arguments>
     </type>
