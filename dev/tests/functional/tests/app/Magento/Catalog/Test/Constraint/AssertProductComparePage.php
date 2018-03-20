@@ -65,7 +65,7 @@ class AssertProductComparePage extends AbstractConstraint
                         : number_format($product->getPrice(), 2));
 
                 $attribute = is_numeric($attributeKey) ? 'info' : 'attribute';
-                \PHPUnit_Framework_Assert::assertEquals(
+                \PHPUnit\Framework\Assert::assertEquals(
                     $attributeValue,
                     $comparePage->getCompareProductsBlock()->{'getProduct' . ucfirst($attribute)}($key + 1, $value),
                     'Product "' . $product->getName() . '" is\'n equals with data from fixture.'

@@ -209,7 +209,7 @@ abstract class AbstractFactory
         if ($reflectionClass->isAbstract()) {
             return;
         }
-        $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations($className);
+        $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations($className);
 
         list(, $targetClassName) = explode($location . '/', $filename);
         $targetClassName = str_replace('.php', '', $targetClassName);

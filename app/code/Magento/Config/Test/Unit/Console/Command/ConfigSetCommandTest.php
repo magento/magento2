@@ -95,7 +95,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->processorFacadeMock);
         $this->processorFacadeMock->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
@@ -171,9 +171,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
-            ->willThrowException(
-                new ValidatorException(__('The "test/test/test" path doesn\'t exist. Verify and try again.'))
-            );
+            ->willThrowException(new ValidatorException(__('The "test/test/test" path does not exists')));
 
         $tester = new CommandTester($this->command);
         $tester->execute([
@@ -182,7 +180,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->assertContains(
-            __('The "test/test/test" path doesn\'t exist. Verify and try again.')->render(),
+            __('The "test/test/test" path does not exists')->render(),
             $tester->getDisplay()
         );
         $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());

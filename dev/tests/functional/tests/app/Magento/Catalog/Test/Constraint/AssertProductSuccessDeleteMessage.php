@@ -32,7 +32,7 @@ class AssertProductSuccessDeleteMessage extends AbstractConstraint
         $products = is_array($product) ? $product : [$product];
         $deleteMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, count($products));
         $actualMessage = $productPage->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $deleteMessage,
             $actualMessage,
             'Wrong success message is displayed.'
