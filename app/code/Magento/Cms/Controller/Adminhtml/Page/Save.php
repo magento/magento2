@@ -128,11 +128,15 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Process and set the page return
      *
+     * @param \Magento\Cms\Model\Block $model
+     * @param array $data
+     * @param \Magento\Framework\Controller\ResultInterface $resultRedirect
      * @return \Magento\Framework\Controller\ResultInterface
      */
     private function processPageReturn($model, $data, $resultRedirect)
     {
-        $redirect = $data['back'];
+        $redirect = $data['back'] ?? 'close';
+
         if ($redirect === 'duplicate') {
             $newPage = $this->pageFactory->create(['data' => $data]);
             $newPage->setId(null);

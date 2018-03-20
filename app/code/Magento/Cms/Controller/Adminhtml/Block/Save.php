@@ -64,7 +64,6 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
-        $redirect = $data['back'];
         if ($data) {
             if (isset($data['is_active']) && $data['is_active'] === 'true') {
                 $data['is_active'] = Block::STATUS_ENABLED;
@@ -92,19 +91,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 $this->blockRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the block.'));
                 $this->dataPersistor->clear('cms_block');
-                if ($redirect ==='continue') {
-                    return $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
-                } else if ($redirect === 'close') {
-                    return $resultRedirect->setPath('*/*/');
-                } else if ($redirect === 'duplicate') {
-                    $duplicateModel = $this->blockFactory->create(['data' => $data]);
-                    $duplicateModel->setId(null);
-                    $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());
-                    $duplicateModel->setIsActive(Block::STATUS_DISABLED);
-                    $this->blockRepository->save($duplicateModel);
-                    $id = $duplicateModel->getId();
-                    $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
-                }
+                return $this->processBlockReturn($model, $data, $resultRedirect);
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
@@ -115,5 +102,35 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Process and set the block return
+     *
+     * @param \Magento\Cms\Model\Block $model
+     * @param array $data
+     * @param \Magento\Framework\Controller\ResultInterface $resultRedirect
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    private function processBlockReturn($model, $data, $resultRedirect)
+    {
+        $redirect = $data['back'] ?? 'close';
+
+        if ($redirect ==='continue') {
+            $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
+        } else if ($redirect === 'close') {
+            $resultRedirect->setPath('*/*/');
+        } else if ($redirect === 'duplicate') {
+            $duplicateModel = $this->blockFactory->create(['data' => $data]);
+            $duplicateModel->setId(null);
+            $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());
+            $duplicateModel->setIsActive(Block::STATUS_DISABLED);
+            $this->blockRepository->save($duplicateModel);
+            $id = $duplicateModel->getId();
+            $this->messageManager->addSuccessMessage(__('You duplicated the block.'));
+            $this->dataPersistor->set('cms_block', $data);
+            $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
+        }
+        return $resultRedirect;
     }
 }
