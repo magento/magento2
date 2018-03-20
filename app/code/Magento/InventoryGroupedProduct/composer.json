@@ -4,7 +4,9 @@
   "require": {
     "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
     "magento/framework": "100.3.*",
-    "magento/module-grouped-product": "100.3.*",
+    "magento/module-grouped-product": "100.3.*"
+  },
+  "suggest" : {
     "magento/module-inventory-configuration": "100.0.*"
   },
   "type": "magento2-module",
