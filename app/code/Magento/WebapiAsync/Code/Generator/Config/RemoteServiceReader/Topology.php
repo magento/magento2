@@ -46,12 +46,7 @@ class Topology implements \Magento\Framework\Config\ReaderInterface
      */
     public function read($scope = null)
     {
-        try {
-            $asyncServicesData = $this->webapiAsyncConfig->getServices();
-        } catch (\Exception $e) {
-            return [];
-        }
-
+        $asyncServicesData = $this->webapiAsyncConfig->getServices();
         $bindings = [];
         foreach ($asyncServicesData as $serviceData) {
             $topicName = $serviceData[WebApiAsyncConfig::SERVICE_PARAM_KEY_TOPIC];
@@ -66,7 +61,7 @@ class Topology implements \Magento\Framework\Config\ReaderInterface
         }
 
         $result = [
-            'magento-async--amqp' =>
+            'magento-async-amqp' =>
                 [
                     'name'       => 'magento',
                     'type'       => 'topic',
