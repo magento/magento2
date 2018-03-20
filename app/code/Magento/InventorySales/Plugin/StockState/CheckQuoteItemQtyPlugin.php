@@ -96,24 +96,23 @@ class CheckQuoteItemQtyPlugin
     ) {
         $stockId = $this->getStockIdForCurrentWebsite->execute();
         if ($this->defaultStockProvider->getId() === $stockId) {
-            $result = $proceed($productId, $itemQty, $qtyToCheck, $origQty, $scopeId);
-        } else {
-            $result = $this->objectFactory->create();
-            $result->setHasError(false);
+            return $proceed($productId, $itemQty, $qtyToCheck, $origQty, $scopeId);
+        }
+        $result = $this->objectFactory->create();
+        $result->setHasError(false);
 
-            $qty = $this->getNumber($qtyToCheck);
+        $qty = $this->getNumber($qtyToCheck);
 
-            $skus = $this->getSkusByProductIds->execute([$productId]);
-            $productSku = $skus[$productId];
+        $skus = $this->getSkusByProductIds->execute([$productId]);
+        $productSku = $skus[$productId];
 
-            $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, $stockId, $qty);
+        $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, $stockId, $qty);
 
-            if ($isSalableResult->isSalable() === false) {
-                /** @var ProductSalabilityError $error */
-                foreach ($isSalableResult->getErrors() as $error) {
-                    $result->setHasError(true)->setMessage($error->getMessage())->setQuoteMessage($error->getMessage())
-                        ->setQuoteMessageIndex('qty');
-                }
+        if ($isSalableResult->isSalable() === false) {
+            /** @var ProductSalabilityError $error */
+            foreach ($isSalableResult->getErrors() as $error) {
+                $result->setHasError(true)->setMessage($error->getMessage())->setQuoteMessage($error->getMessage())
+                    ->setQuoteMessageIndex('qty');
             }
         }
 
