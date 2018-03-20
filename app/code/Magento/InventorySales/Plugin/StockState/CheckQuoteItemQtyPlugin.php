@@ -83,7 +83,6 @@ class CheckQuoteItemQtyPlugin
      * @param int|null $scopeId
      *
      * @return DataObject
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCheckQuoteItemQty(
         StockStateInterface $subject,
