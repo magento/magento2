@@ -329,7 +329,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'main.value_id = entity.value_id',
             ['entity_id']
         )->willReturnSelf();
-        $this->product->expects($this->at(0))->method('getData')->with('entity_id')->willReturn($productId);
+        $this->product->expects($this->at(0))->method('getData')
+            ->with('entity_id')->willReturn($productId);
         $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
         $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
             ['value.store_id = ?'],
@@ -340,9 +341,21 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         );
         $this->connection->expects($this->any())->method('getIfNullSql')->will(
             $this->returnValueMap([
-                ['`value`.`label`', '`default_value`.`label`', 'IFNULL(`value`.`label`, `default_value`.`label`)'],
-                ['`value`.`position`', '`default_value`.`position`', 'IFNULL(`value`.`position`, `default_value`.`position`)'],
-                ['`value`.`disabled`', '`default_value`.`disabled`', 'IFNULL(`value`.`disabled`, `default_value`.`disabled`)']
+                [
+                    '`value`.`label`',
+                    '`default_value`.`label`',
+                    'IFNULL(`value`.`label`, `default_value`.`label`)']
+                ,
+                [
+                    '`value`.`position`',
+                    '`default_value`.`position`',
+                    'IFNULL(`value`.`position`, `default_value`.`position`)']
+                ,
+                [
+                    '`value`.`disabled`',
+                    '`default_value`.`disabled`',
+                    'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
+                ]
             ])
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
@@ -367,7 +380,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'main.attribute_id = ?',
             $attributeId
         )->willReturnSelf();
-        $this->select->expects($this->at(6))->method('where')->with('main.disabled = 0')->willReturnSelf();
+        $this->select->expects($this->at(6))->method('where')
+            ->with('main.disabled = 0')->willReturnSelf();
         $this->select->expects($this->at(8))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
