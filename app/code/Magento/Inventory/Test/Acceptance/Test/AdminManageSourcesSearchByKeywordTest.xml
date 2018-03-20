@@ -18,8 +18,8 @@
             <group value="msi"/>
         </annotations>
         <before>
-            <createData entity="TestSource1" stepKey="createSource1"/>
-            <createData entity="TestSource2" stepKey="createSource2"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>

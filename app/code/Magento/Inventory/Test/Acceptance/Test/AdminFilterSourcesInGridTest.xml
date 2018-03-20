@@ -18,10 +18,10 @@
             <group value="msi"/>
         </annotations>
         <before>
-            <createData entity="TestSource1" stepKey="createSource1"/>
-            <createData entity="TestSource2" stepKey="createSource2"/>
-            <createData entity="TestSource1" stepKey="createSource3"/>
-            <createData entity="TestSource2" stepKey="createSource4"/>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <createData entity="FullSource1" stepKey="createSource3"/>
+            <createData entity="FullSource2" stepKey="createSource4"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -31,13 +31,28 @@
         <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="value" value="$$createSource3.general[source_code]$$"/>
         </actionGroup>
 
+        <see userInput="$$createSource3.general[source_code]$$" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__current-filters-list" stepKey="seeFilterName1"/>
         <see userInput="$$createSource3.general[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
         <see userInput="$$createSource3.general[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
         <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow1"/>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns1"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns2"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource4.general[source_code]$$"/>
+        </actionGroup>
+
+        <see userInput="$$createSource4.general[source_code]$$" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__current-filters-list" stepKey="seeFilterName2"/>
+        <see userInput="$$createSource4.general[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
+        <see userInput="$$createSource4.general[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>
+        <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow2"/>
     </test>
 </tests>

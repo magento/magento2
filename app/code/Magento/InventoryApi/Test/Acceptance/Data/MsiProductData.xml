@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SimpleMsiProduct" type="product">
+        <data key="name" unique="suffix">Simple Product </data>
+        <data key="sku" unique="suffix">Simple_Product_</data>
+        <data key="price">10.00</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <data key="urlKey" unique="suffix">simple-product-</data>
+        <data key="stockStatus">In Stock</data>
+        <data key="notifyQuantity">1</data>
+    </entity>
+</entities>

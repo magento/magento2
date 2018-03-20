@@ -19,6 +19,7 @@
         </annotations>
 
         <before>
+            <createData entity="FullSource1" stepKey="createFullSource1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -26,65 +27,67 @@
         </after>
 
         <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage1"/>
-        <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewSource1"/>
 
-        <fillField userInput="{{TestSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField1"/>
-        <fillField userInput="{{TestSource1.source_code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillCodeField1"/>
-        <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled1"/>
-        <fillField userInput="{{TestSource1.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchForSource1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createFullSource1.general[source_code]$$"/>
+        </actionGroup>
 
-        <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
-        <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.latitude}}" stepKey="fillLatitudeField1"/>
-        <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.longitude}}" stepKey="fillLongitudeField1"/>
+        <click selector="{{AdminGridRow.editByValue($$createFullSource1.general[source_code]$$)}}" stepKey="clickOnEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad0"/>
 
-        <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo1"/>
-        <fillField userInput="{{TestSource1.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField1"/>
-        <fillField userInput="{{TestSource1.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField1"/>
-        <fillField userInput="{{TestSource1.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField1"/>
-        <fillField userInput="{{TestSource1.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField1"/>
-
-        <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses1"/>
-        <selectOption userInput="{{TestSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry1"/>
-        <selectOption userInput="{{TestSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState1"/>
-        <fillField userInput="{{TestSource1.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField1"/>
-        <fillField userInput="{{TestSource1.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField1"/>
-        <fillField userInput="{{TestSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField1"/>
-
-        <conditionalClick selector="{{AdminEditSourceCarriersSection.closed}}" dependentSelector="{{AdminEditSourceCarriersSection.opened}}" visible="false" stepKey="clickOnCarriers1"/>
-        <checkOption selector="{{AdminEditSourceCarriersSection.useGlobalShippingConfiguration}}" stepKey="checkUseGlobalShippingConfiguration1"/>
-
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveContinue1"/>
-
-        <fillField userInput="{{TestSource2.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField2"/>
+        <fillField userInput="{{FullSource2.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField2"/>
         <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="checkIsEnabled2"/>
-        <fillField userInput="{{TestSource2.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField2"/>
+        <fillField userInput="{{FullSource2.description}}" selector="{{AdminEditSourceGeneralSection.description}}" stepKey="fillDescriptionField2"/>
 
         <!--Todo: MQE-677 needs to be merged into Develop before we can use "0" in the Data. Hardcoded "0" for now.-->
         <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.latitude}}" stepKey="fillLatitudeField2"/>
         <fillField userInput="0" selector="{{AdminEditSourceGeneralSection.longitude}}" stepKey="fillLongitudeField2"/>
 
         <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo2"/>
-        <fillField userInput="{{TestSource2.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField2"/>
-        <fillField userInput="{{TestSource2.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField2"/>
-        <fillField userInput="{{TestSource2.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField2"/>
-        <fillField userInput="{{TestSource2.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField2"/>
+        <fillField userInput="{{FullSource2.contact_name}}" selector="{{AdminEditSourceContactInfoSection.contactName}}" stepKey="fillContactNameField2"/>
+        <fillField userInput="{{FullSource2.email}}" selector="{{AdminEditSourceContactInfoSection.email}}" stepKey="fillEmailField2"/>
+        <fillField userInput="{{FullSource2.phone}}" selector="{{AdminEditSourceContactInfoSection.phone}}" stepKey="fillPhoneField2"/>
+        <fillField userInput="{{FullSource2.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField2"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses2"/>
-        <selectOption userInput="{{TestSource2.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry2"/>
-        <selectOption userInput="{{TestSource2.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState2"/>
-        <fillField userInput="{{TestSource2.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField2"/>
-        <fillField userInput="{{TestSource2.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField2"/>
-        <fillField userInput="{{TestSource2.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField2"/>
+        <selectOption userInput="{{FullSource2.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry2"/>
+        <selectOption userInput="{{FullSource2.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState2"/>
+        <fillField userInput="{{FullSource2.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField2"/>
+        <fillField userInput="{{FullSource2.street}}" selector="{{AdminEditSourceAddressDataSection.street}}" stepKey="fillStreetField2"/>
+        <fillField userInput="{{FullSource2.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostcodeField2"/>
 
-        <actionGroup ref="AdminSaveAndClose" stepKey="saveAndClose1"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue"/>
+
+        <seeInField selector="{{AdminEditSourceGeneralSection.name}}" userInput="{{FullSource2.name}}" stepKey="seeNameInField"/>
+        <seeInField selector="{{AdminEditSourceGeneralSection.code}}" userInput="$$createFullSource1.general[source_code]$$" stepKey="seeCodeInField"/>
+        <seeInField selector="{{AdminEditSourceGeneralSection.description}}" userInput="{{FullSource2.description}}" stepKey="seeDescriptionInField"/>
+        <seeInField selector="{{AdminEditSourceGeneralSection.latitude}}" userInput="0" stepKey="seeLatitudeInField"/>
+        <seeInField selector="{{AdminEditSourceGeneralSection.longitude}}" userInput="0" stepKey="seeLongitudeInField"/>
+
+        <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo3"/>
+        <seeInField selector="{{AdminEditSourceContactInfoSection.contactName}}" userInput="{{FullSource2.contact_name}}" stepKey="seeContactNameInField"/>
+        <seeInField selector="{{AdminEditSourceContactInfoSection.email}}" userInput="{{FullSource2.email}}" stepKey="seeEmailInField"/>
+        <seeInField selector="{{AdminEditSourceContactInfoSection.phone}}" userInput="{{FullSource2.phone}}" stepKey="seePhoneInField"/>
+        <seeInField selector="{{AdminEditSourceContactInfoSection.fax}}" userInput="{{FullSource2.fax}}" stepKey="seeFaxInField"/>
+
+        <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses3"/>
+        <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.country}}" userInput="{{FullSource2.country}}" stepKey="seeCountryInDropDown"/>
+        <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.state}}" userInput="{{FullSource2.stateProvince}}" stepKey="seeStateProvinceInDropDown"/>
+        <seeInField selector="{{AdminEditSourceAddressDataSection.city}}" userInput="{{FullSource2.city}}" stepKey="seeCityInField"/>
+        <seeInField selector="{{AdminEditSourceAddressDataSection.street}}" userInput="{{FullSource2.street}}" stepKey="seeStreetInField"/>
+        <seeInField selector="{{AdminEditSourceAddressDataSection.postcode}}" userInput="{{FullSource2.postcode}}" stepKey="seePostcodeInField"/>
+
+        <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage2"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="TestSource1.source_code"/>
+            <argument name="value" value="FullSource1.source_code"/>
         </actionGroup>
 
-        <see userInput="{{TestSource1.source_code}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
-        <see userInput="{{TestSource2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>
+        <see userInput="{{FullSource1.source_code}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow2"/>
+        <see userInput="{{FullSource2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow2"/>
         <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow2"/>
     </test>
 </tests>

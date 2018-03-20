@@ -21,6 +21,7 @@
             <createData entity="_defaultStock" stepKey="createStock1"/>
             <createData entity="_defaultStock" stepKey="createStock2"/>
             <createData entity="_defaultStock" stepKey="createStock3"/>
+            <createData entity="_defaultStock" stepKey="createStock4"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -31,9 +32,9 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
-            <argument name="value" value="$$createStock3.general[name]$$"/>
+            <argument name="value" value="$$createStock4.general[name]$$"/>
         </actionGroup>
 
-        <see userInput="$$createStock3.general[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createStock4.general[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
     </test>
 </tests>

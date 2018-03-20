@@ -33,7 +33,7 @@
 
         <fillField userInput="{{TestStock2.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName2"/>
 
-        <actionGroup ref="AdminSaveAndClose" stepKey="saveAndClose1"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
             <argument name="value" value="TestStock2.name"/>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="AdminAddMultipleSourcesToProductTest">
+        <annotations>
+            <features value="Multi-Source Inventory 1"/>
+            <features value="Multi-Source Inventory 2"/>
+            <stories value="Add Multiple Sources to a Product 1"/>
+            <stories value="Add Multiple Sources to a Product 2"/>
+            <title value="You should be able to add Multiple Sources to a Product."/>
+            <testCaseId value="630"/>
+            <group value="skip"/>
+            <group value="banana"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <createData entity="FullSource1" stepKey="createSource1"/>
+            <createData entity="FullSource2" stepKey="createSource2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+            <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+            <argument name="value" value="SimpleProduct.sku"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit"/>
+    </test>
+</tests>

@@ -50,14 +50,23 @@
         <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone"/>
 
         <fillField selector="{{AdminProductSourcesGrid.rowQty}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="fillQtyField"/>
-        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity}}" userInput="{{SimpleMsiProduct.notifyQuantity}}" stepKey="fillNotifyQtyField"/>
 
-        <actionGroup ref="AdminSaveAndClose" stepKey="saveAndClose1"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
             <argument name="selector" value="AdminProductGridFilterControls.sku"/>
             <argument name="value" value="SimpleMsiProduct.sku"/>
         </actionGroup>
+
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumns"/>
+
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.name}}" stepKey="seeNameInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.sku}}" stepKey="seeSkuInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.price}}" stepKey="seePriceInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{SimpleMsiProduct.quantity}}" stepKey="seeQuantityInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Enabled" stepKey="seeStatusInFirstRow"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="Main Website" stepKey="seeWebsiteInFirstRow"/>
 
         <!-- Go to storefront category page, assert product visibility -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createPreReqCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
