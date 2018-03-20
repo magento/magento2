@@ -35,7 +35,7 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderOnNotDefaultSourceTest extends TestCase
+class PlaceOrderOnNotDefaultStockTest extends TestCase
 {
     /**
      * @var CleanupReservationsInterface
