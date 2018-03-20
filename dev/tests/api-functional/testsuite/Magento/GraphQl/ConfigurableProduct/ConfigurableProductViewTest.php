@@ -6,6 +6,7 @@
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
+use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
@@ -27,19 +28,92 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$productSku}"}})
-    {
-        items{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+      id
+      attribute_set_id
+      created_at
+      name
+      sku
+      type_id
+      updated_at
+      ... on PhysicalProductInterface {
+        weight
+      }
+      price {
+        minimalPrice {
+          amount {
+            value
+            currency
+          }
+          adjustments {
+            amount {
+              value
+              currency
+            }
+            code
+            description
+          }
+        }
+        maximalPrice {
+          amount {
+            value
+            currency
+          }
+          adjustments {
+            amount {
+              value
+              currency
+            }
+            code
+            description
+          }
+        }
+        regularPrice {
+          amount {
+            value
+            currency
+          }
+          adjustments {
+            amount {
+              value
+              currency
+            }
+            code
+            description
+          }
+        }
+      }
+      category_ids
+      ... on ConfigurableProduct {
+        configurable_options {
+          id
+          attribute_id
+          label
+          position
+          use_default
+          attribute_code
+          values {
+            value_index
+            label
+            store_label
+            default_label
+            use_default_value
+          }
+          product_id
+        }
+        variants {
+          product {
             id
-            attribute_set_id
-            created_at
+            category_ids
             name
             sku
-            type_id
-            updated_at
+            attribute_set_id
             ... on PhysicalProductInterface {
-                weight
+              weight
             }
+            created_at
+            updated_at
             price {
               minimalPrice {
                 amount {
@@ -84,106 +158,37 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                 }
               }
             }
-            category_ids                
-            ... on ConfigurableProduct {
-              configurable_product_options{
-                id
-                attribute_id
-                label
-                position
-                is_use_default
-                values{
-                  value_index
-                }
-                product_id
-              }
-                configurable_product_links {
-                    id
-                    category_ids
-                    name
-                    sku
-                    attribute_set_id
-                    ... on PhysicalProductInterface {
-                        weight
-                    }
-                    created_at
-                    updated_at
-                    price {
-                      minimalPrice {
-                        amount {
-                          value
-                          currency
-                        }
-                        adjustments {
-                          amount {
-                            value
-                            currency
-                          }
-                          code
-                          description
-                        }
-                      }
-                      maximalPrice {
-                        amount {
-                          value
-                          currency
-                        }
-                        adjustments {
-                          amount {
-                            value
-                            currency
-                          }
-                          code
-                          description
-                        }
-                      }
-                      regularPrice {
-                        amount {
-                          value
-                          currency
-                        }
-                        adjustments {
-                          amount {
-                            value
-                            currency
-                          }
-                          code
-                          description
-                        }
-                      }
-                    }
-                    category_links {
-                    position
-                    category_id
-                    }
-                    media_gallery_entries {
-                    disabled
-                    file
-                    id
-                    label
-                    media_type
-                    position
-                    types
-                    content
-                    {
-                        base64_encoded_data
-                        type
-                        name
-                    }
-                    video_content
-                    {
-                        media_type
-                        video_description
-                        video_metadata
-                        video_provider
-                        video_title
-                        video_url
-                    }            
-                  }
-                }
+            category_links {
+              position
+              category_id
             }
+            media_gallery_entries {
+              disabled
+              file
+              id
+              label
+              media_type
+              position
+              types
+              content {
+                base64_encoded_data
+                type
+                name
+              }
+              video_content {
+                media_type
+                video_description
+                video_metadata
+                video_provider
+                video_title
+                video_url
+              }
+            }
+          }
         }
+      }
     }
+  }
 }
 QUERY;
 
@@ -201,8 +206,8 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
-        $this->assertConfigurableProductLinks($response['products']['items'][0]);
         $this->assertConfigurableProductOptions($response['products']['items'][0]);
+        $this->assertConfigurableVariants($response['products']['items'][0]);
     }
 
     /**
@@ -258,29 +263,28 @@ QUERY;
      * @param $actualResponse
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function assertConfigurableProductLinks($actualResponse)
+    private function assertConfigurableVariants($actualResponse)
     {
         $this->assertNotEmpty(
-            $actualResponse['configurable_product_links'],
-            "Precondition failed: 'configurable_product_links' must not be empty"
+            $actualResponse['variants'],
+            "Precondition failed: 'variants' must not be empty"
         );
-        foreach ($actualResponse[
-            'configurable_product_links'
-                 ] as $configurableProductLinkIndex => $configurableProductLinkArray) {
-            $this->assertNotEmpty($configurableProductLinkArray);
+        foreach ($actualResponse['variants'] as $variantKey => $variantArray) {
+            $this->assertNotEmpty($variantArray);
+            $this->assertNotEmpty($variantArray['product']);
             $this->assertTrue(
-                isset($configurableProductLinkArray['id']),
-                'configurable_product_links elements don\'t contain id key'
+                isset($variantArray['product']['id']),
+                'variant product elements don\'t contain id key'
             );
-            $indexValue = $configurableProductLinkArray['id'];
-            unset($configurableProductLinkArray['id']);
+            $indexValue = $variantArray['product']['id'];
+            unset($variantArray['product']['id']);
             $this->assertTrue(
-                isset($configurableProductLinkArray['category_ids']),
-                'configurable_product_links doesn\'t contain category_ids key'
+                isset($variantArray['product']['category_ids']),
+                'variant product doesn\'t contain category_ids key'
             );
             $this->assertTrue(
-                isset($configurableProductLinkArray['category_links']),
-                'configurable_product_links doesn\'t contain category_links key'
+                isset($variantArray['product']['category_links']),
+                'variant product doesn\'t contain category_links key'
             );
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $childProduct */
@@ -293,15 +297,15 @@ QUERY;
             $categoryId = $links[0]->getCategoryId();
 
             $actualValue
-                = $actualResponse['configurable_product_links'][$configurableProductLinkIndex]['category_links'][0];
-            $this->assertEquals($actualValue, ['position' => $position, 'category_id' =>$categoryId]);
-            unset($configurableProductLinkArray['category_links']);
+                = $actualResponse['variants'][$variantKey]['product']['category_links'][0];
+            $this->assertEquals($actualValue, ['position' => $position, 'category_id' => $categoryId]);
+            unset($variantArray['product']['category_links']);
 
             $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
             $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
             $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-            $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
-            unset($configurableProductLinkArray['category_ids']);
+            $this->assertEquals($categoryIdsAttributeValue, $variantArray['product']['category_ids']);
+            unset($variantArray['product']['category_ids']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
             $this->assertCount(
@@ -311,20 +315,22 @@ QUERY;
             );
             $this->assertTrue(
                 is_array(
-                    $actualResponse['configurable_product_links']
-                    [$configurableProductLinkIndex]
+                    $actualResponse['variants']
+                    [$variantKey]
+                    ['product']
                     ['media_gallery_entries']
                 )
             );
             $this->assertCount(
                 1,
-                $actualResponse['configurable_product_links'][$configurableProductLinkIndex]['media_gallery_entries'],
+                $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'],
                 "there must be 1 record in the media gallery"
             );
             $mediaGalleryEntry = $mediaGalleryEntries[0];
             $this->assertResponseFields(
-                $actualResponse['configurable_product_links']
-                [$configurableProductLinkIndex]
+                $actualResponse['variants']
+                [$variantKey]
+                ['product']
                 ['media_gallery_entries'][0],
                 [
                     'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
@@ -337,8 +343,9 @@ QUERY;
             );
             $videoContent = $mediaGalleryEntry->getExtensionAttributes()->getVideoContent();
             $this->assertResponseFields(
-                $actualResponse['configurable_product_links']
-                [$configurableProductLinkIndex]
+                $actualResponse['variants']
+                [$variantKey]
+                ['product']
                 ['media_gallery_entries']
                 [0]
                 ['video_content'],
@@ -351,9 +358,9 @@ QUERY;
                     'video_url' => $videoContent->getVideoUrl()
                 ]
             );
-            unset($configurableProductLinkArray['media_gallery_entries']);
+            unset($variantArray['product']['media_gallery_entries']);
 
-            foreach ($configurableProductLinkArray as $key => $value) {
+            foreach ($variantArray['product'] as $key => $value) {
                 if ($key !== 'price') {
                     $this->assertEquals($value, $childProduct->getData($key));
                 }
@@ -383,7 +390,7 @@ QUERY;
                         'adjustments' => []
                     ],
                 ],
-                $configurableProductLinkArray['price']
+                $variantArray['product']['price']
             );
         }
     }
@@ -391,45 +398,67 @@ QUERY;
     private function assertConfigurableProductOptions($actualResponse)
     {
         $this->assertNotEmpty(
-            $actualResponse['configurable_product_options'],
+            $actualResponse['configurable_options'],
             "Precondition failed: 'configurable_product_options' must not be empty"
         );
         $productSku = 'configurable';
-        /** @var OptionRepositoryInterface $optionRepository */
-        $optionRepository = ObjectManager::getInstance()->get(OptionRepositoryInterface::class);
-        $configurableAttributeOptions = $optionRepository->getList($productSku);
-        $configurableAttributeOption = $configurableAttributeOptions[0];
-        /** @var Attribute $attribute */
-        //$attribute = ObjectManager::getInstance()->get(Attribute::class);
-        /** @var OptionInterface $option */
-        $option = ObjectManager::getInstance()->get(OptionInterface::class);
+        /** @var ProductRepositoryInterface $productRepo */
+        $productRepo = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepo->get($productSku);
+        $configurableAttributeOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        foreach ($configurableAttributeOptions as $option) {
+            $configurableAttributeOption = $option->getData();
+            $configurableAttributeOption['id'] = $option->getId();
+            $configurableAttributeOption['attribute_code'] = $option->getProductAttribute()->getAttributeCode();
+            break;
+        }
 
-        // TODO: uncomment the assertions once issue MAGETWO-88216 is fixed.
-        //$this->assertEquals($actualResponse['configurable_product_options'][0]['id'], $configurableAttributeOption->getId());
-        // $this->assertEquals($actualResponse['configurable_product_options'][0]['is_use_default'], (bool)$attribute->getIsUseDefault());
         $this->assertEquals(
-            $actualResponse['configurable_product_options'][0]['attribute_id'],
-            $configurableAttributeOption->getAttributeId()
+            $actualResponse['configurable_options'][0]['id'],
+            $configurableAttributeOption['id']
         );
         $this->assertEquals(
-            $actualResponse['configurable_product_options'][0]['label'],
-            $configurableAttributeOption->getLabel()
+            $actualResponse['configurable_options'][0]['use_default'],
+            (bool)$configurableAttributeOption['use_default']
         );
         $this->assertEquals(
-            $actualResponse['configurable_product_options'][0]['position'],
-            $configurableAttributeOption->getPosition()
+            $actualResponse['configurable_options'][0]['attribute_id'],
+            $configurableAttributeOption['attribute_id']
         );
         $this->assertEquals(
-            $actualResponse['configurable_product_options'][0]['product_id'],
-            $configurableAttributeOption->getProductId()
+            $actualResponse['configurable_options'][0]['label'],
+            $configurableAttributeOption['label']
         );
-     //  $this->assertEquals($actualResponse['configurable_product_options'][0]['is_use_default'], $option->getIsUseDefault());
-        /*foreach ($actualResponse['configurable_product_options'][0]['values'] as $value) {
+        $this->assertEquals(
+            $actualResponse['configurable_options'][0]['position'],
+            $configurableAttributeOption['position']
+        );
+        $this->assertEquals(
+            $actualResponse['configurable_options'][0]['product_id'],
+            $configurableAttributeOption['product_id']
+        );
+        $this->assertEquals(
+            $actualResponse['configurable_options'][0]['attribute_code'],
+            $configurableAttributeOption['attribute_code']
+        );
+        foreach ($actualResponse['configurable_options'][0]['values'] as $key => $value) {
             $this->assertEquals(
-                $actualResponse ['configurable_product_options'][0]['values'][$value]['value_index'],
-                $configurableAttributeOption->getOptions()[$value]['value_index']
+                $value['label'],
+                $configurableAttributeOption['options'][$key]['label']
             );
-        }*/
+            $this->assertEquals(
+                $value['store_label'],
+                $configurableAttributeOption['options'][$key]['store_label']
+            );
+            $this->assertEquals(
+                $value['default_label'],
+                $configurableAttributeOption['options'][$key]['default_label']
+            );
+            $this->assertEquals(
+                $value['use_default_value'],
+                $configurableAttributeOption['options'][$key]['use_default_value']
+            );
+        }
     }
 
     /**
