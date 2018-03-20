@@ -18,6 +18,7 @@
                 <item name="anySimpleType" active="false" xsi:type="string">string</item>
             </item>
             <item name="openDialogTitle" xsi:type="string" translate="true">string</item>
+            <item name="initialMediaGalleryOpenSubpath" xsi:type="string">string</item>
             <item name="visible" xsi:type="boolean">false</item>
             <item name="disabled" xsi:type="boolean">false</item>
             <item name="labelVisible" xsi:type="boolean">false</item>
