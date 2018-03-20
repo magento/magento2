@@ -13,28 +13,24 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Session\Config */
-    protected $_model;
+    private $_model;
 
     /** @var string */
-    protected $_cacheLimiter = 'private_no_expire';
+    private $_cacheLimiter = 'private_no_expire';
 
     /** @var \Magento\TestFramework\ObjectManager */
-    protected $_objectManager;
+    private $_objectManager;
 
     /** @var string Default value for session.save_path setting */
-    protected $defaultSavePath;
+    private $defaultSavePath;
 
     /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
-    protected $deploymentConfigMock;
+    private $deploymentConfigMock;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $sessionManager \Magento\Framework\Session\SessionManager */
-        $sessionManager = $this->_objectManager->create(\Magento\Framework\Session\SessionManager::class);
-        if ($sessionManager->isSessionExists()) {
-            $sessionManager->writeClose();
-        }
+
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->deploymentConfigMock
             ->method('get')

@@ -55,11 +55,8 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             $expected,
             ObjectManager::getInstance()->get(ConfigInterface::class)->getOption('session.save_handler')
         );
-    }
 
-    public function tearDown()
-    {
-        if (isset($this->originalSaveHandler)) {
+        if ($iniHandler && isset($this->originalSaveHandler) && $iniHandler != $this->originalSaveHandler) {
             ini_set('session.save_handler', $this->originalSaveHandler);
         }
     }

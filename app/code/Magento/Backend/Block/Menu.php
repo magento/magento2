@@ -387,7 +387,12 @@ class Menu extends \Magento\Backend\Block\Template
             $itemName = substr($menuId, strrpos($menuId, '::') + 2);
             $itemClass = str_replace('_', '-', strtolower($itemName));
 
-            if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake'] && $itemPosition != 1) {
+            if (
+                is_array($colBrakes)
+                && count($colBrakes)
+                && $colBrakes[$itemPosition]['colbrake']
+                && $itemPosition != 1
+            ) {
                 $output .= '</ul></li><li class="column"><ul role="menu">';
             }
 
@@ -401,7 +406,7 @@ class Menu extends \Magento\Backend\Block\Template
             $itemPosition++;
         }
 
-        if (count($colBrakes) && $limit) {
+        if (is_array($colBrakes) && count($colBrakes) && $limit) {
             $output = '<li class="column"><ul role="menu">' . $output . '</ul></li>';
         }
 

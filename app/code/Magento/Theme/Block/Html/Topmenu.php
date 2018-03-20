@@ -244,7 +244,7 @@ class Topmenu extends Template implements IdentityInterface
                 }
             }
 
-            if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+            if (is_array($colBrakes) && count($colBrakes) && $colBrakes[$counter]['colbrake']) {
                 $html .= '</ul></li><li class="column"><ul>';
             }
 
@@ -261,7 +261,7 @@ class Topmenu extends Template implements IdentityInterface
             $counter++;
         }
 
-        if (count($colBrakes) && $limit) {
+        if (is_array($colBrakes) && count($colBrakes) && $limit) {
             $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
