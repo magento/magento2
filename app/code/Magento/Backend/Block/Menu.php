@@ -387,8 +387,7 @@ class Menu extends \Magento\Backend\Block\Template
             $itemName = substr($menuId, strrpos($menuId, '::') + 2);
             $itemClass = str_replace('_', '-', strtolower($itemName));
 
-            if (
-                is_array($colBrakes)
+            if (is_array($colBrakes)
                 && count($colBrakes)
                 && $colBrakes[$itemPosition]['colbrake']
                 && $itemPosition != 1
