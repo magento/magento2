@@ -65,8 +65,7 @@ class CreateCustomerAccountStep implements TestStepInterface
         FixtureFactory $fixtureFactory,
         CustomerAccountCreate $customerAccountCreate,
         $customerPassword
-    )
-    {
+    ) {
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
         $this->fixtureFactory = $fixtureFactory;
