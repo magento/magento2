@@ -6,8 +6,7 @@
 
 namespace Magento\CatalogInventory\Observer;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -34,28 +33,19 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
     protected $itemsForReindex;
 
     /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
-
-    /**
      * SubtractQuoteInventoryObserver constructor.
      * @param StockManagementInterface $stockManagement
      * @param ProductQty $productQty
      * @param ItemsForReindex $itemsForReindex
-     * @param StockRegistryInterface|null $stockRegistry
      */
     public function __construct(
         StockManagementInterface $stockManagement,
         ProductQty $productQty,
-        ItemsForReindex $itemsForReindex,
-        StockRegistryInterface $stockRegistry = null
+        ItemsForReindex $itemsForReindex
     ) {
         $this->stockManagement = $stockManagement;
         $this->productQty = $productQty;
         $this->itemsForReindex = $itemsForReindex;
-        $this->stockRegistry = $stockRegistry
-            ?? ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -83,6 +73,8 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
         $items = $this->productQty->getProductQty($quote->getAllItems());
         /**
          * Remember items
+         *
+         * @var StockItemInterface[] $itemsForReindex
          */
         $itemsForReindex = $this->stockManagement->registerProductsSale(
             $items,
@@ -90,13 +82,19 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
         );
         $this->itemsForReindex->setItems($itemsForReindex);
         //Marking items as backordered.
-        foreach ($order->getItems() as $item) {
-            $stock = $this->stockRegistry->getStockItem($item->getProductId());
-            if (($qty = $stock->getQty()) < 0) {
-                $item->setQtyBackordered(
-                    $item->getQtyOrdered() > (- $qty)
-                        ? (- $qty) : $item->getQtyOrdered()
-                );
+        foreach ($order->getItems() as $orderItem) {
+            foreach ($itemsForReindex as $stock) {
+                if ($stock->getProductId() == $orderItem->getProductId()) {
+                    //Found stock of ordered item,
+                    //checking if the item was backordered.
+                    if (($qty = $stock->getQty()) < 0) {
+                        $orderItem->setQtyBackordered(
+                            $orderItem->getQtyOrdered() > (-$qty)
+                                ? (-$qty) : $orderItem->getQtyOrdered()
+                        );
+                    }
+                    break;
+                }
             }
         }
 
