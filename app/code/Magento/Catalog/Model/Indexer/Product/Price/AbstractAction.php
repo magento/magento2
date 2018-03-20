@@ -235,20 +235,18 @@ abstract class AbstractAction
         $linkField = $this->getProductIdFieldName();
         $priceAttribute = $this->getProductResource()->getAttribute('price');
 
-        $tierPriceValueFields = [
-            'tpcw.value',
-            'tpaw.value',
-            'tpc0.value',
-            'tpa0.value',
-        ];
-        $tierPriceValue = 'COALESCE(' . implode(', ', $tierPriceValueFields) . ')';
-        $tierPricePercentageFields = [
-            'tpcw.percentage_value',
-            'tpaw.percentage_value',
-            'tpc0.percentage_value',
-            'tpa0.percentage_value',
-        ];
-        $tierPricePercentage = 'COALESCE(' . implode(', ', $tierPricePercentageFields) . ')';
+        $tierPriceValue = 'COALESCE(' . implode(', ', [
+                'tpcw.value',
+                'tpaw.value',
+                'tpc0.value',
+                'tpa0.value',
+            ]) . ')';
+        $tierPricePercentage = 'COALESCE(' . implode(', ', [
+                'tpcw.percentage_value',
+                'tpaw.percentage_value',
+                'tpc0.percentage_value',
+                'tpa0.percentage_value',
+            ]) . ')';
         $priceValue = $this->_connection->getIfNullSql('eps.value', 'ep0.value');
         $tierPriceValueExpr = $this->_connection->getCheckSql(
             $tierPriceValue,
