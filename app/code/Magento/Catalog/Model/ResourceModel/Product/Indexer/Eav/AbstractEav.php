@@ -181,7 +181,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
             []
-        )->joinInner(
+        )->join(
             ['sw' => $this->getTable('store_website')],
             "cs.website_id = sw.website_id",
             []
