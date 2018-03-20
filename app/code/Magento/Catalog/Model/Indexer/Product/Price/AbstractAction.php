@@ -270,34 +270,26 @@ abstract class AbstractAction
             []
         )->joinLeft(
             ['tpcw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            ' tpcw.' . $linkField . ' = cpe.' . $linkField
-            . ' AND tpcw.all_groups = 0'
-            . ' AND tpcw.customer_group_id = cg.customer_group_id'
-            . ' AND tpcw.qty = 1'
+            ' tpcw.' . $linkField . ' = cpe.' . $linkField . ' AND tpcw.qty = 1'
+            . ' AND tpcw.all_groups = 0 AND tpcw.customer_group_id = cg.customer_group_id'
             . ' AND tpcw.website_id = sw.website_id',
             []
         )->joinLeft(
             ['tpaw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            'tpaw.' . $linkField . ' = cpe.' . $linkField
-            . ' AND tpaw.all_groups = 1'
-            . ' AND tpaw.customer_group_id = 0'
-            . ' AND tpaw.qty = 1'
+            'tpaw.' . $linkField . ' = cpe.' . $linkField . ' AND tpaw.qty = 1'
+            . ' AND tpaw.all_groups = 1 AND tpaw.customer_group_id = 0'
             . ' AND tpaw.website_id = sw.website_id',
             []
         )->joinLeft(
             ['tpc0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            ' tpc0.' . $linkField . ' = cpe.' . $linkField
-            . ' AND tpc0.all_groups = 0'
-            . ' AND tpc0.customer_group_id = cg.customer_group_id'
-            . ' AND tpc0.qty = 1'
+            ' tpc0.' . $linkField . ' = cpe.' . $linkField . ' AND tpc0.qty = 1'
+            . ' AND tpc0.all_groups = 0 AND tpc0.customer_group_id = cg.customer_group_id'
             . ' AND tpc0.website_id = 0',
             []
         )->joinLeft(
             ['tpa0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            'tpa0.' . $linkField . ' = cpe.' . $linkField
-            . ' AND tpa0.all_groups = 1'
-            . ' AND tpa0.customer_group_id = 0'
-            . ' AND tpa0.qty = 1'
+            'tpa0.' . $linkField . ' = cpe.' . $linkField . ' AND tpa0.qty = 1'
+            . ' AND tpa0.all_groups = 1 AND tpa0.customer_group_id = 0'
             . ' AND tpa0.website_id = 0',
             []
         )->joinLeft(
