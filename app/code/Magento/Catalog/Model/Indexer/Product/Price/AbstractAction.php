@@ -231,133 +231,35 @@ abstract class AbstractAction
         if (empty($entityIds)) {
             return $this;
         }
+
         $linkField = $this->getProductIdFieldName();
         $priceAttribute = $this->getProductResource()->getAttribute('price');
-        $baseColumns = [
-            'cpe.entity_id',
-            'tp.customer_group_id',
-            'tp.website_id'
+
+        $tierPriceValueFields = [
+            'tpcw.value',
+            'tpaw.value',
+            'tpc0.value',
+            'tpa0.value',
         ];
-        if ($linkField !== 'entity_id') {
-            $baseColumns[] = 'cpe.' . $linkField;
-        };
-        $subSelect = $this->_connection->select()->from(
-            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-            array_merge_recursive(
-                $baseColumns,
-                [
-                    'min(tp.value) AS value',
-                    'min(tp.percentage_value) AS percentage_value'
-                ]
-            )
-        )->joinInner(
-            ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
-            'tp.' . $linkField . ' = cpe.' . $linkField,
-            []
-        )->where("cpe.entity_id IN(?)", $entityIds)
-            ->where("tp.website_id != 0")
-            ->group(['cpe.entity_id', 'tp.customer_group_id', 'tp.website_id']);
-
-        $subSelect2 = $this->_connection->select()
-            ->from(
-                ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-                array_merge_recursive(
-                    $baseColumns,
-                    [
-                        'MIN(ROUND(tp.value * cwd.rate, 4)) AS value',
-                        'MIN(ROUND(tp.percentage_value * cwd.rate, 4)) AS percentage_value'
-
-                    ]
-                )
-            )
-            ->joinInner(
-                ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
-                'tp.' . $linkField . ' = cpe.' . $linkField,
-                []
-            )->join(
-                ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
-                true,
-                []
-            )
-            ->joinInner(
-                ['cwd' => $this->_defaultIndexerResource->getTable('catalog_product_index_website')],
-                'cw.website_id = cwd.website_id',
-                []
-            )
-            ->where("cpe.entity_id IN(?)", $entityIds)
-            ->where("tp.website_id = 0")
-            ->group(
-                ['cpe.entity_id', 'tp.customer_group_id', 'tp.website_id']
-            );
-
-        $unionSelect = $this->_connection->select()
-            ->union([$subSelect, $subSelect2], \Magento\Framework\DB\Select::SQL_UNION_ALL);
-        $select = $this->_connection->select()
-            ->from(
-                ['b' => new \Zend_Db_Expr(sprintf('(%s)', $unionSelect->assemble()))],
-                [
-                    'b.entity_id',
-                    'b.customer_group_id',
-                    'b.website_id',
-                    'MIN(IF(b.value = 0, product_price.value * (1 - b.percentage_value / 100), b.value))'
-                ]
-            )
-            ->joinInner(
-                ['product_price' => $priceAttribute->getBackend()->getTable()],
-                'b.' . $linkField . ' = product_price.' . $linkField,
-                []
-            )
-            ->group(['b.entity_id', 'b.customer_group_id', 'b.website_id']);
-
-        $query = $select->insertFromSelect($table, [], false);
-        $this->_connection->query($query);
-
-        $this->populateTierPriceIndexTable($table, $linkField);
-
-        return $this;
-    }
-
-    /**
-     * Populate product tier price index table with minimal tier price for one product unit if it's set.
-     *
-     * Data from index table will be processed further to calculate minimal price for product taking into account
-     * tier and special prices.
-     *
-     * @param string $table
-     * @param string $linkField
-     * @return $this
-     */
-    protected function populateTierPriceIndexTable($table, $linkField)
-    {
-        $priceAttribute = $this->getProductResource()->getAttribute('price');
-
-        $subSelect = $this->_connection->select()
-            ->from(
-                ['t' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-                [$linkField]
-            )->where(
-                't.qty = 1'
-            );
-
-        $percentageValueIfNullSql = $this->_connection->getIfNullSql('tw.percentage_value', 't0.percentage_value');
-        $valueIfNullSql = $this->_connection->getIfNullSql('tw.value', 't0.value');
+        $tierPriceValue = 'COALESCE(' . implode(', ', $tierPriceValueFields) . ')';
+        $tierPricePercentageFields = [
+            'tpcw.percentage_value',
+            'tpaw.percentage_value',
+            'tpc0.percentage_value',
+            'tpa0.percentage_value',
+        ];
+        $tierPricePercentage = 'COALESCE(' . implode(', ', $tierPricePercentageFields) . ')';
+        $priceValue = $this->_connection->getIfNullSql('eps.value', 'ep0.value');
         $tierPriceValueExpr = $this->_connection->getCheckSql(
-            $this->_connection->prepareSqlCondition($percentageValueIfNullSql, ['null' => 'null']),
-            $this->_connection->getIfNullSql('tw.value', 't0.value'),
-            sprintf('(1 - (%s/100)) * %s', $percentageValueIfNullSql, $valueIfNullSql)
+            $tierPriceValue,
+            $tierPriceValue,
+            sprintf('(1 - %s / 100) * %s', $tierPricePercentage, $priceValue)
         );
 
         $select = $this->_connection->select();
         $select->from(
             ['sw' => $this->_defaultIndexerResource->getTable('store_website')],
             []
-        )->columns(
-            [
-                'cpe.entity_id',
-                'cg.customer_group_id',
-                'sw.website_id',
-                'tier_price_value' => $tierPriceValueExpr
-            ]
         )->joinCross(
             ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             []
@@ -369,26 +271,62 @@ abstract class AbstractAction
             'sg.group_id = sw.default_group_id',
             []
         )->joinLeft(
-            ['t0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            '(t0.customer_group_id = cg.customer_group_id OR t0.all_groups = 1) 
-                AND t0.website_id = 0 AND t0.qty = 1 AND cpe.' . $linkField . ' = t0.' . $linkField,
+            ['tpcw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            ' tpcw.' . $linkField . ' = cpe.' . $linkField
+            . ' AND tpcw.all_groups = 0'
+            . ' AND tpcw.customer_group_id = cg.customer_group_id'
+            . ' AND tpcw.qty = 1'
+            . ' AND tpcw.website_id = sw.website_id',
             []
         )->joinLeft(
-            ['tw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            '(tw.customer_group_id = cg.customer_group_id OR tw.all_groups = 1) 
-                AND tw.website_id = sw.website_id AND tw.qty = 1 AND cpe.' . $linkField . ' = tw.' . $linkField,
+            ['tpaw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            'tpaw.' . $linkField . ' = cpe.' . $linkField
+            . ' AND tpaw.all_groups = 1'
+            . ' AND tpaw.customer_group_id = 0'
+            . ' AND tpaw.qty = 1'
+            . ' AND tpaw.website_id = sw.website_id',
             []
         )->joinLeft(
-            ['cped' => $this->_defaultIndexerResource->getTable('catalog_product_entity_decimal')],
-            '(cped.' . $linkField . ' = cpe.' . $linkField .') AND cped.store_id = sg.default_store_id 
-                AND cped.attribute_id = '.$priceAttribute->getId(),
+            ['tpc0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            ' tpc0.' . $linkField . ' = cpe.' . $linkField
+            . ' AND tpc0.all_groups = 0'
+            . ' AND tpc0.customer_group_id = cg.customer_group_id'
+            . ' AND tpc0.qty = 1'
+            . ' AND tpc0.website_id = 0',
             []
         )->joinLeft(
-            ['cped0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_decimal')],
-            '(cped0.' . $linkField . ' = cpe.' . $linkField . ') 
-                AND cped0.attribute_id = '.$priceAttribute->getId().' AND cped0.store_id = 0',
+            ['tpa0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
+            'tpa0.' . $linkField . ' = cpe.' . $linkField
+            . ' AND tpa0.all_groups = 1'
+            . ' AND tpa0.customer_group_id = 0'
+            . ' AND tpa0.qty = 1'
+            . ' AND tpa0.website_id = 0',
             []
-        )->where('sw.website_id != 0 AND cpe.' . $linkField . ' IN(?)', $subSelect);
+        )->joinLeft(
+            ['eps' => $priceAttribute->getBackend()->getTable()],
+            'eps.' . $linkField . ' = cpe.' . $linkField
+            . ' AND eps.attribute_id = '.$priceAttribute->getId()
+            . ' AND eps.store_id = sg.default_store_id',
+            []
+        )->joinLeft(
+            ['ep0' => $priceAttribute->getBackend()->getTable()],
+            'ep0.' . $linkField . ' = cpe.' . $linkField
+            . ' AND ep0.attribute_id = '.$priceAttribute->getId()
+            . ' AND ep0.store_id = 0',
+            []
+        )->where(
+            'cpe.entity_id IN (?)',
+            $entityIds
+        )->having(
+            'tier_price IS NOT NULL'
+        )->columns(
+            [
+                'cpe.entity_id',
+                'cg.customer_group_id',
+                'sw.website_id',
+                'tier_price' => $tierPriceValueExpr,
+            ]
+        );
 
         $query = $select->insertFromSelect($table, []);
         $this->_connection->query($query);
