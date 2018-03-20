@@ -233,7 +233,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
     private function getControllerPath($relativeFilePath)
     {
         if (preg_match('~(Magento\/.*Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
-            if (count($matches) === 2 && count($partPath = $matches[1]) >= 1) {
+            if (is_array($matches) && count($matches) === 2 && is_array($matches[1]) && count($matches[1]) >= 1) {
                 $partPath = $matches[1];
                 return $partPath;
             }
