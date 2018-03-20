@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "055fca8f5bdcf692c8c8672256f7c7cd",
+    "content-hash": "cbcce9b47021a788a89ad43bd9a57fb5",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -4093,16 +4093,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.2.17",
+            "version": "v2.2.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "12f95d20d7c8f6c2ee68d00a0fad74179ca75339"
+                "reference": "44f73c3e881805da5957ebd16ea87da9270cd5f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/12f95d20d7c8f6c2ee68d00a0fad74179ca75339",
-                "reference": "12f95d20d7c8f6c2ee68d00a0fad74179ca75339",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/44f73c3e881805da5957ebd16ea87da9270cd5f3",
+                "reference": "44f73c3e881805da5957ebd16ea87da9270cd5f3",
                 "shasum": ""
             },
             "require": {
@@ -4128,7 +4128,7 @@
                 "hhvm": "<3.18"
             },
             "require-dev": {
-                "johnkary/phpunit-speedtrap": "^1.0.1",
+                "johnkary/phpunit-speedtrap": "^1.0.1 || ^2.0 || ^3.0",
                 "justinrainbow/json-schema": "^5.0",
                 "keradus/cli-executor": "^1.0",
                 "mikey179/vfsstream": "^1.6",
@@ -4175,7 +4175,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2018-02-22T16:46:13+00:00"
+            "time": "2018-03-08T11:07:46+00:00"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -6450,7 +6450,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "php": "~7.0.13|~7.1.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
