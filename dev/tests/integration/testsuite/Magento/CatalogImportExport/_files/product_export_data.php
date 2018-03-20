@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** Rollback */
+require dirname(dirname(__DIR__)) . '/CatalogImportExport/_files/product_export_data_rollback.php';
 /** Create category */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 /** Create fixture store */
