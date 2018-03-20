@@ -40,6 +40,11 @@ class Product
     private $searchResultsFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    private $layerResolver;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
@@ -49,12 +54,14 @@ class Product
         CollectionFactory $collectionFactory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        ProductSearchResultsInterfaceFactory $searchResultsFactory
+        ProductSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -67,6 +74,7 @@ class Product
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
+        $this->layerResolver->get()->setCollection($collection);
         $this->joinProcessor->process($collection);
 
         $collection->addAttributeToSelect('*');

@@ -371,8 +371,20 @@
         <field xsi:type="ObjectInputField" name="custom_layout" type="SortEnum" description="The name of a custom layout."/>
         <field xsi:type="ObjectInputField" name="gift_message_available" type="SortEnum" description="Indicates whether a gift message is available."/>
     </type>
+    <type xsi:type="OutputType" name="LayerFilter">
+        <field xsi:type="ScalarOutputField" name="name" type="String" description="Filter name"/>
+        <field xsi:type="ScalarOutputField" name="request_var" type="String" description="Variable to be passed to request"/>
+        <field xsi:type="ScalarOutputField" name="filter_items_count" type="Int" description="Count of items matching filter."/>
+        <field xsi:type="ObjectArrayOutputField" name="filter_items" itemType="LayerFilterItem" description="Attribute code for attribtue based filter"/>
+    </type>
+    <type xsi:type="OutputType" name="LayerFilterItem">
+        <field xsi:type="ScalarOutputField" name="label" type="String" description="Filter item label"/>
+        <field xsi:type="ScalarOutputField" name="value_string" type="String" description="Filter value"/>
+        <field xsi:type="ScalarOutputField" name="items_count" type="Int" description="Filter result items count"/>
+    </type>
     <type xsi:type="OutputType" name="Products">
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="ProductInterface" description="An array of products that match the specified search criteria.."/>
+        <field xsi:type="ObjectArrayOutputField" name="filters" itemType="LayerFilter" description="An array of Layer filters."/>
         <field xsi:type="ObjectOutputField" name="page_info" type="SearchResultPageInfo" description="An object that includes the `page_info` and `currentPage` values specified in the query"/>
         <field xsi:type="ScalarOutputField" name="total_count" type="Int" description="The number of products returned."/>
     </type>

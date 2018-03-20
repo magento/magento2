@@ -54,4 +54,22 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Layer\Resolver">
+        <arguments>
+            <argument name="layersPool" xsi:type="array">
+                <item name="graphql_category" xsi:type="string">Magento\CatalogGraphQl\Model\Layer\Category</item>
+                <item name="graphql_search" xsi:type="string">Magento\CatalogGraphQl\Model\Layer\Search</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Layer\Search">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\Catalog\Model\Layer\Search\Context</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Layer\Category">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\Catalog\Model\Layer\Category\Context</argument>
+        </arguments>
+    </type>
 </config>
