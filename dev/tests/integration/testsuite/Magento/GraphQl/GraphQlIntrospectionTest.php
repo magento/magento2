@@ -33,6 +33,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
                 'query' => new ObjectType(
                     [
                         'name' => 'Query',
+                        'description' =>'Description at type level',
                         'fields' => ['a' => Type::string()]
                     ]
                 )
@@ -50,6 +51,7 @@ types{
 }
 fragment FullType on __Type{
 name
+description
 kind
 fields(includeDeprecated:true){
 name
@@ -81,6 +83,7 @@ QUERY;
         $expectedFragment =
         [
         'name' => 'Query',
+        'description' => 'Description at type level',
         'kind' => 'OBJECT',
         'fields' => [
           [
