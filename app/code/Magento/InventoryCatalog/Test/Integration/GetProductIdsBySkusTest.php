@@ -32,4 +32,18 @@ class GetProductIdsBySkusTest extends TestCase
 
         self::assertEquals($idBySku, $this->getProductIdsBySkus->execute(array_keys($idBySku)));
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
+     *
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @codingStandardsIgnoreLine
+     * @expectedExceptionMessage Following products with requested skus were not found: search_product_10, search_product_30
+     */
+    public function testExecuteWithException()
+    {
+        $idBySku = ['search_product_10' => 101, 'search_product_2' => 102, 'search_product_30' => 103];
+
+        self::assertEquals($idBySku, $this->getProductIdsBySkus->execute(array_keys($idBySku)));
+    }
 }

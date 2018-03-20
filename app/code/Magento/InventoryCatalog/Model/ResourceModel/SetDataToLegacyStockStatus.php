@@ -9,7 +9,9 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Set data to legacy cataloginventory_stock_status table via plain MySql query
@@ -27,15 +29,23 @@ class SetDataToLegacyStockStatus
     private $getProductIdsBySkus;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetProductIdsBySkusInterface $getProductIdsBySkus
+        GetProductIdsBySkusInterface $getProductIdsBySkus,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
+        $this->logger = $logger;
     }
 
     /**
@@ -46,10 +56,8 @@ class SetDataToLegacyStockStatus
      */
     public function execute(string $sku, float $quantity, int $status)
     {
-        $productIds = $this->getProductIdsBySkus->execute([$sku]);
-
-        if (isset($productIds[$sku])) {
-            $productId = $productIds[$sku];
+        try {
+            $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
             $connection = $this->resourceConnection->getConnection();
             $connection->update(
@@ -63,6 +71,8 @@ class SetDataToLegacyStockStatus
                     'website_id = ?' => 0,
                 ]
             );
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error($e->getMessage());
         }
     }
 }
