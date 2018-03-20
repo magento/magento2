@@ -13,7 +13,7 @@
         <arguments>
             <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
-        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderIndexPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>

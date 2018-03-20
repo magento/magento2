@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
         <!--Create Downloadable Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
             <argument name="product" value="DownloadableProduct"/>
