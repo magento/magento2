@@ -9,6 +9,7 @@
  */
 namespace Magento\Test\Bootstrap;
 
+ob_start();
 class EnvironmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
