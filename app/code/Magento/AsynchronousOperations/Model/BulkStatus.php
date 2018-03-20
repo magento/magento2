@@ -153,24 +153,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      */
     public function getOperationsCountByBulkIdAndStatus($bulkUuid, $status)
     {
-        if ($status === OperationInterface::STATUS_TYPE_OPEN) {
-            /**
-             * Total number of operations that has been scheduled within the given bulk
-             */
-            $allOperationsQty = $this->getOperationCount($bulkUuid);
-
-            /**
-             * Number of operations that has been processed (i.e. operations with any status but 'open')
-             */
-            $allProcessedOperationsQty = (int)$this->operationCollectionFactory->create()
-                                                                               ->addFieldToFilter(
-                                                                                   'bulk_uuid',
-                                                                                   $bulkUuid
-                                                                               )
-                                                                               ->getSize();
-
-            return $allOperationsQty - $allProcessedOperationsQty;
-        }
 
         /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection $collection */
         $collection = $this->operationCollectionFactory->create();
@@ -295,12 +277,12 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
         /** @var \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails */
         $operationDetails = $this->operationDetailsFactory->create(['bulkUuid' => $bulkUuid]);
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $bulkExtensionAttribute */
-        $bulkExtensionAttribute = $this->bulkSummaryExtensionInterfaceFactory->create();
-        $bulkExtensionAttribute->setOperationsList($operationList);
+        /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $bulkAttribute */
+        $bulkAttribute = $this->bulkSummaryExtensionInterfaceFactory->create();
+        $bulkAttribute->setOperationsList($operationList);
 
-        $bulkExtensionAttribute->setOperationsCount($operationDetails);
-        $bulk->setExtensionAttributes($bulkExtensionAttribute);
+        $bulkAttribute->setOperationsCount($operationDetails);
+        $bulk->setExtensionAttributes($bulkAttribute);
 
         return $bulk;
     }

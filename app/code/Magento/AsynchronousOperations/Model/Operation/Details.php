@@ -78,12 +78,7 @@ class Details implements OperationDetailsInterface
             );
         }
 
-        // total is sum of successful, rejected, retriable, not retriable and open operations
-        $details['operations_total'] =
-            array_sum($details) + $this->bulkStatus->getOperationsCountByBulkIdAndStatus(
-                $bulkUuid,
-                OperationInterface::STATUS_TYPE_OPEN
-            );
+        $details['operations_total'] = array_sum($details);
         $details['operations_failed'] = $details['failed_retriable'] + $details['failed_not_retriable'];
         $this->operationCache[$bulkUuid] = $details;
 
