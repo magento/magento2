@@ -109,13 +109,9 @@ class Fields implements FormatterInterface
             } else {
                 if ($typeStructure->getName() == $field->getTypeName()) {
                     $type = $outputType;
+                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
                 } else {
-                    if ($typeStructure->getName() == $field->getTypeName()) {
-                        $type = $outputType;
-                    } else {
-                        $type = $this->outputMapper->getTypeObject($field->getTypeName());
-                    }
-
+                    $type = $this->outputMapper->getTypeObject($field->getTypeName());
                     $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
                 }
             }
@@ -139,6 +135,7 @@ class Fields implements FormatterInterface
             }
             $config = $this->formatArguments($field, $config);
         }
+
         return $config;
     }
 

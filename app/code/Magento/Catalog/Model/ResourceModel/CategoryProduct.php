@@ -29,4 +29,47 @@ class CategoryProduct extends AbstractDb
     {
         $this->_init('catalog_category_product', 'entity_id');
     }
+
+    /**
+     * Retrieve distinct product ids, that are linked to categories
+     *
+     * @return array
+     */
+    public function getDistinctProductIds()
+    {
+        $productIdsSelect = $this
+            ->getConnection()
+            ->select()
+            ->from($this->getTable('catalog_category_product'), 'product_id')
+            ->distinct('product_id');
+
+        return $this->getConnection()->fetchAll($productIdsSelect);
+    }
+
+    /**
+     * Retrieve product ids grouped by categories
+     *
+     * @return array
+     */
+    public function getProductsIdsGroupedByCategories()
+    {
+        $productIdsGroupedByCategories = [];
+        $productIdsSelect = $this
+            ->getConnection()
+            ->select()
+            ->from(
+                $this->getTable('catalog_category_product'),
+                ['category_id', 'product_id', 'position']
+            );
+
+        $categoriesData = $this->getConnection()->fetchAll($productIdsSelect);
+
+        foreach ($categoriesData as $categoryData) {
+            $categoryId = $categoryData['category_id'];
+            $productId = $categoryData['product_id'];
+            $productIdsGroupedByCategories[$categoryId][$productId] = $categoryData['position'];
+        }
+
+        return $productIdsGroupedByCategories;
+    }
 }

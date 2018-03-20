@@ -6,6 +6,8 @@
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Model\ResourceModel\CategoryProduct;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\SearchResultInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -24,6 +26,11 @@ class Product
     private $collectionFactory;
 
     /**
+     * @var array
+     */
+    private $productsByCategories = null;
+
+    /**
      * @var JoinProcessorInterface
      */
     private $joinProcessor;
@@ -39,21 +46,37 @@ class Product
     private $searchResultsFactory;
 
     /**
+     * @var CategoryProduct
+     */
+    private $categoryProduct;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CategoryProduct $categoryProduct
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        ProductSearchResultsInterfaceFactory $searchResultsFactory
+        ProductSearchResultsInterfaceFactory $searchResultsFactory,
+        CategoryProduct $categoryProduct,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->categoryProduct = $categoryProduct;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -85,5 +108,29 @@ class Product
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
         return $searchResult;
+    }
+
+    /**
+     * Retrieve products list by category ids
+     *
+     * @param $categoryId
+     * @return array
+     */
+    public function getListOfProductsInCategories($categoryId)
+    {
+        if ($this->productsByCategories === null) {
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+                    'entity_id',
+                    $this->categoryProduct->getDistinctProductIds(),
+                    'in'
+                )
+                ->create();
+
+            $this->productsByCategories = $this->getList($searchCriteria)->getItems();
+        }
+
+        $productsByCategories = $this->categoryProduct->getProductsIdsGroupedByCategories();
+        $productIds = $productsByCategories[$categoryId] ?? [];
+        return array_intersect_key($this->productsByCategories, array_keys($productIds));
     }
 }
