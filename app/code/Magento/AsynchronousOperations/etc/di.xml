@@ -12,6 +12,9 @@
     <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
     <preference for="Magento\Framework\Bulk\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
     <preference for="Magento\Framework\Bulk\OperationManagementInterface" type="Magento\AsynchronousOperations\Model\OperationManagement" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationDetailsInterface" type="Magento\AsynchronousOperations\Model\Operation\Details" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationShortDetailsInterface" type="Magento\AsynchronousOperations\Model\OperationShortDetails" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\ShortOperationListInterface" type="Magento\AsynchronousOperations\Model\ShortOperationList" />
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
@@ -76,4 +79,6 @@
     </type>
     <virtualType name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
                  type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+
+    <preference for="Magento\AsynchronousOperations\Api\BulkRepositoryInterface" type="Magento\Framework\Bulk\BulkStatusInterface" />
 </config>
