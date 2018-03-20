@@ -67,7 +67,7 @@
 
         <!--Submit Order and verify information-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
 
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
@@ -89,7 +89,7 @@
         <comment userInput="Admin creates invoice for order" stepKey="adminCreateInvoiceComment" before="closeAdminNotificationInvoice"/>
         <closeAdminNotification stepKey="closeAdminNotificationInvoice" after="seeConfigurableProductInItemsOrdered"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction" after="closeAdminNotificationInvoice"/>
-        <seeInCurrentUrl url="{{AdminInvoiceNewPage}}" stepKey="seeOrderInvoiceUrl" after="clickInvoiceAction"/>
+        <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl" after="clickInvoiceAction"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage" after="seeOrderInvoiceUrl"/>
 
         <!--Check Invoice Data-->
@@ -104,7 +104,7 @@
         <!--Submit Invoice-->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice" after="seeShippingCost"/>
         <!--Invoice created successfully-->
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage}}" stepKey="seeViewOrderPageInvoice" after="clickSubmitInvoice"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice" after="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess" after="seeViewOrderPageInvoice"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess"/>
 
@@ -129,7 +129,7 @@
         <!--Create Credit Memo-->
         <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment" after="clickOrderIdOnShipment"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
-        <seeInCurrentUrl url="{{AdminCreditMemoNewPage}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage"/>
         <!--Check Credit Memo Order Data-->
         <actionGroup ref="verifyBasicCreditMemoInformation" stepKey="verifyOrderCreditMemoInformation" after="seeNewMemoInPageTitle">
@@ -162,7 +162,7 @@
 
         <!--Admin uses order grid-->
         <comment userInput="Admin uses order grid" stepKey="adminUseOrderGridComment" before="navigateToOrderGridPage"/>
-        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage" after="clickOrderIdLinkOnCreditMemo"/>
         <waitForPageLoad time="60" stepKey="waitForLoadUseOrderGrid" after="navigateToOrderGridPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrderGridPageLoad" after="waitForLoadUseOrderGrid"/>
 
