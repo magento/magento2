@@ -118,7 +118,8 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request) {
+    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    {
         if (strpos(ltrim($request->getPathInfo(), '/'), $this->getProcessorPath()) === 0) {
             return true;
         }

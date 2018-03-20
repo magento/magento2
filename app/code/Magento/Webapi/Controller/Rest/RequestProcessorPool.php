@@ -35,9 +35,6 @@ class RequestProcessorPool
      */
     public function getProcessor(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        /**
-         * @var RequestProcessorInterface $processor
-         */
         foreach ($this->requestProcessors as $processor) {
             if ($processor->canProcess($request)) {
                 return $processor;
