@@ -10,14 +10,11 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminAddMultipleSourcesToProductTest">
         <annotations>
-            <features value="Multi-Source Inventory 1"/>
-            <features value="Multi-Source Inventory 2"/>
-            <stories value="Add Multiple Sources to a Product 1"/>
-            <stories value="Add Multiple Sources to a Product 2"/>
+            <features value="Multi-Source Inventory"/>
+            <stories value="Add Multiple Sources to a Product"/>
             <title value="You should be able to add Multiple Sources to a Product."/>
             <testCaseId value="630"/>
-            <group value="skip"/>
-            <group value="banana"/>
+            <group value="msi"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
@@ -27,6 +24,15 @@
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
+                <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+                <argument name="value" value="SimpleProduct.sku"/>
+            </actionGroup>
+
+            <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
         </before>
         <after>
             <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
@@ -34,12 +40,26 @@
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
-            <argument name="selector" value="AdminProductGridFilterControls.sku"/>
-            <argument name="value" value="SimpleProduct.sku"/>
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource1.general[source_code]$$"/>
         </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByIndex('0')}}" stepKey="clickOnCheckbox1"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone1"/>
 
-        <click selector="{{AdminGridRow.editByValue(SimpleProduct.sku)}}" stepKey="clickOnEdit"/>
+        <click selector="{{AdminProductSourcesSection.assignSources}}" stepKey="clickOnAssignSources2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults2">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$createSource2.general[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminAssignSourcesSlideOutGridSection.checkboxByIndex('0')}}" stepKey="clickOnCheckbox2"/>
+        <click selector="{{AdminAssignSourcesSlideOutSection.done}}" stepKey="clickOnDone2"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.general[source_code]$$" stepKey="seeSourceIdInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.general[name]$$" stepKey="seeSourceNameInGrid1"/>
+
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.general[source_code]$$" stepKey="seeSourceIdInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.general[name]$$" stepKey="seeSourceNameInGrid2"/>
     </test>
 </tests>
