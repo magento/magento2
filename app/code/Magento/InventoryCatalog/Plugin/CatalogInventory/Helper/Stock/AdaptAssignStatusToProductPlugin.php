@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Helper\Stock;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Helper\Stock;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 
@@ -28,15 +29,23 @@ class AdaptAssignStatusToProductPlugin
     private $isProductSalable;
 
     /**
+    * @var DefaultStockProviderInterface
+    */
+    private $defaultStockProvider;
+
+    /**
      * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
      * @param IsProductSalableInterface $isProductSalable
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        IsProductSalableInterface $isProductSalable
+        IsProductSalableInterface $isProductSalable,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
         $this->isProductSalable = $isProductSalable;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -53,20 +62,13 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
-        // TODO: https://github.com/magento-engcom/msi/issues/532
-        if ($product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-            && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-        ) {
-            return;
+        $stockId = $this->getStockIdForCurrentWebsite->execute();
+        if ($this->defaultStockProvider->getId() !== $stockId) {
+            if (null === $status && null !== $product->getSku()) {
+                $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
+            }
         }
 
-        if (null === $product->getSku()) {
-            return;
-        }
-        if (null === $status) {
-            $stockId = $this->getStockIdForCurrentWebsite->execute();
-            $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
-        }
         $proceed($product, $status);
     }
 }
