@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <!--Filter order grid by order id field-->
     <actionGroup name="filterOrderGridById">
-        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
         <waitForPageLoad stepKey="waitForOrderGridLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
@@ -23,7 +23,7 @@
         <arguments>
             <argument name="customer"/>
         </arguments>
-        <amOnPage url="{{AdminOrdersPage}}" stepKey="navigateToOrderGridPage"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
         <waitForPageLoad stepKey="waitForOrderGridLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
