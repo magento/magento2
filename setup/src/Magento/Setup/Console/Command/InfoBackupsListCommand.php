@@ -87,7 +87,7 @@ class InfoBackupsListCommand extends Command
             }
             if (empty($tempTable)) {
                 $output->writeln('<info>No backup files found.</info>');
-                return;
+                return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
             }
             $output->writeln("<info>Showing backup files in $backupsDir.</info>");
             /** @var \Symfony\Component\Console\Helper\Table $table */
@@ -101,5 +101,7 @@ class InfoBackupsListCommand extends Command
         } else {
             $output->writeln('<info>No backup files found.</info>');
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
