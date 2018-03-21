@@ -7,19 +7,17 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
-    <preference for="Magento\WebapiAsync\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config" />
     <preference for="Magento\WebapiAsync\Api\Data\AsyncResponseInterface" type="Magento\WebapiAsync\Model\AsyncResponse" />
     <preference for="Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemStatus" />
     <preference for="Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemsList" />
 
-    <type name="Magento\Framework\MessageQueue\MergerFactory">
+    <!--type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
                 <item name="async.#" xsi:type="string">Magento\WebapiAsync\Model\Merger</item>
             </argument>
         </arguments>
-    </type>
+    </type-->
 
     <virtualType name="Magento\WebapiAsync\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
         <arguments>
