@@ -21,12 +21,11 @@
             <!--display field to insert link value based on link type-->
             <div ko-scope="getLinkedElementName()" class="url-input-element-linked-element">
                 <render/>
-                <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+                <label class="admin__field-error" visible="error" attr="for: uid" text="error"/>
             </div>
         </div>
 
         <!--display container to specify url options(Example: open in new tab)-->
-        <render if="isDisplayAdditionalSettings" args="settingTemplate"/>
-        <div/>
+        <div render="settingTemplate" if="isDisplayAdditionalSettings"/>
     </div>
 </div>

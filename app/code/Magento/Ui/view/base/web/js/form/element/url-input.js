@@ -37,7 +37,6 @@ define([
                 }
             },
             listens: {
-                value: 'renderComponent',
                 checked: 'updateSettingValue',
                 disabled: 'hideLinkedElement'
             },
@@ -154,9 +153,11 @@ define([
          *
          * @return void
          */
-        renderComponent: function (value) {
+        setDifferedFromDefault: function (value) {
+            this._super();
+
             if (!_.isUndefined(value) && value) {
-                this.setChildUrlInputComponent(value);
+                this.createChildUrlInputComponent(value);
                 //to store current element
                 this.linkedElement = this.linkedElementInstances[value];
                 this.linkType(value);
@@ -164,12 +165,12 @@ define([
         },
 
         /**
-         * Set child component by value
+         * Create child component by value
          *
          * @param {String} value
          * @return void
          */
-        setChildUrlInputComponent: function (value) {
+        createChildUrlInputComponent: function (value) {
             var elementConfig;
 
             if (_.isUndefined(this.linkedElementInstances[value])) {
