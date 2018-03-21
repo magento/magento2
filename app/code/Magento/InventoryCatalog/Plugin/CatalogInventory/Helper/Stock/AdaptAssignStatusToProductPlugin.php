@@ -54,6 +54,7 @@ class AdaptAssignStatusToProductPlugin
      * @param Product $product
      * @param int|null $status
      * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAssignStatusToProduct(
@@ -62,13 +63,15 @@ class AdaptAssignStatusToProductPlugin
         Product $product,
         $status = null
     ) {
-        $stockId = $this->getStockIdForCurrentWebsite->execute();
-        if ($this->defaultStockProvider->getId() !== $stockId) {
-            if (null === $status && null !== $product->getSku()) {
-                $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
-            }
+        if (null === $product->getSku()) {
+            return;
         }
 
+        $stockId = $this->getStockIdForCurrentWebsite->execute();
+
+        if ($this->defaultStockProvider->getId() !== $stockId && null === $status) {
+            $status = (int)$this->isProductSalable->execute($product->getSku(), $stockId);
+        }
         $proceed($product, $status);
     }
 }
