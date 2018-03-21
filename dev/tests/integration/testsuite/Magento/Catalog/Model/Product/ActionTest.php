@@ -29,6 +29,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/385');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\App\Cache\StateInterface $cacheState */
