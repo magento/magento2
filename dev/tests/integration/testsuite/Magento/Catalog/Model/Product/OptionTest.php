@@ -59,10 +59,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple');
         $fileOption = $product->getOptions()[0];
         $actualExtensions = $fileOption->getFileExtension();
-        $this->assertEquals(
-            $expectedExtensions,
-            $actualExtensions
-        );
+        $this->assertEquals($expectedExtensions, $actualExtensions);
     }
 
     /**
@@ -79,7 +76,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             ['jpg png gif', 'jpg, png, gif'],
             ['!jpg@png#gif%', 'jpg, png, gif'],
             ['jpg, png, 123', 'jpg, png, 123'],
-            ['', '']
+            ['', ''],
         ];
     }
 
@@ -101,7 +98,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'sku' => 'sku3',
             'file_extension' => $rawExtensions,
             'image_size_x' => 10,
-            'image_size_y' => 20
+            'image_size_y' => 20,
         ];
 
         return $this->customOptionFactory->create(['data' => $data]);

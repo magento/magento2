@@ -82,10 +82,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->model->setFileExtension($rawExtensions);
         $this->model->beforeSave();
         $actualExtensions = $this->model->getFileExtension();
-        $this->assertEquals(
-            $expectedExtensions,
-            $actualExtensions
-        );
+        $this->assertEquals($expectedExtensions, $actualExtensions);
     }
 
     /**
@@ -102,7 +99,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             ['jpg png gif', 'jpg, png, gif'],
             ['!jpg@png#gif%', 'jpg, png, gif'],
             ['jpg, png, 123', 'jpg, png, 123'],
-            ['', '']
+            ['', ''],
         ];
     }
 }

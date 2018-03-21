@@ -20,7 +20,7 @@ class AssertFileExtensionHints extends AbstractAssertForm
      *
      * @var string
      */
-    const EXPECTED_MESSAGE = 'Enter separated extensions, like: png, jpg, gif. Leave blank to allow any.';
+    const EXPECTED_MESSAGE = 'Enter separated extensions, like: png, jpg, gif.';
 
     /**
      * Assert that file extension message is showed.
