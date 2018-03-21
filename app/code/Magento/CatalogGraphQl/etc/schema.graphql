@@ -1,13 +1,12 @@
 type Query {
     products(
-        search: String @doc(description: "comment for search."),
+        search: String,
         filter: ProductFilterInput,
         pageSize: Int,
         currentPage: Int,
         sort: ProductSortInput
      ): Products
      @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products")
-     @doc(description: "comment for products.")
 }
 
 enum CurrencyEnum {
@@ -250,11 +249,8 @@ type ProductTierPrices {
     website_id: Float
 }
 
-interface ProductInterface
-@typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite")
-@doc(description: "comment for ProductInterface.")
-{
-    id: Int @doc(description: "comment for ProductInterface Id.")
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
+    id: Int
     name: String
     sku: String
     description: String
@@ -450,12 +446,13 @@ type VirtualProduct implements ProductInterface, CustomizableProductInterface {
     manufacturer: Int
 }
 
-type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "comment for SimpleProduct.") {
+type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface
+{
     id: Int
     name: String
     sku: String
     description: String
-    short_description: String @doc(description: "Comment for short_description.")
+    short_description: String
     special_price: Float
     special_from_date: String
     special_to_date: String
@@ -496,15 +493,15 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
     manufacturer: Int
 }
 
-type Products @doc(description:"Comment for Products") {
-    items: [ProductInterface]  @doc(description: "comment for items[ProductInterface] on Products.")
-    page_info: SearchResultPageInfo @doc(description: "comment for page_info.")
+type Products {
+    items: [ProductInterface]
+    page_info: SearchResultPageInfo
     total_count: Int
 }
 
-input ProductFilterInput @doc(description:"Comment for ProductFilterInput") {
+input ProductFilterInput {
     name: FilterTypeInput
-    sku: FilterTypeInput @doc(description:"Comment for sku")
+    sku: FilterTypeInput
     description: FilterTypeInput
     short_description: FilterTypeInput
     price: FilterTypeInput
@@ -542,7 +539,7 @@ input ProductFilterInput @doc(description:"Comment for ProductFilterInput") {
     or: ProductFilterInput
 }
 
-type ProductMediaGalleryEntriesContent @doc(description: "Comment for ProductMediaGalleryEntriesContent.") {
+type ProductMediaGalleryEntriesContent {
     base64_encoded_data: String
     type: String
     name: String
@@ -557,14 +554,14 @@ type ProductMediaGalleryEntriesVideoContent {
     video_metadata: String
 }
 
-input ProductSortInput @doc(description:"Comment for Input ProductSortInput") {
-    name: SortEnum @doc(description:"Name")
+input ProductSortInput {
+    name: SortEnum
     sku: SortEnum
     description: SortEnum
     short_description: SortEnum
     price: SortEnum
     special_price: SortEnum
-    special_from_date: SortEnum @doc(description:"Comment for special_from_date")
+    special_from_date: SortEnum
     special_to_date: SortEnum
     weight: SortEnum
     manufacturer: SortEnum
@@ -596,10 +593,8 @@ input ProductSortInput @doc(description:"Comment for Input ProductSortInput") {
     gift_message_available: SortEnum
 }
 
-type MediaGalleryEntry
-@doc(description: "comment for MediaGalleryEntry")
-{
-    id: Int @doc(description: "id for MediaGalleryEntry")
+type MediaGalleryEntry {
+    id: Int
     media_type: String
     label: String
     position: Int

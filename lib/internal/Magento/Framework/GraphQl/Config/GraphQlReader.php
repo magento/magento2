@@ -54,6 +54,9 @@ class GraphQlReader implements ReaderInterface
         $this->fileName = $fileName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($scope = null) : array
     {
         $result = [];

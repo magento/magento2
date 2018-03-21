@@ -1,9 +1,9 @@
 type Query {
-    placeholder: String @doc(description: "comment for placeholder.")
+    placeholder: String
 }
 
-input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
-    eq: String @doc(description:"comment for Equal")
+input FilterTypeInput {
+    eq: String
     finset: [String]
     from: String
     gt: String
@@ -20,15 +20,12 @@ input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
     nin: [String]
 }
 
-type SearchResultPageInfo
-@doc(description:"Comment for SearchResultPageInfo")
-{
-    page_size: Int @doc(description:"Comment for page_size")
-    current_page: Int @doc(description:"Comment for current_page")
+type SearchResultPageInfo {
+    page_size: Int
+    current_page: Int
 }
 
-enum SortEnum @doc(description: "comment for SortEnum.")
-{
-    ASC @doc(description:"comment for Ascending")
+enum SortEnum {
+    ASC
     DESC
 }
