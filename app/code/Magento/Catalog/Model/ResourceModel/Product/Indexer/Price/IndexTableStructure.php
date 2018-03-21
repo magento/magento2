@@ -7,49 +7,175 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Framework\DataObject;
-
 /**
  * Wrapper for structure of price index table.
- *
- * @method string getTableName()
- * @method string getEntityField()
- * @method string getCustomerGroupField()
- * @method string getWebsiteField()
- * @method string getTaxClassField()
- * @method string getOriginalPriceField()
- * @method string getFinalPriceField()
- * @method string getMinPriceField()
- * @method string getMaxPriceField()
- * @method string getTierPriceField()
  */
-class IndexTableStructure extends DataObject
+class IndexTableStructure
 {
     /**
-     * @inheritdoc
+     * @var string
      */
-    public function __construct(array $data = [])
-    {
-        $requiredFields = [
-            'table_name',
-            'entity_field',
-            'customer_group_field',
-            'website_field',
-            'tax_class_field',
-            'original_price_field',
-            'final_price_field',
-            'min_price_field',
-            'max_price_field',
-            'tier_price_field',
-        ];
-        $data = array_filter($data);
-        $emptyRequiredFields = array_diff_key(array_flip($requiredFields), $data);
-        if ($emptyRequiredFields) {
-            throw new \InvalidArgumentException(
-                '[' . implode(', ', array_keys($emptyRequiredFields)) . '] are required fields'
-            );
-        }
+    private $tableName;
 
-        parent::__construct($data);
+    /**
+     * @var string
+     */
+    private $entityField;
+
+    /**
+     * @var string
+     */
+    private $customerGroupField;
+
+    /**
+     * @var string
+     */
+    private $websiteField;
+
+    /**
+     * @var string
+     */
+    private $taxClassField;
+
+    /**
+     * @var string
+     */
+    private $originalPriceField;
+
+    /**
+     * @var string
+     */
+    private $finalPriceField;
+
+    /**
+     * @var string
+     */
+    private $minPriceField;
+
+    /**
+     * @var string
+     */
+    private $maxPriceField;
+
+    /**
+     * @var string
+     */
+    private $tierPriceField;
+
+    /**
+     * @param string $tableName
+     * @param string $entityField
+     * @param string $customerGroupField
+     * @param string $websiteField
+     * @param string $taxClassField
+     * @param string $originalPriceField
+     * @param string $finalPriceField
+     * @param string $minPriceField
+     * @param string $maxPriceField
+     * @param string $tierPriceField
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        string $tableName,
+        string $entityField,
+        string $customerGroupField,
+        string $websiteField,
+        string $taxClassField,
+        string $originalPriceField,
+        string $finalPriceField,
+        string $minPriceField,
+        string $maxPriceField,
+        string $tierPriceField
+    ) {
+        $this->tableName = $tableName;
+        $this->entityField = $entityField;
+        $this->customerGroupField = $customerGroupField;
+        $this->websiteField = $websiteField;
+        $this->taxClassField = $taxClassField;
+        $this->originalPriceField = $originalPriceField;
+        $this->finalPriceField = $finalPriceField;
+        $this->minPriceField = $minPriceField;
+        $this->maxPriceField = $maxPriceField;
+        $this->tierPriceField = $tierPriceField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName(): string
+    {
+        return $this->tableName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityField(): string
+    {
+        return $this->entityField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerGroupField(): string
+    {
+        return $this->customerGroupField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsiteField(): string
+    {
+        return $this->websiteField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaxClassField(): string
+    {
+        return $this->taxClassField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalPriceField(): string
+    {
+        return $this->originalPriceField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFinalPriceField(): string
+    {
+        return $this->finalPriceField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinPriceField(): string
+    {
+        return $this->minPriceField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaxPriceField(): string
+    {
+        return $this->maxPriceField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTierPriceField(): string
+    {
+        return $this->tierPriceField;
     }
 }
