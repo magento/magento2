@@ -62,10 +62,13 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     *  {@inheritdoc}
+     * {@inheritdoc}
      */
-    public function getProcessorPath()
+    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        return self::PROCESSOR_PATH;
+        if (preg_match(self::PROCESSOR_PATH, ltrim($request->getPathInfo(), '/')) === 0) {
+            return true;
+        }
+        return false;
     }
 }
