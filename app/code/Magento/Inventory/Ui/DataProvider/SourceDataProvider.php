@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Ui\DataProvider;
 
 use Magento\Backend\Model\Session;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -38,6 +39,11 @@ class SourceDataProvider extends DataProvider
     private $session;
 
     /**
+     * @var RegionFactory
+     */
+    private $regionFactory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -48,6 +54,7 @@ class SourceDataProvider extends DataProvider
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchResultFactory $searchResultFactory
      * @param Session $session
+     * @param RegionFactory $regionFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -63,6 +70,7 @@ class SourceDataProvider extends DataProvider
         SourceRepositoryInterface $sourceRepository,
         SearchResultFactory $searchResultFactory,
         Session $session,
+        RegionFactory $regionFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -80,6 +88,7 @@ class SourceDataProvider extends DataProvider
         $this->sourceRepository = $sourceRepository;
         $this->searchResultFactory = $searchResultFactory;
         $this->session = $session;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -109,7 +118,10 @@ class SourceDataProvider extends DataProvider
                     ];
                 }
             }
+        } elseif ('inventory_source_listing_data_source' === $this->name) {
+            $data = $this->prepareRegionData($data);
         }
+
         return $data;
     }
 
@@ -146,5 +158,25 @@ class SourceDataProvider extends DataProvider
             }
         }
         return $carrierCodes;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    private function prepareRegionData(array $data): array
+    {
+        foreach ($data['items'] as $key => $item) {
+            $regionId = $item['region_id'] ?? 0;
+
+            if ($regionId != 0) {
+                $region = $this->regionFactory->create();
+                $region->load($regionId);
+                $data['items'][$key]['region'] = $region->getName();
+            }
+        }
+
+        return $data;
     }
 }

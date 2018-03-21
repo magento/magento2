@@ -40,9 +40,7 @@ class SourceRegionDataProcessor
         $regionId = $data['region_id'] ?? 0;
 
         if ($regionId != 0) {
-            $region = $this->regionFactory->create();
-            $region->load($regionId);
-            $data['region'] = $region->getName();
+            $data['region'] = null;
         }
 
         return $data;
