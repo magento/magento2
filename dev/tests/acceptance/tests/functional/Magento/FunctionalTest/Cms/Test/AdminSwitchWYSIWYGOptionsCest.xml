@@ -16,6 +16,8 @@
             <title value="Admin are able to switch between versions of TinyMCE."/>
             <description value="Admin are able to switch between versions of TinyMCE."/>
             <severity value="CRITICAL"/>
+            <group value="skip"/>
+            <!-- Skipped; see MAGETWO-89417 -->
             <testCaseId value="MAGETWO-82936"/>
         </annotations>
         <before>
