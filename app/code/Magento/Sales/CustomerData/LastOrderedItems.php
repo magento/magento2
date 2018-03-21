@@ -7,6 +7,8 @@ namespace Magento\Sales\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Returns information for "Recently Ordered" widget.
@@ -61,6 +63,11 @@ class LastOrderedItems implements SectionSourceInterface
     private $productRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
@@ -74,7 +81,8 @@ class LastOrderedItems implements SectionSourceInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        LoggerInterface $logger = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
@@ -82,6 +90,7 @@ class LastOrderedItems implements SectionSourceInterface
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -118,12 +127,17 @@ class LastOrderedItems implements SectionSourceInterface
             /** @var \Magento\Sales\Model\Order\Item $item */
             foreach ($order->getParentItemsRandomCollection($limit) as $item) {
                 /** @var \Magento\Catalog\Model\Product $product */
-                $product = $this->productRepository->getById(
-                    $item->getProductId(),
-                    false,
-                    $this->_storeManager->getStore()->getId()
-                );
-                if ($product && in_array($website, $product->getWebsiteIds())) {
+                try {
+                    $product = $this->productRepository->getById(
+                        $item->getProductId(),
+                        false,
+                        $this->_storeManager->getStore()->getId()
+                    );
+                }catch (\Magento\Framework\Exception\NoSuchEntityException $e){
+                    $this->logger->critical($e);
+                    break;
+                }
+                if (isset($product) && in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
                     $items[] = [
                         'id' => $item->getId(),
