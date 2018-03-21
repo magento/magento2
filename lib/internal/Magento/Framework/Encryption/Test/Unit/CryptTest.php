@@ -111,8 +111,18 @@ class CryptTest extends \PHPUnit\Framework\TestCase
                 $tooShortInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) - 1);
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
                 $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
-                $result['key-' . $cipher . '-' . $mode . '-tooShortInitVector'] = [$this->_key, $cipher, $mode, $tooShortInitVector];
-                $result['key-' . $cipher . '-' . $mode . '-tooLongInitVector'] = [$this->_key, $cipher, $mode, $tooLongInitVector];
+                $result['key-' . $cipher . '-' . $mode . '-tooShortInitVector'] = [
+                    $this->_key,
+                    $cipher,
+                    $mode,
+                    $tooShortInitVector
+                ];
+                $result['key-' . $cipher . '-' . $mode . '-tooLongInitVector'] = [
+                    $this->_key,
+                    $cipher,
+                    $mode,
+                    $tooLongInitVector
+                ];
             }
         }
         return $result;
