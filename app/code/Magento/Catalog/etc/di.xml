@@ -1061,4 +1061,9 @@
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
 </config>

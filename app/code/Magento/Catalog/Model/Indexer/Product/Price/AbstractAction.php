@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Abstract action reindex class
  *
@@ -71,9 +73,9 @@ abstract class AbstractAction
     protected $_indexers;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice
      */
-    private $productResource;
+    private $tierPriceIndexResource;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -84,6 +86,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -93,7 +96,8 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -104,6 +108,9 @@ abstract class AbstractAction
         $this->_indexerPriceFactory = $indexerPriceFactory;
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
+        $this->tierPriceIndexResource = $tierPriceIndexResource ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
+        );
     }
 
     /**
@@ -139,21 +146,10 @@ abstract class AbstractAction
         $sql = $select->deleteFromSelect('index_price');
         $this->_connection->query($sql);
 
-        $updateData = [
-            'final_price' => $this->_connection->getCheckSql('tier_price < final_price', 'tier_price', 'final_price'),
-            'min_price' => $this->_connection->getCheckSql('tier_price < min_price', 'tier_price', 'min_price'),
-        ];
-        $where = [];
-        if (!empty($processIds)) {
-            $where['entity_id IN (?)'] = $processIds;
-        }
-        $this->_connection->update($this->_defaultIndexerResource->getIdxTable(), $updateData, $where);
-
         $this->_insertFromTable(
             $this->_defaultIndexerResource->getIdxTable(),
             $this->getIndexTargetTable()
         );
-
         return $this;
     }
 
@@ -226,100 +222,7 @@ abstract class AbstractAction
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
-        $table = $this->_defaultIndexerResource->getTable('catalog_product_index_tier_price');
-        $this->_emptyTable($table);
-        if (empty($entityIds)) {
-            return $this;
-        }
-
-        $linkField = $this->getProductIdFieldName();
-        $priceAttribute = $this->getProductResource()->getAttribute('price');
-
-        $tierPriceValue = 'COALESCE(' . implode(', ', [
-                'tpcw.value',
-                'tpaw.value',
-                'tpc0.value',
-                'tpa0.value',
-            ]) . ')';
-        $tierPricePercentage = 'COALESCE(' . implode(', ', [
-                'tpcw.percentage_value',
-                'tpaw.percentage_value',
-                'tpc0.percentage_value',
-                'tpa0.percentage_value',
-            ]) . ')';
-        $priceValue = $this->_connection->getIfNullSql('eps.value', 'ep0.value');
-        $tierPriceValueExpr = $this->_connection->getCheckSql(
-            $tierPriceValue,
-            $tierPriceValue,
-            sprintf('(1 - %s / 100) * %s', $tierPricePercentage, $priceValue)
-        );
-
-        $select = $this->_connection->select();
-        $select->from(
-            ['sw' => $this->_defaultIndexerResource->getTable('store_website')],
-            []
-        )->joinCross(
-            ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
-            []
-        )->joinCross(
-            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-            []
-        )->joinLeft(
-            ['sg' => $this->_defaultIndexerResource->getTable('store_group')],
-            'sg.group_id = sw.default_group_id',
-            []
-        )->joinLeft(
-            ['tpcw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            ' tpcw.' . $linkField . ' = cpe.' . $linkField . ' AND tpcw.qty = 1'
-            . ' AND tpcw.all_groups = 0 AND tpcw.customer_group_id = cg.customer_group_id'
-            . ' AND tpcw.website_id = sw.website_id',
-            []
-        )->joinLeft(
-            ['tpaw' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            'tpaw.' . $linkField . ' = cpe.' . $linkField . ' AND tpaw.qty = 1'
-            . ' AND tpaw.all_groups = 1 AND tpaw.customer_group_id = 0'
-            . ' AND tpaw.website_id = sw.website_id',
-            []
-        )->joinLeft(
-            ['tpc0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            ' tpc0.' . $linkField . ' = cpe.' . $linkField . ' AND tpc0.qty = 1'
-            . ' AND tpc0.all_groups = 0 AND tpc0.customer_group_id = cg.customer_group_id'
-            . ' AND tpc0.website_id = 0',
-            []
-        )->joinLeft(
-            ['tpa0' => $this->_defaultIndexerResource->getTable('catalog_product_entity_tier_price')],
-            'tpa0.' . $linkField . ' = cpe.' . $linkField . ' AND tpa0.qty = 1'
-            . ' AND tpa0.all_groups = 1 AND tpa0.customer_group_id = 0'
-            . ' AND tpa0.website_id = 0',
-            []
-        )->joinLeft(
-            ['eps' => $priceAttribute->getBackend()->getTable()],
-            'eps.' . $linkField . ' = cpe.' . $linkField
-            . ' AND eps.attribute_id = '.$priceAttribute->getId()
-            . ' AND eps.store_id = sg.default_store_id',
-            []
-        )->joinLeft(
-            ['ep0' => $priceAttribute->getBackend()->getTable()],
-            'ep0.' . $linkField . ' = cpe.' . $linkField
-            . ' AND ep0.attribute_id = '.$priceAttribute->getId()
-            . ' AND ep0.store_id = 0',
-            []
-        )->where(
-            'cpe.entity_id IN (?)',
-            $entityIds
-        )->having(
-            'tier_price IS NOT NULL'
-        )->columns(
-            [
-                'cpe.entity_id',
-                'cg.customer_group_id',
-                'sw.website_id',
-                'tier_price' => $tierPriceValueExpr,
-            ]
-        );
-
-        $query = $select->insertFromSelect($table, []);
-        $this->_connection->query($query);
+        $this->tierPriceIndexResource->reindexEntity((array) $entityIds);
 
         return $this;
     }
@@ -566,18 +469,5 @@ abstract class AbstractAction
         }
 
         return $byType;
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated 101.1.0
-     */
-    private function getProductResource()
-    {
-        if (null === $this->productResource) {
-            $this->productResource = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Product::class);
-        }
-        return $this->productResource;
     }
 }
