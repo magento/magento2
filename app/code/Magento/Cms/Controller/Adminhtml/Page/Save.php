@@ -111,10 +111,9 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
-                $this->dataPersistor->clear('cms_page');
-                return $this->processPageReturn($model, $data, $resultRedirect);
+                return $this->processResultRedirect($model, $resultRedirect, $data);
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
+                $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
@@ -126,37 +125,36 @@ class Save extends \Magento\Backend\App\Action
     }
 
     /**
-     * Process and set the page return
+     * Process result redirect
      *
-     * @param \Magento\Cms\Model\Block $model
+     * @param \Magento\Cms\Api\Data\PageInterface  $model
+     * @param \Magento\Backend\Model\View\Result\Redirect  $resultRedirect
      * @param array $data
-     * @param \Magento\Framework\Controller\ResultInterface $resultRedirect
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws LocalizedException
      */
-    private function processPageReturn($model, $data, $resultRedirect)
+    private function processResultRedirect($model, $resultRedirect, $data)
     {
-        $redirect = $data['back'] ?? 'close';
-
-        if ($redirect === 'duplicate') {
+        if ($this->getRequest()->getParam('back', false) === 'duplicate') {
             $newPage = $this->pageFactory->create(['data' => $data]);
             $newPage->setId(null);
-            $identifier = $newPage->getIdentifier() . '-' . uniqid();
+            $identifier = $model->getIdentifier() . '-' . uniqid();
             $newPage->setIdentifier($identifier);
             $newPage->setIsActive(false);
             $this->pageRepository->save($newPage);
             $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
-            $resultRedirect->setPath(
+            return $resultRedirect->setPath(
                 '*/*/edit',
                 [
                     'page_id' => $newPage->getId(),
                     '_current' => true
                 ]
             );
-        } else if ($redirect === 'continue') {
-            $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-        } else if ($redirect === 'close') {
-            $resultRedirect->setPath('*/*/');
         }
-        return $resultRedirect;
+        $this->dataPersistor->clear('cms_page');
+        if ($this->getRequest()->getParam('back')) {
+            return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
+        }
+        return $resultRedirect->setPath('*/*/');
     }
 }
