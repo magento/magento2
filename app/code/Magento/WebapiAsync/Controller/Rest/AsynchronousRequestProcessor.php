@@ -16,7 +16,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 
 class AsynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = 'async/V1';
+    const PROCESSOR_PATH = "/async/V\\d+/";
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response
@@ -58,7 +58,8 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
         MassSchedule $asyncBulkPublisher,
         WebApiAsyncConfig $webapiAsyncConfig,
         DataObjectProcessor $dataObjectProcessor
-    ) {
+    )
+    {
         $this->response = $response;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->asyncBulkPublisher = $asyncBulkPublisher;
@@ -95,18 +96,10 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
             );
 
             $this->response->setStatusCode(RestResponse::STATUS_CODE_202)
-                           ->prepareResponse($responseData);
+                ->prepareResponse($responseData);
         } catch (\Exception $e) {
             $this->response->setException($e);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProcessorPath()
-    {
-        return self::PROCESSOR_PATH;
     }
 
     /**
@@ -126,8 +119,9 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request) {
-        if (strpos(ltrim($request->getPathInfo(), '/'), $this->getProcessorPath()) === 0) {
+    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    {
+        if (preg_match(self::PROCESSOR_PATH, ltrim($request->getPathInfo(), '/')) === 0) {
             return true;
         }
         return false;
