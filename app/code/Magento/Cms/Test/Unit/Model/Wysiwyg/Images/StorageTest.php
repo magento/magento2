@@ -127,7 +127,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['delete', 'getDriver', 'create']
+            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist']
         );
         $this->directoryMock->expects(
             $this->any()
@@ -151,7 +151,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
         $this->imageHelperMock = $this->createPartialMock(
             \Magento\Cms\Helper\Wysiwyg\Images::class,
-            ['getStorageRoot']
+            ['getStorageRoot', 'getCurrentPath']
         );
         $this->imageHelperMock->expects(
             $this->any()
@@ -182,7 +182,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->uploaderFactoryMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->createMock(\Magento\Backend\Model\Session::class);
+        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+            ->setMethods(['getCurrentPath'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->backendUrlMock = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $this->coreFileStorageMock = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)

@@ -47,7 +47,8 @@ define([
                 component: this,
                 selector: 'button'
             }, function (element) {
-                this.$wysiwygEditorButton = $(element);
+                this.$wysiwygEditorButton = this.$wysiwygEditorButton ?
+                    this.$wysiwygEditorButton.add($(element)) : $(element);
             }.bind(this));
 
             // disable editor completely after initialization is field is disabled
@@ -108,7 +109,6 @@ define([
 
             /* eslint-disable no-undef */
             if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
-
                 if (wysiwyg && disabled) {
                     wysiwyg.setEnabledStatus(false);
                     wysiwyg.getPluginButtons().prop('disabled', 'disabled');

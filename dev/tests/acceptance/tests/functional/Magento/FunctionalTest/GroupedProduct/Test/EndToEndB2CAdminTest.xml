@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
         <!--Create Grouped Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrouped" after="viewConfigurableProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrouped" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadGrouped" after="visitAdminProductPageGrouped"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateGroupedProduct" after="waitForProductPageLoadGrouped">
             <argument name="product" value="GroupedProduct"/>
@@ -33,8 +33,9 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct">
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up grouped product" stepKey="cleanUpGroupedProduct" after="deleteSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteGroupedProduct" after="cleanUpGroupedProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
     </test>
