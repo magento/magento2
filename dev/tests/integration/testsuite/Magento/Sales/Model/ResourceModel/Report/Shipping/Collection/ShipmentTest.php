@@ -22,6 +22,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/712');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->collection = $this->objectManager->create(
             \Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment::class
