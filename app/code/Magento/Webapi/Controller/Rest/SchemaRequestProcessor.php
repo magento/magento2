@@ -60,7 +60,6 @@ class SchemaRequestProcessor implements RequestProcessorInterface
         $this->response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
     }
 
-
     /**
      * {@inheritdoc}
      */
