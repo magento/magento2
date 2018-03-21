@@ -7,6 +7,7 @@ namespace Magento\Sales\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -14,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * Returns information for "Recently Ordered" widget.
  * It contains list of 5 salable products from the last placed order.
  * Qty of products to display is limited by LastOrderedItems::SIDEBAR_ORDER_LIMIT constant.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LastOrderedItems implements SectionSourceInterface
 {
@@ -74,6 +76,7 @@ class LastOrderedItems implements SectionSourceInterface
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
@@ -90,7 +93,7 @@ class LastOrderedItems implements SectionSourceInterface
         $this->stockRegistry = $stockRegistry;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
-        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -133,9 +136,9 @@ class LastOrderedItems implements SectionSourceInterface
                         false,
                         $this->_storeManager->getStore()->getId()
                     );
-                }catch (\Magento\Framework\Exception\NoSuchEntityException $e){
-                    $this->logger->critical($e);
-                    break;
+                } catch (NoSuchEntityException $noEntityException) {
+                    $this->logger->critical($noEntityException);
+                    continue;
                 }
                 if (isset($product) && in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
@@ -166,7 +169,7 @@ class LastOrderedItems implements SectionSourceInterface
                 $orderItem->getStore()->getWebsiteId()
             );
             return $stockItem->getIsInStock();
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $noEntityException) {
+        } catch (NoSuchEntityException $noEntityException) {
             return false;
         }
     }
