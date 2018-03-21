@@ -75,7 +75,7 @@ class ObjectType implements TypeMetaReaderInterface
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description') {
+                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
                         return $directiveArgument->value->value;
                     }
                 }

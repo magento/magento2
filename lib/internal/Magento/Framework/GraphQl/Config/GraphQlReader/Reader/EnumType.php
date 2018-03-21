@@ -23,21 +23,25 @@ class EnumType implements TypeMetaReaderInterface
                 'items' => [] // Populated later
             ];
             foreach ($typeMeta->getValues() as $value) {
-                $description = '';
-                if (!empty($value->astNode->directives)) {
-                    $description = $this->readTypeDescription($value);
-                }
-
                 // TODO: Simplify structure, currently name is lost during conversion to GraphQL schema
                 $result['items'][$value->value] = [
                     'name' => strtolower($value->name),
-                    '_value' => $value->value,
-                    'description' => $description
+                    '_value' => $value->value
                 ];
+
+                if (!empty($value->astNode->directives)) {
+                    $description = $this->readTypeDescription($value);
+                    if ($description) {
+                        $result['items'][$value->value]['description'] = $description;
+                    }
+                }
             }
 
             if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $result['description'] = $this->readTypeDescription($typeMeta);
+                $description = $this->readTypeDescription($typeMeta);
+                if ($description) {
+                    $result['description'] = $description;
+                }
             }
 
             return $result;
@@ -59,7 +63,7 @@ class EnumType implements TypeMetaReaderInterface
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description') {
+                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
                         return $directiveArgument->value->value;
                     }
                 }

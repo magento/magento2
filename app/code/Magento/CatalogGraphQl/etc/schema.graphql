@@ -503,9 +503,9 @@ type Products @doc(description:"Comment for Products") {
     total_count: Int
 }
 
-input ProductFilterInput {
+input ProductFilterInput @doc(description:"Comment for ProductFilterInput") {
     name: FilterTypeInput
-    sku: FilterTypeInput
+    sku: FilterTypeInput @doc(description:"Comment for sku")
     description: FilterTypeInput
     short_description: FilterTypeInput
     price: FilterTypeInput

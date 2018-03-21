@@ -21,7 +21,10 @@ class TypeMetaReader
         $result = [];
 
         if (!empty($meta->astNode->directives) && !($meta instanceof \GraphQL\Type\Definition\ScalarType)) {
-            $result['description'] = $this->readTypeDescription($meta);
+            $description = $this->readTypeDescription($meta);
+            if ($description) {
+                $result['description'] = $description;
+            }
         }
 
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {
@@ -38,7 +41,6 @@ class TypeMetaReader
             } else {
                 $result['itemsRequired'] = false;
             }
-            //$result['description'] = $itemTypeMeta->description;
             $itemTypeName = $itemTypeMeta->name;
             $result['itemType'] = $itemTypeName;
             if ($this->isScalarType((string)$itemTypeMeta)) {
@@ -47,7 +49,6 @@ class TypeMetaReader
                 $result['type'] = 'ObjectArray' . $parameterType;
             }
         } else {
-            //$result['description'] = $meta->description;
             $result['type'] = $meta->name;
         }
 
@@ -78,7 +79,7 @@ class TypeMetaReader
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description') {
+                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
                         return $directiveArgument->value->value;
                     }
                 }

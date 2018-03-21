@@ -65,7 +65,10 @@ class InputObjectType implements TypeMetaReaderInterface
         $result = array_merge($result, $this->typeMetaReader->readTypeMeta($typeMeta, 'InputField'));
 
         if (!empty($fieldMeta->astNode->directives) && !($fieldMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-            $result['description'] = $this->readTypeDescription($fieldMeta);
+            $description = $this->readTypeDescription($fieldMeta);
+            if ($description) {
+                $result['description'] = $description;
+            }
         }
 
         return $result;
@@ -84,7 +87,7 @@ class InputObjectType implements TypeMetaReaderInterface
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description') {
+                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
                         return $directiveArgument->value->value;
                     }
                 }

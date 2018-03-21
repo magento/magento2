@@ -50,7 +50,10 @@ class InterfaceType implements TypeMetaReaderInterface
             }
 
             if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $result['description'] = $this->readTypeDescription($typeMeta);
+                $description = $this->readTypeDescription($typeMeta);
+                if ($description) {
+                    $result['description'] = $description;
+                }
             }
 
             return $result;
@@ -94,7 +97,7 @@ class InterfaceType implements TypeMetaReaderInterface
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {
                 foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description') {
+                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
                         return $directiveArgument->value->value;
                     }
                 }
