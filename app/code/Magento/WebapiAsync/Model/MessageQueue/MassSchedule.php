@@ -46,7 +46,7 @@ class MassSchedule
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $jsonHelper;
+    private $jsonSerializer;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityManager
@@ -69,16 +69,6 @@ class MassSchedule
     private $itemStatusInterfaceFactory;
 
     /**
-     * @var BulkSummaryInterfaceFactory
-     */
-    private $bulkSummaryFactory;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var MessageEncoder
      */
     private $messageEncoder;
@@ -99,46 +89,39 @@ class MassSchedule
      * @param \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operationFactory
      * @param \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService
      * @param \Magento\Authorization\Model\UserContextInterface $userContextInterface
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonHelper
+     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
      * @param \Magento\Framework\EntityManager\EntityManager $entityManager
      * @param \Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory $asyncResponse
      * @param \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterfaceFactory $itemsListFactory
      * @param \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterfaceFactory $itemStatusFactory
-     * @param \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory $bulkSummaryFactory
      * @param \Magento\Framework\MessageQueue\MessageEncoder $messageEncoder
      * @param \Magento\Framework\MessageQueue\MessageValidator $messageValidator
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
-     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
         IdentityGeneratorInterface $identityService,
         UserContextInterface $userContextInterface,
-        Json $jsonHelper,
+        Json $jsonSerializer,
         EntityManager $entityManager,
         AsyncResponseInterfaceFactory $asyncResponse,
         ItemsListInterfaceFactory $itemsListFactory,
         ItemStatusInterfaceFactory $itemStatusFactory,
-        BulkSummaryInterfaceFactory $bulkSummaryFactory,
         MessageEncoder $messageEncoder,
         MessageValidator $messageValidator,
-        BulkManagementInterface $bulkManagement,
-        LoggerInterface $logger
+        BulkManagementInterface $bulkManagement
     ) {
         $this->userContext = $userContextInterface;
         $this->operationFactory = $operationFactory;
         $this->identityService = $identityService;
-        $this->jsonHelper = $jsonHelper;
+        $this->jsonSerializer = $jsonSerializer;
         $this->entityManager = $entityManager;
         $this->asyncResponseFactory = $asyncResponse;
         $this->itemsListInterfaceFactory = $itemsListFactory;
         $this->itemStatusInterfaceFactory = $itemStatusFactory;
-        $this->bulkSummaryFactory = $bulkSummaryFactory;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
         $this->bulkManagement = $bulkManagement;
-
-        $this->logger = $logger ? : \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -192,7 +175,7 @@ class MassSchedule
                     'data' => [
                         OperationInterface::BULK_ID         => $groupId,
                         OperationInterface::TOPIC_NAME      => $topicName,
-                        OperationInterface::SERIALIZED_DATA => $this->jsonHelper->serialize($serializedData),
+                        OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),
                         OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
                     ],
                 ];
