@@ -7,7 +7,6 @@ namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -53,7 +52,7 @@ class SaveHandler implements SaveHandlerInterface
 
         try {
             $connection = $saveHandlerFactory->create($saveMethod);
-        } catch (SessionException $e) {
+        } catch (\LogicException $e) {
             $connection = $saveHandlerFactory->create($default);
             $this->setSaveHandler($default);
         }
