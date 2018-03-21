@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryBundle\Plugin\InventoryConfiguration\IsSourceItemsAllowedForProductType;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductType;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Disable Source items management for Bundle product type.
@@ -23,7 +23,7 @@ class DisableBundleTypePlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        IsSourceItemsAllowedForProductType $subject,
+        IsSourceItemsAllowedForProductTypeInterface $subject,
         callable $proceed,
         string $productType
     ): bool {
