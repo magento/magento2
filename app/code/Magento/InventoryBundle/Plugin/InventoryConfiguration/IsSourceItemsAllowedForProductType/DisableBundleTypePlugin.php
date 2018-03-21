@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryBundle\Plugin\InventoryConfiguration\IsSourceItemsAllowedForProductType;
 
@@ -21,8 +22,11 @@ class DisableBundleTypePlugin
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(IsSourceItemsAllowedForProductType $subject, callable $proceed, string $productType)
-    {
+    public function aroundExecute(
+        IsSourceItemsAllowedForProductType $subject,
+        callable $proceed,
+        string $productType
+    ): bool {
         if ($productType === BundleType::TYPE_CODE) {
             return false;
         }
