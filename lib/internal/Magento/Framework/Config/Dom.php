@@ -279,8 +279,7 @@ class Dom
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase(
                     "More than one node matching the query: %1, Xml is: %2",
-                    [$nodePath],
-                    $this->dom->saveXML()
+                    [$nodePath, $this->dom->saveXML()]
                 )
             );
         } elseif ($matchedNodes->length == 1) {
