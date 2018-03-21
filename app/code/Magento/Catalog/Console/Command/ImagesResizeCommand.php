@@ -69,7 +69,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         $productIds = $productCollection->getAllIds();
         if (!count($productIds)) {
             $output->writeln("<info>No product images to resize</info>");
-            // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
