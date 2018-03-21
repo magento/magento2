@@ -5,7 +5,7 @@
  */
 -->
 <!--render select with link types-->
-<div class="admin__field"
+<div class="admin__field url-input-container"
      visible="visible"
      attr="'data-index': index">
     <label class="admin__field-label" if="$data.label" visible="$data.labelVisible" attr="for: uid">
@@ -13,17 +13,20 @@
     </label>
     <div class="admin__field-control url-input-element"
          css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
-        <!--render link types select-->
-        <render args="typeSelectorTemplate"/>
 
-        <!--display field to insert link value based on link type-->
-        <div ko-scope="getLinkedElementName()" class="url-input-element-linked-element">
-            <render/>
-            <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+        <div>
+            <!--render link types select-->
+            <render args="typeSelectorTemplate"/>
+
+            <!--display field to insert link value based on link type-->
+            <div ko-scope="getLinkedElementName()" class="url-input-element-linked-element">
+                <render/>
+                <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+            </div>
         </div>
 
         <!--display container to specify url options(Example: open in new tab)-->
         <render if="isDisplayAdditionalSettings" args="settingTemplate"/>
-
+        <div/>
     </div>
 </div>

@@ -6,17 +6,28 @@
 //
 //  Components -> Url Input
 //  _____________________________________________
+.url-input-container .url-input-element {
+    & > div:after {
+        clear: both;
+    }
 
-.url-input-element {
     .url-input-select {
-        display: inline-block;
+        float: left;
+        margin-right: 20px;
+    }
+
+    .url-input-setting {
+        clear: both;
+        display: block;
+        &:before {
+            content: "";
+            clear: both;
+        }
     }
 
     .url-input-element-linked-element {
-        display: inline-block;
-        + label {
-            display: inline-block;
-        }
+        float: left;
     }
 }
+
 

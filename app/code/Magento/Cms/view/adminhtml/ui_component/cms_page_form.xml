@@ -83,7 +83,7 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="title" sortOrder="20" formElement="input">
+        <urlInput name="title" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>
@@ -93,11 +93,24 @@
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
+                <isDisplayAdditionalSettings>true</isDisplayAdditionalSettings>
+                <settingLabel translate="true">Label bla bla</settingLabel>
                 <dataType>text</dataType>
                 <label translate="true">Page Title</label>
                 <dataScope>title</dataScope>
+                <urlTypes class="Magento\Ui\Model\UrlInput\LinksProvider"/>
             </settings>
-        </field>
+            <!--<formElements>-->
+                <!--<select>-->
+                    <!--<settings>-->
+                        <!--<options>-->
+                            <!--<option name="url" xsi:type="string">Url</option>-->
+                        <!--</options>-->
+                        <!--<caption translate="true">&#45;&#45; Please Select &#45;&#45;</caption>-->
+                    <!--</settings>-->
+                <!--</select>-->
+            <!--</formElements>-->
+        </urlInput>
     </fieldset>
     <fieldset name="content" sortOrder="10">
         <settings>
