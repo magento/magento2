@@ -57,10 +57,6 @@ class InterfaceType implements TypeMetaReaderInterface
                 $result['fields'][$fieldName] = $this->fieldMetaReader->readFieldMeta($fieldMeta);
             }
 
-            if ( ($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $x=1;
-            }
-
             if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
             }
