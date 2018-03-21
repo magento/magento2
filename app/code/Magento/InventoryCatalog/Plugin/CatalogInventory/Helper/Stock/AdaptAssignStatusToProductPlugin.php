@@ -29,8 +29,8 @@ class AdaptAssignStatusToProductPlugin
     private $isProductSalable;
 
     /**
-    * @var DefaultStockProviderInterface
-    */
+     * @var DefaultStockProviderInterface
+     */
     private $defaultStockProvider;
 
     /**
