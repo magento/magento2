@@ -15,14 +15,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     private static $_cipherInfo;
 
-    protected $_supportedCiphers = [MCRYPT_BLOWFISH, MCRYPT_RIJNDAEL_128, MCRYPT_RIJNDAEL_256];
-
-    protected $_supportedModes = [
-        MCRYPT_MODE_ECB,
-        MCRYPT_MODE_CBC,
-        MCRYPT_MODE_CFB,
-        MCRYPT_MODE_OFB,
-        MCRYPT_MODE_NOFB,
+    private const SUPPORTED_CIPHER_MODE_COMBINATIONS = [
+        MCRYPT_BLOWFISH => [MCRYPT_MODE_ECB],
+        MCRYPT_RIJNDAEL_128 => [MCRYPT_MODE_ECB],
+        MCRYPT_RIJNDAEL_256 => [MCRYPT_MODE_CBC],
     ];
 
     protected function setUp()
@@ -76,11 +72,12 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         return self::$_cipherInfo[$cipherName][$modeName]['iv_size'];
     }
 
-    public function getCipherModeCombinations()
+    public function getCipherModeCombinations(): array
     {
         $result = [];
-        foreach ($this->_supportedCiphers as $cipher) {
-            foreach ($this->_supportedModes as $mode) {
+        foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
+            /** @var array $modes */
+            foreach ($modes as $mode) {
                 $result[$cipher . '-' . $mode] = [$cipher, $mode];
             }
         }
@@ -105,8 +102,9 @@ class CryptTest extends \PHPUnit\Framework\TestCase
     public function getConstructorExceptionData()
     {
         $result = [];
-        foreach ($this->_supportedCiphers as $cipher) {
-            foreach ($this->_supportedModes as $mode) {
+        foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
+            /** @var array $modes */
+            foreach ($modes as $mode) {
                 $tooLongKey = str_repeat('-', $this->_getKeySize($cipher, $mode) + 1);
                 $tooShortInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) - 1);
                 $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
