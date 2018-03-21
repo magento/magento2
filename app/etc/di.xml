@@ -1607,7 +1607,6 @@
                 <item name="remoteServiceReader" xsi:type="object" sortOrder="10">Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader</item>
                 <item name="xmlReader" xsi:type="object" sortOrder="20">Magento\Framework\MessageQueue\Publisher\Config\Xml\Reader</item>
                 <item name="envReader" xsi:type="object" sortOrder="30">Magento\Framework\MessageQueue\Publisher\Config\Env\Reader</item>
-                <item name="asyncServiceReader" xsi:type="object" sortOrder="0">Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader\Publisher</item>
             </argument>
         </arguments>
     </type>
