@@ -70,6 +70,5 @@ class LinksProvider implements ConfigInterface
             );
         }
         return $this->objectManager->create($instance);
-
     }
 }
