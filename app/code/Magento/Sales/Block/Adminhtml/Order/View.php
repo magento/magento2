@@ -245,9 +245,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($order->canReorderIgnoreSalable()
-            && $this->_reorderHelper->isAllowed($order->getStore())
-            && $this->_isAllowedAction('Magento_Sales::reorder')
+        if ($this->_isAllowedAction(
+                'Magento_Sales::reorder'
+            ) && $this->_reorderHelper->isAllowed(
+                $order->getStore()
+            ) && $order->canReorderIgnoreSalable()
         ) {
             $this->addButton(
                 'order_reorder',
@@ -314,11 +316,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getUrl($params = '', $params2 = [])
     {
-        if (isset($params2['action']) && 'index' === $params2['action']) {
-            return parent::getUrl($params, $params2);
-        } else {
-            $params2['order_id'] = $this->getOrderId();
-        }
+        $params2['order_id'] = $this->getOrderId();
         return parent::getUrl($params, $params2);
     }
 
@@ -454,7 +452,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             return $this->getOrder()->getBackUrl();
         }
 
-        return $this->getUrl('sales/*/', ['action' => 'index']);
+        return $this->_urlBuilder->getUrl('sales/*/');
     }
 
     /**
