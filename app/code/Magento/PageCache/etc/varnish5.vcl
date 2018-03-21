@@ -170,6 +170,10 @@ sub vcl_backend_response {
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
     }
+
+    # collect all x-magento-tags headers
+    std.collect(beresp.http.X-Magento-Tags);
+
     return (deliver);
 }
 

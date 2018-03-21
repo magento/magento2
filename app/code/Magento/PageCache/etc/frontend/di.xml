@@ -25,4 +25,7 @@
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="response-http-page-cache" type="Magento\PageCache\Model\App\Response\HttpPlugin"/>
     </type>
+    <type name="Magento\Framework\HTTP\PhpEnvironment\Response">
+        <plugin name="response-split-x-magento-tags-headers" type="Magento\PageCache\Model\HTTP\PhpEnvironment\ResponsePlugin" />
+    </type>
 </config>
