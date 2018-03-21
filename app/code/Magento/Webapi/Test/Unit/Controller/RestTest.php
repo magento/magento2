@@ -192,7 +192,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
 
         $schema = 'Some REST schema content';
         $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
-        $this->requestProcessorPool->process($this->_requestMock);
+        $this->requestProcessorPool->getProcessor($this->_requestMock)->process($this->_requestMock);
 
         $this->assertEquals($schema, $this->_responseMock->getBody());
     }
@@ -225,7 +225,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
 
         $schema = 'Some REST schema content';
         $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
-        $this->requestProcessorPool->process($this->_requestMock);
+        $this->requestProcessorPool->getProcessor($this->_requestMock)->process($this->_requestMock);
 
         $this->assertEquals($schema, $this->_responseMock->getBody());
     }

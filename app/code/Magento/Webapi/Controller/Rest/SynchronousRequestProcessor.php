@@ -18,7 +18,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = 'V1';
+    const PROCESSOR_PATH = "/V\n+/";
 
     /**
      * @var RestResponse
@@ -110,17 +110,9 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function getProcessorPath()
-    {
-        return self::PROCESSOR_PATH;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        if (strpos(ltrim($request->getPathInfo(), '/'), $this->getProcessorPath()) === 0) {
+        if (preg_match(self::PROCESSOR_PATH, ltrim($request->getPathInfo(), '/')) === 0) {
             return true;
         }
         return false;

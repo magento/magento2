@@ -23,13 +23,6 @@ interface RequestProcessorInterface
     public function process(\Magento\Framework\Webapi\Rest\Request $request);
 
     /**
-     * Return processor request prefix
-     *
-     * @return string
-     */
-    public function getProcessorPath();
-
-    /**
      * Method should return true for all the request current processor can process.
      *
      * Invoked in the loop for all registered request processors. The first one wins.
