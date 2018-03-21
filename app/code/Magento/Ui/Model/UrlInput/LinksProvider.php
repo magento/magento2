@@ -44,8 +44,7 @@ class LinksProvider implements ConfigInterface
     public function getConfig()
     {
         $config = [];
-        foreach ($this->linksConfiguration as $linkName => $className)
-        {
+        foreach ($this->linksConfiguration as $linkName => $className) {
             $config[$linkName] = $this->createConfigProvider($className)->getConfig();
         }
         return $config;

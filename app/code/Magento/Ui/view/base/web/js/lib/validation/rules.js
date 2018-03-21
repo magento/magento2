@@ -969,7 +969,7 @@ define([
                 return new RegExp(param).test(value);
             },
             $.mage.__('This link is not allowed.')
-        ],
+        ]
     }, function (data) {
         return {
             handler: data[0],
