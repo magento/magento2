@@ -36,14 +36,13 @@ class GetProductIdsBySkusTest extends TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @codingStandardsIgnoreLine
-     * @expectedExceptionMessage Following products with requested skus were not found: search_product_10, search_product_30
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Following products with requested skus were not found: not_existed_sku
      */
-    public function testExecuteWithException()
+    public function testExecuteWithNotExistedSkus()
     {
-        $idBySku = ['search_product_10' => 101, 'search_product_2' => 102, 'search_product_30' => 103];
+        $skus = ['not_existed_sku', 'search_product_2'];
 
-        self::assertEquals($idBySku, $this->getProductIdsBySkus->execute(array_keys($idBySku)));
+        $this->getProductIdsBySkus->execute($skus);
     }
 }

@@ -32,4 +32,17 @@ class GetSkusByProductIdsTest extends TestCase
 
         self::assertEquals($skuById, $this->getSkusByProductIds->execute(array_keys($skuById)));
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
+     *
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Following products with requested ids were not found: 999
+     */
+    public function testExecuteWithNotExistedSkus()
+    {
+        $ids = [999, 102];
+
+        $this->getSkusByProductIds->execute($ids);
+    }
 }

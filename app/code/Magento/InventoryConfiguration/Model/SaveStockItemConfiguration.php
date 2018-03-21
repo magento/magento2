@@ -9,12 +9,10 @@ namespace Magento\InventoryConfiguration\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 use Magento\InventoryConfigurationApi\Api\Data\StockItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SaveStockItemConfigurationInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -37,26 +35,18 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
     private $defaultStockProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param ResourceConnection $resourceConnection
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         GetProductIdsBySkusInterface $getProductIdsBySkus,
-        DefaultStockProviderInterface $defaultStockProvider,
-        LoggerInterface $logger
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -66,25 +56,21 @@ class SaveStockItemConfiguration implements SaveStockItemConfigurationInterface
      */
     public function execute(string $sku, int $stockId, StockItemConfigurationInterface $stockItemConfiguration)
     {
-        try {
-            $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
-            // TODO We ignore $stockId and use $legacyStockId until we have proper multi-stock item configuration
-            $legacyStockId = $this->defaultStockProvider->getId();
+        // TODO We ignore $stockId and use $legacyStockId until we have proper multi-stock item configuration
+        $legacyStockId = $this->defaultStockProvider->getId();
 
-            $connection = $this->resourceConnection->getConnection();
-            $connection->update(
-                $this->resourceConnection->getTableName('cataloginventory_stock_item'),
-                $this->getBinds($stockItemConfiguration),
-                [
-                    StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
-                    StockItemInterface::STOCK_ID . ' = ?' => $legacyStockId,
-                    'website_id = ?' => 0,
-                ]
-            );
-        } catch (NoSuchEntityException $e) {
-            $this->logger->error($e->getMessage());
-        }
+        $connection = $this->resourceConnection->getConnection();
+        $connection->update(
+            $this->resourceConnection->getTableName('cataloginventory_stock_item'),
+            $this->getBinds($stockItemConfiguration),
+            [
+                StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
+                StockItemInterface::STOCK_ID . ' = ?' => $legacyStockId,
+                'website_id = ?' => 0,
+            ]
+        );
     }
 
     /**
