@@ -69,28 +69,38 @@ class GraphQlReader implements ReaderInterface
         $knownTypes = [];
         foreach ($schemaFiles as $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
-            /**
-             * Keep declarations from current partial schema, add missing declarations from all previously read schemas
-             */
+            // Keep declarations from current partial schema, add missing declarations from all previously read schemas
             $knownTypes = $partialSchemaTypes + $knownTypes;
             $schemaContent = implode("\n", $knownTypes);
-            $partialResult = [];
-            $schema = \GraphQL\Utils\BuildSchema::build($schemaContent);
-            $typeMap = $schema->getTypeMap();
-            foreach ($typeMap as $typeName => $typeMeta) {
-                if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
-                    // Skip built-in object types
-                    $partialResult[$typeName] = $this->typeReader->read($typeMeta);
-                    if (!$partialResult[$typeName]) {
-                        throw new \LogicException("'{$typeName}' cannot be processed.");
-                    }
-                }
-            }
+            $partialResult = $this->readPartialTypes($schemaContent);
 
             $result = array_replace_recursive($result, $partialResult);
         }
 
         return $result;
+    }
+
+
+    /**
+     * Extract types as string from schema as string
+     *
+     * @param string $graphQlSchemaContent
+     * @return string[] [$typeName => $typeDeclaration, ...]
+     */
+    private function readPartialTypes(string $graphQlSchemaContent) : array
+    {
+        $partialResult = [];
+        $schema = \GraphQL\Utils\BuildSchema::build($graphQlSchemaContent);
+        foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
+            // Only process custom types and skip built-in object types
+            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
+                $partialResult[$typeName] = $this->typeReader->read($typeMeta);
+                if (!$partialResult[$typeName]) {
+                    throw new \LogicException("'{$typeName}' cannot be processed.");
+                }
+            }
+        }
+        return $partialResult;
     }
 
     /**

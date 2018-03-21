@@ -8,9 +8,23 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
 
 class EnumType implements TypeMetaReaderInterface
 {
+    /**
+     * @var DocReader
+     */
+    private $docReader;
+
+    /**
+     * @param DocReader $docReader
+     */
+    public function __construct(DocReader $docReader)
+    {
+        $this->docReader = $docReader;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -22,53 +36,26 @@ class EnumType implements TypeMetaReaderInterface
                 'type' => 'graphql_enum',
                 'items' => [] // Populated later
             ];
-            foreach ($typeMeta->getValues() as $value) {
+            foreach ($typeMeta->getValues() as $enumValueMeta) {
                 // TODO: Simplify structure, currently name is lost during conversion to GraphQL schema
-                $result['items'][$value->value] = [
-                    'name' => strtolower($value->name),
-                    '_value' => $value->value
+                $result['items'][$enumValueMeta->value] = [
+                    'name' => strtolower($enumValueMeta->name),
+                    '_value' => $enumValueMeta->value
                 ];
 
-                if (!empty($value->astNode->directives)) {
-                    $description = $this->readTypeDescription($value);
-                    if ($description) {
-                        $result['items'][$value->value]['description'] = $description;
-                    }
+                if ($this->docReader->readTypeDescription($enumValueMeta->astNode->directives)) {
+                    $result['items'][$enumValueMeta->value]['description'] =
+                        $this->docReader->readTypeDescription($enumValueMeta->astNode->directives);
                 }
             }
 
-            if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $description = $this->readTypeDescription($typeMeta);
-                if ($description) {
-                    $result['description'] = $description;
-                }
+            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
             }
 
             return $result;
         } else {
             return null;
         }
-    }
-
-    /**
-     * Read documentation annotation for a specific type
-     *
-     * @param $meta
-     * @return string
-     */
-    private function readTypeDescription($meta) : string
-    {
-        /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $meta->astNode->directives;
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'doc') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
-                        return $directiveArgument->value->value;
-                    }
-                }
-            }
-        }
-        return '';
     }
 }

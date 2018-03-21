@@ -15,11 +15,18 @@ class FieldMetaReader
     private $typeMetaReader;
 
     /**
-     * @param TypeMetaReader $typeMetaReader
+     * @var DocReader
      */
-    public function __construct(TypeMetaReader $typeMetaReader)
+    private $docReader;
+
+    /**
+     * @param TypeMetaReader $typeMetaReader
+     * @param DocReader $docReader
+     */
+    public function __construct(TypeMetaReader $typeMetaReader, DocReader $docReader)
     {
         $this->typeMetaReader = $typeMetaReader;
+        $this->docReader = $docReader;
     }
 
     /**
@@ -45,11 +52,8 @@ class FieldMetaReader
             $this->typeMetaReader->readTypeMeta($fieldTypeMeta, 'OutputField')
         );
 
-        if (!empty($fieldMeta->astNode->directives) && !($fieldMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-            $description = $this->readTypeDescription($fieldMeta);
-            if ($description) {
-                $result['description'] = $description;
-            }
+        if ($this->docReader->readTypeDescription($fieldMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->readTypeDescription($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;
@@ -64,11 +68,9 @@ class FieldMetaReader
                 $this->typeMetaReader->readTypeMeta($typeMeta, 'Argument')
             );
 
-            if (!empty($argumentMeta->astNode->directives) && !($argumentMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $description = $this->readTypeDescription($argumentMeta);
-                if ($description) {
-                    $result['arguments'][$argumentName]['description'] = $description;
-                }
+            if ($this->docReader->readTypeDescription($argumentMeta->astNode->directives)) {
+                $result['arguments'][$argumentName]['description'] =
+                    $this->docReader->readTypeDescription($argumentMeta->astNode->directives);
             }
         }
         return $result;
@@ -92,27 +94,5 @@ class FieldMetaReader
             }
         }
         return null;
-    }
-
-    /**
-     * Read documentation annotation for a specific type
-     *
-     * @param $meta
-     * @return string
-     */
-    private function readTypeDescription($meta) : string
-    {
-        /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $meta->astNode->directives;
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'doc') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
-                        return $directiveArgument->value->value;
-                    }
-                }
-            }
-        }
-        return '';
     }
 }

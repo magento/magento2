@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\FieldMetaReader;
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
 
 class InterfaceType implements TypeMetaReaderInterface
 {
@@ -18,11 +19,18 @@ class InterfaceType implements TypeMetaReaderInterface
     private $fieldMetaReader;
 
     /**
-     * @param FieldMetaReader $fieldMetaReader
+     * @var DocReader
      */
-    public function __construct(FieldMetaReader $fieldMetaReader)
+    private $docReader;
+
+    /**
+     * @param FieldMetaReader $fieldMetaReader
+     * @param DocReader $docReader
+     */
+    public function __construct(FieldMetaReader $fieldMetaReader, DocReader $docReader)
     {
         $this->fieldMetaReader = $fieldMetaReader;
+        $this->docReader = $docReader;
     }
 
     /**
@@ -49,11 +57,12 @@ class InterfaceType implements TypeMetaReaderInterface
                 $result['fields'][$fieldName] = $this->fieldMetaReader->readFieldMeta($fieldMeta);
             }
 
-            if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $description = $this->readTypeDescription($typeMeta);
-                if ($description) {
-                    $result['description'] = $description;
-                }
+            if ( ($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
+                $x=1;
+            }
+
+            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
             }
 
             return $result;
@@ -82,27 +91,5 @@ class InterfaceType implements TypeMetaReaderInterface
             }
         }
         return null;
-    }
-
-    /**
-     * Read documentation annotation for a specific type
-     *
-     * @param $meta
-     * @return string
-     */
-    private function readTypeDescription($meta) : string
-    {
-        /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $meta->astNode->directives;
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'doc') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
-                        return $directiveArgument->value->value;
-                    }
-                }
-            }
-        }
-        return '';
     }
 }

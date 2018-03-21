@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\TypeMetaReader;
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
 
 class InputObjectType implements TypeMetaReaderInterface
 {
@@ -18,11 +19,18 @@ class InputObjectType implements TypeMetaReaderInterface
     private $typeMetaReader;
 
     /**
-     * @param TypeMetaReader $typeMetaReader
+     * @var DocReader
      */
-    public function __construct(TypeMetaReader $typeMetaReader)
+    private $docReader;
+
+    /**
+     * @param TypeMetaReader $typeMetaReader
+     * @param DocReader $docReader
+     */
+    public function __construct(TypeMetaReader $typeMetaReader, DocReader $docReader)
     {
         $this->typeMetaReader = $typeMetaReader;
+        $this->docReader = $docReader;
     }
 
     /**
@@ -42,11 +50,8 @@ class InputObjectType implements TypeMetaReaderInterface
                 $result['fields'][$fieldName] = $this->readInputObjectFieldMeta($fieldMeta);
             }
 
-            if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $description = $this->readTypeDescription($typeMeta);
-                if ($description) {
-                    $result['description'] = $description;
-                }
+            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
             }
             return $result;
         } else {
@@ -71,35 +76,10 @@ class InputObjectType implements TypeMetaReaderInterface
 
         $result = array_merge($result, $this->typeMetaReader->readTypeMeta($typeMeta, 'InputField'));
 
-        if (!empty($fieldMeta->astNode->directives) && !($fieldMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-            $description = $this->readTypeDescription($fieldMeta);
-            if ($description) {
-                $result['description'] = $description;
-            }
+        if ($this->docReader->readTypeDescription($fieldMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->readTypeDescription($fieldMeta->astNode->directives);
         }
 
         return $result;
-    }
-
-    /**
-     * Read documentation annotation for a specific type
-     *
-     * @param $meta
-     * @return string
-     */
-    private function readTypeDescription($meta) : string
-    {
-        /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $meta->astNode->directives;
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'doc') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
-                        return $directiveArgument->value->value;
-                    }
-                }
-            }
-        }
-        return '';
     }
 }

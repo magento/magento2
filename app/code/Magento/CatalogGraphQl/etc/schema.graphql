@@ -254,7 +254,7 @@ interface ProductInterface
 @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite")
 @doc(description: "comment for ProductInterface.")
 {
-    id: Int @doc(description: "comment for [ProductInterface].")
+    id: Int @doc(description: "comment for ProductInterface Id.")
     name: String
     sku: String
     description: String
@@ -455,7 +455,7 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
     name: String
     sku: String
     description: String
-    short_description: String
+    short_description: String @doc(description: "Comment for short_description.")
     special_price: Float
     special_from_date: String
     special_to_date: String
@@ -497,7 +497,7 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
 }
 
 type Products @doc(description:"Comment for Products") {
-    items: [ProductInterface]  @doc(description: "comment for items[Products].")
+    items: [ProductInterface]  @doc(description: "comment for items[ProductInterface] on Products.")
     page_info: SearchResultPageInfo @doc(description: "comment for page_info.")
     total_count: Int
 }

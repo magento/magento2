@@ -35,7 +35,7 @@ class TypeMetaReader
             }
             $itemTypeName = $itemTypeMeta->name;
             $result['itemType'] = $itemTypeName;
-            if ($this->isScalarType((string)$itemTypeMeta)) {
+            if ($itemTypeMeta instanceof \GraphQL\Type\Definition\ScalarType) {
                 $result['type'] = 'ScalarArray' . $parameterType;
             } else {
                 $result['type'] = 'ObjectArray' . $parameterType;
@@ -45,16 +45,5 @@ class TypeMetaReader
         }
 
         return $result;
-    }
-
-    /**
-     * Test if type is a scalar type
-     *
-     * @param string $type
-     * @return bool
-     */
-    private function isScalarType(string $type) : bool
-    {
-        return in_array($type, ['String', 'Int', 'Float', 'Boolean', 'ID']);
     }
 }
