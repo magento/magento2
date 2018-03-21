@@ -55,16 +55,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-file",
-            "version": "v1.4.1",
+            "version": "v1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_File.git",
-                "reference": "3146110d4d0f79e016a4f99c36794d5ed50c4652"
+                "reference": "9250e3d931c3d71701834fc073a82fd3902c04ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/3146110d4d0f79e016a4f99c36794d5ed50c4652",
-                "reference": "3146110d4d0f79e016a4f99c36794d5ed50c4652",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/9250e3d931c3d71701834fc073a82fd3902c04ae",
+                "reference": "9250e3d931c3d71701834fc073a82fd3902c04ae",
                 "shasum": ""
             },
             "type": "magento-module",
@@ -84,7 +84,7 @@
             ],
             "description": "The stock Zend_Cache_Backend_File backend has extremely poor performance for cleaning by tags making it become unusable as the number of cached items increases. This backend makes many changes resulting in a huge performance boost, especially for tag cleaning.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_File",
-            "time": "2018-03-02T17:44:39+00:00"
+            "time": "2018-03-20T17:41:08+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
@@ -828,12 +828,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento-engcom/zf1-php-7.2-support.git",
-                "reference": "df32cb041603119a448d4634f7d545ab85a8f68a"
+                "reference": "d99ca643e52e2465ef84abc61646159807a0de93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/df32cb041603119a448d4634f7d545ab85a8f68a",
-                "reference": "df32cb041603119a448d4634f7d545ab85a8f68a",
+                "url": "https://api.github.com/repos/magento-engcom/zf1-php-7.2-support/zipball/d99ca643e52e2465ef84abc61646159807a0de93",
+                "reference": "d99ca643e52e2465ef84abc61646159807a0de93",
                 "shasum": ""
             },
             "archive": {
@@ -877,7 +877,7 @@
                 "source": "https://github.com/magento-engcom/zf1-php-7.2-support/tree/master",
                 "issues": "https://github.com/magento-engcom/zf1-php-7.2-support/issues"
             },
-            "time": "2018-03-14T21:49:31+00:00"
+            "time": "2018-03-20T01:20:27+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4321,16 +4321,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.10.4",
+            "version": "v2.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "b2dce1dacff988b79c4aadf252e5dee31bc04e19"
+                "reference": "e49993dfb9b96ec8b8d9964c4627599b050a6e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/b2dce1dacff988b79c4aadf252e5dee31bc04e19",
-                "reference": "b2dce1dacff988b79c4aadf252e5dee31bc04e19",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e49993dfb9b96ec8b8d9964c4627599b050a6e99",
+                "reference": "e49993dfb9b96ec8b8d9964c4627599b050a6e99",
                 "shasum": ""
             },
             "require": {
@@ -4404,7 +4404,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2018-03-08T11:13:12+00:00"
+            "time": "2018-03-20T18:07:08+00:00"
         },
         {
             "name": "lusitanian/oauth",
