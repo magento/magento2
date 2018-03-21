@@ -15,7 +15,6 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
  */
 class SourceItems extends AbstractModifier
 {
-
     /**
      * @var IsSingleSourceModeInterface
      */

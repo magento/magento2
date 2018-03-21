@@ -15,7 +15,6 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
  */
 class SalableQuantity extends AbstractModifier
 {
-
     /**
      * @var IsSingleSourceModeInterface
      */

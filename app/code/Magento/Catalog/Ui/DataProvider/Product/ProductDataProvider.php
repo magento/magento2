@@ -37,7 +37,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var PoolInterface
      */
-    private $pool;
+    private $modifiersPool;
 
     /**
      * Construct
@@ -50,7 +50,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
-     * @param PoolInterface|null $pool
+     * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
         $name,
@@ -61,13 +61,13 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $addFilterStrategies = [],
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
-        $this->pool = $pool ?: ObjectManager::getInstance()->get(PoolInterface::class);
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -129,7 +129,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $meta = parent::getMeta();
 
         /** @var ModifierInterface $modifier */
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
             $meta = $modifier->modifyMeta($meta);
         }
 
