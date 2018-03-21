@@ -41,6 +41,13 @@ class InputObjectType implements TypeMetaReaderInterface
             foreach ($fields as $fieldName => $fieldMeta) {
                 $result['fields'][$fieldName] = $this->readInputObjectFieldMeta($fieldMeta);
             }
+
+            if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
+                $description = $this->readTypeDescription($typeMeta);
+                if ($description) {
+                    $result['description'] = $description;
+                }
+            }
             return $result;
         } else {
             return null;

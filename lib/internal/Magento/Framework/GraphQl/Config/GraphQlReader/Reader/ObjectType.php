@@ -53,7 +53,10 @@ class ObjectType implements TypeMetaReaderInterface
             }
 
             if (!empty($typeMeta->astNode->directives) && !($typeMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
-                $result['description'] = $this->readTypeDescription($typeMeta);
+                $description = $this->readTypeDescription($typeMeta);
+                if ($description) {
+                    $result['description'] = $description;
+                }
             }
 
             return $result;

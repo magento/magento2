@@ -3,7 +3,7 @@ type Query {
 }
 
 input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
-    eq: String @doc(description:"Equal")
+    eq: String @doc(description:"comment for Equal")
     finset: [String]
     from: String
     gt: String
@@ -29,6 +29,6 @@ type SearchResultPageInfo
 
 enum SortEnum @doc(description: "comment for SortEnum.")
 {
-    ASC @doc(description:"Ascending")
+    ASC @doc(description:"comment for Ascending")
     DESC
 }

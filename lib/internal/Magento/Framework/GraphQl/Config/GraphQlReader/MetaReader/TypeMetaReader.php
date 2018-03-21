@@ -19,14 +19,6 @@ class TypeMetaReader
     public function readTypeMeta($meta, $parameterType = 'Argument') : array
     {
         $result = [];
-
-        if (!empty($meta->astNode->directives) && !($meta instanceof \GraphQL\Type\Definition\ScalarType)) {
-            $description = $this->readTypeDescription($meta);
-            if ($description) {
-                $result['description'] = $description;
-            }
-        }
-
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {
             $result['required'] = true;
             $meta = $meta->getWrappedType();
@@ -64,27 +56,5 @@ class TypeMetaReader
     private function isScalarType(string $type) : bool
     {
         return in_array($type, ['String', 'Int', 'Float', 'Boolean', 'ID']);
-    }
-
-    /**
-     * Read documentation annotation for a specific type
-     *
-     * @param $meta
-     * @return string
-     */
-    private function readTypeDescription($meta) : string
-    {
-        /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $meta->astNode->directives;
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'doc') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'description' && $directiveArgument->value->value) {
-                        return $directiveArgument->value->value;
-                    }
-                }
-            }
-        }
-        return '';
     }
 }

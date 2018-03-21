@@ -450,8 +450,7 @@ type VirtualProduct implements ProductInterface, CustomizableProductInterface {
     manufacturer: Int
 }
 
-type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface
-@doc(description: "comment for items[ProductInterface].") {
+type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "comment for SimpleProduct.") {
     id: Int
     name: String
     sku: String
@@ -498,7 +497,7 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
 }
 
 type Products @doc(description:"Comment for Products") {
-    items: [ProductInterface]  @doc(description: "comment for items[ProductInterface].")
+    items: [ProductInterface]  @doc(description: "comment for items[Products].")
     page_info: SearchResultPageInfo @doc(description: "comment for page_info.")
     total_count: Int
 }
@@ -543,7 +542,7 @@ input ProductFilterInput @doc(description:"Comment for ProductFilterInput") {
     or: ProductFilterInput
 }
 
-type ProductMediaGalleryEntriesContent @doc(description: "The number of products returned.") {
+type ProductMediaGalleryEntriesContent @doc(description: "Comment for ProductMediaGalleryEntriesContent.") {
     base64_encoded_data: String
     type: String
     name: String
@@ -558,14 +557,14 @@ type ProductMediaGalleryEntriesVideoContent {
     video_metadata: String
 }
 
-input ProductSortInput @doc(description:"Input ProductSortInput") {
+input ProductSortInput @doc(description:"Comment for Input ProductSortInput") {
     name: SortEnum @doc(description:"Name")
     sku: SortEnum
     description: SortEnum
     short_description: SortEnum
     price: SortEnum
     special_price: SortEnum
-    special_from_date: SortEnum
+    special_from_date: SortEnum @doc(description:"Comment for special_from_date")
     special_to_date: SortEnum
     weight: SortEnum
     manufacturer: SortEnum
