@@ -6,7 +6,7 @@
     "magento/framework": "100.3.*",
     "magento/module-grouped-product": "100.3.*"
   },
-  "suggest" : {
+  "suggest": {
     "magento/module-inventory-configuration": "100.0.*"
   },
   "type": "magento2-module",
