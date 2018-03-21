@@ -7,7 +7,7 @@
 namespace Magento\AsynchronousOperations\Api\Data;
 
 /**
- * Interface
+ * Provide details of operations
  *
  * @api
  * @since 100.3.0

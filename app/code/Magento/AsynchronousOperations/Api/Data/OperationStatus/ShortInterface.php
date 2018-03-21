@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AsynchronousOperations\Api\Data;
+namespace Magento\AsynchronousOperations\Api\Data\OperationStatus;
 
-use \Magento\Framework\Bulk\OperationInterface;
 /**
- * Getter Class OperationShortDetailsInterface
+ * Getter Class OperationsStatusInterface
  * Instead of OperationInterface this class don't provide all operation data
- * and not responsive to set any data, just get operation data without serialized_data
+ * and not responsive to set any data, just to get operation data
+ * without serialized_data and result_serialized_data
  *
  * @api
  * @since 100.3.0
  * @see \Magento\AsynchronousOperations\Api\Data\OperationInterface
  */
-interface OperationShortDetailsInterface
+interface ShortInterface
 {
     /**
      * Operation id
@@ -25,22 +25,6 @@ interface OperationShortDetailsInterface
      * @since 100.3.0
      */
     public function getId();
-
-    /**
-     * Message Queue Topic
-     *
-     * @return string
-     * @since 100.3.0
-     */
-    public function getTopicName();
-
-    /**
-     * Result serialized Data
-     *
-     * @return string
-     * @since 100.3.0
-     */
-    public function getResultSerializedData();
 
     /**
      * Get operation status

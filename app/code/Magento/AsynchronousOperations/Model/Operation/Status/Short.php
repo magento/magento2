@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AsynchronousOperations\Model;
+
+namespace Magento\AsynchronousOperations\Model\Operation\Status;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\AsynchronousOperations\Api\Data\OperationShortDetailsInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationStatus\ShortInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class OperationShortDetails
  */
-class OperationShortDetails extends DataObject implements OperationShortDetailsInterface, ExtensibleDataInterface
+class Short extends DataObject implements OperationStatusInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc
@@ -21,22 +22,6 @@ class OperationShortDetails extends DataObject implements OperationShortDetailsI
     public function getId()
     {
         return $this->getData(OperationInterface::ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTopicName()
-    {
-        return $this->getData(OperationInterface::TOPIC_NAME);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getResultSerializedData()
-    {
-        return $this->getData(OperationInterface::RESULT_SERIALIZED_DATA);
     }
 
     /**

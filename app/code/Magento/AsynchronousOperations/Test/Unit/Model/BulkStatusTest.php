@@ -57,6 +57,21 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $bulkDetailedFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bulkShortFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $operationCounterFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $entityMetadataMock;
 
     /**
@@ -81,6 +96,19 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql::class
         );
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->bulkDetailedFactory = $this->createPartialMock(
+            \Magento\AsynchronousOperations\Api\Data\BulkStatus\DetailedInterfaceFactory ::class,
+            ['create']
+        );
+        $this->bulkShortFactory = $this->createPartialMock(
+            \Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterfaceFactory::class,
+            ['create']
+        );
+        $this->operationCounterFactory = $this->createPartialMock(
+            \Magento\AsynchronousOperations\Api\Data\OperationDetailsInterfaceFactory::class,
+            ['create']
+        );
+        $this->entityManager = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
 
         $this->entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
@@ -90,7 +118,11 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             $this->operationCollectionFactory,
             $this->resourceConnectionMock,
             $this->calculatedStatusSqlMock,
-            $this->metadataPoolMock
+            $this->metadataPoolMock,
+            $this->bulkDetailedFactory,
+            $this->bulkShortFactory,
+            $this->operationCounterFactory,
+            $this->entityManager
         );
     }
 

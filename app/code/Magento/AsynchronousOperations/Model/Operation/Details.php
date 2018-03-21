@@ -8,6 +8,7 @@ namespace Magento\AsynchronousOperations\Model\Operation;
 
 use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterface;
 use Magento\Framework\Bulk\OperationInterface;
+use Magento\Framework\Bulk\BulkStatusInterface;
 
 class Details implements OperationDetailsInterface
 {
@@ -40,10 +41,13 @@ class Details implements OperationDetailsInterface
     ];
 
     /**
+     * Init dependencies.
+     *
      * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
+     * @param null $bulkUuid
      */
     public function __construct(
-        \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus,
+        BulkStatusInterface $bulkStatus,
         $bulkUuid = null
     ) {
         $this->bulkStatus = $bulkStatus;
