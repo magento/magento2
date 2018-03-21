@@ -58,8 +58,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
         MassSchedule $asyncBulkPublisher,
         WebApiAsyncConfig $webapiAsyncConfig,
         DataObjectProcessor $dataObjectProcessor
-    )
-    {
+    ) {
         $this->response = $response;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->asyncBulkPublisher = $asyncBulkPublisher;
