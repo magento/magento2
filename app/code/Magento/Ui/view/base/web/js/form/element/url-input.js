@@ -8,12 +8,10 @@
  */
 define([
     'underscore',
-    'mageUtils',
     'uiLayout',
     'mage/translate',
-    'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract'
-], function (_, utils, layout, $t, validator, Abstract) {
+], function (_, layout, $t, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -56,10 +54,8 @@ define([
          * @returns {Abstract} Chainable.
          */
         initObservable: function () {
-
-            this._super();
-
-            this.observe('componentTemplate options value linkType settingValue checked isDisplayAdditionalSettings')
+            this._super()
+                .observe('componentTemplate options value linkType settingValue checked isDisplayAdditionalSettings')
                 .processLinkTypes()
                 .setOptions();
 
@@ -148,9 +144,7 @@ define([
          * @return void
          */
         updateSettingValue: function (checked) {
-            if (checked) {
-                this.source.set(this.dataScope + '.setting', checked);
-            }
+            this.source.set(this.dataScope + '.setting', checked);
         },
 
         /**
@@ -161,9 +155,8 @@ define([
          * @return void
          */
         renderComponent: function (value) {
-
             if (!_.isUndefined(value) && value) {
-                this.getChildUrlInputComponent(value);
+                this.setChildUrlInputComponent(value);
                 //to store current element
                 this.linkedElement = this.linkedElementInstances[value];
                 this.linkType(value);
@@ -171,12 +164,12 @@ define([
         },
 
         /**
-         * Returns child component by value
+         * Set child component by value
          *
          * @param {String} value
          * @return void
          */
-        getChildUrlInputComponent: function (value) {
+        setChildUrlInputComponent: function (value) {
             var elementConfig;
 
             if (_.isUndefined(this.linkedElementInstances[value])) {
@@ -198,7 +191,9 @@ define([
          * Add ability to choose check box by clicking on label
          */
         checkboxClick: function () {
-            this.checked(!this.checked());
+            if (!this.disabled()) {
+                this.checked(!this.checked());
+            }
         }
     });
 });

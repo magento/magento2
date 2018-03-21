@@ -610,6 +610,12 @@
         </xs:choice>
     </xs:complexType>
 
+    <xs:complexType name="linksType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="link" type="linkType"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="exportsType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="link" type="linkType"/>

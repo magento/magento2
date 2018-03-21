@@ -38,7 +38,9 @@ class LinksProvider implements ConfigInterface
         $this->objectManager = $objectManager;
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function getConfig()
     {
         $config = [];
