@@ -199,3 +199,5 @@ Magento/Framework/MessageQueue/Topology/Config/ExchangeConfigItem
 IntegrationConfig.php
 *Test.php
 setup/performance-toolkit/aggregate-report
+Magento/MessageQueue/Setup
+Magento/Elasticsearch/Elasticsearch5

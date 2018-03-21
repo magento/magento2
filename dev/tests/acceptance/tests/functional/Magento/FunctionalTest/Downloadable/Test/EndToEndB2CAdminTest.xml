@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="EndToEndB2CAdminTest">
         <!--Create Downloadable Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitProductPageDownloadable" after="viewBundleProductInGrid"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
             <argument name="product" value="DownloadableProduct"/>
@@ -50,8 +50,9 @@
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
-        <!--TODO - Move to 'after' block when MQE-732 is fixed-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct">
+        <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+        <comment userInput="Clean up downloadable product" stepKey="cleanUpDownloadableProduct" after="deleteSimpleProduct"/>
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct" after="cleanUpDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
     </test>

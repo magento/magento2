@@ -51,6 +51,8 @@
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="VariableSection">

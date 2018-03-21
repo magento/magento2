@@ -28,9 +28,9 @@ class AssertImportCheckDataErrorMessage extends AbstractConstraint
     {
         $actualMessage = $adminImportIndex->getMessagesBlock()->getErrorMessage();
 
-        \PHPUnit_Framework_Assert::assertNotFalse($actualMessage, 'Error message is absent.');
+        \PHPUnit\Framework\Assert::assertNotFalse($actualMessage, 'Error message is absent.');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             static::ERROR_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'
