@@ -63,6 +63,33 @@ class InputObjectType implements TypeMetaReaderInterface
         ];
 
         $result = array_merge($result, $this->typeMetaReader->readTypeMeta($typeMeta, 'InputField'));
+
+        if (!empty($fieldMeta->astNode->directives) && !($fieldMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
+            $result['description'] = $this->readTypeDescription($fieldMeta);
+        }
+
         return $result;
+    }
+
+    /**
+     * Read documentation annotation for a specific type
+     *
+     * @param $meta
+     * @return string
+     */
+    private function readTypeDescription($meta) : string
+    {
+        /** @var \GraphQL\Language\AST\NodeList $directives */
+        $directives = $meta->astNode->directives;
+        foreach ($directives as $directive) {
+            if ($directive->name->value == 'doc') {
+                foreach ($directive->arguments as $directiveArgument) {
+                    if ($directiveArgument->name->value == 'description') {
+                        return $directiveArgument->value->value;
+                    }
+                }
+            }
+        }
+        return '';
     }
 }

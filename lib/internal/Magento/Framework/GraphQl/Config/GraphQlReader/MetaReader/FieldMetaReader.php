@@ -60,6 +60,10 @@ class FieldMetaReader
                 $result['arguments'][$argumentName],
                 $this->typeMetaReader->readTypeMeta($typeMeta, 'Argument')
             );
+
+            if (!empty($argumentMeta->astNode->directives) && !($argumentMeta instanceof \GraphQL\Type\Definition\ScalarType)) {
+                $result['arguments'][$argumentName]['description'] = $this->readTypeDescription($argumentMeta);
+            }
         }
         return $result;
     }

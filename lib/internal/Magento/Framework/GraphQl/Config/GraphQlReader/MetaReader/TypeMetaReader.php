@@ -19,6 +19,11 @@ class TypeMetaReader
     public function readTypeMeta($meta, $parameterType = 'Argument') : array
     {
         $result = [];
+
+        if (!empty($meta->astNode->directives) && !($meta instanceof \GraphQL\Type\Definition\ScalarType)) {
+            $result['description'] = $this->readTypeDescription($meta);
+        }
+
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {
             $result['required'] = true;
             $meta = $meta->getWrappedType();
@@ -33,7 +38,7 @@ class TypeMetaReader
             } else {
                 $result['itemsRequired'] = false;
             }
-            $result['description'] = $itemTypeMeta->description;
+            //$result['description'] = $itemTypeMeta->description;
             $itemTypeName = $itemTypeMeta->name;
             $result['itemType'] = $itemTypeName;
             if ($this->isScalarType((string)$itemTypeMeta)) {
@@ -42,9 +47,10 @@ class TypeMetaReader
                 $result['type'] = 'ObjectArray' . $parameterType;
             }
         } else {
-            $result['description'] = $meta->description;
+            //$result['description'] = $meta->description;
             $result['type'] = $meta->name;
         }
+
         return $result;
     }
 
@@ -57,5 +63,27 @@ class TypeMetaReader
     private function isScalarType(string $type) : bool
     {
         return in_array($type, ['String', 'Int', 'Float', 'Boolean', 'ID']);
+    }
+
+    /**
+     * Read documentation annotation for a specific type
+     *
+     * @param $meta
+     * @return string
+     */
+    private function readTypeDescription($meta) : string
+    {
+        /** @var \GraphQL\Language\AST\NodeList $directives */
+        $directives = $meta->astNode->directives;
+        foreach ($directives as $directive) {
+            if ($directive->name->value == 'doc') {
+                foreach ($directive->arguments as $directiveArgument) {
+                    if ($directiveArgument->name->value == 'description') {
+                        return $directiveArgument->value->value;
+                    }
+                }
+            }
+        }
+        return '';
     }
 }

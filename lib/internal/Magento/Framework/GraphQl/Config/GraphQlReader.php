@@ -102,14 +102,12 @@ class GraphQlReader implements ReaderInterface
     private function parseTypes($graphQlSchemaContent) : array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
-        $typeNamePattern = '[_A-Za-z][_0-9A-Za-z]*';
-        $typeDefinitionPattern = '.*\{[^\}]*\}';
-        $spacePattern = '[\s\t\n\r]*';
-        $annotationsPattern = '(@.*[\s\t\n\r]*){0,}';
+        $typeNamePattern = '[_A-Za-z][_0-9A-Za-z]+';
+        $typeDefinitionPattern = '[^\{]*(\{[^\}]*\})';
+        $spacePattern = '[\s\t\n\r]+';
 
         preg_match_all(
-            "/{$typeKindsPattern}{$spacePattern}({$typeNamePattern})"
-            . "{$spacePattern}{$annotationsPattern}{$typeDefinitionPattern}/i",
+            "/{$typeKindsPattern}{$spacePattern}({$typeNamePattern}){$spacePattern}{$typeDefinitionPattern}/i",
             $graphQlSchemaContent,
             $matches
         );

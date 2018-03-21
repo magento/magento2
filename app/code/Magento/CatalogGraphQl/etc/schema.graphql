@@ -1,5 +1,13 @@
 type Query {
-    products(search: String, filter: ProductFilterInput, pageSize: Int, currentPage: Int, sort: ProductSortInput): Products @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products")
+    products(
+        search: String @doc(description: "comment for search."),
+        filter: ProductFilterInput,
+        pageSize: Int,
+        currentPage: Int,
+        sort: ProductSortInput
+     ): Products
+     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products")
+     @doc(description: "comment for products.")
 }
 
 enum CurrencyEnum {
@@ -242,8 +250,11 @@ type ProductTierPrices {
     website_id: Float
 }
 
-interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
-    id: Int
+interface ProductInterface
+@typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite")
+@doc(description: "comment for ProductInterface.")
+{
+    id: Int @doc(description: "comment for [ProductInterface].")
     name: String
     sku: String
     description: String
@@ -439,7 +450,8 @@ type VirtualProduct implements ProductInterface, CustomizableProductInterface {
     manufacturer: Int
 }
 
-type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
+type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface
+@doc(description: "comment for items[ProductInterface].") {
     id: Int
     name: String
     sku: String
@@ -485,12 +497,11 @@ type SimpleProduct implements ProductInterface, PhysicalProductInterface, Custom
     manufacturer: Int
 }
 
-type Products {
-    items: [ProductInterface]
+type Products @doc(description:"Comment for Products") {
+    items: [ProductInterface]  @doc(description: "comment for items[ProductInterface].")
     page_info: SearchResultPageInfo @doc(description: "comment for page_info.")
     total_count: Int
 }
-
 
 input ProductFilterInput {
     name: FilterTypeInput
@@ -547,8 +558,8 @@ type ProductMediaGalleryEntriesVideoContent {
     video_metadata: String
 }
 
-input ProductSortInput {
-    name: SortEnum
+input ProductSortInput @doc(description:"Input ProductSortInput") {
+    name: SortEnum @doc(description:"Name")
     sku: SortEnum
     description: SortEnum
     short_description: SortEnum
@@ -589,7 +600,7 @@ input ProductSortInput {
 type MediaGalleryEntry
 @doc(description: "comment for MediaGalleryEntry")
 {
-    id: Int
+    id: Int @doc(description: "id for MediaGalleryEntry")
     media_type: String
     label: String
     position: Int

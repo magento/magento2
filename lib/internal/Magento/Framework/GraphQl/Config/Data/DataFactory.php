@@ -142,15 +142,17 @@ class DataFactory
      *
      * @param string $name
      * @param string $value
+     * @param string $description
      * @return Value
      */
-    public function createValue(string $name, string $value): Value
+    public function createValue(string $name, string $value, string $description = ''): Value
     {
         return $this->objectManager->create(
             Value::class,
             [
                 'name' => $name,
-                'value' => $value
+                'value' => $value,
+                'description' => $description
             ]
         );
     }
@@ -162,15 +164,17 @@ class DataFactory
      *
      * @param string $name
      * @param array $values
+     * @param string $description
      * @return Enum
      */
-    public function createEnum(string $name, array $values): Enum
+    public function createEnum(string $name, array $values, string $description = ''): Enum
     {
         return $this->objectManager->create(
             Enum::class,
             [
                 'name' => $name,
-                'values' => $values
+                'values' => $values,
+                'description' => $description
             ]
         );
     }
