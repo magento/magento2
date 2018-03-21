@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Test\Async;
+namespace Magento\WebapiAsync\Test\ApiFunctional;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -93,29 +93,6 @@ class BulkScheduleTest extends WebapiAbstract
     private $config;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var array
-     */
-    private $productData = [
-        [
-            ProductInterface::SKU     => 'simple',
-            ProductInterface::NAME    => 'Simple Related Product',
-            ProductInterface::TYPE_ID => 'simple',
-            ProductInterface::PRICE   => 10,
-        ],
-        [
-            ProductInterface::SKU     => 'simple_with_cross',
-            ProductInterface::NAME    => 'Simple Product With Related Product',
-            ProductInterface::TYPE_ID => 'simple',
-            ProductInterface::PRICE   => 10,
-        ],
-    ];
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -138,20 +115,20 @@ class BulkScheduleTest extends WebapiAbstract
         $this->config = $this->loadConfig();
 
         $this->shellMock->expects($this->any())
-                        ->method('execute')
-                        ->willReturnCallback(function ($command, $arguments) {
-                            $command = vsprintf($command, $arguments);
-                            $params =
-                                \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
-                            $params['MAGE_DIRS']['base']['path'] = BP;
-                            $params =
-                                'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
-                            $command =
-                                str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
-                            $command = $params . ' ' . $command;
+            ->method('execute')
+            ->willReturnCallback(function ($command, $arguments) {
+                $command = vsprintf($command, $arguments);
+                $params =
+                    \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
+                $params['MAGE_DIRS']['base']['path'] = BP;
+                $params =
+                    'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
+                $command =
+                    str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
+                $command = $params . ' ' . $command;
 
-                            return exec("{$command} > /dev/null &");
-                        });
+                return exec("{$command} > /dev/null &");
+            });
     }
 
     /**
@@ -405,7 +382,7 @@ class BulkScheduleTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    private function tearDown()
+    protected function tearDown()
     {
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumerName = $consumer->getName();
@@ -427,40 +404,5 @@ class BulkScheduleTest extends WebapiAbstract
         );
         $this->writeConfig($this->config);
         $this->appConfig->reinit();
-    }
-
-    /**
-     * Mock AMQP configuration.
-     *
-     * @param bool $enabled
-     * @return void
-     */
-    private function setAmqpConfiguredStatus($enabled)
-    {
-        if ($enabled) {
-            $data = [
-                'amqp' =>
-                    [
-                        'host'        => 'localhost',
-                        'port'        => '5672',
-                        'user'        => 'guest',
-                        'password'    => 'guest',
-                        'virtualhost' => '/',
-                        'ssl'         => '',
-                    ],
-            ];
-        } else {
-            $data = [
-                'amqp' =>
-                    [
-                        'host'        => '',
-                        'port'        => '',
-                        'user'        => '',
-                        'password'    => '',
-                        'virtualhost' => '/',
-                        'ssl'         => '',
-                    ],
-            ];
-        }
     }
 }

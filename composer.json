@@ -220,6 +220,7 @@
         "magento/module-vault": "100.3.0-dev",
         "magento/module-version": "100.3.0-dev",
         "magento/module-webapi": "100.3.0-dev",
+        "magento/module-webapi-async": "100.3.0-dev",
         "magento/module-webapi-security": "100.3.0-dev",
         "magento/module-weee": "100.3.0-dev",
         "magento/module-widget": "100.3.0-dev",
