@@ -2678,8 +2678,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $source->next();
         }
-        $this->
-            ();
+        $this->checkUrlKeyDuplicates();
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
     }
