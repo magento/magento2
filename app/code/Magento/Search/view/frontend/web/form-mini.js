@@ -9,11 +9,11 @@
 define([
     'jquery',
     'underscore',
+    'mage/getKeyNameFromEvent',
     'mage/template',
     'matchMedia',
-    'jquery/ui',
     'mage/translate'
-], function ($, _, mageTemplate, mediaCheck) {
+], function ($, _, getKeyNameFromEvent, mageTemplate, mediaCheck) {
     'use strict';
 
     /**
@@ -202,29 +202,27 @@ define([
          * @return {Boolean} Default return type for any unhandled keys
          */
         _onKeyDown: function (e) {
-            var keyCode = e.keyCode || e.which;
-
-            switch (keyCode) {
-                case $.ui.keyCode.HOME:
+            switch (getKeyNameFromEvent(e)) {
+                case "Home":
                     this._getFirstVisibleElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getFirstVisibleElement();
                     break;
 
-                case $.ui.keyCode.END:
+                case "End":
                     this._getLastElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getLastElement();
                     break;
 
-                case $.ui.keyCode.ESCAPE:
+                case "Escape":
                     this._resetResponseList(true);
                     this.autoComplete.hide();
                     break;
 
-                case $.ui.keyCode.ENTER:
+                case "Enter":
                     this.searchForm.trigger('submit');
                     break;
 
-                case $.ui.keyCode.DOWN:
+                case "ArrowDown":
                     if (this.responseList.indexList) {
                         if (!this.responseList.selected) {  //eslint-disable-line max-depth
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
@@ -242,7 +240,7 @@ define([
                     }
                     break;
 
-                case $.ui.keyCode.UP:
+                case "ArrowUp":
                     if (this.responseList.indexList !== null) {
                         if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
                             this.responseList.selected = this.responseList.selected
