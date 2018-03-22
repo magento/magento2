@@ -32,12 +32,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->addStoreFilter([1]);
     }
 
-    /**
-     * @magentoDataFixture Magento/Sales/_files/order_shipping.php
-     * @magentoDataFixture Magento/Sales/_files/order_from_past.php
-     * @magentoDataFixture Magento/Sales/_files/report_shipping.php
-     * @return void
-     */
     public function testGetItems()
     {
         /** @var \Magento\Sales\Model\Order $order */
