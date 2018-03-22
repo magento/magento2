@@ -7,6 +7,7 @@
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
@@ -278,14 +279,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
-        $directories = Files::init()->readLists(__DIR__ . '/_files/whitelist/strict_type.txt');
+        $changedFiles = self::getChangedFilesList('');
 
-        if (empty($directories)) {
-            return;
-        }
+        $componentRegistrar = new ComponentRegistrar();
+        $directoriesToCheck = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
 
         $toBeTestedFiles = array_diff(
-            self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt'),
+            self::filterFiles($changedFiles, ['php'], $directoriesToCheck),
             Files::init()->readLists(self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt')
         );
 
