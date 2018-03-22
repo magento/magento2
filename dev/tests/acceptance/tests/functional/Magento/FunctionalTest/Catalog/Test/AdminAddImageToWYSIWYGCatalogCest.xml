@@ -21,6 +21,8 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Catalog Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84373"/>
+            <!--Skip because of issue MAGETWO-88266-->
+            <group value="skip"/>
         </annotations>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
         <waitForPageLoad stepKey="wait1"/>
@@ -37,18 +39,19 @@
                 <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="attachImage" stepKey="attachImage1">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="deleteImage" stepKey="deleteImage"/>
         <actionGroup ref="attachImage" stepKey="attachImage2">
-            <argument name="Image" value="ImageUpload"/>
+            <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
         <actionGroup ref="saveImage" stepKey="insertImage"/>
         <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload.content)}}" stepKey="assertMediaDescription"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.ImageSource(ImageUpload3.fileName,ImageUpload3.extension)}}" stepKey="assertMediaSource"/>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
