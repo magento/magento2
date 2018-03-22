@@ -28,7 +28,7 @@
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageSimple"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSimple"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
         <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
@@ -53,7 +53,7 @@
         </actionGroup>
 
         <!--Create Virtual Product-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageVirtual"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageVirtual"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
@@ -69,7 +69,7 @@
 
         <!--Admin uses product grid-->
         <!--Start with default view-->
-        <amOnPage url="{{AdminProductIndexPage}}" stepKey="visitAdminProductPageGrid"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrid"/>
         <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
 
         <!--Search by keyword-->
@@ -177,7 +177,7 @@
 
         <!--Admin creates category-->
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
-        <amOnPage url="{{AdminCategoryPage}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
         <!--Create category under Default Category-->
         <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
@@ -193,7 +193,7 @@
 
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
-        <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToMoveCategory"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToMoveCategory"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoadMoveCategory"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
@@ -208,7 +208,7 @@
 
         <!--Admin deletes category-->
         <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
-        <amOnPage url="{{AdminCategoryPage}}" stepKey="onCategoryPageToDeleteCategory"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToDeleteCategory"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryPageDelete"/>
         <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>

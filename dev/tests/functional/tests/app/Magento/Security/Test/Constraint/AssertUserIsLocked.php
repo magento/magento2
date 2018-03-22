@@ -27,7 +27,7 @@ class AssertUserIsLocked extends AbstractConstraint
         AdminAuthLogin $adminAuth
     ) {
         $ignoreCase = true;
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::USER_ACCOUNT_DISABLED_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::USER_ACCOUNT_DISABLED_MESSAGE . '" is not visible.',
