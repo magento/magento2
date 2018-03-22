@@ -21,13 +21,22 @@ modules:
             depends: PhpBrowser
             part: Json
         - \Magento\FunctionalTestingFramework\Module\MagentoSequence
+        - \Magento\FunctionalTestingFramework\Module\MagentoAssert
         - Asserts
     config:
         \Magento\FunctionalTestingFramework\Module\MagentoWebDriver:
             url: "%MAGENTO_BASE_URL%"
-            backend_name: admin
+            backend_name: "%MAGENTO_BACKEND_NAME%"
             browser: 'chrome'
             window_size: maximize
             username: "%MAGENTO_ADMIN_USERNAME%"
             password: "%MAGENTO_ADMIN_PASSWORD%"
             pageload_timeout: 30
+            host: %SELENIUM_HOST%
+            port: %SELENIUM_PORT%
+            protocol: %SELENIUM_PROTOCOL%
+            path: %SELENIUM_PATH%
+            capabilities:
+              chromeOptions:
+                args: ["--start-maximized", "--disable-extensions", "--enable-automation"]
+

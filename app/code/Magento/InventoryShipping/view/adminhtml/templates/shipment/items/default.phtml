@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer $block */
+?>
+
+<?php $item = $block->getItem() ?>
+<tr>
+    <td class="col-product"><?= $block->getColumnHtml($item, 'name') ?></td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($item, 'qty') ?></td>
+    <td class="col-qty <?php if ($block->isShipmentRegular()): ?>last<?php endif; ?>">
+        <?php if ($block->canShipPartiallyItem()): ?>
+        <div class="admin__control-table-wrapper">
+            <table class="data-table admin__control-table">
+                <thead>
+                <tr class="headings">
+                    <th><?= /* @escapeNotVerified */ __('Source Code') ?></th>
+                    <th><?= /* @escapeNotVerified */ __('Available Qty') ?></th>
+                    <th><?= /* @escapeNotVerified */ __('Qty To Deduct') ?></th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td colspan="3" class="col-actions-add"><button type="button" class="action-default scalable" id="manually_add_<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>">
+                            <span><?= /* @escapeNotVerified */ __('Add Manually') ?></span>
+                        </button>
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody id="sources_<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>">
+                </tbody>
+            </table>
+        </div>
+        <?php else: ?>
+            <?= /* @escapeNotVerified */ $item->getQty() * 1 ?>
+        <?php endif; ?>
+    </td>
+    <script>
+        if (!window.shipmentItems) {
+            window.shipmentItems = [];
+        }
+        window.shipmentItems[<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>] = {
+            sku: '<?= $block->escapeHtml($item->getSku()) ?>',
+            qty: '<?= /* @escapeNotVerified */ $item->getQty() ?>'
+        };
+    </script>
+    <?php if (!$block->canShipPartiallyItem()): ?>
+    <td class="col-ship last">
+        <input type="hidden" name="shipment[items][<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>]" value="0" />
+        <input type="checkbox" name="shipment[items][<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>]" value="<?= /* @escapeNotVerified */ $item->getQty() * 1 ?>" checked />
+    </td>
+    <?php endif; ?>
+</tr>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        var orderItemId = <?= /* @escapeNotVerified */ $item->getOrderItemId() ?>;
+        $('#manually_add_'+orderItemId).on('click', function () {
+            getDataManually(orderItemId);
+        });
+    });
+</script>
+

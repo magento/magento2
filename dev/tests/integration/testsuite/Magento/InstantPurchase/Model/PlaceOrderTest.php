@@ -55,6 +55,9 @@ class PlaceOrderTest extends TestCase
      */
     public function testPlaceOrderForConfigurableProduct()
     {
+        $this->markTestSkipped(
+            'Fix Integration Test PlaceOrder for ConfigurableProduct https://github.com/magento-engcom/msi/issues/689'
+        );
         $configurable = $this->getFixtureProduct('configurable');
         $simple = $this->getFixtureProduct('simple_10');
         $configurableAttributes = $configurable->getTypeInstance()->getConfigurableAttributes($configurable);

@@ -6,14 +6,29 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-                <item name="quantity_container" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
-                    <item name="sortOrder" xsi:type="number">200</item>
-                </item>
+                <item name="inventoryConfigurablePanel" xsi:type="string">Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\InventoryConfigurablePanel</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk">
+        <plugin name="adapt_configurable_wizard_bulk_block_to_msi"
+                type="Magento\InventoryConfigurableProduct\Plugin\Block\BulkStepChangeTemplate"/>
+    </type>
+    <type name="Magento\InventoryConfigurableProduct\Plugin\Block\BulkStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary">
+        <plugin name="adapt_configurable_wizard_summary_block_to_msi"
+                type="Magento\InventoryConfigurableProduct\Plugin\Block\SummaryStepChangeTemplate"/>
+    </type>
+    <type name="Magento\InventoryConfigurableProduct\Plugin\Block\SummaryStepChangeTemplate">
+        <arguments>
+            <argument name="multiSourceTemplate" xsi:type="string">Magento_InventoryConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml</argument>
+        </arguments>
+    </type>
 </config>

@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Magento\InventoryShipping\Block\Adminhtml\Shipment\AlgorithmSelectionButton $block */
+?>
+<script>
+    require([
+        'jquery',
+        'mage/template',
+        'jquery/ui'
+    ], function ($, mageTemplate) {
+
+        processAlgorithm = function(code) {
+            var requestData = [];
+            var shipmentItems = window.shipmentItems;
+            if (shipmentItems) {
+                shipmentItems.forEach(function (data, index) {
+                    requestData.push({
+                        orderItem: index,
+                        sku: data['sku'],
+                        qty: data['qty']
+                    });
+                });
+                sendRequest(requestData, code);
+            }
+        };
+
+        getDataManually = function (orderItemId) {
+            var requestData = [];
+            requestData.push({
+                orderItem: orderItemId,
+                sku: window.shipmentItems[orderItemId].sku,
+                qty: window.shipmentItems[orderItemId].qty
+            });
+            sendRequest(requestData, null);
+
+        };
+
+        sendRequest = function (requestData, code) {
+            var websiteId = <?= /* @escapeNotVerified */ $block->getWebsiteId() ?>;
+            $.ajax({
+                url: "<?= $block->escapeUrl($block->getUrl('inventoryshipping/Algorithm/GetSources')) ?>",
+                type: 'POST',
+                dataType: 'json',
+                showLoader: true,
+                data: {
+                    websiteId: websiteId,
+                    algorithmCode: code,
+                    requestData: requestData
+                },
+                context: this,
+                success: function (response) {
+                    processData(response);
+                }
+            });
+        };
+
+        processData = function (response) {
+            $.each(response, function(orderItemId, sources) {
+                $('#sources_'+orderItemId).empty();
+                $.each(sources, function(index, source) {
+                    source['index'] = index;
+                    source['orderItemId'] = orderItemId;
+                    addRow(source);
+                });
+            });
+        };
+
+        addRow = function (data) {
+            var template = mageTemplate('#source_row_template');
+            var newField = template({
+                data: data
+            });
+            $('#sources_'+data['orderItemId']).append(newField);
+        };
+    });
+</script>
+<script id="source_row_template" type="text/x-magento-template">
+    <tr>
+        <td class="col-source">
+            <span><%- data.sourceCode %></span>
+        </td>
+        <td class="col-qty">
+            <span><%- data.qtyAvailable %></span>
+        </td>
+        <td class="col-title">
+            <input class="input-text admin__control-text number-title"
+                   type="text"
+                   name="shipment[items][<%- data.orderItemId %>][<%- data.sourceCode %>]"
+                   value="<%- data.qtyToDeduct %>"/>
+        </td>
+    </tr>
+</script>

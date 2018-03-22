@@ -6,7 +6,14 @@
         "magento/framework": "100.2.*",
         "magento/module-catalog": "101.2.*",
         "magento/module-configurable-product": "100.3.*",
-        "magento/module-ui": "100.3.*"
+        "magento/module-ui": "100.3.*",
+        "magento/module-inventory-api": "100.0.*",
+        "magento/module-inventory-sales": "100.0.0-dev",
+        "magento/module-inventory-sales-api": "100.0.0-dev",
+        "magento/module-inventory-catalog": "100.0.0-dev",
+        "magento/module-inventory-indexer": "100.0.0-dev",
+        "magento/module-store": "100.3.*",
+        "magento/module-catalog-inventory": "100.3.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",

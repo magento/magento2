@@ -195,7 +195,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(null)
             ->willThrowException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'))
+                new \Magento\Framework\Exception\NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                )
             );
         $this->messageManager->expects($this->once())
             ->method('addError')

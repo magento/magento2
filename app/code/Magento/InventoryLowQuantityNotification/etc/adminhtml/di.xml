@@ -16,4 +16,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="notifystock" xsi:type="string">Magento\InventoryLowQuantityNotification\Block\Adminhtml\Rss\NotifyStock</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

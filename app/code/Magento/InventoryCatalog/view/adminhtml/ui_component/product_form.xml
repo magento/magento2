@@ -37,9 +37,6 @@
                         <item name="additionalForGroup" xsi:type="boolean">true</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
                         <item name="dataScope" xsi:type="string"/>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">!${ $.provider }:data.product.stock_data.manage_stock</item>
-                        </item>
                     </item>
                 </argument>
             </container>
@@ -69,6 +66,7 @@
                         <item name="source_code" xsi:type="string">source_code</item>
                         <item name="name" xsi:type="string">name</item>
                         <item name="qty" xsi:type="string">qty</item>
+                        <item name="source_status" xsi:type="string">enabled</item>
                     </item>
                     <item name="identificationDRProperty" xsi:type="string">source_code</item>
                 </item>
@@ -101,10 +99,7 @@
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_code</dataScope>
-                        <label translate="true">ID</label>
-                        <imports>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
-                        </imports>
+                        <label translate="true">Source Code</label>
                     </settings>
                 </field>
                 <field name="name" formElement="input" sortOrder="20">
@@ -113,14 +108,11 @@
                         <dataType>text</dataType>
                         <dataScope>name</dataScope>
                         <label translate="true">Name</label>
-                        <imports>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
-                        </imports>
                     </settings>
                 </field>
                 <field name="source_status" formElement="input" sortOrder="30">
                     <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <elementTmpl>Magento_InventoryCatalog/product/form/cell-status</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_status</dataScope>
                         <label translate="true">Source Status</label>
@@ -131,9 +123,6 @@
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
                         <label translate="true">Source Item Status</label>
-                        <imports>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
-                        </imports>
                     </settings>
                     <formElements>
                         <select>
@@ -148,17 +137,11 @@
                         <dataType>text</dataType>
                         <dataScope>quantity</dataScope>
                         <label translate="true">Qty</label>
-                        <imports>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
-                        </imports>
                     </settings>
                 </field>
                 <field name="actionDelete" formElement="actionDelete" sortOrder="90">
                     <settings>
                         <label translate="true">Unassign</label>
-                        <imports>
-                            <link name="disabled">!${ $.provider }:data.product.stock_data.manage_stock</link>
-                        </imports>
                     </settings>
                 </field>
             </container>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
@@ -167,7 +165,7 @@ class Quote extends AbstractDb
     {
         return $this->sequenceManager->getSequence(
             \Magento\Sales\Model\Order::ENTITY,
-            $quote->getStore()->getGroup()->getDefaultStoreId()
+            $quote->getStoreId()
         )
         ->getNextValue();
     }
@@ -234,7 +232,7 @@ class Quote extends AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    public function substractProductFromQuotes($product)
+    public function subtractProductFromQuotes($product)
     {
         $productId = (int)$product->getId();
         if (!$productId) {
@@ -272,6 +270,21 @@ class Quote extends AbstractDb
         $connection->query($updateQuery);
 
         return $this;
+    }
+
+    /**
+     * Subtract product from all quotes quantities
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @deprecated 101.0.1
+     * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
+     *
+     * @return $this
+     */
+    public function substractProductFromQuotes($product)
+    {
+        return $this->subtractProductFromQuotes($product);
     }
 
     /**

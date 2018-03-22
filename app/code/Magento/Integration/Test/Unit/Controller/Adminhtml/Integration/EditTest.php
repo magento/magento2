@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -18,37 +16,37 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getSampleIntegrationData())
-            );
+            'get'
+        )->with(
+            $this->equalTo(self::INTEGRATION_ID)
+        )->will(
+            $this->returnValue($this->_getSampleIntegrationData())
+        );
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getParam'
-            )->with(
-                $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
-            )->will(
-                $this->returnValue(self::INTEGRATION_ID)
-            );
+            'getParam'
+        )->with(
+            $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
+        )->will(
+            $this->returnValue(self::INTEGRATION_ID)
+        );
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
             $this->any()
         )->method(
-                '__call'
-            )->will(
-                $this->returnValueMap(
+            '__call'
+        )->will(
+            $this->returnValueMap(
+                [
+                    ['setIntegrationData'],
                     [
-                        ['setIntegrationData'],
-                        [
-                            'getIntegrationData',
-                            [Info::DATA_ID => self::INTEGRATION_ID, Info::DATA_NAME => 'testIntegration']
-                        ],
-                    ]
-                )
-            );
+                        'getIntegrationData',
+                        [Info::DATA_ID => self::INTEGRATION_ID, Info::DATA_NAME => 'testIntegration']
+                    ],
+                ]
+            )
+        );
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
             ->willReturnArgument(0);
@@ -69,19 +67,19 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_backendSessionMock->expects(
             $this->any()
         )->method(
-                '__call'
-            )->will(
-                $this->returnValue(['name' => 'nonExistentInt'])
-            );
+            '__call'
+        )->will(
+            $this->returnValue(['name' => 'nonExistentInt'])
+        );
 
         $invalidIdException = new IntegrationException(__($exceptionMessage));
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->will(
-                $this->throwException($invalidIdException)
-            );
+            'get'
+        )->will(
+            $this->throwException($invalidIdException)
+        );
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
             ->willReturnArgument(0);

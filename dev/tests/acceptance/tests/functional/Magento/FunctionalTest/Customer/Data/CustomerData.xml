@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="CustomerEntityOne" type="customer">
         <data key="group_id">0</data>
@@ -28,9 +28,9 @@
         <data key="store_id">0</data>
         <data key="taxvat">taxValue</data>
         <data key="website_id">0</data>
-        <required-entity type="address">CustomerAddressSimple</required-entity>
+        <requiredEntity type="address">CustomerAddressSimple</requiredEntity>
         <data key="disable_auto_group_change">0</data>
-        <!--required-entity type="extension_attribute">ExtensionAttributeSimple</required-entity-->
+        <!--requiredEntity type="extension_attribute">ExtensionAttributeSimple</requiredEntity-->
     </entity>
     <entity name="Simple_US_Customer" type="customer">
         <data key="group_id">0</data>
@@ -39,13 +39,14 @@
         <data key="email" unique="prefix">John.Doe@example.com</data>
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
-        <required-entity type="address">US_Address_TX</required-entity>
+        <requiredEntity type="address">US_Address_TX</requiredEntity>
     </entity>
     <entity name="Simple_US_Customer_For_Update" type="customer">
         <var key="id" entityKey="id" entityType="customer"/>
         <data key="firstname">Jane</data>
     </entity>
-</config>
+</entities>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="importexport_importdata" resource="default" engine="innodb" comment="Import Data Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="varchar" name="entity" nullable="false" length="50" comment="Entity"/>
+        <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append" comment="Behavior"/>
+        <column xsi:type="longtext" name="data" nullable="true" comment="Data"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="import_history" resource="default" engine="innodb" comment="Import history table">
+        <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="History record Id"/>
+        <column xsi:type="timestamp" name="started_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Started at"/>
+        <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="User ID"/>
+        <column xsi:type="varchar" name="imported_file" nullable="true" length="255" comment="Imported file"/>
+        <column xsi:type="varchar" name="execution_time" nullable="true" length="255" comment="Execution time"/>
+        <column xsi:type="varchar" name="summary" nullable="true" length="255" comment="Summary"/>
+        <column xsi:type="varchar" name="error_file" nullable="false" length="255" comment="Imported file with errors"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="history_id"/>
+        </constraint>
+    </table>
+</schema>

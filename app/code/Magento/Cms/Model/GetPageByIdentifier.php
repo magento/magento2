@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
@@ -46,7 +47,7 @@ class GetPageByIdentifier implements GetPageByIdentifierInterface
         $this->pageResource->load($page, $identifier, PageInterface::IDENTIFIER);
 
         if (!$page->getId()) {
-            throw new NoSuchEntityException(__('CMS Page with identifier "%1" does not exist.', $identifier));
+            throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $identifier));
         }
 
         return $page;

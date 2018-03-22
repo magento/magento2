@@ -6,11 +6,12 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCustomerFiltersSection">
         <element name="filtersButton" type="button" selector="#container > div > div.admin__data-grid-header > div:nth-child(1) > div.data-grid-filters-actions-wrap > div > button" timeout="30"/>
         <element name="nameInput" type="input" selector="input[name=name]"/>
+        <element name="emailInput" type="input" selector="input[name=email]"/>
         <element name="apply" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
     </section>
-</config>
+</sections>
