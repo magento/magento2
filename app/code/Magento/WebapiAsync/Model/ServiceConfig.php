@@ -70,7 +70,7 @@ class ServiceConfig
             if ($services && is_string($services)) {
                 $this->services = $this->serializer->unserialize($services);
             } else {
-                $this->services = $this->configReader->read()[Converter::KEY_SERVICES];
+                $this->services = $this->configReader->read()[Converter::KEY_SERVICES] ?? [];
                 $this->cache->save($this->serializer->serialize($this->services), self::CACHE_ID);
             }
         }

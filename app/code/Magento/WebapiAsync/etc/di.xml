@@ -42,4 +42,8 @@
         </arguments>
     </type>
 
+    <type name="Magento\Webapi\Model\ServiceMetadata">
+        <plugin name="webapiServiceMetadataAsync" type="Magento\WebapiAsync\Plugin\ServiceMetadata" />
+    </type>
+
 </config>

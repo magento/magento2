@@ -29,6 +29,10 @@ class ServiceMetadata
      * @var \Magento\Framework\Reflection\TypeProcessor
      */
     private $typeProcessor;
+    /**
+     * @var array
+     */
+    private $responseDefinitionReplacement;
 
     /**
      * ServiceMetadata constructor.
@@ -51,7 +55,12 @@ class ServiceMetadata
         $this->typeProcessor = $typeProcessor;
     }
 
-    public function afterGetServicesConfig(\Magento\Webapi\Model\ServiceMetadata $subject, $result)
+    /**
+     * @param \Magento\Webapi\Model\ServiceMetadata $subject
+     * @param array $result
+     * @return array
+     */
+    public function afterGetServicesConfig(\Magento\Webapi\Model\ServiceMetadata $subject, array $result)
     {
         if ($this->asynchronousSchemaRequestProcessor->canProcess($this->request)) {
             $synchronousOnlyServiceMethods = $this->getSynchronousOnlyServiceMethods($subject);
@@ -65,18 +74,13 @@ class ServiceMetadata
                         $methodName,
                         $synchronousOnlyServiceMethods
                     )) {
-                        $result[$serviceName][WebapiConverter::KEY_METHODS][$methodName] = array_merge(
-                            $result[$serviceName][WebapiConverter::KEY_METHODS][$methodName],
-                            ['interface']['out']['parameters']['result'] = [
-                                'type' => $this->typeProcessor->register(AsyncResponseInterface::class),
-                                'documentation' => 'Returns a 202 Accepted Response when successfully queued.',
-                                'required' => true,
-                            ]
-                        );
+                        $result = $this->replaceResponseDefinition($result, $serviceName, $methodName);
                     }
                 }
             }
         }
+
+        return $result;
     }
 
     /**
@@ -131,6 +135,24 @@ class ServiceMetadata
     }
 
     /**
+     * @param array $result
+     * @param $serviceName
+     * @param $methodName
+     * @return array
+     */
+    private function replaceResponseDefinition(array $result, $serviceName, $methodName)
+    {
+        if (!isset($result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'])) {
+            return $result;
+        }
+
+        $replacement = $this->getResponseDefinitionReplacement();
+        $result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'] = $replacement;
+
+        return $result;
+    }
+
+    /**
      * Check if a method on the given service is defined as synchronous only.
      *
      * @param array $methodData
@@ -143,5 +165,25 @@ class ServiceMetadata
         }
 
         return $methodData[Converter::KEY_SYNCHRONOUS_INVOCATION_ONLY];
+    }
+
+    /**
+     * @return array
+     */
+    private function getResponseDefinitionReplacement()
+    {
+        if ($this->responseDefinitionReplacement === null) {
+            $this->responseDefinitionReplacement = [
+                'parameters' => [
+                    'result' => [
+                        'type' => $this->typeProcessor->register(AsyncResponseInterface::class),
+                        'documentation' => 'Returns a 202 Accepted Response when successfully queued.',
+                        'required' => true,
+                    ]
+                ]
+            ];
+        }
+
+        return $this->responseDefinitionReplacement;
     }
 }
