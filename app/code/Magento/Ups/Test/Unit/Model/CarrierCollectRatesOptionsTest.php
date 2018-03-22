@@ -227,6 +227,7 @@ class CarrierCollectRatesOptionsTest extends \PHPUnit\Framework\TestCase
                     'stockRegistry' => $stockRegistryMock,
                     'localeFormat' => $formatInterfaceMock,
                     'configHelper' => $configHelperMock,
+                    'httpClientFactory' => $this->createMock(\Magento\Framework\HTTP\ClientFactory::class),
                     'data' => [],
                 ]
             )
