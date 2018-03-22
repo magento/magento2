@@ -22,6 +22,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/712');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->collection = $this->objectManager->create(
             \Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment::class
@@ -31,12 +32,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->addStoreFilter([1]);
     }
 
-    /**
-     * @magentoDataFixture Magento/Sales/_files/order_shipping.php
-     * @magentoDataFixture Magento/Sales/_files/order_from_past.php
-     * @magentoDataFixture Magento/Sales/_files/report_shipping.php
-     * @return void
-     */
     public function testGetItems()
     {
         /** @var \Magento\Sales\Model\Order $order */

@@ -45,7 +45,7 @@ class AssertBundlePriceCalculatedOnProductPage extends AbstractConstraint
     protected function assertPrice(BundleProduct $product, CatalogProductView $productView)
     {
         $checkoutData = $product->getCheckoutData();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $checkoutData['cartItem']['configuredPrice'],
             $productView->getBundleViewBlock()->getBundleSummaryBlock()->getConfiguredPriceBlock()->getPrice(),
             'Bundle price calculated is not correct.'

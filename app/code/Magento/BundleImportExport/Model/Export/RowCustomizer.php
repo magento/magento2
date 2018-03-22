@@ -242,7 +242,8 @@ class RowCustomizer implements RowCustomizerInterface
                 'price' => $selection->getSelectionPriceValue(),
                 'default' => $selection->getIsDefault(),
                 'default_qty' => $selection->getSelectionQty(),
-                'price_type' => $this->getPriceTypeValue($selection->getSelectionPriceType())
+                'price_type' => $this->getPriceTypeValue($selection->getSelectionPriceType()),
+                'can_change_qty' => $selection->getSelectionCanChangeQty(),
             ];
             $bundleData .= $optionValues
                 . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
