@@ -12,7 +12,6 @@
             <argument name="FolderName" type="string" defaultValue="" />
         </arguments>
         <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
-        <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
         <waitForText userInput="{{FolderName}}" stepKey="waitForNewFolder" />
         <click userInput="{{FolderName}}" stepKey="clickOnCreatedFolder" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading5" />

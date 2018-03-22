@@ -7,14 +7,16 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToMediaFolderActionGroup">
+    <actionGroup name="DeleteImageFromStorageActionGroup">
         <arguments>
-            <argument name="FolderName" type="string" defaultValue="" />
+            <argument name="Image" defaultValue="" />
         </arguments>
-        <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
-        <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
-        <waitForText userInput="{{FolderName}}" stepKey="waitForNewFolder" />
-        <click userInput="{{FolderName}}" stepKey="clickOnCreatedFolder" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading5" />
+        <click selector="//small[contains(text(),'{{Image.value}}')]" stepKey="selectImage" />
+        <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
+        <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected" />
+        <waitForText userInput="OK" stepKey="waitForConfirm" />
+        <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete" />
+        <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted" />
+        <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
     </actionGroup>
 </actionGroups>
