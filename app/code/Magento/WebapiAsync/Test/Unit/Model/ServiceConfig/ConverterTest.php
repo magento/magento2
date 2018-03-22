@@ -10,11 +10,11 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\WebapiAsync\Model\ServiceConfig\Converter
      */
-    protected $_model;
+    private $model;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\WebapiAsync\Model\ServiceConfig\Converter();
+        $this->model = new \Magento\WebapiAsync\Model\ServiceConfig\Converter();
     }
 
     /**
@@ -25,6 +25,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $inputData = new \DOMDocument();
         $inputData->load(__DIR__ . '/_files/Converter/webapi_async.xml');
         $expectedResult = require __DIR__ . '/_files/Converter/webapi_async.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($inputData));
+        $this->assertEquals($expectedResult, $this->model->convert($inputData));
     }
 }

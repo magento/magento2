@@ -10,20 +10,20 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_moduleReaderMock;
+    private $moduleReaderMock;
 
     /**
      * @var \Magento\WebapiAsync\Model\ServiceConfig\SchemaLocator
      */
-    protected $_model;
+    private $model;
 
     protected function setUp()
     {
-        $this->_moduleReaderMock = $this->createPartialMock(
+        $this->moduleReaderMock = $this->createPartialMock(
             \Magento\Framework\Module\Dir\Reader::class,
             ['getModuleDir']
         );
-        $this->_moduleReaderMock->expects(
+        $this->moduleReaderMock->expects(
             $this->any()
         )->method(
             'getModuleDir'
@@ -34,16 +34,16 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('schema_dir')
         );
 
-        $this->_model = new \Magento\WebapiAsync\Model\ServiceConfig\SchemaLocator($this->_moduleReaderMock);
+        $this->model = new \Magento\WebapiAsync\Model\ServiceConfig\SchemaLocator($this->moduleReaderMock);
     }
 
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/webapi_async.xsd', $this->_model->getSchema());
+        $this->assertEquals('schema_dir/webapi_async.xsd', $this->model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(null, $this->_model->getPerFileSchema());
+        $this->assertEquals(null, $this->model->getPerFileSchema());
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\WebapiAsync\Model\ServiceConfig;
 use Magento\Framework\Module\Dir;
 
 /**
- * Web API config schema locator.
+ * Web API Async config schema locator.
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -17,21 +17,21 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
+    private $schema = null;
 
     /**
      * Path to corresponding XSD file with validation rules for separate config files
      *
      * @var string
      */
-    protected $_perFileSchema = null;
+    private $perFileSchema = null;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_WebapiAsync') . '/webapi_async.xsd';
+        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_WebapiAsync') . '/webapi_async.xsd';
     }
 
     /**
@@ -41,7 +41,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -51,6 +51,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_perFileSchema;
+        return $this->perFileSchema;
     }
 }

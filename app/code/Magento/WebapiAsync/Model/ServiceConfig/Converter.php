@@ -6,7 +6,7 @@
 namespace Magento\WebapiAsync\Model\ServiceConfig;
 
 /**
- * Converter of webapi.xml content into array format.
+ * Converter of webapi_async.xml content into array format.
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -137,13 +137,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private function getSynchronousMethodInvocationOnly(\DOMElement $serviceNode)
     {
         $synchronousInvocationOnlyNodes = $serviceNode->getElementsByTagName('synchronousInvocationOnly');
-
-        // This should be caught by the xsd, but covers some un-expected scenario
-        if (count($synchronousInvocationOnlyNodes) > 1) {
-            throw new \InvalidArgumentException(
-                'Multiple synchronousInvocationOnly child nodes defined with configuration source'
-            );
-        }
 
         return $this->isSynchronousInvocationOnlyTrue($synchronousInvocationOnlyNodes->item(0));
     }

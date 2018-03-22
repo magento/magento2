@@ -6,7 +6,6 @@
 
 namespace Magento\WebapiAsync\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
 use Magento\WebapiAsync\Model\ServiceConfig\Converter;
@@ -46,16 +45,16 @@ class ServiceConfig
      *
      * @param WebapiCache $cache
      * @param Reader $configReader
-     * @param SerializerInterface|null $serializer
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         WebapiCache $cache,
         Reader $configReader,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer
     ) {
         $this->cache = $cache;
         $this->configReader = $configReader;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer;
     }
 
     /**
