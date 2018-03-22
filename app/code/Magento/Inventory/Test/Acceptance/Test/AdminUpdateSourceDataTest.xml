@@ -31,10 +31,10 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchForSource1">
             <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="value" value="$$createFullSource1.general[source_code]$$"/>
+            <argument name="value" value="$$createFullSource1.source[source_code]$$"/>
         </actionGroup>
 
-        <click selector="{{AdminGridRow.editByValue($$createFullSource1.general[source_code]$$)}}" stepKey="clickOnEdit"/>
+        <click selector="{{AdminGridRow.editByValue($$createFullSource1.source[source_code]$$)}}" stepKey="clickOnEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad0"/>
 
         <fillField userInput="{{FullSource2.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillNameField2"/>
@@ -62,7 +62,7 @@
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="clickOnSaveAndContinue"/>
 
         <seeInField selector="{{AdminEditSourceGeneralSection.name}}" userInput="{{FullSource2.name}}" stepKey="seeNameInField"/>
-        <seeInField selector="{{AdminEditSourceGeneralSection.code}}" userInput="$$createFullSource1.general[source_code]$$" stepKey="seeCodeInField"/>
+        <seeInField selector="{{AdminEditSourceGeneralSection.code}}" userInput="$$createFullSource1.source[source_code]$$" stepKey="seeCodeInField"/>
         <seeInField selector="{{AdminEditSourceGeneralSection.description}}" userInput="{{FullSource2.description}}" stepKey="seeDescriptionInField"/>
         <seeInField selector="{{AdminEditSourceGeneralSection.latitude}}" userInput="0" stepKey="seeLatitudeInField"/>
         <seeInField selector="{{AdminEditSourceGeneralSection.longitude}}" userInput="0" stepKey="seeLongitudeInField"/>

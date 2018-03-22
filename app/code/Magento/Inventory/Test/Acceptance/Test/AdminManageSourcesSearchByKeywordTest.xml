@@ -30,11 +30,11 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
-            <argument name="value" value="$$createSource2.general[name]$$"/>
+            <argument name="value" value="$$createSource2.source[name]$$"/>
         </actionGroup>
 
-        <see userInput="$$createSource2.general[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
-        <see userInput="$$createSource2.general[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
+        <see userInput="$$createSource2.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createSource2.source[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeNameInRow1"/>
         <see userInput="Enabled" selector="{{AdminGridRow.rowOne}}" stepKey="seeIsEnabledInRow1"/>
     </test>
 </tests>
