@@ -73,8 +73,7 @@ class Product
     public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $this->layerResolver->get()->setCollection($collection);
+        $collection = $this->layerResolver->get()->getProductCollection();
         $this->joinProcessor->process($collection);
 
         $collection->addAttributeToSelect('*');

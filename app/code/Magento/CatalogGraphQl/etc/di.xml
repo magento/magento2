@@ -11,6 +11,7 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+            <argument name="layer" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\EavGraphQl\Model\Resolver\Query\Type">

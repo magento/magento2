@@ -10,6 +10,8 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
@@ -43,13 +45,19 @@ class Products implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var Layer\DataProvider\LayerFilters
-     */
-    private $layerFiltersDataProvider;
-    /**
-     * @var \Magento\Catalog\Model\Layer\Resolver
+     * @var Resolver
      */
     private $layerResolver;
+
+    /**
+     * @var \Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory
+     */
+    private $filterableAttributesListFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer\FilterListFactory
+     */
+    private $filterListFactory;
 
     /**
      * @param Builder $searchCriteriaBuilder
@@ -61,15 +69,17 @@ class Products implements ResolverInterface
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
+        ValueFactory $valueFactory,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\LayerFilters $layerFiltersDataProvider,
-        ValueFactory $valueFactory
+        \Magento\Catalog\Model\Layer\FilterListFactory $filterListFactory,
+        \Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory $filterableAttributesListFactory
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
-        $this->layerFiltersDataProvider = $layerFiltersDataProvider;
         $this->layerResolver = $layerResolver;
+        $this->filterableAttributesListFactory = $filterableAttributesListFactory;
+        $this->filterListFactory = $filterListFactory;
         $this->valueFactory = $valueFactory;
     }
 
@@ -89,15 +99,17 @@ class Products implements ResolverInterface
                 __("'search' or 'filter' input argument is required.")
             );
         } elseif (isset($args['search'])) {
-            $this->layerResolver->create(\Magento\CatalogGraphQl\Model\Layer\Search::LAYER_GRAPHQL_SEARCH);
+            $this->layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
+            $filterableAttributesList = $this->filterableAttributesListFactory->create(
+                Resolver::CATALOG_LAYER_SEARCH
+            );
             $searchResult = $this->searchQuery->getResult($searchCriteria);
-            $this->layerResolver->get();
-            $layerFilters = $this->layerFiltersDataProvider->getFilters(\Magento\CatalogGraphQl\Model\Layer\Search::LAYER_GRAPHQL_SEARCH);
         } else {
-            $this->layerResolver->create(\Magento\CatalogGraphQl\Model\Layer\Category::LAYER_GRAPHQL_CATEGORY);
-            $this->layerResolver->get();
+            $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
+            $filterableAttributesList = $this->filterableAttributesListFactory->create(
+                Resolver::CATALOG_LAYER_CATEGORY
+            );
             $searchResult = $this->filterQuery->getResult($searchCriteria);
-            $layerFilters = $this->layerFiltersDataProvider->getFilters(\Magento\CatalogGraphQl\Model\Layer\Category::LAYER_GRAPHQL_CATEGORY);
         }
         //possible division by 0
         if ($searchCriteria->getPageSize()) {
@@ -105,7 +117,32 @@ class Products implements ResolverInterface
         } else {
             $maxPages = 0;
         }
-
+        $filterList = $this->filterListFactory->create(
+            [
+                'filterableAttributes' => $filterableAttributesList
+            ]
+        );
+        $filters = $filterList->getFilters($this->layerResolver->get());
+        $filtersArray = [];
+        /** @var AbstractFilter $filter */
+        foreach ($filters as $filter) {
+            if ($filter->getItemsCount()) {
+                $filterGroup = [
+                    'name' => (string)$filter->getName(),
+                    'filter_items_count' => $filter->getItemsCount(),
+                    'request_var' => $filter->getRequestVar(),
+                ];
+                /** @var \Magento\Catalog\Model\Layer\Filter\Item $filterItem */
+                foreach ($filter->getItems() as $filterItem) {
+                    $filterGroup['filter_items'][] = [
+                        'label' => (string)$filterItem->getLabel(),
+                        'value_string' => $filterItem->getValueString(),
+                        'items_count' => $filterItem->getCount(),
+                    ];
+                }
+                $filtersArray[] = $filterGroup;
+            }
+        }
         $currentPage = $searchCriteria->getCurrentPage();
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
             $currentPage = new GraphQlInputException(
@@ -123,7 +160,7 @@ class Products implements ResolverInterface
                 'page_size' => $searchCriteria->getPageSize(),
                 'current_page' => $currentPage
             ],
-            'filters' => $layerFilters,
+            'filters' => $filtersArray
         ];
 
         $result = function () use ($data) {

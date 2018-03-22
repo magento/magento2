@@ -25,7 +25,7 @@ class Filter
     private $searchResultFactory;
 
     /**
-     * @var Product
+     * @var \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product
      */
     private $productDataProvider;
 
@@ -40,21 +40,30 @@ class Filter
     private $postProcessors;
 
     /**
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    private $layerResolver;
+
+    /**
      * @param SearchResultFactory $searchResultFactory
-     * @param Product $productDataProvider
+     * @param \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product $productDataProvider
      * @param FormatterInterface $formatter
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param PostFetchProcessorInterface[] $postProcessors
+     * @internal param Product $productDataProvider
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
-        Product $productDataProvider,
+        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product $productDataProvider,
         FormatterInterface $formatter,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         array $postProcessors = []
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
         $this->postProcessors = $postProcessors;
         $this->formatter = $formatter;
+        $this->layerResolver = $layerResolver;
     }
 
     /**
