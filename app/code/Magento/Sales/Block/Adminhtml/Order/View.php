@@ -245,11 +245,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($this->_isAllowedAction(
-                'Magento_Sales::reorder'
-            ) && $this->_reorderHelper->isAllowed(
-                $order->getStore()
-            ) && $order->canReorderIgnoreSalable()
+        if ($this->_isAllowedAction('Magento_Sales::reorder')
+            && $this->_reorderHelper->isAllowed($order->getStore())
+            && $order->canReorderIgnoreSalable()
         ) {
             $this->addButton(
                 'order_reorder',
