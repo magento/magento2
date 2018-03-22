@@ -97,9 +97,9 @@
                     <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                 </settings>
             </field>
-            <field name="quantity" formElement="input">
+            <field name="quantity_per_source" formElement="input">
                 <settings>
-                    <label translate="true">Quantity</label>
+                    <label translate="true">Quantity Per Source</label>
                     <dataType>text</dataType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>

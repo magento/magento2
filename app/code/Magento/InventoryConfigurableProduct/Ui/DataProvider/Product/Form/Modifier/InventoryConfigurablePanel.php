@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Ui\Component\Container;
+
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
@@ -60,9 +62,10 @@ class InventoryConfigurablePanel extends AbstractModifier
 
             if (isset($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX])) {
                 foreach ($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX] as $key => $productArray) {
-                    $qtyPerSource =
-                        $this->getQuantityInformationPerSource->execute($productArray[ProductInterface::SKU]);
-                    $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['qty_per_source'] = $qtyPerSource;
+                    $quantityPerSource
+                        = $this->getQuantityInformationPerSource->execute($productArray[ProductInterface::SKU]);
+                    $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['quantity_per_source']
+                        = $quantityPerSource;
                 }
             }
         }
@@ -84,16 +87,12 @@ class InventoryConfigurablePanel extends AbstractModifier
                         'componentType' => 'text',
                         'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity',
                         'template' => 'ui/form/field',
-                        'dataScope' => 'qty_per_source',
+                        'dataScope' => 'quantity_per_source',
                         'label' => __('Quantity Per Source'),
                         'formElement' => Form\Element\Input::NAME,
-                        'imports' => [
-                            'visible' => '!${$.provider}:${$.parentScope}.canEdit'
-                        ],
-                        'visibleIfCanEdit' => true,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -103,6 +102,7 @@ class InventoryConfigurablePanel extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->isSingleSourceMode->execute() === false) {
+
             $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children']
             [ConfigurablePanel::CONFIGURABLE_MATRIX]['children']
             ['record']['children']['quantity_per_source_container'] = $this->getQuantityContainerConfig();

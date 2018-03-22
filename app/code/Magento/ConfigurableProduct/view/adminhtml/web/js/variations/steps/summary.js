@@ -51,7 +51,8 @@ define([
                 }
             }),
             attributes: [],
-            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
+            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'),$.mage.__('Quantity Per' +
+                ' Source'), $.mage.__('Price')],
             sections: [],
             gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
         },
@@ -134,6 +135,7 @@ define([
                     sku: sku,
                     name: name,
                     quantity: quantity,
+                    quantity_per_source: quantity,
                     price: price,
                     productId: productId,
                     weight: productWeight,
@@ -196,6 +198,7 @@ define([
             }, variation.images));
             row.push(variation.sku);
             row.push(variation.quantity);
+            row.push(variation.quantity_per_source);
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });
@@ -223,10 +226,11 @@ define([
          * @return {Array}
          */
         getColumnsName: function (attributes) {
+            debugger;
             var columns = this.attributesName.slice(0);
 
             attributes.each(function (attribute, index) {
-                columns.splice(3 + index, 0, attribute.label);
+                columns.splice(4 + index, 0, attribute.label);
             }, this);
 
             return columns;
