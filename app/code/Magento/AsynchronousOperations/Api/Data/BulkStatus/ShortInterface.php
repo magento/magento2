@@ -8,7 +8,6 @@ namespace Magento\AsynchronousOperations\Api\Data\BulkStatus;
 
 use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
-use Magento\AsynchronousOperations\Api\Data\OperationStatus\ShortListInterface;
 
 /**
  * Interface BulkStatusInterface

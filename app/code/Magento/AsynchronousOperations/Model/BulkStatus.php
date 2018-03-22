@@ -14,7 +14,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Setup\Exception;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterfaceFactory as BulkStatusShortFactory;
 use Magento\AsynchronousOperations\Api\Data\BulkStatus\DetailedInterfaceFactory as BulkStatusDetailedFactory;

@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Class OperationShortDetails
  */
-class Short extends DataObject implements OperationStatusInterface, ExtensibleDataInterface
+class Short extends DataObject implements ShortInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc

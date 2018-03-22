@@ -77,6 +77,11 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $entityManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $connectionMock;
 
     protected function setUp()
