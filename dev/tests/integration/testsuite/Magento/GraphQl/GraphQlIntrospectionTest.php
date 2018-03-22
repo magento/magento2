@@ -87,7 +87,7 @@ QUERY;
         'kind' => 'OBJECT',
         'fields' => [
           [
-            'name' => 'a',
+           'name' => 'a',
           'args' => []
           ]
         ]

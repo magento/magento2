@@ -19,7 +19,7 @@ use Magento\Framework\Webapi\Request;
 use Magento\GraphQl\Controller\GraphQl;
 
 /**
- * Class GraphQlTest
+ * Tests the dispatch method in the GraphQl Controller class using a simple product query
  *
  * @magentoAppArea graphql
  * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
@@ -91,8 +91,7 @@ QUERY;
         $request->setPathInfo('/graphql');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']
-            );
+            ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
         $response = $this->graphql->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
@@ -134,25 +133,26 @@ QUERY;
         $request->setPathInfo('/graphql');
         $request->setContent(json_encode($postData));
         $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']
-            );
+            ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
         $response = $this->graphql->dispatch($request);
         $outputResponse = $this->jsonSerializer->unserialize($response->getContent());
-        if(isset($outputResponse['errors'][0])) {
-            if(is_array($outputResponse['errors'][0])) {
-                foreach($outputResponse['errors'] as $error) {
-                    $this->assertEquals($error['category'], \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY);
+        if (isset($outputResponse['errors'][0])) {
+            if (is_array($outputResponse['errors'][0])) {
+                foreach ($outputResponse['errors'] as $error) {
+                    $this->assertEquals(
+                        $error['category'],
+                        \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY
+                    );
                     if (isset($error['message'])) {
                         $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');
+                    }
+                    if (isset($error['trace'])) {
+                        if (is_array($error['trace']))
+                        $this->assertNotEmpty($error['trace']);
+                    }
                 }
-                if(isset($error['trace']))
-                {
-                if(is_array($error['trace']))
-                 $this->assertNotEmpty($error['trace']);
-                }
-             }
-          }
+            }
         }
     }
 }
