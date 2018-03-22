@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
@@ -49,24 +52,34 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
+     * Provides "Manage Stock" global config value.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param ScopeConfigInterface $config
      */
     public function __construct(
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ScopeConfigInterface $config
     ) {
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->config = $config;
     }
 
     /**
@@ -127,7 +140,7 @@ class SourceItems extends AbstractModifier
             || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
-
+        $isMangeStock = $this->isMangeStock($product);
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
@@ -136,7 +149,50 @@ class SourceItems extends AbstractModifier
                     ],
                 ],
             ],
+            'children' => [
+                'assign_sources_container' => [
+                    'children' => [
+                        'assign_sources_button' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'visible' => $isMangeStock,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'assigned_sources' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'visible' => $isMangeStock,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
+
         return $meta;
+    }
+
+    /**
+     * Get "isManageStock" from product, and fall back to global config in case of new product.
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    private function isMangeStock(ProductInterface $product): bool
+    {
+        $item = $product->getExtensionAttributes() ? $product->getExtensionAttributes()->getStockItem() : null;
+        if ($item) {
+            return $item->getUseConfigManageStock()
+                ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
+                : (bool)$item->getManageStock();
+        }
+
+        return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
     }
 }
