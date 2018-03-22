@@ -60,9 +60,10 @@ class InventoryConfigurablePanel extends AbstractModifier
 
             if (isset($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX])) {
                 foreach ($data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX] as $key => $productArray) {
-                    $qtyPerSource =
-                        $this->getQuantityInformationPerSource->execute($productArray[ProductInterface::SKU]);
-                    $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['qty_per_source'] = $qtyPerSource;
+                    $quantityPerSource
+                        = $this->getQuantityInformationPerSource->execute($productArray[ProductInterface::SKU]);
+                    $data[$productId][ConfigurablePanel::CONFIGURABLE_MATRIX][$key]['quantity_per_source']
+                        = $quantityPerSource;
                 }
             }
         }
@@ -82,18 +83,14 @@ class InventoryConfigurablePanel extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'text',
-                        'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity',
+                        'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity-per-source',
                         'template' => 'ui/form/field',
-                        'dataScope' => 'qty_per_source',
+                        'dataScope' => 'quantity_per_source',
                         'label' => __('Quantity Per Source'),
                         'formElement' => Form\Element\Input::NAME,
-                        'imports' => [
-                            'visible' => '!${$.provider}:${$.parentScope}.canEdit'
-                        ],
-                        'visibleIfCanEdit' => true,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -110,6 +107,10 @@ class InventoryConfigurablePanel extends AbstractModifier
             unset($meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children']
                 [ConfigurablePanel::CONFIGURABLE_MATRIX]['children']
                 ['record']['children']['quantity_container']);
+
+            $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children']
+            [ConfigurablePanel::CONFIGURABLE_MATRIX]['arguments']['data']['config']['component']
+                = 'Magento_InventoryConfigurableProduct/js/components/dynamic-rows-configurable';
         }
 
         return $meta;
