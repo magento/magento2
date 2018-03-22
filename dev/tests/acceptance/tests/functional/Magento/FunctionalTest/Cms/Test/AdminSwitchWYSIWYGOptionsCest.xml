@@ -25,6 +25,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
         </before>
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue1"/>
@@ -33,7 +34,7 @@
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions1" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig1" />
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage1"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <waitForPageLoad stepKey="wait2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle1"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
@@ -52,6 +53,7 @@
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
+        <waitForPageLoad stepKey="wait4"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
@@ -60,7 +62,7 @@
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig2" />
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <waitForPageLoad stepKey="wait5"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
@@ -75,7 +77,7 @@
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage2"/>
         <!-- Go to storefront cms page, assert cms content -->
         <amOnPage url="{{simpleCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
-        <waitForPageLoad stepKey="wait4" />
+        <waitForPageLoad stepKey="wait6" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
         <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
