@@ -32,9 +32,9 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
-            <argument name="value" value="$$createStock4.source[name]$$"/>
+            <argument name="value" value="$$createStock4.stock[name]$$"/>
         </actionGroup>
 
-        <see userInput="$$createStock4.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createStock4.stock[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
     </test>
 </tests>
