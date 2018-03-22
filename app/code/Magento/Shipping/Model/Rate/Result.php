@@ -115,7 +115,24 @@ class Result
     {
         return isset($this->_rates[$id]) ? $this->_rates[$id] : null;
     }
-
+    
+    /**
+     * Return rate by method id
+     *
+     * @param $id
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method|null
+     */
+    public function getRateByMethodId($id)
+    {
+        return array_reduce($this->_rates, function($foundItem, $item) use ($id) {
+            if (!$foundItem && $item->getMethod() == $id) {
+                return $item;
+            } else {
+                return $foundItem;
+            }
+        });
+    }
+    
     /**
      * Return quotes for specified type
      *
