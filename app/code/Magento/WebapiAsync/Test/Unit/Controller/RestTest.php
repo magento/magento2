@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Webapi\Test\Unit\Controller;
+namespace Magento\WebapiAsync\Test\Unit\Controller;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthorizationException;
