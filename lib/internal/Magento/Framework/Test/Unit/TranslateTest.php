@@ -237,6 +237,9 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->translate->getData());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestLoadData()
     {
         return [
@@ -245,7 +248,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             ['frontend', true],
             ['frontend', false],
             [null, true],
-            [null, false]
+            [null, false],
         ];
     }
 
@@ -264,12 +267,15 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->translate->getData());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForTestGetData()
     {
         $data = ['original 1' => 'translated 1', 'original 2' => 'translated 2'];
         return [
             [$data, $data],
-            [null, []]
+            [null, []],
         ];
     }
 

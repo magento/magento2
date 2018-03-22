@@ -78,7 +78,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $designModel->expects($this->any())->method('getDesignTheme')->willReturnValue($theme);
+        $designModel->expects($this->any())->method('getDesignTheme')->willReturn($theme);
 
         $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
 
