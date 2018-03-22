@@ -55,7 +55,7 @@ class AssertCustomerGroupForm extends AbstractConstraint
         $customerGroupIndex->getCustomerGroupGrid()->searchAndOpen($filter);
         $formData = $customerGroupNew->getPageMainForm()->getData();
         $dataDiff = $this->verifyForm($formData, $data);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($dataDiff),
             'Customer Group form was filled incorrectly.'
             . "\nLog:\n" . implode(";\n", $dataDiff)

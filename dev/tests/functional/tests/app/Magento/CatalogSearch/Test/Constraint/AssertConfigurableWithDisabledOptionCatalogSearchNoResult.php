@@ -67,7 +67,7 @@ class AssertConfigurableWithDisabledOptionCatalogSearchNoResult extends Abstract
             $isProductVisible = $resultPage->getListProductBlock()->getProductItem($product)->isVisible();
         } while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage());
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $isProductVisible,
             "A product with name '" . $product->getName() . "' was found."
         );

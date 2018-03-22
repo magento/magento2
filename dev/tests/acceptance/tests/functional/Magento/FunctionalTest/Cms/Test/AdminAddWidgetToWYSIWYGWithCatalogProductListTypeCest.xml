@@ -54,7 +54,7 @@
         <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
         <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
-        <click selector="{{WidgetSection.RuleParam}}" stepKey="click ..." />
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
         <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
