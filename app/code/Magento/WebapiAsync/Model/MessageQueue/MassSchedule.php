@@ -175,39 +175,33 @@ class MassSchedule
 
         $operations = [];
         $requestItems = [];
-        foreach ($entitiesArray as $key => $entityParams) {
+        foreach ($entitiesArray as $entityParams) {
             /** @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
                 $this->messageValidator->validate($topicName, $entityParams);
                 $data = $this->messageEncoder->encode($topicName, $entityParams);
-
-                $serializedData = [
-                    'entity_id'        => null,
-                    'entity_link'      => '',
-                    'meta_information' => $data,
-                ];
-                $data = [
-                    'data' => [
-                        OperationInterface::BULK_ID         => $groupId,
-                        OperationInterface::TOPIC_NAME      => $topicName,
-                        OperationInterface::SERIALIZED_DATA => $this->jsonHelper->serialize($serializedData),
-                        OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
-                    ],
-                ];
-
-                /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
-                $operation = $this->operationFactory->create($data);
-                $operations[] = $this->entityManager->save($operation);
-
-                $requestItem->setId($key);
-                $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
+                $operationStatus = OperationInterface::STATUS_TYPE_OPEN;
             } catch (\Exception $exception) {
-                $requestItem->setId($key);
+                $data = $entityParams;
+                //TODO after merge with BulkApi Status need change cons from OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED to OperationInterface::STATUS_TYPE_REJECTED
+                $operationStatus = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            }
+
+            $operation = $this->saveOperation($groupId, $topicName, $data, $operationStatus);
+            if (!isset($exception)) {
+                $operations[] = $operation;
+            }
+
+            $requestItem->setId($operation->getId());
+            $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
+
+            if (isset($exception)) {
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);
+                unset($exception);
             }
 
             $requestItems[] = $requestItem;
@@ -226,5 +220,44 @@ class MassSchedule
         $asyncResponse->setRequestItems($requestItemsList);
 
         return $asyncResponse;
+    }
+
+    /**
+     * @param string $groupId
+     * @param string $topicName
+     * @param mixed $data
+     * @param int $operationStatus
+     * @param null $error
+     * @param null $errorCode
+     * @return \Magento\AsynchronousOperations\Api\Data\OperationInterface
+     */
+    private function saveOperation(
+        $groupId,
+        $topicName,
+        $data,
+        $operationStatus = OperationInterface::STATUS_TYPE_OPEN,
+        $error = null,
+        $errorCode = null
+    ) {
+        $serializedData = [
+            'entity_id'        => null,
+            'entity_link'      => '',
+            'meta_information' => $data,
+        ];
+        $data = [
+            'data' => [
+                OperationInterface::BULK_ID         => $groupId,
+                OperationInterface::TOPIC_NAME      => $topicName,
+                OperationInterface::SERIALIZED_DATA => $this->jsonHelper->serialize($serializedData),
+                OperationInterface::STATUS          => $operationStatus,
+                OperationInterface::RESULT_MESSAGE  => $error,
+                OperationInterface::ERROR_CODE      => $errorCode,
+            ],
+        ];
+
+        /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
+        $operation = $this->operationFactory->create($data);
+
+        return $this->entityManager->save($operation);
     }
 }

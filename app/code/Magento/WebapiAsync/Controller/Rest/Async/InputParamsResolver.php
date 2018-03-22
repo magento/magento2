@@ -91,10 +91,20 @@ class InputParamsResolver
         //simple check if async request have single or bulk entities
         if (array_key_exists(0, $inputData)) {
             foreach ($inputData as $key => $singleParams) {
-                $webapiResolvedParams[$key] = $this->resolveParams($singleParams);
+                try {
+                    $webapiResolvedParams[$key] = $this->resolveParams($singleParams);
+                } catch (\Exception $e) {
+                    //return input request data when failed to process rejected type in MassSchedule
+                    $webapiResolvedParams[$key] = $singleParams;
+                }
             }
         } else {//single item request
-            $webapiResolvedParams[] = $this->resolveParams($inputData);
+            try {
+                $webapiResolvedParams[] = $this->resolveParams($inputData);
+            } catch (\Exception $e) {
+                //return input request data when failed to process rejected type in MassSchedule
+                $webapiResolvedParams[] = $inputData;
+            }
         }
 
         return $webapiResolvedParams;
@@ -132,6 +142,7 @@ class InputParamsResolver
 
         $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
         $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+
         return $inputParams;
     }
 }
