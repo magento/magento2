@@ -475,7 +475,10 @@ class ConfigurablePanel extends AbstractModifier
                                 [
                                     'required-entry' => true,
                                     'max_text_length' => Sku::SKU_MAX_LENGTH,
-                                ]
+                                ],
+                        ],
+                        [
+                            'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-sku',
                         ]
                     ),
                     'price_container' => $this->getColumn(
