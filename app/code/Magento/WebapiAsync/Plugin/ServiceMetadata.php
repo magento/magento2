@@ -177,8 +177,14 @@ class ServiceMetadata
                 'parameters' => [
                     'result' => [
                         'type' => $this->typeProcessor->register(AsyncResponseInterface::class),
-                        'documentation' => 'Returns a 202 Accepted Response when successfully queued.',
+                        'documentation' => 'Returns response information for the asynchronous request.',
                         'required' => true,
+                        'response_codes' => [
+                            'success' => [
+                                'code' => '202',
+                                'description' => '202 Accepted.'
+                            ]
+                        ]
                     ]
                 ]
             ];
