@@ -47,7 +47,7 @@ class Interfaces implements FormatterInterface
         if ($typeStructure instanceof Type && !empty($typeStructure->getInterfaces())) {
             $interfaces = [];
             foreach ($typeStructure->getInterfaces() as $interface) {
-                $interfaces[$interface['interface']] = $this->outputMapper->getInterface($interface['interface']);
+                $interfaces[$interface['interface']] = $this->outputMapper->getOutputType($interface['interface']);
             }
             $config['interfaces'] = $interfaces;
         }

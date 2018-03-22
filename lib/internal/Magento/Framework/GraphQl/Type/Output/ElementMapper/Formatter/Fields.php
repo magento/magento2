@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
@@ -81,47 +81,79 @@ class Fields implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $typeStructure, OutputType $outputType) : array
+    public function format(TypeInterface $typeStructure, OutputType $outputType): array
     {
-        $config = [];
-        /** @var Field $field */
-        foreach ($typeStructure->getFields() as $field) {
-            if ($this->scalarTypes->isScalarType($field->getTypeName())) {
-                $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
+        $typeConfig = [
+            'fields' => function () use ($typeStructure, $outputType) {
+                $fieldsConfig = [];
+                foreach ($typeStructure->getFields() as $field) {
+                    $fieldsConfig[$field->getName()] = $this->getFieldConfig($typeStructure, $outputType, $field);
+                }
+                return $fieldsConfig;
+            }
+        ];
+        return $typeConfig;
+    }
+
+
+    /**
+     * Generate field type object.
+     *
+     * @param TypeInterface $typeStructure
+     * @param OutputType $outputType
+     * @param Field $field
+     * @return OutputType
+     */
+    private function getFieldType(TypeInterface $typeStructure, OutputType $outputType, Field $field)
+    {
+        if ($this->scalarTypes->isScalarType($field->getTypeName())) {
+            $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
+        } else {
+            if ($typeStructure->getName() == $field->getTypeName()) {
+                $type = $outputType;
             } else {
                 if ($typeStructure->getName() == $field->getTypeName()) {
                     $type = $outputType;
                 } else {
-                    if ($typeStructure->getName() == $field->getTypeName()) {
-                        $type = $outputType;
-                    } else {
-                        $type = $this->outputMapper->getTypeObject($field->getTypeName());
-                    }
-
-                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
+                    $type = $this->outputMapper->getOutputType($field->getTypeName());
                 }
-            }
-            $config['fields'][$field->getName()] = [
-                'name' => $field->getName(),
-                'type' => $type,
-            ];
 
-            if (!empty($field->getDescription())) {
-                $config['fields'][$field->getName()]['description'] = $field->getDescription();
+                $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
             }
-
-            if ($field->getResolver() != null) {
-                /** @var ResolverInterface $resolver */
-                $resolver = $this->objectManager->get($field->getResolver());
-
-                $config['fields'][$field->getName()]['resolve'] =
-                    function ($value, $args, $context, $info) use ($resolver, $field) {
-                        return $resolver->resolve($field, $value, $args, $context, $info);
-                    };
-            }
-            $config = $this->formatArguments($field, $config);
         }
-        return $config;
+        return $type;
+    }
+
+    /**
+     * Generate field config.
+     *
+     * @param TypeInterface $typeStructure
+     * @param OutputType $outputType
+     * @param Field $field
+     * @return array
+     */
+    private function getFieldConfig(TypeInterface $typeStructure, OutputType $outputType, Field $field): array
+    {
+        $type = $this->getFieldType($typeStructure, $outputType, $field);
+        $fieldConfig = [
+            'name' => $field->getName(),
+            'type' => $type,
+        ];
+
+        if (!empty($field->getDescription())) {
+            $fieldConfig['description'] = $field->getDescription();
+        }
+
+        if ($field->getResolver() != null) {
+            /** @var ResolverInterface $resolver */
+            $resolver = $this->objectManager->get($field->getResolver());
+
+            $fieldConfig['resolve'] =
+                function ($value, $args, $context, $info) use ($resolver, $field) {
+                    return $resolver->resolve($field, $value, $args, $context, $info);
+                };
+        }
+        return $this->formatArguments($field, $fieldConfig);
     }
 
     /**
@@ -136,7 +168,7 @@ class Fields implements FormatterInterface
         foreach ($field->getArguments() as $argument) {
             $inputType = $this->inputMapper->getRepresentation($argument);
 
-            $config['fields'][$field->getName()]['args'][$argument->getName()] = $inputType;
+            $config['args'][$argument->getName()] = $inputType;
         }
 
         return $config;
