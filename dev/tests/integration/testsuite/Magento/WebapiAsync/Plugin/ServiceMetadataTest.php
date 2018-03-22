@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Plugin;
+namespace Magento\WebapiAsync\Plugin;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
