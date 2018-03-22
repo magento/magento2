@@ -5,23 +5,24 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
-use Magento\Braintree\Gateway\Http\Client\TransactionSale;
+use Magento\Braintree\Gateway\Http\Client\TransactionRefund;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
 /**
- * Tests \Magento\Braintree\Gateway\Http\Client\TransactionSale.
+ * Tests \Magento\Braintree\Gateway\Http\Client\TransactionRefund.
  */
-class TransactionSaleTest extends \PHPUnit\Framework\TestCase
+class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TransactionSale
+     * @var TransactionRefund
      */
-    private $model;
+    private $client;
 
     /**
      * @var Logger|MockObject
@@ -32,6 +33,16 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      * @var BraintreeAdapter|MockObject
      */
     private $adapterMock;
+
+    /**
+     * @var string
+     */
+    private $transactionId = 'px4kpev5';
+
+    /**
+     * @var string
+     */
+    private $paymentAmount = '100.00';
 
     /**
      * @inheritdoc
@@ -54,12 +65,10 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->adapterMock);
 
-        $this->model = new TransactionSale($criticalLoggerMock, $this->loggerMock, $adapterFactoryMock);
+        $this->client = new TransactionRefund($criticalLoggerMock, $this->loggerMock, $adapterFactoryMock);
     }
 
     /**
-     * Runs test placeRequest method (exception)
-     *
      * @return void
      *
      * @expectedException \Magento\Payment\Gateway\Http\ClientException
@@ -72,32 +81,32 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
             ->with(
                 [
                     'request' => $this->getTransferData(),
-                    'client' => TransactionSale::class,
+                    'client' => TransactionRefund::class,
                     'response' => []
                 ]
             );
 
         $this->adapterMock->expects($this->once())
-            ->method('sale')
+            ->method('refund')
+            ->with($this->transactionId, $this->paymentAmount)
             ->willThrowException(new \Exception('Test messages'));
 
         /** @var TransferInterface|MockObject $transferObjectMock */
         $transferObjectMock = $this->getTransferObjectMock();
 
-        $this->model->placeRequest($transferObjectMock);
+        $this->client->placeRequest($transferObjectMock);
     }
 
     /**
-     * Run test placeRequest method
-     *
      * @return void
      */
     public function testPlaceRequestSuccess()
     {
-        $response = $this->getResponseObject();
+        $response = new \stdClass;
+        $response->success = true;
         $this->adapterMock->expects($this->once())
-            ->method('sale')
-            ->with($this->getTransferData())
+            ->method('refund')
+            ->with($this->transactionId, $this->paymentAmount)
             ->willReturn($response);
 
         $this->loggerMock->expects($this->once())
@@ -105,12 +114,12 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
             ->with(
                 [
                     'request' => $this->getTransferData(),
-                    'client' => TransactionSale::class,
-                    'response' => ['success' => 1]
+                    'client' => TransactionRefund::class,
+                    'response' => ['success' => 1],
                 ]
             );
 
-        $actualResult = $this->model->placeRequest($this->getTransferObjectMock());
+        $actualResult = $this->client->placeRequest($this->getTransferObjectMock());
 
         $this->assertTrue(is_object($actualResult['object']));
         $this->assertEquals(['object' => $response], $actualResult);
@@ -132,19 +141,6 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Creates stub for a response.
-     *
-     * @return \stdClass
-     */
-    private function getResponseObject()
-    {
-        $obj = new \stdClass;
-        $obj->success = true;
-
-        return $obj;
-    }
-
-    /**
      * Creates stub request data.
      *
      * @return array
@@ -152,7 +148,8 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     private function getTransferData()
     {
         return [
-            'test-data-key' => 'test-data-value'
+            'transaction_id' => $this->transactionId,
+            PaymentDataBuilder::AMOUNT => $this->paymentAmount,
         ];
     }
 }

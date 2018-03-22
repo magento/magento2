@@ -8,30 +8,31 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class CaptureDataBuilderTest
+ * Tests \Magento\Braintree\Gateway\Request\CaptureDataBuilder.
  */
 class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Braintree\Gateway\Request\CaptureDataBuilder
+     * @var CaptureDataBuilder
      */
     private $builder;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     private $payment;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     private $paymentDO;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
@@ -61,11 +62,11 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => $amount
         ];
 
-        $this->payment->expects(static::once())
+        $this->payment->expects(self::once())
             ->method('getCcTransId')
             ->willReturn('');
 
-        $this->paymentDO->expects(static::once())
+        $this->paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($this->payment);
 
@@ -95,11 +96,11 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
             'amount' => $amount
         ];
 
-        $this->payment->expects(static::once())
+        $this->payment->expects(self::once())
             ->method('getCcTransId')
             ->willReturn($transactionId);
 
-        $this->paymentDO->expects(static::once())
+        $this->paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($this->payment);
 
