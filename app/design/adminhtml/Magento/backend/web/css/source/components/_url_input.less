@@ -6,14 +6,12 @@
 //
 //  Components -> Url Input
 //  _____________________________________________
-.url-input-container .url-input-element {
-    & > div:after {
-        clear: both;
-    }
+.url-input-container {
 
     .url-input-select {
         float: left;
-        margin-right: 20px;
+        max-width: 7.5em;
+        min-width: 7.5em;
     }
 
     .url-input-setting {
@@ -27,7 +25,9 @@
 
     .url-input-element-linked-element {
         float: left;
-        max-width: 200px;
+        margin-left: 1.5em;
+        max-width: calc(79%);
+        min-width: calc(79%);
     }
 }
 

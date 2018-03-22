@@ -25,6 +25,7 @@ define([
             isDisplayAdditionalSettings: true,
             settingValue: false,
             settingLabel: $t('Open in new tab'),
+
             //observable object(without functional call)
             tracks: {
                 linkedElement: true
@@ -37,14 +38,27 @@ define([
                 }
             },
             listens: {
-                checked: 'updateSettingValue',
-                disabled: 'hideLinkedElement'
+                checked: 'settingValue',
+                disabled: 'hideLinkedElement',
+                settingValue: 'checked',
+                linkType: 'createChildUrlInputComponent'
             },
             links: {
                 linkType: '${$.provider}:${$.dataScope}.type',
-                settingValue: '${$.provider}:${$.dataScope}.setting',
-                value: false
+                settingValue: '${$.provider}:${$.dataScope}.setting'
             }
+        },
+
+        /**
+         *
+         * @inheritdoc
+         */
+        initialize: function () {
+
+            this._super()
+                .setOptions();
+
+            return this;
         },
 
         /**
@@ -55,8 +69,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe('componentTemplate options value linkType settingValue checked isDisplayAdditionalSettings')
-                .processLinkTypes()
-                .setOptions();
+                .processLinkTypes();
 
             return this;
         },
@@ -136,35 +149,6 @@ define([
         },
 
         /**
-         * Set url setting value to datasource
-         *
-         * @param {Boolean} checked
-         *
-         * @return void
-         */
-        updateSettingValue: function (checked) {
-            this.source.set(this.dataScope + '.setting', checked);
-        },
-
-        /**
-         * Initialize linked input field based on linked type
-         *
-         * @param {String} value
-         *
-         * @return void
-         */
-        setDifferedFromDefault: function (value) {
-            this._super();
-
-            if (!_.isUndefined(value) && value) {
-                this.createChildUrlInputComponent(value);
-                //to store current element
-                this.linkedElement = this.linkedElementInstances[value];
-                this.linkType(value);
-            }
-        },
-
-        /**
          * Create child component by value
          *
          * @param {String} value
@@ -178,6 +162,8 @@ define([
                 layout([elementConfig]);
                 this.linkedElementInstances[value] = this.requestModule(elementConfig.name);
             }
+            this.linkedElement = this.linkedElementInstances[value];
+
         },
 
         /**
