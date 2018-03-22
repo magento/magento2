@@ -188,8 +188,19 @@ class MassSchedule
                 //TODO after merge with BulkApi Status need change cons from OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED to OperationInterface::STATUS_TYPE_REJECTED
                 $operationStatus = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             }
-
-            $operation = $this->saveOperation($groupId, $topicName, $data, $operationStatus);
+            if (!isset($exception)) {
+                $operation = $this->saveOperation($groupId, $topicName, $data, $operationStatus);
+            } else {
+                $operation =
+                    $this->saveOperation(
+                        $groupId,
+                        $topicName,
+                        $data,
+                        $operationStatus,
+                        $exception->getMessage(),
+                        $exception->getCode()
+                    );
+            }
             if (!isset($exception)) {
                 $operations[] = $operation;
             }
