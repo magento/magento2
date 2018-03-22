@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 /**
  * @magentoAppArea adminhtml
  */
-class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
+class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
