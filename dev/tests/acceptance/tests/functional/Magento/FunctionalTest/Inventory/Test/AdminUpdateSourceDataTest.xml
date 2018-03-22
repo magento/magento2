@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminUpdateSourceDataTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
@@ -52,6 +52,7 @@
         <fillField userInput="{{FullSource2.fax}}" selector="{{AdminEditSourceContactInfoSection.fax}}" stepKey="fillFaxField2"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses2"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <selectOption userInput="{{FullSource2.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectCountry2"/>
         <selectOption userInput="{{FullSource2.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectState2"/>
         <fillField userInput="{{FullSource2.city}}" selector="{{AdminEditSourceAddressDataSection.city}}" stepKey="fillCityField2"/>
@@ -67,12 +68,14 @@
         <seeInField selector="{{AdminEditSourceGeneralSection.longitude}}" userInput="0" stepKey="seeLongitudeInField"/>
 
         <conditionalClick selector="{{AdminEditSourceContactInfoSection.closed}}" dependentSelector="{{AdminEditSourceContactInfoSection.opened}}" visible="false" stepKey="clickOnContactInfo3"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.contactName}}" userInput="{{FullSource2.contact_name}}" stepKey="seeContactNameInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.email}}" userInput="{{FullSource2.email}}" stepKey="seeEmailInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.phone}}" userInput="{{FullSource2.phone}}" stepKey="seePhoneInField"/>
         <seeInField selector="{{AdminEditSourceContactInfoSection.fax}}" userInput="{{FullSource2.fax}}" stepKey="seeFaxInField"/>
 
         <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="clickOnAddresses3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.country}}" userInput="{{FullSource2.country}}" stepKey="seeCountryInDropDown"/>
         <seeOptionIsSelected selector="{{AdminEditSourceAddressDataSection.state}}" userInput="{{FullSource2.stateProvince}}" stepKey="seeStateProvinceInDropDown"/>
         <seeInField selector="{{AdminEditSourceAddressDataSection.city}}" userInput="{{FullSource2.city}}" stepKey="seeCityInField"/>

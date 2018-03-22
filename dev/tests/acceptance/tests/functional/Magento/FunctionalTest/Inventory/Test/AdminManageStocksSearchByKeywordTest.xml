@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <test name="AdminManageStocksSearchByKeywordTest">
         <annotations>
             <features value="Multi-Source Inventory"/>
@@ -32,9 +32,9 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
-            <argument name="value" value="$$createStock4.source[name]$$"/>
+            <argument name="value" value="$$createStock4.stock[name]$$"/>
         </actionGroup>
 
-        <see userInput="$$createStock4.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="$$createStock4.stock[name]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
     </test>
 </tests>
