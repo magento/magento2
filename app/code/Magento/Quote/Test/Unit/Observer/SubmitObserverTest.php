@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Test\Unit\Observer\Webapi;
+namespace Magento\Quote\Test\Unit\Observer;
 
 class SubmitObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Observer\Webapi\SubmitObserver
+     * @var \Magento\Quote\Observer\SubmitObserver
      */
     protected $model;
 
@@ -59,7 +59,7 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
-        $this->model = new \Magento\Quote\Observer\Webapi\SubmitObserver(
+        $this->model = new \Magento\Quote\Observer\SubmitObserver(
             $this->loggerMock,
             $this->orderSenderMock
         );
