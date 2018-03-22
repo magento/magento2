@@ -38,8 +38,6 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
         if (!count($items)) {
             return false;
         }
-
-        $addressFreeShipping = true;
         $store = $this->storeManager->getStore($quote->getStoreId());
         $this->calculator->init(
             $store->getWebsiteId(),
@@ -51,7 +49,6 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
-                $addressFreeShipping = false;
                 $item->setFreeShipping(false);
                 continue;
             }
@@ -63,17 +60,23 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
 
             $this->calculator->processFreeShipping($item);
             $itemFreeShipping = (bool)$item->getFreeShipping();
-            $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
 
-            if ($addressFreeShipping && !$item->getAddress()->getFreeShipping()) {
-                $item->getAddress()->setFreeShipping(true);
-            }
+            /**  Removed below as it is set in Calculator.
+             *
+             * $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
+             *
+             * if ($addressFreeShipping && !$item->getAddress()->getFreeShipping()) {
+             *   $item->getAddress()->setFreeShipping(true);
+             * }
+             *
+             */
 
             /** Parent free shipping we apply to all children*/
             $this->applyToChildren($item, $itemFreeShipping);
         }
         return (bool)$shippingAddress->getFreeShipping();
     }
+
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
