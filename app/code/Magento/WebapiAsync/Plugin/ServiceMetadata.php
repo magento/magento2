@@ -79,12 +79,14 @@ class ServiceMetadata
                 // Check all of the methods on the service
                 foreach ($serviceData[WebapiConverter::KEY_METHODS] as $methodName => $methodData) {
                     // Exclude service methods that are marked as synchronous only
-                    if (!$this->isServiceMethodSynchronousOnly(
+                    if ($this->isServiceMethodSynchronousOnly(
                         $serviceName,
                         $methodName,
                         $synchronousOnlyServiceMethods
                     )) {
-                        $result = $this->replaceResponseDefinition($result, $serviceName, $methodName);
+                        $this->removeServiceMethodDefinition($result, $serviceName, $methodName);
+                    } else {
+                        $this->replaceResponseDefinition($result, $serviceName, $methodName);
                     }
                 }
             }
@@ -201,18 +203,28 @@ class ServiceMetadata
      * @param array $result
      * @param $serviceName
      * @param $methodName
-     * @return array
      */
-    private function replaceResponseDefinition(array $result, $serviceName, $methodName)
+    private function removeServiceMethodDefinition(array &$result, $serviceName, $methodName)
     {
-        if (!isset($result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'])) {
-            return $result;
+        unset($result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]);
+
+        // Remove the service altogether if there is no methods left.
+        if (count($result[$serviceName][WebapiConverter::KEY_METHODS]) === 0) {
+            unset($result[$serviceName]);
         }
+    }
 
-        $replacement = $this->getResponseDefinitionReplacement();
-        $result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'] = $replacement;
-
-        return $result;
+    /**
+     * @param array $result
+     * @param $serviceName
+     * @param $methodName
+     */
+    private function replaceResponseDefinition(array &$result, $serviceName, $methodName)
+    {
+        if (isset($result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'])) {
+            $replacement = $this->getResponseDefinitionReplacement();
+            $result[$serviceName][WebapiConverter::KEY_METHODS][$methodName]['interface']['out'] = $replacement;
+        }
     }
 
     /**
