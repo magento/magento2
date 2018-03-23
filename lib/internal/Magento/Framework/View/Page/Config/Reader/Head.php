@@ -71,38 +71,49 @@ class Head implements Layout\ReaderInterface
         Layout\Element $headElement
     ) {
         $pageConfigStructure = $readerContext->getPageConfigStructure();
-        /** @var \Magento\Framework\View\Layout\Element $node */
+
+        $orderedNodes = [];
+
         foreach ($headElement as $node) {
-            switch ($node->getName()) {
-                case self::HEAD_CSS:
-                case self::HEAD_SCRIPT:
-                case self::HEAD_LINK:
-                    $this->addContentTypeByNodeName($node);
-                    $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
-                    break;
+            $nodeOrder = $node->getAttribute('order') ?: 0;
+            $orderedNodes[$nodeOrder][] = $node;
+        }
 
-                case self::HEAD_REMOVE:
-                    $pageConfigStructure->removeAssets($node->getAttribute('src'));
-                    break;
+        ksort($orderedNodes);
+        foreach ($orderedNodes as $nodes ) {
+            /** @var \Magento\Framework\View\Layout\Element $node */
+            foreach ($nodes as $node) {
+                switch ($node->getName()) {
+                    case self::HEAD_CSS:
+                    case self::HEAD_SCRIPT:
+                    case self::HEAD_LINK:
+                        $this->addContentTypeByNodeName($node);
+                        $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
+                        break;
 
-                case self::HEAD_TITLE:
-                    $pageConfigStructure->setTitle(new \Magento\Framework\Phrase($node));
-                    break;
+                    case self::HEAD_REMOVE:
+                        $pageConfigStructure->removeAssets($node->getAttribute('src'));
+                        break;
 
-                case self::HEAD_META:
-                    $this->setMetadata($pageConfigStructure, $node);
-                    break;
+                    case self::HEAD_TITLE:
+                        $pageConfigStructure->setTitle(new \Magento\Framework\Phrase($node));
+                        break;
 
-                case self::HEAD_ATTRIBUTE:
-                    $pageConfigStructure->setElementAttribute(
-                        PageConfig::ELEMENT_TYPE_HEAD,
-                        $node->getAttribute('name'),
-                        $node->getAttribute('value')
-                    );
-                    break;
+                    case self::HEAD_META:
+                        $this->setMetadata($pageConfigStructure, $node);
+                        break;
 
-                default:
-                    break;
+                    case self::HEAD_ATTRIBUTE:
+                        $pageConfigStructure->setElementAttribute(
+                            PageConfig::ELEMENT_TYPE_HEAD,
+                            $node->getAttribute('name'),
+                            $node->getAttribute('value')
+                        );
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
         return $this;
