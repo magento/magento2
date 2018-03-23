@@ -106,8 +106,6 @@
         <arguments>
             <argument name="normalizers" xsi:type="array">
                 <item name="output" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Output</item>
-                <item name="input" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Input</item>
-                <item name="enum" xsi:type="object">Magento\Framework\GraphQl\Config\Converter\Normalizer\Enum</item>
             </argument>
         </arguments>
     </type>

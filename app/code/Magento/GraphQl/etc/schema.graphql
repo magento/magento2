@@ -1,5 +1,4 @@
 type Query {
-    placeholder: String
 }
 
 input FilterTypeInput {

@@ -46,12 +46,11 @@ class ObjectType implements TypeMetaReaderInterface
                 'fields' => [], // Populated later
             ];
 
-            $interfaces = $typeMeta->getInterfaces();
-            foreach ($interfaces as $interfaceMeta) {
-                $interfaceName = $interfaceMeta->name;
+            $interfacesNames = $this->readCopyFieldsAnnotation($typeMeta->astNode->directives);
+            foreach ($interfacesNames as $interfaceName) {
                 $result['implements'][$interfaceName] = [
                     'interface' => $interfaceName,
-                    'copyFields' => true // TODO: Configure in separate config
+                    'copyFields' => true
                 ];
             }
 
@@ -67,6 +66,52 @@ class ObjectType implements TypeMetaReaderInterface
             return $result;
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Read copyFields annotation for a specific node if exists
+     *
+     * @param \GraphQL\Language\AST\NodeList $directives
+     * @return string[]|null
+     */
+    public function readCopyFieldsAnnotation(\GraphQL\Language\AST\NodeList $directives) : array
+    {
+        foreach ($directives as $directive) {
+            if ($directive->name->value == 'implements') {
+                foreach ($directive->arguments as $directiveArgument) {
+                    if ($directiveArgument->name->value == 'interfaces') {
+                        if ($directiveArgument->value->kind == 'ListValue') {
+                            $interfacesNames = [];
+                            foreach ($directiveArgument->value->values as $stringValue) {
+                                $interfacesNames[] = $stringValue->value;
+                            }
+                            return $interfacesNames;
+                        } else {
+                            return [$directiveArgument->value->value];
+                        }
+                    }
+                }
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Find interface graphql type in array list of strings
+     *
+     * @param \GraphQL\Type\Definition\InterfaceType $interfacesType
+     * @param string[] $interfacesNames
+     * @return bool
+     */
+    public function isInInterfaceTypeInList(
+        \GraphQL\Type\Definition\InterfaceType  $interfacesType,
+        array $interfacesNames
+    ) : bool {
+        if (in_array($interfacesType->name, $interfacesNames)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
