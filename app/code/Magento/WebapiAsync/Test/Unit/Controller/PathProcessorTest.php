@@ -25,14 +25,14 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-                                       ->disableOriginalConstructor()
-                                       ->getMock();
+           ->disableOriginalConstructor()
+           ->getMock();
         $this->storeManagerMock->expects($this->once())
-                               ->method('getStores')
-                               ->willReturn([
-                                   $this->arbitraryStoreCode => 'store object',
-                                   'default'                 => 'default store object',
-                               ]);
+           ->method('getStores')
+           ->willReturn([
+               $this->arbitraryStoreCode => 'store object',
+               'default' => 'default store object',
+           ]);
         $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock);
     }
 
@@ -48,8 +48,8 @@ class PathProcessorTest extends \PHPUnit\Framework\TestCase
         $storeCodeInPath = !$storeCodeInPath ? : '/' . $storeCodeInPath; // add leading slash if store code not empty
         $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
         $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
-                               ->method('setCurrentStore')
-                               ->with($storeCodeSet);
+           ->method('setCurrentStore')
+           ->with($storeCodeSet);
         $result = $this->model->process($inPath);
         $this->assertSame($this->endpointPath, $result);
     }

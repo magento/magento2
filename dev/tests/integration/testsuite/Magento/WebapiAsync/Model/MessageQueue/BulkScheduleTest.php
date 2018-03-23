@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Test\ApiFunctional;
+namespace Magento\WebapiAsync\Model\MessageQueue;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -99,7 +99,7 @@ class BulkScheduleTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
-                                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $this->pid = $this->objectManager->get(PidConsumerManager::class);
         $this->consumerConfig = $this->objectManager->get(ConsumerConfigInterface::class);
         $this->reader = $this->objectManager->get(FileReader::class);

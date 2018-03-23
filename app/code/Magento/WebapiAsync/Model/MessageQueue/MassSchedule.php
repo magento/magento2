@@ -158,6 +158,7 @@ class MassSchedule
 
         $operations = [];
         $requestItems = [];
+        $errors = [];
         foreach ($entitiesArray as $key => $entityParams) {
             /** @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
@@ -183,17 +184,20 @@ class MassSchedule
                 /** @var \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation */
                 $operation = $this->operationFactory->create($data);
                 $operations[] = $this->entityManager->save($operation);
-
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
+                $requestItems[] = $requestItem;
             } catch (\Exception $exception) {
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);
+                $errors[] = $requestItem;
             }
+        }
 
-            $requestItems[] = $requestItem;
+        if (!empty($errors)) {
+            throw new \Magento\Framework\Webapi\Exception($errors);
         }
 
         $result = $this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId);

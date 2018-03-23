@@ -102,28 +102,28 @@ class RestTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->responseMock = $this->getResponseMock();
         $routerMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\Router::class)->setMethods(['match'])
-                           ->disableOriginalConstructor()->getMock();
+           ->disableOriginalConstructor()->getMock();
 
         $this->routeMock = $this->getRouteMock();
         $this->serviceMock = $this->getMockBuilder(self::SERVICE_ID)->setMethods([self::SERVICE_METHOD])
-                                  ->disableOriginalConstructor()->getMock();
+          ->disableOriginalConstructor()->getMock();
 
         $this->oauthServiceMock = $this->getMockBuilder(\Magento\Framework\Oauth\OauthInterface::class)
-                                       ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
+           ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
         $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
-                                        ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()->getMock();
 
         $paramsOverriderMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\ParamsOverrider::class)
-                                    ->setMethods(['overrideParams'])
-                                    ->disableOriginalConstructor()->getMock();
+            ->setMethods(['overrideParams'])
+            ->disableOriginalConstructor()->getMock();
 
         $dataObjectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
-                                        ->disableOriginalConstructor()
-                                        ->setMethods(['getMethodReturnType'])
-                                        ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->setMethods(['getMethodReturnType'])
+            ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-                           ->disableOriginalConstructor()->getMock();
+           ->disableOriginalConstructor()->getMock();
 
         $errorProcessorMock = $this->createMock(\Magento\Framework\Webapi\ErrorProcessor::class);
         $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
@@ -131,7 +131,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->serviceInputProcessorMock = $this->getMockBuilder(\Magento\Framework\Webapi\ServiceInputProcessor::class)
-                                                ->disableOriginalConstructor()->setMethods(['process'])->getMock();
+            ->disableOriginalConstructor()->setMethods(['process'])->getMock();
 
         $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $areaMock = $this->createMock(\Magento\Framework\App\AreaInterface::class);
@@ -173,8 +173,8 @@ class RestTest extends \PHPUnit\Framework\TestCase
         $this->serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
         
         $dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
-                                ->with(self::SERVICE_ID, self::SERVICE_METHOD)
-                                ->will($this->returnValue('null'));
+            ->with(self::SERVICE_ID, self::SERVICE_METHOD)
+            ->will($this->returnValue('null'));
 
         $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
 

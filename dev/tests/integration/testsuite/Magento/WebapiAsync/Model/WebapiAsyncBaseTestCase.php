@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\UseCase;
 
+namespace Magento\WebapiAsync;
+
+use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\MessageQueue\PublisherInterface;
@@ -12,10 +14,7 @@ use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 
-/**
- * Base test case for message queue tests.
- */
-abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
+class WebApiAsyncBaseTestCase extends WebapiAbstract
 {
     /**
      * @var string[]
@@ -50,7 +49,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
+        $this->publisherConsumerController = $this->objectManager->get(PublisherConsumerController::class, [
             'consumers' => $this->consumers,
             'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
             'maxMessages' => $this->maxMessages,
@@ -66,12 +65,12 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
                 $e->getMessage()
             );
         }
-        $this->publisher = $this->publisherConsumerController->getPublisher();
     }
 
     protected function tearDown()
     {
         $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
     }
 
     /**
@@ -101,5 +100,6 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
             $config = Bootstrap::getObjectManager()->get(\Magento\Amqp\Model\Config::class);
             $closeConnection->invoke($config);
         }
+        parent::tearDownAfterClass();
     }
 }
