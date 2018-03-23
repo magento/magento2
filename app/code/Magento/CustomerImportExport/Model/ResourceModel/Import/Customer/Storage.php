@@ -18,6 +18,16 @@ use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 class Storage
 {
     /**
+     * @deprecated
+     */
+    protected $_isCollectionLoaded = false;
+
+    /**
+     * @deprecated
+     */
+    protected $_customerCollection;
+
+    /**
      * Existing customers information. In form of:
      *
      * [customer email] => array(
@@ -60,11 +70,36 @@ class Storage
         CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = []
     ) {
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? $data['page_size'] : 0;
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
         ) ? $data['collection_by_pages_iterator'] : $colIteratorFactory->create();
         $this->customerCollectionFactory = $collectionFactory;
+    }
+
+    /**
+     * @deprecated
+     * @see prepareCustomers
+     */
+    public function load()
+    {
+        if ($this->_isCollectionLoaded == false) {
+            $collection = clone $this->_customerCollection;
+            $collection->removeAttributeToSelect();
+            $tableName = $collection->getResource()->getEntityTable();
+            $collection->getSelect()->from($tableName, ['entity_id', 'website_id', 'email']);
+
+            $this->_byPagesIterator->iterate(
+                $this->_customerCollection,
+                $this->_pageSize,
+                [[$this, 'addCustomer']]
+            );
+
+            $this->_isCollectionLoaded = true;
+        }
     }
 
     /**

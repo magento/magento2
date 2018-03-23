@@ -168,9 +168,7 @@ class Address extends AbstractCustomer
     protected $_attributeCollection;
 
     /**
-     * Collection of existent addresses
-     *
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @deprecated
      */
     protected $_addressCollection;
 
@@ -226,6 +224,11 @@ class Address extends AbstractCustomer
      * @var \Magento\Customer\Model\Address\Validator\Postcode
      */
     protected $postcodeValidator;
+
+    /**
+     * @deprecated
+     */
+    protected $_addresses = [];
 
     /**
      * @var Sources\CountryWithWebsites
@@ -401,6 +404,25 @@ class Address extends AbstractCustomer
         }
 
         return $attributeData;
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function _initAddresses()
+    {
+        /** @var $address \Magento\Customer\Model\Address */
+        foreach ($this->_addressCollection as $address) {
+            $customerId = $address->getParentId();
+            if (!isset($this->_addresses[$customerId])) {
+                $this->_addresses[$customerId] = [];
+            }
+            $addressId = $address->getId();
+            if (!in_array($addressId, $this->_addresses[$customerId])) {
+                $this->_addresses[$customerId][] = $addressId;
+            }
+        }
+        return $this;
     }
 
     /**
