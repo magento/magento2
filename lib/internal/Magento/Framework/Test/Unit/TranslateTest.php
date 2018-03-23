@@ -121,6 +121,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
      * @param string $area
      * @param bool $forceReload
      * @param array $cachedData
+     * @return void
      * @dataProvider dataProviderLoadDataCachedTranslation
      */
     public function testLoadDataCachedTranslation($area, $forceReload, array $cachedData)
@@ -155,6 +156,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $area
      * @param bool $forceReload
+     * @return void
      * @dataProvider dataProviderForTestLoadData
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -255,6 +257,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $data
      * @param $result
+     * @return void
      * @dataProvider dataProviderForTestGetData
      */
     public function testGetData($data, $result)

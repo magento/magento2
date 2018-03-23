@@ -171,7 +171,7 @@ class Translate implements \Magento\Framework\TranslateInterface
             self::CONFIG_LOCALE_KEY => null,
             self::CONFIG_SCOPE_KEY => null,
             self::CONFIG_THEME_KEY => null,
-            self::CONFIG_MODULE_KEY => null
+            self::CONFIG_MODULE_KEY => null,
         ];
     }
 
@@ -195,7 +195,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         );
 
         if (!$forceReload) {
-            if (false !== $data = $this->_loadCache()) {
+            $data = $this->_loadCache();
+            if (false !== $data) {
                 $this->_data = $data;
                 return $this;
             }
@@ -459,11 +460,9 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Retrieve cache identifier
      *
-     * @param bool $forceReload
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function getCacheId($forceReload = false)
+    protected function getCacheId()
     {
         $_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
         $_cacheId .= '_' . $this->_config[self::CONFIG_LOCALE_KEY];
