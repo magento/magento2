@@ -197,7 +197,6 @@ type PriceAdjustment {
 }
 
 enum PriceAdjustmentCodesEnum {
-    TAX
 }
 
 enum PriceAdjustmentDescriptionEnum {

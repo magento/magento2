@@ -6,37 +6,6 @@ interface ProductInterface {
     url_path: String
 }
 
-type VirtualProduct {
-    url_key: String
-    url_path: String
-}
-
-type SimpleProduct {
-    url_key: String
-    url_path: String
-}
-
-
-type BundleProduct {
-    url_key: String
-    url_path: String
-}
-
-type ConfigurableProduct {
-    url_key: String
-    url_path: String
-}
-
-type DownloadableProduct {
-    url_key: String
-    url_path: String
-}
-
-type GroupedProduct {
-    url_key: String
-    url_path: String
-}
-
 input ProductFilterInput {
     url_key: FilterTypeInput
     url_path: FilterTypeInput

@@ -5,30 +5,6 @@ interface ProductInterface {
     swatch_image: String
 }
 
-type VirtualProduct {
-    swatch_image: String
-}
-
-type SimpleProduct {
-    swatch_image: String
-}
-
-type BundleProduct {
-    swatch_image: String
-}
-
-type ConfigurableProduct {
-    swatch_image: String
-}
-
-type DownloadableProduct {
-    swatch_image: String
-}
-
-type GroupedProduct {
-    swatch_image: String
-}
-
 input ProductFilterInput {
     swatch_image: FilterTypeInput
 }

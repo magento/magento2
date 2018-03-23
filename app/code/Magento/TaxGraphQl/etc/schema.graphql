@@ -1,22 +1,6 @@
 #Copyright © Magento, Inc. All rights reserved.
 #See COPYING.txt for license details.
 
-type BundleProduct {
-    tax_class_id: Int
-}
-
-type ConfigurableProduct {
-    tax_class_id: Int
-}
-
-type DownloadableProduct {
-    tax_class_id: Int
-}
-
-type GroupedProduct {
-    tax_class_id: Int
-}
-
 input ProductFilterInput {
     tax_class_id: FilterTypeInput
 }
@@ -29,10 +13,6 @@ input ProductSortInput {
     tax_class_id: SortEnum
 }
 
-type SimpleProduct {
-    tax_class_id: Int
-}
-
-type VirtualProduct {
-    tax_class_id: Int
+enum PriceAdjustmentCodesEnum {
+    TAX
 }
