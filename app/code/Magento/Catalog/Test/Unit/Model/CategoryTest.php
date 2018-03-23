@@ -666,7 +666,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             'catalog_category_1',
             'catalog_category_2',
             'catalog_category_3',
-            'catalog_category_product_1'
+            'catalog_category_product_1',
         ];
         $category->setId(1);
         $category->setAffectedCategoryIds([1,2,3]);
