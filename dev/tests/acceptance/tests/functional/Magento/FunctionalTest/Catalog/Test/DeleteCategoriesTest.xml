@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <test name="DeleteCategoriesTest">
+        <annotations>
+            <features value="Delete categories"/>
+            <stories value="Delete categories"/>
+            <title value="Delete categories."/>
+            <description value="Delete categories."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-46344"/>
+            <group value="category"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategoryC"/>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="createCategoryB"/>
+            <createData entity="_defaultProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategoryB"/>
+            </createData>
+            <createData entity="NewRootCategory" stepKey="createNewRootCategoryA"/>
+        </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.category($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad1a"/>
+        <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent"/>
+         <!--Move categories from Default Category to NewRootCategory. -->
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryBToNewRootCategory">
+            <argument name="childCategory" value="$$createCategoryC.name$$"/>
+            <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryCToNewRootCategory">
+            <argument name="childCategory" value="$$createCategoryB.name$$"/>
+            <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
+        </actionGroup>
+        <!-- Change root category for Main Website Store. -->
+        <amOnPage stepKey="s1" url="{{AdminSystemStorePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" time="10"/>
+        <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
+        <click stepKey="s5" selector="{{AdminStoresGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <click stepKey="s7" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" />
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{NewRootCategory.name}}" stepKey="setNewCategoryForStoreGroup"/>
+        <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal" />
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+
+        <!-- Perform cli reindex. -->
+        <!--<magentoCLI command="indexer:reindex" stepKey="magentoCli"/>-->
+
+        <!-- Delete Default Root Category. -->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <click selector="{{AdminCategorySidebarTreeSection.category('Default Category')}}" stepKey="clickOnDefaultRootCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad7" />
+        <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
+        <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
+        <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModal1" />
+        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
+        <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReload1"/>
+        <!-- Verify categories 1 and 3 their products. -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
+        <waitForPageLoad stepKey="homeWaitForPageLoad"/>
+
+        <!--<click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryC.name$$)}}" stepKey="browseClickCategoryC"/>-->
+        <!--<actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategoryC">-->
+            <!--<argument name="category" value="$$createCategoryC$$"/>-->
+            <!--&lt;!&ndash; @TODO: Change to scalar value after MQE-498 is implemented &ndash;&gt;-->
+            <!--<argument name="productCount" value="CONST.two"/>-->
+        <!--</actionGroup>-->
+        <!--<actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">-->
+            <!--<argument name="product" value="$$createProduct1$$"/>-->
+        <!--</actionGroup>-->
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryC.name$$)}}" stepKey="hoverCategory"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="waitForSubcategory"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="browseClickSubCategory"/>
+        <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertSubcategory">
+            <argument name="category" value="$$createSubCategory$$"/>
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="productCount" value="CONST.one"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+
+        <!--<actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategoryB">-->
+            <!--<argument name="category" value="$$createCategoryB$$"/>-->
+            <!--&lt;!&ndash; @TODO: Change to scalar value after MQE-498 is implemented &ndash;&gt;-->
+            <!--<argument name="productCount" value="CONST.one"/>-->
+        <!--</actionGroup>-->
+        <!--<actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct3">-->
+            <!--<argument name="product" value="$$createProduct3$$"/>-->
+        <!--</actionGroup>-->
+
+        <!-- Delete Categories 1(with subcategory) and 3. -->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <actionGroup ref="DeleteCategory" stepKey="deleteCategoryC">
+            <argument name="categoryEntity" value="$$createCategoryC$$"/>
+        </actionGroup>
+        <actionGroup ref="DeleteCategory" stepKey="deleteCategoryB">
+            <argument name="categoryEntity" value="$$createCategoryB$$"/>
+        </actionGroup>
+        <!-- Verify categories 1 and 3 are absent -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage1"/>
+        <waitForPageLoad stepKey="homeWaitForPageLoad1"/>
+        <dontSee selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryB.name$$)}}" stepKey="browseClickCategoryB"/>
+        <dontSee selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryC.name$$)}}" stepKey="browseClickCategoryC"/>
+        <!-- Verify products 1-3 are available on storefront -->
+        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct1.custom_attributes[url_key]$$.html" stepKey="amOnProduct1Page"/>
+        <waitForPageLoad stepKey="product1WaitForPageLoad"/>
+        <actionGroup ref="StorefrontCheckSimpleProductNoDescription" stepKey="browseAssertProduct1Page">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct2.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
+        <waitForPageLoad stepKey="product2WaitForPageLoad"/>
+        <actionGroup ref="StorefrontCheckSimpleProductNoDescription" stepKey="browseAssertProduct2Page">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct3.custom_attributes[url_key]$$.html" stepKey="amOnProduct3Page"/>
+        <waitForPageLoad stepKey="product3WaitForPageLoad"/>
+        <actionGroup ref="StorefrontCheckSimpleProductNoDescription" stepKey="browseAssertProduct3Page">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <!-- Rename New Root Category to Default category -->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <click selector="{{AdminCategorySidebarTreeSection.category('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnDefaultRootCategory2"/>
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryName"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+    </test>
+</tests>
