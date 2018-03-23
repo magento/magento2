@@ -81,20 +81,24 @@ class SubtractQuoteInventoryObserver implements ObserverInterface
             $quote->getStore()->getWebsiteId()
         );
         $this->itemsForReindex->setItems($itemsForReindex);
-        //Marking items as backordered if order is placed.
+
         if ($order) {
+            //Marking items as backordered if order is placed.
+            /** @var StockItemInterface[] $stockItems */
+            $stockItems = [];
+            foreach ($itemsForReindex as $stockItem) {
+                $stockItems[$stockItem->getProductId()] = $stockItem;
+            }
             foreach ($order->getItems() as $orderItem) {
-                foreach ($itemsForReindex as $stock) {
-                    if ($stock->getProductId() == $orderItem->getProductId()) {
-                        //Found stock of ordered item,
-                        //checking if the item was backordered.
-                        if (($qty = $stock->getQty()) < 0) {
-                            $orderItem->setQtyBackordered(
-                                $orderItem->getQtyOrdered() > (-$qty)
-                                    ? (-$qty) : $orderItem->getQtyOrdered()
-                            );
-                        }
-                        break;
+                if (!empty($stockItems[$orderItem->getProductId()])) {
+                    $stock = $stockItems[$orderItem->getProductId()];
+                    //Found stock of ordered item,
+                    //checking if the item was backordered.
+                    if (($qty = $stock->getQty()) < 0) {
+                        $orderItem->setQtyBackordered(
+                            $orderItem->getQtyOrdered() > (-$qty)
+                                ? (-$qty) : $orderItem->getQtyOrdered()
+                        );
                     }
                 }
             }
