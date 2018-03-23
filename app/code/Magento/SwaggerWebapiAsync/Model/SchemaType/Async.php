@@ -43,6 +43,6 @@ class Async implements SchemaTypeInterface
     {
         $store = $store ?? 'all';
 
-        return '/' . $this->code . '/' . $store . '/schema?services=all';
+        return '/rest/' . $store . '/' . $this->code . '/schema?services=all';
     }
 }

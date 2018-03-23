@@ -7,7 +7,7 @@
 namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
-use Magento\SwaggerWebapi\Model\SchemaType\Async;
+use Magento\SwaggerWebapiAsync\Model\SchemaType\Async;
 
 class AsyncTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,6 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        // @todo: implement constant once merged with other bulk-api changes
         $this->async = new Async('async');
     }
 
@@ -30,7 +29,6 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCode()
     {
-        // @todo: implement constant once merged with other bulk-api changes
         $this->assertEquals('async', $this->async->getCode());
     }
 
@@ -55,11 +53,11 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 null,
-                '/async/all/schema?services=all'
+                '/rest/all/async/schema?services=all'
             ],
             [
                 'test',
-                '/async/test/schema?services=all'
+                '/rest/test/async/schema?services=all'
             ]
         ];
     }
