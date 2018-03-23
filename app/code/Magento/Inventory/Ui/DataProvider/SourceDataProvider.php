@@ -39,11 +39,6 @@ class SourceDataProvider extends DataProvider
     private $session;
 
     /**
-     * @var RegionFactory
-     */
-    private $regionFactory;
-
-    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -54,7 +49,6 @@ class SourceDataProvider extends DataProvider
      * @param SourceRepositoryInterface $sourceRepository
      * @param SearchResultFactory $searchResultFactory
      * @param Session $session
-     * @param RegionFactory $regionFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
@@ -70,7 +64,6 @@ class SourceDataProvider extends DataProvider
         SourceRepositoryInterface $sourceRepository,
         SearchResultFactory $searchResultFactory,
         Session $session,
-        RegionFactory $regionFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -88,7 +81,6 @@ class SourceDataProvider extends DataProvider
         $this->sourceRepository = $sourceRepository;
         $this->searchResultFactory = $searchResultFactory;
         $this->session = $session;
-        $this->regionFactory = $regionFactory;
     }
 
     /**
