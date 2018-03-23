@@ -11,12 +11,24 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\GroupedProductGraphQl\Model\Resolver\Products\Links\Collection;
 
 /**
  * {@inheritdoc}
  */
 class GroupedItems implements ResolverInterface
 {
+    /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
+     * @var Collection
+     */
+    private $linksCollection;
+
     /**
      * {@inheritDoc}
      */

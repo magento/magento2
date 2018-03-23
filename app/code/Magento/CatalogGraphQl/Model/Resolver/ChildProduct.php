@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 
 /**
  * {@inheritdoc}
@@ -31,15 +32,23 @@ class ChildProduct implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @var Collection
+     */
+    private $collection;
+
+    /**
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
+     * @param Collection $collection
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        Collection $collection
     ) {
         $this->productDataProvider = $productDataProvider;
         $this->valueFactory = $valueFactory;
+        $this->collection = $collection;
     }
 
     /**
@@ -51,7 +60,9 @@ class ChildProduct implements ResolverInterface
             throw new GraphQlInputException(__('No child sku found for product link.'));
         }
         $this->productDataProvider->addProductSku($value['sku']);
-        $this->productDataProvider->addEavAttributes($this->getProductFields($info));
+        $fields = $this->getProductFields($info);
+        $matchedFields = $this->collection->getRequestAttributes($fields);
+        $this->productDataProvider->addEavAttributes($matchedFields);
 
         $result = function () use ($value) {
             return $this->productDataProvider->getProductBySku($value['sku']);
