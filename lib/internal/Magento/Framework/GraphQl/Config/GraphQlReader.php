@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Config\Converter\NormalizerComposite;
 
 class GraphQlReader implements ReaderInterface
 {
-
     const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
 
     /**
@@ -71,11 +70,11 @@ class GraphQlReader implements ReaderInterface
      */
     public function read($scope = null) : array
     {
-        $result = [];
+        $results = [];
         $scope = $scope ?: $this->defaultScope;
         $schemaFiles = $this->fileResolver->get($this->fileName, $scope);
         if (!count($schemaFiles)) {
-            return $result;
+            return $results;
         }
 
         /**
@@ -84,17 +83,18 @@ class GraphQlReader implements ReaderInterface
         $knownTypes = [];
         foreach ($schemaFiles as $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
+
             // Keep declarations from current partial schema, add missing declarations from all previously read schemas
             $knownTypes = $partialSchemaTypes + $knownTypes;
             $schemaContent = implode("\n", $knownTypes);
 
-            $partialResult = $this->readPartialTypes($schemaContent);
+            $partialResults = $this->readPartialTypes($schemaContent);
 
-            $result = array_replace_recursive($result, $partialResult);
+            $results = array_replace_recursive($results, $partialResults);
         }
 
-        $result = $this->copyInterfaceFieldsToConcreteTypes($result);
-        return $result;
+        $results = $this->copyInterfaceFieldsToConcreteTypes($results);
+        return $results;
     }
 
 
@@ -106,52 +106,25 @@ class GraphQlReader implements ReaderInterface
      */
     private function readPartialTypes(string $graphQlSchemaContent) : array
     {
-        $partialResult = [];
-        $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
-        $typesKindsPattern = '(type|interface|input)';
-        $enumKindsPattern = '(enum)';
-        $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
-        $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
-        $spacePattern = '([\s\t\n\r]+)';
+        $partialResults = [];
 
-        //add placeholder in empty types
-        $graphQlSchemaContent = preg_replace(
-            "/{$typesKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
-            "\$1\$2\$3\$4\$5{\n{$placeholderField}: String\n}",
-            $graphQlSchemaContent
-        );
-
-        //add placeholder in empty enums
-        $graphQlSchemaContent = preg_replace(
-            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
-            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
-            $graphQlSchemaContent
-        );
+        $graphQlSchemaContent = $this->addPlaceHolderInSchema($graphQlSchemaContent);
 
         $schema = \GraphQL\Utils\BuildSchema::build($graphQlSchemaContent);
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
             if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
-                $partialResult[$typeName] = $this->typeReader->read($typeMeta);
-                if (!$partialResult[$typeName]) {
+                $partialResults[$typeName] = $this->typeReader->read($typeMeta);
+                if (!$partialResults[$typeName]) {
                     throw new \LogicException("'{$typeName}' cannot be processed.");
                 }
             }
         }
 
-        //remove parsed placeholders
-        foreach ($partialResult as $typeName => $partialResultType) {
-            if (isset($partialResultType['fields'][$placeholderField])) {
-                //unset placeholder for fields
-                unset($partialResult[$typeName]['fields'][$placeholderField]);
-            } elseif (isset($partialResultType['items'][$placeholderField])) {
-                //unset placeholder for enums
-                unset($partialResult[$typeName]['items'][$placeholderField]);
-            }
-        }
+        $partialResults = $this->removePlaceholderFromResults($partialResults);
 
-        return $partialResult;
+        return $partialResults;
     }
 
     /**
@@ -172,11 +145,20 @@ class GraphQlReader implements ReaderInterface
             $graphQlSchemaContent,
             $matches
         );
-        /**
-         * $matches[0] is an indexed array with the whole type definitions
-         * $matches[2] is an indexed array with type names
-         */
-        $parsedTypes = array_combine($matches[2], $matches[0]);
+
+        $parsedTypes = [];
+
+        if (!empty($matches)) {
+            foreach ($matches[0] as $matchKey => $matchValue) {
+                $matches[0][$matchKey] = $this->convertInterfacesToAnnotations($matchValue);
+            }
+
+            /**
+             * $matches[0] is an indexed array with the whole type definitions
+             * $matches[2] is an indexed array with type names
+             */
+            $parsedTypes = array_combine($matches[2], $matches[0]);
+        }
         return $parsedTypes;
     }
 
@@ -186,7 +168,7 @@ class GraphQlReader implements ReaderInterface
      * @param array $source
      * @return array
      */
-    public function copyInterfaceFieldsToConcreteTypes(array $source): array
+    private function copyInterfaceFieldsToConcreteTypes(array $source): array
     {
         foreach ($source as $interface) {
             if ($interface['type'] == 'graphql_interface') {
@@ -204,5 +186,109 @@ class GraphQlReader implements ReaderInterface
         }
 
         return $source;
+    }
+
+    /**
+     * Find the implements statement and convert them to annotation to enable copy fields feature
+     *
+     * @param string $graphQlSchemaContent
+     * @return string
+     */
+    private function convertInterfacesToAnnotations(string $graphQlSchemaContent): string
+    {
+        $implementsKindsPattern = 'implements';
+        $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
+        $spacePattern = '([\s\t\n\r]+)';
+        $spacePatternNotMandatory = '[\s\t\n\r]*';
+        preg_match_all(
+            "/{$spacePattern}{$implementsKindsPattern}{$spacePattern}{$typeNamePattern}"
+            . "(,{$spacePatternNotMandatory}$typeNamePattern)*/im",
+            $graphQlSchemaContent,
+            $allMatchesForImplements
+        );
+
+
+        if (!empty($allMatchesForImplements)) {
+            foreach (array_unique($allMatchesForImplements[0]) as $implementsString) {
+                $implementsStatementString = preg_replace(
+                    "/{$spacePattern}{$implementsKindsPattern}{$spacePattern}/m",
+                    '',
+                    $implementsString
+                );
+                preg_match_all(
+                    "/{$typeNamePattern}+/im",
+                    $implementsStatementString,
+                    $implementationsMatches
+                );
+
+                if (!empty($implementationsMatches)) {
+                    $annotationString = ' @implements(interfaces: [';
+                    foreach ($implementationsMatches[0] as $interfaceName) {
+                        $annotationString.= "\"{$interfaceName}\", ";
+                    }
+                    $annotationString = rtrim($annotationString, ', ');
+                    $annotationString .= '])';
+                    $graphQlSchemaContent = str_replace($implementsString, $annotationString, $graphQlSchemaContent);
+                }
+
+            }
+        }
+
+        return $graphQlSchemaContent;
+    }
+
+    /**
+     * Add a placeholder field into the schema to allow parser to not throw error on empty types
+     * This method is paired with @see self::removePlaceholderFromResults()
+     * This is needed so that the placeholder doens't end up in the actual schema
+     *
+     * @param string $graphQlSchemaContent
+     * @return string
+     */
+    private function addPlaceHolderInSchema(string $graphQlSchemaContent) :string
+    {
+        $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
+        $typesKindsPattern = '(type|interface|input)';
+        $enumKindsPattern = '(enum)';
+        $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
+        $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
+        $spacePattern = '([\s\t\n\r]+)';
+
+        //add placeholder in empty types
+        $graphQlSchemaContent = preg_replace(
+            "/{$typesKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
+            "\$1\$2\$3\$4\$5{\n{$placeholderField}: String\n}",
+            $graphQlSchemaContent
+        );
+
+        //add placeholder in empty enums
+        $graphQlSchemaContent = preg_replace(
+            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
+            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
+            $graphQlSchemaContent
+        );
+        return $graphQlSchemaContent;
+    }
+
+    /**
+     * Remove parsed placeholders as these should not be present in final result
+     *
+     * @param array $partialResults
+     * @return array
+     */
+    private function removePlaceholderFromResults(array $partialResults) : array
+    {
+        $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
+        //remove parsed placeholders
+        foreach ($partialResults as $typeKeyName => $partialResultTypeArray) {
+            if (isset($partialResultTypeArray['fields'][$placeholderField])) {
+                //unset placeholder for fields
+                unset($partialResults[$typeKeyName]['fields'][$placeholderField]);
+            } elseif (isset($partialResultTypeArray['items'][$placeholderField])) {
+                //unset placeholder for enums
+                unset($partialResults[$typeKeyName]['items'][$placeholderField]);
+            }
+        }
+        return $partialResults;
     }
 }
