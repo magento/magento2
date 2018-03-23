@@ -12,7 +12,7 @@
         <field xsi:type="ObjectArrayOutputField" name="configurable_options" itemType="ConfigurableProductOptions" resolver="Magento\ConfigurableProductGraphQl\Model\Resolver\Options"/>
     </type>
     <type xsi:type="OutputType" name="ConfigurableVariant">
-        <field xsi:type="ObjectArrayOutputField" name="attributes" itemType="ConfigurableAttributeOption"/>
+        <field xsi:type="ObjectArrayOutputField" name="attributes" itemType="ConfigurableAttributeOption" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\Attributes"/>
         <field xsi:type="ObjectOutputField" name="product" type="SimpleProduct"/>
     </type>
     <type xsi:type="OutputType" name="ConfigurableAttributeOption">
