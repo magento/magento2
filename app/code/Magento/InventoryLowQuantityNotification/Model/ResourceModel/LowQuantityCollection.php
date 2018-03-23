@@ -104,6 +104,8 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addFieldToSelect('*');
 
+        $this->addFieldToFilter('status', SourceItemInterface::STATUS_IN_STOCK);
+
         $this->joinCatalogProduct();
         $this->joinInventoryConfiguration();
 
