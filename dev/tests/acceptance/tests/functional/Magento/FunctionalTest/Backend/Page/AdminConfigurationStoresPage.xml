@@ -11,4 +11,7 @@
     <page name="ConfigurationStoresPage" url="admin/system_config/edit/section/cms/" area="admin" module="Catalog">
         <section name="WYSIWYGOptionsSection"/>
     </page>
+    <page name="WebConfigurationPage" url="admin/system_config/edit/section/web/" area="admin" module="Backend">
+        <section name="WYSIWYGOptionsSection"/>
+    </page>
 </pages>
