@@ -81,6 +81,8 @@ class Storage
     }
 
     /**
+     * @return void
+     *
      * @deprecated
      * @see prepareCustomers
      */

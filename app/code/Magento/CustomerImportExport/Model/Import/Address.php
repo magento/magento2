@@ -407,6 +407,8 @@ class Address extends AbstractCustomer
     }
 
     /**
+     * @return $this
+     *
      * @deprecated
      */
     protected function _initAddresses()
