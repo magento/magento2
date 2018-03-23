@@ -186,7 +186,9 @@
                 <label translate="true">Country</label>
             </settings>
         </column>
-        <column name="region" sortOrder="100">
+        <column name="region"
+                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\Region"
+                sortOrder="100">
             <settings>
                 <filter>text</filter>
                 <label translate="true">State/Province</label>

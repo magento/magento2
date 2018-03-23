@@ -118,8 +118,6 @@ class SourceDataProvider extends DataProvider
                     ];
                 }
             }
-        } elseif ('inventory_source_listing_data_source' === $this->name) {
-            $data = $this->prepareRegionData($data);
         }
 
         return $data;
@@ -158,25 +156,5 @@ class SourceDataProvider extends DataProvider
             }
         }
         return $carrierCodes;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private function prepareRegionData(array $data): array
-    {
-        foreach ($data['items'] as $key => $item) {
-            $regionId = $item['region_id'] ?? 0;
-
-            if ($regionId != 0) {
-                $region = $this->regionFactory->create();
-                $region->load($regionId);
-                $data['items'][$key]['region'] = $region->getName();
-            }
-        }
-
-        return $data;
     }
 }
