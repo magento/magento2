@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product;
+namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Model\Product;
