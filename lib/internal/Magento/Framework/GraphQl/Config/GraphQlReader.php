@@ -10,7 +10,6 @@ namespace Magento\Framework\GraphQl\Config;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeReader;
 use Magento\Framework\Config\ReaderInterface;
-use Magento\Framework\GraphQl\Config\Converter\NormalizerComposite;
 
 class GraphQlReader implements ReaderInterface
 {
@@ -40,27 +39,19 @@ class GraphQlReader implements ReaderInterface
     private $defaultScope;
 
     /**
-     * @var NormalizerComposite
-     */
-    private $normalizer;
-
-    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReader $typeReader
-     * @param NormalizerComposite $normalizer
      * @param string $fileName
      * @param string $defaultScope
      */
     public function __construct(
         FileResolverInterface $fileResolver,
         TypeReader $typeReader,
-        NormalizerComposite $normalizer,
         $fileName = 'schema.graphql',
         $defaultScope = 'global'
     ) {
         $this->fileResolver = $fileResolver;
         $this->typeReader = $typeReader;
-        $this->normalizer = $normalizer;
         $this->defaultScope = $defaultScope;
         $this->fileName = $fileName;
     }
