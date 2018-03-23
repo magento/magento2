@@ -18,7 +18,6 @@
             <testCaseId value="MAGETWO-26041"/>
             <group value="configurable"/>
             <group value="product"/>
-            <group value="skip"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
