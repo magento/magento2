@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\BundleGraphQl\Model\Resolver\Links;
+namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
@@ -18,7 +18,7 @@ use Magento\Framework\GraphQl\Resolver\ValueFactory;
 /**
  * {@inheritdoc}
  */
-class Product implements ResolverInterface
+class ChildProduct implements ResolverInterface
 {
     /**
      * @var ProductDataProvider
@@ -51,11 +51,28 @@ class Product implements ResolverInterface
             throw new GraphQlInputException(__('No child sku found for product link.'));
         }
         $this->productDataProvider->addProductSku($value['sku']);
+        $this->productDataProvider->addEavAttributes($this->getProductFields($info));
 
         $result = function () use ($value) {
             return $this->productDataProvider->getProductBySku($value['sku']);
         };
 
         return $this->valueFactory->create($result);
+    }
+
+    /**
+     * Return field names for all requested product fields.
+     *
+     * @param ResolveInfo $info
+     * @return string[]
+     */
+    private function getProductFields(ResolveInfo $info)
+    {
+        $fieldNames = [];
+        foreach ($info->fieldNodes as $node) {
+            $fieldNames[] = $node->name->value;
+        }
+
+        return $fieldNames;
     }
 }

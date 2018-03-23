@@ -7,12 +7,12 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use GraphQL\Type\Definition\ResolveInfo;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
@@ -30,76 +30,70 @@ class Filter
     private $productDataProvider;
 
     /**
-     * @var FormatterInterface
+     * @var Collection
      */
-    private $formatter;
-
-    /**
-     * @var PostFetchProcessorInterface[]
-     */
-    private $postProcessors;
+    private $collection;
 
     /**
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
-     * @param FormatterInterface $formatter
-     * @param PostFetchProcessorInterface[] $postProcessors
+     * @param Collection $collection
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
-        FormatterInterface $formatter,
-        array $postProcessors = []
+        Collection $collection
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->postProcessors = $postProcessors;
-        $this->formatter = $formatter;
+        $this->collection = $collection;
     }
 
     /**
      * Filter catalog product data based off given search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param ResolveInfo $info
      * @return SearchResult
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria) : SearchResult
+    public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
     {
-        $realPageSize = $searchCriteria->getPageSize();
-        $realCurrentPage = $searchCriteria->getCurrentPage();
-        // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround for
-        // inaccurate search
-        $searchCriteria->setPageSize(PHP_INT_MAX);
-        $searchCriteria->setCurrentPage(1);
-        $products = $this->productDataProvider->getList($searchCriteria);
+        $fields = $this->getProductFields($info);
+        $matchedFields = $this->collection->getRequestAttributes($fields);
+        $products = $this->productDataProvider->getList($searchCriteria, $matchedFields);
         $productArray = [];
-        $searchCriteria->setPageSize($realPageSize);
-        $searchCriteria->setCurrentPage($realCurrentPage);
-        $paginatedProducts = $this->paginateList($products->getItems(), $searchCriteria);
         /** @var \Magento\Catalog\Model\Product $product */
-        foreach ($paginatedProducts as $product) {
-            $productArray[] = $this->formatter->format($product);
-        }
-
-        foreach ($this->postProcessors as $postProcessor) {
-            $productArray = $postProcessor->process($productArray);
+        foreach ($products->getItems() as $product) {
+            $productArray[] = ['model' => $product];
         }
 
         return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
     }
 
     /**
-     * Paginate an array of Ids that get pulled back in search based off search criteria and total count.
+     * Return field names for all requested product fields.
      *
-     * @param array $ids
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return int[]
+     * @param ResolveInfo $info
+     * @return string[]
      */
-    private function paginateList(array $ids, SearchCriteriaInterface $searchCriteria) : array
+    private function getProductFields(ResolveInfo $info)
     {
-        $length = $searchCriteria->getPageSize();
-        // Search starts pages from 0
-        $offset = $length * ($searchCriteria->getCurrentPage() - 1);
-        return array_slice($ids, $offset, $length);
+        $fieldNames = [];
+        foreach ($info->fieldNodes as $node) {
+            if ($node->name->value !== 'products') {
+                continue;
+            }
+            foreach ($node->selectionSet->selections as $selection) {
+                if ($selection->name->value !== 'items') {
+                    continue;
+                }
+
+                foreach ($selection->selectionSet->selections as $itemSelection) {
+                    $fieldNames[] = $itemSelection->name->value;
+                }
+            }
+        }
+
+        return $fieldNames;
     }
 }

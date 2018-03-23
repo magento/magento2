@@ -7,8 +7,8 @@
     <type xsi:type="OutputType" name="DownloadableProduct">
         <implements interface="ProductInterface" copyFields="true"/>
         <implements interface="CustomizableProductInterface" copyFields="true"/>
-        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_samples" itemType="DownloadableProductSamples" description="An array containing information about samples of this downloadable product."/>
-        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_links" itemType="DownloadableProductLinks" description="An array containing information about the links for this downloadable product."/>
+        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_samples" resolver="Magento\DownloadableGraphQl\Model\Resolver\Product\DownloadableOptions" itemType="DownloadableProductSamples" description="An array containing information about samples of this downloadable product."/>
+        <field xsi:type="ObjectArrayOutputField" name="downloadable_product_links" resolver="Magento\DownloadableGraphQl\Model\Resolver\Product\DownloadableOptions" itemType="DownloadableProductLinks" description="An array containing information about the links for this downloadable product."/>
         <field xsi:type="ObjectOutputField" name="links_purchased_separately" type="Int" description="A value of 1 indicates that each link in the array must be purchased separately."/>
         <field xsi:type="ObjectOutputField" name="links_title" type="String" description="The heading above the list of downloadable products"/>
     </type>

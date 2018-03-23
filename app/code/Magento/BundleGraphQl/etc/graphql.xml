@@ -36,7 +36,7 @@
         <field xsi:type="ScalarOutputField" name="price" type="Float" description="The price of the selected option"/>
         <field xsi:type="ObjectOutputField" name="price_type" type="PriceTypeEnum" description="One of FIXED, PERCENT, or DYNAMIC"/>
         <field xsi:type="ScalarOutputField" name="can_change_quantity" type="Boolean" description="Indicates whether the customer can change the number of items for this option"/>
-        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface" resolver="Magento\BundleGraphQl\Model\Resolver\Links\Product" description="The ProductInterface object, which contains details about this product option"/>
+        <field xsi:type="ObjectOutputField" name="product" type="ProductInterface" resolver="Magento\CatalogGraphQl\Model\Resolver\ChildProduct" description="The ProductInterface object, which contains details about this product option"/>
     </type>
     <type xsi:type="Enum" name="ShipBundleItemsEnum">
         <item name="together">TOGETHER</item>

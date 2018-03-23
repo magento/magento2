@@ -5,21 +5,27 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\DownloadableGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter;
+namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
+use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type as Downloadable;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
 use Magento\Downloadable\Model\ResourceModel\Link\Collection as LinkCollection;
+use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * Format for downloadable product types
+ *
+ * {@inheritdoc}
  */
-class DownloadableOptions implements FormatterInterface
+class DownloadableOptions implements ResolverInterface
 {
     /**
      * @var EnumLookup
@@ -42,21 +48,29 @@ class DownloadableOptions implements FormatterInterface
     private $linkCollection;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
      * @param SampleCollection $sampleCollection
      * @param LinkCollection $linkCollection
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
         SampleCollection $sampleCollection,
-        LinkCollection $linkCollection
+        LinkCollection $linkCollection,
+        ValueFactory $valueFactory
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->sampleCollection = $sampleCollection;
         $this->linkCollection = $linkCollection;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -64,23 +78,43 @@ class DownloadableOptions implements FormatterInterface
      *
      * {@inheritdoc}
      */
-    public function format(Product $product, array $productData = []) : array
-    {
-        if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
-            $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
-                ->addProductToFilter($product->getId());
-            $links = $this->linkCollection->addTitleToResult($product->getStoreId())
-                ->addPriceToResult($product->getStore()->getWebsiteId())
-                ->addProductToFilter($product->getId());
-            $productData['downloadable_product_links'] =  $this->formatLinks(
-                $links
-            );
-            $productData['downloadable_product_samples'] = $this->formatSamples(
-                $samples
-            );
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ): ?Value {
+        if (!isset($value['model'])) {
+            return null;
         }
 
-        return $productData;
+        /** @var Product $product */
+        $product = $value['model'];
+
+        $data = null;
+        if ($product->getTypeId() === Downloadable::TYPE_DOWNLOADABLE) {
+            if ($field->getName() === 'downloadable_product_links') {
+                $links = $this->linkCollection->addTitleToResult($product->getStoreId())
+                    ->addPriceToResult($product->getStore()->getWebsiteId())
+                    ->addProductToFilter($product->getId());
+                $data = $this->formatLinks(
+                    $links
+                );
+            } elseif ($field->getName() === 'downloadable_product_samples') {
+                $samples = $this->sampleCollection->addTitleToResult($product->getStoreId())
+                    ->addProductToFilter($product->getId());
+                $data = $this->formatSamples(
+                    $samples
+                );
+            }
+        }
+
+        $result = function () use ($data) {
+            return $data;
+        };
+
+        return $this->valueFactory->create($result);
     }
 
     /**

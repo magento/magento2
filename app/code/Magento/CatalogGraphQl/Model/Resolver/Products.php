@@ -77,9 +77,9 @@ class Products implements ResolverInterface
                 __("'search' or 'filter' input argument is required.")
             );
         } elseif (isset($args['search'])) {
-            $searchResult = $this->searchQuery->getResult($searchCriteria);
+            $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         } else {
-            $searchResult = $this->filterQuery->getResult($searchCriteria);
+            $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
         }
 
         //possible division by 0
