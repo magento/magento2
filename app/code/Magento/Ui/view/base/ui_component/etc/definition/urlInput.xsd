@@ -62,6 +62,13 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="settingValue" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>
+                        Allows to specify default value for setting
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:choice>
     </xs:group>
 </xs:schema>

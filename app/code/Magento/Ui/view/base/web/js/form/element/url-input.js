@@ -36,9 +36,8 @@ define([
                 }
             },
             listens: {
-                checked: 'settingValue',
-                disabled: 'hideLinkedElement',
                 settingValue: 'checked',
+                disabled: 'hideLinkedElement',
                 linkType: 'createChildUrlInputComponent'
             },
             links: {
@@ -78,6 +77,7 @@ define([
                 baseLinkType = this.urlTypes.base;
 
             delete this.urlTypes.base;
+            console.log(this);
             _.each(this.urlTypes, function (linkSettingsArray, linkName) {
                 //add link name by link type
                 linkSettingsArray.name = baseLinkType.namePrefix + linkName;
@@ -170,7 +170,7 @@ define([
          */
         checkboxClick: function () {
             if (!this.disabled()) {
-                this.checked(!this.checked());
+                this.settingValue(!this.settingValue());
             }
         }
     });

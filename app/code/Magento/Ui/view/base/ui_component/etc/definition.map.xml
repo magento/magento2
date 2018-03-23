@@ -421,6 +421,7 @@
                     <item name="settingLabel" type="string" translate="true" xsi:type="xpath">settings/settingLabel</item>
                     <item name="typeSelectorTemplate" type="string" translate="true" xsi:type="xpath">settings/typeSelectorTemplate</item>
                     <item name="settingTemplate" type="string" translate="true" xsi:type="xpath">settings/settingTemplate</item>
+                    <item name="settingValue" type="boolean" xsi:type="xpath">settings/settingValue</item>
                 </item>
             </argument>
         </schema>
