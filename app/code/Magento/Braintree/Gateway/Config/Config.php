@@ -188,7 +188,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @param int|null $storeId
      * @return string
-     * @internal param null $storeId
      */
     public function getKountMerchantId($storeId = null)
     {

@@ -9,7 +9,7 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder.
@@ -59,7 +59,7 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild(array $paymentData, array $expected)
     {
         $subject = [
-            'payment' => $this->paymentDataObjectMock
+            'payment' => $this->paymentDataObjectMock,
         ];
 
         $this->subjectReaderMock->expects(static::once())

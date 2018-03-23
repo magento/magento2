@@ -21,7 +21,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Command\CaptureStrategyCommand.
@@ -99,11 +99,11 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->braintreeAdapterMock = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
-        $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterFactory->expects(self::any())
+        $adapterFactoryMock->expects(self::any())
             ->method('create')
             ->willReturn($this->braintreeAdapterMock);
 
@@ -115,7 +115,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock,
             $this->subjectReaderMock,
-            $adapterFactory,
+            $adapterFactoryMock,
             $this->braintreeSearchAdapter
         );
     }
@@ -339,12 +339,12 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
-        $order = $this->getMockBuilder(OrderAdapterInterface::class)
+        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $mock->method('getOrder')
-            ->willReturn($order);
+            ->willReturn($orderMock);
 
         return $mock;
     }

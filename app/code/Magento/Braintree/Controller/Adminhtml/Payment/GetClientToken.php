@@ -13,6 +13,9 @@ use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Retrieve client token controller.
+ */
 class GetClientToken extends Action
 {
     const ADMIN_RESOURCE = 'Magento_Braintree::get_client_token';

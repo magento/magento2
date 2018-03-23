@@ -9,7 +9,7 @@ use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\CaptureDataBuilder.
@@ -24,12 +24,12 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Payment|MockObject
      */
-    private $payment;
+    private $paymentMock;
 
     /**
      * @var Payment|MockObject
      */
-    private $paymentDO;
+    private $paymentDOMock;
 
     /**
      * @var SubjectReader|MockObject
@@ -38,8 +38,8 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
-        $this->payment = $this->getMockBuilder(Payment::class)
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
@@ -58,22 +58,22 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $amount = 10.00;
         $buildSubject = [
-            'payment' => $this->paymentDO,
-            'amount' => $amount
+            'payment' => $this->paymentDOMock,
+            'amount' => $amount,
         ];
 
-        $this->payment->expects(self::once())
+        $this->paymentMock->expects(self::once())
             ->method('getCcTransId')
             ->willReturn('');
 
-        $this->paymentDO->expects(self::once())
+        $this->paymentDOMock->expects(self::once())
             ->method('getPayment')
-            ->willReturn($this->payment);
+            ->willReturn($this->paymentMock);
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
             ->with($buildSubject)
-            ->willReturn($this->paymentDO);
+            ->willReturn($this->paymentDOMock);
 
         $this->builder->build($buildSubject);
     }
@@ -88,26 +88,26 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
         $expected = [
             'transaction_id' => $transactionId,
-            'amount' => $amount
+            'amount' => $amount,
         ];
 
         $buildSubject = [
-            'payment' => $this->paymentDO,
-            'amount' => $amount
+            'payment' => $this->paymentDOMock,
+            'amount' => $amount,
         ];
 
-        $this->payment->expects(self::once())
+        $this->paymentMock->expects(self::once())
             ->method('getCcTransId')
             ->willReturn($transactionId);
 
-        $this->paymentDO->expects(self::once())
+        $this->paymentDOMock->expects(self::once())
             ->method('getPayment')
-            ->willReturn($this->payment);
+            ->willReturn($this->paymentMock);
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
             ->with($buildSubject)
-            ->willReturn($this->paymentDO);
+            ->willReturn($this->paymentDOMock);
         $this->subjectReaderMock->expects(self::once())
             ->method('readAmount')
             ->with($buildSubject)

@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Test\Unit\Gateway;
 
 use Braintree\Transaction;
-use InvalidArgumentException;
 use Magento\Braintree\Gateway\SubjectReader;
 
 /**
@@ -26,7 +25,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readCustomerId
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "customerId" field does not exists
      */
     public function testReadCustomerIdWithException()
@@ -45,7 +44,7 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readPublicHash
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "public_hash" field does not exists
      */
     public function testReadPublicHashWithException()

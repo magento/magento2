@@ -15,7 +15,7 @@ use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class GetPaymentNonceCommandTest
@@ -80,11 +80,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['createNonce'])
             ->getMock();
-        /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
-        $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterFactory->expects(self::any())
+        $adapterFactoryMock->expects(self::any())
             ->method('create')
             ->willReturn($this->adapterMock);
 
@@ -109,7 +109,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->command = new GetPaymentNonceCommand(
             $this->tokenManagementMock,
-            $adapterFactory,
+            $adapterFactoryMock,
             $this->resultFactoryMock,
             $this->subjectReaderMock,
             $this->responseValidatorMock

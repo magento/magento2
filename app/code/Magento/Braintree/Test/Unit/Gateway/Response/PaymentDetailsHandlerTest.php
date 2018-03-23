@@ -10,7 +10,7 @@ use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \\Magento\Braintree\Gateway\Response\PaymentDetailsHandler.
@@ -41,7 +41,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([
                 'setCcTransId',
                 'setLastTransId',
-                'setAdditionalInformation'
+                'setAdditionalInformation',
             ])
             ->getMock();
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
@@ -112,7 +112,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             'cvvResponseCode' => 'M',
             'processorAuthorizationCode' => 'W1V8XK',
             'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved'
+            'processorResponseText' => 'Approved',
         ];
 
         return Transaction::factory($attributes);
