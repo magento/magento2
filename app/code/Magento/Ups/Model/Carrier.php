@@ -810,18 +810,16 @@ XMLRequest;
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
                 // Negotiated rates
-                $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
-                $negotiatedActive = $this->getConfigFlag(
-                        'negotiated_active'
-                    ) && $this->getConfigData(
-                        'shipper_number'
-                    ) && !empty($negotiatedArr);
+                $negotiatedActive = $this->getConfigFlag('negotiated_active') &&
+                                    $this->getConfigData('shipper_number');
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
+
                     if (in_array($code, $allowedMethods)) {
-                        if ($negotiatedActive) {
+
+                        if ($negotiatedActive && array_key_exists("NegotiatedRates", $shipElement->asArray())) {
                             $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
                         } else {
                             $cost = $shipElement->TotalCharges->MonetaryValue;
