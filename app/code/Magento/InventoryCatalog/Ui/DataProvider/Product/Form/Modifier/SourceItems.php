@@ -7,21 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\CatalogInventory\Model\Configuration;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\SourceItems\ManageStock;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
-use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
  * Product form modifier. Add to form source data
@@ -54,25 +50,11 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
-     * Provides "Manage Stock" global config value.
+     * Check, if stock should be managed for given product.
      *
-     * @var ScopeConfigInterface
+     * @var ManageStock
      */
-    private $config;
-
-    /**
-     * Retrieves stock item for given product.
-     *
-     * @var GetStockItemConfigurationInterface
-     */
-    private $getStockItemConfiguration;
-
-    /**
-     * Provides default stock id for current website in order to get correct stock item for product.
-     *
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
+    private $manageStock;
 
     /**
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
@@ -80,9 +62,7 @@ class SourceItems extends AbstractModifier
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
-     * @param ScopeConfigInterface $config
-     * @param GetStockItemConfigurationInterface $getStockItemConfiguration
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param ManageStock $manageStock
      */
     public function __construct(
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
@@ -90,18 +70,14 @@ class SourceItems extends AbstractModifier
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection,
-        ScopeConfigInterface $config,
-        GetStockItemConfigurationInterface $getStockItemConfiguration,
-        DefaultStockProviderInterface $defaultStockProvider
+        ManageStock $manageStock
     ) {
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->config = $config;
-        $this->getStockItemConfiguration = $getStockItemConfiguration;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->manageStock = $manageStock;
     }
 
     /**
@@ -162,7 +138,7 @@ class SourceItems extends AbstractModifier
             || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
-        $isMangeStock = $this->isMangeStock($product);
+        $isMangeStock = $this->manageStock->execute($product->getSku());
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
@@ -198,27 +174,5 @@ class SourceItems extends AbstractModifier
         ];
 
         return $meta;
-    }
-
-    /**
-     * Get "isManageStock" from product, and fall back to global config in case of new product.
-     *
-     * @param ProductInterface $product
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function isMangeStock(ProductInterface $product): bool
-    {
-        $stockId = $this->defaultStockProvider->getId();
-        if ($product->getSku()) {
-            $itemConfiguration = $this->getStockItemConfiguration->execute($product->getSku(), $stockId);
-            if ($itemConfiguration) {
-                return $itemConfiguration->isUseConfigManageStock()
-                    ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
-                    : $itemConfiguration->isManageStock();
-            }
-        }
-
-        return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
     }
 }
