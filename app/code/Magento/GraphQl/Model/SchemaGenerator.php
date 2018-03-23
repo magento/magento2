@@ -9,19 +9,14 @@ namespace Magento\GraphQl\Model;
 
 use Magento\Framework\GraphQl\Type\SchemaFactory;
 use Magento\Framework\GraphQl\Type\Schema;
-use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 
 /**
  * Generate a query field and concrete types for GraphQL schema
  */
 class SchemaGenerator implements SchemaGeneratorInterface
 {
-    /**
-     * @var Generator
-     */
-    private $typeGenerator;
-
     /**
      * @var TypeFactory
      */
@@ -33,18 +28,23 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $schemaFactory;
 
     /**
-     * @param Generator $typeGenerator
+     * @var OutputMapper
+     */
+    private $outputMapper;
+
+    /**
      * @param TypeFactory $typeFactory
      * @param SchemaFactory $schemaFactory
+     * @param OutputMapper $outputMapper
      */
     public function __construct(
-        Generator $typeGenerator,
         TypeFactory $typeFactory,
-        SchemaFactory $schemaFactory
+        SchemaFactory $schemaFactory,
+        OutputMapper $outputMapper
     ) {
-        $this->typeGenerator = $typeGenerator;
         $this->typeFactory = $typeFactory;
         $this->schemaFactory = $schemaFactory;
+        $this->outputMapper = $outputMapper;
     }
 
     /**
@@ -52,13 +52,14 @@ class SchemaGenerator implements SchemaGeneratorInterface
      */
     public function generate() : Schema
     {
-        $schemaConfig = $this->typeGenerator->generateTypes();
-
-        $config = $this->typeFactory->createObject([
-            'name' => 'Query',
-            'fields' => $schemaConfig['fields']
-        ]);
-        $schema = $this->schemaFactory->create(['query' => $config, 'types' => $schemaConfig['types']]);
+        $schema = $this->schemaFactory->create(
+            [
+                'query' => $this->outputMapper->getOutputType('Query'),
+                'typeLoader' => function ($name) {
+                    return $this->outputMapper->getOutputType($name);
+                }
+            ]
+        );
         return $schema;
     }
 }
