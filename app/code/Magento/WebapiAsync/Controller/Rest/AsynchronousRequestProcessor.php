@@ -16,7 +16,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 
 class AsynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = "/async/V\\d+/";
+    const PROCESSOR_PATH = "/async\\/V\\d+/";
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Response

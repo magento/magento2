@@ -14,6 +14,10 @@ $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
+if (!defined('TESTS_TEMP_DIR')) {
+    define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
+}
+
 try {
     setCustomErrorHandler();
 

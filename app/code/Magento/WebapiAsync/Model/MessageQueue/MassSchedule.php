@@ -197,7 +197,12 @@ class MassSchedule
         }
 
         if (!empty($errors)) {
-            throw new \Magento\Framework\Webapi\Exception($errors);
+            throw new \Magento\Framework\Webapi\Exception(
+                __('Errors while processing entities'),
+                0,
+                \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
+                $errors
+            );
         }
 
         $result = $this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId);

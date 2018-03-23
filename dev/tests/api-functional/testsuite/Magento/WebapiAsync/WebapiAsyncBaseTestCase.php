@@ -49,7 +49,7 @@ class WebApiAsyncBaseTestCase extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherConsumerController = $this->objectManager->get(PublisherConsumerController::class, [
+        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers' => $this->consumers,
             'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
             'maxMessages' => $this->maxMessages,
