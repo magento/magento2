@@ -14,7 +14,7 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Retrieve client token controller.
+ * Retrieves client token.
  */
 class GetClientToken extends Action
 {
