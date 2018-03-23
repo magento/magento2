@@ -159,6 +159,7 @@ class Helper
         }
 
         $productData = $this->normalize($productData);
+        $productData = $this->trimData($productData);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
@@ -311,6 +312,25 @@ class Helper
                 }
             } elseif (is_array($value)) {
                 $productData[$key] = $this->normalize($value);
+            }
+        }
+
+        return $productData;
+    }
+
+    /**
+     * Internal trim data
+     *
+     * @param array $productData
+     * @return array
+     */
+    protected function trimData(array $productData)
+    {
+        foreach ($productData as $key => $value) {
+            if (is_scalar($value)) {
+                $productData[$key] = trim($value);
+            } elseif (is_array($value)) {
+                $productData[$key] = $this->trimData($value);
             }
         }
 
