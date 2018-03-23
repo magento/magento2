@@ -10,9 +10,8 @@ namespace Magento\Ui\Model\UrlInput;
 /**
  * Returns configuration for default Url Input type
  */
-class DefaultLink implements ConfigInterface
+class Url implements ConfigInterface
 {
-
     /**
      * {@inheritdoc}
      */

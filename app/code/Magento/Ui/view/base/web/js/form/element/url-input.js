@@ -25,8 +25,6 @@ define([
             isDisplayAdditionalSettings: true,
             settingValue: false,
             settingLabel: $t('Open in new tab'),
-
-            //observable object(without functional call)
             tracks: {
                 linkedElement: true
             },
@@ -49,12 +47,8 @@ define([
             }
         },
 
-        /**
-         *
-         * @inheritdoc
-         */
+        /** @inheritdoc */
         initialize: function () {
-
             this._super()
                 .setOptions();
 
@@ -76,6 +70,8 @@ define([
 
         /**
          * Adds link types array with default settings
+         *
+         * @return {Object}
          */
         processLinkTypes: function () {
             var processedLinkTypes = {},
@@ -98,7 +94,7 @@ define([
         /**
          * Set options to select based on link types configuration
          *
-         * @return {exports}
+         * @return {Object}
          */
         setOptions: function () {
             var result = [];
@@ -121,9 +117,7 @@ define([
             return this;
         },
 
-        /**
-         * @inheritdoc
-         */
+        /** @inheritdoc */
         setPreview: function (visible) {
             this.linkedElement().visible(visible);
         },
@@ -132,15 +126,12 @@ define([
          * Initializes observable properties of instance
          *
          * @param {Boolean} disabled
-         * @returns void.
          */
         hideLinkedElement: function (disabled) {
             this.linkedElement().disabled(disabled);
         },
 
-        /**
-         * @{inheritDoc}
-         */
+        /** @inheritdoc */
         destroy: function () {
             _.each(this.linkedElementInstances, function (value) {
                 value().destroy();

@@ -11,7 +11,7 @@ namespace Magento\Ui\Model\UrlInput;
 /**
  * Returns information about allowed links
  */
-class LinksProvider implements ConfigInterface
+class LinksConfigProvider implements ConfigInterface
 {
     /**
      * @var array
