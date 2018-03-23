@@ -53,33 +53,33 @@ class GeneratePatchCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-             ->setDescription('Generate patch and put it in specific folder.')
-             ->setDefinition([
-                 new InputArgument(
-                     self::MODULE_NAME,
-                     InputArgument::REQUIRED,
-                     'Module name'
-                 ),
-                 new InputArgument(
-                     self::INPUT_KEY_PATCH_NAME,
-                     InputArgument::REQUIRED,
-                     'Patch name'
-                 ),
-                 new InputOption(
-                     self::INPUT_KEY_IS_REVERTABLE,
-                     null,
-                     InputOption::VALUE_OPTIONAL,
-                     'Check whether patch is revertable or not.',
-                     false
-                 ),
-                 new InputOption(
-                     self::INPUT_KEY_PATCH_TYPE,
-                     null,
-                     InputOption::VALUE_OPTIONAL,
-                     'Find out what type of patch should be generated.',
-                     'data'
-                 ),
-             ]);
+            ->setDescription('Generate patch and put it in specific folder.')
+            ->setDefinition([
+                new InputArgument(
+                    self::MODULE_NAME,
+                    InputArgument::REQUIRED,
+                    'Module name'
+                ),
+                new InputArgument(
+                    self::INPUT_KEY_PATCH_NAME,
+                    InputArgument::REQUIRED,
+                    'Patch name'
+                ),
+                new InputOption(
+                    self::INPUT_KEY_IS_REVERTABLE,
+                    null,
+                    InputOption::VALUE_OPTIONAL,
+                    'Check whether patch is revertable or not.',
+                    false
+                ),
+                new InputOption(
+                    self::INPUT_KEY_PATCH_TYPE,
+                    null,
+                    InputOption::VALUE_OPTIONAL,
+                    'Find out what type of patch should be generated.',
+                    'data'
+                ),
+            ]);
 
         parent::configure();
     }
