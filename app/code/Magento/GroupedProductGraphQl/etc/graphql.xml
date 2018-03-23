@@ -12,6 +12,6 @@
     <type xsi:type="OutputType" name="GroupedProductItem">
         <field xsi:type="ScalarOutputField" name="qty" type="Float" description="The quantity of this grouped product item"/>
         <field xsi:type="ScalarOutputField" name="position" type="Int" description="The relative position of this item compared to the other group items."/>
-        <field xsi:type="ObjectOutputField" name="product" resolver="Magento\CatalogGraphQl\Model\Resolver\ChildProduct" type="ProductInterface" description="The ProductInterface object, which contains details about this product option"/>
+        <field xsi:type="ObjectOutputField" name="product" resolver="Magento\CatalogGraphQl\Model\Resolver\Product" type="ProductInterface" description="The ProductInterface object, which contains details about this product option"/>
     </type>
 </config>

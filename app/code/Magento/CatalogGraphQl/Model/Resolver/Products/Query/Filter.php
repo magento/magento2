@@ -58,13 +58,14 @@ class Filter
      */
     public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
     {
-        $fields = $this->getProductFields($info);
-        $matchedFields = $this->collection->getRequestAttributes($fields);
-        $products = $this->productDataProvider->getList($searchCriteria, $matchedFields);
+//        $fields = $this->getProductFields($info);
+//        $matchedFields = $this->collection->getRequestAttributes($fields);
+        $products = $this->productDataProvider->getList($searchCriteria, []);
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($products->getItems() as $product) {
-            $productArray[] = ['model' => $product];
+            $productArray[$product->getId()] = $product->getData();
+            $productArray[$product->getId()]['model'] = $product;
         }
 
         return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
@@ -89,6 +90,7 @@ class Filter
                 }
 
                 foreach ($selection->selectionSet->selections as $itemSelection) {
+                    if ($selection->selection)
                     $fieldNames[] = $itemSelection->name->value;
                 }
             }

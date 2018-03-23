@@ -70,21 +70,23 @@ class Product
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 
-        foreach ($attributes as $attributeCode) {
-            $collection->addAttributeToSelect($attributeCode);
-        }
+//        foreach ($attributes as $attributeCode) {
+//            $collection->addAttributeToSelect($attributeCode);
+//        }
+        $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
         $count = $collection->getSelectCountSql()->query();
-        $collection->addPriceData();
         $collection->addWebsiteNamesToResult();
         $collection->addTaxPercents();
         $collection->addWebsiteNamesToResult();
+        $sql = $collection->getSelect()->assemble();
         $collection->load();
 
         // Methods that perform extra fetches
+        $collection->addPriceData();
         $collection->addCategoryIds();
         $collection->addMediaGalleryData();
         $collection->addOptionsToResult();
