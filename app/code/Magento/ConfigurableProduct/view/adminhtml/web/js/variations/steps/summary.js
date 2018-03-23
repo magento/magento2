@@ -51,7 +51,7 @@ define([
                 }
             }),
             attributes: [],
-            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'),$.mage.__('Quantity Per' +
+            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity Per' +
                 ' Source'), $.mage.__('Price')],
             sections: [],
             gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
@@ -100,7 +100,7 @@ define([
 
             this.variations = [];
             _.each(variations, function (options) {
-                var product, images, sku, name, quantity, price, variation,
+                var product, images, sku, name, quantity_per_source, price, variation,
                     productId = this.variationsComponent().getProductIdByOptions(options);
 
                 if (productId) {
@@ -115,10 +115,10 @@ define([
                 name = productName + _.reduce(options, function (memo, option) {
                         return memo + '-' + option.label;
                     }, '');
-                quantity = getSectionValue('quantity', options);
+                quantity_per_source = getSectionValue('quantity_per_source', options);
 
-                if (!quantity && productId) {
-                    quantity = product.quantity;
+                if (!quantity_per_source && productId) {
+                    quantity_per_source = product.quantity;
                 }
                 price = getSectionValue('price', options);
 
@@ -134,8 +134,7 @@ define([
                     images: images,
                     sku: sku,
                     name: name,
-                    quantity: quantity,
-                    quantity_per_source: quantity,
+                    quantity_per_source: quantity_per_source,
                     price: price,
                     productId: productId,
                     weight: productWeight,
@@ -197,7 +196,6 @@ define([
                 images: []
             }, variation.images));
             row.push(variation.sku);
-            row.push(variation.quantity);
             row.push(variation.quantity_per_source);
             _.each(variation.options, function (option) {
                 row.push(option.label);
@@ -230,7 +228,7 @@ define([
             var columns = this.attributesName.slice(0);
 
             attributes.each(function (attribute, index) {
-                columns.splice(4 + index, 0, attribute.label);
+                columns.splice(3 + index, 0, attribute.label);
             }, this);
 
             return columns;

@@ -34,13 +34,13 @@ define([
          * Inits listeners for attribute change.
          */
         initAttributeListener: function () {
-            var quantity = this.sections().quantity;
+            var quantity_per_source = this.sections().quantity_per_source;
 
-            quantity.attribute.subscribe(function (data) {
+            quantity_per_source.attribute.subscribe(function (data) {
                 this.attribute(data);
             }.bind(this));
 
-            quantity.type.subscribe(function (data) {
+            quantity_per_source.type.subscribe(function (data) {
                 this.type(data);
             }.bind(this));
         },
@@ -81,30 +81,30 @@ define([
                 data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
-                    item.sections().quantity = data[item.label];
+                    item.sections().quantity_per_source = data[item.label];
                 });
             } else if (this.type() === 'single') {
                 data = module.dynamicRowsCollection[module.dynamicRowsName];
-                this.sections().quantity.value(data);
+                this.sections().quantity_per_source.value(data);
             }
         },
 
         /** @inheritdoc */
         validate: function () {
             var valid = true,
-                quantity = this.quantityResolver();
+                quantity_per_source = this.quantityResolver();
 
             this._super();
 
             if (this.type() && this.type() !== 'none') {
-                quantity.valid = true;
+                quantity_per_source.valid = true;
 
-                quantity.elems().forEach(function (item) {
-                    quantity.validate.call(quantity, item);
+                quantity_per_source.elems().forEach(function (item) {
+                    quantity_per_source.validate.call(quantity_per_source, item);
                     valid = valid && item.elems()[1].elems().length;
                 });
 
-                if (!quantity.valid || !valid) {
+                if (!quantity_per_source.valid || !valid) {
                     throw new Error($.mage.__('Please fill-in correct values.'));
                 }
             }

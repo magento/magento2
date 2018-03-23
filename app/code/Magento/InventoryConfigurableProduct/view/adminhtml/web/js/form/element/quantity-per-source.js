@@ -39,7 +39,6 @@ define([
          * @param {Object} data
          */
         updateItems: function (data) {
-            debugger;
             this.isFullList(data.length > this.itemsToDisplay);
             this.isFullList() ? this.items(data.slice(0, this.itemsToDisplay)) : this.items(data);
         }

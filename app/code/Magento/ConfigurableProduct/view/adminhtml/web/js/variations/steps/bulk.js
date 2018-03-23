@@ -30,6 +30,7 @@ define([
             images: null,
             price: '',
             quantity: '',
+            quantity_per_source: '',
             notificationMessage: {
                 text: null,
                 error: null
@@ -67,6 +68,12 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable()
+                },
+                quantity_per_source: {
+                    label: 'quantity per source',
+                    type: ko.observable('none'),
+                    value: ko.observable(),
+                    attribute: ko.observable()
                 }
             });
 
@@ -81,6 +88,7 @@ define([
                 this.images = new self.makeImages(null);
                 this.price = self.price;
                 this.quantity = self.quantity;
+                this.quantity_per_source = self.quantity_per_source;
             };
 
             /**

@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Ui\Component\Container;
-
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
@@ -85,7 +83,7 @@ class InventoryConfigurablePanel extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'text',
-                        'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity',
+                        'component' => 'Magento_InventoryConfigurableProduct/js/form/element/quantity-per-source',
                         'template' => 'ui/form/field',
                         'dataScope' => 'quantity_per_source',
                         'label' => __('Quantity Per Source'),

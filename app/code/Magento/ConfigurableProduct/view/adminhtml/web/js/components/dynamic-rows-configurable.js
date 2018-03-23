@@ -392,7 +392,8 @@ define([
                     'small_image': row['small_image'],
                     image: row.image,
                     'thumbnail': row.thumbnail,
-                    'attributes': attributesText
+                    'attributes': attributesText,
+                    'quantity_per_source': row['quantity_per_source']
                 };
                 product[this.changedFlag] = true;
                 product[this.canEditField] = row.editable;
