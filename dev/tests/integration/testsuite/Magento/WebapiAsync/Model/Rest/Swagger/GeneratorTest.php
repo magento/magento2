@@ -62,6 +62,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             $schema['paths']['/V1/customers']['post']['responses']
         );
 
+        // 202 Response should not apply to GET requests.
+        $this->assertArrayNotHasKey(
+            '202',
+            $schema['paths']['/V1/customers/me/shippingAddress']['get']['responses']
+        );
+
         // Ensure that the response type has been replaced with the async version.
         $this->assertEquals(
             '#/definitions/webapi-async-data-async-response-interface',

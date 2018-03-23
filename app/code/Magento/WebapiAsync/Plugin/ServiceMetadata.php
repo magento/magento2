@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\WebapiAsync\Plugin;
 
@@ -33,6 +37,12 @@ class ServiceMetadata
      * @var array
      */
     private $responseDefinitionReplacement;
+    /**
+     * @var array
+     */
+    private $synchronousOnlyHttpMethods = [
+        'GET'
+    ];
 
     /**
      * ServiceMetadata constructor.
@@ -95,17 +105,19 @@ class ServiceMetadata
     }
 
     /**
+     * @param string $serviceName
      * @return array
      */
-    private function getServiceVersions()
+    private function getServiceVersions(string $serviceName)
     {
         $services = $this->webapiConfig->getServices();
-        $serviceVersionData = array_values($services[WebapiConverter::KEY_SERVICES]);
 
-        return array_keys($serviceVersionData);
+        return array_keys($services[WebapiConverter::KEY_SERVICES][$serviceName]);
     }
 
     /**
+     * Get a list of all service methods that cannot be executed asynchronously.
+     *
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @return array
      */
@@ -119,19 +131,70 @@ class ServiceMetadata
 
             foreach ($serviceData[Converter::KEY_METHODS] as $method => $methodData) {
                 if ($this->isMethodDataSynchronousOnly($methodData)) {
-                    foreach ($this->getServiceVersions() as $serviceVersion) {
-                        $serviceName = $serviceMetadata->getServiceName($service, $serviceVersion);
-                        if (!array_key_exists($serviceName, $synchronousOnlyServiceMethods)) {
-                            $synchronousOnlyServiceMethods[$serviceName] = [];
-                        }
+                    $this->appendSynchronousOnlyServiceMethodsWithInterface(
+                        $serviceMetadata,
+                        $synchronousOnlyServiceMethods,
+                        $service,
+                        $method
+                    );
+                }
+            }
+        }
 
-                        $synchronousOnlyServiceMethods[$serviceName][$method] = true;
-                    }
+        return array_merge_recursive(
+            $synchronousOnlyServiceMethods,
+            $this->getSynchronousOnlyRoutesAsServiceMethods($serviceMetadata)
+        );
+    }
+
+    /**
+     * Get service methods associated with routes that can't be processed as asynchronous.
+     *
+     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @return array
+     */
+    private function getSynchronousOnlyRoutesAsServiceMethods(
+        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+    ) {
+        $synchronousOnlyServiceMethods = [];
+        $serviceRoutes = $this->webapiConfig->getServices()[\Magento\Webapi\Model\Config\Converter::KEY_ROUTES];
+        foreach ($serviceRoutes as $serviceRoutePath => $serviceRouteMethods) {
+            foreach ($serviceRouteMethods as $serviceRouteMethod => $serviceRouteMethodData) {
+                // Check if the HTTP method associated with the route is not able to be async.
+                if (in_array(strtoupper($serviceRouteMethod), $this->synchronousOnlyHttpMethods)) {
+                    $this->appendSynchronousOnlyServiceMethodsWithInterface(
+                        $serviceMetadata,
+                        $synchronousOnlyServiceMethods,
+                        $serviceRouteMethodData[WebapiConverter::KEY_SERVICE][WebapiConverter::KEY_SERVICE_CLASS],
+                        $serviceRouteMethodData[WebapiConverter::KEY_SERVICE][WebapiConverter::KEY_SERVICE_METHOD]
+                    );
                 }
             }
         }
 
         return $synchronousOnlyServiceMethods;
+    }
+
+    /**
+     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param array $synchronousOnlyServiceMethods
+     * @param $serviceInterface
+     * @param $serviceMethod
+     */
+    private function appendSynchronousOnlyServiceMethodsWithInterface(
+        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+        array &$synchronousOnlyServiceMethods,
+        $serviceInterface,
+        $serviceMethod
+    ) {
+        foreach ($this->getServiceVersions($serviceInterface) as $serviceVersion) {
+            $serviceName = $serviceMetadata->getServiceName($serviceInterface, $serviceVersion);
+            if (!array_key_exists($serviceName, $synchronousOnlyServiceMethods)) {
+                $synchronousOnlyServiceMethods[$serviceName] = [];
+            }
+
+            $synchronousOnlyServiceMethods[$serviceName][$serviceMethod] = true;
+        }
     }
 
     /**
@@ -153,7 +216,7 @@ class ServiceMetadata
     }
 
     /**
-     * Check if a method on the given service is defined as synchronous only.
+     * Check if a method on the given service is defined as synchronous only using XML.
      *
      * @param array $methodData
      * @return bool
