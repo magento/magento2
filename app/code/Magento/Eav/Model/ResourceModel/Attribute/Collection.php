@@ -172,40 +172,42 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
 
         // scope values
 
-        $scopeDescribe = $connection->describeTable($this->_getEavWebsiteTable());
-        unset($scopeDescribe['attribute_id']);
-        $scopeColumns = [];
-        foreach (array_keys($scopeDescribe) as $columnName) {
-            if ($columnName == 'website_id') {
-                $scopeColumns['scope_website_id'] = $columnName;
-            } else {
-                if (isset($mainColumns[$columnName])) {
-                    $alias = 'scope_' . $columnName;
-                    $condition = 'main_table.' . $columnName . ' IS NULL';
-                    $true = 'scope_table.' . $columnName;
-                    $false = 'main_table.' . $columnName;
-                    $expression = $connection->getCheckSql($condition, $true, $false);
-                    $this->addFilterToMap($columnName, $expression);
-                    $scopeColumns[$alias] = $columnName;
-                } elseif (isset($extraColumns[$columnName])) {
-                    $alias = 'scope_' . $columnName;
-                    $condition = 'additional_table.' . $columnName . ' IS NULL';
-                    $true = 'scope_table.' . $columnName;
-                    $false = 'additional_table.' . $columnName;
-                    $expression = $connection->getCheckSql($condition, $true, $false);
-                    $this->addFilterToMap($columnName, $expression);
-                    $scopeColumns[$alias] = $columnName;
+        if ($this->_getEavWebsiteTable()){
+            $scopeDescribe = $connection->describeTable($this->_getEavWebsiteTable());
+            unset($scopeDescribe['attribute_id']);
+            $scopeColumns = [];
+            foreach (array_keys($scopeDescribe) as $columnName) {
+                if ($columnName == 'website_id') {
+                    $scopeColumns['scope_website_id'] = $columnName;
+                } else {
+                    if (isset($mainColumns[$columnName])) {
+                        $alias = 'scope_' . $columnName;
+                        $condition = 'main_table.' . $columnName . ' IS NULL';
+                        $true = 'scope_table.' . $columnName;
+                        $false = 'main_table.' . $columnName;
+                        $expression = $connection->getCheckSql($condition, $true, $false);
+                        $this->addFilterToMap($columnName, $expression);
+                        $scopeColumns[$alias] = $columnName;
+                    } elseif (isset($extraColumns[$columnName])) {
+                        $alias = 'scope_' . $columnName;
+                        $condition = 'additional_table.' . $columnName . ' IS NULL';
+                        $true = 'scope_table.' . $columnName;
+                        $false = 'additional_table.' . $columnName;
+                        $expression = $connection->getCheckSql($condition, $true, $false);
+                        $this->addFilterToMap($columnName, $expression);
+                        $scopeColumns[$alias] = $columnName;
+                    }
                 }
             }
-        }
 
-        $select->joinLeft(
-            ['scope_table' => $this->_getEavWebsiteTable()],
-            'scope_table.attribute_id = main_table.attribute_id AND scope_table.website_id = :scope_website_id',
-            $scopeColumns
-        );
-        $websiteId = $this->getWebsite() ? (int)$this->getWebsite()->getId() : 0;
-        $this->addBindParam('scope_website_id', $websiteId);
+            $select->joinLeft(
+                ['scope_table' => $this->_getEavWebsiteTable()],
+                'scope_table.attribute_id = main_table.attribute_id AND scope_table.website_id = :scope_website_id',
+                $scopeColumns
+            );
+            $websiteId = $this->getWebsite() ? (int)$this->getWebsite()->getId() : 0;
+            $this->addBindParam('scope_website_id', $websiteId);
+        }
 
         return $this;
     }
