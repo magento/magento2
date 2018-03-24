@@ -23,6 +23,7 @@ define([
     cartData.subscribe(function () {
         var quoteSubtotal = parseFloat(quote.totals().subtotal),
             subtotalAmount = parseFloat(cartData().subtotalAmount);
+
         if (quoteSubtotal !== subtotalAmount) {
             customerData.reload(['cart'], false);
         }
