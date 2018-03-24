@@ -19,6 +19,11 @@ class Renderer implements RendererInterface
      * @var array
      */
     protected $assetTypeOrder = ['css', 'ico', 'js'];
+    
+    /**
+     * @var array
+     */
+    protected $metaAssets = ['msapplication-TileImage'];
 
     /**
      * @var \Magento\Framework\View\Page\Config
@@ -139,6 +144,11 @@ class Renderer implements RendererInterface
         if (method_exists($this->pageConfig, $method)) {
             $content = $this->pageConfig->$method();
         }
+        
+        if ($content && in_array($name, $this->metaAssets)) {
+            $content = $this->pageConfig->getMetaUrl($content);
+        }
+
         return $content;
     }
 
