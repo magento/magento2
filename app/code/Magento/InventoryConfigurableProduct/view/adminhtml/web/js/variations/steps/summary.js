@@ -4,14 +4,13 @@
  */
 
 define([
-    'uiComponent',
+    'Magento_ConfigurableProduct/js/variations/steps/summary',
     'jquery',
     'underscore',
     'mage/translate'
-], function (Component, $, _) {
+], function (Summary, $, _) {
     'use strict';
-    var mixin = {
-
+    return Summary.extend({
         /**
          *
          * @inheritDoc
@@ -28,9 +27,5 @@ define([
 
             return this;
         }
-    };
-
-    return function (target) {
-        return target.extend(mixin);
-    };
+    });
 });
