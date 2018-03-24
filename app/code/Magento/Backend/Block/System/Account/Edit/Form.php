@@ -72,8 +72,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        $userId = $this->_authSession->getUser()->getId();
-        $user = $this->_userFactory->create()->load($userId);
+        $user = $this->_userFactory->create()->load($this->_authSession->getUser()->getId());
         $user->unsetData('password');
 
         /** @var \Magento\Framework\Data\Form $form */
@@ -157,14 +156,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $data = $user->getData();
-        unset($data[self::IDENTITY_VERIFICATION_PASSWORD_FIELD]);
-        $form->setValues($data);
         $form->setAction($this->getUrl('adminhtml/system_account/save'));
         $form->setMethod('post');
         $form->setUseContainer(true);
         $form->setId('edit_form');
+        $this->_eventManager->dispatch('adminhtml_backend_user_edit_prepare_form', ['form' => $form, 'user' => $user]);
 
+        $data = $user->getData();
+        unset($data[self::IDENTITY_VERIFICATION_PASSWORD_FIELD]);
+        $form->setValues($data);
         $this->setForm($form);
 
         return parent::_prepareForm();
