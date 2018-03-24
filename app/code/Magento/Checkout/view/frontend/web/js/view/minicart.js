@@ -94,6 +94,7 @@ define([
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 this.update(updatedCart);
+
                 if (cartData()['website_id'] !== window.checkout.websiteId) {
                     customerData.reload(['cart'], false);
                 }
