@@ -8,6 +8,6 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
-        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\Indexer\UpdateSalableStatusForConfigurableProducts" />
+        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\Indexer\SourceItemIndexerPlugin" />
     </type>
 </config>
