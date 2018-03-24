@@ -24,6 +24,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
 use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -160,7 +161,7 @@ class LowQuantityCollection extends AbstractCollection
         $this->getSelect()->joinInner(
             ['product_entity_varchar' => $productEavVarcharTable],
             'product_entity_varchar.entity_id = product_entity.entity_id ' .
-            'AND product_entity_varchar.store_id = 0 ' .
+            'AND product_entity_varchar.store_id = ' . Store::DEFAULT_STORE_ID. ' ' .
             'AND product_entity_varchar.attribute_id = ' . $nameAttribute->getAttributeId(),
             []
         );
