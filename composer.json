@@ -78,7 +78,7 @@
         "zendframework/zend-server": "^2.6.1",
         "zendframework/zend-servicemanager": "^2.7.8",
         "zendframework/zend-session": "^2.7.3",
-        "zendframework/zend-soap": "^2.6.0",
+        "zendframework/zend-soap": "^2.7.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
