@@ -384,7 +384,7 @@ define([
 
         /**
          *
-         * @param row
+         * @param {Object} row
          * @returns {Object}
          */
         getProductData: function (row) {

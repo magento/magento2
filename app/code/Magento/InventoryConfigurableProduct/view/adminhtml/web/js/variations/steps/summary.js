@@ -6,15 +6,12 @@
 define([
     'Magento_ConfigurableProduct/js/variations/steps/summary',
     'jquery',
-    'underscore',
     'mage/translate'
-], function (Summary, $, _) {
+], function (Summary, $) {
     'use strict';
+
     return Summary.extend({
-        /**
-         *
-         * @inheritDoc
-         */
+        /** @inheritdoc */
         initObservable: function () {
             this._super();
             this.quantityFieldName = 'quantity_per_source';

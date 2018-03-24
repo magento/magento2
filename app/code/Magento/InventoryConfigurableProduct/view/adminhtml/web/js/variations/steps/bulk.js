@@ -26,16 +26,15 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            var self = this;
-            var sections;
+            var self = this, sections;
             this._super();
 
             sections = this.sections();
             sections.quantity_per_source = {
                 label: 'quantity per source',
-                    type: ko.observable('none'),
-                    value: ko.observable(),
-                    attribute: ko.observable()
+                type: ko.observable('none'),
+                value: ko.observable(),
+                attribute: ko.observable()
             };
             this.sections(sections);
 

@@ -51,12 +51,13 @@ class ProcessSourceItemsObserver implements ObserverInterface
         $controller = $observer->getEvent()->getController();
         $configurableMatrix = $controller->getRequest()->getParam('configurable-matrix-serialized', '');
 
-        if ($configurableMatrix != "") {
+        if ($configurableMatrix != '') {
             $productsData = json_decode($configurableMatrix, true);
             foreach ($productsData as $productData) {
-                $sku = $productData[ProductInterface::SKU];
-                $sourceItems = $productData['quantity_per_source'] ?? [];
-                $this->processSourceItems($sourceItems, $sku);
+                if (isset($productData['quantity_per_source']) && is_array($productData['quantity_per_source'])) {
+                    $sku = $productData[ProductInterface::SKU];
+                    $this->processSourceItems($productData['quantity_per_source'], $sku);
+                }
             }
         }
     }
