@@ -37,10 +37,8 @@ class Region extends Column
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-
         $this->regionFactory = $regionFactory;
     }
-
 
     /**
      * @inheritdoc
