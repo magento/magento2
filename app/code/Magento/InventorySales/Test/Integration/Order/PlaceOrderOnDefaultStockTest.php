@@ -19,19 +19,18 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderOnDefaultSourceTest extends TestCase
+class PlaceOrderOnDefaultStockTest extends TestCase
 {
     /**
      * @var DefaultStockProviderInterface
@@ -64,16 +63,6 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
     private $cartItemFactory;
 
     /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
-    /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -88,6 +77,11 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
      */
     private $registry;
 
+    /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
+
     protected function setUp()
     {
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
@@ -98,9 +92,8 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
         $this->cartItemFactory = Bootstrap::getObjectManager()->get(CartItemInterfaceFactory::class);
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
-        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
+        $this->orderManagement = Bootstrap::getObjectManager()->get(OrderManagementInterface::class);
     }
 
     /**
@@ -115,12 +108,8 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
      */
     public function testPlaceOrderWithInStockProduct()
     {
-        $this->markTestSkipped(
-            'Fix Integration Test for placing Order https://github.com/magento-engcom/msi/issues/687'
-        );
         $sku = 'SKU-1';
         $quoteItemQty = 3.8;
-        $reservedDuringCheckoutQty = 1.5;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -139,14 +128,11 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
-        $this->appendReservation($sku, -$reservedDuringCheckoutQty);
-
         $orderId = $this->cartManagement->placeOrder($cart->getId());
 
         self::assertNotNull($orderId);
 
         //cleanup
-        $this->appendReservation($sku, $reservedDuringCheckoutQty);
         $this->deleteOrderById((int)$orderId);
     }
 
@@ -162,12 +148,8 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
      */
     public function testPlaceOrderWithOutOffStockProduct()
     {
-        $this->markTestSkipped(
-            'Fix Integration Test for placing Order https://github.com/magento-engcom/msi/issues/687'
-        );
         $sku = 'SKU-1';
-        $quoteItemQty = 5.5;
-        $reservedDuringCheckoutQty = 4.9;
+        $quoteItemQty = 8.7;
 
         $cart = $this->getCart();
         $product = $this->productRepository->get($sku);
@@ -186,33 +168,10 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
         $cart->addItem($cartItem);
         $this->cartRepository->save($cart);
 
-        //append reservation during checkout to make laking quantity in stock
-        $this->appendReservation($sku, -$reservedDuringCheckoutQty);
-
         self::expectException(LocalizedException::class);
         $orderId = $this->cartManagement->placeOrder($cart->getId());
 
         self::assertNull($orderId);
-
-        //cleanup
-        $this->appendReservation($sku, $reservedDuringCheckoutQty);
-    }
-
-    /**
-     * @param string $productSku
-     * @param float $qty
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
-     */
-    private function appendReservation(string $productSku, float $qty)
-    {
-        $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId(
-                $this->defaultStockProvider->getId()
-            )->setSku($productSku)->setQuantity($qty)->build(),
-        ]);
     }
 
     /**
@@ -238,6 +197,7 @@ class PlaceOrderOnDefaultSourceTest extends TestCase
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
+        $this->orderManagement->cancel($orderId);
         $this->orderRepository->delete($this->orderRepository->get($orderId));
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
