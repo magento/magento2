@@ -64,7 +64,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
 
         try {
             if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
-                $this->messageManager->addError(__("The quote item isn't found. Verify the item and try again."));
+                $this->messageManager->addErrorMessage(__("The quote item isn't found. Verify the item and try again."));
                 return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('checkout/cart');
             }
 
@@ -83,7 +83,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
                 );
             return $resultPage;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot configure the product.'));
+            $this->messageManager->addErrorMessage(__('We cannot configure the product.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }
