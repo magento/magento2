@@ -41,4 +41,20 @@ class SourceItemIndexerPlugin
     ) {
         $this->configurableProductsSourceItemIndexer->executeList($sourceItemIds);
     }
+
+    /**
+     * @param SourceItemIndexer $subject
+     * @param void $result
+     * @param int $sourceItemId
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterExecuteRow(
+        SourceItemIndexer $subject,
+        $result,
+        int $sourceItemId
+    ) {
+        $this->configurableProductsSourceItemIndexer->executeList([$sourceItemId]);
+    }
 }

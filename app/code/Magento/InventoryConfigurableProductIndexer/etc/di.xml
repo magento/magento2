@@ -10,4 +10,9 @@
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\Indexer\SourceItemIndexerPlugin" />
     </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItemIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
 </config>
