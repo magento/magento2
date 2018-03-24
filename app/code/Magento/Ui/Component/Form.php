@@ -65,11 +65,10 @@ class Form extends AbstractComponent
             ->create();
         $dataProvider = $this->getContext()->getDataProvider();
         if (isset($dataProvider->collection)) {
-            $this->getContext()->getDataProvider()
-                ->addFilter($filter);
+            $dataProvider->addFilter($filter);
         }
 
-        $data = $this->getContext()->getDataProvider()->getData();
+        $data = $dataProvider->getData();
 
         if (isset($data[$id])) {
             $dataSource = [
