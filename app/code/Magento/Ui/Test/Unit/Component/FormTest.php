@@ -93,9 +93,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($filterMock);
 
-        $dataProviderMock->expects($this->once())
-            ->method('addFilter')
-            ->with($filterMock);
+        if (isset($dataProviderMock->collection)) {
+            $dataProviderMock->expects($this->once())
+                ->method('addFilter')
+                ->with($filterMock);
+        }
         $dataProviderMock->expects($this->once())
             ->method('getData')
             ->willReturn($data);
@@ -147,9 +149,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($filterMock);
 
-        $dataProviderMock->expects($this->once())
-            ->method('addFilter')
-            ->with($filterMock);
+        if (isset($dataProviderMock->collection)) {
+            $dataProviderMock->expects($this->once())
+                ->method('addFilter')
+                ->with($filterMock);
+        }
         $dataProviderMock->expects($this->once())
             ->method('getData')
             ->willReturn($data);
@@ -206,9 +210,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($filterMock);
 
-        $dataProviderMock->expects($this->once())
-            ->method('addFilter')
-            ->with($filterMock);
+        if (isset($dataProviderMock->collection)) {
+            $dataProviderMock->expects($this->once())
+                ->method('addFilter')
+                ->with($filterMock);
+        }
         $dataProviderMock->expects($this->once())
             ->method('getData')
             ->willReturn($data);
