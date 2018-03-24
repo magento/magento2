@@ -168,7 +168,7 @@ class LowQuantityCollection extends AbstractCollection
             $this->getSelect()->joinLeft(
                 ['product_entity_varchar_store' => $productEavVarcharTable],
                 'product_entity_varchar_store.entity_id = product_entity.entity_id ' .
-                'AND product_entity_varchar_store.store_id = ' . $this->filterStoreId .
+                'AND product_entity_varchar_store.store_id = ' . $this->filterStoreId . ' ' .
                 'AND product_entity_varchar_store.attribute_id = ' . $nameAttribute->getAttributeId(),
                 ['product_name' => 'IFNULL(product_entity_varchar_store.value, product_entity_varchar.value)']
             );
