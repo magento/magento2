@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class ProductDataProvider
@@ -33,6 +35,11 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $addFilterStrategies;
 
     /**
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * Construct
      *
      * @param string $name
@@ -43,6 +50,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
         $name,
@@ -52,12 +60,14 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -109,5 +119,20 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         } else {
             parent::addFilter($filter);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $meta = $modifier->modifyMeta($meta);
+        }
+
+        return $meta;
     }
 }
