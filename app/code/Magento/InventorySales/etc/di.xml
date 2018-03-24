@@ -33,6 +33,9 @@
         <plugin name="check_quote_item_qty" type="Magento\InventorySales\Plugin\StockState\CheckQuoteItemQtyPlugin"/>
         <plugin name="suggest_qty" type="Magento\InventorySales\Plugin\StockState\SuggestQtyPlugin"/>
     </type>
+    <type name="Magento\InventoryReservationsApi\Api\AppendReservationsInterface">
+        <plugin name="prevent_append_reservarion_on_use_config_manage_stock_set_to_zero" type="Magento\InventorySales\Plugin\InventoryReservations\PreventAppendReservationOnUseConfigManageStockSetToZeroPlugin"/>
+    </type>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
     <!-- StockItem -->
