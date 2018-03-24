@@ -43,7 +43,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,
             $optionMock
-        )->willReturn(true);
+        )->willReturn($optionMock);
         $this->assertTrue($this->model->add($attributeCode, $optionMock));
     }
 

@@ -71,7 +71,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('Cannot save attribute %1', $attributeCode));
         }
 
-        return true;
+        return $option;
     }
 
     /**
