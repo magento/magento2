@@ -206,14 +206,14 @@ define([
 
             switch (keyCode) {
                 case $.ui.keyCode.HOME:
-                    if(this._getFirstVisibleElement()) {
+                    if (this._getFirstVisibleElement()) {
                         this._getFirstVisibleElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getFirstVisibleElement();
                     }
                     break;
 
                 case $.ui.keyCode.END:
-                    if(this._getFirstVisibleElement()) {
+                    if (this._getFirstVisibleElement()) {
                         this._getLastElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getLastElement();
                     }
