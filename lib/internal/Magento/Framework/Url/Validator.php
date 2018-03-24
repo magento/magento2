@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\Url;
 
+use Zend\Uri\UriFactory;
+
 class Validator extends \Zend_Validate_Abstract
 {
     /**#@+
@@ -45,11 +47,14 @@ class Validator extends \Zend_Validate_Abstract
     {
         $this->_setValue($value);
 
-        if (!\Zend_Uri::check($value)) {
-            $this->_error(self::INVALID_URL);
-            return false;
-        }
+        try {
+            $uri = UriFactory::factory($value);
+            if ($uri->isValid()) {
+                return true;
+            }
+        } catch (Exception $e) {/** left empty */}
 
-        return true;
+        $this->_error(self::INVALID_URL);
+        return false;
     }
 }
