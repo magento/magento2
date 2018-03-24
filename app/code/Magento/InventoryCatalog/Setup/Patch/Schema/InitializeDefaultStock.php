@@ -5,21 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup;
+namespace Magento\InventoryCatalog\Setup\Patch\Schema;
 
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 use Magento\InventoryCatalog\Setup\Operation\AssignDefaultSourceToDefaultStock;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
-use Magento\InventoryCatalog\Setup\Operation\ReindexDefaultStock;
-use Magento\InventoryCatalog\Setup\Operation\UpdateInventorySourceItem;
 
 /**
- * Install Default Source, Stock and link them together
+ * Patch schema with information about default stock
  */
-class InstallData implements InstallDataInterface
+class InitializeDefaultStock implements SchemaPatchInterface
 {
     /**
      * @var CreateDefaultSource
@@ -37,46 +33,45 @@ class InstallData implements InstallDataInterface
     private $assignDefaultSourceToDefaultStock;
 
     /**
-     * @var UpdateInventorySourceItem
-     */
-    private $updateInventorySourceItem;
-
-    /**
-     * @var ReindexDefaultStock
-     */
-    private $reindexDefaultStock;
-
-    /**
      * @param CreateDefaultSource $createDefaultSource
      * @param CreateDefaultStock $createDefaultStock
      * @param AssignDefaultSourceToDefaultStock $assignDefaultSourceToDefaultStock
-     * @param UpdateInventorySourceItem $updateInventorySourceItem
-     * @param ReindexDefaultStock $reindexDefaultStock
      */
     public function __construct(
         CreateDefaultSource $createDefaultSource,
         CreateDefaultStock $createDefaultStock,
-        AssignDefaultSourceToDefaultStock $assignDefaultSourceToDefaultStock,
-        UpdateInventorySourceItem $updateInventorySourceItem,
-        ReindexDefaultStock $reindexDefaultStock
+        AssignDefaultSourceToDefaultStock $assignDefaultSourceToDefaultStock
     ) {
         $this->createDefaultSource = $createDefaultSource;
         $this->createDefaultStock = $createDefaultStock;
         $this->assignDefaultSourceToDefaultStock = $assignDefaultSourceToDefaultStock;
-        $this->updateInventorySourceItem = $updateInventorySourceItem;
-        $this->reindexDefaultStock = $reindexDefaultStock;
     }
 
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritDoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
         $this->createDefaultSource->execute();
         $this->createDefaultStock->execute();
         $this->assignDefaultSourceToDefaultStock->execute();
-        $this->updateInventorySourceItem->execute($setup);
-        $this->reindexDefaultStock->execute();
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }

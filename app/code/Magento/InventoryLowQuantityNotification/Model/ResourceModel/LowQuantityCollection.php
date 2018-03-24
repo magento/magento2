@@ -22,7 +22,6 @@ use Magento\Inventory\Model\SourceItem as SourceItemModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
@@ -146,9 +145,7 @@ class LowQuantityCollection extends AbstractCollection
      */
     private function joinInventoryConfiguration()
     {
-        $sourceItemConfigurationTable = $this->getTable(
-            CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
-        );
+        $sourceItemConfigurationTable = $this->getTable('inventory_low_stock_notification_configuration');
 
         $this->getSelect()->joinInner(
             ['notification_configuration' => $sourceItemConfigurationTable],

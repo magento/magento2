@@ -15,7 +15,6 @@ use Magento\Inventory\Model\ResourceModel\Source;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 class ApplyBaseJoins
@@ -41,7 +40,7 @@ class ApplyBaseJoins
      */
     public function execute(Select $select)
     {
-        $sourceItemConfigurationTable = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION;
+        $sourceItemConfigurationTable = 'inventory_low_stock_notification_configuration';
         $configurationJoinCondition =
             'source_item_config.' . SourceItemConfigurationInterface::SKU . ' = product.' . ProductInterface::SKU . ' '
             . Select::SQL_AND
