@@ -195,7 +195,7 @@ define([
                 images: []
             }, variation.images));
             row.push(variation.sku);
-            row.push(variation[this.quantityFieldName]);
+            row.push(variation.quantity);
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });

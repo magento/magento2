@@ -100,6 +100,7 @@ class InventoryConfigurablePanel extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->isSingleSourceMode->execute() === false) {
+
             $meta[ConfigurablePanel::GROUP_CONFIGURABLE]['children']
             [ConfigurablePanel::CONFIGURABLE_MATRIX]['children']
             ['record']['children']['quantity_per_source_container'] = $this->getQuantityContainerConfig();
