@@ -55,7 +55,10 @@ class ProcessSourceItemsObserver implements ObserverInterface
             $productsData = json_decode($configurableMatrix, true);
             foreach ($productsData as $productData) {
                 $sku = $productData[ProductInterface::SKU];
-                $sourceItems = $productData['qty_per_source'] ?? [];
+
+                // temporary fix
+                // see https://github.com/magento-engcom/msi/issues/714 for final solution
+                $sourceItems = $productData['qty'] ?? [];
 
                 $this->processSourceItems($sourceItems, $sku);
             }
