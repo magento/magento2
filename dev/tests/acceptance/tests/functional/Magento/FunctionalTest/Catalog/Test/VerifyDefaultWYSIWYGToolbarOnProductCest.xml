@@ -23,7 +23,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{AdminProductCreatePage(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
@@ -62,7 +62,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{AdminProductCreatePage(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
         <waitForPageLoad stepKey="wait"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />

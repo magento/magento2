@@ -19,14 +19,14 @@
         </annotations>
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
-        <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
+        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage">
+            <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
+        </actionGroup>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
@@ -44,21 +44,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
         <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
-        <waitForPageLoad stepKey="waitForGridReload"/>
-        <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
-        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillOutURLKey" />
-        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
-        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
-        <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
-        <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
-        <waitForPageLoad stepKey="waitForPageLoad4" />
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon2" />
@@ -68,8 +56,9 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate2" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn2" />
         <waitForLoadingMaskToDisappear stepKey="waitForWidgetChooserLoadingMaskToDisappear"/>
-        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending2" />
-        <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockTitle" />
+        <actionGroup ref="searchBlockOnGridPage" stepKey="searchBlockOnGridPage">
+            <argument name="Block" value="_defaultBlock"/>
+        </actionGroup>
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
@@ -77,6 +66,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6" />
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
@@ -86,6 +76,7 @@
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAll}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
             <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

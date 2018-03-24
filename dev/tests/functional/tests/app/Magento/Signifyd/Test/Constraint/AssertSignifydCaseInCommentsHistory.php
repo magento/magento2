@@ -39,7 +39,7 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
         $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
         $commentsMessages = array_column($orderComments, 'comment');
 
-        \PHPUnit_Framework_Assert::assertRegExp(
+        \PHPUnit\Framework\Assert::assertRegExp(
             self::CASE_CREATED_PATTERN,
             implode('. ', $commentsMessages),
             'Signifyd case is not created for the order #' . $orderId

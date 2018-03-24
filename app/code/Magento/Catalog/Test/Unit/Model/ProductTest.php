@@ -1278,31 +1278,40 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $priceCode = 'price';
-        $colorAttributeCode = 'color';
+        $interfaceAttributeCode = 'price';
+        $customAttributeCode = 'color';
+        $initialCustomAttributeValue = 'red';
+        $newCustomAttributeValue = 'blue';
+
         $this->getCustomAttributeCodes->expects($this->exactly(3))
             ->method('execute')
-            ->willReturn([$colorAttributeCode]);
-        $this->model->setData($priceCode, 10);
+            ->willReturn([$customAttributeCode]);
+        $this->model->setData($interfaceAttributeCode, 10);
 
         //The color attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->model->getCustomAttributes());
 
         //Set the color attribute;
-        $this->model->setData($colorAttributeCode, "red");
+        $this->model->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setData($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
-        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
-        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $newCustomAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue()
+        );
     }
 
     /**

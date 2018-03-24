@@ -83,9 +83,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
+        try {
+            $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
+        } catch (\Exception $e) {
+            // no directories matched white list
+            return [];
+        }
         $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
-
         return $targetFiles;
     }
 
@@ -199,7 +203,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private function getFullWhitelist()
     {
-        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        try {
+            return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        } catch (\Exception $e) {
+            // nothing is whitelisted
+            return [];
+        }
     }
 
     public function testCodeStyle()
@@ -278,10 +287,21 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
-        $toBeTestedFiles = array_diff(
-            self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt'),
-            Files::init()->readLists(self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt')
+        $whiteList = self::getWhitelist(
+            ['php'],
+            '',
+            '',
+            '/_files/whitelist/strict_type.txt'
         );
+        try {
+            $blackList = Files::init()->readLists(
+                self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
+            );
+        } catch (\Exception $e) {
+            // nothing matched black list
+            $blackList = [];
+        }
+        $toBeTestedFiles = array_diff($whiteList, $blackList);
 
         $filesMissingStrictTyping = [];
         foreach ($toBeTestedFiles as $fileName) {

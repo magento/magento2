@@ -441,33 +441,39 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $nameAttributeCode = 'name';
-        $descriptionAttributeCode = 'description';
+        $interfaceAttributeCode = 'name';
+        $customAttributeCode = 'description';
+        $initialCustomAttributeValue = 'initial description';
+        $newCustomAttributeValue = 'new description';
+
         $this->getCustomAttributeCodes->expects($this->exactly(3))
             ->method('execute')
-            ->willReturn([$descriptionAttributeCode]);
-        $this->category->setData($nameAttributeCode, "sub");
+            ->willReturn([$customAttributeCode]);
+        $this->category->setData($interfaceAttributeCode, "sub");
 
         //The description attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->category->getCustomAttributes());
 
         //Set the description attribute;
-        $this->category->setData($descriptionAttributeCode, "description");
+        $this->category->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
-        $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setData($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
-            "new description",
-            $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
+            $newCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
     }
 
