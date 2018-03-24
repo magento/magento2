@@ -74,4 +74,21 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
     {
         return $this;
     }
+
+    /**
+     * Process loaded collection data
+     *
+     * @return $this
+     */
+    protected function _afterLoadData()
+    {
+        // Set attribute model
+        foreach ($this->_data as $key => $item) {
+            if(!isset($item['attribute_model'])) {
+                $this->_data[$key]['attribute_model'] = \Magento\Catalog\Model\Category\Attribute::class;
+            }
+        }
+
+        return $this;
+    }
 }
