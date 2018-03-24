@@ -25,7 +25,6 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Magento_Catalog::products</aclResource>
-        <storeId>0</storeId>
         <dataProvider class="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider" name="product_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
