@@ -47,6 +47,11 @@ class LowQuantityCollection extends AbstractCollection
     private $attributeRepository;
 
     /**
+     * @var int
+     */
+    private $filterStoreId;
+
+    /**
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -84,6 +89,17 @@ class LowQuantityCollection extends AbstractCollection
     }
 
     /**
+     * Sets store filter for use in catalog product name join
+     * @param $storeId
+     * @return $this
+     */
+    public function addStoreFilter($storeId)
+    {
+        $this->filterStoreId = (int)$storeId;
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _construct()
@@ -91,6 +107,16 @@ class LowQuantityCollection extends AbstractCollection
         $this->_init(SourceItemModel::class, SourceItemResourceModel::class);
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+        $this->joinCatalogProduct();
+        $this->addProductTypeFilter();
+        return $this;
+    }
     /**
      * @inheritdoc
      */
@@ -104,10 +130,8 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addFieldToSelect('*');
 
-        $this->joinCatalogProduct();
         $this->joinInventoryConfiguration();
 
-        $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
         $this->addEnabledSourceFilter();
 
@@ -135,10 +159,22 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity_varchar' => $productEavVarcharTable],
-            'product_entity_varchar.entity_id = product_entity.entity_id AND product_entity_varchar.attribute_id = '
-                . $nameAttribute->getAttributeId(),
-            ['product_name' => 'value']
+            'product_entity_varchar.entity_id = product_entity.entity_id ' .
+            'AND product_entity_varchar.store_id = 0 ' .
+            'AND product_entity_varchar.attribute_id = ' . $nameAttribute->getAttributeId(),
+            []
         );
+        if ($this->filterStoreId) {
+            $this->getSelect()->joinLeft(
+                ['product_entity_varchar_store' => $productEavVarcharTable],
+                'product_entity_varchar_store.entity_id = product_entity.entity_id ' .
+                'AND product_entity_varchar_store.store_id = ' . $this->filterStoreId .
+                'AND product_entity_varchar_store.attribute_id = ' . $nameAttribute->getAttributeId(),
+                ['product_name' => 'IFNULL(product_entity_varchar_store.value, product_entity_varchar.value)']
+            );
+        } else {
+            $this->getSelect()->columns(['product_name' => 'product_entity_varchar.value']);
+        }
     }
 
     /**
