@@ -112,6 +112,12 @@ class Router implements \Magento\Framework\App\RouterInterface
         $page = $this->_pageFactory->create();
         $pageId = $page->checkIdentifier($identifier, $this->_storeManager->getStore()->getId());
         if (!$pageId) {
+            $pageId = $page->checkIdentifier($identifier, $this->_storeManager->getDefaultStoreView()->getId());
+            if($pageId) {
+                $this->_response->setRedirect('/');
+                $request->setDispatched(true);
+                return $this->actionFactory->create(\Magento\Framework\App\Action\Redirect::class);
+            }
             return null;
         }
 
