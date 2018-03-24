@@ -44,7 +44,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             $attributeCode,
             $optionMock
         )->willReturn($optionMock);
-        $this->assertTrue($this->model->add($attributeCode, $optionMock));
+        $this->assertEquals($optionMock, $this->model->add($attributeCode, $optionMock));
     }
 
     public function testDelete()
