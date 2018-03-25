@@ -129,8 +129,9 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavSource->expects($this->once())->method('getRelationsByChild')->with($childIds)->willReturn($childIds);
-        $eavSource->expects($this->once())->method('getRelationsByParent')->with($childIds)->willReturn($parentIds);
+        $eavSource->expects($this->once())->method('getRelationsByChild')->with($childIds)->willReturn($parentIds);
+        $eavSource->expects($this->once())->method('getRelationsByParent')
+            ->with(array_unique(array_merge($parentIds, $childIds)))->willReturn($parentIds);
 
         $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($reindexIds)->willReturn($reindexIds);
         $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($reindexIds)->willReturn([]);

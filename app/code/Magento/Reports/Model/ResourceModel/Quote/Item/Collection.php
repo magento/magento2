@@ -220,8 +220,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $orderData = $this->getOrdersData($productIds);
         foreach ($items as $item) {
             $item->setId($item->getProductId());
-            $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
-            $item->setName($productData[$item->getProductId()]['name']);
+            if (isset($productData[$item->getProductId()])) {
+                $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
+                $item->setName($productData[$item->getProductId()]['name']);
+            }
             $item->setOrders(0);
             if (isset($orderData[$item->getProductId()])) {
                 $item->setOrders($orderData[$item->getProductId()]['orders']);

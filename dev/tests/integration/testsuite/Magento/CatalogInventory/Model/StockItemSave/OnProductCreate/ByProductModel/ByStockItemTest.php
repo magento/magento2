@@ -59,7 +59,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
     private $stockItemData = [
         StockItemInterface::QTY => 555,
         StockItemInterface::MANAGE_STOCK => true,
-        StockItemInterface::IS_IN_STOCK => false,
+        StockItemInterface::IS_IN_STOCK => true,
     ];
 
     public function setUp()

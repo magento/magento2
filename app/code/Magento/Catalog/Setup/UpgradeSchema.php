@@ -21,6 +21,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -124,6 +126,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.2.2', '<')) {
             $this->fixCustomerGroupIdColumn($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.2.4', '<')) {
+            $this->removeAttributeSetRelation($setup);
         }
 
         $setup->endSetup();
@@ -698,5 +704,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
         );
         $setup->getConnection()->query($sql);
+    }
+
+    /**
+     * Remove foreign key between catalog_product_entity and eav_attribute_set tables.
+     * Drop foreign key to delegate cascade on delete to plugin.
+     * @see \Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function removeAttributeSetRelation(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->dropForeignKey(
+            $setup->getTable('catalog_product_entity'),
+            $setup->getFkName('catalog_product_entity', 'attribute_set_id', 'eav_attribute_set', 'attribute_set_id')
+        );
     }
 }

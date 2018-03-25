@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutPaymentSection">
+        <element name="cartItems" type="text" selector=".minicart-items"/>
+        <element name="billingAddress" type="text" selector="div.billing-address-details"/>
+        <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
+    </section>
+</sections>

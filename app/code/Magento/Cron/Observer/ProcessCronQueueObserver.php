@@ -237,14 +237,14 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
-           !$this->lockGroup(
-               $groupId,
-               function ($groupId) use ($currentTime, $jobsRoot) {
-                   $this->cleanupJobs($groupId, $currentTime);
-                   $this->generateSchedules($groupId);
-                   $this->processPendingJobs($groupId, $jobsRoot, $currentTime);
+            $this->lockGroup(
+                $groupId,
+                function ($groupId) use ($currentTime, $jobsRoot) {
+                    $this->cleanupJobs($groupId, $currentTime);
+                    $this->generateSchedules($groupId);
+                    $this->processPendingJobs($groupId, $jobsRoot, $currentTime);
                 }
-             );
+            );
         }
     }
 
@@ -295,8 +295,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
         if ($scheduledTime < $currentTime - $scheduleLifetime) {
             $schedule->setStatus(Schedule::STATUS_MISSED);
-            $this->logger->info(sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt()));
-            throw new \Exception('Too late for the schedule');
+            throw new \Exception(sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt()));
         }
 
         if (!isset($jobConfig['instance'], $jobConfig['method'])) {
@@ -318,7 +317,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         try {
             $this->logger->info(sprintf('Cron Job %s is run', $jobCode));
             call_user_func_array($callback, [$schedule]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
             $this->logger->error(sprintf(
                 'Cron Job %s has an error: %s. Statistics: %s',
@@ -326,6 +325,13 @@ class ProcessCronQueueObserver implements ObserverInterface
                 $e->getMessage(),
                 $this->getProfilingStat()
             ));
+            if (!$e instanceof \Exception) {
+                $e = new \RuntimeException(
+                    'Error when running a cron job',
+                    0,
+                    $e
+                );
+            }
             throw $e;
         } finally {
             $this->stopProfiling();
@@ -738,14 +744,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 if ($schedule->getStatus() === Schedule::STATUS_MISSED
                     && $this->state->getMode() === State::MODE_DEVELOPER
                 ) {
-                    $this->logger->info(
-                        sprintf(
-                            "%s Schedule Id: %s Job Code: %s",
-                            $schedule->getMessages(),
-                            $schedule->getScheduleId(),
-                            $schedule->getJobCode()
-                        )
-                    );
+                    $this->logger->info($schedule->getMessages());
                 }
             }
             if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {

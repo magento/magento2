@@ -22,8 +22,8 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -86,11 +87,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @var array
      */
     protected $_assertOptions = [
-        'is_require' => '_custom_option_is_required',
-        'price' => '_custom_option_price',
-        'sku' => '_custom_option_sku',
-        'sort_order' => '_custom_option_sort_order',
-        'max_characters' => '_custom_option_max_characters',
+        'is_require' => 'required',
+        'price' => 'price',
+        'sku' => 'sku',
+        'sort_order' => 'order',
+        'max_characters' => 'max_characters',
     ];
 
     /**
@@ -98,7 +99,23 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @var array
      */
-    protected $_assertOptionValues = ['title', 'price', 'sku'];
+    protected $_assertOptionValues = [
+        'title' => 'option_title',
+        'price' => 'price',
+        'sku' => 'sku'
+    ];
+
+    /**
+     * List of specific custom option types
+     *
+     * @var array
+     */
+    private $specificTypes = [
+        'drop_down',
+        'radio',
+        'checkbox',
+        'multiple',
+    ];
 
     /**
      * Test if visibility properly saved after import
@@ -321,6 +338,78 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Tests adding of custom options with multiple store views
+     *
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveCustomOptionsWithMultipleStoreViews()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeCodes = [
+            'admin',
+            'default',
+            'fixture_second_store'
+        ];
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
+        $sku = 'simple';
+        $pathToFile = __DIR__ . '/_files/' . $importFile;
+        $importModel = $this->createImportModel($pathToFile);
+        $errors = $importModel->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importModel->importData();
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        foreach ($storeCodes as $storeCode) {
+            $storeManager->setCurrentStore($storeCode);
+            $product = $productRepository->get($sku);
+            $options = $product->getOptionInstance()->getProductOptions($product);
+            $expectedData = $this->getExpectedOptionsData($pathToFile, $storeCode);
+            $expectedData = $this->mergeWithExistingData($expectedData, $options);
+            $actualData = $this->getActualOptionsData($options);
+            // assert of equal type+titles
+            $expectedOptions = $expectedData['options'];
+            // we need to save key values
+            $actualOptions = $actualData['options'];
+            sort($expectedOptions);
+            sort($actualOptions);
+            $this->assertEquals($expectedOptions, $actualOptions);
+
+            // assert of options data
+            $this->assertCount(count($expectedData['data']), $actualData['data']);
+            $this->assertCount(count($expectedData['values']), $actualData['values']);
+            foreach ($expectedData['options'] as $expectedId => $expectedOption) {
+                $elementExist = false;
+                // find value in actual options and values
+                foreach ($actualData['options'] as $actualId => $actualOption) {
+                    if ($actualOption == $expectedOption) {
+                        $elementExist = true;
+                        $this->assertEquals($expectedData['data'][$expectedId], $actualData['data'][$actualId]);
+                        if (array_key_exists($expectedId, $expectedData['values'])) {
+                            $this->assertEquals($expectedData['values'][$expectedId], $actualData['values'][$actualId]);
+                        }
+                        unset($actualData['options'][$actualId]);
+                        // remove value in case of duplicating key values
+                        break;
+                    }
+                }
+                $this->assertTrue($elementExist, 'Element must exist.');
+            }
+
+            // Make sure that after importing existing options again, option IDs and option value IDs are not changed
+            $customOptionValues = $this->getCustomOptionValues($sku);
+            $this->createImportModel($pathToFile)->importData();
+            $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+        }
+    }
+
+    /**
      * @return array
      */
     public function getBehaviorDataProvider()
@@ -461,9 +550,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * Returns expected product data: current id, options, options data and option values
      *
      * @param string $pathToFile
+     * @param string $storeCode
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function getExpectedOptionsData($pathToFile)
+    protected function getExpectedOptionsData($pathToFile, $storeCode = '')
     {
         $productData = $this->csvToArray(file_get_contents($pathToFile));
         $expectedOptionId = 0;
@@ -472,31 +564,53 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $expectedData = [];
         // array of option data
         $expectedValues = [];
-        // array of option values data
-        foreach ($productData['data'] as $data) {
-            if (!empty($data['_custom_option_type']) && !empty($data['_custom_option_title'])) {
-                $lastOptionKey = $data['_custom_option_type'] . '|' . $data['_custom_option_title'];
-                $expectedOptionId++;
-                $expectedOptions[$expectedOptionId] = $lastOptionKey;
-                $expectedData[$expectedOptionId] = [];
-                foreach ($this->_assertOptions as $assertKey => $assertFieldName) {
-                    if (array_key_exists($assertFieldName, $data)) {
-                        $expectedData[$expectedOptionId][$assertKey] = $data[$assertFieldName];
-                    }
-                }
-            }
-            if (!empty($data['_custom_option_row_title']) && empty($data['_custom_option_store'])) {
-                $optionData = [];
-                foreach ($this->_assertOptionValues as $assertKey) {
-                    $valueKey = \Magento\CatalogImportExport\Model\Import\Product\Option::COLUMN_PREFIX .
-                        'row_' .
-                        $assertKey;
-                    $optionData[$assertKey] = $data[$valueKey];
-                }
-                $expectedValues[$expectedOptionId][] = $optionData;
+        $storeRowId = null;
+        foreach ($productData['data'] as $rowId => $rowData) {
+            $storeCode = ($storeCode == 'admin') ? '' : $storeCode;
+            if ($rowData['store_view_code'] == $storeCode) {
+                $storeRowId = $rowId;
+                break;
             }
         }
+            foreach (explode('|', $productData['data'][$storeRowId]['custom_options']) as $optionData) {
+                $option = array_values(
+                    array_map(
+                        function ($input) {
+                            $data = explode('=',$input);
+                            return [$data[0] => $data[1]];
+                        },
+                        explode(',', $optionData)
+                    )
+                );
+                $option = call_user_func_array('array_merge', $option);
 
+                if (!empty($option['type']) && !empty($option['name'])) {
+                    $lastOptionKey = $option['type'] . '|' . $option['name'];
+                    if (!isset($expectedOptions[$expectedOptionId])
+                        || $expectedOptions[$expectedOptionId] != $lastOptionKey) {
+                        $expectedOptionId++;
+                        $expectedOptions[$expectedOptionId] = $lastOptionKey;
+                        $expectedData[$expectedOptionId] = [];
+                        foreach ($this->_assertOptions as $assertKey => $assertFieldName) {
+                            if (array_key_exists($assertFieldName, $option)
+                            && !(($assertFieldName == 'price' || $assertFieldName == 'sku')
+                                    && in_array($option['type'], $this->specificTypes))
+                            ) {
+                                $expectedData[$expectedOptionId][$assertKey] = $option[$assertFieldName];
+                            }
+                        }
+                    }
+                }
+                $optionValue = [];
+                if (!empty($option['name']) && !empty($option['option_title'])) {
+                    foreach ($this->_assertOptionValues as $assertKey => $assertFieldName) {
+                        if (isset($option[$assertFieldName])) {
+                            $optionValue[$assertKey] = $option[$assertFieldName];
+                        }
+                    }
+                    $expectedValues[$expectedOptionId][] = $optionValue;
+                }
+            }
         return [
             'id' => $expectedOptionId,
             'options' => $expectedOptions,
@@ -522,12 +636,26 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $expectedValues = $expected['values'];
         foreach ($options as $option) {
             $optionKey = $option->getType() . '|' . $option->getTitle();
+            $optionValues = $this->getOptionValues($option);
             if (!in_array($optionKey, $expectedOptions)) {
                 $expectedOptionId++;
                 $expectedOptions[$expectedOptionId] = $optionKey;
                 $expectedData[$expectedOptionId] = $this->getOptionData($option);
-                if ($optionValues = $this->getOptionValues($option)) {
+                if ($optionValues) {
                     $expectedValues[$expectedOptionId] = $optionValues;
+                }
+            } else {
+                $existingOptionId = array_search($optionKey, $expectedOptions);
+                $expectedData[$existingOptionId] = array_merge(
+                    $this->getOptionData($option),
+                    $expectedData[$existingOptionId]
+
+                );
+                if ($optionValues) {
+                    foreach ($optionValues as $optionKey => $optionValue)
+                    $expectedValues[$existingOptionId][$optionKey] = array_merge(
+                        $optionValue, $expectedValues[$existingOptionId][$optionKey]
+                    );
                 }
             }
         }
@@ -604,7 +732,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             /** @var $value \Magento\Catalog\Model\Product\Option\Value */
             foreach ($values as $value) {
                 $optionData = [];
-                foreach ($this->_assertOptionValues as $assertKey) {
+                foreach (array_keys($this->_assertOptionValues) as $assertKey) {
                     if ($value->hasData($assertKey)) {
                         $optionData[$assertKey] = $value->getData($assertKey);
                     }
@@ -1967,5 +2095,52 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'Check that all products were updated'
             );
         }
+    }
+
+    /**
+     * Test that product import with images for non-default store works properly.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testImportImageForNonDefaultStore()
+    {
+        $this->importDataForMediaTest('import_media_two_stores.csv');
+        $product = $this->getProductBySku('simple_with_images');
+        $mediaGallery = $product->getData('media_gallery');
+        foreach ($mediaGallery['images'] as $image) {
+            $image['file'] === '/m/a/magento_image.jpg'
+                ? self::assertSame('1', $image['disabled'])
+                : self::assertSame('0', $image['disabled']);
+        }
+    }
+
+    /**
+     * Test import product into multistore system when media is disabled.
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductsWithMultipleStoresWhenMediaIsDisabled()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_with_custom_store_media_disabled.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->assertTrue($this->_model->importData());
     }
 }

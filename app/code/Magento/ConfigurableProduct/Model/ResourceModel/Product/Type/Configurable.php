@@ -17,6 +17,7 @@ use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -109,26 +110,33 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $productId = $mainProduct->getData($this->optionProvider->getProductEntityLinkField());
+        $select = $this->getConnection()->select()->from(
+            ['t' => $this->getMainTable()],
+            ['product_id']
+        )->where(
+            't.parent_id = ?',
+            $productId
+        );
 
-        $data = [];
-        foreach ($productIds as $id) {
-            $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
-        }
+        $existingProductIds = $this->getConnection()->fetchCol($select);
+        $insertProductIds = array_diff($productIds, $existingProductIds);
+        $deleteProductIds = array_diff($existingProductIds, $productIds);
 
-        if (!empty($data)) {
-            $this->getConnection()->insertOnDuplicate(
+        if (!empty($insertProductIds)) {
+            $insertData = [];
+            foreach ($insertProductIds as $id) {
+                $insertData[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
+            }
+            $this->getConnection()->insertMultiple(
                 $this->getMainTable(),
-                $data,
-                ['product_id', 'parent_id']
+                $insertData
             );
         }
 
-        $where = ['parent_id = ?' => $productId];
-        if (!empty($productIds)) {
-            $where['product_id NOT IN(?)'] = $productIds;
+        if (!empty($deleteProductIds)) {
+            $where = ['parent_id = ?' => $productId, 'product_id IN (?)' => $deleteProductIds];
+            $this->getConnection()->delete($this->getMainTable(), $where);
         }
-
-        $this->getConnection()->delete($this->getMainTable(), $where);
 
         // configurable product relations should be added to relation table
         $this->catalogProductRelation->processRelations($productId, $productIds);
@@ -181,7 +189,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getParentIdsByChild($childId)
     {
-        $parentIds = [];
         $select = $this->getConnection()
             ->select()
             ->from(['l' => $this->getMainTable()], [])
@@ -190,10 +197,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'e.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
                 ['e.entity_id']
             )->where('l.product_id IN(?)', $childId);
-
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $parentIds[] = $row['entity_id'];
-        }
+        $parentIds = $this->getConnection()->fetchCol($select);
 
         return $parentIds;
     }
