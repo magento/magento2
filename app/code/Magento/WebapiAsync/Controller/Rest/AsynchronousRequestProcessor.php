@@ -71,13 +71,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        $request->setPathInfo(
-            str_replace(
-                self::PROCESSOR_PATH,
-                SynchronousRequestProcessor::PROCESSOR_PATH,
-                $request->getPathInfo()
-            )
-        );
+        $this->changePathInfo($request);
 
         try {
             $entitiesParamsArray = $this->inputParamsResolver->resolve();
@@ -95,10 +89,23 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
             );
 
             $this->response->setStatusCode(RestResponse::STATUS_CODE_202)
-                ->prepareResponse($responseData);
+                           ->prepareResponse($responseData);
         } catch (\Exception $e) {
             $this->response->setException($e);
         }
+    }
+
+    private function changePathInfo(\Magento\Framework\Webapi\Rest\Request $request)
+    {
+        preg_match(self::PROCESSOR_PATH, $request->getPathInfo(), $asyncMatches);
+        preg_match(SynchronousRequestProcessor::PROCESSOR_PATH, $asyncMatches[0], $syncMatches);
+        $request->setPathInfo(
+            preg_replace(
+                self::PROCESSOR_PATH,
+                $syncMatches[0],
+                $request->getPathInfo()
+            )
+        );
     }
 
     /**
@@ -120,9 +127,10 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        if (preg_match(self::PROCESSOR_PATH, ltrim($request->getPathInfo(), '/')) === 0) {
+        if (preg_match(self::PROCESSOR_PATH, ltrim($request->getPathInfo(), '/')) === 1) {
             return true;
         }
+
         return false;
     }
 }
