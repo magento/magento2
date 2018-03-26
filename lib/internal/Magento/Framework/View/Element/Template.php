@@ -342,6 +342,21 @@ class Template extends AbstractBlock
     }
 
     /**
+     * Output a legacy syncronous JavaScript global
+     *
+     * @param string $key
+     * @param string|object|array $value
+     * @return string
+     * @deprecated since version 2.3.0
+     */
+    public function outputLegacyJavaScript($key, $value) {
+        $includePath = $this->escapeUrl($this->getViewFileUrl('/mage/legacyinit/' . $key . '.js'));
+        return '<script type="application/json" id="legacyJS_' . $this->escapeHtml($key) . '">' .
+               json_encode([$key => $value]) .
+               '</script>' . PHP_EOL . '<script src="' . $includePath . '"></script>';
+    }
+
+    /**
      * Instantiates filesystem directory
      *
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface

@@ -78,8 +78,8 @@ class GiftOptions extends \Magento\Backend\Block\Template
      *
      * @return array
      */
-    public function getGiftOptionsConfigJson()
+    public function getGiftOptionsConfig()
     {
-        return $this->jsonEncoder->encode($this->configProvider->getConfig());
+        return $this->configProvider->getConfig();
     }
 }
