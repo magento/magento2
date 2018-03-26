@@ -100,18 +100,20 @@ class Config implements ConfigInterface
         $services = [];
         foreach ($webApiConfig[Converter::KEY_ROUTES] as $routeUrl => $routeData) {
             foreach ($routeData as $httpMethod => $httpMethodData) {
-                $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
-                $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
+                if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
+                    $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
+                    $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
 
-                $topicName = $this->generateTopicNameByRouteData(
-                    $routeUrl,
-                    $httpMethod
-                );
-                $services[$topicName] = [
-                    self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
-                    self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
-                    self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
-                ];
+                    $topicName = $this->generateTopicNameByRouteData(
+                        $routeUrl,
+                        $httpMethod
+                    );
+                    $services[$topicName] = [
+                        self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
+                        self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
+                        self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
+                    ];
+                }
             }
         }
 
