@@ -12,9 +12,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
-class ApplyNameAttributeCondition
+/**
+ * Add product attribute 'name' to select.
+ */
+class ApplyNameAttributeJoin
 {
     /**
      * @var ResourceConnection
@@ -48,22 +52,54 @@ class ApplyNameAttributeCondition
 
     /**
      * @param Select $select
+     *
      * @return void
      */
     public function execute(Select $select)
     {
         $storeId = $this->storeManager->getStore()->getId();
+        $connection = $this->resourceConnection->getConnection();
+        $valueCondition = 'at_name.value';
+        $tableName = $this->resourceConnection->getTableName('catalog_product_entity_varchar');
+
+        if ($storeId != Store::DEFAULT_STORE_ID) {
+            $select->join(
+                ['at_name_default' => $tableName],
+                $this->getConditionByAliasAndStoreId(Store::DEFAULT_STORE_ID, 'at_name_default'),
+                []
+            );
+            $valueCondition = $connection->getCheckSql(
+                'at_name.value_id > 0',
+                'at_name.value',
+                'at_name_default.value'
+            );
+        }
+
+        $select->joinLeft(
+            ['at_name' => $tableName],
+            $this->getConditionByAliasAndStoreId((int)$storeId, 'at_name'),
+            ['name' => $valueCondition]
+        );
+    }
+
+    /**
+     * @param int $storeId
+     * @param string $alias
+     *
+     * @return string
+     */
+    private function getConditionByAliasAndStoreId(int $storeId, string $alias): string
+    {
         $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::NAME)->getAttributeId();
         $connection = $this->resourceConnection->getConnection();
 
-        $condition = implode(
+        return $condition = implode(
             [
-                $connection->prepareSqlCondition('product_varchar.store_id', $storeId),
-                $connection->prepareSqlCondition('product_varchar.attribute_id', $attributeId),
+                $alias . '.entity_id = product.entity_id',
+                $connection->prepareSqlCondition($alias . '.store_id', $storeId),
+                $connection->prepareSqlCondition($alias . '.attribute_id', $attributeId),
             ],
             ' ' . Select::SQL_AND . ' '
         );
-
-        $select->where($condition);
     }
 }

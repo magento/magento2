@@ -7,24 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\Rss\NotifyStock;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Inventory\Model\ResourceModel\Source;
+use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
+use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 class SelectBuilder
 {
     /**
-     * @var ApplyBaseJoins
+     * @var ResourceConnection
      */
-    private $applyBaseJoins;
+    private $resourceConnection;
 
     /**
-     * @var ApplyStatusAttributeCondition
+     * @var ApplyNameAttributeJoin
      */
-    private $applyStatusAttributeCondition;
+    private $applyNameAttributeJoin;
 
     /**
-     * @var ApplyNameAttributeCondition
+     * @var ApplyStatusAttributeJoin
      */
-    private $applyNameAttributeCondition;
+    private $applyStatusAttributeJoin;
 
     /**
      * @var ApplyConfigurationCondition
@@ -32,20 +41,20 @@ class SelectBuilder
     private $applyConfigurationCondition;
 
     /**
-     * @param ApplyBaseJoins $applyBaseJoins
-     * @param ApplyStatusAttributeCondition $applyStatusAttributeCondition
-     * @param ApplyNameAttributeCondition $applyNameAttributeCondition
+     * @param ResourceConnection $resourceConnection
+     * @param ApplyNameAttributeJoin $applyNameAttributeJoin
+     * @param ApplyStatusAttributeJoin $applyStatusAttributeJoin
      * @param ApplyConfigurationCondition $applyConfigurationCondition
      */
     public function __construct(
-        ApplyBaseJoins $applyBaseJoins,
-        ApplyStatusAttributeCondition $applyStatusAttributeCondition,
-        ApplyNameAttributeCondition $applyNameAttributeCondition,
+        ResourceConnection $resourceConnection,
+        ApplyNameAttributeJoin $applyNameAttributeJoin,
+        ApplyStatusAttributeJoin $applyStatusAttributeJoin,
         ApplyConfigurationCondition $applyConfigurationCondition
     ) {
-        $this->applyBaseJoins = $applyBaseJoins;
-        $this->applyStatusAttributeCondition = $applyStatusAttributeCondition;
-        $this->applyNameAttributeCondition = $applyNameAttributeCondition;
+        $this->resourceConnection = $resourceConnection;
+        $this->applyNameAttributeJoin = $applyNameAttributeJoin;
+        $this->applyStatusAttributeJoin = $applyStatusAttributeJoin;
         $this->applyConfigurationCondition = $applyConfigurationCondition;
     }
 
@@ -56,9 +65,36 @@ class SelectBuilder
      */
     public function build(Select $select)
     {
-        $this->applyBaseJoins->execute($select);
+        $sourceItemConfigurationTable = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION;
+        $configurationJoinCondition =
+            'source_item_config.' . SourceItemConfigurationInterface::SKU . ' = product.' . ProductInterface::SKU . ' '
+            . Select::SQL_AND
+            . ' source_item_config.' . SourceItemConfigurationInterface::SOURCE_CODE
+            . ' = main_table.' . SourceItemInterface::SOURCE_CODE;
+
+        $select->join(
+            ['source' => $this->resourceConnection->getTableName(Source::TABLE_NAME_SOURCE)],
+            'source.' . SourceInterface::SOURCE_CODE . '= main_table.' . SourceItemInterface::SOURCE_CODE,
+            ['source_name' => 'source.' . SourceInterface::NAME]
+        )->join(
+            ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            'main_table.' . SourceItemInterface::SKU . ' = product.' . ProductInterface::SKU,
+            ['*']
+        )->join(
+            ['source_item_config' => $this->resourceConnection->getTableName($sourceItemConfigurationTable)],
+            $configurationJoinCondition,
+            ['source_item_config.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
+        )->join(
+            ['invtr' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
+            'invtr.product_id = product.entity_id',
+            [
+                'invtr.' . StockItemInterface::LOW_STOCK_DATE,
+                'use_config' => 'invtr.' . StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY
+            ]
+        )->group('main_table.' . SourceItem::ID_FIELD_NAME);
+
+        $this->applyNameAttributeJoin->execute($select);
+        $this->applyStatusAttributeJoin->execute($select);
         $this->applyConfigurationCondition->execute($select);
-        $this->applyNameAttributeCondition->execute($select);
-        $this->applyStatusAttributeCondition->execute($select);
     }
 }
