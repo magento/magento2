@@ -18,6 +18,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
+use Magento\Framework\Registry;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -117,11 +118,15 @@ class Products implements ResolverInterface
         } else {
             $maxPages = 0;
         }
+        /////////////////
         $filterList = $this->filterListFactory->create(
             [
                 'filterableAttributes' => $filterableAttributesList
             ]
         );
+        /** @var Registry $registry */
+        $registry = \Magento\Framework\App\ObjectManager::getInstance()->get(Registry::class);
+        $registry->register('graphql_search_criteria', $searchCriteria);
         $filters = $filterList->getFilters($this->layerResolver->get());
         $filtersArray = [];
         /** @var AbstractFilter $filter */
@@ -143,6 +148,7 @@ class Products implements ResolverInterface
                 $filtersArray[] = $filterGroup;
             }
         }
+        /////////////////
         $currentPage = $searchCriteria->getCurrentPage();
         if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
             $currentPage = new GraphQlInputException(

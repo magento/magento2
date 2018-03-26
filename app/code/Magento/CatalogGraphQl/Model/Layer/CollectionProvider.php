@@ -5,8 +5,9 @@
  */
 namespace Magento\CatalogGraphQl\Model\Layer;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
+use Magento\Framework\Registry;
 
 /**
  * Class CollectionProvider
@@ -15,7 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
 {
     /**
-     * @var CollectionFactory
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory
      */
     private $collectionFactory;
 
@@ -24,20 +25,35 @@ class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionP
      */
     private $collection;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
     public function __construct(
-        CollectionFactory $collectionFactory
+        \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
     ) {
+        $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
     }
 
     /**
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @return \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {
         if (!$this->collection) {
-            $this->collection = $this->collectionFactory->create();
+            $collection = $this->collectionFactory->create();
+            $this->collection = clone $collection;
+            /** @var Registry $registry */
+            $registry = \Magento\Framework\App\ObjectManager::getInstance()->get(Registry::class);
+            $searchCriteria = $registry->registry('graphql_search_criteria');
+            /** @var CollectionProcessor $collectionProcessor */
+            $this->collectionProcessor->process($searchCriteria, $collection);
+            $ids = $collection->getAllIds();
+            $this->collection->addIdFilter($ids);
         }
         return $this->collection;
     }

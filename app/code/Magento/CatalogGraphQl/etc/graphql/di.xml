@@ -66,4 +66,9 @@
             <argument name="context" xsi:type="object">Magento\CatalogGraphQl\Model\Layer\Context</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Layer\CollectionProvider">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
 </config>

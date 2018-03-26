@@ -97,7 +97,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
             $childData = $this->formatter->format($child);
             $childSku = $child->getSku();
             foreach ($resultData as $key => $item) {
-                foreach ($item['items'] as $linkKey => $link) {
+                foreach ((array)$item['items'] as $linkKey => $link) {
                     if (!isset($link['product']['linked_product_sku'])
                         || $link['product']['link_type'] !== ProductLinks::LINK_TYPE
                         || $link['product']['linked_product_sku'] !== $childSku
