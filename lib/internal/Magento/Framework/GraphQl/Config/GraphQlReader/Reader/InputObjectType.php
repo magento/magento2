@@ -8,13 +8,13 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
-use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\TypeMetaReader;
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\TypeMetaWrapperReader;
 use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
 
 class InputObjectType implements TypeMetaReaderInterface
 {
     /**
-     * @var TypeMetaReader
+     * @var TypeMetaWrapperReader
      */
     private $typeMetaReader;
 
@@ -24,10 +24,10 @@ class InputObjectType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
-     * @param TypeMetaReader $typeMetaReader
+     * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
      */
-    public function __construct(TypeMetaReader $typeMetaReader, DocReader $docReader)
+    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
     {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
@@ -50,8 +50,8 @@ class InputObjectType implements TypeMetaReaderInterface
                 $result['fields'][$fieldName] = $this->readInputObjectFieldMeta($fieldMeta);
             }
 
-            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
-                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
             return $result;
         } else {
@@ -73,10 +73,13 @@ class InputObjectType implements TypeMetaReaderInterface
             'arguments' => []
         ];
 
-        $result = array_merge($result, $this->typeMetaReader->readTypeMeta($typeMeta, 'InputField'));
+        $result = array_merge(
+            $result,
+            $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::INPUT_FIELD_PARAMETER)
+        );
 
-        if ($this->docReader->readTypeDescription($fieldMeta->astNode->directives)) {
-                $result['description'] = $this->docReader->readTypeDescription($fieldMeta->astNode->directives);
+        if ($this->docReader->read($fieldMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
         }
 
         return $result;

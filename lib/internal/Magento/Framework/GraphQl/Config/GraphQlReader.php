@@ -27,7 +27,6 @@ class GraphQlReader implements ReaderInterface
      */
     private $typeReader;
 
-
     /**
      * @var string
      */
@@ -88,7 +87,6 @@ class GraphQlReader implements ReaderInterface
         return $results;
     }
 
-
     /**
      * Extract types as string from schema as string
      *
@@ -124,7 +122,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function parseTypes($graphQlSchemaContent) : array
+    private function parseTypes(string $graphQlSchemaContent) : array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';

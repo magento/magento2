@@ -42,7 +42,10 @@ class ConnectiveFactory
             Connective::class,
             [
                 'conditions' => $conditions,
-                'operator' => new Operator($operator)
+                'operator' => $this->objectManager->create(
+                    Operator::class,
+                    ['value' => $operator ?: Operator::AND]
+                )
             ]
         );
     }

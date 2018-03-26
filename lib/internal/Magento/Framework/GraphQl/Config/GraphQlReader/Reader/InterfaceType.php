@@ -54,11 +54,11 @@ class InterfaceType implements TypeMetaReaderInterface
 
             $fields = $typeMeta->getFields();
             foreach ($fields as $fieldName => $fieldMeta) {
-                $result['fields'][$fieldName] = $this->fieldMetaReader->readFieldMeta($fieldMeta);
+                $result['fields'][$fieldName] = $this->fieldMetaReader->read($fieldMeta);
             }
 
-            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
-                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

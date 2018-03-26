@@ -11,7 +11,6 @@ use Magento\Framework\GraphQl\Type\Definition\OutputType;
 use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\Framework\GraphQl\Type\Output\ElementMapper\FormatterInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 
 /**
@@ -20,21 +19,15 @@ use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 class Interfaces implements FormatterInterface
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var OutputMapper
      */
     private $outputMapper;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @param OutputMapper $outputMapper
      */
-    public function __construct(ObjectManagerInterface $objectManager, OutputMapper $outputMapper)
+    public function __construct(OutputMapper $outputMapper)
     {
-        $this->objectManager = $objectManager;
         $this->outputMapper = $outputMapper;
     }
 

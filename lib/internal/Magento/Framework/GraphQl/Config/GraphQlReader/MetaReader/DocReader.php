@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
 
 /**
- * Reads documentation from a AST node
+ * Reads documentation from the annotation @doc of an AST node
  */
 class DocReader
 {
@@ -18,7 +18,7 @@ class DocReader
      * @param \GraphQL\Language\AST\NodeList $directives
      * @return string|null
      */
-    public function readTypeDescription(\GraphQL\Language\AST\NodeList $directives) : ?string
+    public function read(\GraphQL\Language\AST\NodeList $directives) : ?string
     {
         foreach ($directives as $directive) {
             if ($directive->name->value == 'doc') {

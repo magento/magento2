@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
 use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\FieldMetaReader;
 use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\ImplementsReader;
 
 class ObjectType implements TypeMetaReaderInterface
 {
@@ -24,13 +25,23 @@ class ObjectType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
+     * @var ImplementsReader
+     */
+    private $implementsAnnotation;
+
+    /**
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
+     * @param ImplementsReader $implementsAnnotation
      */
-    public function __construct(FieldMetaReader $fieldMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        FieldMetaReader $fieldMetaReader,
+        DocReader $docReader,
+        ImplementsReader $implementsAnnotation
+    ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
+        $this->implementsAnnotation = $implementsAnnotation;
     }
 
     /**
@@ -46,7 +57,7 @@ class ObjectType implements TypeMetaReaderInterface
                 'fields' => [], // Populated later
             ];
 
-            $interfacesNames = $this->readCopyFieldsAnnotation($typeMeta->astNode->directives);
+            $interfacesNames = $this->implementsAnnotation->read($typeMeta->astNode->directives);
             foreach ($interfacesNames as $interfaceName) {
                 $result['implements'][$interfaceName] = [
                     'interface' => $interfaceName,
@@ -56,45 +67,17 @@ class ObjectType implements TypeMetaReaderInterface
 
             $fields = $typeMeta->getFields();
             foreach ($fields as $fieldName => $fieldMeta) {
-                $result['fields'][$fieldName] = $this->fieldMetaReader->readFieldMeta($fieldMeta);
+                $result['fields'][$fieldName] = $this->fieldMetaReader->read($fieldMeta);
             }
 
-            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
-                    $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                    $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
 
             return $result;
         } else {
             return null;
         }
-    }
-
-    /**
-     * Read copyFields annotation for a specific node if exists
-     *
-     * @param \GraphQL\Language\AST\NodeList $directives
-     * @return string[]|null
-     */
-    public function readCopyFieldsAnnotation(\GraphQL\Language\AST\NodeList $directives) : array
-    {
-        foreach ($directives as $directive) {
-            if ($directive->name->value == 'implements') {
-                foreach ($directive->arguments as $directiveArgument) {
-                    if ($directiveArgument->name->value == 'interfaces') {
-                        if ($directiveArgument->value->kind == 'ListValue') {
-                            $interfacesNames = [];
-                            foreach ($directiveArgument->value->values as $stringValue) {
-                                $interfacesNames[] = $stringValue->value;
-                            }
-                            return $interfacesNames;
-                        } else {
-                            return [$directiveArgument->value->value];
-                        }
-                    }
-                }
-            }
-        }
-        return [];
     }
 
     /**

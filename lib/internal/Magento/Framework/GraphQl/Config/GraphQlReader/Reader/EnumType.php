@@ -42,14 +42,14 @@ class EnumType implements TypeMetaReaderInterface
                     '_value' => $enumValueMeta->value
                 ];
 
-                if ($this->docReader->readTypeDescription($enumValueMeta->astNode->directives)) {
+                if ($this->docReader->read($enumValueMeta->astNode->directives)) {
                     $result['items'][$enumValueMeta->value]['description'] =
-                        $this->docReader->readTypeDescription($enumValueMeta->astNode->directives);
+                        $this->docReader->read($enumValueMeta->astNode->directives);
                 }
             }
 
-            if ($this->docReader->readTypeDescription($typeMeta->astNode->directives)) {
-                $result['description'] = $this->docReader->readTypeDescription($typeMeta->astNode->directives);
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

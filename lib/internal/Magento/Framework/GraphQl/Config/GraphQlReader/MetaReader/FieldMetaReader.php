@@ -7,10 +7,15 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
 
+use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\TypeMetaWrapperReader;
+
+/**
+ * Reads fields and possible arguments from a meta field
+ */
 class FieldMetaReader
 {
     /**
-     * @var TypeMetaReader
+     * @var TypeMetaWrapperReader
      */
     private $typeMetaReader;
 
@@ -20,20 +25,22 @@ class FieldMetaReader
     private $docReader;
 
     /**
-     * @param TypeMetaReader $typeMetaReader
+     * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
      */
-    public function __construct(TypeMetaReader $typeMetaReader, DocReader $docReader)
+    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
     {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
     }
 
     /**
+     * Read field and possible arguments from a field meta
+     *
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
      * @return array
      */
-    public function readFieldMeta(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : array
+    public function read(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : array
     {
         $fieldName = $fieldMeta->name;
         $fieldTypeMeta = $fieldMeta->getType();
@@ -42,18 +49,18 @@ class FieldMetaReader
             'arguments' => []
         ];
 
-        $fieldResolver = $this->readFieldResolver($fieldMeta);
+        $fieldResolver = $this->getFieldResolver($fieldMeta);
         if ($fieldResolver) {
             $result['resolver'] = $fieldResolver;
         }
 
         $result = array_merge(
             $result,
-            $this->typeMetaReader->readTypeMeta($fieldTypeMeta, 'OutputField')
+            $this->typeMetaReader->read($fieldTypeMeta, TypeMetaWrapperReader::OUTPUT_FIELD_PARAMETER)
         );
 
-        if ($this->docReader->readTypeDescription($fieldMeta->astNode->directives)) {
-                $result['description'] = $this->docReader->readTypeDescription($fieldMeta->astNode->directives);
+        if ($this->docReader->read($fieldMeta->astNode->directives)) {
+            $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;
@@ -65,22 +72,24 @@ class FieldMetaReader
             $typeMeta = $argumentMeta->getType();
             $result['arguments'][$argumentName] = array_merge(
                 $result['arguments'][$argumentName],
-                $this->typeMetaReader->readTypeMeta($typeMeta, 'Argument')
+                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
             );
 
-            if ($this->docReader->readTypeDescription($argumentMeta->astNode->directives)) {
+            if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
-                    $this->docReader->readTypeDescription($argumentMeta->astNode->directives);
+                    $this->docReader->read($argumentMeta->astNode->directives);
             }
         }
         return $result;
     }
 
     /**
+     * Read resolver if an annotation with the class of the resolver is defined in the meta
+     *
      * @param \GraphQL\Type\Definition\FieldDefinition $fieldMeta
      * @return string|null
      */
-    private function readFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : ?string
+    private function getFieldResolver(\GraphQL\Type\Definition\FieldDefinition $fieldMeta) : ?string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $fieldMeta->astNode->directives;

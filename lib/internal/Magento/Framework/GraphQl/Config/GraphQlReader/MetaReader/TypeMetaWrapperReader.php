@@ -7,16 +7,23 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
 
-class TypeMetaReader
+/**
+ * Common cases for types that need extra formatting like wrapping or additional properties added to their definition
+ */
+class TypeMetaWrapperReader
 {
+    const ARGUMENT_PARAMETER = 'Argument';
+    const OUTPUT_FIELD_PARAMETER = 'OutputField';
+    const INPUT_FIELD_PARAMETER = 'InputField';
+
     /**
-     * Read meta from type meta and parameter type
+     * Read from type meta data and determine wrapping types that are needed and extra properties that need to be added
      *
-     * @param $meta
+     * @param \GraphQL\Type\Definition\Type $meta
      * @param string $parameterType Argument|OutputField|InputField
      * @return array
      */
-    public function readTypeMeta($meta, $parameterType = 'Argument') : array
+    public function read(\GraphQL\Type\Definition\Type $meta, string $parameterType) : array
     {
         $result = [];
         if ($meta instanceof \GraphQL\Type\Definition\NonNull) {

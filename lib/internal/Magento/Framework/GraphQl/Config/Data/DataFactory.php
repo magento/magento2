@@ -81,7 +81,7 @@ class DataFactory
                 'isList' => isset($argumentData['itemType']),
                 'itemType' => isset($argumentData['itemType']) ? $argumentData['itemType'] : '',
                 'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false,
-                'default' => isset($argumentData['default']) ? $argumentData['default'] : null
+                'defaultType' => isset($argumentData['defaultType']) ? $argumentData['defaultType'] : null
             ]
         );
     }

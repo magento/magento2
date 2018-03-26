@@ -51,7 +51,7 @@ class Field implements OutputFieldInterface
      * @param string $type
      * @param bool $required
      * @param bool $isList
-     * @param $itemType $itemType
+     * @param string $itemType
      * @param string $resolver
      * @param string $description
      * @param array $arguments
