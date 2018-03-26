@@ -12,6 +12,9 @@
 namespace Magento\WebapiAsync\Model\MessageQueue;
 
 use Magento\Framework\Exception\BulkException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\Webapi\Exception;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
@@ -20,6 +23,7 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use \Magento\WebapiAsync\Model\AsyncResponse\ItemStatus;
 
 class MassScheduleTest extends \PHPUnit\Framework\TestCase
 {
@@ -58,10 +62,16 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private $skus = [];
 
+    /**
+     * @var Registry
+     */
+    private $registry;
+
     protected function setUp()
     {
 
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->registry = $this->objectManager->get(Registry::class);
         $this->massSchedule = $this->objectManager->create(MassSchedule::class);
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->collection = $this->objectManager->create(Collection::class);
@@ -92,20 +102,11 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @dataProvider productDataProvider
+     * @param ProductInterface[] $products
      */
     public function testScheduleMass($products) {
         try {
-            $this->skus = [];
-            foreach ($products as $data) {
-                $this->skus[] = $data['product']->getSku();
-            }
-            $result = $this->massSchedule->publishMass('async.V1.products.POST', $products);
-
-            //assert bulk accepted with no errors
-            $this->assertFalse($result->getIsErrors());
-
-            //assert number of products sent to queue
-            $this->assertEquals(count($result->getRequestItems()), count($this->skus));
+            $this->sendBulk($products);
         } catch (BulkException $bulkException) {
             $this->fail('Bulk was not accepted in full');
         }
@@ -118,26 +119,61 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         } catch (PreconditionFailedException $e) {
             $this->fail("Not all products were created");
         }
+    }
 
-        foreach ($this->skus as $sku) {
-            $this->productRepository->deleteById($sku);
+    public function sendBulk($products)
+    {
+        $this->skus = [];
+        foreach ($products as $data) {
+            $this->skus[] = isset($data['product']) ? $data['product']->getSku() : null;
         }
+        $result = $this->massSchedule->publishMass('async.V1.products.POST', $products);
+
+        //assert bulk accepted with no errors
+        $this->assertFalse($result->getIsErrors());
+
+        //assert number of products sent to queue
+        $this->assertCount(count($this->skus), $result->getRequestItems());
     }
 
     public function tearDown()
     {
-//        foreach ($this->skus as $sku) {
-//            $this->productRepository->deleteById($sku);
-//        }
+        $this->publisherConsumerController->stopConsumers();
+        $this->clearProducts();
+
+        parent::tearDown();
+    }
+
+    private function clearProducts()
+    {
+        $size = $this->objectManager->create(Collection::class)
+            ->addAttributeToFilter('sku', ['in' => $this->skus])
+            ->load()
+            ->getSize();
+
+        if ($size == 0) {
+            return;
+        }
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        try {
+            foreach ($this->skus as $sku) {
+                $this->productRepository->deleteById($sku);
+            }
+        } catch (\Exception $e) {
+            //nothing to delete
+        }
+        $this->registry->unregister('isSecureArea');
 
         $size = $this->objectManager->create(Collection::class)
             ->addAttributeToFilter('sku', ['in' => $this->skus])
             ->load()
             ->getSize();
 
-        $this->publisherConsumerController->stopConsumers();
-
-        parent::tearDown();
+        if ($size > 0) {
+            throw new Exception(new Phrase("Collection size after clearing the products: %size", ['size' => $size]));
+        }
     }
 
     public function assertProductExists($productsSkus, $count)
@@ -145,28 +181,54 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         $collection = $this->objectManager->create(Collection::class)
             ->addAttributeToFilter('sku', ['in' => $productsSkus])
             ->load();
-        var_dump($collection->getData());
         $size = $collection->getSize();
-        var_dump($size, $count);
         return $size == $count;
     }
 
-    public function testScheduleMassMultipleEntities()
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @dataProvider productExceptionDataProvider
+     * @param ProductInterface[] $products
+     */
+    public function testScheduleMassOneEntityFailure($products)
     {
+        try {
+            $this->sendBulk($products);
+        } catch (BulkException $e) {
+            $this->assertCount(1, $e->getErrors());
 
-    }
 
-    public function testScheduleMassOneEntityFailure()
-    {
-//        var_dump($bulkException->getData()['request_items']);
-//        foreach($bulkException->getData() as $item) {
-//            var_dump($item);
-//        }
-    }
+            $errors = $e->getErrors();
+            $this->assertInstanceOf(\Magento\Framework\Exception\LocalizedException::class, $errors[0]);
 
-    public function testScheduleMassMultipleEntitiesFailure()
-    {
+            $this->assertEquals("Error processing 1 element of input data", $errors[0]->getMessage());
 
+            $reasonException = $errors[0]->getPrevious();
+
+            $expectedErrorMessage = "Data item corresponding to \"product\" must be specified in the message with topic " .
+                "\"async.V1.products.POST\".";
+            $this->assertEquals(
+                $expectedErrorMessage,
+                $reasonException->getMessage()
+            );
+
+            /** @var \Magento\WebapiAsync\Model\AsyncResponse $bulkStatus */
+            $bulkStatus = $e->getData();
+            $this->assertTrue($bulkStatus->getIsErrors());
+
+            /** @var ItemStatus[] $items */
+            $items = $bulkStatus->getRequestItems();
+            $this->assertCount(2, $items);
+
+            $this->assertEquals(ItemStatus::STATUS_ACCEPTED, $items[0]->getStatus());
+            $this->assertEquals(0, $items[0]->getId());
+
+            $this->assertEquals(ItemStatus::STATUS_REJECTED, $items[1]->getStatus());
+            $this->assertEquals(1, $items[1]->getId());
+            $this->assertEquals($expectedErrorMessage, $items[1]->getErrorMessage());
+        }
     }
 
     private function getProduct()
@@ -204,6 +266,21 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
                         ->setSku('unique-simple-product2')
                         ->setMetaTitle('meta title 2')
                     ]
+                ]
+            ],
+        ];
+    }
+
+    public function productExceptionDataProvider()
+    {
+        return [
+            'single_product' => [
+                [['product' => $this->getProduct()]],
+            ],
+            'multiple_products' => [
+                [
+                    ['product' => $this->getProduct()],
+                    ['customer' => $this->getProduct()]
                 ]
             ],
         ];
