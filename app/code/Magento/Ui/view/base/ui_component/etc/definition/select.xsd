@@ -40,6 +40,7 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
     </xs:complexType>
 
     <xs:group name="componentSelectSettings">
