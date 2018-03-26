@@ -46,7 +46,7 @@ class GraphQlReader implements ReaderInterface
     public function __construct(
         FileResolverInterface $fileResolver,
         TypeReader $typeReader,
-        $fileName = 'schema.graphql',
+        $fileName = 'schema.graphqls',
         $defaultScope = 'global'
     ) {
         $this->fileResolver = $fileResolver;
