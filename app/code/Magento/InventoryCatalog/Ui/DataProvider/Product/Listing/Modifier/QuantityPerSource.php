@@ -13,7 +13,7 @@ use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 /**
  * Quantity Per Source modifier on CatalogInventory Product Grid
  */
-class SourceItems extends AbstractModifier
+class QuantityPerSource extends AbstractModifier
 {
     /**
      * @var IsSingleSourceModeInterface

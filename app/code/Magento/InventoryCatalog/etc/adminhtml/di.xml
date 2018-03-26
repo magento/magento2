@@ -44,8 +44,8 @@
                     <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Listing\Modifier\SalableQuantity</item>
                     <item name="sortOrder" xsi:type="number">200</item>
                 </item>
-                <item name="source_items" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Listing\Modifier\SourceItems</item>
+                <item name="quantity_per_source" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\InventoryCatalog\Ui\DataProvider\Product\Listing\Modifier\QuantityPerSource</item>
                     <item name="sortOrder" xsi:type="number">300</item>
                 </item>
             </argument>
