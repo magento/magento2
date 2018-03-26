@@ -47,14 +47,12 @@ class SaveHandler implements SaveHandlerInterface
          * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
          */
         $defaultSaveHandler = ini_get('session.save_handler') ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(Config::PARAM_SESSION_SAVE_METHOD, $defaultSaveHandler);
-        $this->setSaveHandler($saveMethod);
+        $saveMethod = $this->getConfig()->getOption('session.save_handler') ?: $defaultSaveHandler;
 
         try {
             $connection = $saveHandlerFactory->create($saveMethod);
         } catch (\LogicException $e) {
             $connection = $saveHandlerFactory->create($default);
-            $this->setSaveHandler($default);
         }
         $this->saveHandlerAdapter = $connection;
     }
@@ -140,20 +138,5 @@ class SaveHandler implements SaveHandlerInterface
             $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
         }
         return $this->config;
-    }
-
-    /**
-     * Set session.save_handler option
-     *
-     * @param string $saveHandler
-     * @return $this
-     */
-    private function setSaveHandler($saveHandler)
-    {
-        if ($saveHandler === 'db' || $saveHandler === 'redis') {
-            $saveHandler = 'user';
-        }
-        $this->getConfig()->setOption('session.save_handler', $saveHandler);
-        return $this;
     }
 }
