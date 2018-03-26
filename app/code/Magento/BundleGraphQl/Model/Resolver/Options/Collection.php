@@ -63,9 +63,9 @@ class Collection
      * @param int $parentId
      * @param string $sku
      */
-    public function addParentFilterData(int $parentId, string $sku) : void
+    public function addParentFilterData(int $parentId, int $parentEntityId, string $sku) : void
     {
-        $this->skuMap[$parentId] = $sku;
+        $this->skuMap[$parentId] = ['sku' => $sku, 'entity_id' => $parentEntityId];
     }
 
     /**
@@ -99,8 +99,8 @@ class Collection
         $optionsCollection = $this->bundleOptionFactory->create()->getResourceCollection();
         // All products in collection will have same store id.
         $optionsCollection->joinValues($this->storeManager->getStore()->getId());
-        foreach (array_keys($this->skuMap) as $id) {
-            $optionsCollection->setProductIdFilter($id);
+        foreach ($this->skuMap as $parentInfo) {
+            $optionsCollection->setProductIdFilter($parentInfo['entity_id']);
         }
         $optionsCollection->setPositionOrder();
 
@@ -118,7 +118,7 @@ class Collection
             $this->optionMap[$option->getParentId()][$option->getId()]['title']
                 = $option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle();
             $this->optionMap[$option->getParentId()][$option->getId()]['sku']
-                = $this->skuMap[$option->getParentId()];
+                = $this->skuMap[$option->getParentId()]['sku'];
         }
 
         return $this->optionMap;

@@ -67,7 +67,11 @@ class BundleItems implements ResolverInterface
             return null;
         }
 
-        $this->bundleOptionCollection->addParentFilterData((int)$value[$linkField], $value[ProductInterface::SKU]);
+        $this->bundleOptionCollection->addParentFilterData(
+            (int)$value[$linkField],
+            (int)$value['entity_id'],
+            $value[ProductInterface::SKU]
+        );
 
         $result = function () use ($value, $linkField) {
             return $this->bundleOptionCollection->getOptionsByParentId((int)$value[$linkField]);
