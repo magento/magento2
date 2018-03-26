@@ -1123,650 +1123,328 @@ return [
         'possibleTypes' =>  null
     ],
     [
-        'kind' =>  'INTERFACE',
-        'name' =>  'ProductInterface',
-        'description' =>  'comment for ProductInterface',
-        'fields' =>  [
+        'kind'=> 'INTERFACE',
+        'name'=> 'ProductInterface',
+        'description'=> 'comment for ProductInterface',
+        'fields'=> [
             [
-                'name' =>  'url_key',
-                'description' =>  'comment for url_key inside [ProductInterface].',
-                'args' =>  [
+                'name'=> 'url_key',
+                'description'=> 'comment for url_key inside ProductInterface type.',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'url_path',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'url_path',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'id',
-                'description' =>  'comment for [ProductInterface].',
-                'args' =>  [
+                'name'=> 'id',
+                'description'=> 'comment for [ProductInterface].',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'name',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'name',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'description',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'short_description',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_from_date',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'special_price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'attribute_set_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'special_from_date',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'special_to_date',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'category_ids',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'attribute_set_id',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_title',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_keyword',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'small_image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'thumbnail',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_from_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_to_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'tier_price',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_from',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_to',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout_update',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'page_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'category_ids',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'options_container',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'updated_at',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'country_of_manufacture',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'small_image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'type_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'thumbnail_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'website_ids',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'created_at',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'updated_at',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'country_of_manufacture',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'type_id',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'website_ids',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'category_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'category_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductCategoryLinks',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductCategoryLinks',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'INTERFACE',
-                        'name' =>  'ProductLinksInterface',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'INTERFACE',
+                        'name'=> 'ProductLinksInterface',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'media_gallery_entries',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'media_gallery_entries',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'MediaGalleryEntry',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'MediaGalleryEntry',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'tier_prices',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_prices',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductTierPrices',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductTierPrices',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'ProductPrices',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'ProductPrices',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'gift_message_available',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'manufacturer',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'manufacturer',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  null,
-        'enumValues' =>  null,
-        'possibleTypes' =>  [
+        'inputFields'=> null,
+        'interfaces'=> null,
+        'enumValues'=> null,
+        'possibleTypes'=> [
             [
-                'kind' =>  'OBJECT',
-                'name' =>  'SimpleProduct',
-                'ofType' =>  null
+                'kind'=> 'OBJECT',
+                'name'=> 'SimpleProduct',
+                'ofType'=> null
             ],
             [
-                'kind' =>  'OBJECT',
-                'name' =>  'VirtualProduct',
-                'ofType' =>  null
+                'kind'=> 'OBJECT',
+                'name'=> 'VirtualProduct',
+                'ofType'=> null
             ]
         ]
     ],
@@ -1913,7 +1591,7 @@ return [
     [
         'kind' =>  'OBJECT',
         'name' =>  'MediaGalleryEntry',
-        'description' =>  'comment for MediaGalleryEntry',
+        'description' =>  'Comment for MediaGalleryEntry type',
         'fields' =>  [
             [
                 'name' =>  'id',
@@ -2609,709 +2287,360 @@ return [
         'possibleTypes' =>  null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'SimpleProduct',
-        'description' =>  'comment for items[ProductInterface].',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'SimpleProduct',
+        'description'=> 'Comment for empty SimpleProduct type',
+        'fields'=> [
             [
-                'name' =>  'url_key',
-                'description' =>  'comment for url_key for simple Product which implements ProductInterface',
-                'args' =>  [
+                'name'=> 'options',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'url_path',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'id',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'name',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'short_description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_price',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_from_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_to_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'attribute_set_id',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_title',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_keyword',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'small_image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'thumbnail',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_from_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_to_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'tier_price',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_from',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_to',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout_update',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'page_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'category_ids',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'INTERFACE',
+                        'name'=> 'CustomizableOptionInterface',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'options_container',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'url_key',
+                'description'=> 'comment for url_key for simple product that implements [ProductInterface]',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'url_path',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'small_image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'id',
+                'description'=> 'comment for [ProductInterface].',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'thumbnail_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'name',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'created_at',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'updated_at',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'country_of_manufacture',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_from_date',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'type_id',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'attribute_set_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'website_ids',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'category_ids',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'category_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'updated_at',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductCategoryLinks',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'country_of_manufacture',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'type_id',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'website_ids',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'category_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'INTERFACE',
-                        'name' =>  'ProductLinksInterface',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductCategoryLinks',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'media_gallery_entries',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'MediaGalleryEntry',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'INTERFACE',
+                        'name'=> 'ProductLinksInterface',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'tier_prices',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'media_gallery_entries',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductTierPrices',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'MediaGalleryEntry',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_prices',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'ProductPrices',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'gift_message_available',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'weight',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'options',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'INTERFACE',
-                        'name' =>  'CustomizableOptionInterface',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductTierPrices',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'manufacturer',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'ProductPrices',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'manufacturer',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'ProductInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'ProductInterface',
+                'ofType'=> null
             ],
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'PhysicalProductInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'PhysicalProductInterface',
+                'ofType'=> null
             ],
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableProductInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableProductInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
         'kind' =>  'INTERFACE',
         'name' =>  'PhysicalProductInterface',
-        'description' =>  '',
+        'description' =>  'Comment for empty PhysicalProductInterface',
         'fields' =>  [
-            [
-                'name' =>  'weight',
-                'description' =>  null,
-                'args' =>  [
 
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ]
         ],
         'inputFields' =>  null,
         'interfaces' =>  null,
@@ -3536,91 +2865,91 @@ return [
         'possibleTypes' =>  null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableAreaOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableAreaOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'Comment for title field for CustomizableAreaOption concrete type',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'CustomizableAreaValue',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'required',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  'Comment for CustomizableAreaOption that implements CustomizableOptionInterface',
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'CustomizableAreaValue',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
         'kind' =>  'OBJECT',
@@ -3718,91 +3047,91 @@ return [
         'possibleTypes' =>  null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableDateOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableDateOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'This description should override interface comment.',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'CustomizableDateValue',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'required',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'CustomizableDateValue',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
         'kind' =>  'OBJECT',
@@ -3860,1329 +3189,1102 @@ return [
         'possibleTypes' =>  null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableDropDownOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableDropDownOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'Comment for CustomizableOptionInterface',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'CustomizableDropDownValue',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'required',
+                'description'=> 'Comment for required field for CustomizableDropDownOption concrete type',
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'CustomizableDropDownValue',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableDropDownValue',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableDropDownValue',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'option_type_id',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'option_type_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price_type',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price_type',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'ENUM',
-                    'name' =>  'PriceTypeEnum',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'ENUM',
+                    'name'=> 'PriceTypeEnum',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
 
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableFieldOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableFieldOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'Comment for CustomizableOptionInterface',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'CustomizableFieldValue',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'required',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> 'Comment for sort_order for CustomizableFieldOption concrete type',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'CustomizableFieldValue',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableFieldValue',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableFieldValue',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price_type',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price_type',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'ENUM',
-                    'name' =>  'PriceTypeEnum',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'ENUM',
+                    'name'=> 'PriceTypeEnum',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'max_characters',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'max_characters',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
 
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableFileOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableFileOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'Comment for CustomizableOptionInterface',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'CustomizableFileValue',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'required',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'CustomizableFileValue',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableFileValue',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableFileValue',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price_type',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price_type',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'ENUM',
-                    'name' =>  'PriceTypeEnum',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'ENUM',
+                    'name'=> 'PriceTypeEnum',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'file_extension',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'file_extension',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'image_size_x',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'image_size_x',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'image_size_y',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'image_size_y',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
 
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableRadioOption',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableRadioOption',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'value',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> 'Comment for CustomizableOptionInterface',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'CustomizableRadioValue',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'required',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Boolean',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'value',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'CustomizableRadioValue',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'required',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Boolean',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableOptionInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableOptionInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'CustomizableRadioValue',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'CustomizableRadioValue',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'option_type_id',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'option_type_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price_type',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price_type',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'ENUM',
-                    'name' =>  'PriceTypeEnum',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'ENUM',
+                    'name'=> 'PriceTypeEnum',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'title',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'title',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'sort_order',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sort_order',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
 
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
     ],
     [
-        'kind' =>  'OBJECT',
-        'name' =>  'VirtualProduct',
-        'description' =>  '',
-        'fields' =>  [
+        'kind'=> 'OBJECT',
+        'name'=> 'VirtualProduct',
+        'description'=> '',
+        'fields'=> [
             [
-                'name' =>  'id',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'options',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'name',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'sku',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'short_description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_price',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_from_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'special_to_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'attribute_set_id',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_title',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_keyword',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'meta_description',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'small_image',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'thumbnail',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_from_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'new_to_date',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'tier_price',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Float',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_from',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_design_to',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout_update',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'custom_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'page_layout',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'category_ids',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'INTERFACE',
+                        'name'=> 'CustomizableOptionInterface',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'options_container',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'url_key',
+                'description'=> 'comment for url_key inside ProductInterface type.',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'url_path',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'small_image_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'id',
+                'description'=> 'comment for [ProductInterface].',
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'thumbnail_label',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'name',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'created_at',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'sku',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'updated_at',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'country_of_manufacture',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'special_from_date',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'type_id',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'attribute_set_id',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'website_ids',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'SCALAR',
-                        'name' =>  'Int',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Float',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'category_ids',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'category_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'updated_at',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductCategoryLinks',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'country_of_manufacture',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'type_id',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'String',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'website_ids',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'SCALAR',
+                        'name'=> 'Int',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'product_links',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'category_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'INTERFACE',
-                        'name' =>  'ProductLinksInterface',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductCategoryLinks',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'media_gallery_entries',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'product_links',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'MediaGalleryEntry',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'INTERFACE',
+                        'name'=> 'ProductLinksInterface',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'tier_prices',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'media_gallery_entries',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'OBJECT',
-                        'name' =>  'ProductTierPrices',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'MediaGalleryEntry',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'price',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'tier_prices',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'OBJECT',
-                    'name' =>  'ProductPrices',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'gift_message_available',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'String',
-                    'ofType' =>  null
-                ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
-            ],
-            [
-                'name' =>  'options',
-                'description' =>  null,
-                'args' =>  [
-
-                ],
-                'type' =>  [
-                    'kind' =>  'LIST',
-                    'name' =>  null,
-                    'ofType' =>  [
-                        'kind' =>  'INTERFACE',
-                        'name' =>  'CustomizableOptionInterface',
-                        'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'LIST',
+                    'name'=> null,
+                    'ofType'=> [
+                        'kind'=> 'OBJECT',
+                        'name'=> 'ProductTierPrices',
+                        'ofType'=> null
                     ]
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ],
             [
-                'name' =>  'manufacturer',
-                'description' =>  null,
-                'args' =>  [
+                'name'=> 'price',
+                'description'=> null,
+                'args'=> [
 
                 ],
-                'type' =>  [
-                    'kind' =>  'SCALAR',
-                    'name' =>  'Int',
-                    'ofType' =>  null
+                'type'=> [
+                    'kind'=> 'OBJECT',
+                    'name'=> 'ProductPrices',
+                    'ofType'=> null
                 ],
-                'isDeprecated' =>  false,
-                'deprecationReason' =>  null
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
+            ],
+            [
+                'name'=> 'manufacturer',
+                'description'=> null,
+                'args'=> [
+
+                ],
+                'type'=> [
+                    'kind'=> 'SCALAR',
+                    'name'=> 'Int',
+                    'ofType'=> null
+                ],
+                'isDeprecated'=> false,
+                'deprecationReason'=> null
             ]
         ],
-        'inputFields' =>  null,
-        'interfaces' =>  [
+        'inputFields'=> null,
+        'interfaces'=> [
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'ProductInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'ProductInterface',
+                'ofType'=> null
             ],
             [
-                'kind' =>  'INTERFACE',
-                'name' =>  'CustomizableProductInterface',
-                'ofType' =>  null
+                'kind'=> 'INTERFACE',
+                'name'=> 'CustomizableProductInterface',
+                'ofType'=> null
             ]
         ],
-        'enumValues' =>  null,
-        'possibleTypes' =>  null
+        'enumValues'=> null,
+        'possibleTypes'=> null
+    ],
+    [
+        'kind' => 'OBJECT',
+        'name' => 'EntityUrl',
+        'description' => '',
+        'fields' => [
+            [
+                'name' => 'id',
+                'description' => null,
+                'args' => [
+
+                ],
+                'type' => [
+                    'kind' => 'SCALAR',
+                    'name' => 'Int',
+                    'ofType' => null
+                ],
+                'isDeprecated' => false,
+                'deprecationReason' => null
+            ],
+            [
+                'name' => 'canonical_url',
+                'description' => null,
+                'args' => [
+
+                ],
+                'type' => [
+                    'kind' => 'SCALAR',
+                    'name' => 'String',
+                    'ofType' => null
+                ],
+                'isDeprecated' => false,
+                'deprecationReason' => null
+            ],
+            [
+                'name' => 'type',
+                'description' => null,
+                'args' => [
+
+                ],
+                'type' => [
+                    'kind' => 'ENUM',
+                    'name' => 'UrlRewriteEntityTypeEnum',
+                    'ofType' => null
+                ],
+                'isDeprecated' => false,
+                'deprecationReason' => null
+            ]
+        ],
+        'inputFields' => null,
+        'interfaces' => [
+
+        ],
+        'enumValues' => null,
+        'possibleTypes' => null
+    ],
+    [
+        'kind' => 'ENUM',
+        'name' => 'UrlRewriteEntityTypeEnum',
+        'description' => 'Comment for empty Enum',
+        'fields' => null,
+        'inputFields' => null,
+        'interfaces' => null,
+        'enumValues' => [
+
+        ],
+        'possibleTypes' => null
     ]
 ];

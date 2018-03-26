@@ -34,12 +34,12 @@ enum SortEnum @doc(description: "Comment for SortEnum.")
 }
 
 interface ProductInterface {
-    url_key: String @doc(description: "comment for url_key inside [ProductInterface].")
+    url_key: String @doc(description: "comment for url_key inside ProductInterface type.")
     url_path: String
 }
 
 
 type SimpleProduct {
-    url_key: String @doc(description: "comment for url_key for simple Product which implements ProductInterface")
+    url_key: String @doc(description: "comment for url_key for simple product that implements [ProductInterface]")
     url_path: String
 }

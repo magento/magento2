@@ -16,7 +16,7 @@ use Magento\GraphQl\Model\SchemaGenerator;
 /**
  * Tests the entire process of generating a schema from a given SDL and processing a request/query
  *
- * @package Magento\Framework\GraphQl\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea graphql
  */
 class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
@@ -194,5 +194,22 @@ QUERY;
                 'Missing type in the response'
             );
         }
+        //Checks to make sure that the the given description exists in the expectedOutput array
+        $this->assertTrue(array_key_exists(
+            array_search(
+                'Comment for empty PhysicalProductInterface',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
+        )
+        );
+        $this->assertTrue(array_key_exists(
+            array_search(
+                'Comment for empty Enum',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
+        )
+        );
     }
 }

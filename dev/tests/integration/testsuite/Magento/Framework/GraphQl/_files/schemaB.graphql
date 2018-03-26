@@ -92,33 +92,11 @@ interface ProductInterface
     id: Int @doc(description: "comment for [ProductInterface].")
     name: String
     sku: String
-    description: String
-    short_description: String
     special_price: Float
     special_from_date: String
-    special_to_date: String
     attribute_set_id: Int
-    meta_title: String
-    meta_keyword: String
-    meta_description: String
-    image: String
-    small_image: String
-    thumbnail: String
-    new_from_date: String
-    new_to_date: String
     tier_price: Float
-    custom_design: String
-    custom_design_from: String
-    custom_design_to: String
-    custom_layout_update: String
-    custom_layout: String
-    page_layout: String
     category_ids: [Int]
-    options_container: String
-    image_label: String
-    small_image_label: String
-    thumbnail_label: String
-    created_at: String
     updated_at: String
     country_of_manufacture: String
     type_id: String
@@ -128,19 +106,18 @@ interface ProductInterface
     media_gallery_entries: [MediaGalleryEntry]
     tier_prices: [ProductTierPrices]
     price: ProductPrices
-    gift_message_available: String
     manufacturer: Int
 }
 
-interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
-    weight: Float
+interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description:"Comment for empty PhysicalProductInterface") {
+
 }
 
 
 type CustomizableAreaOption implements CustomizableOptionInterface {
     value: CustomizableAreaValue
     product_sku: String
-    title: String @doc(description:"Comment for CustomizableAreaOption that implements CustomizableOptionInterface")
+    title: String @doc(description:"Comment for title field for CustomizableAreaOption concrete type")
     required: Boolean
     sort_order: Int
 }
@@ -155,7 +132,7 @@ type CustomizableAreaValue {
 type CustomizableDateOption implements CustomizableOptionInterface {
     value: CustomizableDateValue
     product_sku: String
-    title: String
+    title: String @doc(description:"This description should override interface comment.")
     required: Boolean
     sort_order: Int
 }
@@ -168,9 +145,7 @@ type CustomizableDateValue {
 
 type CustomizableDropDownOption implements CustomizableOptionInterface {
     value: [CustomizableDropDownValue]
-    title: String
-    required: Boolean
-    sort_order: Int
+    required: Boolean @doc(description:"Comment for required field for CustomizableDropDownOption concrete type")
 }
 
 type CustomizableDropDownValue {
@@ -185,9 +160,7 @@ type CustomizableDropDownValue {
 type CustomizableFieldOption implements CustomizableOptionInterface {
     value: CustomizableFieldValue
     product_sku: String
-    title: String
-    required: Boolean
-    sort_order: Int
+    sort_order: Int @doc(description:"Comment for sort_order for CustomizableFieldOption concrete type")
 }
 
 type CustomizableFieldValue {
@@ -200,9 +173,6 @@ type CustomizableFieldValue {
 type CustomizableFileOption implements CustomizableOptionInterface {
     value: CustomizableFileValue
     product_sku: String
-    title: String
-    required: Boolean
-    sort_order: Int
 }
 
 type CustomizableFileValue {
@@ -226,9 +196,6 @@ interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGra
 
 type CustomizableRadioOption implements CustomizableOptionInterface {
     value: [CustomizableRadioValue]
-    title: String
-    required: Boolean
-    sort_order: Int
 }
 
 type CustomizableRadioValue {
@@ -241,95 +208,11 @@ type CustomizableRadioValue {
 }
 
 type VirtualProduct implements ProductInterface, CustomizableProductInterface {
-    id: Int
-    name: String
-    sku: String
-    description: String
-    short_description: String
-    special_price: Float
-    special_from_date: String
-    special_to_date: String
-    attribute_set_id: Int
-    meta_title: String
-    meta_keyword: String
-    meta_description: String
-    image: String
-    small_image: String
-    thumbnail: String
-    new_from_date: String
-    new_to_date: String
-    tier_price: Float
-    custom_design: String
-    custom_design_from: String
-    custom_design_to: String
-    custom_layout_update: String
-    custom_layout: String
-    page_layout: String
-    category_ids: [Int]
-    options_container: String
-    image_label: String
-    small_image_label: String
-    thumbnail_label: String
-    created_at: String
-    updated_at: String
-    country_of_manufacture: String
-    type_id: String
-    website_ids: [Int]
-    category_links: [ProductCategoryLinks]
-    product_links: [ProductLinksInterface]
-    media_gallery_entries: [MediaGalleryEntry]
-    tier_prices: [ProductTierPrices]
-    price: ProductPrices
-    gift_message_available: String
-    options: [CustomizableOptionInterface]
-    manufacturer: Int
 }
 
 type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface
-@doc(description: "comment for items[ProductInterface].") {
-    id: Int
-    name: String
-    sku: String
-    description: String
-    short_description: String
-    special_price: Float
-    special_from_date: String
-    special_to_date: String
-    attribute_set_id: Int
-    meta_title: String
-    meta_keyword: String
-    meta_description: String
-    image: String
-    small_image: String
-    thumbnail: String
-    new_from_date: String
-    new_to_date: String
-    tier_price: Float
-    custom_design: String
-    custom_design_from: String
-    custom_design_to: String
-    custom_layout_update: String
-    custom_layout: String
-    page_layout: String
-    category_ids: [Int]
-    options_container: String
-    image_label: String
-    small_image_label: String
-    thumbnail_label: String
-    created_at: String
-    updated_at: String
-    country_of_manufacture: String
-    type_id: String
-    website_ids: [Int]
-    category_links: [ProductCategoryLinks]
-    product_links: [ProductLinksInterface]
-    media_gallery_entries: [MediaGalleryEntry]
-    tier_prices: [ProductTierPrices]
-    price: ProductPrices
-    gift_message_available: String
-    weight: Float
-    options: [CustomizableOptionInterface]
-    manufacturer: Int
+@doc(description: "Comment for empty SimpleProduct type")
+{
 }
 
 type Products @doc(description:"Comment for Products") {
@@ -433,7 +316,7 @@ input ProductSortInput @doc(description:"Input ProductSortInput") {
 }
 
 type MediaGalleryEntry
-@doc(description: "comment for MediaGalleryEntry")
+@doc(description: "Comment for MediaGalleryEntry type")
 {
     id: Int @doc(description: "id for MediaGalleryEntry")
     media_type: String
@@ -445,3 +328,15 @@ type MediaGalleryEntry
     content: ProductMediaGalleryEntriesContent @doc(description: "Comment for ProductMediaGalleryEntriesContent on content field")
     video_content: ProductMediaGalleryEntriesVideoContent
 }
+
+type EntityUrl {
+    id: Int
+    canonical_url: String
+    type: UrlRewriteEntityTypeEnum
+}
+enum UrlRewriteEntityTypeEnum @doc(description: "Comment for empty Enum")
+{
+
+}
+
+
