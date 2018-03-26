@@ -136,12 +136,12 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
                 'Phrase in Magento_Catalog module that doesn\'t need translation',
             ],
             [
-                'Magento_Store module phrase will be override by theme translation',
-                'Magento_Store module phrase is override by theme translation',
+                'Magento_Store module phrase will be overriden by theme translation',
+                'Magento_Store module phrase is overriden by theme translation',
             ],
             [
-                'Magento_Catalog module phrase will be override by theme translation',
-                'Magento_Catalog module phrase is override by theme translation',
+                'Magento_Catalog module phrase will be overriden by theme translation',
+                'Magento_Catalog module phrase is overriden by theme translation',
             ],
         ];
     }
