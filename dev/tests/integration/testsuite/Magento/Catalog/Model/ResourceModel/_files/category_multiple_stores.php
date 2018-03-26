@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 /** @var \Magento\Catalog\Model\CategoryFactory $factory */
 $factory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Model\CategoryFactory::class
@@ -20,6 +25,7 @@ if (!$store->load('second_category_store', 'code')->getId()) {
     $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
     )->getWebsite()->getDefaultGroupId();
+
     $store->setCode(
         'second_category_store'
     )->setWebsiteId(
@@ -55,7 +61,6 @@ $newCategory
 $repository->save($newCategory);
 $currentStoreId = $storeManager->getStore()->getId();
 $storeManager->setCurrentStore($storeManager->getStore($store->getId()));
-$newCategory
-    ->setUrlKey('category-3-on-2');
+$newCategory->setUrlKey('category-3-on-2');
 $repository->save($newCategory);
 $storeManager->setCurrentStore($storeManager->getStore($currentStoreId));

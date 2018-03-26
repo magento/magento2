@@ -10,7 +10,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
-    protected $collection;
+    private $collection;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
