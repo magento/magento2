@@ -13,17 +13,6 @@ namespace Magento\Catalog\Model\Category\Product;
 class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param string $connectionName
-     */
-    public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null
-    ) {
-        parent::__construct($context, $connectionName);
-    }
-
-    /**
      * Initialize resource model
      *
      * @return void
