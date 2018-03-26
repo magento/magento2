@@ -528,12 +528,6 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $this->_block->escapeUrl($url));
     }
 
-    public function testEscapeJsQuote()
-    {
-        $script = "var s = 'text';";
-        $this->assertEquals('var s = \\\'text\\\';', $this->_block->escapeJsQuote($script));
-    }
-
     public function testGetCacheKeyInfo()
     {
         $name = uniqid('block.');

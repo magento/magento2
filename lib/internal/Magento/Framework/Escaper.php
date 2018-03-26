@@ -263,27 +263,6 @@ class Escaper
     }
 
     /**
-     * Escape quotes in java script
-     *
-     * @param string|array $data
-     * @param string $quote
-     * @return string|array
-     * @deprecated 100.2.0
-     */
-    public function escapeJsQuote($data, $quote = '\'')
-    {
-        if (is_array($data)) {
-            $result = [];
-            foreach ($data as $item) {
-                $result[] = $this->escapeJsQuote($item, $quote);
-            }
-        } else {
-            $result = str_replace($quote, '\\' . $quote, $data);
-        }
-        return $result;
-    }
-
-    /**
      * Escape xss in urls
      * Remove `javascript:`, `vbscript:`, `data:` words from url
      *
@@ -298,23 +277,6 @@ class Escaper
             . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
         $result = preg_replace($pattern, ':', $data);
         return htmlspecialchars($result, ENT_COMPAT | ENT_HTML5 | ENT_HTML401, 'UTF-8', false);
-    }
-
-    /**
-     * Escape quotes inside html attributes
-     * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
-     *
-     * @param string $data
-     * @param bool $addSlashes
-     * @return string
-     * @deprecated 100.2.0
-     */
-    public function escapeQuote($data, $addSlashes = false)
-    {
-        if ($addSlashes === true) {
-            $data = addslashes($data);
-        }
-        return htmlspecialchars($data, ENT_QUOTES, null, false);
     }
 
     /**

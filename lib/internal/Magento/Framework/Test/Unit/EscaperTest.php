@@ -267,31 +267,6 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Escaper::escapeJsQuote
-     */
-    public function testEscapeJsQuote()
-    {
-        $data = ["Don't do that.", 'lost_key' => "Can't do that."];
-        $expected = ["Don\\'t do that.", "Can\\'t do that."];
-        $this->assertEquals($expected, $this->escaper->escapeJsQuote($data));
-        $this->assertEquals($expected[0], $this->escaper->escapeJsQuote($data[0]));
-    }
-
-    /**
-     * @covers \Magento\Framework\Escaper::escapeQuote
-     */
-    public function testEscapeQuote()
-    {
-        $data = "Text with 'single' and \"double\" quotes";
-        $expected = [
-            "Text with &#039;single&#039; and &quot;double&quot; quotes",
-            "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
-        ];
-        $this->assertEquals($expected[0], $this->escaper->escapeQuote($data));
-        $this->assertEquals($expected[1], $this->escaper->escapeQuote($data, true));
-    }
-
-    /**
      * @covers \Magento\Framework\Escaper::escapeXssInUrl
      * @param string $input
      * @param string $expected

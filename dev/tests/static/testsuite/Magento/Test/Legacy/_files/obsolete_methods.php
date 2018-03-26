@@ -1043,8 +1043,6 @@ return [
     ['getHash', '\Magento\Core\Helper\Data'],
     ['escapeHtml', '\Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Escaper::escapeHtml'],
     ['escapeUrl', '\Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Escaper::escapeUrl'],
-    ['jsQuoteEscape', '\Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Escaper::escapeJsQuote'],
-    ['quoteEscape', '\Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Escaper::escapeQuote'],
     ['removeTags', '\Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Filter\FilterManager'],
     ['removeAccents', '\Magento\Core\Helper\Data', '\Magento\Framework\Filter\FilterManager'],
     ['splitWords', '\Magento\Core\Helper\String', '\Magento\Framework\Filter\FilterManager'],

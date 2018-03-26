@@ -7,6 +7,7 @@
 namespace Magento\GoogleAnalytics\Block;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 
 /**
  * GoogleAnalytics Page Block
@@ -34,22 +35,30 @@ class Ga extends \Magento\Framework\View\Element\Template
     private $cookieHelper;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
      * @param \Magento\Cookie\Helper\Cookie|null $cookieHelper
+     * @param Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData,
         array $data = [],
-        \Magento\Cookie\Helper\Cookie $cookieHelper = null
+        \Magento\Cookie\Helper\Cookie $cookieHelper = null,
+        Escaper $escaper = null
     ) {
         $this->_googleAnalyticsData = $googleAnalyticsData;
         $this->_salesOrderCollection = $salesOrderCollection;
         $this->cookieHelper = $cookieHelper ?: ObjectManager::getInstance()->get(\Magento\Cookie\Helper\Cookie::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper);
         parent::__construct($context, $data);
     }
 
@@ -128,8 +137,8 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJsQuote($item->getSku()),
-                    $this->escapeJsQuote($item->getName()),
+                    $this->escaper->escapeJs($item->getSku()),
+                    $this->escaper->escapeJs($item->getName()),
                     $item->getPrice(),
                     $item->getQtyOrdered()
                 );
@@ -144,7 +153,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                $this->escaper->escapeJs($this->_storeManager->getStore()->getFrontendName()),
                 $order->getGrandTotal(),
                 $order->getTaxAmount(),
                 $order->getShippingAmount()
@@ -234,15 +243,15 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'id' => $this->escapeJsQuote($item->getSku()),
-                    'name' =>  $this->escapeJsQuote($item->getName()),
+                    'id' => $this->escaper->escapeJs($item->getSku()),
+                    'name' =>  $this->escaper->escapeJs($item->getName()),
                     'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
-                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                'affiliation' => $this->escaper->escapeJs($this->_storeManager->getStore()->getFrontendName()),
                 'revenue' => $order->getGrandTotal(),
                 'tax' => $order->getTaxAmount(),
                 'shipping' => $order->getShippingAmount(),
