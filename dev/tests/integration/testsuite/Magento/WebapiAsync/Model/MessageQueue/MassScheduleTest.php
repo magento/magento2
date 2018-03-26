@@ -125,7 +125,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     {
         $this->skus = [];
         foreach ($products as $data) {
-            $this->skus[] = isset($data['product']) ? $data['product']->getSku() : null;
+            if (isset($data['product'])) {
+                $this->skus[] = $data['product']->getSku();
+            }
         }
         $result = $this->massSchedule->publishMass('async.V1.products.POST', $products);
 
@@ -228,6 +230,15 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(ItemStatus::STATUS_REJECTED, $items[1]->getStatus());
             $this->assertEquals(1, $items[1]->getId());
             $this->assertEquals($expectedErrorMessage, $items[1]->getErrorMessage());
+        }
+
+        //assert one products is created
+        try {
+            $this->publisherConsumerController->waitForAsynchronousResult(
+                [$this, 'assertProductExists'], [$this->skus, count($this->skus)]
+            );
+        } catch (PreconditionFailedException $e) {
+            $this->fail("Not all products were created");
         }
     }
 

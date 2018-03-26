@@ -150,12 +150,12 @@ class MassSchedule
 
             try {
                 $this->messageValidator->validate($topicName, $entityParams);
-                $data = $this->messageEncoder->encode($topicName, $entityParams);
+                $encodedMessage = $this->messageEncoder->encode($topicName, $entityParams);
 
                 $serializedData = [
                     'entity_id'        => null,
                     'entity_link'      => '',
-                    'meta_information' => $data,
+                    'meta_information' => $encodedMessage,
                 ];
                 $data = [
                     'data' => [
@@ -180,7 +180,7 @@ class MassSchedule
                 $requestItem->setErrorCode($exception);
                 $requestItems[] = $requestItem;
                 $bulkException->addException(new LocalizedException(
-                    __('Error processing input data: %s', $entityParams),
+                    __('Error processing %key element of input data', ['key' => $key]),
                     $exception
                 ));
             }
