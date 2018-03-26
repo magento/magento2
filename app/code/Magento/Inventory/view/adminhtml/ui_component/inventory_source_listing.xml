@@ -187,7 +187,7 @@
             </settings>
         </column>
         <column name="region"
-                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\Region"
+                class="Magento\Inventory\Ui\Component\Listing\Column\Region"
                 sortOrder="100">
             <settings>
                 <filter>text</filter>

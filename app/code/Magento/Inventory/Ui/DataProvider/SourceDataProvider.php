@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Inventory\Ui\DataProvider;
 
 use Magento\Backend\Model\Session;
-use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -111,7 +110,6 @@ class SourceDataProvider extends DataProvider
                 }
             }
         }
-
         return $data;
     }
 

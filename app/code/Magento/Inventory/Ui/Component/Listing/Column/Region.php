@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
+namespace Magento\Inventory\Ui\Component\Listing\Column;
 
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
