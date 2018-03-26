@@ -149,6 +149,7 @@
             <initialMediaGalleryOpenSubpath>wysiwyg</initialMediaGalleryOpenSubpath>
         </settings>
     </imageUploader>
+    <colorPicker class="Magento\Ui\Component\Form\Element\Input" component="Magento_Ui/js/form/element/colorPicker" template="ui/form/element/colorPicker"/>
     <!-- Form elements -->
 
     <!-- Form element data types -->

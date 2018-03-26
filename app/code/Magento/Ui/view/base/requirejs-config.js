@@ -12,6 +12,7 @@ var config = {
     paths: {
         'ui/template': 'Magento_Ui/templates',
         'tinymce4': 'tiny_mce_4/tinymce.min',
+        'spectrum': 'jquery/spectrum',
         'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
     },
     map: {
