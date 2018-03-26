@@ -7,15 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
+use Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\SourceItems\ManageStock;
+use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
  * Product form modifier. Add to form source data
@@ -23,9 +25,14 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 class SourceItems extends AbstractModifier
 {
     /**
-     * @var IsSourceItemsManagementAllowedForProductTypeInterface
+     * @var IsSourceItemsAllowedForProductTypeInterface
      */
-    private $isSourceItemsManagementAllowedForProductType;
+    private $isSourceItemsAllowedForProductType;
+
+    /**
+     * @var IsSingleSourceModeInterface
+     */
+    private $isSingleSourceMode;
 
     /**
      * @var LocatorInterface
@@ -43,21 +50,34 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
-     * @param IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType
+     * Check, if stock should be managed for given product.
+     *
+     * @var ManageStock
+     */
+    private $manageStock;
+
+    /**
+     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
+     * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param ManageStock $manageStock
      */
     public function __construct(
-        IsSourceItemsManagementAllowedForProductTypeInterface $isSourceItemsManagementAllowedForProductType,
+        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
+        IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ManageStock $manageStock
     ) {
-        $this->isSourceItemsManagementAllowedForProductType = $isSourceItemsManagementAllowedForProductType;
+        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
+        $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->manageStock = $manageStock;
     }
 
     /**
@@ -66,9 +86,15 @@ class SourceItems extends AbstractModifier
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
-            $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
+
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false
+            || null === $product->getId()
+        ) {
+            return $data;
         }
+
+        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
         return $data;
     }
 
@@ -85,7 +111,7 @@ class SourceItems extends AbstractModifier
         $collection->join(
             ['s' => $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE)],
             sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_CODE, SourceItemInterface::SOURCE_CODE),
-            ['source_name' => SourceInterface::NAME]
+            ['source_name' => SourceInterface::NAME, 'source_status' => SourceInterface::ENABLED]
         );
 
         $sourceItemsData = [];
@@ -95,6 +121,7 @@ class SourceItems extends AbstractModifier
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],
+                'source_status' => $row['source_status'],
             ];
         }
         return $sourceItemsData;
@@ -107,19 +134,45 @@ class SourceItems extends AbstractModifier
     {
         $product = $this->locator->getProduct();
 
-        if ($this->isSourceItemsManagementAllowedForProductType->execute($product->getTypeId()) === true) {
+        if ($this->isSingleSourceMode->execute() === true
+            || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
-
+        $isMangeStock = $this->manageStock->execute($product->getSku());
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'visible' => 0,
+                        'visible' => 1,
+                    ],
+                ],
+            ],
+            'children' => [
+                'assign_sources_container' => [
+                    'children' => [
+                        'assign_sources_button' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'visible' => $isMangeStock,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'assigned_sources' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'visible' => $isMangeStock,
+                            ],
+                        ],
                     ],
                 ],
             ],
         ];
+
         return $meta;
     }
 }

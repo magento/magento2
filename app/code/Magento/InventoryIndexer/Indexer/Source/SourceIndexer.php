@@ -39,7 +39,7 @@ class SourceIndexer
     }
 
     /**
-     * @inheritdoc
+     * @return void
      */
     public function executeFull()
     {
@@ -47,15 +47,16 @@ class SourceIndexer
     }
 
     /**
-     * @inheritdoc
+     * @param string $sourceCode
+     * @return void
      */
-    public function executeRow($sourceCode)
+    public function executeRow(string $sourceCode)
     {
         $this->executeList([$sourceCode]);
     }
 
     /**
-     * @inheritdoc
+     * @param array $sourceCodes
      */
     public function executeList(array $sourceCodes)
     {

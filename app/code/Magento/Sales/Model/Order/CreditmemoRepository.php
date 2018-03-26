@@ -70,13 +70,15 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('Id required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\CreditmemoInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
             $this->registry[$id] = $entity;
         }
@@ -121,7 +123,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
             $this->metadata->getMapper()->delete($entity);
             unset($this->registry[$entity->getEntityId()]);
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException(__('Could not delete credit memo'), $e);
+            throw new CouldNotDeleteException(__("The credit memo couldn't be deleted."), $e);
         }
         return true;
     }
@@ -139,7 +141,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save credit memo'), $e);
+            throw new CouldNotSaveException(__("The credit memo couldn't be saved."), $e);
         }
         return $this->registry[$entity->getEntityId()];
     }

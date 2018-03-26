@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
+        <plugin name="bundle_source_item_indexer"
+                type="Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem\AddBundleDataToIndexBySourceItemsIds" />
+    </type>
+    <type name="Magento\InventoryBundleIndexer\Indexer\SourceItem\ByBundleSkuAndChildrenSourceItemsIdsIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Api\ProductOptionRepositoryInterface">
+        <plugin name="bundle_product_index"
+                type="Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceItem\AddBundleDataToIndexByBundleIds" />
+    </type>
+    <type name="Magento\InventoryBundleIndexer\Indexer\SourceItem\GetSkuListInStock">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
+</config>

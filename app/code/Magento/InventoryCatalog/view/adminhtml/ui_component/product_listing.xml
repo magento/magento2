@@ -7,24 +7,24 @@
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="product_columns">
-        <column name="qty"
+        <column name="quantity_per_source"
                 class="Magento\InventoryCatalog\Ui\Component\Listing\Column\SourceItems"
                 component="Magento_InventoryCatalog/js/product/grid/cell/source-items"
-                sortOrder="75">
+                sortOrder="76">
             <settings>
                 <filter>false</filter>
                 <sortable>false</sortable>
-                <label translate="true">Quantity</label>
+                <label translate="true">Quantity per Source</label>
             </settings>
         </column>
-        <column name="stocks"
-                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\Stocks"
-                component="Magento_InventoryCatalog/js/product/grid/cell/stocks"
-                sortOrder="85">
+        <column name="salable_quantity"
+                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\SalableQuantity"
+                component="Magento_InventoryCatalog/js/product/grid/cell/salable-quantity"
+                sortOrder="77">
             <settings>
                 <filter>false</filter>
                 <sortable>false</sortable>
-                <label translate="true">Quantity per Stock</label>
+                <label translate="true">Salable Quantity</label>
             </settings>
         </column>
     </columns>

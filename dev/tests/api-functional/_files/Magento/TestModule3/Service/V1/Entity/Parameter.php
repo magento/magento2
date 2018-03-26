@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\TestModule3\Service\V1\Entity;
 
 class Parameter extends \Magento\Framework\Api\AbstractExtensibleObject

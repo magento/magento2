@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * A helper to gather specific kind of files in Magento application
+ * A helper to gather specific kind of files in Magento application.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -162,7 +162,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
@@ -471,6 +472,14 @@ class Files
                 $files,
                 $this->getFilesSubset(
                     $this->componentRegistrar->getPaths(ComponentRegistrar::THEME),
+                    $fileNamePattern,
+                    []
+                )
+            );
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::SETUP),
                     $fileNamePattern,
                     []
                 )
@@ -1119,6 +1128,37 @@ class Files
             return self::composeDataSets(self::$_cache[$key]);
         }
         return self::$_cache[$key];
+    }
+
+    /**
+     * Returns list of db_schema files, used by Magento application.
+     *
+     * @param string $fileNamePattern
+     * @param array $excludedFileNames
+     * @param bool $asDataSet
+     * @return array
+     * @codingStandardsIgnoreStart
+     */
+    public function getDbSchemaFiles(
+        $fileNamePattern = 'db_schema.xml',
+        $excludedFileNames = [],
+        $asDataSet = true
+    ) {
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
+            $files = array_filter(
+                $files,
+                function ($file) use ($excludedFileNames) {
+                    return !in_array(basename($file), $excludedFileNames);
+                }
+            );
+            self::$_cache[$cacheKey] = $files;
+        }
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
     }
 
     /**

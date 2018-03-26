@@ -11,6 +11,7 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceInterface" type="Magento\Inventory\Model\Source"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
+    <preference for="Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface" type="Magento\Inventory\Model\Source\Command\GetSourcesAssignedToStockOrderedByPriority"/>
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface" type="Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySku"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
@@ -63,14 +64,12 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Inventory\Model\GetStockItemDataInterface" type="Magento\Inventory\Model\ResourceModel\Stock\GetStockItemData"/>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
     <preference for="Magento\InventoryApi\Api\GetStockSourceLinksInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetStockSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksSave"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\StockSourceLinksDelete"/>
-    <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
     <preference for="Magento\Inventory\Model\StockSourceLink\Validator\StockSourceLinkValidatorInterface" type="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain">
@@ -87,15 +86,4 @@
             <argument name="stockSourceLinkValidator" xsi:type="object">Magento\Inventory\Model\StockSourceLink\Validator\ValidatorChain</argument>
         </arguments>
     </type>
-    <!-- IsSalable -->
-    <preference for="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetIsSalableConditionInterface" type="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain"/>
-    <type name="Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetStockConditionChain">
-        <arguments>
-            <argument name="getIsSalableConditions" xsi:type="array">
-                <item name="source_item_status" xsi:type="object">Magento\Inventory\Model\ResourceModel\IsSalableCondition\GetSourceItemStatusCondition</item>
-            </argument>
-        </arguments>
-    </type>
-    <!-- Product types -->
-    <preference for="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductTypeInterface" type="Magento\Inventory\Model\IsSourceItemsManagementAllowedForProductType"/>
 </config>

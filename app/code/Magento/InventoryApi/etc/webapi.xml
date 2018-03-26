@@ -32,6 +32,12 @@
             <resource ref="Magento_InventoryApi::source_edit"/>
         </resources>
     </route>
+    <route url="/V1/inventory/get-sources-assigned-to-stock-ordered-by-priority/:stockId" method="GET">
+        <service class="Magento\InventoryApi\Api\GetSourcesAssignedToStockOrderedByPriorityInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
     <!-- Stock -->
     <route url="/V1/inventory/stock" method="GET">
         <service class="Magento\InventoryApi\Api\StockRepositoryInterface" method="getList"/>
@@ -70,12 +76,6 @@
         </resources>
     </route>
     <!-- StockSourceLink -->
-    <route url="/V1/inventory/stock/get-assigned-sources/:stockId" method="GET">
-        <service class="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" method="execute"/>
-        <resources>
-            <resource ref="Magento_InventoryApi::source_stock_link"/>
-        </resources>
-    </route>
     <route url="/V1/inventory/stock-source-link" method="GET">
         <service class="Magento\InventoryApi\Api\GetStockSourceLinksInterface" method="execute"/>
         <resources>

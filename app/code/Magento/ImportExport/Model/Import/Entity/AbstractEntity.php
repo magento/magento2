@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Model\Import\Entity;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
@@ -310,7 +311,7 @@ abstract class AbstractEntity
     protected function _getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a source.'));
+            throw new LocalizedException(__('Please specify a source.'));
         }
         return $this->_source;
     }
@@ -378,7 +379,7 @@ abstract class AbstractEntity
     /**
      * Validate data rows and save bunches to DB.
      *
-     * @return $this|void
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValidatedBunches()
@@ -548,11 +549,11 @@ abstract class AbstractEntity
         if (!isset(
             $this->_parameters['behavior']
         ) ||
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_APPEND &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_DELETE
         ) {
-            return \Magento\ImportExport\Model\Import::getDefaultBehavior();
+            return ImportExport::getDefaultBehavior();
         }
         return $this->_parameters['behavior'];
     }
@@ -604,7 +605,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
+            throw new LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -879,7 +880,7 @@ abstract class AbstractEntity
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->metadataPool = ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;

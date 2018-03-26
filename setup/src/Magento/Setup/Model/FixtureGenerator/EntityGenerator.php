@@ -335,7 +335,9 @@ class EntityGenerator
                 }
             }
             if (!$foreignKey) {
-                throw new ValidatorException(__('Cannot find entity id field for table "%1"', $table));
+                throw new ValidatorException(
+                    __('The entity ID field for the "%1" table wasn\'t found. Verify the field and try again.', $table)
+                );
             }
             $this->tableToEntityIdMap[$table] = current($foreignKey)['COLUMN_NAME'];
         }
@@ -374,7 +376,9 @@ class EntityGenerator
                     }
                 );
                 if (!$ddl) {
-                    throw new ValidatorException(__('Cannot find primary key for table "%1"', $table));
+                    throw new ValidatorException(
+                        __('The primary key for the "%1" table wasn\'t found. Verify the key and try again.', $table)
+                    );
                 }
                 $this->tableToEntityIdMap[$table] = current($ddl)['COLUMN_NAME'];
             }

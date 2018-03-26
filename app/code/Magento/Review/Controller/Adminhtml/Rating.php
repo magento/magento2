@@ -41,9 +41,18 @@ abstract class Rating extends Action
     }
 
     /**
-     * @return void
+     * @deprecated Misspelled method
+     * @see initEntityId
      */
     protected function initEnityId()
+    {
+        $this->initEntityId();
+    }
+
+    /**
+     * @return void
+     */
+    protected function initEntityId()
     {
         $this->coreRegistry->register(
             'entityId',

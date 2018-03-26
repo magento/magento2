@@ -114,7 +114,7 @@ define([
                     metadata: {
                         node: codeCopy
                     },
-                    state: 'closed'
+                    state: node.state || 'closed'
                 };
             });
         }

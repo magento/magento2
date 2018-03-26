@@ -359,6 +359,12 @@
                     <item name="allowedExtensions" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/allowedExtensions
                     </item>
+                    <item name="openDialogTitle" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/openDialogTitle
+                    </item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/initialMediaGalleryOpenSubpath
+                    </item>
                     <item name="customEntry" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/customEntry
                     </item>
@@ -415,6 +421,16 @@
                     <item name="previewTmpl" type="string" xsi:type="xpath">settings/previewTmpl</item>
                     <item name="dropZone" type="string" xsi:type="xpath">settings/dropZone</item>
                     <item name="uploaderConfig" type="item" xsi:type="converter">settings/uploaderConfig</item>
+                </item>
+            </argument>
+        </schema>
+    </component>
+    <component name="imageUploader" include="fileUploader">
+        <schema name="current">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="openDialogTitle" type="string" translate="true" xsi:type="xpath">settings/openDialogTitle</item>
+                    <item name="initialMediaGalleryOpenSubpath" type="string" xsi:type="xpath">settings/initialMediaGalleryOpenSubpath</item>
                 </item>
             </argument>
         </schema>

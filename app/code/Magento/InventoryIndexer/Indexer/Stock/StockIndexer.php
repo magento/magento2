@@ -80,7 +80,7 @@ class StockIndexer
     }
 
     /**
-     * @inheritdoc
+     * @return void
      */
     public function executeFull()
     {
@@ -89,15 +89,17 @@ class StockIndexer
     }
 
     /**
-     * @inheritdoc
+     * @param int $stockId
+     * @return void
      */
-    public function executeRow($stockId)
+    public function executeRow(int $stockId)
     {
         $this->executeList([$stockId]);
     }
 
     /**
-     * @inheritdoc
+     * @param array $stockIds
+     * @return void
      */
     public function executeList(array $stockIds)
     {

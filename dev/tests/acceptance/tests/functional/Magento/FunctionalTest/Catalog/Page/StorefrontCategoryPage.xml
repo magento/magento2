@@ -6,9 +6,10 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontCategoryPage" url="/{{var1}}.html" module="Category" parameterized="true">
+    <page name="StorefrontCategoryPage" url="/{{var1}}.html" area="storefront" module="Catalog" parameterized="true">
         <section name="StorefrontCategoryMainSection"/>
+        <section name="WYSIWYGToolbarSection"/>
     </page>
-</config>
+</pages>
