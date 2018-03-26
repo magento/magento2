@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
 use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection as AttributeCollection;
 
 /**
  * {@inheritdoc}
@@ -37,18 +38,26 @@ class ConfigurableVariant implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @var AttributeCollection
+     */
+    private $attributeCollection;
+
+    /**
      * @param Collection $variantCollection
      * @param OptionCollection $optionCollection
      * @param ValueFactory $valueFactory
+     * @param AttributeCollection $attributeCollection
      */
     public function __construct(
         Collection $variantCollection,
         OptionCollection $optionCollection,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        AttributeCollection $attributeCollection
     ) {
         $this->variantCollection = $variantCollection;
         $this->optionCollection = $optionCollection;
         $this->valueFactory = $valueFactory;
+        $this->attributeCollection = $attributeCollection;
     }
 
     /**
@@ -63,6 +72,9 @@ class ConfigurableVariant implements ResolverInterface
         }
 
         $this->variantCollection->addParentId((int)$value['id']);
+        $fields = $this->getProductFields($info);
+        $matchedFields = $this->attributeCollection->getRequestAttributes($fields);
+        $this->variantCollection->addEavAttributes($matchedFields);
         $this->optionCollection->addProductId((int)$value['id']);
 
         $result = function () use ($value) {
@@ -70,30 +82,34 @@ class ConfigurableVariant implements ResolverInterface
             $options = $this->optionCollection->getAttributesByProductId((int)$value['id']) ?: [];
             $variants = [];
             foreach ($children as $key => $child) {
-                $variants[$key] = ['product' => $child];
-                foreach ($options as $option) {
-                    $code = $option['attribute_code'];
-                    if (!isset($child[$code])) {
-                        continue;
-                    }
-
-                    foreach ($option['values'] as $optionValue) {
-                        if ($optionValue['value_index'] != $child[$code]) {
-                            continue;
-                        }
-                        $variants[$key]['attributes'][] = [
-                            'label' => $optionValue['label'],
-                            'code' => $code,
-                            'use_default_value' => $optionValue['use_default_value'],
-                            'value_index' => $optionValue['value_index']
-                        ];
-                    }
-                }
+                $variants[$key] = ['product' => $child, 'options' => $options];
             }
 
             return $variants;
         };
 
         return $this->valueFactory->create($result);
+    }
+
+    /**
+     * Return field names for all requested product fields.
+     *
+     * @param ResolveInfo $info
+     * @return string[]
+     */
+    private function getProductFields(ResolveInfo $info)
+    {
+        $fieldNames = [];
+        foreach ($info->fieldNodes as $node) {
+            if ($node->name->value !== 'product') {
+                continue;
+            }
+
+            foreach ($node->selectionSet->selections as $selectionNode) {
+                $fieldNames[] = $selectionNode->name->value;
+            }
+        }
+
+        return $fieldNames;
     }
 }

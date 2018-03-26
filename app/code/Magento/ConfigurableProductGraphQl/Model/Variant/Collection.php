@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\Catalog\Model\ProductFactory;
@@ -48,16 +47,6 @@ class Collection
     private $metadataPool;
 
     /**
-     * @var FormatterInterface
-     */
-    private $formatter;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
-     */
-    private $productResource;
-
-    /**
      * @var int[]
      */
     private $parentIds = [];
@@ -68,30 +57,29 @@ class Collection
     private $childrenMap = [];
 
     /**
+     * @var string[]
+     */
+    private $attributeCodes = [];
+
+    /**
      * @param CollectionFactory $childCollectionFactory
      * @param ProductFactory $productFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataProvider $productDataProvider
      * @param MetadataPool $metadataPool
-     * @param FormatterInterface $formatter
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      */
     public function __construct(
         CollectionFactory $childCollectionFactory,
         ProductFactory $productFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataProvider $productDataProvider,
-        MetadataPool $metadataPool,
-        FormatterInterface $formatter,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource
+        MetadataPool $metadataPool
     ) {
         $this->childCollectionFactory = $childCollectionFactory;
         $this->productFactory = $productFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productDataProvider = $productDataProvider;
         $this->metadataPool = $metadataPool;
-        $this->formatter = $formatter;
-        $this->productResource = $productResource;
     }
 
     /**
@@ -105,6 +93,17 @@ class Collection
         if (!in_array($id, $this->parentIds)) {
             $this->parentIds[] = $id;
         }
+    }
+
+    /**
+     * Add attributes to collection filter
+     *
+     * @param array $attributeCodes
+     * @return void
+     */
+    public function addEavAttributes(array $attributeCodes) : void
+    {
+        $this->attributeCodes = array_replace($this->attributeCodes, $attributeCodes);
     }
 
     /**
@@ -151,23 +150,15 @@ class Collection
         }
 
         $this->searchCriteriaBuilder->addFilter($linkField, $childIds, 'in');
-        $childProducts = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
+        $childProducts = $this->productDataProvider->getList(
+            $this->searchCriteriaBuilder->create(),
+            $this->attributeCodes
+        );
 
         /** @var Product $childProduct */
         foreach ($childProducts->getItems() as $childProduct) {
-            $formattedChild = $this->formatter->format($childProduct);
-            $categoryLinks = $this->productResource->getCategoryIds($childProduct);
-            /** @var Product $item */
-            foreach ($childCollection->getItems() as $item) {
-                if ($childProduct->getId() !== $item->getId()) {
-                    continue;
-                }
-
-                $parentId = $item->getParentId();
-            }
-            foreach ($categoryLinks as $position => $link) {
-                $formattedChild['category_links'][] = ['position' => $position, 'category_id' => $link];
-            }
+            $formattedChild = ['model' => $childProduct];
+            $parentId = (int)$childProduct->getParentId();
             if (!isset($this->childrenMap[$parentId])) {
                 $this->childrenMap[$parentId] = [];
             }

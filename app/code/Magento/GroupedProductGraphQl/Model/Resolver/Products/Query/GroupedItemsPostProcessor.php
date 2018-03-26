@@ -78,7 +78,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
         }
 
         $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $childrenSkus, 'in');
-        $childResults = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
+        $childResults = $this->productDataProvider->getList($this->searchCriteriaBuilder->create(), []);
         $resultData = $this->addChildData($childResults->getItems(), $resultData);
 
         return $resultData;
@@ -94,7 +94,7 @@ class GroupedItemsPostProcessor implements PostFetchProcessorInterface
     private function addChildData(array $childResults, array $resultData) : array
     {
         foreach ($childResults as $child) {
-            $childData = $this->formatter->format($child);
+            $childData = ['model' => $child];
             $childSku = $child->getSku();
             foreach ($resultData as $key => $item) {
                 foreach ((array)$item['items'] as $linkKey => $link) {

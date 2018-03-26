@@ -6,21 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
-        <arguments>
-            <argument name="formatterInstances" xsi:type="array">
-                <item name="baseModelData" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\BaseModelData</item>
-                <item name="customAttributes" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\CustomAttributes</item>
-                <item name="entityIdToId" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\EntityIdToId</item>
-                <item name="mediaGalleryEntries" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
-                <item name="options" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Options</item>
-                <item name="price" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
-                <item name="tierPrices" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
-                <item name="newFromTo" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\NewFromTo</item>
-                <item name="productLinks" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">

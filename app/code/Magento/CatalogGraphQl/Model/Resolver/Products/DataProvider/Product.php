@@ -77,12 +77,13 @@ class Product
     }
 
     /**
-     * Gets list of product data with full data set
+     * Gets list of product data with full data set. Adds eav attributes to result set from passed in array
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param string[] $attributes
      * @return SearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
     {
         if (!$this->searchResult) {
 

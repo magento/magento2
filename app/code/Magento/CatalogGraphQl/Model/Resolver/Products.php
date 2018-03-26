@@ -104,13 +104,13 @@ class Products implements ResolverInterface
             $filterableAttributesList = $this->filterableAttributesListFactory->create(
                 Resolver::CATALOG_LAYER_SEARCH
             );
-            $searchResult = $this->searchQuery->getResult($searchCriteria);
+            $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         } else {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
             $filterableAttributesList = $this->filterableAttributesListFactory->create(
                 Resolver::CATALOG_LAYER_CATEGORY
             );
-            $searchResult = $this->filterQuery->getResult($searchCriteria);
+            $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
         }
         //possible division by 0
         if ($searchCriteria->getPageSize()) {
