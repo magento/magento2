@@ -2,16 +2,16 @@
 #See COPYING.txt for license details.
 
 interface ProductInterface {
-    url_key: String
-    url_path: String
+    url_key: String @doc(description: "The part of the URL that identifies the product")
+    url_path: String @doc(description: "The part of the URL that precedes the `url_key`")
 }
 
 input ProductFilterInput {
-    url_key: FilterTypeInput
-    url_path: FilterTypeInput
+    url_key: FilterTypeInput @doc(description: "The part of the URL that identifies the product")
+    url_path: FilterTypeInput @doc(description: "The part of the URL that precedes the `url_key`")
 }
 
 input ProductSortInput {
-    url_key: SortEnum
-    url_path: SortEnum
+    url_key: SortEnum @doc(description: "The part of the URL that identifies the product")
+    url_path: SortEnum @doc(description: "The part of the URL that precedes the `url_key`")
 }

@@ -2,21 +2,21 @@
 #See COPYING.txt for license details.
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
-    configurable_product_links: [SimpleProduct]
-    configurable_product_options: [ConfigurableProductOptions]
+    configurable_product_links: [SimpleProduct] @doc(description: "An array of linked simple products")
+    configurable_product_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items")
 }
 
 type ConfigurableProductOptions {
-    id: Int
-    attribute_id: String
-    attribute_code: String
-    label: String
-    position: Int
-    is_use_default: Boolean
-    values: [ConfigurableProductOptionsValues]
-    product_id: Int
+    id: Int @doc(description: "The configurable option ID number assigned by the system")
+    attribute_id: String @doc(description: "The ID assigned to the attribute")
+    attribute_code: String @doc(description: "A string that identifies the attribute")
+    label: String @doc(description: "A string that describes the configurable product option. It is displayed on the UI.")
+    position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
+    is_use_default: Boolean @doc(description: "Indicates whether the option is the default")
+    values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the value_index codes assigned to the configurable product")
+    product_id: Int @doc(description: "This is the same as a product's 'id' field")
 }
 
 type ConfigurableProductOptionsValues {
-    value_index: Int
+    value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
 }

@@ -2,34 +2,34 @@
 #See COPYING.txt for license details.
 
 type BundleItem {
-    option_id: Int
-    title: String
-    required: Boolean
-    type: String
-    position: Int
-    sku: String
-    options: [BundleItemOption]
+    option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product")
+    title: String @doc(description: "The display name of the item")
+    required: Boolean @doc(description: "Indicates whether the item must be included in the bundle")
+    type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox")
+    position: Int @doc(description: "he relative position of this item compared to the other bundle items")
+    sku: String @doc(description: "The SKU of the bundle product")
+    options: [BundleItemOption] @doc(description: "An array of additional options for this bundle item")
 }
 
 type BundleItemOption {
-    id: Int
-    label: String
-    qty: Float
-    position: Int
-    is_default: Boolean
-    price: Float
-    price_type: PriceTypeEnum
-    can_change_quantity: Boolean
-    product: ProductInterface
+    id: Int @doc(description: "The ID assigned to the bundled item option")
+    label: String @doc(description: "The text that identifies the bundled item option")
+    qty: Float @doc(description: "Indicates the quantity of this specific bundle item")
+    position: Int @doc(description: "When a bundle item contains multiple options, the relative position of this option compared to the other options")
+    is_default: Boolean @doc(description: "Indicates whether this option is the default option")
+    price: Float @doc(description: "The price of the selected option")
+    price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC")
+    can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option")
+    product: ProductInterface @doc(description: "Contains details about this product option")
 }
 
 type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
-    price_view: PriceViewEnum
-    dynamic_price: Boolean
-    dynamic_sku: Boolean
-    ship_bundle_items: ShipBundleItemsEnum
-    dynamic_weight: Boolean
-    items: [BundleItem]
+    price_view: PriceViewEnum @doc(description: "One of PRICE_RANGE or AS_LOW_AS")
+    dynamic_price: Boolean @doc(description: "Indicates whether the bundle product has a dynamic price")
+    dynamic_sku: Boolean @doc(description: "Indicates whether the bundle product has a dynamic SK")
+    ship_bundle_items: ShipBundleItemsEnum @doc(description: "Indicates whether to ship bundle items together or individually")
+    dynamic_weight: Boolean @doc(description: "Indicates whether the bundle product has a dynamically calculated weight")
+    items: [BundleItem] @doc(description: "An array containing information about individual bundle items")
 }
 
 enum PriceViewEnum {

@@ -6,16 +6,16 @@ type Query {
 }
 
 type CustomAttributeMetadata {
-    items: [Attribute]
+    items: [Attribute] @doc(description: "An array of attributes")
 }
 
 type Attribute {
-    attribute_code: String
-    entity_type: String
-    attribute_type: String
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
+    attribute_type: String @doc(description: "The data type of the attribute")
 }
 
 input AttributeInput {
-    attribute_code: String
-    entity_type: String
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
 }
