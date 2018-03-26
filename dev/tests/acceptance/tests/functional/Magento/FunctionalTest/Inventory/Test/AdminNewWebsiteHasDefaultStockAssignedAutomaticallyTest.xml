@@ -35,6 +35,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
 
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicWebsite.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource"/>
     </test>
