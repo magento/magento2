@@ -65,7 +65,7 @@ class SchemaRequestProcessor implements RequestProcessorInterface
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
-        if (strpos(ltrim($request->getPathInfo(), '/'), self::PROCESSOR_PATH) === 0) {
+        if (strpos($request->getPathInfo(), self::PROCESSOR_PATH) === 0) {
             return true;
         }
         return false;

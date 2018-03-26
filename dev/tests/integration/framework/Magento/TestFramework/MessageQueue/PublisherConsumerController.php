@@ -39,9 +39,9 @@ class PublisherConsumerController
         PublisherInterface $publisher,
         OsInfo $osInfo,
         $logFilePath,
-        $maxMessages,
         $consumers,
-        $appInitParams
+        $appInitParams,
+        $maxMessages = null
     ) {
         $this->consumers = $consumers;
         $this->publisher = $publisher;
@@ -132,21 +132,19 @@ class PublisherConsumerController
     }
 
     /**
-     * Wait for asynchronous handlers to log data to file.
-     *
-     * @param int $expectedLinesCount
-     * @param string $logFilePath
+     * @param callable $condition
+     * @param $params
      * @throws PreconditionFailedException
      */
-    public function waitForAsynchronousResult($expectedLinesCount, $logFilePath)
+    public function waitForAsynchronousResult(callable $condition, $params)
     {
         $i = 0;
         do {
             sleep(1);
-            $actualCount = file_exists($logFilePath) ? count(file($logFilePath)) : 0;
-        } while (($expectedLinesCount !== $actualCount) && ($i++ < 180));
+            $assertion = call_user_func_array($condition, $params);
+        } while (!$assertion && ($i++ < 180));
 
-        if (!file_exists($logFilePath)) {
+        if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");
         }
     }

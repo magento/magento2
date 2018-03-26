@@ -11,8 +11,8 @@
     <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
         <arguments>
             <argument name="requestProcessors" xsi:type="array">
-                <item name="asyncSchema" xsi:type="object">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor</item>
-                <item name="async" xsi:type="object">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor</item>
+                <item name="asyncSchema" xsi:type="object" sortOrder="60">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor</item>
+                <item name="async" xsi:type="object" sortOrder="150">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor</item>
             </argument>
         </arguments>
     </type>

@@ -15,7 +15,7 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 /**
  * Base test case for message queue tests.
  */
-abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
+class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string[]
@@ -84,10 +84,18 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     protected function waitForAsynchronousResult($expectedLinesCount, $logFilePath)
     {
         try {
-            $this->publisherConsumerController->waitForAsynchronousResult($expectedLinesCount, $logFilePath);
+            //$expectedLinesCount, $logFilePath
+            $this->publisherConsumerController->waitForAsynchronousResult([$this, 'checkLogsExists'], [
+                $expectedLinesCount, $logFilePath
+            ]);
         } catch (PreconditionFailedException $e) {
             $this->fail($e->getMessage());
         }
+    }
+
+    public function checkLogsExists($expectedLinesCount) {
+        $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
+        return $expectedLinesCount === $actualCount;
     }
 
     /**

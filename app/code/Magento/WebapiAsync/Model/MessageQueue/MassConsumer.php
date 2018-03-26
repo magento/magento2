@@ -155,7 +155,6 @@ class MassConsumer implements ConsumerInterface
                     $this->dispatchMessage($message);
                 } else {
                     $queue->reject($message);
-
                     return;
                 }
 
@@ -165,7 +164,7 @@ class MassConsumer implements ConsumerInterface
             } catch (ConnectionLostException $e) {
                 if ($lock) {
                     $this->resource->getConnection()
-                                   ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
                 }
             } catch (NotFoundException $e) {
                 $queue->acknowledge($message);
@@ -174,7 +173,7 @@ class MassConsumer implements ConsumerInterface
                 $queue->reject($message, false, $e->getMessage());
                 if ($lock) {
                     $this->resource->getConnection()
-                                   ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
                 }
             }
         };
@@ -204,7 +203,7 @@ class MassConsumer implements ConsumerInterface
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
             $this->messageValidator->validate($topicName, $entityParams);
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->error($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();
             $messages[] = $e->getMessage();
@@ -231,19 +230,19 @@ class MassConsumer implements ConsumerInterface
                             __('Sorry, something went wrong during product prices update. Please see log for details.');
                     }
                 } catch (NoSuchEntityException $e) {
-                    $this->logger->critical($e->getMessage());
+                    $this->logger->error($e->getMessage());
                     $status = ($e instanceof TemporaryStateExceptionInterface) ?
                         OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED :
                         OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                     $errorCode = $e->getCode();
                     $messages[] = $e->getMessage();
                 } catch (LocalizedException $e) {
-                    $this->logger->critical($e->getMessage());
+                    $this->logger->error($e->getMessage());
                     $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                     $errorCode = $e->getCode();
                     $messages[] = $e->getMessage();
                 } catch (\Exception $e) {
-                    $this->logger->critical($e->getMessage());
+                    $this->logger->error($e->getMessage());
                     $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
                     $errorCode = $e->getCode();
                     $messages[] = $e->getMessage();
