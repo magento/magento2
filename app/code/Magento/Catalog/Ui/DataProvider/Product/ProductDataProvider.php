@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
@@ -40,8 +41,6 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $modifiersPool;
 
     /**
-     * Construct
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -82,10 +81,16 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+        return $data;
     }
 
     /**
