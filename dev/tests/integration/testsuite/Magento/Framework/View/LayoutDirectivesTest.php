@@ -201,6 +201,18 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      */
+    public function testRemoveCancellation()
+    {
+        $layout = $this->_getLayoutModel('remove_cancellation.xml');
+        $this->assertTrue($layout->isContainer('container1'));
+        $this->assertTrue($layout->isBlock('child_block1'));
+        $this->assertTrue($layout->isBlock('no_name2'));
+        $this->assertFalse($layout->getBlock('not_exist'));
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testMove()
     {
         $layout = $this->_getLayoutModel('move.xml');
