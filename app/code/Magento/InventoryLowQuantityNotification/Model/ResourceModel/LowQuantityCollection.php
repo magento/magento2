@@ -110,6 +110,7 @@ class LowQuantityCollection extends AbstractCollection
         $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
         $this->addEnabledSourceFilter();
+        $this->addSourceItemStatusFilter();
 
         $this->setOrder(
             SourceItemInterface::QUANTITY,
@@ -202,5 +203,13 @@ class LowQuantityCollection extends AbstractCollection
             ),
             []
         );
+    }
+
+    /**
+     * @return void
+     */
+    private function addSourceItemStatusFilter()
+    {
+        $this->addFieldToFilter('main_table.status', SourceItemInterface::STATUS_IN_STOCK);
     }
 }
