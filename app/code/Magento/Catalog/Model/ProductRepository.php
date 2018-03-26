@@ -246,7 +246,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
-            $this->cacheProduct($cacheKey, $product);
+            $this->cacheProduct($cacheKey, $product, $sku);
         }
         if (!isset($this->instances[$sku])) {
             $sku = trim($sku);
@@ -302,12 +302,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      *
      * @param string $cacheKey
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param null|string $sku
      * @return void
      */
-    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
+    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product, $sku = null)
     {
+        $productSku = $sku ?: $product->getSku();
         $this->instancesById[$product->getId()][$cacheKey] = $product;
-        $this->instances[$product->getSku()][$cacheKey] = $product;
+        $this->instances[$productSku][$cacheKey] = $product;
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
