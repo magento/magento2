@@ -14,7 +14,7 @@ define([
     return Bulk.extend({
         defaults: {
             quantityModuleName: '',
-            quantity_per_source: '',
+            quantityPerSource: '',
             exports: {
                 attribute: '${$.provider}:data.inventoryAttribute',
                 type: '${$.provider}:data.inventoryType'
@@ -46,7 +46,7 @@ define([
                 this.images = new self.makeImages(null);
                 this.price = self.price;
                 this.quantity = self.quantity;
-                this.quantity_per_source = self.quantity_per_source;
+                this.quantity_per_source = self.quantityPerSource;
             };
 
             this.initAttributeListener();
@@ -58,13 +58,13 @@ define([
          * Inits listeners for attribute change.
          */
         initAttributeListener: function () {
-            var quantity_per_source = this.sections().quantity_per_source;
+            var quantityPerSource = this.sections().quantity_per_source;
 
-            quantity_per_source.attribute.subscribe(function (data) {
+            quantityPerSource.attribute.subscribe(function (data) {
                 this.attribute(data);
             }.bind(this));
 
-            quantity_per_source.type.subscribe(function (data) {
+            quantityPerSource.type.subscribe(function (data) {
                 this.type(data);
             }.bind(this));
         },
@@ -116,19 +116,19 @@ define([
         /** @inheritdoc */
         validate: function () {
             var valid = true,
-                quantity_per_source = this.quantityResolver();
+                quantityPerSource = this.quantityResolver();
 
             this._super();
 
             if (this.type() && this.type() !== 'none') {
-                quantity_per_source.valid = true;
+                quantityPerSource.valid = true;
 
-                quantity_per_source.elems().forEach(function (item) {
-                    quantity_per_source.validate.call(quantity_per_source, item);
+                quantityPerSource.elems().forEach(function (item) {
+                    quantityPerSource.validate.call(quantityPerSource, item);
                     valid = valid && item.elems()[1].elems().length;
                 });
 
-                if (!quantity_per_source.valid || !valid) {
+                if (!quantityPerSource.valid || !valid) {
                     throw new Error($.mage.__('Please fill-in correct values.'));
                 }
             }
