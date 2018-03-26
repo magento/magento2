@@ -127,6 +127,10 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
+        if ($request->getHttpMethod() === \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
+            return false;
+        }
+
         if (preg_match(self::PROCESSOR_PATH, $request->getPathInfo()) === 1) {
             return true;
         }
