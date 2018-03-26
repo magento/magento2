@@ -27,6 +27,7 @@ define([
         /** @inheritdoc */
         initialize: function () {
             var self = this, sections;
+
             this._super();
 
             sections = this.sections();
