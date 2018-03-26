@@ -174,6 +174,7 @@ class MessageValidator
     {
         $type = is_object($message) ? get_class($message) : gettype($message);
         $type = $type == 'boolean' ? 'bool' : $type;
+        $type = $type == 'double' ? 'float' : $type;
         return $type == "integer" ? "int" : $type;
     }
 
