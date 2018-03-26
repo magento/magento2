@@ -77,7 +77,6 @@ define([
                 baseLinkType = this.urlTypes.base;
 
             delete this.urlTypes.base;
-            console.log(this);
             _.each(this.urlTypes, function (linkSettingsArray, linkName) {
                 //add link name by link type
                 linkSettingsArray.name = baseLinkType.namePrefix + linkName;
