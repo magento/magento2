@@ -72,26 +72,37 @@ class TierPrice extends AbstractDb
      */
     public function reindexEntity(array $entityIds = [])
     {
-        $connection = $this->getConnection();
-        $connection->delete($this->getMainTable());
-        if (!$entityIds) {
-            return;
-        }
+        $select = $this->buildSelect(true, $entityIds);
+        $query = $select->insertFromSelect($this->getMainTable());
+        $this->getConnection()->query($query);
 
+        $select = $this->buildSelect(false, $entityIds);
+        $query = $select->insertFromSelect($this->getMainTable());
+        $this->getConnection()->query($query);
+    }
+
+    private function buildSelect(bool $isAllGroups, array $entityIds = []): Select
+    {
         $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $linkField = $entityMetadata->getLinkField();
-        $entityField = 'cpe.' . $linkField;
+
+        $select = $this->getConnection()->select();
+        $select->from(['tp' => $this->tierPriceResourceModel->getMainTable()], [])
+            ->where('tp.qty = ?', 1)
+            ->where('tp.all_groups = ?', (int) $isAllGroups);
+        if ($isAllGroups) {
+            $select->where('tp.customer_group_id = ?', 0);
+        }
+
+        $select->join(['cpe' => $this->getTable('catalog_product_entity')], "cpe.{$linkField} = tp.{$linkField}", []);
+        if (!empty($entityIds)) {
+            $select->where('cpe.entity_id IN (?)', $entityIds);
+        }
+
+        $select->joinLeft(['sw' => $this->getTable('store_website')], 'sw.website_id = tp.website_id', []);
+        $select->joinLeft(['sg' => $this->getTable('store_group')], 'sg.group_id = sw.default_group_id', []);
 
         $priceAttribute = $this->attributeRepository->get('price');
-
-        $select = $connection->select();
-        $select->from(['sw' => $this->getTable('store_website')], [])
-            ->joinCross(['cg' => $this->getTable('customer_group')], [])
-            ->joinCross(['cpe' => $this->getTable('catalog_product_entity')], [])
-            ->joinLeft(['sg' => $this->getTable('store_group')], 'sg.group_id = sw.default_group_id', [])
-            ->where('cpe.entity_id IN (?)', $entityIds)
-            ->having('tier_price IS NOT NULL');
-
         $select->joinLeft(
             ['eps' => $priceAttribute->getBackend()->getTable()],
             'eps.' . $linkField . ' = cpe.' . $linkField
@@ -106,67 +117,21 @@ class TierPrice extends AbstractDb
             []
         );
 
-        $tierPriceAliases = [];
-        $tierPriceAliases[] = $this->joinTierPrice($select, $entityField, 'sw.website_id', 'cg.customer_group_id');
-        $tierPriceAliases[] = $this->joinTierPrice($select, $entityField, 'sw.website_id', '0');
-        $tierPriceAliases[] = $this->joinTierPrice($select, $entityField, '0', 'cg.customer_group_id');
-        $tierPriceAliases[] = $this->joinTierPrice($select, $entityField, '0', '0');
-
-        $tierPriceValueFields = $tierPricePercentageFields = [];
-        foreach ($tierPriceAliases as $tierPriceAlias) {
-            $tierPriceValueFields[] = $tierPriceAlias . '.value';
-            $tierPricePercentageFields[] = $tierPriceAlias . '.percentage_value';
-        }
-        $tierPriceValue = 'COALESCE(' . implode(', ', $tierPriceValueFields) . ')';
-        $tierPricePercentage = 'COALESCE(' . implode(', ', $tierPricePercentageFields) . ')';
-        $priceValue = $connection->getIfNullSql('eps.value', 'ep0.value');
-        $tierPriceValueExpr = $connection->getCheckSql(
-            $tierPriceValue,
-            $tierPriceValue,
-            sprintf('(1 - %s / 100) * %s', $tierPricePercentage, $priceValue)
+        $priceValue = $this->getConnection()->getIfNullSql('eps.value', 'ep0.value');
+        $tierPriceValueExpr = $this->getConnection()->getCheckSql(
+            'tp.value > 0',
+            'tp.value',
+            sprintf('(1 - %s / 100) * %s', 'tp.percentage_value', $priceValue)
         );
         $select->columns(
             [
                 'cpe.entity_id',
-                'cg.customer_group_id',
+                'tp.customer_group_id',
                 'sw.website_id',
                 'tier_price' => $tierPriceValueExpr,
             ]
         );
 
-        $query = $select->insertFromSelect($this->getMainTable());
-        $connection->query($query);
-    }
-
-    /**
-     * Join tier price table to select.
-     *
-     * @param Select $select
-     * @param string $entityField
-     * @param string $websiteField
-     * @param string $customerGroupField
-     * @return string
-     */
-    private function joinTierPrice(
-        Select $select,
-        string $entityField,
-        string $websiteField,
-        string $customerGroupField
-    ): string {
-        list (, $linkField) = explode('.', $entityField);
-        $isAllGroups = ('0' === $customerGroupField ? '1' : '0');
-        $tableAlias = 'tp' . ('0' === $websiteField ? '0' : 'w') . $isAllGroups;
-
-        $select->joinLeft(
-            [$tableAlias => $this->tierPriceResourceModel->getMainTable()],
-            $tableAlias . '.' . $linkField . ' = ' . $entityField
-            . ' AND ' . $tableAlias . '.qty = 1'
-            . ' AND ' . $tableAlias . '.all_groups = ' . $isAllGroups
-            . ' AND ' . $tableAlias . '.customer_group_id = ' . $customerGroupField
-            . ' AND ' . $tableAlias . '.website_id = ' . $websiteField,
-            []
-        );
-
-        return $tableAlias;
+        return $select;
     }
 }
