@@ -220,6 +220,7 @@
             <xs:element name="price" type="formElementPrice" maxOccurs="unbounded"/>
             <xs:element name="radioset" type="formElementRadioset" maxOccurs="unbounded"/>
             <xs:element name="wysiwyg" type="formElementWysiwyg" maxOccurs="unbounded"/>
+            <xs:element name="fileUploader" type="formElementFileUploader" maxOccurs="unbounded"/>
         </xs:choice>
     </xs:group>
 
