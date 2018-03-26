@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
     configurable_product_links: [SimpleProduct] @doc(description: "An array of linked simple products")

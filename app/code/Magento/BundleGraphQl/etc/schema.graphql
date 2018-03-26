@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 type BundleItem {
     option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product")

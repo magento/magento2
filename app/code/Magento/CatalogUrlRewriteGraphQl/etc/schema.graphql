@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 interface ProductInterface {
     url_key: String @doc(description: "The part of the URL that identifies the product")

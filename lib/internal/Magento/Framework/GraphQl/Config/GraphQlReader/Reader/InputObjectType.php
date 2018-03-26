@@ -70,7 +70,6 @@ class InputObjectType implements TypeMetaReaderInterface
         $result = [
             'name' => $fieldName,
             'required' => false,
-            // TODO arguments don't make sense here, but expected to be always present in \Magento\Framework\GraphQl\Config\Data\Mapper\TypeMapper::map
             'arguments' => []
         ];
 

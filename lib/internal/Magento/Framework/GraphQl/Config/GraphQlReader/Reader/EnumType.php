@@ -37,7 +37,6 @@ class EnumType implements TypeMetaReaderInterface
                 'items' => [] // Populated later
             ];
             foreach ($typeMeta->getValues() as $enumValueMeta) {
-                // TODO: Simplify structure, currently name is lost during conversion to GraphQL schema
                 $result['items'][$enumValueMeta->value] = [
                     'name' => strtolower($enumValueMeta->name),
                     '_value' => $enumValueMeta->value

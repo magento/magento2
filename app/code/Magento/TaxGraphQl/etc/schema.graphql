@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 input ProductFilterInput {
     tax_class_id: FilterTypeInput

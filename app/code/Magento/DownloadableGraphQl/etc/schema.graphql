@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 type DownloadableProduct implements ProductInterface, CustomizableProductInterface {
     downloadable_product_samples: [DownloadableProductSamples] @doc(description: "An array containing information about samples of this downloadable product.")

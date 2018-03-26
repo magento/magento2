@@ -1,5 +1,5 @@
-#Copyright © Magento, Inc. All rights reserved.
-#See COPYING.txt for license details.
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 
 type Query {
     products(
@@ -453,7 +453,7 @@ input ProductSortInput {
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
     short_description: SortEnum @doc(description: "A short description of the product. Its use depends on the theme.")
-    price: SortEnum  @doc(description: "The price of the item")
+    price: SortEnum @doc(description: "The price of the item")
     special_price: SortEnum @doc(description: "The discounted price of the product")
     special_from_date: SortEnum @doc(description: "The beginning date that a product has a special price")
     special_to_date: SortEnum @doc(description: "The end date that a product has a special price")
@@ -468,7 +468,7 @@ input ProductSortInput {
     tier_price: SortEnum @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached")
     news_from_date: SortEnum @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product")
     news_to_date: SortEnum @doc(description: "The end date for new product listings")
-    custom_design: SortEnum  @doc(description: "A theme that can be applied to the product page")
+    custom_design: SortEnum @doc(description: "A theme that can be applied to the product page")
     custom_design_from: SortEnum @doc(description: "The beginning date when a theme is applied to the product page")
     custom_design_to: SortEnum @doc(description: "The date at which a theme is no longer applied to the product page")
     custom_layout_update: SortEnum @doc(description: "XML code that is applied as a layout update to the product page")
