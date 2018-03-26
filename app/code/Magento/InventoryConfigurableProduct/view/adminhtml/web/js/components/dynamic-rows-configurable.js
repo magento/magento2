@@ -12,8 +12,7 @@ define([
         /** @inheritdoc */
         getProductData: function (row) {
             var product = this._super(row);
-
-            product.quantity_per_source = row['quantity_per_source'];
+            product['quantity_per_source'] = row.quantityPerSource;
 
             return product;
         }

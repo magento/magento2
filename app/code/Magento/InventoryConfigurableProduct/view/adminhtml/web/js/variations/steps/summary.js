@@ -14,7 +14,7 @@ define([
         /** @inheritdoc */
         initObservable: function () {
             this._super();
-            this.quantityFieldName = 'quantity_per_source';
+            this.quantityFieldName = 'quantityPerSource';
             this.attributesName = [
                 $.mage.__('Images'),
                 $.mage.__('SKU'),

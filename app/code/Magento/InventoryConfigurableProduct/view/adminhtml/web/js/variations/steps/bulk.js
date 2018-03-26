@@ -26,13 +26,14 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            var self = this, sections;
+            var self = this,
+                sections;
 
             this._super();
 
             sections = this.sections();
-            sections.quantity_per_source = {
-                label: 'quantity per source',
+            sections.quantityPerSource = {
+                label: 'Quantity Per Source',
                 type: ko.observable('none'),
                 value: ko.observable(),
                 attribute: ko.observable()
@@ -45,8 +46,7 @@ define([
             this.makeOptionSections = function () {
                 this.images = new self.makeImages(null);
                 this.price = self.price;
-                this.quantity = self.quantity;
-                this.quantity_per_source = self.quantityPerSource;
+                this.quantityPerSource = self.quantityPerSource;
             };
 
             this.initAttributeListener();
@@ -58,7 +58,7 @@ define([
          * Inits listeners for attribute change.
          */
         initAttributeListener: function () {
-            var quantityPerSource = this.sections().quantity_per_source;
+            var quantityPerSource = this.sections().quantityPerSource;
 
             quantityPerSource.attribute.subscribe(function (data) {
                 this.attribute(data);
@@ -105,11 +105,11 @@ define([
                 data = module.dynamicRowsCollection[this.attribute().code];
 
                 _.each(this.attribute().chosen, function (item) {
-                    item.sections().quantity_per_source = data[item.label];
+                    item.sections().quantityPerSource = data[item.label];
                 });
             } else if (this.type() === 'single') {
                 data = module.dynamicRowsCollection[module.dynamicRowsName];
-                this.sections().quantity_per_source.value(data);
+                this.sections().quantityPerSource.value(data);
             }
         },
 
