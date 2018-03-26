@@ -146,6 +146,7 @@ class MassSchedule
         $requestItems = [];
         $bulkException = new BulkException();
         foreach ($entitiesArray as $key => $entityParams) {
+            /** @var \Magento\WebapiAsync\Api\Data\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
@@ -191,7 +192,7 @@ class MassSchedule
                 __('Something went wrong while processing the request.')
             );
         }
-
+        /** @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
         $asyncResponse->setBulkUuid($groupId);
         $asyncResponse->setRequestItems($requestItems);

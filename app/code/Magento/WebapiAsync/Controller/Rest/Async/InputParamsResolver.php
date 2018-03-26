@@ -77,9 +77,10 @@ class InputParamsResolver
     /**
      * Process and resolve input parameters
      * Return array with validated input params
-     * or \Exception object for failed validation params
+     * or throw \Exception if at least one request entity params is not valid
      *
      * @return array
+     * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
      * @throws \Magento\Framework\Webapi\Exception
      */
     public function resolve()
@@ -90,11 +91,13 @@ class InputParamsResolver
 
         //simple check if async request have single or bulk entities
         if (array_key_exists(0, $inputData)) {
-            foreach ($inputData as $key => $singleParams) {
-                $webapiResolvedParams[$key] = $this->resolveParams($singleParams);
+            foreach ($inputData as $key => $singleEntityParams) {
+                if (is_integer($key)) {
+                    $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams);
+                }
             }
         } else {//single item request
-            $webapiResolvedParams[] = $this->resolveParams($inputData);
+            $webapiResolvedParams[] = $this->inputParamsResolver->resolve();
         }
 
         return $webapiResolvedParams;
@@ -109,29 +112,24 @@ class InputParamsResolver
     }
 
     /**
-     * @return array|\Exception
+     * Convert the input array from key-value format to a list of parameters
+     * suitable for the specified class / method.
+     *
+     * Instead of \Magento\Webapi\Controller\Rest\InputParamsResolver
+     * we don't need to merge body params with url params and use only body params
+     *
+     * @param array $inputData data to send to method in key-value format
+     * @return array list of parameters that can be used to call the service method
+     * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
+     * @throws \Magento\Framework\Webapi\Exception
      */
-    private function resolveParams($inputData)
+    private function resolveBulkItemParams($inputData)
     {
         $route = $this->getRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
-
-        /*
-         * Valid only for updates using PUT when passing id value both in URL and body
-         */
-        if ($this->request->getHttpMethod() == RestRequest::HTTP_METHOD_PUT) {
-            $inputData = $this->paramsOverrider->overrideRequestBodyIdWithPathParam(
-                $this->request->getParams(),
-                $inputData,
-                $serviceClassName,
-                $serviceMethodName
-            );
-            $inputData = array_merge($inputData, $this->request->getParams());
-        }
-
-        $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
         $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+
         return $inputParams;
     }
 }
