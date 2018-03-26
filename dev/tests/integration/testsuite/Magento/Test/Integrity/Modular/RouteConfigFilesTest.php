@@ -52,7 +52,6 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
 
     public function testRouteConfigsValidation()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/657');
         $invalidFiles = [];
 
         $componentRegistrar = new ComponentRegistrar();
