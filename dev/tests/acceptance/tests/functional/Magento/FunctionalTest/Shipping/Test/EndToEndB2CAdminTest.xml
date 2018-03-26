@@ -11,7 +11,7 @@
         <!--Ship Order-->
         <comment userInput="Admin creates shipment" stepKey="adminCreatesShipmentComment" before="clickShipAction"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="clickOrderIdLinkOnInvoice"/>
-        <seeInCurrentUrl url="{{AdminShipmentNewPage}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
 
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus" after="seeOrderShipmentUrl"/>
         <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfo" after="seeShipmentOrderStatus">
@@ -23,7 +23,7 @@
         <!--Submit Shipment-->
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="checkBasicShipmentOrderInfo"/>
         <!--Shipment created successfully-->
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage}}" stepKey="seeViewOrderPageShipping" after="clickSubmitShipment"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping" after="clickSubmitShipment"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seeOrderIdInPageNameAfterShip" after="seeViewOrderPageShipping"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess" after="seeOrderIdInPageNameAfterShip"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderComplete" after="seeShipmentCreateSuccess"/>
