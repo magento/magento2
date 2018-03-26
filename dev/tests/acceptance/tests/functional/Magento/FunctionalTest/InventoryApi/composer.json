@@ -1,6 +1,6 @@
 {
     "name": "magento/magento2-functional-test-module-inventoryapi",
-    "description": "Magento 2 Acceptance Test Module Inventory API",
+    "description": "Magento 2 Functional Test Module Inventory API",
     "repositories": [
         {
             "type" : "composer",
