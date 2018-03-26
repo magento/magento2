@@ -931,8 +931,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
+            $collection->clear();
         }
-        $collection->clear();
 
         return $data;
     }
