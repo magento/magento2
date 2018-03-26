@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,6 +16,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Translate implements \Magento\Framework\TranslateInterface
 {
+    const CONFIG_AREA_KEY = 'area';
+    const CONFIG_LOCALE_KEY = 'locale';
+    const CONFIG_SCOPE_KEY = 'scope';
+    const CONFIG_THEME_KEY = 'theme';
+    const CONFIG_MODULE_KEY = 'module';
+
     /**
      * Locale code
      *
@@ -158,6 +165,14 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_csvParser = $csvParser;
         $this->packDictionary = $packDictionary;
+
+        $this->_config = [
+            self::CONFIG_AREA_KEY => null,
+            self::CONFIG_LOCALE_KEY => null,
+            self::CONFIG_SCOPE_KEY => null,
+            self::CONFIG_THEME_KEY => null,
+            self::CONFIG_MODULE_KEY => null,
+        ];
     }
 
     /**
@@ -169,17 +184,23 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     public function loadData($area = null, $forceReload = false)
     {
+        $this->_data = [];
+        if ($area === null) {
+            $area = $this->_appState->getAreaCode();
+        }
         $this->setConfig(
-            ['area' => isset($area) ? $area : $this->_appState->getAreaCode()]
+            [
+                self::CONFIG_AREA_KEY => $area,
+            ]
         );
 
         if (!$forceReload) {
-            $this->_data = $this->_loadCache();
-            if ($this->_data !== false) {
+            $data = $this->_loadCache();
+            if (false !== $data) {
+                $this->_data = $data;
                 return $this;
             }
         }
-        $this->_data = [];
 
         $this->_loadModuleTranslation();
         $this->_loadPackTranslation();
@@ -202,17 +223,17 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function setConfig($config)
     {
         $this->_config = $config;
-        if (!isset($this->_config['locale'])) {
-            $this->_config['locale'] = $this->getLocale();
+        if (!isset($this->_config[self::CONFIG_LOCALE_KEY])) {
+            $this->_config[self::CONFIG_LOCALE_KEY] = $this->getLocale();
         }
-        if (!isset($this->_config['scope'])) {
-            $this->_config['scope'] = $this->getScope();
+        if (!isset($this->_config[self::CONFIG_SCOPE_KEY])) {
+            $this->_config[self::CONFIG_SCOPE_KEY] = $this->getScope();
         }
-        if (!isset($this->_config['theme'])) {
-            $this->_config['theme'] = $this->_viewDesign->getDesignTheme()->getId();
+        if (!isset($this->_config[self::CONFIG_THEME_KEY])) {
+            $this->_config[self::CONFIG_THEME_KEY] = $this->_viewDesign->getDesignTheme()->getThemePath();
         }
-        if (!isset($this->_config['module'])) {
-            $this->_config['module'] = $this->getControllerModuleName();
+        if (!isset($this->_config[self::CONFIG_MODULE_KEY])) {
+            $this->_config[self::CONFIG_MODULE_KEY] = $this->getControllerModuleName();
         }
         return $this;
     }
@@ -224,7 +245,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function getScope()
     {
-        $scope = ($this->getConfig('area') == 'adminhtml') ? 'admin' : null;
+        $scope = ($this->getConfig(self::CONFIG_AREA_KEY) === 'adminhtml') ? 'admin' : null;
         return $this->_scopeResolver->getScope($scope)->getCode();
     }
 
@@ -295,7 +316,7 @@ class Translate implements \Magento\Framework\TranslateInterface
             }
 
             $key = str_replace('""', '"', $key);
-            $value  = str_replace('""', '"', $value);
+            $value = str_replace('""', '"', $value);
 
             $this->_data[$key] = $value;
         }
@@ -309,10 +330,6 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _loadThemeTranslation()
     {
-        if (!$this->_config['theme']) {
-            return $this;
-        }
-
         $file = $this->_getThemeTranslationFile($this->getLocale());
         if ($file) {
             $this->_addData($this->_getFileData($file));
@@ -339,7 +356,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function _loadDbTranslation()
     {
         $data = $this->_translateResource->getTranslationArray(null, $this->getLocale());
-        $this->_addData(array_map("htmlspecialchars_decode", $data));
+        $this->_addData(array_map('htmlspecialchars_decode', $data));
         return $this;
     }
 
@@ -367,7 +384,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     {
         return $this->_viewFileSystem->getLocaleFileName(
             'i18n' . '/' . $locale . '.csv',
-            ['area' => $this->getConfig('area')]
+            $this->_config
         );
     }
 
@@ -422,8 +439,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     public function setLocale($locale)
     {
         $this->_localeCode = $locale;
-        $this->_config['locale'] = $locale;
-        $this->getCacheId(true);
+        $this->_config[self::CONFIG_LOCALE_KEY] = $locale;
         return $this;
     }
 
@@ -434,40 +450,29 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     public function getTheme()
     {
-        $theme = $this->request->getParam('theme');
+        $theme = $this->request->getParam(self::CONFIG_THEME_KEY);
         if (empty($theme)) {
-            return 'theme' . $this->getConfig('theme');
+            return self::CONFIG_THEME_KEY . $this->getConfig(self::CONFIG_THEME_KEY);
         }
-        return 'theme' . $theme['theme_title'];
+        return self::CONFIG_THEME_KEY . $theme['theme_title'];
     }
 
     /**
      * Retrieve cache identifier
      *
-     * @param bool $forceReload
      * @return string
      */
-    protected function getCacheId($forceReload = false)
+    protected function getCacheId()
     {
-        if ($this->_cacheId === null || $forceReload) {
-            $this->_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
-            if (isset($this->_config['locale'])) {
-                $this->_cacheId .= '_' . $this->_config['locale'];
-            }
-            if (isset($this->_config['area'])) {
-                $this->_cacheId .= '_' . $this->_config['area'];
-            }
-            if (isset($this->_config['scope'])) {
-                $this->_cacheId .= '_' . $this->_config['scope'];
-            }
-            if (isset($this->_config['theme'])) {
-                $this->_cacheId .= '_' . $this->_config['theme'];
-            }
-            if (isset($this->_config['module'])) {
-                $this->_cacheId .= '_' . $this->_config['module'];
-            }
-        }
-        return $this->_cacheId;
+        $_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
+        $_cacheId .= '_' . $this->_config[self::CONFIG_LOCALE_KEY];
+        $_cacheId .= '_' . $this->_config[self::CONFIG_AREA_KEY];
+        $_cacheId .= '_' . $this->_config[self::CONFIG_SCOPE_KEY];
+        $_cacheId .= '_' . $this->_config[self::CONFIG_THEME_KEY];
+        $_cacheId .= '_' . $this->_config[self::CONFIG_MODULE_KEY];
+
+        $this->_cacheId = $_cacheId;
+        return $_cacheId;
     }
 
     /**
@@ -491,7 +496,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _saveCache()
     {
-        $this->_cache->save($this->getSerializer()->serialize($this->getData()), $this->getCacheId(true), [], false);
+        $this->_cache->save($this->getSerializer()->serialize($this->getData()), $this->getCacheId(), [], false);
         return $this;
     }
 
