@@ -63,7 +63,6 @@ class Product
     {
         if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
             $this->productList = [];
-            $this->productSkus = [];
             $this->productSkus[] = $sku;
         } elseif (!in_array($sku, $this->productSkus)) {
             $this->productSkus[] = $sku;

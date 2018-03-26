@@ -27,7 +27,7 @@
     <type xsi:type="OutputType" name="BundleItemOption">
         <!-- is product_id same with entity_id and id ?? -->
         <field xsi:type="ScalarOutputField" name="id" type="Int" description="The ID assigned to the bundled item option"/>
-        <field xsi:type="ScalarOutputField" name="label" type="String" description="The text that identifies the bundled item option"/>
+        <field xsi:type="ScalarOutputField" name="label" type="String" resolver="Magento\BundleGraphQl\Model\Resolver\Options\Label" description="The text that identifies the bundled item option"/>
         <!--<field xsi:type="ScalarOutputField" name="option_id" type="Int"/>-->
         <field xsi:type="ScalarOutputField" name="qty" type="Float" description="Indicates the quantity of this specific bundle item"/>
         <field xsi:type="ScalarOutputField" name="position" type="Int" description="When a bundle item contains multiple options, the relative position of this option compared to the other options"/>

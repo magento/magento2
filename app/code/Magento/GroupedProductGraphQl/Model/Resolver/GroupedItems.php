@@ -39,6 +39,16 @@ class GroupedItems implements ResolverInterface
         $context,
         ResolveInfo $info
     ): ?Value {
+        if (!isset($value['id'])) {
+            return null;
+        }
 
+        $this->linksCollection->addParentIdToFilter((int)$value['id']);
+
+        $result = function () use ($value) {
+            return $this->linksCollection->getGroupedLinksByParentId((int)$value['id']);
+        };
+
+        return $this->valueFactory->create($result);
     }
 }

@@ -45,7 +45,7 @@ class DynamicSku implements ResolverInterface
     ): ?Value {
         $result = null;
         if ($value['type_id'] === Bundle::TYPE_CODE) {
-            $result = isset($value['sku_type']) ? $value['sku_type'] : null;
+            $result = isset($value['sku_type']) ? !$value['sku_type'] : null;
         }
 
         return $this->valueFactory->create(

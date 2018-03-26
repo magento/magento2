@@ -65,7 +65,7 @@ class Product implements ResolverInterface
         $this->productDataProvider->addEavAttributes($matchedFields);
 
         $result = function () use ($value) {
-            $data = $this->productDataProvider->getProductBySkus($value['sku']);
+            $data = $this->productDataProvider->getProductBySku($value['sku']);
             if (!$data) {
                 return null;
             }
