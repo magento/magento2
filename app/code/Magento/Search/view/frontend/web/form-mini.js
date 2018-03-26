@@ -213,7 +213,7 @@ define([
                     break;
 
                 case $.ui.keyCode.END:
-                    if (this._getFirstVisibleElement()) {
+                    if (this._getLastElement()) {
                         this._getLastElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getLastElement();
                     }
