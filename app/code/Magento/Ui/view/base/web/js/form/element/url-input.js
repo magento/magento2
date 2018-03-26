@@ -28,13 +28,12 @@ define([
             tracks: {
                 linkedElement: true
             },
-            urlTypes: {
-                base: {
-                    namePrefix: '${$.name}.',
-                    dataScopePrefix: '${$.dataScope}.',
-                    provider: '${$.provider}'
-                }
+            baseLinkSetting: {
+                namePrefix: '${$.name}.',
+                dataScopePrefix: '${$.dataScope}.',
+                provider: '${$.provider}'
             },
+            urlTypes: {},
             listens: {
                 settingValue: 'checked',
                 disabled: 'hideLinkedElement',
@@ -47,11 +46,21 @@ define([
         },
 
         /** @inheritdoc */
-        initialize: function () {
-            this._super()
-                .setOptions();
+        initConfig: function (config) {
+            var processedLinkTypes = {},
+                baseLinkType = this.constructor.defaults.baseLinkSetting;
 
-            return this;
+            _.each(config.urlTypes, function (linkSettingsArray, linkName) {
+                //add link name by link type
+                linkSettingsArray.name = baseLinkType.namePrefix + linkName;
+                linkSettingsArray.dataScope = baseLinkType.dataScopePrefix + linkName;
+                linkSettingsArray.type = linkName;
+                processedLinkTypes[linkName] = {};
+                _.extend(processedLinkTypes[linkName], baseLinkType, linkSettingsArray);
+            });
+            _.extend(this.constructor.defaults.urlTypes, processedLinkTypes);
+
+            this._super();
         },
 
         /**
@@ -62,30 +71,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe('componentTemplate options value linkType settingValue checked isDisplayAdditionalSettings')
-                .processLinkTypes();
-
-            return this;
-        },
-
-        /**
-         * Adds link types array with default settings
-         *
-         * @return {Object}
-         */
-        processLinkTypes: function () {
-            var processedLinkTypes = {},
-                baseLinkType = this.urlTypes.base;
-
-            delete this.urlTypes.base;
-            _.each(this.urlTypes, function (linkSettingsArray, linkName) {
-                //add link name by link type
-                linkSettingsArray.name = baseLinkType.namePrefix + linkName;
-                linkSettingsArray.dataScope = baseLinkType.dataScopePrefix + linkName;
-                linkSettingsArray.type = linkName;
-                processedLinkTypes[linkName] = {};
-                _.extend(processedLinkTypes[linkName], baseLinkType, linkSettingsArray);
-            });
-            _.extend(this.urlTypes, processedLinkTypes);
+                .setOptions();
 
             return this;
         },

@@ -18,11 +18,6 @@ define([
             var params = {
                 dataScope: 'urlInput',
                 urlTypes: {
-                    base: {
-                        namePrefix: '${$.name}.',
-                        dataScopePrefix: '${$.dataScope}.',
-                        provider: '${$.provider}'
-                    },
                     url: {
                         label: 'Test label',
                         component: 'Magento_Ui/js/form/element/abstract',
@@ -46,7 +41,6 @@ define([
                 expect(component.urlTypes).toBeDefined();
                 expect(component.urlTypes.hasOwnProperty('url'));
                 expect(component.urlTypes.hasOwnProperty('testUrl'));
-                expect(component.urlTypes.base).not.toBeDefined();
             });
         });
 
