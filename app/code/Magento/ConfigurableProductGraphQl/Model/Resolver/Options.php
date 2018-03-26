@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as Type;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
@@ -31,15 +33,23 @@ class Options implements ResolverInterface
     private $valueFactory;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param OptionCollection $optionCollection
      * @param ValueFactory $valueFactory
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         OptionCollection $optionCollection,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        MetadataPool $metadataPool
     ) {
         $this->optionCollection = $optionCollection;
         $this->valueFactory = $valueFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -49,14 +59,15 @@ class Options implements ResolverInterface
      */
     public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
     {
-        if ($value['type_id'] !== Type::TYPE_CODE || !isset($value['id'])) {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        if ($value['type_id'] !== Type::TYPE_CODE || !isset($value[$linkField])) {
             return null;
         }
 
-        $this->optionCollection->addProductId((int)$value['id']);
+        $this->optionCollection->addProductId((int)$value[$linkField]);
 
-        $result = function () use ($value) {
-            return $this->optionCollection->getAttributesByProductId((int)$value['id']) ?: [];
+        $result = function () use ($value, $linkField) {
+            return $this->optionCollection->getAttributesByProductId((int)$value[$linkField]) ?: [];
         };
 
         return $this->valueFactory->create($result);
