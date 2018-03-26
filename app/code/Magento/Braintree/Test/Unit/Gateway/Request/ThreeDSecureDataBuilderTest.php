@@ -11,7 +11,7 @@ use Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder;
 use Magento\Payment\Gateway\Data\Order\AddressAdapter;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder.
