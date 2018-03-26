@@ -70,7 +70,6 @@
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
         "ext-soap": "*",
-        "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "~3.7.3"
     },
     "require-dev": {
