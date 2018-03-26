@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\SourceItems;
+namespace Magento\InventoryCatalog\Model;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -13,9 +13,9 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
 
 /**
- * Check stock should be managed for given product sku.
+ * Check source items should be managed for given product sku
  */
-class ManageStock
+class CanManageSourceItemsBySku
 {
     /**
      * Provides manage stock global config value.
@@ -39,8 +39,6 @@ class ManageStock
     private $getStockItemConfiguration;
 
     /**
-     * ManageStock constructor.
-     *
      * @param ScopeConfigInterface $config
      * @param GetStockItemConfigurationInterface $getStockItemConfiguration
      * @param DefaultStockProviderInterface $defaultStockProvider
@@ -56,24 +54,21 @@ class ManageStock
     }
 
     /**
-     * Check, if stock should be managed for give product.
-     *
-     * @param string $sku
+     * @param string $sku Sku can be null if product is new
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $sku = null): bool
     {
-        $stockId = $this->defaultStockProvider->getId();
-        if ($sku) {
+        if (null !== $sku) {
+            $stockId = $this->defaultStockProvider->getId();
             $itemConfiguration = $this->getStockItemConfiguration->execute($sku, $stockId);
-            if ($itemConfiguration) {
+
+            if (null !== $itemConfiguration) {
                 return $itemConfiguration->isUseConfigManageStock()
                     ? (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK)
                     : $itemConfiguration->isManageStock();
             }
         }
-
         return (bool)$this->config->getValue(Configuration::XML_PATH_MANAGE_STOCK);
     }
 }

@@ -15,8 +15,8 @@ use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Model\CanManageSourceItemsBySku;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
-use Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier\SourceItems\ManageStock;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
 /**
@@ -50,11 +50,9 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
-     * Check, if stock should be managed for given product.
-     *
-     * @var ManageStock
+     * @var CanManageSourceItemsBySku
      */
-    private $manageStock;
+    private $canManageSourceItemsBySku;
 
     /**
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
@@ -62,7 +60,7 @@ class SourceItems extends AbstractModifier
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
-     * @param ManageStock $manageStock
+     * @param CanManageSourceItemsBySku $canManageSourceItemsBySku
      */
     public function __construct(
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
@@ -70,14 +68,14 @@ class SourceItems extends AbstractModifier
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
         ResourceConnection $resourceConnection,
-        ManageStock $manageStock
+        CanManageSourceItemsBySku $canManageSourceItemsBySku
     ) {
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->manageStock = $manageStock;
+        $this->canManageSourceItemsBySku = $canManageSourceItemsBySku;
     }
 
     /**
@@ -138,7 +136,8 @@ class SourceItems extends AbstractModifier
             || $this->isSourceItemsAllowedForProductType->execute($product->getTypeId()) === false) {
             return $meta;
         }
-        $isMangeStock = $this->manageStock->execute($product->getSku());
+
+        $canMangeSourceItems = $this->canManageSourceItemsBySku->execute($product->getSku());
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
@@ -154,7 +153,7 @@ class SourceItems extends AbstractModifier
                             'arguments' => [
                                 'data' => [
                                     'config' => [
-                                        'visible' => $isMangeStock,
+                                        'visible' => $canMangeSourceItems,
                                     ],
                                 ],
                             ],
@@ -165,7 +164,7 @@ class SourceItems extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'visible' => $isMangeStock,
+                                'visible' => $canMangeSourceItems,
                             ],
                         ],
                     ],
