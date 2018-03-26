@@ -50,7 +50,7 @@ class TierPrice extends AbstractDb
         string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        
+
         $this->tierPriceResourceModel = $tierPriceResourceModel;
         $this->metadataPool = $metadataPool;
         $this->attributeRepository = $attributeRepository;
@@ -72,61 +72,141 @@ class TierPrice extends AbstractDb
      */
     public function reindexEntity(array $entityIds = [])
     {
-        $select = $this->buildSelect(true, $entityIds);
-        $query = $select->insertFromSelect($this->getMainTable());
-        $this->getConnection()->query($query);
-
-        $select = $this->buildSelect(false, $entityIds);
-        $query = $select->insertFromSelect($this->getMainTable());
-        $this->getConnection()->query($query);
+        $tierPriceVariations = [
+            [true, true], //all websites; all customer groups
+            [true, false], //all websites; specific customer group
+            [false, true], //specific website; all customer groups
+            [false, false], //specific website; specific customer group
+        ];
+        foreach ($tierPriceVariations as $variation) {
+            list ($isAllWebsites, $isAllCustomerGroups) = $variation;
+            $select = $this->getTierPriceSelect($isAllWebsites, $isAllCustomerGroups, $entityIds);
+            $query = $select->insertFromSelect($this->getMainTable());
+            $this->getConnection()->query($query);
+        }
     }
 
-    private function buildSelect(bool $isAllGroups, array $entityIds = []): Select
+    /**
+     * Join websites table.
+     * If $isAllWebsites is true, for each website will be used default value for all websites,
+     * otherwise per each website will be used their own values.
+     *
+     * @param Select $select
+     * @param bool $isAllWebsites
+     */
+    private function joinWebsites(Select $select, bool $isAllWebsites)
     {
-        $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkField = $entityMetadata->getLinkField();
-
-        $select = $this->getConnection()->select();
-        $select->from(['tp' => $this->tierPriceResourceModel->getMainTable()], [])
-            ->where('tp.qty = ?', 1)
-            ->where('tp.all_groups = ?', (int) $isAllGroups);
-        if ($isAllGroups) {
-            $select->where('tp.customer_group_id = ?', 0);
+        if ($isAllWebsites) {
+            $select->joinCross(['sw' => $this->getTable('store_website')], [])
+                ->where('sw.website_id > ?', 0)
+                ->where('tp.website_id = ?', 0);
+        } else {
+            $select->join(
+                ['sw' => $this->getTable('store_website')],
+                'sw.website_id = tp.website_id',
+                []
+            )->where('tp.website_id > 0');
         }
+    }
 
-        $select->join(['cpe' => $this->getTable('catalog_product_entity')], "cpe.{$linkField} = tp.{$linkField}", []);
-        if (!empty($entityIds)) {
-            $select->where('cpe.entity_id IN (?)', $entityIds);
+    /**
+     * Join customer groups table.
+     * If $isAllCustomerGroups is true, for each customer group will be used default value for all customer groups,
+     * otherwise per each customer group will be used their own values.
+     *
+     * @param Select $select
+     * @param bool $isAllCustomerGroups
+     */
+    private function joinCustomerGroups(Select $select, bool $isAllCustomerGroups)
+    {
+        if ($isAllCustomerGroups) {
+            $select->joinCross(['cg' => $this->getTable('customer_group')], [])
+                ->where('tp.all_groups = ?', 1)
+                ->where('tp.customer_group_id = ?', 0);
+        } else {
+            $select->join(
+                ['cg' => $this->getTable('customer_group')],
+                'cg.customer_group_id = tp.customer_group_id',
+                []
+            )->where('tp.all_groups = ?', 0);
         }
+    }
 
-        $select->joinLeft(['sw' => $this->getTable('store_website')], 'sw.website_id = tp.website_id', []);
-        $select->joinLeft(['sg' => $this->getTable('store_group')], 'sg.group_id = sw.default_group_id', []);
-
+    /**
+     * Join price table and return price value.
+     *
+     * @param Select $select
+     * @param string $linkField
+     * @return string
+     */
+    private function joinPrice(Select $select, string $linkField): string
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
         $priceAttribute = $this->attributeRepository->get('price');
         $select->joinLeft(
-            ['eps' => $priceAttribute->getBackend()->getTable()],
-            'eps.' . $linkField . ' = cpe.' . $linkField
-            . ' AND eps.attribute_id = '.$priceAttribute->getAttributeId()
-            . ' AND eps.store_id = sg.default_store_id',
-            []
-        )->joinLeft(
             ['ep0' => $priceAttribute->getBackend()->getTable()],
             'ep0.' . $linkField . ' = cpe.' . $linkField
             . ' AND ep0.attribute_id = '.$priceAttribute->getAttributeId()
             . ' AND ep0.store_id = 0',
             []
         );
+        $priceValue = 'ep0.value';
 
-        $priceValue = $this->getConnection()->getIfNullSql('eps.value', 'ep0.value');
+        if (!$priceAttribute->isScopeGlobal()) {
+            $select->joinLeft(['sg' => $this->getTable('store_group')], 'sg.group_id = sw.default_group_id', [])
+                ->joinLeft(
+                    ['eps' => $priceAttribute->getBackend()->getTable()],
+                    'eps.' . $linkField . ' = cpe.' . $linkField
+                    . ' AND eps.attribute_id = '.$priceAttribute->getAttributeId()
+                    . ' AND eps.store_id = sg.default_store_id',
+                    []
+                );
+            $priceValue = $this->getConnection()->getIfNullSql('eps.value', 'ep0.value');
+        }
+
+        return (string) $priceValue;
+    }
+
+    /**
+     * Build select for getting tier price data.
+     *
+     * @param bool $isAllWebsites
+     * @param bool $isAllCustomerGroups
+     * @param array $entityIds
+     * @return Select
+     */
+    private function getTierPriceSelect(bool $isAllWebsites, bool $isAllCustomerGroups, array $entityIds = []): Select
+    {
+        $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $entityMetadata->getLinkField();
+
+        $select = $this->getConnection()->select();
+        $select->from(['tp' => $this->tierPriceResourceModel->getMainTable()], [])
+            ->where('tp.qty = ?', 1);
+
+        $select->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$linkField} = tp.{$linkField}",
+            []
+        );
+        if (!empty($entityIds)) {
+            $select->where('cpe.entity_id IN (?)', $entityIds);
+        }
+        $this->joinWebsites($select, $isAllWebsites);
+        $this->joinCustomerGroups($select, $isAllCustomerGroups);
+
+        $priceValue = $this->joinPrice($select, $linkField);
+        $tierPriceValue = 'tp.value';
+        $tierPricePercentageValue = 'tp.percentage_value';
         $tierPriceValueExpr = $this->getConnection()->getCheckSql(
-            'tp.value > 0',
-            'tp.value',
-            sprintf('(1 - %s / 100) * %s', 'tp.percentage_value', $priceValue)
+            $tierPriceValue,
+            $tierPriceValue,
+            sprintf('(1 - %s / 100) * %s', $tierPricePercentageValue, $priceValue)
         );
         $select->columns(
             [
                 'cpe.entity_id',
-                'tp.customer_group_id',
+                'cg.customer_group_id',
                 'sw.website_id',
                 'tier_price' => $tierPriceValueExpr,
             ]
