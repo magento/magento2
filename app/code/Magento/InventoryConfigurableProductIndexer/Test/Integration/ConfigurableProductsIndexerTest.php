@@ -7,8 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProduct\Test\Integration\Price;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\SourceItem\Command\GetSourceItemsBySkuInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventorySales\Model\GetStockItemDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,9 +29,14 @@ class ConfigurableProductsIndexerTest extends TestCase
     private $productRepository;
 
     /**
-     * @var GetSourceItemsBySkuInterface
+     * @var SourceItemRepositoryInterface
      */
-    private $getSourceItemsBySku;
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var SourceItemsSaveInterface
@@ -45,7 +56,8 @@ class ConfigurableProductsIndexerTest extends TestCase
         parent::setUp();
 
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->getSourceItemsBySku = Bootstrap::getObjectManager()->get(GetSourceItemsBySkuInterface::class);
+        $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
         $this->getStockItemData = Bootstrap::getObjectManager()->get(GetStockItemDataInterface::class);
     }
@@ -64,14 +76,20 @@ class ConfigurableProductsIndexerTest extends TestCase
      * @return void
      */
     // @codingStandardsIgnoreEnd
-    public function testOneSimpleChangesToOutOfStock()
+    public function testOneSimpleChangesToOutOfStockInOneSource()
     {
-        $this->changeStockStatusForSku('simple_11', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
 
+        // EU-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 10);
+        $this->assertEquals(1, $data['is_salable']);
+
+        // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
         $this->assertEquals(1, $data['is_salable']);
 
-        $data = $this->getStockItemData->execute('configurable_2', 20);
+        // Global-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 30);
         $this->assertEquals(1, $data['is_salable']);
     }
 
@@ -89,17 +107,68 @@ class ConfigurableProductsIndexerTest extends TestCase
      * @return void
      */
     // @codingStandardsIgnoreEnd
-    public function testAllSimplesChangesToOutOfStock()
+    public function testAllSimplesChangesToOutOfStockInOneSource()
     {
-        $this->changeStockStatusForSku('simple_11', SourceItemInterface::STATUS_OUT_OF_STOCK);
-        $this->changeStockStatusForSku('simple_21', SourceItemInterface::STATUS_OUT_OF_STOCK);
-        $this->changeStockStatusForSku('simple_31', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
 
+        // EU-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 10);
+        $this->assertEquals(1, $data['is_salable']);
+
+        // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
         $this->assertEquals(0, $data['is_salable']);
 
-        $data = $this->getStockItemData->execute('configurable_2', 20);
+        // Global-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 30);
         $this->assertEquals(1, $data['is_salable']);
+    }
+
+    // @codingStandardsIgnoreStart
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites_with_stores.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/product_configurable_multiple.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryConfigurableProductIndexer/Test/_files/source_items_configurable_multiple.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_sales_channels.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryIndexer/Test/_files/reindex_inventory.php
+     * @return void
+     */
+    // @codingStandardsIgnoreEnd
+    public function testAllSimplesChangesToOutOfStockInAllSources()
+    {
+        $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+
+        $this->changeStockStatusForSku('simple_11', 'eu-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
+
+        $this->changeStockStatusForSku('simple_11', 'eu-2', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-2', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-2', SourceItemInterface::STATUS_OUT_OF_STOCK);
+
+        $this->changeStockStatusForSku('simple_11', 'eu-3', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-3', SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-3', SourceItemInterface::STATUS_OUT_OF_STOCK);
+
+        // EU-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 10);
+        $this->assertEquals(0, $data['is_salable']);
+
+        // US-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 20);
+        $this->assertEquals(0, $data['is_salable']);
+
+        // Global-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 30);
+        $this->assertEquals(0, $data['is_salable']);
     }
 
     // @codingStandardsIgnoreStart
@@ -119,12 +188,18 @@ class ConfigurableProductsIndexerTest extends TestCase
     // @codingStandardsIgnoreEnd
     public function testOneSimpleChangesToInStock()
     {
-        $this->changeStockStatusForSku('simple_21', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'us-1', SourceItemInterface::STATUS_IN_STOCK);
 
+        // EU-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 10);
+        $this->assertEquals(0, $data['is_salable']);
+
+        // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
         $this->assertEquals(1, $data['is_salable']);
 
-        $data = $this->getStockItemData->execute('configurable_2', 20);
+        // Global-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 30);
         $this->assertEquals(1, $data['is_salable']);
     }
 
@@ -145,29 +220,52 @@ class ConfigurableProductsIndexerTest extends TestCase
     // @codingStandardsIgnoreEnd
     public function testAllSimplesChangesToInStock()
     {
-        $this->changeStockStatusForSku('simple_11', SourceItemInterface::STATUS_IN_STOCK);
-        $this->changeStockStatusForSku('simple_21', SourceItemInterface::STATUS_IN_STOCK);
-        $this->changeStockStatusForSku('simple_31', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'us-1', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'us-1', SourceItemInterface::STATUS_IN_STOCK);
 
+        $this->changeStockStatusForSku('simple_11', 'eu-1', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-1', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-1', SourceItemInterface::STATUS_IN_STOCK);
+
+        $this->changeStockStatusForSku('simple_11', 'eu-2', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-2', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-2', SourceItemInterface::STATUS_IN_STOCK);
+
+        $this->changeStockStatusForSku('simple_11', 'eu-3', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_21', 'eu-3', SourceItemInterface::STATUS_IN_STOCK);
+        $this->changeStockStatusForSku('simple_31', 'eu-3', SourceItemInterface::STATUS_IN_STOCK);
+
+        // EU-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 10);
+        $this->assertEquals(1, $data['is_salable']);
+
+        // US-Stock
         $data = $this->getStockItemData->execute('configurable_1', 20);
         $this->assertEquals(1, $data['is_salable']);
 
-        $data = $this->getStockItemData->execute('configurable_2', 20);
+        // Global-Stock
+        $data = $this->getStockItemData->execute('configurable_1', 30);
         $this->assertEquals(1, $data['is_salable']);
     }
 
     /**
      * @param string $sku
+     * @param string $sourceCode
      * @param int $stockStatus
      */
-    private function changeStockStatusForSku(string $sku, int $stockStatus)
+    private function changeStockStatusForSku(string $sku, string $sourceCode, int $stockStatus)
     {
-        $sourceItems = $this->getSourceItemsBySku->execute($sku);
-        $changesSourceItems = [];
-        foreach ($sourceItems->getItems() as $sourceItem) {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $sourceCode)
+            ->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+
+        foreach ($sourceItems as $sourceItem) {
             $sourceItem->setStatus($stockStatus);
-            $changesSourceItems[] = $sourceItem;
         }
-        $this->sourceItemsSave->execute($changesSourceItems);
+
+        $this->sourceItemsSave->execute($sourceItems);
     }
 }
