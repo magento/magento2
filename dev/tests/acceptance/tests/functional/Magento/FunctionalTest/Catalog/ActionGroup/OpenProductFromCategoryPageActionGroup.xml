@@ -13,15 +13,10 @@
             <argument name="category"/>
             <argument name="product"/>
         </arguments>
-        <!-- Go to storefront category page, assert product visibility -->
+        <!-- Go to storefront category page -->
         <amOnPage url="{{StorefrontCategoryPage.url(category.custom_attributes[url_path])}}" stepKey="navigateToCategoryPage"/>
-        <see userInput="{{product.name}}" stepKey="assertProductPresent"/>
-        <see userInput="{{product.price}}" stepKey="assertProductPricePresent"/>
-        <!-- Go to storefront product page, assert product visibility -->
+        <!-- Go to storefront product page -->
         <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product.name)}}" stepKey="openProductPage"/>
         <waitForAjaxLoad stepKey="waitForImageLoader"/>
-        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
-        <see userInput="{{product.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
-        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
     </actionGroup>
 </actionGroups>

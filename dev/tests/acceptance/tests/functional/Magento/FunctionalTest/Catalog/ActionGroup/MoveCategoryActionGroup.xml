@@ -17,7 +17,6 @@
         <waitForAjaxLoad stepKey="waitForCategoriesExpand"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.category('childCategory')}}" selector2="{{AdminCategorySidebarTreeSection.category('parentCategory')}}" stepKey="moveCategory"/>
         <waitForElementVisible selector="{{AdminCategoryWarningMessagesPopupSection.warningMessage}}" stepKey="waitForWarningMessageVisible"/>
-        <see selector="{{AdminCategoryWarningMessagesPopupSection.warningMessage}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryWarningMessagesPopupSection.okButton}}" stepKey="clickOkButtonOnWarningPopup"/>
     </actionGroup>
 </actionGroups>

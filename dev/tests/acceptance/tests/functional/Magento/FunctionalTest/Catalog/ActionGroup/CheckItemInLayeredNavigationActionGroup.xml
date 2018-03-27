@@ -14,6 +14,5 @@
             <argument name="itemName"/>
         </arguments>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('itemType')}}" dependentSelector="{{StorefrontCategorySidebarSection.filterOptions}}" visible="false" stepKey="expandFilterOptions"/>
-        <see selector="{{StorefrontCategorySidebarSection.filterOption}}" userInput="{{itemName}}" stepKey="seeFilterName"/>
     </actionGroup>
 </actionGroups>
