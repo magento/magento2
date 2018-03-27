@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\GraphQl\Model;
 
@@ -66,7 +67,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      *
      * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface||null
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes() : ?\Magento\GraphQl\Model\ResolverContextExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }
@@ -75,18 +76,18 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      * {@inheritdoc}
      *
      * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
-     * @return $this
+     * @return ResolverContextInterface
      */
     public function setExtensionAttributes(
         \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
-    ) {
+    ) : ResolverContextInterface {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**
      * @inheritDoc
      */
-    public function getUserId()
+    public function getUserId() : int
     {
         if (!$this->getData(self::USER_ID)) {
             $this->setUserId((int) $this->userContext->getUserId());
@@ -97,7 +98,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * @inheritDoc
      */
-    public function setUserId(int $userId)
+    public function setUserId(int $userId) : ResolverContextInterface
     {
         return $this->setData(self::USER_ID, $userId);
     }
@@ -105,7 +106,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * @inheritDoc
      */
-    public function getUserType()
+    public function getUserType() : int
     {
         if (!$this->getData(self::USER_TYPE_ID)) {
             $this->setUserType($this->userContext->getUserType());
@@ -116,7 +117,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * @inheritDoc
      */
-    public function setUserType(int $typeId)
+    public function setUserType(int $typeId) : ResolverContextInterface
     {
         return $this->setData(self::USER_TYPE_ID, $typeId);
     }

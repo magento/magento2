@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -26,21 +28,29 @@ class CustomAttributeMetadata implements ResolverInterface
      */
     private $type;
 
+    private $valueFactory;
+
     /**
      * @param Type $type
+     * @param ValueFactory $valueFactory
      */
-    public function __construct(Type $type)
+    public function __construct(Type $type, ValueFactory $valueFactory)
     {
         $this->type = $type;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?Value {
         $attributes['items'] = null;
-        /** @var ArgumentInterface $attributeInputs */
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs as $attribute) {
             if (!isset($attribute['attribute_code']) || !isset($attribute['entity_type'])) {
@@ -78,16 +88,20 @@ class CustomAttributeMetadata implements ResolverInterface
             ];
         }
 
-        return $attributes;
+        $result = function () use ($attributes) {
+            return $attributes;
+        };
+
+        return $this->valueFactory->create($result);
     }
 
     /**
-     * Create GraphQL input exception for an invalid AttributeInput ArgumentValueInterface
+     * Create GraphQL input exception for an invalid attribute input
      *
      * @param array $attribute
      * @return GraphQlInputException
      */
-    private function createInputException(array $attribute)
+    private function createInputException(array $attribute) : GraphQlInputException
     {
         $isCodeSet = isset($attribute['attribute_code']);
         $isEntitySet = isset($attribute['entity_type']);

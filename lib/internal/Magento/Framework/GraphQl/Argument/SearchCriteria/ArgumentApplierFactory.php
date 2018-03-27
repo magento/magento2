@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
@@ -34,7 +35,7 @@ class ArgumentApplierFactory
      * @return ArgumentApplierInterface
      * @throws \LogicException
      */
-    public function create(string $argumentName)
+    public function create(string $argumentName) : ArgumentApplierInterface
     {
         $appliers = [
             ArgumentApplier\Filter::ARGUMENT_NAME => ArgumentApplier\Filter::class,

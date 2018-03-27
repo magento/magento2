@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\Phrase;
@@ -57,7 +59,7 @@ class Operator
      *
      * @return array
      */
-    public static function getOperators()
+    public static function getOperators() : array
     {
         $type = new \ReflectionClass(Operator::class);
         return $type->getConstants();
@@ -68,7 +70,7 @@ class Operator
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return strtoupper($this->value);
     }

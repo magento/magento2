@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model;
 
@@ -21,7 +22,7 @@ class ProductLinksTypeResolver implements TypeResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveType(array $data)
+    public function resolveType(array $data) : ?string
     {
         if (isset($data['link_type'])) {
             $linkType = $data['link_type'];
@@ -29,5 +30,6 @@ class ProductLinksTypeResolver implements TypeResolverInterface
                 return 'ProductLinks';
             }
         }
+        return null;
     }
 }

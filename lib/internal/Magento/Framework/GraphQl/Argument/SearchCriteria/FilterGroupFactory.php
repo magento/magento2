@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
@@ -11,9 +12,9 @@ use Magento\Framework\GraphQl\Argument\Filter\Connective;
 use Magento\Framework\GraphQl\Argument\Filter\Operator;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * Class FilterGroupFactory
@@ -45,7 +46,7 @@ class FilterGroupFactory
      * @return \Magento\Framework\Api\Search\FilterGroup[]
      * @throws GraphQlInputException
      */
-    public function create(Connective $arguments)
+    public function create(Connective $arguments) : array
     {
         $filters = $arguments;
         /** @var \Magento\Framework\Api\Search\FilterGroup[] $searchCriteriaFilterGroups */
@@ -72,10 +73,10 @@ class FilterGroupFactory
      * Process an AST Connective
      *
      * @param Connective $connective
-     * @return \Magento\Framework\Api\Search\FilterGroup
+     * @return FilterGroup
      * @throws GraphQlInputException
      */
-    private function processConnective(Connective $connective)
+    private function processConnective(Connective $connective) : FilterGroup
     {
         foreach ($connective->getConditions() as $subNode) {
             if ($subNode instanceof Clause) {

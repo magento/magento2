@@ -59,7 +59,7 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle product items' must not be empty"
+            "Precondition failed: 'grouped product items' must not be empty"
         );
         $this->assertEquals(2, count($actualResponse['items']));
         $groupedProductLinks = $product->getProductLinks();

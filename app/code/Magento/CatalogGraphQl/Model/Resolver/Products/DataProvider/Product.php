@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
@@ -14,6 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
+use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
@@ -75,29 +77,39 @@ class Product
     }
 
     /**
-     * Gets list of product data with full data set
+     * Gets list of product data with full data set. Adds eav attributes to result set from passed in array
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
+     * @param string[] $attributes
+     * @return SearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 
+//        foreach ($attributes as $attributeCode) {
+//            $collection->addAttributeToSelect($attributeCode);
+//        }
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
-
+        $count = $collection->getSelectCountSql()->query();
+        $collection->addWebsiteNamesToResult();
+        $collection->addTaxPercents();
+        $collection->addWebsiteNamesToResult();
+        $sql = $collection->getSelect()->assemble();
         $collection->load();
+
+        // Methods that perform extra fetches
+        $collection->addPriceData();
         $collection->addCategoryIds();
         $collection->addMediaGalleryData();
-        $collection->addWebsiteNamesToResult();
         $collection->addOptionsToResult();
-        $collection->addWebsiteNamesToResult();
+
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());

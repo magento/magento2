@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
@@ -12,7 +13,10 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 use Magento\GraphQl\Model\ResolverContextInterface;
+use Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider;
 
 /**
  * Customers field resolver, used for GraphQL request processing.
@@ -20,24 +24,37 @@ use Magento\GraphQl\Model\ResolverContextInterface;
 class Customer implements ResolverInterface
 {
     /**
-     * @var Customer\CustomerDataProvider
+     * @var CustomerDataProvider
      */
     private $customerResolver;
 
     /**
-     * @param \Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider $customerResolver
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
+     * @param CustomerDataProvider $customerResolver
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        \Magento\CustomerGraphQl\Model\Resolver\Customer\CustomerDataProvider $customerResolver
+        CustomerDataProvider $customerResolver,
+        ValueFactory $valueFactory
     ) {
         $this->customerResolver = $customerResolver;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
-    {
+    public function resolve(
+        Field $field,
+        array $value = null,
+        array $args = null,
+        $context,
+        ResolveInfo $info
+    ) : ?Value {
         /** @var ResolverContextInterface $context */
         if ((!$context->getUserId()) || $context->getUserType() == 4) {
             throw new GraphQlAuthorizationException(
@@ -49,9 +66,13 @@ class Customer implements ResolverInterface
         }
 
         try {
-            return $this->customerResolver->getCustomerById($context->getUserId());
+            $data = $this->customerResolver->getCustomerById($context->getUserId());
+            $result = function () use ($data) {
+                return $data;
+            };
+            return $this->valueFactory->create($result);
         } catch (NoSuchEntityException $exception) {
-            return new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
+            throw new GraphQlNoSuchEntityException(__('Customer id %1 does not exist.', [$context->getUserId()]));
         }
     }
 }

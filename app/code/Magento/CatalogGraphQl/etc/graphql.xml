@@ -9,7 +9,7 @@
             <argument xsi:type="ScalarArgument" name="search" type="String" description="Text to be used in a full text search. If multiple keywords are specified, each keyword is evaluated separately."/>
             <argument xsi:type="ObjectArgument" name="filter" type="ProductFilterInput" description="Defines which search criteria to use to find the desired results. Each filter defines the field or fields to be searched, the condition type, and the search value."/>
             <argument xsi:type="ScalarArgument" name="pageSize" type="Int" default="20" description="The maximum number of items to return. If no value is specified, the search returns 20 items."/>
-            <argument xsi:type="ScalarArgument" name="currentPage" type="Int" default="0" description="Specifies which page of results to return. If no value is specified, the first page is returned. If you specify a value that is greater than the number of available pages, an error is returned."/>
+            <argument xsi:type="ScalarArgument" name="currentPage" type="Int" default="1" description="Specifies which page of results to return. If no value is specified, the first page is returned. If you specify a value that is greater than the number of available pages, an error is returned."/>
             <argument xsi:type="ObjectArgument" name="sort" type="ProductSortInput" description="Specifies which field or fields to use for sorting the results. If you specify more than one field, Magento sorts by the first field listed. Then, if any items have the same value, those items will be sorted by the secondary field. The value for each field can be set to either ASC (ascending) or DESC (descending)."/>
         </field>
         <field xsi:type="ObjectOutputField" name="categories" type="Categories" resolver="Magento\CatalogGraphQl\Model\Resolver\CategoryTree">
@@ -234,7 +234,7 @@
         <field xsi:type="ScalarOutputField" name="customer_group_id" type="String" description="The ID of the customer group"/>
     </type>
     <type xsi:type="OutputInterface" name="ProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
-        <field xsi:type="ScalarOutputField" name="id" type="Int" description="The ID number assigned to the product."/>
+        <field xsi:type="ScalarOutputField" name="id" type="Int" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\EntityIdToId" description="The ID number assigned to the product."/>
         <field xsi:type="ScalarOutputField" name="name" type="String" description="The product name. Customers use this name to identify the product."/>
         <field xsi:type="ScalarOutputField" name="sku" type="String" description="A number or code assigned to a product to identify the product, options, price, and manufacturer."/>
         <field xsi:type="ScalarOutputField" name="description" type="String" description="A detailed information about the product. The value can include simple HTML tags."/>
@@ -249,8 +249,8 @@
         <field xsi:type="ScalarOutputField" name="image" type="String" description="The relative path for the main image on the product page."/>
         <field xsi:type="ScalarOutputField" name="small_image" type="String" description="The file name of a small image, which is used on catalog pages."/>
         <field xsi:type="ScalarOutputField" name="thumbnail" type="String" description="The file name of a thumbnail image"/>
-        <field xsi:type="ScalarOutputField" name="new_from_date" type="String" description="The beginning date for new product listings, and determines if the product is featured as a new product. Note: The input attribute name is 'news_from_date'."/>
-        <field xsi:type="ScalarOutputField" name="new_to_date" type="String" description="The end date for new product listings.  Note: The input attribute name is 'news_to_date'."/>
+        <field xsi:type="ScalarOutputField" name="new_from_date" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="String" description="The beginning date for new product listings, and determines if the product is featured as a new product. Note: The input attribute name is 'news_from_date'."/>
+        <field xsi:type="ScalarOutputField" name="new_to_date" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="String" description="The end date for new product listings.  Note: The input attribute name is 'news_to_date'."/>
         <field xsi:type="ScalarOutputField" name="tier_price" type="Float" description="The price when tier pricing is in effect and the items purchased threshold has been reached."/>
         <field xsi:type="ScalarOutputField" name="custom_design" type="String" description="A theme that can be applied to the product page."/>
         <field xsi:type="ScalarOutputField" name="custom_design_from" type="String" description="The beginning date when a theme is applied to the product page."/>
@@ -268,11 +268,11 @@
         <field xsi:type="ScalarOutputField" name="country_of_manufacture" type="String" description="The product's country of origin"/>
         <field xsi:type="ScalarOutputField" name="type_id" type="String" description="One of 'simple', 'virtual', 'bundle', 'downloadable','grouped', or 'configurable'"/>
         <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int" description="An array of website IDs in which the product is available."/>
-        <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks" description="An array that contains links to categories the product is assigned to."/>
-        <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinksInterface" description="An array that contains information about products that are related to the current product."/>
-        <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry" description="An array that contains information about the images and video assigned to this product."/>
-        <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices" description="An array that defines tier prices for the item."/>
-        <field xsi:type="ObjectOutputField" name="price" type="ProductPrices" description="The price of the item, including the value and the currency code."/>
+        <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\CategoryLinks" description="An array that contains links to categories the product is assigned to."/>
+        <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinksInterface" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\ProductLinks" description="An array that contains information about products that are related to the current product."/>
+        <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" description="An array that contains information about the images and video assigned to this product."/>
+        <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\TierPrices" description="An array that defines tier prices for the item."/>
+        <field xsi:type="ObjectOutputField" name="price" type="ProductPrices" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\Price" description="The price of the item, including the value and the currency code."/>
         <field xsi:type="ScalarOutputField" name="gift_message_available" type="String" description="Indicates whether a gift message is available."/>
         <field xsi:type="ObjectArrayOutputField" name="category" itemType="CategoryInterface" description="Current category of a product" resolver="\Magento\CatalogGraphQl\Model\Resolver\Category"/>
     </type>
@@ -299,7 +299,7 @@
         <field xsi:type="ScalarOutputField" name="weight" type="Float" description="The weight of a physical product"/>
     </type>
     <type xsi:type="OutputInterface" name="CustomizableProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
-        <field xsi:type="ObjectArrayOutputField" name="options" itemType="CustomizableOptionInterface" description="An array containing information about the customizable options for a product"/>
+        <field xsi:type="ObjectArrayOutputField" name="options" itemType="CustomizableOptionInterface" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\Options" description="An array containing information about the customizable options for a product"/>
     </type>
     <type xsi:type="OutputInterface" name="CustomizableOptionInterface" typeResolver="Magento\CatalogGraphQl\Model\CustomizableOptionTypeResolver">
         <field xsi:type="ScalarOutputField" name="title" type="String" description="The displayed name of the option"/>

@@ -54,7 +54,7 @@ class XmlConverter implements ConverterInterface
      * @param \DOMDocument $source
      * @return array
      */
-    public function convert($source)
+    public function convert($source) : array
     {
         return $this->convertNodeToArray($source);
     }

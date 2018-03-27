@@ -3,12 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Type\Output\ElementMapper\Formatter;
 
 use Magento\Framework\GraphQl\Type\Definition\OutputType;
-use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\Config\Data\TypeInterface;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Type\Input\InputMapper;
@@ -17,7 +16,6 @@ use Magento\Framework\GraphQl\Type\Output\OutputMapper;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Config\FieldConfig;
 use Magento\Framework\GraphQl\Type\Definition\ScalarTypes;
 use Magento\Framework\GraphQl\Config\Data\WrappedTypeProcessor;
 
@@ -30,16 +28,6 @@ class Fields implements FormatterInterface
      * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var FieldConfig
-     */
-    private $fieldConfig;
-
-    /**
-     * @var ArgumentFactory
-     */
-    private $argumentFactory;
 
     /**
      * @var OutputMapper
@@ -68,8 +56,6 @@ class Fields implements FormatterInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param FieldConfig $fieldConfig
-     * @param ArgumentFactory $argumentFactory
      * @param OutputMapper $outputMapper
      * @param InputMapper $inputMapper
      * @param TypeFactory $typeFactory
@@ -78,8 +64,6 @@ class Fields implements FormatterInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        FieldConfig $fieldConfig,
-        ArgumentFactory $argumentFactory,
         OutputMapper $outputMapper,
         InputMapper $inputMapper,
         TypeFactory $typeFactory,
@@ -87,8 +71,6 @@ class Fields implements FormatterInterface
         WrappedTypeProcessor $wrappedTypeProcessor
     ) {
         $this->objectManager = $objectManager;
-        $this->fieldConfig = $fieldConfig;
-        $this->argumentFactory = $argumentFactory;
         $this->outputMapper = $outputMapper;
         $this->inputMapper = $inputMapper;
         $this->typeFactory = $typeFactory;
@@ -99,44 +81,77 @@ class Fields implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function format(TypeInterface $typeStructure, OutputType $outputType) : array
+    public function format(TypeInterface $typeStructure, OutputType $outputType): array
     {
-        $config = [];
-        /** @var Field $field */
+        $typeConfig = [
+        'fields' => function () use ($typeStructure, $outputType) {
+                $fieldsConfig = [];
         foreach ($typeStructure->getFields() as $field) {
-            if ($this->scalarTypes->isScalarType($field->getTypeName())) {
+            $fieldsConfig[$field->getName()] = $this->getFieldConfig($typeStructure, $outputType, $field);
+                }
+                return $fieldsConfig;
+            }
+        ];
+        return $typeConfig;
+    }
+
+
+    /**
+     * Generate field type object.
+     *
+     * @param TypeInterface $typeStructure
+     * @param OutputType $outputType
+     * @param Field $field
+     * @return OutputType
+     */
+    private function getFieldType(TypeInterface $typeStructure, OutputType $outputType, Field $field)
+    {if ($this->scalarTypes->isScalarType($field->getTypeName())) {
                 $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
                 if ($typeStructure->getName() == $field->getTypeName()) {
                     $type = $outputType;
-                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
-                } else {
-                    $type = $this->outputMapper->getTypeObject($field->getTypeName());
+                $type = $this->wrappedTypeProcessor->processWrappedType( $field,
+                        $type );
+                    } else {
+                        $type = $this->outputMapper->getOutputType($field->getTypeName());
+
+
                     $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
                 }
             }
-            $config['fields'][$field->getName()] = [
+            return $type;
+    }
+
+    /**
+     * Generate fieldconfig.
+     *
+     * @param TypeInterface $typeStructure
+     * @param OutputType $outputType
+     * @param Field$field* @return array
+     */
+    private function getFieldConfig(TypeInterface $typeStructure, OutputType $outputType, Field $field): array
+    {
+        $type = $this->getFieldType($typeStructure, $outputType, $field);
+        $fieldConfig = [
                 'name' => $field->getName(),
                 'type' => $type,
             ];
 
-            if (!empty($field->getDescription())) {
-                $config['fields'][$field->getName()]['description'] = $field->getDescription();
-            }
-
-            if ($field->getResolver() != null) {
-                /** @var ResolverInterface $resolver */
-                $resolver = $this->objectManager->get($field->getResolver());
-
-                $config['fields'][$field->getName()]['resolve'] =
-                    function ($value, $args, $context, $info) use ($resolver, $field) {
-                        return $resolver->resolve($field, $value, $args, $context, $info);
-                    };
-            }
-            $config = $this->formatArguments($field, $config);
+        if (!empty($field->getDescription())) {
+            $fieldConfig['description'] = $field->getDescription();
         }
 
-        return $config;
+        if ($field->getResolver() != null) {
+            /** @var ResolverInterface $resolver */
+            $resolver = $this->objectManager->get($field->getResolver());
+
+            $fieldConfig['resolve'] =
+                function ($value, $args, $context, $info) use ($resolver, $field) {
+                    return $resolver->resolve($field, $value, $args, $context, $info);
+                };
+        }
+
+        return $this->formatArguments($field, $fieldConfig);
     }
 
     /**
@@ -151,7 +166,7 @@ class Fields implements FormatterInterface
         foreach ($field->getArguments() as $argument) {
             $inputType = $this->inputMapper->getRepresentation($argument);
 
-            $config['fields'][$field->getName()]['args'][$argument->getName()] = $inputType;
+            $config['args'][$argument->getName()] = $inputType;
         }
 
         return $config;

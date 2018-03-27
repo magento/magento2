@@ -126,7 +126,7 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle_product_items' must not be empty"
+            "Precondition failed: 'bundle product items' must not be empty"
         );
         /** @var OptionList $optionList */
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);

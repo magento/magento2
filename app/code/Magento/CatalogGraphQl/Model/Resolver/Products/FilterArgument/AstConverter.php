@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument;
 
 use Magento\Framework\GraphQl\Argument\AstConverterInterface;
 use Magento\Framework\GraphQl\Config\ConfigInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
-use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
 use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
@@ -37,11 +38,6 @@ class AstConverter implements AstConverterInterface
     private $referenceTypeFactory;
 
     /**
-     * @var EntityAttributeList
-     */
-    private $entityAttributeList;
-
-    /**
      * @var ConfigInterface
      */
     private $config;
@@ -55,7 +51,6 @@ class AstConverter implements AstConverterInterface
      * @param ClauseFactory $clauseFactory
      * @param ConnectiveFactory $connectiveFactory
      * @param ReferenceTypeFactory $referenceTypeFactory
-     * @param EntityAttributeList $entityAttributeList
      * @param ConfigInterface $config
      * @param array $additionalAttributes
      */
@@ -63,14 +58,12 @@ class AstConverter implements AstConverterInterface
         ClauseFactory $clauseFactory,
         ConnectiveFactory $connectiveFactory,
         ReferenceTypeFactory $referenceTypeFactory,
-        EntityAttributeList $entityAttributeList,
         ConfigInterface $config,
         array $additionalAttributes = ['min_price', 'max_price']
     ) {
         $this->clauseFactory = $clauseFactory;
         $this->connectiveFactory = $connectiveFactory;
         $this->referenceTypeFactory = $referenceTypeFactory;
-        $this->entityAttributeList = $entityAttributeList;
         $this->config = $config;
         $this->additionalAttributes = $additionalAttributes;
     }
@@ -82,7 +75,7 @@ class AstConverter implements AstConverterInterface
      * @param array $arguments
      * @return array
      */
-    private function getClausesFromAst(ReferenceType $referenceType, array $arguments)
+    private function getClausesFromAst(ReferenceType $referenceType, array $arguments) : array
     {
         $entityInfo = ['attributes' => $this->getCatalogProductFields()];
         $attributes = array_keys($entityInfo['attributes']);
@@ -122,7 +115,7 @@ class AstConverter implements AstConverterInterface
      * @return array
      * @throws \LogicException
      */
-    private function getCatalogProductFields()
+    private function getCatalogProductFields() : array
     {
         $productTypeSchema = $this->config->getTypeStructure('SimpleProduct');
         if (!$productTypeSchema instanceof Type) {
@@ -153,7 +146,7 @@ class AstConverter implements AstConverterInterface
      * @param array $arguments
      * @return Connective
      */
-    public function convert(string $entityType, $arguments)
+    public function convert(string $entityType, array $arguments) : Connective
     {
         $filters =  $this->getClausesFromAst(
             $this->referenceTypeFactory->create($entityType),

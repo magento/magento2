@@ -33,7 +33,7 @@ class Reader implements ReaderInterface
      * @param string|null $scope
      * @return array
      */
-    public function read($scope = null)
+    public function read($scope = null) : array
     {
         $output = [];
         foreach ($this->readers as $reader) {
