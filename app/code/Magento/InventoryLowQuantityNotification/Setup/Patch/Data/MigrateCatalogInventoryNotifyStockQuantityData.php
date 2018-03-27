@@ -5,55 +5,64 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryLowQuantityNotification\Setup;
+namespace Magento\InventoryLowQuantityNotification\Setup\Patch\Data;
 
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 
 /**
  * Copy notify_stock_qty data from cataloginventory_stock_item to inventory_low_stock_notification_configuration.
  */
-class InstallData implements InstallDataInterface
+class MigrateCatalogInventoryNotifyStockQuantityData implements DataPatchInterface
 {
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    private $moduleDataSetup;
+
     /**
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
-    public function __construct(DefaultSourceProviderInterface $defaultSourceProvider)
-    {
+    /**
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     */
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
+        DefaultSourceProviderInterface $defaultSourceProvider
+    ) {
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function apply()
     {
         $defaultSource = $this->defaultSourceProvider->getCode();
-        $connection = $setup->getConnection();
+        $connection = $this->moduleDataSetup->getConnection();
         $select = $connection->select();
         $select
             ->from(
-                ['stock_item' => $setup->getTable(StockItem::ENTITY)],
+                ['stock_item' => $this->moduleDataSetup->getTable(StockItem::ENTITY)],
                 [
                     'source_item.' . SourceItemInterface::SOURCE_CODE,
                     'source_item.' . SourceItemInterface::SKU,
                     'stock_item.notify_stock_qty',
                 ]
             )->join(
-                ['product' => $setup->getTable('catalog_product_entity')],
+                ['product' => $this->moduleDataSetup->getTable('catalog_product_entity')],
                 'product.entity_id = stock_item.product_id',
                 []
             )->join(
-                ['source_item' => $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM)],
+                ['source_item' => $this->moduleDataSetup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM)],
                 'source_item.sku = product.sku',
                 []
             )->where(
@@ -65,9 +74,27 @@ class InstallData implements InstallDataInterface
 
         $sql = $connection->insertFromSelect(
             $select,
-            $setup->getTable(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
+            $this->moduleDataSetup->getTable('inventory_low_stock_notification_configuration')
         );
 
         $connection->query($sql);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getDependencies()
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAliases()
+    {
+        return [];
     }
 }
