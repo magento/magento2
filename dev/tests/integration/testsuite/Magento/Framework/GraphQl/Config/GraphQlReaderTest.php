@@ -21,9 +21,8 @@ use Magento\GraphQl\Model\SchemaGenerator;
  */
 class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
 {
-
     /** @var Config */
-    private $model;
+    private $configModel;
 
     /** @var  GraphQl */
     private $graphQlController;
@@ -34,7 +33,6 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  SerializerInterface */
     private $jsonSerializer;
 
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -44,31 +42,30 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
         $fileResolverMock = $this->getMockBuilder(
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
-       // $fileList = [file_get_contents(__DIR__ . '/../_files/schemaA.graphql')];
         $fileList = [
-            file_get_contents(__DIR__ . '/../_files/schemaA.graphql'),
-            file_get_contents(__DIR__ . '/../_files/schemaB.graphql')
+            file_get_contents(__DIR__ . '/../_files/schemaA.graphqls'),
+            file_get_contents(__DIR__ . '/../_files/schemaB.graphqls')
         ];
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
         $graphQlReader = $this->objectManager->create(
-            \Magento\Framework\GraphQl\Config\GraphQlReader::class,
+            \Magento\Framework\GraphQlModularSchema\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $this->objectManager->create(
-            \Magento\Framework\GraphQl\Config\Reader::class,
-            ['readers' => ['graphQlReader' => $graphQlReader]]
+            \Magento\Framework\GraphQlModularSchema\Reader::class,
+            ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $this->objectManager->create(
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
-        $this->model = $this->objectManager->create(
+        $this->configModel = $this->objectManager->create(
             \Magento\Framework\GraphQl\Config\Config::class,
             ['data' => $data]
         );
         $graphQlSchemaProvider = $this->objectManager->create(
             \Magento\Framework\GraphQl\SchemaProvider::class,
-            ['config' =>$this->model]
+            ['config' =>$this->configModel]
         );
         $typeGenerator = $this->objectManager->create(
             \Magento\GraphQl\Model\Type\Generator::class,
