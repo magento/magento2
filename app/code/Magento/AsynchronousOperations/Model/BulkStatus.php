@@ -57,12 +57,12 @@ class BulkStatus implements BulkStatusInterface
     private $entityManager;
 
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory
+     * @var BulkStatusDetailedFactory
      */
     private $bulkDetailedFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterfaceFactory
+     * @var BulkStatusShortFactory
      */
     private $bulkShortFactory;
 
@@ -74,8 +74,8 @@ class BulkStatus implements BulkStatusInterface
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql $calculatedStatusSql
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory $bulkDetailedFactory
-     * @param \Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory $bulkShortFactory
+     * @param BulkStatusDetailedFactory $bulkDetailedFactory
+     * @param BulkStatusShortFactory $bulkShortFactory
      * @param \Magento\Framework\EntityManager\EntityManager $entityManager
      */
     public function __construct(
