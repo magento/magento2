@@ -13,6 +13,7 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -48,6 +49,11 @@ class LowQuantityCollection extends AbstractCollection
     private $attributeRepository;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @var int
      */
     private $filterStoreId;
@@ -60,6 +66,7 @@ class LowQuantityCollection extends AbstractCollection
      * @param AttributeRepositoryInterface $attributeRepository
      * @param StockConfigurationInterface $stockConfiguration
      * @param GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems
+     * @param MetadataPool $metadataPool
      * @param AdapterInterface|null $connection
      * @param AbstractDb|null $resource
      */
@@ -71,14 +78,10 @@ class LowQuantityCollection extends AbstractCollection
         AttributeRepositoryInterface $attributeRepository,
         StockConfigurationInterface $stockConfiguration,
         GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems,
+        MetadataPool $metadataPool,
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
-        // should be before parent constructor call
-        $this->attributeRepository = $attributeRepository;
-        $this->stockConfiguration = $stockConfiguration;
-        $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
-
         parent::__construct(
             $entityFactory,
             $logger,
@@ -87,17 +90,10 @@ class LowQuantityCollection extends AbstractCollection
             $connection,
             $resource
         );
-    }
-
-    /**
-     * Sets store filter for use in catalog product name join
-     * @param $storeId
-     * @return $this
-     */
-    public function addStoreFilter($storeId)
-    {
-        $this->filterStoreId = (int)$storeId;
-        return $this;
+        $this->attributeRepository = $attributeRepository;
+        $this->stockConfiguration = $stockConfiguration;
+        $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -109,21 +105,20 @@ class LowQuantityCollection extends AbstractCollection
     }
 
     /**
+     * @param int $storeId
+     * @return void
+     */
+    public function addStoreFilter(int $storeId)
+    {
+        $this->filterStoreId = $storeId;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _beforeLoad()
     {
         parent::_beforeLoad();
-        $this->joinCatalogProduct();
-        $this->addProductTypeFilter();
-        return $this;
-    }
-    /**
-     * @inheritdoc
-     */
-    protected function _initSelect()
-    {
-        parent::_initSelect();
 
         $this->addFilterToMap('source_code', 'main_table.source_code');
         $this->addFilterToMap('sku', 'main_table.sku');
@@ -131,16 +126,16 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->addFieldToSelect('*');
 
+        $this->joinCatalogProduct();
         $this->joinInventoryConfiguration();
 
+        $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
         $this->addEnabledSourceFilter();
-        $this->addSourceItemStatusFilter();
+        $this->addSourceItemInStockFilter();
 
-        $this->setOrder(
-            SourceItemInterface::QUANTITY,
-            self::SORT_ORDER_ASC
-        );
+        $this->setOrder(SourceItemInterface::QUANTITY, self::SORT_ORDER_ASC);
+
         return $this;
     }
 
@@ -153,6 +148,9 @@ class LowQuantityCollection extends AbstractCollection
         $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
         $nameAttribute = $this->attributeRepository->get('catalog_product', 'name');
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $this->getSelect()->joinInner(
             ['product_entity' => $productEntityTable],
             'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
@@ -161,18 +159,24 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity_varchar' => $productEavVarcharTable],
-            'product_entity_varchar.entity_id = product_entity.entity_id ' .
+            'product_entity_varchar.' . $linkField . ' = product_entity.' . $linkField . ' ' .
             'AND product_entity_varchar.store_id = ' . Store::DEFAULT_STORE_ID. ' ' .
-            'AND product_entity_varchar.attribute_id = ' . $nameAttribute->getAttributeId(),
+            'AND product_entity_varchar.attribute_id = ' . (int)$nameAttribute->getAttributeId(),
             []
         );
-        if ($this->filterStoreId) {
+
+        if (null !== $this->filterStoreId) {
             $this->getSelect()->joinLeft(
                 ['product_entity_varchar_store' => $productEavVarcharTable],
-                'product_entity_varchar_store.entity_id = product_entity.entity_id ' .
-                'AND product_entity_varchar_store.store_id = ' . $this->filterStoreId . ' ' .
-                'AND product_entity_varchar_store.attribute_id = ' . $nameAttribute->getAttributeId(),
-                ['product_name' => 'IFNULL(product_entity_varchar_store.value, product_entity_varchar.value)']
+                'product_entity_varchar_store.' . $linkField . ' = product_entity.' . $linkField . ' ' .
+                'AND product_entity_varchar_store.store_id = ' . (int)$this->filterStoreId . ' ' .
+                'AND product_entity_varchar_store.attribute_id = ' . (int)$nameAttribute->getAttributeId(),
+                [
+                    'product_name' => $this->getConnection()->getIfNullSql(
+                        'product_entity_varchar_store.value',
+                        'product_entity_varchar.value'
+                    )
+                ]
             );
         } else {
             $this->getSelect()->columns(['product_name' => 'product_entity_varchar.value']);
@@ -245,7 +249,7 @@ class LowQuantityCollection extends AbstractCollection
     /**
      * @return void
      */
-    private function addSourceItemStatusFilter()
+    private function addSourceItemInStockFilter()
     {
         $this->addFieldToFilter('main_table.status', SourceItemInterface::STATUS_IN_STOCK);
     }

@@ -35,7 +35,6 @@ class LowQuantityCollectionTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_links.php
      * @codingStandardsIgnoreLine
      * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/product_multistore_name.php
      */
     public function testLowQuantityCollection()
     {

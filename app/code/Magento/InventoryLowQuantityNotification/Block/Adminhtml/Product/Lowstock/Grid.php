@@ -50,14 +50,14 @@ class Grid extends GridWidget
         $group = $this->getRequest()->getParam('group');
         $store = $this->getRequest()->getParam('store');
 
-        if ($website) {
-            $storeIds = $this->_storeManager->getWebsite($website)->getStoreIds();
+        if (is_numeric($website)) {
+            $storeIds = $this->_storeManager->getWebsite((int)$website)->getStoreIds();
             $storeId = array_pop($storeIds);
-        } elseif ($group) {
-            $storeIds = $this->_storeManager->getGroup($group)->getStoreIds();
+        } elseif (is_numeric($group)) {
+            $storeIds = $this->_storeManager->getGroup((int)$group)->getStoreIds();
             $storeId = array_pop($storeIds);
-        } elseif ($store) {
-            $storeId = (int)$store;
+        } elseif (is_numeric($store)) {
+            $storeId = $store;
         } else {
             $storeId = null;
         }
@@ -65,10 +65,9 @@ class Grid extends GridWidget
         /** @var LowQuantityCollection $collection  */
         $collection = $this->lowQuantityCollectionFactory->create();
 
-        if ($storeId) {
-            $collection->addStoreFilter($storeId);
+        if (null !== $storeId) {
+            $collection->addStoreFilter((int)$storeId);
         }
-
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
