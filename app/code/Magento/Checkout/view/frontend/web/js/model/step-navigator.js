@@ -183,6 +183,15 @@ define([
         },
 
         /**
+         * Sets window location.
+         *
+         * @param {String} code
+         */
+        setLocation: function (code) {
+            window.location = window.checkoutConfig.checkoutUrl + '#' + code;
+        },
+
+        /**
          * Next step.
          */
         next: function () {
@@ -199,7 +208,7 @@ define([
             if (steps().length > activeIndex + 1) {
                 code = steps()[activeIndex + 1].code;
                 steps()[activeIndex + 1].isVisible(true);
-                window.location = window.checkoutConfig.checkoutUrl + '#' + code;
+                this.setLocation(code);
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
         }
