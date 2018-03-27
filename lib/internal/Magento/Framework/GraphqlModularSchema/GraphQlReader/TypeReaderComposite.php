@@ -5,9 +5,12 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\GraphQlReader;
+namespace Magento\Framework\GraphQlModularSchema\GraphQlReader;
 
-class TypeReader implements TypeMetaReaderInterface
+/**
+ * Composite configured class used to determine which reader should be used for a specific type
+ */
+class TypeReaderComposite implements TypeMetaReaderInterface
 {
     /** @var TypeMetaReaderInterface[] */
     private $typeReaders = [];

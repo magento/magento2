@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\Config\Common;
+namespace Magento\Framework\GraphQlModularSchema\Common;
 
 use Magento\Framework\Config\ReaderInterface;
 

@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
+namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader;
 
 /**
  * Common cases for types that need extra formatting like wrapping or additional properties added to their definition
@@ -13,7 +13,9 @@ namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
 class TypeMetaWrapperReader
 {
     const ARGUMENT_PARAMETER = 'Argument';
+
     const OUTPUT_FIELD_PARAMETER = 'OutputField';
+
     const INPUT_FIELD_PARAMETER = 'InputField';
 
     /**

@@ -5,13 +5,16 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\GraphQlReader\Reader;
+namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader;
 
-use Magento\Framework\GraphQl\Config\GraphQlReader\TypeMetaReaderInterface;
-use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\FieldMetaReader;
-use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\DocReader;
-use Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader\ImplementsReader;
+use Magento\Framework\GraphQlModularSchema\GraphQlReader\TypeMetaReaderInterface;
+use Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader\FieldMetaReader;
+use Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader\ImplementsReader;
 
+/**
+ * Composite configuration reader to handle the object type meta
+ */
 class ObjectType implements TypeMetaReaderInterface
 {
     /**

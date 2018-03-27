@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config\GraphQlReader\MetaReader;
+namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader;
 
 /**
  * Reads interfaces implementations from the annotation @implements of an AST node

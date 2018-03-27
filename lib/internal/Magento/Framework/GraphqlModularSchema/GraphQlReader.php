@@ -5,15 +5,20 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQl\Config;
+namespace Magento\Framework\GraphQlModularSchema;
 
 use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphQl\Config\GraphQlReader\TypeReader;
+use Magento\Framework\GraphqlModularSchema\GraphQlReader\TypeReaderComposite;
 use Magento\Framework\Config\ReaderInterface;
 
+/**
+ * Reads *.graphqls files from modules and combines the results as array to be used with a library to configure objects
+ */
 class GraphQlReader implements ReaderInterface
 {
     const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
+
+    const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
 
     /**
      * File locator
@@ -23,7 +28,7 @@ class GraphQlReader implements ReaderInterface
     private $fileResolver;
 
     /**
-     * @var TypeReader
+     * @var TypeReaderComposite
      */
     private $typeReader;
 
@@ -39,14 +44,14 @@ class GraphQlReader implements ReaderInterface
 
     /**
      * @param FileResolverInterface $fileResolver
-     * @param TypeReader $typeReader
+     * @param TypeReaderComposite $typeReader
      * @param string $fileName
      * @param string $defaultScope
      */
     public function __construct(
         FileResolverInterface $fileResolver,
-        TypeReader $typeReader,
-        $fileName = 'schema.graphqls',
+        TypeReaderComposite $typeReader,
+        $fileName = self::GRAPHQL_SCHEMA_FILE,
         $defaultScope = 'global'
     ) {
         $this->fileResolver = $fileResolver;
