@@ -16,7 +16,6 @@ services:
   - elasticsearch
 language: php
 php:
-  - 7.0
   - 7.1
 env:
   global:
@@ -33,16 +32,6 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=functional
-matrix:
-  exclude:
-    - php: 7.0
-      env: TEST_SUITE=static
-    - php: 7.0
-      env: TEST_SUITE=js GRUNT_COMMAND=spec
-    - php: 7.0
-      env: TEST_SUITE=js GRUNT_COMMAND=static
-    - php: 7.0
-      env: TEST_SUITE=functional
 cache:
   apt: true
   directories:
