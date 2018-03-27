@@ -27,18 +27,19 @@ define([
 
         defaults: {
             colorPickerConfig: {
-                showInput: true,
-                allowEmpty: true,
-                showInitial: false,
-                showPalette: true,
-                showAlpha: true,
                 chooseText: "Apply",
                 cancelText: "Cancel",
-                showSelectionPalette: true,
-                maxSelectionSize: 64,
-                preferredFormat: "rgb",
+                maxSelectionSize: 8,
+                clickoutFiresChange: true,
                 palette: defaultColorPalette
             }
+        },
+
+        initConfig: function (config) {
+            this._super();
+
+            this.constructor.defaults.colorPickerConfig = Object.assign(this.constructor.defaults.colorPickerConfig, config.colorPickerConfig);
+            return this;
         },
 
         /**

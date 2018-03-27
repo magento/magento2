@@ -107,7 +107,9 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="initialColor" type="string" xsi:type="xpath">settings/initialCOlor</item>
+                    <item name="initialColor" type="string" xsi:type="xpath">settings/initialColor</item>
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">settings/colorPickerMode</item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">settings/colorFormat</item>
                 </item>
             </argument>
         </schema>
@@ -296,6 +298,12 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" type="string" xsi:type="xpath">@formElement</item>
+                    <item name="colorPickerMode" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorPickerMode
+                    </item>
+                    <item name="colorFormat" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/colorFormat
+                    </item>
                     <item name="wysiwyg" type="boolean" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/wysiwyg
                     </item>

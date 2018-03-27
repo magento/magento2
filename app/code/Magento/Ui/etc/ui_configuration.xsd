@@ -451,6 +451,14 @@
             </xs:documentation>
         </xs:annotation>
     </xs:element>
+    <xs:element name="colorPicker" type="componentColorPicker">
+        <xs:annotation>
+            <xs:documentation>
+                The ColorPicker component utilizes the Spectrum js library to allow user greater flexibility in entering
+                color values.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
     <xs:element name="column" type="componentColumn">
         <xs:annotation>
             <xs:documentation>
@@ -780,13 +788,6 @@
                 The Wysiwyg component is an adapter for the TinyMCE editor which is used to integrate editor's instance
                 into the UI Form. It expects to receive complete widget declaration in the "content" option
                 which should contain both markup and the script responsible for creating editor's instance.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-    <xs:element name="colorPicker" type="componentColorPicker">
-        <xs:annotation>
-            <xs:documentation>
-                ColorPicker
             </xs:documentation>
         </xs:annotation>
     </xs:element>
