@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -37,16 +35,15 @@ class StockIdResolver
      *
      * @param string $type
      * @param string $code
-     * @throws NoSuchEntityException
      * @return int|null
      */
     public function resolve(string $type, string $code)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
         $select = $connection->select()
-            ->from($tableName, CreateSalesChannelTable::STOCK_ID)
+            ->from($tableName, 'stock_id')
             ->where(SalesChannelInterface::TYPE . ' = ?', $type)
             ->where(SalesChannelInterface::CODE . ' = ?', $code);
 

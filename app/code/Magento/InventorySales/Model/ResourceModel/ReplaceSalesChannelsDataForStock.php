@@ -9,7 +9,6 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface;
-use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -40,9 +39,9 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
     public function execute(array $salesChannels, int $stockId)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
-        $connection->delete($tableName, [CreateSalesChannelTable::STOCK_ID . ' = ?' => $stockId]);
+        $connection->delete($tableName, ['stock_id = ?' => $stockId]);
 
         if (count($salesChannels)) {
             $salesChannelsToInsert = [];
@@ -50,7 +49,7 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
                 $salesChannelsToInsert[] = [
                     SalesChannelInterface::TYPE => $salesChannel->getType(),
                     SalesChannelInterface::CODE => $salesChannel->getCode(),
-                    CreateSalesChannelTable::STOCK_ID => $stockId,
+                    'stock_id' => $stockId,
                 ];
             }
             $connection->insertOnDuplicate($tableName, $salesChannelsToInsert);

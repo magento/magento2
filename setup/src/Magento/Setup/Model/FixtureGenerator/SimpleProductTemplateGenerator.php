@@ -62,8 +62,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
      */
     private function getProductTemplate($attributeSet, $additionalAttributes = [])
     {
-        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
-        $productRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
+        $productRandomizerNumber = crc32(random_int(1, PHP_INT_MAX));
         $product = $this->productFactory->create([
             'data' => [
                 'attribute_set_id' => $attributeSet,

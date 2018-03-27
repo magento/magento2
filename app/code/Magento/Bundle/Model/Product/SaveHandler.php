@@ -5,6 +5,7 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
@@ -50,41 +51,57 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * @param ProductInterface $bundle
+     * @param OptionInterface[] $currentOptions
+     *
+     * @return void
+     */
+    private function removeOldOptions(
+        ProductInterface $bundle,
+        array $currentOptions
+    ) {
+        $oldOptions = $this->optionRepository->getList($bundle->getSku());
+        if ($oldOptions) {
+            $remainingOptions = [];
+            $metadata
+                = $this->metadataPool->getMetadata(ProductInterface::class);
+            $productId = $bundle->getData($metadata->getLinkField());
+
+            foreach ($currentOptions as $option) {
+                $remainingOptions[] = $option->getOptionId();
+            }
+            foreach ($oldOptions as $option) {
+                if (!in_array($option->getOptionId(), $remainingOptions)) {
+                    $option->setParentId($productId);
+                    $this->removeOptionLinks($bundle->getSku(), $option);
+                    $this->optionRepository->delete($option);
+                }
+            }
+        }
+    }
+
+    /**
      * @param object $entity
      * @param array $arguments
-     * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     *
+     * @return ProductInterface|object
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
     {
         /** @var \Magento\Bundle\Api\Data\OptionInterface[] $options */
         $options = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
-
+        //Only processing bundle products.
         if ($entity->getTypeId() !== 'bundle' || empty($options)) {
             return $entity;
         }
-
+        /** @var ProductInterface $entity */
+        //Removing old options
         if (!$entity->getCopyFromView()) {
-            $updatedOptions = [];
-            $oldOptions = $this->optionRepository->getList($entity->getSku());
-
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-
-            $productId = $entity->getData($metadata->getLinkField());
-
-            foreach ($options as $option) {
-                $updatedOptions[$option->getOptionId()][$productId] = (bool)$option->getOptionId();
-            }
-
-            foreach ($oldOptions as $option) {
-                if (!isset($updatedOptions[$option->getOptionId()][$productId])) {
-                    $option->setParentId($productId);
-                    $this->removeOptionLinks($entity->getSku(), $option);
-                    $this->optionRepository->delete($option);
-                }
-            }
+            $this->removeOldOptions($entity, $options);
         }
-
+        //Saving active options.
         foreach ($options as $option) {
             $this->optionRepository->save($entity, $option);
         }

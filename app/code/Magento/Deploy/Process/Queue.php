@@ -161,7 +161,7 @@ class Queue
             foreach ($packages as $name => $packageJob) {
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
-            $this->logger->notice('.');
+            $this->logger->info('.');
             sleep(3);
             foreach ($this->inProgress as $name => $package) {
                 if ($this->isDeployed($package)) {
@@ -214,7 +214,7 @@ class Queue
                     unset($this->inProgress[$name]);
                 }
             }
-            $this->logger->notice('.');
+            $this->logger->info('.');
             sleep(5);
         }
         if ($this->isCanBeParalleled()) {

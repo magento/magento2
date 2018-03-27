@@ -58,7 +58,8 @@ class CollectSourcesForShipmentItems
         }
 
         /** @var \Magento\Sales\Api\Data\ShipmentItemInterface $item */
-        foreach ($shipment->getItems() as $item) {
+        // TODO: https://github.com/magento-engcom/msi/issues/385
+        foreach ((array)$shipment->getItems() as $item) {
             if (isset($itemToProcess[$item->getOrderItemId()])) {
                 $item->setSources($itemToProcess[$item->getOrderItemId()]);
             }
