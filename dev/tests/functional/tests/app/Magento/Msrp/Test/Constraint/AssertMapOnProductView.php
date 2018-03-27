@@ -41,14 +41,14 @@ class AssertMapOnProductView extends AbstractConstraint
         $viewBlock = $catalogProductView->getMsrpViewBlock();
         $viewBlock->openMapBlock();
         $mapBlock = $viewBlock->getMapBlock();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             $product->getMsrp(),
             $mapBlock->getOldPrice(),
             'Displayed on Product view page MAP is incorrect.'
         );
         $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
         $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $price,
             $mapBlock->getActualPrice(),
             'Displayed on Product view page price is incorrect.'

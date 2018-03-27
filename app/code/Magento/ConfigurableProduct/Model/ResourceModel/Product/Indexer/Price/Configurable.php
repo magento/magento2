@@ -8,10 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -58,7 +55,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         if ($this->hasEntity() || !empty($entityIds)) {
             $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
             $this->_applyCustomOption();
-            $this->_applyConfigurableOption();
+            $this->_applyConfigurableOption($entityIds);
             $this->_movePriceDataToIndexTable($entityIds);
         }
         return $this;
@@ -110,10 +107,11 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * Calculate minimal and maximal prices for configurable product options
      * and apply it to final price
      *
+     * @param array|null $entityIds
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _applyConfigurableOption()
+    protected function _applyConfigurableOption($entityIds = null)
     {
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $connection = $this->getConnection();
@@ -134,6 +132,10 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             'le.' . $linkField . ' = l.parent_id',
             ['parent_id' => 'entity_id']
         );
+
+        if ($entityIds !== null) {
+            $subSelect->where('le.entity_id IN (?)', $entityIds);
+        }
 
         $select = $connection->select();
         $select
@@ -174,6 +176,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             ' AND i.website_id = io.website_id',
             []
         );
+        // adds price of custom option, that was applied in DefaultPrice::_applyCustomOption
         $select->columns(
             [
                 'min_price' => new \Zend_Db_Expr('i.min_price - i.orig_price + io.min_price'),

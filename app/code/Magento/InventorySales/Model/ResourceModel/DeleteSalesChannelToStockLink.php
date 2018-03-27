@@ -9,7 +9,6 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\DeleteSalesChannelToStockLinkInterface;
-use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -40,7 +39,7 @@ class DeleteSalesChannelToStockLink implements DeleteSalesChannelToStockLinkInte
     public function execute(string $type, string $code)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
         $connection->delete($tableName, [
             SalesChannelInterface::TYPE . ' = ?' => $type,

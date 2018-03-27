@@ -39,8 +39,7 @@ class LowQuantityCollectionTest extends TestCase
     public function testLowQuantityCollection()
     {
         $expectedSourceCodes = [
-            'eu-1',
-            'eu-2'
+            'eu-1'
         ];
         $actualSourceCodes = $this->lowQuantityCollection->getColumnValues(
             SourceItemConfigurationInterface::SOURCE_CODE

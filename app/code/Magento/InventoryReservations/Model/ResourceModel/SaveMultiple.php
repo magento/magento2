@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryReservations\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryReservations\Setup\Operation\CreateReservationTable;
 use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 
 /**
@@ -38,7 +37,7 @@ class SaveMultiple
     public function execute(array $reservations)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $tableName = $this->resourceConnection->getTableName('inventory_reservation');
 
         $columns = [
             ReservationInterface::STOCK_ID,
