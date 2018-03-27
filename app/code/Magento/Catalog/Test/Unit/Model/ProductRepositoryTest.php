@@ -317,7 +317,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetBySkuWithSpace()
     {
-        $trimmedSku = 'test_sku';
         $sku = 'test_sku ';
         $this->productFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->productMock));
