@@ -300,6 +300,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
             ->will($this->returnValue('test_id'));
         $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getId')->willReturn('test_id');
         $this->assertEquals($this->productMock, $this->model->get($sku));
     }
 
@@ -312,6 +313,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('test_id'));
         $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getId')->willReturn('test_id');
         $this->assertEquals($this->productMock, $this->model->get($sku, true));
     }
 
@@ -323,6 +325,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
             ->will($this->returnValue('test_id'));
         $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getId')->willReturn('test_id');
         $this->assertEquals($this->productMock, $this->model->get($sku));
     }
 
@@ -337,6 +340,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($differentCasedSku)
             ->will($this->returnValue('test_id'));
         $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getId')->willReturn('test_id');
         $this->assertEquals($this->productMock, $this->model->get($differentCasedSku));
     }
 
@@ -374,6 +378,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->productMock->expects($this->once())->method('load')->with($productId);
         $this->productMock->expects($this->atLeastOnce())->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->once())->method('getSku')->willReturn('test_sku');
         $this->assertEquals($this->productMock, $this->model->getById($productId, true));
     }
 
@@ -399,6 +404,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         }
         $this->productMock->expects($this->once())->method('load')->with($identifier);
         $this->productMock->expects($this->atLeastOnce())->method('getId')->willReturn($identifier);
+        $this->productMock->expects($this->once())->method('getSku');
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
         //Second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
@@ -420,7 +426,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->exactly(2))->method('load');
         $this->serializerMock->expects($this->exactly(3))->method('serialize');
 
-        $this->productMock->expects($this->exactly(4))->method('getId')->willReturn($identifier);
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($identifier);
+        $this->productMock->expects($this->exactly(2))->method('getSku');
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
         //second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));

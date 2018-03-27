@@ -246,7 +246,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
-            $this->cacheProduct($cacheKey, $product, $sku);
+            $this->cacheProduct($cacheKey, $product, $product->getId(), $sku);
         }
         if (!isset($this->instances[$sku])) {
             $sku = trim($sku);
@@ -272,7 +272,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if (!$product->getId()) {
                 throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
-            $this->cacheProduct($cacheKey, $product);
+            $this->cacheProduct($cacheKey, $product, $productId, $product->getSku());
         }
         return $this->instancesById[$productId][$cacheKey];
     }
@@ -302,13 +302,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      *
      * @param string $cacheKey
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param null|string $sku
+     * @param string|int $productId
+     * @param string $productSku
      * @return void
+     * @internal param null|string $sku
      */
-    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product, $sku = null)
+    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product, $productId, string $productSku)
     {
-        $productSku = $sku ?: $product->getSku();
-        $this->instancesById[$product->getId()][$cacheKey] = $product;
+        $this->instancesById[$productId][$cacheKey] = $product;
         $this->instances[$productSku][$cacheKey] = $product;
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
@@ -599,7 +600,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         $product->hasData(\Magento\Catalog\Model\Product::STORE_ID) ? $product->getStoreId() : null
                     ]
                 ),
-                $product
+                $product,
+                $product->getId(),
+                $product->getSku()
             );
         }
 
