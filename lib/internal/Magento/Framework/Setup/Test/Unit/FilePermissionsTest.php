@@ -275,26 +275,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 
     public function setUpDirectoryListInstallation()
     {
-        $this->directoryListMock
-            ->expects($this->at(0))
-            ->method('getPath')
-            ->with(DirectoryList::CONFIG)
-            ->will($this->returnValue(BP . '/app/etc'));
-        $this->directoryListMock
-            ->expects($this->at(1))
-            ->method('getPath')
-            ->with(DirectoryList::VAR_DIR)
-            ->will($this->returnValue(BP . '/var'));
-        $this->directoryListMock
-            ->expects($this->at(2))
-            ->method('getPath')
-            ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue(BP . '/pub/media'));
-        $this->directoryListMock
-            ->expects($this->at(3))
-            ->method('getPath')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue(BP . '/pub/static'));
+        $this->setUpDirectoryListInstallationInProduction();
         $this->directoryListMock
             ->expects($this->at(4))
             ->method('getPath')
