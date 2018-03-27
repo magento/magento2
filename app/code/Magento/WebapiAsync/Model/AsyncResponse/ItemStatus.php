@@ -6,7 +6,7 @@
 
 namespace Magento\WebapiAsync\Model\AsyncResponse;
 
-use Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface;
+use Magento\WebapiAsync\Api\Data\ItemStatusInterface;
 use Magento\Framework\DataObject;
 
 class ItemStatus extends DataObject implements ItemStatusInterface

@@ -39,9 +39,25 @@ class AsyncResponse extends DataObject implements AsyncResponseInterface, Extens
     /**
      * @inheritDoc
      */
-    public function setRequestItems(\Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface $requestItems)
+    public function setRequestItems($requestItems)
     {
         return $this->setData(self::REQUEST_ITEMS, $requestItems);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsErrors($isErrors = false)
+    {
+        return $this->setData(self::IS_ERRORS, $isErrors);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsErrors()
+    {
+        return $this->getData(self::IS_ERRORS);
     }
 
     /**

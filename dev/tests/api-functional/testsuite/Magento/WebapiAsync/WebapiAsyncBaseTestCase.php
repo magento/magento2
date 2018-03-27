@@ -44,12 +44,12 @@ class WebApiAsyncBaseTestCase extends WebapiAbstract
     /**
      * @var PublisherConsumerController
      */
-    private $publisherConsumerController;
+    protected $publisherConsumerController;
 
-    protected function setUp()
+    public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherConsumerController = $this->objectManager->get(PublisherConsumerController::class, [
+        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers' => $this->consumers,
             'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
             'maxMessages' => $this->maxMessages,
@@ -71,21 +71,6 @@ class WebApiAsyncBaseTestCase extends WebapiAbstract
     {
         $this->publisherConsumerController->stopConsumers();
         parent::tearDown();
-    }
-
-    /**
-     * Wait for asynchronous handlers to log data to file.
-     *
-     * @param int $expectedLinesCount
-     * @param string $logFilePath
-     */
-    protected function waitForAsynchronousResult($expectedLinesCount, $logFilePath)
-    {
-        try {
-            $this->publisherConsumerController->waitForAsynchronousResult($expectedLinesCount, $logFilePath);
-        } catch (PreconditionFailedException $e) {
-            $this->fail($e->getMessage());
-        }
     }
 
     /**

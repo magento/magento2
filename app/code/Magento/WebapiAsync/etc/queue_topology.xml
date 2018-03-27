@@ -8,6 +8,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento" type="topic" connection="amqp">
         <binding id="async.operations.all" topic="async.#" destinationType="queue" destination="async.operations.all"/>
-        <binding id="async.V1.products.POST" topic="async.V1.products.POST" destinationType="queue" destination="async.V1.products.POST"/>
     </exchange>
 </config>

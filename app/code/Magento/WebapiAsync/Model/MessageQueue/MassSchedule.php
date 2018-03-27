@@ -9,18 +9,18 @@ namespace Magento\WebapiAsync\Model\MessageQueue;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\WebapiAsync\Api\Data\ItemStatusInterfaceFactory;
+use Magento\WebapiAsync\Api\Data\AsyncResponseInterface;
 use Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory;
-use Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterfaceFactory;
-use Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterfaceFactory;
-use Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface;
-use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
+use Magento\WebapiAsync\Api\Data\ItemStatusInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Bulk\BulkManagementInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Exception\BulkException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MassPublisher used for encoding topic entities to OperationInterface and publish them.
@@ -39,32 +39,22 @@ class MassSchedule
     private $identityService;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $jsonSerializer;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityManager
+     * @var EntityManager
      */
     private $entityManager;
 
     /**
-     * @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory
+     * @var AsyncResponseInterfaceFactory
      */
     private $asyncResponseFactory;
 
     /**
-     * @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterfaceFactory
-     */
-    private $itemsListInterfaceFactory;
-
-    /**
-     * @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterfaceFactory
+     * @var ItemStatusInterfaceFactory
      */
     private $itemStatusInterfaceFactory;
 
@@ -84,93 +74,89 @@ class MassSchedule
     private $bulkManagement;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Initialize dependencies.
      *
-     * @param \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory $operationFactory
-     * @param \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService
-     * @param \Magento\Authorization\Model\UserContextInterface $userContextInterface
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
-     * @param \Magento\Framework\EntityManager\EntityManager $entityManager
-     * @param \Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory $asyncResponse
-     * @param \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterfaceFactory $itemsListFactory
-     * @param \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterfaceFactory $itemStatusFactory
-     * @param \Magento\Framework\MessageQueue\MessageEncoder $messageEncoder
-     * @param \Magento\Framework\MessageQueue\MessageValidator $messageValidator
-     * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
+     * @param OperationInterfaceFactory $operationFactory
+     * @param IdentityGeneratorInterface $identityService
+     * @param Json $jsonSerializer
+     * @param EntityManager $entityManager
+     * @param ItemStatusInterfaceFactory $itemStatusInterfaceFactory
+     * @param AsyncResponseInterfaceFactory $asyncResponseFactory
+     * @param MessageEncoder $messageEncoder
+     * @param MessageValidator $messageValidator
+     * @param BulkManagementInterface $bulkManagement
+     * @param LoggerInterface $logger
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
         IdentityGeneratorInterface $identityService,
-        UserContextInterface $userContextInterface,
         Json $jsonSerializer,
         EntityManager $entityManager,
-        AsyncResponseInterfaceFactory $asyncResponse,
-        ItemsListInterfaceFactory $itemsListFactory,
-        ItemStatusInterfaceFactory $itemStatusFactory,
+        ItemStatusInterfaceFactory $itemStatusInterfaceFactory,
+        AsyncResponseInterfaceFactory $asyncResponseFactory,
         MessageEncoder $messageEncoder,
         MessageValidator $messageValidator,
-        BulkManagementInterface $bulkManagement
+        BulkManagementInterface $bulkManagement,
+        LoggerInterface $logger
     ) {
-        $this->userContext = $userContextInterface;
         $this->operationFactory = $operationFactory;
         $this->identityService = $identityService;
         $this->jsonSerializer = $jsonSerializer;
         $this->entityManager = $entityManager;
-        $this->asyncResponseFactory = $asyncResponse;
-        $this->itemsListInterfaceFactory = $itemsListFactory;
-        $this->itemStatusInterfaceFactory = $itemStatusFactory;
+        $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
+        $this->asyncResponseFactory = $asyncResponseFactory;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
         $this->bulkManagement = $bulkManagement;
+        $this->logger = $logger;
     }
 
     /**
-     * Schedule new bulk operation
+     * Schedule new bulk operation based on the list of entities
      *
-     * @param string $topicName
-     * @param array $entitiesArray
-     * @param null|string $groupId
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\WebapiAsync\Api\Data\AsyncResponseInterface
+     * @param $topicName
+     * @param $entitiesArray
+     * @param null $groupId
+     * @param null $userId
+     * @return AsyncResponseInterface
+     * @throws BulkException
+     * @throws LocalizedException
      */
-    public function publishMass($topicName, $entitiesArray, $groupId = null)
+    public function publishMass($topicName, array $entitiesArray, $groupId = null, $userId = null)
     {
-        $bulkDescription = sprintf('Topic %s', $topicName);
-        $userId = $this->userContext->getUserId();
-
-        /**
-         * set admin userId to 1 because seems it's not work with oAuth
-         * and we need set user id manually
-         */
-        if (!isset($userId) || $userId == 0) {
-            $userId = 1;
-        }
+        $bulkDescription = __('Topic %s', $topicName);
 
         if ($groupId == null) {
             $groupId = $this->identityService->generateId();
 
             /** create new bulk without operations */
-            $this->bulkManagement->scheduleBulk($groupId, [], $bulkDescription, $userId);
+            if (!$this->bulkManagement->scheduleBulk($groupId, [], $bulkDescription, $userId)) {
+                throw new LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
-        /** @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterface $asyncResponse */
-        $asyncResponse = $this->asyncResponseFactory->create();
-        $asyncResponse->setBulkUuid($groupId);
 
         $operations = [];
         $requestItems = [];
-        $errors = [];
+        $bulkException = new BulkException();
         foreach ($entitiesArray as $key => $entityParams) {
-            /** @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface $requestItem */
+            /** @var \Magento\WebapiAsync\Api\Data\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
                 $this->messageValidator->validate($topicName, $entityParams);
-                $data = $this->messageEncoder->encode($topicName, $entityParams);
+                $encodedMessage = $this->messageEncoder->encode($topicName, $entityParams);
 
                 $serializedData = [
                     'entity_id'        => null,
                     'entity_link'      => '',
-                    'meta_information' => $data,
+                    'meta_information' => $encodedMessage,
                 ];
                 $data = [
                     'data' => [
@@ -188,29 +174,36 @@ class MassSchedule
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
                 $requestItems[] = $requestItem;
             } catch (\Exception $exception) {
+                $this->logger->error($exception);
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);
-                $errors[] = $requestItem;
+                $requestItems[] = $requestItem;
+                $bulkException->addException(new LocalizedException(
+                    __('Error processing %key element of input data', ['key' => $key]),
+                    $exception
+                ));
             }
         }
 
-        if (!empty($errors)) {
-            throw new \Magento\Framework\Webapi\Exception($errors);
-        }
-
-        $result = $this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId);
-
-        if (!$result) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+        if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
+            throw new LocalizedException(
                 __('Something went wrong while processing the request.')
             );
         }
+        /** @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterface $asyncResponse */
+        $asyncResponse = $this->asyncResponseFactory->create();
+        $asyncResponse->setBulkUuid($groupId);
+        $asyncResponse->setRequestItems($requestItems);
 
-        /** @var \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface $itemsResponseList */
-        $requestItemsList = $this->itemsListInterfaceFactory->create(['items' => $requestItems]);
-        $asyncResponse->setRequestItems($requestItemsList);
+        if ($bulkException->wasErrorAdded()) {
+            $asyncResponse->setIsErrors(true);
+            $bulkException->addData($asyncResponse);
+            throw $bulkException;
+        } else {
+            $asyncResponse->setIsErrors(false);
+        }
 
         return $asyncResponse;
     }

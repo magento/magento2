@@ -9,8 +9,4 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="async.operations.all" queue="async.operations.all" connection="amqp"
               consumerInstance="Magento\WebapiAsync\Model\MessageQueue\MassConsumer"/>
-
-    <consumer name="async.V1.products.POST" queue="async.V1.products.POST" connection="amqp"
-              consumerInstance="Magento\WebapiAsync\Model\MessageQueue\MassConsumer"
-              handler="Magento\Catalog\Api\ProductRepositoryInterface::save"/>
 </config>

@@ -23,4 +23,34 @@ interface ItemsListInterface
      * @since 100.3.0
      */
     public function getItems();
+
+    /**
+     * @param $items \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface[]
+     * @return \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface
+     */
+    public function setItems($items);
+
+    /**
+     * @return string
+     */
+    public function getGroupId();
+
+    /**
+     * @param $groupId string
+     * @return \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface
+     */
+    public function setGroupId($groupId);
+
+    /**
+     * @param bool $isErrors
+     * @return \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface
+     */
+    public function setIsErrors($isErrors = false);
+
+    /**
+     * Is there errors during processing bulk
+     *
+     * @return boolean
+     */
+    public function getIsErrors();
 }

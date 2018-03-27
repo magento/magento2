@@ -15,7 +15,7 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 /**
  * Base test case for message queue tests.
  */
-abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
+class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string[]
@@ -50,9 +50,10 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers' => $this->consumers,
-            'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+            'logFilePath' => $this->logFilePath,
             'maxMessages' => $this->maxMessages,
             'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
         ]);
@@ -83,10 +84,18 @@ abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     protected function waitForAsynchronousResult($expectedLinesCount, $logFilePath)
     {
         try {
-            $this->publisherConsumerController->waitForAsynchronousResult($expectedLinesCount, $logFilePath);
+            //$expectedLinesCount, $logFilePath
+            $this->publisherConsumerController->waitForAsynchronousResult([$this, 'checkLogsExists'], [
+                $expectedLinesCount, $logFilePath
+            ]);
         } catch (PreconditionFailedException $e) {
             $this->fail($e->getMessage());
         }
+    }
+
+    public function checkLogsExists($expectedLinesCount) {
+        $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
+        return $expectedLinesCount === $actualCount;
     }
 
     /**

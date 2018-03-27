@@ -7,20 +7,53 @@
 namespace Magento\WebapiAsync\Model\AsyncResponse;
 
 use Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface;
+use Magento\WebapiAsync\Api\Data\ItemStatusInterface;
 
 class ItemsList implements ItemsListInterface
 {
     /**
-     * @var array
+     * @var ItemStatusInterface[]
      */
     private $items;
 
     /**
-     * @param array $items [optional]
+     * @var string
      */
-    public function __construct(array $items = [])
+    private $groupId;
+
+    /**
+     * @var bool
+     */
+    private $isErrors;
+
+    /**
+     * @param $groupId string
+     * @param ItemStatusInterface[] $items
+     * @param bool $isError
+     */
+    public function __construct($groupId, array $items = [], $isError = false)
     {
         $this->items = $items;
+        $this->groupId = $groupId;
+        $this->isErrors = $isError;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+        return $this;
     }
 
     /**
@@ -29,5 +62,29 @@ class ItemsList implements ItemsListInterface
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsErrors($isErrors = false)
+    {
+        $this->isErrors = $isErrors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsErrors()
+    {
+        return $this->isErrors;
     }
 }

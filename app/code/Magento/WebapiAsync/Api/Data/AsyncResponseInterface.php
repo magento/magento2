@@ -11,12 +11,12 @@ namespace Magento\WebapiAsync\Api\Data;
  * Temporary data object to give response from webapi async router
  *
  * @api
- * @since 100.3.0
  */
 interface AsyncResponseInterface
 {
     const BULK_UUID = 'bulk_uuid';
     const REQUEST_ITEMS = 'request_items';
+    const IS_ERRORS = 'is_errors';
 
     /**
      * Gets the bulk uuid.
@@ -38,7 +38,7 @@ interface AsyncResponseInterface
     /**
      * Gets the list of request items with status data.
      *
-     * @return \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface
+     * @return \Magento\WebapiAsync\Api\Data\ItemStatusInterface[]
      * @since 100.3.0
      */
     public function getRequestItems();
@@ -46,11 +46,24 @@ interface AsyncResponseInterface
     /**
      * Sets the list of request items with status data.
      *
-     * @param \Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface $requestItems
+     * @param \Magento\WebapiAsync\Api\Data\ItemStatusInterface[] $requestItems
      * @return $this
      * @since 100.3.0
      */
-    public function setRequestItems(\Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface $requestItems);
+    public function setRequestItems($requestItems);
+
+    /**
+     * @param bool $isErrors
+     * @return \Magento\WebapiAsync\Api\Data\AsyncResponseInterface
+     */
+    public function setIsErrors($isErrors = false);
+
+    /**
+     * Is there errors during processing bulk
+     *
+     * @return boolean
+     */
+    public function getIsErrors();
 
     /**
      * Retrieve existing extension attributes object.

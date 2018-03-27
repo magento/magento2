@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Api\Data\AsyncResponse;
+namespace Magento\WebapiAsync\Api\Data;
 
 /**
  * ItemStatusInterface interface
@@ -12,7 +12,6 @@ namespace Magento\WebapiAsync\Api\Data\AsyncResponse;
  * Indicate if entity param was Accepted|Rejected to bulk schedule
  *
  * @api
- * @since 100.3.0
  */
 interface ItemStatusInterface
 {
