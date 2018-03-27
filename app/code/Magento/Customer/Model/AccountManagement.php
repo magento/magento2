@@ -632,13 +632,9 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Make sure that password complies with minimum security requirements.
-     *
-     * @param string $password
-     * @return void
-     * @throws InputException
+     * {@inheritdoc}
      */
-    protected function checkPasswordStrength($password)
+    public function checkPasswordStrength($password)
     {
         $length = $this->stringHelper->strlen($password);
         if ($length > self::MAX_PASSWORD_LENGTH) {
@@ -649,7 +645,7 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        $configMinPasswordLength = $this->getMinPasswordLength();
+        $configMinPasswordLength = $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
         if ($length < $configMinPasswordLength) {
             throw new InputException(
                 __(
@@ -712,6 +708,7 @@ class AccountManagement implements AccountManagementInterface
      * Retrieve minimum password length
      *
      * @return int
+     * @deprecated
      */
     protected function getMinPasswordLength()
     {

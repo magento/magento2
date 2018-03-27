@@ -153,6 +153,15 @@ interface AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword);
 
     /**
+     * Make sure that password complies with minimum security requirements.
+     *
+     * @param string $password
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function checkPasswordStrength($password);
+
+    /**
      * Check if password reset token is valid.
      *
      * @param int $customerId
