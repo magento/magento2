@@ -148,9 +148,9 @@ class FulltextTest extends TestCase
     public function reindexAllDataProvider(): array
     {
         return [
-            ['store_for_eu_website', [1, 1]],
+            ['store_for_eu_website', [1, 2]],
             ['store_for_us_website', [0, 1]],
-            ['store_for_global_website', [1, 2]],
+            ['store_for_global_website', [1, 3]],
         ];
     }
 
@@ -188,9 +188,9 @@ class FulltextTest extends TestCase
     public function reindexRowDataProvider(): array
     {
         return [
-            ['store_for_eu_website', [1, 1]],
+            ['store_for_eu_website', [1, 2]],
             ['store_for_us_website', [0, 1]],
-            ['store_for_global_website', [1, 2]],
+            ['store_for_global_website', [1, 3]],
         ];
     }
 
@@ -265,9 +265,9 @@ class FulltextTest extends TestCase
     public function reindexRowAfterDeleteDataProvider(): array
     {
         return [
-            ['store_for_eu_website', 1],
+            ['store_for_eu_website', 2],
             ['store_for_us_website', 0],
-            ['store_for_global_website', 1],
+            ['store_for_global_website', 2],
         ];
     }
     /**
