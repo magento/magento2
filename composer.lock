@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2f827106b25e61999eec2b51090b369",
+    "content-hash": "a01a818f1c20967d8b6774be2a997966",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -710,20 +710,20 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.3.0.x-dev",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "21e4019f051513be041f5611fab717af63b5451e"
+                "reference": "38fdaa51967cd3dbed85cf695b6a70e3c2ff8a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/21e4019f051513be041f5611fab717af63b5451e",
-                "reference": "21e4019f051513be041f5611fab717af63b5451e",
+                "url": "https://api.github.com/repos/magento/composer/zipball/38fdaa51967cd3dbed85cf695b6a70e3c2ff8a92",
+                "reference": "38fdaa51967cd3dbed85cf695b6a70e3c2ff8a92",
                 "shasum": ""
             },
             "require": {
-                "composer/composer": "~1.6.0",
+                "composer/composer": "^1.6",
                 "php": "~7.1.3|~7.2.0",
                 "symfony/console": "~4.0.0"
             },
@@ -742,7 +742,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2018-02-23T15:57:04+00:00"
+            "time": "2018-03-26T16:19:52+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -6583,7 +6583,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
         "magento/zendframework1": 20,
         "phpmd/phpmd": 0
     },
