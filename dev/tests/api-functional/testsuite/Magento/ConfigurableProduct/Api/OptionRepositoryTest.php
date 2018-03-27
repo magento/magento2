@@ -7,6 +7,9 @@
 
 namespace Magento\ConfigurableProduct\Api;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
@@ -138,6 +141,12 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
      */
     public function testAdd()
     {
+        /** @var AttributeRepositoryInterface $attributeRepository */
+        $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
+
+        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+        $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
+
         $productSku = 'simple';
         $serviceInfo = [
             'rest' => [
@@ -151,7 +160,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             ]
         ];
         $option = [
-            'attribute_id' => 'test_configurable',
+            'attribute_id' => $attribute->getAttributeId(),
             'label' => 'Test',
             'values' => [
                 [
