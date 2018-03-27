@@ -252,6 +252,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
                     'custom_attributes' => '',
                     'resized_image_width' => 100,
                     'resized_image_height' => 100,
+                    'product_id' => null
                 ],
             ],
         ];
@@ -286,6 +287,7 @@ class ImageBuilderTest extends \PHPUnit\Framework\TestCase
                     'custom_attributes' => 'name_1="value_1" name_2="value_2"',
                     'resized_image_width' => 120,
                     'resized_image_height' => 70,
+                    'product_id' => null
                 ],
             ],
         ];
