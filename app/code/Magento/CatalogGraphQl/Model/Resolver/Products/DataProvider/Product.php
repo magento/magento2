@@ -26,11 +26,6 @@ class Product
     private $collectionFactory;
 
     /**
-     * @var array
-     */
-    private $productsByCategories = null;
-
-    /**
      * @var JoinProcessorInterface
      */
     private $joinProcessor;
@@ -108,29 +103,5 @@ class Product
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
         return $searchResult;
-    }
-
-    /**
-     * Retrieve products list by category ids
-     *
-     * @param $categoryId
-     * @return array
-     */
-    public function getListOfProductsInCategories($categoryId)
-    {
-        if ($this->productsByCategories === null) {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter(
-                    'entity_id',
-                    $this->categoryProduct->getDistinctProductIds(),
-                    'in'
-                )
-                ->create();
-
-            $this->productsByCategories = $this->getList($searchCriteria)->getItems();
-        }
-
-        $productsByCategories = $this->categoryProduct->getProductsIdsGroupedByCategories();
-        $productIds = $productsByCategories[$categoryId] ?? [];
-        return array_intersect_key($this->productsByCategories, array_keys($productIds));
     }
 }

@@ -45,6 +45,7 @@ class AstConverter implements AstConverterInterface
      * @var ConfigInterface
      */
     private $config;
+
     /**
      * @var array
      */

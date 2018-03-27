@@ -9,6 +9,12 @@
             <argument xsi:type="ObjectArrayArgument" name="attributes" itemType="AttributeInput" itemsRequired="true" required="true"/>
         </field>
     </type>
+    <type xsi:type="OutputType" name="EavDataAttributeOptionInterface">
+        <field xsi:type="ScalarOutputField" name="label" type="String" description="Eav attribute label type" />
+        <field xsi:type="ScalarOutputField" name="value" type="String" description="Eav attribute value" />
+        <field xsi:type="ScalarOutputField" name="sort_order" type="Int" description="Eav attribute sort order" />
+        <field xsi:type="ScalarOutputField" name="is_default" type="Boolean" description="Eav attribute option is default or not" />
+    </type>
     <type xsi:type="OutputType" name="CustomAttributeMetadata">
         <field xsi:type="ObjectArrayOutputField" name="items" itemType="Attribute" description="An array of items that match the search criteria"/>
     </type>
