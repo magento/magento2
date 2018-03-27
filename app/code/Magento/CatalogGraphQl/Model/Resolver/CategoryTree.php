@@ -10,6 +10,8 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 
 /**
  * Category tree field resolver, used for GraphQL request processing.
@@ -27,12 +29,20 @@ class CategoryTree implements ResolverInterface
     private $categoryTree;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param Products\DataProvider\CategoryTree $categoryTree
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
-        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
+        \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree,
+        ValueFactory $valueFactory
     ) {
         $this->categoryTree = $categoryTree;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -59,14 +69,20 @@ class CategoryTree implements ResolverInterface
      * @param ResolveInfo $info
      * @return mixed
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info) : ?Value
     {
-        if (isset($value[$field->getName()])) {
-            return $value[$field->getName()];
-        }
+        $that = $this;
 
-        $rootCategoryId = $this->assertFiltersAreValidAndGetCategoryRootIds($args);
-        $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-        return ['category_tree' => $categoriesTree];
+        return $this->valueFactory->create(function () use ($value, $args, $that, $field, $info) {
+            if (isset($value[$field->getName()])) {
+                return $value[$field->getName()];
+            }
+
+            $rootCategoryId = $this->assertFiltersAreValidAndGetCategoryRootIds($args);
+            $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
+            return [
+                'category_tree' => $categoriesTree
+            ];
+        });
     }
 }

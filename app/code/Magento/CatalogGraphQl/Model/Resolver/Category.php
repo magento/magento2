@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use GraphQL\Deferred;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -15,6 +15,8 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlatternizer;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
+use Magento\Framework\GraphQl\Resolver\Value;
+use Magento\Framework\GraphQl\Resolver\ValueFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
@@ -55,22 +57,30 @@ class Category implements ResolverInterface
     private $customAttributesFlatternizer;
 
     /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * Category constructor.
      * @param CollectionFactory $collectionFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AttributesJoiner $attributesJoiner
      * @param CustomAttributesFlatternizer $customAttributesFlatternizer
+     * @param ValueFactory $valueFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         DataObjectProcessor $dataObjectProcessor,
         AttributesJoiner $attributesJoiner,
-        CustomAttributesFlatternizer $customAttributesFlatternizer
+        CustomAttributesFlatternizer $customAttributesFlatternizer,
+        ValueFactory $valueFactory
     ) {
         $this->collection = $collectionFactory->create();
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->attributesJoiner = $attributesJoiner;
         $this->customAttributesFlatternizer = $customAttributesFlatternizer;
+        $this->valueFactory = $valueFactory;
     }
 
     /**
@@ -81,12 +91,12 @@ class Category implements ResolverInterface
      * @param ResolveInfo $info
      * @return mixed
      */
-    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info)
+    public function resolve(Field $field, array $value = null, array $args = null, $context, ResolveInfo $info): ?Value
     {
         $this->categoryIds = array_merge($this->categoryIds, $value[self::PRODUCT_CATEGORY_IDS_KEY]);
         $that = $this;
 
-        return new Deferred(function () use ($that, $value, $info) {
+        return $this->valueFactory->create(function () use ($that, $value, $info) {
             $categories = [];
             if (empty($that->categoryIds)) {
                 return [];
