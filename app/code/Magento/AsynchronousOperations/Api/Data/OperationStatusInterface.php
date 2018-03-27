@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AsynchronousOperations\Api\Data\OperationStatus;
+namespace Magento\AsynchronousOperations\Api\Data;
 
 /**
  * Getter Class OperationsStatusInterface
@@ -13,16 +13,14 @@ namespace Magento\AsynchronousOperations\Api\Data\OperationStatus;
  * without serialized_data and result_serialized_data
  *
  * @api
- * @since 100.3.0
  * @see \Magento\AsynchronousOperations\Api\Data\OperationInterface
  */
-interface ShortInterface
+interface OperationStatusInterface
 {
     /**
      * Operation id
      *
      * @return int
-     * @since 100.3.0
      */
     public function getId();
 
@@ -32,7 +30,6 @@ interface ShortInterface
      * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
      *
      * @return int
-     * @since 100.3.0
      */
     public function getStatus();
 
@@ -40,7 +37,6 @@ interface ShortInterface
      * Get result message
      *
      * @return string
-     * @since 100.3.0
      */
     public function getResultMessage();
 
@@ -48,7 +44,6 @@ interface ShortInterface
      * Get error code
      *
      * @return int
-     * @since 100.3.0
      */
     public function getErrorCode();
 }

@@ -6,11 +6,10 @@
 
 namespace Magento\AsynchronousOperations\Model\Operation;
 
-use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterface;
 use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
 
-class Details implements OperationDetailsInterface
+class Details
 {
     /**
      * @var array
@@ -95,6 +94,7 @@ class Details implements OperationDetailsInterface
     public function getOperationsTotal()
     {
         $this->getDetails($this->bulkUuid);
+
         return $this->operationCache[$this->bulkUuid]['operations_total'];
     }
 
@@ -126,6 +126,7 @@ class Details implements OperationDetailsInterface
     public function getTotalFailed()
     {
         $this->getDetails($this->bulkUuid);
+
         return $this->operationCache[$this->bulkUuid]['operations_failed'];
     }
 

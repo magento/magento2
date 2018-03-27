@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AsynchronousOperations\Model\Operation\Status;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\AsynchronousOperations\Api\Data\OperationStatus\ShortInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationStatusInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class OperationShortDetails
  */
-class Short extends DataObject implements ShortInterface, ExtensibleDataInterface
+class OperationStatus extends DataObject implements OperationStatusInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc

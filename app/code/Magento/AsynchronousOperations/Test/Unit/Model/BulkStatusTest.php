@@ -67,11 +67,6 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $operationCounterFactory;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $entityMetadataMock;
 
     /**
@@ -102,15 +97,11 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         );
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->bulkDetailedFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkStatus\DetailedInterfaceFactory ::class,
+            \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory ::class,
             ['create']
         );
         $this->bulkShortFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterfaceFactory::class,
-            ['create']
-        );
-        $this->operationCounterFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\OperationDetailsInterfaceFactory::class,
+            \Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory::class,
             ['create']
         );
         $this->entityManager = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
@@ -126,7 +117,6 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             $this->metadataPoolMock,
             $this->bulkDetailedFactory,
             $this->bulkShortFactory,
-            $this->operationCounterFactory,
             $this->entityManager
         );
     }
@@ -188,12 +178,13 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [1, [1]],
-            [null,
+            [
+                null,
                 [
                     OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
-                    OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED
-                ]
-            ]
+                    OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
+                ],
+            ],
         ];
     }
 
