@@ -23,7 +23,7 @@
             <createData entity="productWithDescription" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategoryC"/>
             </createData>
-            <createData entity="SimpleSubCategory" stepKey="createSubCategory">
+            <createData entity="SubCategoryWithParent" stepKey="createSubCategory">
                 <requiredEntity createDataKey="createCategoryC"/>
             </createData>
             <createData entity="productWithDescription" stepKey="createProduct2">
