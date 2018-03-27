@@ -6,6 +6,7 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
@@ -55,7 +56,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         $this->cartManagement = $objectManager->create(CartManagementInterface::class);
         $this->cartItemRepository = $objectManager->create(CartItemRepositoryInterface::class);
