@@ -7,7 +7,7 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/form/element/url-input',
+    'Magento_Ui/js/form/element/url-input'
 ], function ($, UrlInput) {
     'use strict';
 
