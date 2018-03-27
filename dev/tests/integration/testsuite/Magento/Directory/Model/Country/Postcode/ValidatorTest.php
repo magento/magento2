@@ -133,7 +133,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['countryId' => 'IL', 'postcode' => '12345'],
             ['countryId' => 'IT', 'postcode' => '12345'],
             ['countryId' => 'JP', 'postcode' => '123-4567'],
-            ['countryId' => 'JP', 'postcode' => '123'],
+            ['countryId' => 'JP', 'postcode' => '1234567'],
             ['countryId' => 'JE', 'postcode' => 'TY8 9PL'],
             ['countryId' => 'KZ', 'postcode' => '123456'],
             ['countryId' => 'KE', 'postcode' => '12345'],
