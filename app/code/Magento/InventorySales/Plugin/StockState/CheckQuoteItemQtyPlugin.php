@@ -10,12 +10,15 @@ namespace Magento\InventorySales\Plugin\StockState;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
-use Magento\InventoryCatalog\Model\GetStockIdForCurrentWebsite;
 use Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\ProductSalabilityError;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
+use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class CheckQuoteItemQtyPlugin
 {
@@ -40,37 +43,37 @@ class CheckQuoteItemQtyPlugin
     private $getSkusByProductIds;
 
     /**
-     * @var GetStockIdForCurrentWebsite
+     * @var StockResolverInterface
      */
-    private $getStockIdForCurrentWebsite;
+    private $stockResolver;
 
     /**
-     * @var DefaultStockProviderInterface
+     * @var StoreManagerInterface
      */
-    private $defaultStockProvider;
+    private $storeManager;
 
     /**
      * @param ObjectFactory $objectFactory
      * @param FormatInterface $format
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
-     * @param GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param StockResolverInterface $stockResolver
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ObjectFactory $objectFactory,
         FormatInterface $format,
         IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
         GetSkusByProductIdsInterface $getSkusByProductIds,
-        GetStockIdForCurrentWebsite $getStockIdForCurrentWebsite,
-        DefaultStockProviderInterface $defaultStockProvider
+        StockResolverInterface $stockResolver,
+        StoreManagerInterface $storeManager
     ) {
         $this->objectFactory = $objectFactory;
         $this->format = $format;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
         $this->getSkusByProductIds = $getSkusByProductIds;
-        $this->getStockIdForCurrentWebsite = $getStockIdForCurrentWebsite;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->stockResolver = $stockResolver;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -83,6 +86,8 @@ class CheckQuoteItemQtyPlugin
      * @param int|null $scopeId
      *
      * @return DataObject
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCheckQuoteItemQty(
@@ -94,10 +99,6 @@ class CheckQuoteItemQtyPlugin
         $origQty,
         $scopeId
     ) {
-        $stockId = $this->getStockIdForCurrentWebsite->execute();
-        if ($this->defaultStockProvider->getId() === $stockId) {
-            return $proceed($productId, $itemQty, $qtyToCheck, $origQty, $scopeId);
-        }
         $result = $this->objectFactory->create();
         $result->setHasError(false);
 
@@ -106,13 +107,17 @@ class CheckQuoteItemQtyPlugin
         $skus = $this->getSkusByProductIds->execute([$productId]);
         $productSku = $skus[$productId];
 
-        $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, $stockId, $qty);
+        $websiteCode = $this->storeManager->getWebsite()->getCode();
+        $stock = $this->stockResolver->get(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
+        $stockId = $stock->getStockId();
+
+        $isSalableResult = $this->isProductSalableForRequestedQty->execute($productSku, (int)$stockId, $qty);
 
         if ($isSalableResult->isSalable() === false) {
             /** @var ProductSalabilityError $error */
             foreach ($isSalableResult->getErrors() as $error) {
                 $result->setHasError(true)->setMessage($error->getMessage())->setQuoteMessage($error->getMessage())
-                    ->setQuoteMessageIndex('qty');
+                       ->setQuoteMessageIndex('qty');
             }
         }
 
