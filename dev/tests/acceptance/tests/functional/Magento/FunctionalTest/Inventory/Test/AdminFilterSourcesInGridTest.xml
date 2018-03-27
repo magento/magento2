@@ -15,8 +15,10 @@
             <title value="Filter Sources on the Manage Sources grid"/>
             <description value="You should be able to Filter the Sources from the Manage Sources grid."/>
             <testCaseId value="493"/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>

@@ -15,8 +15,10 @@
             <title value="Add/Remove Source Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Source Grid."/>
             <testCaseId value="627"/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{ManageSources.url}}" stepKey="amOnSourceListPage1"/>

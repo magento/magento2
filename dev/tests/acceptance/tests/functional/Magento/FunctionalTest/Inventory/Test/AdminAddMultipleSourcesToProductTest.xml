@@ -14,8 +14,10 @@
             <stories value="Add Multiple Sources to a Product"/>
             <title value="You should be able to add Multiple Sources to a Product."/>
             <testCaseId value="630"/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">

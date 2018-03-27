@@ -15,8 +15,10 @@
             <title value="Filter Stocks on the Manage Stocks grid"/>
             <description value="You should be able to Filter the Stocks from the Manage Stocks grid."/>
             <testCaseId value=""/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <createData entity="TestStock1" stepKey="createStock1"/>
             <createData entity="TestStock2" stepKey="createStock2"/>

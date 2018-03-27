@@ -15,8 +15,10 @@
             <title value="Add/Remove Stock Grid Columns"/>
             <description value="You should be able to toggle Columns on/off in the Stock Grid."/>
             <testCaseId value="620"/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{ManageStock.url}}" stepKey="amOnStockListPage1"/>

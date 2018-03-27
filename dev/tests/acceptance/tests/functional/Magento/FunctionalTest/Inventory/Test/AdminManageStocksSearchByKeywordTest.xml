@@ -15,8 +15,10 @@
             <title value="Search by Keyword on the Manage Stock grid"/>
             <description value="You should be able to Search by Keyword from the Manage Stock grid."/>
             <testCaseId value="515"/>
+            <severity value="CRITICAL"/>
             <group value="msi"/>
         </annotations>
+
         <before>
             <createData entity="_defaultStock" stepKey="createStock1"/>
             <createData entity="_defaultStock" stepKey="createStock2"/>
