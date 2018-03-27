@@ -35,6 +35,11 @@ class PublisherConsumerController
      */
     private $osInfo;
 
+    /**
+     * @var array
+     */
+    private $appInitParams;
+
     public function __construct(
         PublisherInterface $publisher,
         OsInfo $osInfo,
@@ -48,6 +53,7 @@ class PublisherConsumerController
         $this->logFilePath = $logFilePath;
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
+        $this->appInitParams = $appInitParams;
     }
 
     /**
@@ -98,6 +104,18 @@ class PublisherConsumerController
     }
 
     /**
+     * @return array
+     */
+    public function getConsumersProcessIds()
+    {
+        $consumers = [];
+        foreach ($this->consumers as $consumer) {
+            $consumers[$consumer] = $this->getConsumerProcessIds($consumer);
+        }
+        return $consumers;
+    }
+
+    /**
      * @param string $consumer
      * @return string[]
      */
@@ -116,14 +134,14 @@ class PublisherConsumerController
      */
     private function getConsumerStartCommand($consumer, $withEnvVariables = false)
     {
-        $binDirectory = realpath(TESTS_TEMP_DIR . '/../bin/');
+        $binDirectory = realpath(INTEGRATION_TESTS_DIR . '/bin/');
         $magentoCli = $binDirectory . '/magento';
         $consumerStartCommand = "php {$magentoCli} queue:consumers:start -vvv " . $consumer;
         if ($this->maxMessages) {
             $consumerStartCommand .= " --max-messages={$this->maxMessages}";
         }
         if ($withEnvVariables) {
-            $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
+            $params = $this->appInitParams;
             $params['MAGE_DIRS']['base']['path'] = BP;
             $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
             $consumerStartCommand = $params . ' ' . $consumerStartCommand;

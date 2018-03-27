@@ -69,7 +69,6 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
         $this->massSchedule = $this->objectManager->create(MassSchedule::class);

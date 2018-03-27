@@ -7,16 +7,16 @@
 namespace Magento\WebapiAsync\Model\MessageQueue;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-//use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
-//use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
-//use Magento\Framework\App\DeploymentConfig\FileReader;
-//use Magento\Framework\App\DeploymentConfig\Writer;
-//use Magento\Framework\Config\File\ConfigFilePool;
-//use Magento\Framework\ShellInterface;
-//use Magento\Framework\Filesystem;
-//use Magento\Framework\App\Filesystem\DirectoryList;
-//use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\WebapiAsync\WebApiAsyncBaseTestCase;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\Webapi\Exception;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Check async request for product creation service, scheduling bulk to rabbitmq
@@ -24,15 +24,14 @@ use Magento\WebapiAsync\WebApiAsyncBaseTestCase;
  * check if product was created by async requests
  *
  * @magentoAppIsolation enabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkScheduleTest extends WebApiAsyncBaseTestCase
+class BulkScheduleTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
     const SERVICE_VERSION = 'V1';
     const REST_RESOURCE_PATH = '/V1/products';
     const ASYNC_RESOURCE_PATH = '/async/V1/products';
-    const ASYNC_CONSUMER_NAME = 'async.V1.products.POST';
+    const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
     const KEY_TIER_PRICES = 'tier_prices';
     const KEY_SPECIAL_PRICE = 'special_price';
@@ -44,96 +43,63 @@ class BulkScheduleTest extends WebApiAsyncBaseTestCase
         self::ASYNC_CONSUMER_NAME
     ];
 
-//    /**
-//     * @var \Magento\Framework\ObjectManagerInterface
-//     */
-//    private $objectManager;
-//
-//    /**
-//     * Consumer config provider
-//     *
-//     * @var ConsumerConfigInterface
-//     */
-//    private $consumerConfig;
-//
-//    /**
-//     * @var PidConsumerManager
-//     */
-//    private $pid;
-//
-//    /**
-//     * @var FileReader
-//     */
-//    private $reader;
-//
-//    /**
-//     * @var \Magento\MessageQueue\Model\Cron\ConsumersRunner
-//     */
-//    private $consumersRunner;
-//
-//    /**
-//     * @var Filesystem
-//     */
-//    private $filesystem;
-//
-//    /**
-//     * @var ConfigFilePool
-//     */
-//    private $configFilePool;
-//
-//    /**
-//     * @var ReinitableConfigInterface
-//     */
-//    private $appConfig;
-//
-//    /**
-//     * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
-//     */
-//    private $shellMock;
-//
-//    /**
-//     * @var array
-//     */
-//    private $config;
+    /**
+     * @var string[]
+     */
+    private $skus = [];
 
-//    /**
-//     * @inheritdoc
-//     */
-//    protected function setUp()
-//    {
-//        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-//        $this->shellMock = $this->getMockBuilder(ShellInterface::class)
-//            ->getMockForAbstractClass();
-//        $this->pid = $this->objectManager->get(PidConsumerManager::class);
-//        $this->consumerConfig = $this->objectManager->get(ConsumerConfigInterface::class);
-//        $this->reader = $this->objectManager->get(FileReader::class);
-//        $this->filesystem = $this->objectManager->get(Filesystem::class);
-//        $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
-//        $this->appConfig = $this->objectManager->get(ReinitableConfigInterface::class);
-//
-//        $this->consumersRunner = $this->objectManager->create(
-//            \Magento\MessageQueue\Model\Cron\ConsumersRunner::class,
-//            ['shellBackground' => $this->shellMock]
-//        );
-//
-//        $this->config = $this->loadConfig();
-//
-//        $this->shellMock->expects($this->any())
-//            ->method('execute')
-//            ->willReturnCallback(function ($command, $arguments) {
-//                $command = vsprintf($command, $arguments);
-//                $params =
-//                    \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
-//                $params['MAGE_DIRS']['base']['path'] = BP;
-//                $params =
-//                    'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
-//                $command =
-//                    str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
-//                $command = $params . ' ' . $command;
-//
-//                return exec("{$command} > /dev/null &");
-//            });
-//    }
+    /**
+     * @var PublisherConsumerController
+     */
+    private $publisherConsumerController;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->registry = $this->objectManager->get(Registry::class);
+
+        $params = array_merge_recursive(
+            \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams(),
+            ['MAGE_DIRS'=> ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
+        );
+
+        /** @var PublisherConsumerController publisherConsumerController */
+        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
+            'consumers' => $this->consumers,
+            'logFilePath' => $this->logFilePath,
+            'appInitParams' => $params
+        ]);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+
+        try {
+            $this->publisherConsumerController->initialize();
+        } catch (EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            $this->fail(
+                $e->getMessage()
+            );
+        }
+
+        parent::setUp();
+
+    }
 
     /**
      * @dataProvider productCreationProvider
@@ -143,18 +109,85 @@ class BulkScheduleTest extends WebApiAsyncBaseTestCase
         $response = $this->saveProductAsync($product);
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
+
+        if (count($product) <= 1) {
+            $this->skus[] = $product['product'][ProductInterface::SKU];
+            $this->assertCount(1, $response['request_items']);
+            $this->assertEquals('accepted', $response['request_items'][0]['status']);
+            $this->assertFalse($response['is_errors']);
+        } else {
+            $this->assertCount(count($product), $response['request_items']);
+            foreach($product as $productItem) {
+                $this->skus[] = $productItem['product'][ProductInterface::SKU];
+            }
+            foreach ($response['request_items'] as $status) {
+                $this->assertEquals('accepted', $status['status']);
+            }
+            $this->assertFalse($response['is_errors']);
+        }
+        //assert one products is created
+        try {
+            $this->publisherConsumerController->waitForAsynchronousResult(
+                [$this, 'assertProductCreation'], [$product]
+            );
+        } catch (PreconditionFailedException $e) {
+            $this->fail("Not all products were created");
+        }
+    }
+
+    public function tearDown()
+    {
+        $this->clearProducts();
+        $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
+    }
+
+    private function clearProducts()
+    {
+        $size = $this->objectManager->create(Collection::class)
+            ->addAttributeToFilter('sku', ['in' => $this->skus])
+            ->load()
+            ->getSize();
+
+        if ($size == 0) {
+            return;
+        }
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        try {
+            foreach ($this->skus as $sku) {
+                $this->productRepository->deleteById($sku);
+            }
+        } catch (\Exception $e) {
+            throw $e;
+            //nothing to delete
+        }
+        $this->registry->unregister('isSecureArea');
+
+        $size = $this->objectManager->create(Collection::class)
+            ->addAttributeToFilter('sku', ['in' => $this->skus])
+            ->load()
+            ->getSize();
+
+        if ($size > 0) {
+            throw new Exception(new Phrase("Collection size after clearing the products: %size", ['size' => $size]));
+        }
     }
 
     /**
      * @param string $sku
      * @param string|null $storeCode
      * @return array|bool|float|int|string
+     * @dataProvider productGetDataProvider
+     * @expectedException \Exception
+     * @expectedExceptionMessage Specified request cannot be processed.
      */
-    private function getProduct($sku, $storeCode = null)
+    public function testGetProductAsync($sku, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::REST_RESOURCE_PATH . '/' . $sku,
+                'resourcePath' => self::ASYNC_RESOURCE_PATH . '/' . $sku,
                 'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
@@ -177,8 +210,22 @@ class BulkScheduleTest extends WebApiAsyncBaseTestCase
         };
 
         return [
-            [$productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])],
-            [$productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])],
+            [['product' => $productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])]],
+            [['product' => $productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])]],
+            [[
+                ['product' => $productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])],
+                ['product' => $productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])]
+            ]]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function productGetDataProvider()
+    {
+        return [
+            ['psku-test-1', null]
         ];
     }
 
@@ -209,205 +256,28 @@ class BulkScheduleTest extends WebApiAsyncBaseTestCase
     }
 
     /**
-     * @param $product
+     * @param $requestData
      * @param string|null $storeCode
      * @return mixed
      */
-    private function saveProductAsync($product, $storeCode = null)
+    private function saveProductAsync($requestData, $storeCode = null)
     {
-        if (isset($product['custom_attributes'])) {
-            for ($i = 0; $i < sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
-                ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
-                }
-            }
-        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::ASYNC_RESOURCE_PATH,
                 'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
-        $requestData = ['product' => $product];
 
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
-    /**
-     * Delete Product by rest request without async
-     *
-     * @param string $sku
-     * @return boolean
-     */
-    private function deleteProductRest($sku)
+    public function assertProductCreation($product)
     {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::REST_RESOURCE_PATH . '/' . $sku,
-                'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
-            ],
-        ];
-
-        return $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        $collection = $this->objectManager->create(Collection::class)
+            ->addAttributeToFilter('sku', ['in' => $this->skus])
+            ->load();
+        $size = $collection->getSize();
+        return $size == count($this->skus);
     }
-
-    /**
-     * @dataProvider productCreationProvider
-     */
-    public function testAsyncProductCreation($product)
-    {
-        $restProduct = $this->getProduct($product[ProductInterface::SKU]);
-        $this->assertArrayHasKey('id', $restProduct);
-        $this->assertGreaterThan(0, $restProduct['id']);
-        $this->deleteProductRest($product[ProductInterface::SKU]);//removing product immediately after test passed
-    }
-
-//    /**
-//     * Checks that pid files are created
-//     *
-//     * @return void
-//     */
-//    public function testCheckThatAsyncPidFilesWasCreated()
-//    {
-//        $config = $this->config;
-//        $config['cron_consumers_runner'] = ['cron_run' => true];
-//        $this->writeConfig($config);
-//
-//        $this->consumersRunner->run();
-//
-//        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-//            if ($consumer->getName() == self::ASYNC_CONSUMER_NAME) {
-//                $this->waitConsumerPidFile($consumer->getName());
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Tests running of specific consumer and his re-running when it is working
-//     *
-//     * @return void
-//     */
-//    public function testAsyncConsumerAndRerun()
-//    {
-//        $specificConsumer = self::ASYNC_CONSUMER_NAME;
-//        $config = $this->config;
-//        $config['cron_consumers_runner'] =
-//            ['consumers' => [$specificConsumer], 'max_messages' => null, 'cron_run' => true];
-//        $this->writeConfig($config);
-//
-//        $this->reRunConsumersAndCheckPidFiles($specificConsumer);
-//        $this->assertGreaterThan(0, $this->pid->getPid($specificConsumer));
-//    }
-
-
-//    /**
-//     * @param string $specificConsumer
-//     * @return void
-//     */
-//    private function reRunConsumersAndCheckPidFiles($specificConsumer)
-//    {
-//        $this->consumersRunner->run();
-//
-//        sleep(20);
-//
-//        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-//            $consumerName = $consumer->getName();
-//            $pidFilePath = $this->pid->getPidFilePath($consumerName);
-//
-//            if ($consumerName === $specificConsumer) {
-//                $this->assertTrue(file_exists($pidFilePath));
-//            } else {
-//                $this->assertFalse(file_exists($pidFilePath));
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Tests disabling cron job which runs consumers
-//     *
-//     * @return void
-//     */
-//    public function testCronJobDisabled()
-//    {
-//        $config = $this->config;
-//        $config['cron_consumers_runner'] = ['cron_run' => false];
-//
-//        $this->writeConfig($config);
-//
-//        $this->consumersRunner->run();
-//
-//        sleep(20);
-//
-//        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-//            $pidFilePath = $this->pid->getPidFilePath($consumer->getName());
-//            $this->assertFalse(file_exists($pidFilePath));
-//        }
-//    }
-//
-//    /**
-//     * @param string $consumerName
-//     * @return void
-//     */
-//    private function waitConsumerPidFile($consumerName)
-//    {
-//        $pidFilePath = $this->pid->getPidFilePath($consumerName);
-//        $i = 0;
-//        do {
-//            sleep(1);
-//        } while (!file_exists($pidFilePath) && ($i++ < 60));
-//
-//        sleep(30);
-//
-//        if (!file_exists($pidFilePath)) {
-//            $this->fail($consumerName . ' pid file does not exist.');
-//        }
-//    }
-//
-//    /**
-//     * @return array
-//     */
-//    private function loadConfig()
-//    {
-//        return $this->reader->load(ConfigFilePool::APP_ENV);
-//    }
-//
-//    /**
-//     * @param array $config
-//     * @return void
-//     */
-//    private function writeConfig(array $config)
-//    {
-//        /** @var Writer $writer */
-//        $writer = $this->objectManager->get(Writer::class);
-//        $writer->saveConfig([ConfigFilePool::APP_ENV => $config]);
-//    }
-//
-//    /**
-//     * @inheritdoc
-//     */
-//    protected function tearDown()
-//    {
-//        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-//            $consumerName = $consumer->getName();
-//            $pid = $this->pid->getPid($consumerName);
-//
-//            if ($pid && $this->pid->isRun($consumerName)) {
-//                posix_kill($pid, SIGKILL);
-//            }
-//
-//            $path = $this->pid->getPidFilePath($consumerName);
-//            if (file_exists($path)) {
-//                unlink($path);
-//            }
-//        }
-//
-//        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-//            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-//            "<?php\n return array();\n"
-//        );
-//        $this->writeConfig($this->config);
-//        $this->appConfig->reinit();
-//    }
 }
