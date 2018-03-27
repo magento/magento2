@@ -188,6 +188,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             }
             $this->setAllowProducts($products);
         }
+
         return $this->getData('allow_products');
     }
 
