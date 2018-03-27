@@ -5,10 +5,10 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader;
+namespace Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader;
 
-use Magento\Framework\GraphQlModularSchema\GraphQlReader\TypeMetaReaderInterface;
-use Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeMetaReaderInterface;
+use Magento\Framework\GraphQlSchemaStiching\GraphQlReader\MetaReader\DocReader;
 
 /**
  * Composite configuration reader to handle the enum type meta

@@ -11,7 +11,7 @@
     <preference for="Magento\GraphQl\Model\ResolverContextInterface" type="Magento\GraphQl\Model\ResolverContext" />
     <preference for="Magento\Framework\GraphQl\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Type\Entity\DefaultMapper"/>
     <preference for="Magento\Framework\GraphQl\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Type\Enum\DefaultDataMapper"/>
-    <preference for="Magento\Framework\GraphQlModularSchema\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlModularSchema\GraphQlReader\TypeReaderComposite"/>
+    <preference for="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeReaderComposite"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -35,8 +35,8 @@
     </type>
     <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\GraphQlModularSchema\Reader</argument>
-            <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlModularSchema_Config_Data</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlSchemaStiching_Config_Data</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Framework\GraphQl\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
@@ -44,10 +44,10 @@
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_GraphQl:etc/graphql.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Framework\GraphQlModularSchema\Reader" type="Magento\Framework\GraphQlModularSchema\Common\Reader">
+    <virtualType name="Magento\Framework\GraphQlSchemaStiching\Reader" type="Magento\Framework\GraphQlSchemaStiching\Common\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="graphql_reader" xsi:type="object">Magento\Framework\GraphQlModularSchema\GraphQlReader</item>
+                <item name="graphql_reader" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader</item>
             </argument>
         </arguments>
     </virtualType>
@@ -83,13 +83,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQlModularSchema\GraphQlReader\TypeReaderComposite">
+    <type name="Magento\Framework\GraphQlSchemaStiching\GraphQlReader\TypeReaderComposite">
         <arguments>
             <argument name="typeReaders" xsi:type="array">
-                <item name="enum_type" xsi:type="object">Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader\EnumType</item>
-                <item name="object_type" xsi:type="object">Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader\ObjectType</item>
-                <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader\InputObjectType</item>
-                <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlModularSchema\GraphQlReader\Reader\InterfaceType</item>
+                <item name="enum_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\EnumType</item>
+                <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\ObjectType</item>
+                <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\InputObjectType</item>
+                <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStiching\GraphQlReader\Reader\InterfaceType</item>
             </argument>
         </arguments>
     </type>

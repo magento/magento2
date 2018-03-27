@@ -5,9 +5,9 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader;
+namespace Magento\Framework\GraphQlSchemaStiching\GraphQlReader\MetaReader;
 
-use Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader\TypeMetaWrapperReader;
+use Magento\Framework\GraphQlSchemaStiching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
 
 /**
  * Reads fields and possible arguments from a meta field

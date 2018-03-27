@@ -5,7 +5,7 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlModularSchema\GraphQlReader\MetaReader;
+namespace Magento\Framework\GraphQlSchemaStiching\GraphQlReader\MetaReader;
 
 /**
  * Common cases for types that need extra formatting like wrapping or additional properties added to their definition
