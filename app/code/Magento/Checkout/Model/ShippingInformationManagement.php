@@ -178,7 +178,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         $shippingAddress = $quote->getShippingAddress();
 
-        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
+        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod()) && !$quote->getIsVirtual()) {
             throw new NoSuchEntityException(
                 __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
             );
