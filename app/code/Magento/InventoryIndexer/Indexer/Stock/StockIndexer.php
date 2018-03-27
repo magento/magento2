@@ -24,9 +24,9 @@ use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 class StockIndexer
 {
     /**
-     * @var GetAllAssignedStockIds
+     * @var GetAllStockIds
      */
-    private $getAllAssignedStockIds;
+    private $getAllStockIds;
 
     /**
      * @var IndexStructureInterface
@@ -56,7 +56,7 @@ class StockIndexer
     /**
      * $indexStructure is reserved name for construct variable in index internal mechanism
      *
-     * @param GetAllAssignedStockIds $getAllAssignedStockIds
+     * @param GetAllStockIds $getAllStockIds
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexNameBuilder $indexNameBuilder
@@ -64,14 +64,14 @@ class StockIndexer
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
     public function __construct(
-        GetAllAssignedStockIds $getAllAssignedStockIds,
+        GetAllStockIds $getAllStockIds,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexNameBuilder $indexNameBuilder,
         IndexDataProviderByStockId $indexDataProviderByStockId,
         IndexTableSwitcherInterface $indexTableSwitcher
     ) {
-        $this->getAllAssignedStockIds = $getAllAssignedStockIds;
+        $this->getAllStockIds = $getAllStockIds;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexNameBuilder = $indexNameBuilder;
@@ -84,7 +84,7 @@ class StockIndexer
      */
     public function executeFull()
     {
-        $stockIds = $this->getAllAssignedStockIds->execute();
+        $stockIds = $this->getAllStockIds->execute();
         $this->executeList($stockIds);
     }
 
