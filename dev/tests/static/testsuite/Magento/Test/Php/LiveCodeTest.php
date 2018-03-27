@@ -107,30 +107,74 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private static function getChangedFilesList($changedFilesBaseDir)
     {
-        $changedFiles = [];
+        return self::getFilesFromListFile(
+            $changedFilesBaseDir,
+            'changed_files*',
+            function () {
+                // if no list files, probably, this is the dev environment
+                @exec('git diff --name-only', $changedFiles);
+                @exec('git diff --cached --name-only', $addedFiles);
+                $changedFiles = array_unique(array_merge($changedFiles, $addedFiles));
+                return $changedFiles;
+            }
+        );
+    }
 
-        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
+    /**
+     * This method loads list of added files.
+     *
+     * @param string $changedFilesBaseDir
+     * @return string[]
+     */
+    private static function getAddedFilesList($changedFilesBaseDir)
+    {
+        return self::getFilesFromListFile(
+            $changedFilesBaseDir,
+            'changed_files*.added.*',
+            function () {
+                // if no list files, probably, this is the dev environment
+                @exec('git diff --cached --name-only', $addedFiles);
+                return $addedFiles;
+            }
+        );
+    }
+
+    /**
+     * Read files from generated lists.
+     *
+     * @param string $listsBaseDir
+     * @param string $listFilePattern
+     * @param callable $noListCallback
+     * @return string[]
+     */
+    private static function getFilesFromListFile($listsBaseDir, $listFilePattern, $noListCallback)
+    {
+        $filesDefinedInList = [];
+
+        $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
+            . '/_files/' . $listFilePattern;
         $listFiles = glob($globFilesListPattern);
         if (count($listFiles)) {
             foreach ($listFiles as $listFile) {
-                $changedFiles = array_merge(
-                    $changedFiles,
+                $filesDefinedInList = array_merge(
+                    $filesDefinedInList,
                     file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
                 );
             }
         } else {
-            // if no list files, probably, this is the dev environment
-            @exec('git diff --name-only', $changedFiles);
+            $filesDefinedInList = call_user_func($noListCallback);
         }
 
         array_walk(
-            $changedFiles,
+            $filesDefinedInList,
             function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
 
-        return $changedFiles;
+        $filesDefinedInList = array_values(array_unique($filesDefinedInList));
+
+        return $filesDefinedInList;
     }
 
     /**
@@ -279,7 +323,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
-        $changedFiles = self::getChangedFilesList('');
+        $changedFiles = self::getAddedFilesList('');
 
         $componentRegistrar = new ComponentRegistrar();
         $directoriesToCheck = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);

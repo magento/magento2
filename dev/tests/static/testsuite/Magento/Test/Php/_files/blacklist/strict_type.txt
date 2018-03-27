@@ -1,9 +1,1 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
-
-app/code/Magento/CatalogImportExport/Model/Import/Product.php
-app/code/Magento/ImportExport/Controller/Adminhtml/Import/Download.php
-app/code/Magento/ImportExport/Model/Import/SampleFileProvider.php
-app/code/Magento/CatalogInventory/Model/StockManagement.php
-app/code/Magento/CatalogInventory/Observer/ItemsForReindex.php
-app/code/Magento/CatalogInventory/Observer/SubtractQuoteInventoryObserver.php
-app/code/Magento/Store/Api/Data/WebsiteInterface.php
