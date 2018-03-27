@@ -9,16 +9,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\WebapiAsync\Api\Data\AsyncResponseInterface" type="Magento\WebapiAsync\Model\AsyncResponse" />
     <preference for="Magento\WebapiAsync\Api\Data\ItemStatusInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemStatus" />
-    <preference for="Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemsList" />
-
-    <!--type name="Magento\Framework\MessageQueue\MergerFactory">
-        <arguments>
-            <argument name="mergers" xsi:type="array">
-                <item name="async.#" xsi:type="string">Magento\WebapiAsync\Model\Merger</item>
-            </argument>
-        </arguments>
-    </type-->
-
     <virtualType name="Magento\WebapiAsync\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
         <arguments>
             <argument name="publishers" xsi:type="array">
