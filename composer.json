@@ -206,6 +206,7 @@
         "magento/module-store": "100.3.0-dev",
         "magento/module-swagger": "100.3.0-dev",
         "magento/module-swagger-webapi": "100.3.0-dev",
+        "magento/module-swagger-webapi-async": "100.3.0-dev",
         "magento/module-swatches": "100.3.0-dev",
         "magento/module-swatches-layered-navigation": "100.3.0-dev",
         "magento/module-tax": "100.3.0-dev",

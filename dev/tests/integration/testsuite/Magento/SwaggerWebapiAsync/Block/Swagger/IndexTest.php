@@ -5,6 +5,8 @@
  */
 namespace Magento\SwaggerWebapiAsync\Block\Swagger;
 
+use Magento\Swagger\Api\Data\SchemaTypeInterface;
+
 /**
  * @magentoAppArea frontend
  */
@@ -28,7 +30,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             [
                 'data' => [
                     'schema_types' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        \Magento\Swagger\Api\Block\SchemaTypesInterface::class
+                        SchemaTypeInterface::class
                     )
                 ]
             ]

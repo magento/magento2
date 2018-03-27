@@ -14,7 +14,7 @@
         "magento/module-config": "100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.0.0",
+    "version": "100.3.0-dev",
     "license": [
         "proprietary"
     ],
