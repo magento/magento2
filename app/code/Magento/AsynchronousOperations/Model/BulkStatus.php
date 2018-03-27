@@ -233,7 +233,7 @@ class BulkStatus implements BulkStatusInterface
     {
         $bulkSummary = $this->bulkDetailedFactory->create();
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\BulkStatus\DetailedInterface $bulk */
+        /** @var \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface $bulk */
         $bulk = $this->entityManager->load($bulkSummary, $bulkUuid);
 
         if ($bulk->getBulkId() === null) {
@@ -257,7 +257,7 @@ class BulkStatus implements BulkStatusInterface
     {
         $bulkSummary = $this->bulkShortFactory->create();
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterface $bulk */
+        /** @var \Magento\AsynchronousOperations\Api\Data\BulkStatusInterface $bulk */
         $bulk = $this->entityManager->load($bulkSummary, $bulkUuid);
         if ($bulk->getBulkId() === null) {
             throw new NoSuchEntityException(

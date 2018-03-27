@@ -6,11 +6,10 @@
 
 namespace Magento\AsynchronousOperations\Model\BulkStatus;
 
-use Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterface;
-use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterface;
+use Magento\AsynchronousOperations\Api\Data\BulkStatusInterface;
 use Magento\AsynchronousOperations\Model\BulkSummary;
 
-class Short extends BulkSummary implements ShortInterface
+class Short extends BulkSummary implements BulkStatusInterface
 {
     /**
      * @inheritDoc
@@ -26,21 +25,5 @@ class Short extends BulkSummary implements ShortInterface
     public function setOperationsList($operationStatusList)
     {
         return $this->setData(self::OPERATIONS_LIST, $operationStatusList);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOperationsCounter()
-    {
-        return $this->getData(self::OPERATIONS_COUNTER);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOperationsCounter(OperationDetailsInterface $operationDetails)
-    {
-        return $this->setData(self::OPERATIONS_COUNTER, $operationDetails);
     }
 }
