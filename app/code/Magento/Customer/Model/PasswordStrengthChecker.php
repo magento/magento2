@@ -104,7 +104,7 @@ class PasswordStrengthChecker implements PasswordStrengthCheckerInterface
      *
      * @return int
      */
-    protected function getMinPasswordLength(): int
+    private function getMinPasswordLength(): int
     {
         return (int)$this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
     }
