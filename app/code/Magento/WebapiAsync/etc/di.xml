@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\WebapiAsync\Api\Data\AsyncResponseInterface" type="Magento\WebapiAsync\Model\AsyncResponse" />
+    <preference for="Magento\WebapiAsync\Api\Data\AsyncResponse\ItemStatusInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemStatus" />
+    <preference for="Magento\WebapiAsync\Api\Data\AsyncResponse\ItemsListInterface" type="Magento\WebapiAsync\Model\AsyncResponse\ItemsList" />
+
+    <!--type name="Magento\Framework\MessageQueue\MergerFactory">
+        <arguments>
+            <argument name="mergers" xsi:type="array">
+                <item name="async.#" xsi:type="string">Magento\WebapiAsync\Model\Merger</item>
+            </argument>
+        </arguments>
+    </type-->
+
+    <virtualType name="Magento\WebapiAsync\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\WebapiAsync\Model\MessageQueue\MassPublisher</item>
+                    <item name="db" xsi:type="object">Magento\WebapiAsync\Model\MessageQueue\MassPublisher</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\WebapiAsync\VirtualType\BulkManagement" type="Magento\AsynchronousOperations\Model\BulkManagement">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\WebapiAsync\VirtualType\PublisherPool</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\WebapiAsync\Model\MessageQueue\MassSchedule">
+        <arguments>
+            <argument name="bulkManagement" xsi:type="object">Magento\WebapiAsync\VirtualType\BulkManagement</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Webapi\Model\ServiceMetadata">
+        <plugin name="webapiServiceMetadataAsync" type="Magento\WebapiAsync\Plugin\ServiceMetadata" />
+    </type>
+
+</config>
