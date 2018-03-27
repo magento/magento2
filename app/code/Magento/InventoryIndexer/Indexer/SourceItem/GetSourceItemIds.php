@@ -50,6 +50,6 @@ class GetSourceItemIds
             );
         }
 
-        return $connection->fetchAll($select);
+        return $connection->fetchCol($select, SourceItemResourceModel::ID_FIELD_NAME);
     }
 }
