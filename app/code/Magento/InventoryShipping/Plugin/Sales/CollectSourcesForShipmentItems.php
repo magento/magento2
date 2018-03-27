@@ -49,13 +49,14 @@ class CollectSourcesForShipmentItems
                 }
             }
         }
+        /** @var \Magento\Sales\Api\Data\ShipmentInterface $shipment */
         $shipment = $proceed($order, $items, $tracks);
         if (empty($items)) {
             return $shipment;
         }
 
         /** @var \Magento\Sales\Api\Data\ShipmentItemInterface $item */
-        foreach ($shipment->getItems()->getItems() as $item) {
+        foreach ($shipment->getItems() as $item) {
             if (isset($itemToProcess[$item->getOrderItemId()])) {
                 $item->setSources($itemToProcess[$item->getOrderItemId()]);
             }
