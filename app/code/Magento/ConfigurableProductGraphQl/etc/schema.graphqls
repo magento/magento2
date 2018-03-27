@@ -23,7 +23,7 @@ type ConfigurableProductOptions {
     attribute_code: String @doc(description: "A string that identifies the attribute")
     label: String @doc(description: "A string that describes the configurable product option. It is displayed on the UI.")
     position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
-    is_use_default: Boolean @doc(description: "Indicates whether the option is the default")
+    use_default: Boolean @doc(description: "Indicates whether the option is the default")
     values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the value_index codes assigned to the configurable product")
     product_id: Int @doc(description: "This is the same as a product's 'id' field")
 }
