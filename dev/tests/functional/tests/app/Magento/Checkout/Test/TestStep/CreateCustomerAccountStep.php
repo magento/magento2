@@ -57,14 +57,14 @@ class CreateCustomerAccountStep implements TestStepInterface
      * @param string $checkoutMethod
      * @param FixtureFactory $fixtureFactory
      * @param CustomerAccountCreate $customerAccountCreate
-     * @param string $customerPassword
+     * @param null|string $customerPassword
      */
     public function __construct(
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
         FixtureFactory $fixtureFactory,
         CustomerAccountCreate $customerAccountCreate,
-        $customerPassword
+        $customerPassword = null
     ) {
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
