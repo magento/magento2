@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Session;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -22,22 +20,15 @@ class SaveHandler implements SaveHandlerInterface
     protected $saveHandlerAdapter;
 
     /**
-     * Config
-     *
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * Constructor
      *
      * @param SaveHandlerFactory $saveHandlerFactory
-     * @param DeploymentConfig $deploymentConfig
+     * @param ConfigInterface $sessionConfig
      * @param string $default
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
-        DeploymentConfig $deploymentConfig,
+        ConfigInterface $sessionConfig,
         $default = self::DEFAULT_HANDLER
     ) {
         /**
@@ -46,15 +37,13 @@ class SaveHandler implements SaveHandlerInterface
          * Save handler may be set to custom value in deployment config, which will override everything else.
          * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
          */
-        $defaultSaveHandler = ini_get('session.save_handler') ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $this->getConfig()->getOption('session.save_handler') ?: $defaultSaveHandler;
+        $saveMethod = $sessionConfig->getOption('session.save_handler') ?: $default;
 
         try {
-            $connection = $saveHandlerFactory->create($saveMethod);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($saveMethod);
         } catch (\LogicException $e) {
-            $connection = $saveHandlerFactory->create($default);
+            $this->saveHandlerAdapter = $saveHandlerFactory->create($default);
         }
-        $this->saveHandlerAdapter = $connection;
     }
 
     /**
@@ -124,19 +113,5 @@ class SaveHandler implements SaveHandlerInterface
     public function gc($maxLifetime)
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
-    }
-
-    /**
-     * Get config
-     *
-     * @return ConfigInterface
-     * @deprecated 100.0.8
-     */
-    private function getConfig()
-    {
-        if ($this->config === null) {
-            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
-        }
-        return $this->config;
     }
 }
