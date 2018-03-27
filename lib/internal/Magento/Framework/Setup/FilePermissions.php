@@ -78,7 +78,7 @@ class FilePermissions
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
-        $this->state = $state ?:ObjectManager::getInstance()->get(State::class);
+        $this->state = $state ?: ObjectManager::getInstance()->get(State::class);
     }
 
     /**
