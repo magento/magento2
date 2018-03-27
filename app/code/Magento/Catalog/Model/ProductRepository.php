@@ -307,8 +307,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @return void
      * @internal param null|string $sku
      */
-    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product, $productId, string $productSku)
-    {
+    private function cacheProduct(
+        $cacheKey,
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        $productId,
+        string $productSku
+    ) {
         $this->instancesById[$productId][$cacheKey] = $product;
         $this->instances[$productSku][$cacheKey] = $product;
 
