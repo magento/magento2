@@ -49,6 +49,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $priceCurrency;
 
     /**
+     * @var \Magento\Directory\Model\Currency|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $currency;
+
+    /**
      * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configurableAttributeData;
@@ -122,6 +127,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->once())
             ->method('getResolver')
             ->willReturn($fileResolverMock);
+        $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configurableAttributeData = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ConfigurableAttributeData::class
         )
@@ -192,10 +200,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                     2 => null,
                     'base_url' => null,
                     'template' => null,
-                    3 => '$',
+                    3 => 'USD',
                     4 => null,
                 ],
-                '$',
+                'USD',
                 null,
             ]
         ];
@@ -223,7 +231,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->method('getStore')
             ->willReturn($storeMock);
         $this->priceCurrency->expects($this->once())
-            ->method('getCurrencySymbol')
+            ->method('getCurrency')
+            ->willReturn($this->currency);
+        $this->currency->expects($this->once())
+            ->method('getCode')
             ->willReturn($priceCurrency);
         $this->customerSession->expects($this->once())
             ->method('getCustomerGroupId')

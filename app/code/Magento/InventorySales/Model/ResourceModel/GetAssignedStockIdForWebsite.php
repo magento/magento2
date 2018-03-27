@@ -9,7 +9,6 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface;
-use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -37,10 +36,10 @@ class GetAssignedStockIdForWebsite implements GetAssignedStockIdForWebsiteInterf
     public function execute(string $websiteCode)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_sales_channel');
 
         $select = $connection->select()
-            ->from($tableName, [CreateSalesChannelTable::STOCK_ID])
+            ->from($tableName, ['stock_id'])
             ->where('code = ?', $websiteCode)
             ->where('type = ?', SalesChannelInterface::TYPE_WEBSITE);
 

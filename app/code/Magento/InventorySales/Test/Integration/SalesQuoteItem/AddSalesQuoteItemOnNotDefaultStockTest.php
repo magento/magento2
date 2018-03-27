@@ -9,18 +9,20 @@ namespace Magento\InventorySales\Test\Integration\SalesQuoteItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryReservations\Model\CleanupReservationsInterface;
-use Magento\InventoryReservations\Model\ReservationBuilderInterface;
-use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -29,16 +31,6 @@ use PHPUnit\Framework\TestCase;
  */
 class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
 {
-    /**
-     * @var ReservationBuilderInterface
-     */
-    private $reservationBuilder;
-
-    /**
-     * @var AppendReservationsInterface
-     */
-    private $appendReservations;
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -60,6 +52,11 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
     private $cleanupReservations;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -67,11 +64,11 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         parent::setUp();
 
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
-        $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
-        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
         $this->storeRepository = Bootstrap::getObjectManager()->get(StoreRepositoryInterface::class);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->cleanupReservations->execute();
     }
 
     /**
@@ -87,27 +84,21 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param float $qty
-     * @param float $reservedQty
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws ValidationException
      *
      * @dataProvider productsInStockDataProvider
      */
     public function testAddInStockProductToQuote(
         string $sku,
         int $stockId,
-        float $qty,
-        float $reservedQty
+        float $qty
     ) {
-        $this->markTestSkipped(
-            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
-        );
         $quote = $this->getQuote($stockId);
-        $this->appendReservation($sku, -$reservedQty, $stockId);
         $product = $this->getProductBySku($sku);
 
         $quote->addProduct($product, $qty);
@@ -115,9 +106,6 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         /** @var CartItemInterface $quoteItem */
         $quoteItem = current($quote->getAllItems());
         self::assertEquals($qty, $quoteItem->getQty());
-
-        //cleanup
-        $this->appendReservation($sku, $reservedQty, $stockId);
     }
 
     /**
@@ -127,10 +115,10 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
     public function productsInStockDataProvider(): array
     {
         return [
-            ['SKU-1', 10, 4, 1.5],
-            ['SKU-1', 20, 2, 1],
-            ['SKU-2', 30, 1.5, 3.5],
-            ['SKU-2', 30, 1, 1.7],
+            ['SKU-1', 10, 4],
+            ['SKU-1', 10, 2],
+            ['SKU-2', 30, 3],
+            ['SKU-2', 30, 1]
         ];
     }
 
@@ -147,27 +135,21 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
      * @param string $sku
      * @param int $stockId
      * @param float $qty
-     * @param float $reservedQty
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws ValidationException
      *
      * @dataProvider notSalableProductsDataProvider
      */
     public function testAddOutOffStockProductToQuote(
         string $sku,
         int $stockId,
-        float $qty,
-        float $reservedQty
+        float $qty
     ) {
-        $this->markTestSkipped(
-            'Fix add to Cart Integration Test https://github.com/magento-engcom/msi/issues/688'
-        );
         $quote = $this->getQuote($stockId);
-        $this->appendReservation($sku, -$reservedQty, $stockId);
         $product = $this->getProductBySku($sku);
 
         self::expectException(LocalizedException::class);
@@ -175,9 +157,6 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
 
         $quoteItemCount = count($quote->getAllItems());
         self::assertEquals(0, $quoteItemCount);
-
-        //cleanup
-        $this->appendReservation($sku, $reservedQty, $stockId);
     }
 
     /**
@@ -187,10 +166,10 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
     public function notSalableProductsDataProvider(): array
     {
         return [
-            ['SKU-1', 20, 2.5, 2.5],
-            ['SKU-1', 30, 1.8, 4],
-            ['SKU-2', 30, 1.5, 3.6],
-            ['SKU-3', 20, 1.9, 1.5]
+            ['SKU-1', 20, 6],
+            ['SKU-1', 30, 9],
+            ['SKU-2', 30, 1.5],
+            ['SKU-3', 20, 1.9]
         ];
     }
 
@@ -202,22 +181,6 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
     private function getProductBySku(string $sku): ProductInterface
     {
         return $this->productRepository->get($sku);
-    }
-
-    /**
-     * @param string $productSku
-     * @param float $qty
-     * @param int $stockId
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Validation\ValidationException
-     */
-    private function appendReservation(string $productSku, float $qty, int $stockId)
-    {
-        $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId($stockId)->setSku($productSku)->setQuantity($qty)->build(),
-        ]);
     }
 
     /**
@@ -240,7 +203,7 @@ class AddSalesQuoteItemOnNotDefaultStockTest extends TestCase
         }
         /** @var StoreInterface $store */
         $store = $this->storeRepository->get($storeCode);
-
+        $this->storeManager->setCurrentStore($storeCode);
         return Bootstrap::getObjectManager()->create(
             Quote::class,
             [
