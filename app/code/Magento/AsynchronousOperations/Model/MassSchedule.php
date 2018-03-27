@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model\MessageQueue;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\WebapiAsync\Api\Data\ItemStatusInterfaceFactory;
-use Magento\WebapiAsync\Api\Data\AsyncResponseInterface;
-use Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory;
-use Magento\WebapiAsync\Api\Data\ItemStatusInterface;
+use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Bulk\BulkManagementInterface;
@@ -23,8 +23,7 @@ use Magento\Framework\Exception\BulkException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class MassPublisher used for encoding topic entities to OperationInterface and publish them.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
  */
 class MassSchedule
 {
@@ -192,7 +191,7 @@ class MassSchedule
                 __('Something went wrong while processing the request.')
             );
         }
-        /** @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterface $asyncResponse */
+        /** @var AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
         $asyncResponse->setBulkUuid($groupId);
         $asyncResponse->setRequestItems($requestItems);

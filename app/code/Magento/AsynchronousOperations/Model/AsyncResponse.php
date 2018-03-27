@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model;
+namespace Magento\AsynchronousOperations\Model;
 
-use Magento\WebapiAsync\Api\Data\AsyncResponseInterface;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
@@ -72,7 +72,7 @@ class AsyncResponse extends DataObject implements AsyncResponseInterface, Extens
      * @inheritDoc
      */
     public function setExtensionAttributes(
-        \Magento\WebapiAsync\Api\Data\AsyncResponseExtensionInterface $extensionAttributes
+        \Magento\AsynchronousOperations\Api\Data\AsyncResponseExtensionInterface $extensionAttributes
     ) {
         return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }

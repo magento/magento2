@@ -74,6 +74,29 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
-                 type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+    <virtualType
+            name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
+            type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                    <item name="db" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\BulkManagement" type="Magento\AsynchronousOperations\Model\BulkManagement">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\PublisherPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <arguments>
+            <argument name="bulkManagement" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\BulkManagement</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface" type="Magento\AsynchronousOperations\Model\AsyncResponse" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\ItemStatusInterface" type="Magento\AsynchronousOperations\Model\ItemStatus" />
 </config>

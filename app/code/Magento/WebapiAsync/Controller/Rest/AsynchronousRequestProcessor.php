@@ -10,10 +10,11 @@ use Magento\Framework\Exception\BulkException;
 use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\WebapiAsync\Controller\Rest\Async\InputParamsResolver;
-use Magento\WebapiAsync\Model\MessageQueue\MassSchedule;
+use Magento\AsynchronousOperations\Model\MassSchedule;
 use Magento\WebapiAsync\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 
 class AsynchronousRequestProcessor implements RequestProcessorInterface
 {
@@ -30,7 +31,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     private $inputParamsResolver;
 
     /**
-     * @var \Magento\WebapiAsync\Model\MessageQueue\MassSchedule
+     * @var MassSchedule
      */
     private $asyncBulkPublisher;
 
@@ -45,19 +46,19 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     private $dataObjectProcessor;
 
     /**
-     * @var \Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory
+     * @var AsyncResponseInterfaceFactory
      */
     private $asyncResponseFactory;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Webapi\Rest\Response $response
-     * @param \Magento\WebapiAsync\Controller\Rest\Async\InputParamsResolver $inputParamsResolver
-     * @param \Magento\WebapiAsync\Model\MessageQueue\MassSchedule $asyncBulkPublisher
-     * @param \Magento\WebapiAsync\Model\ConfigInterface $webapiAsyncConfig
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\WebapiAsync\Api\Data\AsyncResponseInterfaceFactory $asyncResponse
+     * @param RestResponse $response
+     * @param InputParamsResolver $inputParamsResolver
+     * @param MassSchedule $asyncBulkPublisher
+     * @param WebapiAsyncConfig $webapiAsyncConfig
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param AsyncResponseInterfaceFactory $asyncResponse
      */
     public function __construct(
         RestResponse $response,
@@ -101,7 +102,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
 
         $responseData = $this->dataObjectProcessor->buildOutputDataArray(
             $asyncResponse,
-            \Magento\WebapiAsync\Api\Data\AsyncResponseInterface::class
+            AsyncResponseInterface::class
         );
 
         $this->response->setStatusCode(RestResponse::STATUS_CODE_202)

@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model\AsyncResponse;
+namespace Magento\AsynchronousOperations\Model;
 
-use Magento\WebapiAsync\Api\Data\ItemStatusInterface;
+use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;
 use Magento\Framework\DataObject;
 
 class ItemStatus extends DataObject implements ItemStatusInterface

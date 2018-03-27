@@ -7,7 +7,6 @@
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/framework": "100.3.*",
-        "magento/module-authorization": "100.3.*",
         "magento/module-webapi": "100.3.*",
         "magento/module-asynchronous-operations": "100.3.*"
     },

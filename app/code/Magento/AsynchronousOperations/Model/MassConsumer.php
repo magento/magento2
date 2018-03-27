@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model\MessageQueue;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;

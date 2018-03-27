@@ -8,5 +8,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="async.operations.all" queue="async.operations.all" connection="amqp"
-              consumerInstance="Magento\WebapiAsync\Model\MessageQueue\MassConsumer"/>
+              consumerInstance="Magento\AsynchronousOperations\Model\MassConsumer"/>
 </config>

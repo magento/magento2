@@ -9,7 +9,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\WebapiAsync\Model\MessageQueue;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Phrase;
@@ -23,7 +23,6 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
-use \Magento\WebapiAsync\Model\AsyncResponse\ItemStatus;
 
 class MassScheduleTest extends \PHPUnit\Framework\TestCase
 {

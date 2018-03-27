@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Api\Data;
+namespace Magento\AsynchronousOperations\Api\Data;
 
 /**
  * ItemStatusInterface interface
@@ -28,7 +28,6 @@ interface ItemStatusInterface
      * Get entity Id.
      *
      * @return int
-     * @since 100.3.0
      */
     public function getId();
 
@@ -37,7 +36,6 @@ interface ItemStatusInterface
      *
      * @param int $entityId
      * @return $this
-     * @since 100.3.0
      */
     public function setId($entityId);
 
@@ -45,7 +43,6 @@ interface ItemStatusInterface
      * Get hash of entity data.
      *
      * @return string md5 hash of entity params array.
-     * @since 100.3.0
      */
     public function getDataHash();
 
@@ -54,7 +51,6 @@ interface ItemStatusInterface
      *
      * @param string $hash md5 hash of entity params array.
      * @return $this
-     * @since 100.3.0
      */
     public function setDataHash($hash);
 
@@ -62,7 +58,6 @@ interface ItemStatusInterface
      * Get status.
      *
      * @return string accepted|rejected
-     * @since 100.3.0
      */
     public function getStatus();
 
@@ -71,7 +66,6 @@ interface ItemStatusInterface
      *
      * @param string $status accepted|rejected
      * @return $this
-     * @since 100.3.0
      */
     public function setStatus($status = self::STATUS_ACCEPTED);
 
@@ -79,7 +73,6 @@ interface ItemStatusInterface
      * Get error information.
      *
      * @return string|null
-     * @since 100.3.0
      */
     public function getErrorMessage();
 
@@ -88,7 +81,6 @@ interface ItemStatusInterface
      *
      * @param string|null|\Exception $error
      * @return $this
-     * @since 100.3.0
      */
     public function setErrorMessage($error = null);
 
@@ -96,7 +88,6 @@ interface ItemStatusInterface
      * Get error code.
      *
      * @return int|null
-     * @since 100.3.0
      */
     public function getErrorCode();
 
@@ -105,7 +96,6 @@ interface ItemStatusInterface
      *
      * @param int|null|\Exception $errorCode Default: null
      * @return $this
-     * @since 100.3.0
      */
     public function setErrorCode($errorCode = null);
 }
