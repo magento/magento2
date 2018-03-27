@@ -63,6 +63,9 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $object->setStockData(array_replace((array)$object->getStockData(), (array)$stockData));
         }
         $object->unsetData($this->getAttribute()->getAttributeCode());
+        if ($object->getStockData() !== null) {
+            $object->setData($this->getAttribute()->getAttributeCode(), $object->getStockData()['is_in_stock']);
+        }
         parent::beforeSave($object);
     }
 
