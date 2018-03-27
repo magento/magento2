@@ -114,6 +114,7 @@ namespace Magento\Framework\Session {
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = false;
+            $this->_model->destroy();
         }
 
         public function testSessionNameFromIni()
@@ -149,7 +150,9 @@ namespace Magento\Framework\Session {
 
         public function testSetName()
         {
+            $this->_model->destroy();
             $this->_model->setName('test');
+            $this->_model->start();
             $this->assertEquals('test', $this->_model->getName());
         }
 
