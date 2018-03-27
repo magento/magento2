@@ -11,6 +11,7 @@
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationListInterface" type="Magento\AsynchronousOperations\Model\OperationList" />
     <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
     <preference for="Magento\AsynchronousOperations\Api\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
+    <preference for="Magento\Framework\Bulk\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
     <preference for="Magento\Framework\Bulk\OperationManagementInterface" type="Magento\AsynchronousOperations\Model\OperationManagement" />
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationStatusInterface" type="Magento\AsynchronousOperations\Model\OperationStatus" />
     <preference for="Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Detailed" />
