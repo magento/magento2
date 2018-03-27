@@ -6,7 +6,7 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="sources" sortOrder="5">
+    <fieldset name="sources" sortOrder="5" component="Magento_InventoryCatalog/js/product/form/components/source-items">
         <settings>
             <label translate="true">Sources</label>
             <collapsible>true</collapsible>
@@ -37,6 +37,9 @@
                         <item name="additionalForGroup" xsi:type="boolean">true</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
                         <item name="dataScope" xsi:type="string"/>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.provider }:data.product.stock_data.manage_stock</item>
+                        </item>
                     </item>
                 </argument>
             </container>
@@ -66,6 +69,7 @@
                         <item name="source_code" xsi:type="string">source_code</item>
                         <item name="name" xsi:type="string">name</item>
                         <item name="qty" xsi:type="string">qty</item>
+                        <item name="source_status" xsi:type="string">enabled</item>
                     </item>
                     <item name="identificationDRProperty" xsi:type="string">source_code</item>
                 </item>
@@ -84,6 +88,9 @@
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
                 <columnsHeader>true</columnsHeader>
+                <imports>
+                    <link name="visible">${ $.provider }:data.product.stock_data.manage_stock</link>
+                </imports>
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
                 <argument name="data" xsi:type="array">
@@ -98,7 +105,7 @@
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_code</dataScope>
-                        <label translate="true">ID</label>
+                        <label translate="true">Source Code</label>
                     </settings>
                 </field>
                 <field name="name" formElement="input" sortOrder="20">
@@ -111,7 +118,7 @@
                 </field>
                 <field name="source_status" formElement="input" sortOrder="30">
                     <settings>
-                        <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
+                        <elementTmpl>Magento_InventoryCatalog/product/form/cell-status</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_status</dataScope>
                         <label translate="true">Source Status</label>

@@ -1,5 +1,4 @@
 {
-    "name": "magento/magento2ce-functional-tests",
     "description": "Magento 2 (Open Source) Functional Tests",
     "type": "project",
     "version": "1.0.0-dev",
@@ -17,13 +16,13 @@
         }
     ],
     "require": {
-        "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
+        "allure-framework/allure-codeception": "~1.2.6",
         "codeception/codeception": "~2.3.4",
         "consolidation/robo": "^1.0.0",
         "symfony/process": ">=2.7 <3.4",
         "henrikbjorn/lurker": "^1.2",
-        "magento/magento2-functional-testing-framework": "~2.0.2",
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/magento2-functional-testing-framework": "~2.1.1",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0",
         "vlucas/phpdotenv": "~2.4"
     },
     "autoload": {

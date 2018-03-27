@@ -32,7 +32,7 @@ $sourceItemConfigurationsData = [
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 5.6,
     ],
     [
-        // This should be showed regardless product is disabled
+        // This should not be showed in status out of stock
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
         SourceItemConfigurationInterface::SKU => 'SKU-3',
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1000,

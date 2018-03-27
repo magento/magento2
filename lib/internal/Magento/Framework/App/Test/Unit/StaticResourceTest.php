@@ -284,4 +284,22 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('sendResponse');
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLaunchPathAbove()
+    {
+        $path = 'frontend/..\..\folder_above/././Magento_Ui/template/messages.html';
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue(State::MODE_DEVELOPER));
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+        $this->expectExceptionMessage("Requested path '$path' is wrong.");
+
+        $this->object->launch();
+    }
 }

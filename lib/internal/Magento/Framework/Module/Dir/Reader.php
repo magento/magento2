@@ -105,11 +105,11 @@ class Reader
      */
     private function getFilesIterator($filename, $subDir = '')
     {
-        #if (!isset($this->fileIterators[$subDir][$filename])) {
+        if (!isset($this->fileIterators[$subDir][$filename])) {
             $this->fileIterators[$subDir][$filename] = $this->fileIteratorFactory->create(
                 $this->getFiles($filename, $subDir)
             );
-        #}
+        }
         return $this->fileIterators[$subDir][$filename];
     }
 

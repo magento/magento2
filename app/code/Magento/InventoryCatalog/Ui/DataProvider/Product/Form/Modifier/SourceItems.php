@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Model\CanManageSourceItemsBySku;
 use Magento\InventoryCatalog\Model\IsSingleSourceModeInterface;
 use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
 
@@ -49,24 +50,32 @@ class SourceItems extends AbstractModifier
     private $resourceConnection;
 
     /**
+     * @var CanManageSourceItemsBySku
+     */
+    private $canManageSourceItemsBySku;
+
+    /**
      * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
      * @param IsSingleSourceModeInterface $isSingleSourceMode
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param CanManageSourceItemsBySku $canManageSourceItemsBySku
      */
     public function __construct(
         IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
         IsSingleSourceModeInterface $isSingleSourceMode,
         LocatorInterface $locator,
         CollectionFactory $sourceItemCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        CanManageSourceItemsBySku $canManageSourceItemsBySku
     ) {
         $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
         $this->isSingleSourceMode = $isSingleSourceMode;
         $this->locator = $locator;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->canManageSourceItemsBySku = $canManageSourceItemsBySku;
     }
 
     /**
@@ -110,7 +119,7 @@ class SourceItems extends AbstractModifier
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],
-                'source_status' => $row['source_status'] ? __('Enabled') : __('Disabled')
+                'source_status' => $row['source_status'],
             ];
         }
         return $sourceItemsData;
@@ -128,6 +137,7 @@ class SourceItems extends AbstractModifier
             return $meta;
         }
 
+        $canMangeSourceItems = $this->canManageSourceItemsBySku->execute($product->getSku());
         $meta['sources'] = [
             'arguments' => [
                 'data' => [
@@ -136,7 +146,32 @@ class SourceItems extends AbstractModifier
                     ],
                 ],
             ],
+            'children' => [
+                'assign_sources_container' => [
+                    'children' => [
+                        'assign_sources_button' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'visible' => $canMangeSourceItems,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'assigned_sources' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'visible' => $canMangeSourceItems,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
+
         return $meta;
     }
 }

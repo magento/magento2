@@ -57,5 +57,17 @@
                 <externalFilterMode>true</externalFilterMode>
             </settings>
         </insertListing>
+        <component name="sources_visibility_checker" component="Magento_InventoryConfigurableProduct/js/components/sources-visibility-checker">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sourcesIndex" xsi:type="string">sources</item>
+                </item>
+            </argument>
+            <settings>
+                <listens>
+                    <link name="${$.namespace}.${$.namespace}.configurable.configurable-matrix:visible">applySourcesConfiguration</link>
+                </listens>
+            </settings>
+        </component>
     </modal>
 </form>
