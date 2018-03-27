@@ -11,18 +11,14 @@ define([
     'use strict';
 
     return Summary.extend({
-        /** @inheritdoc */
-        initObservable: function () {
-            this._super();
-            this.quantityFieldName = 'quantityPerSource';
-            this.attributesName = [
+        defaults: {
+            attributesName: [
                 $.mage.__('Images'),
                 $.mage.__('SKU'),
                 $.mage.__('Quantity Per Source'),
                 $.mage.__('Price')
-            ];
-
-            return this;
+            ],
+            quantityFieldName: 'quantityPerSource'
         }
     });
 });

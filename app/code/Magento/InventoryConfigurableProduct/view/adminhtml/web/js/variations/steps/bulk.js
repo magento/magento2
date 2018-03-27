@@ -26,8 +26,7 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            var self = this,
-                sections;
+            var sections;
 
             this._super();
 
@@ -44,10 +43,12 @@ define([
              * Make options sections.
              */
             this.makeOptionSections = function () {
-                this.images = new self.makeImages(null);
-                this.price = self.price;
-                this.quantityPerSource = self.quantityPerSource;
-            };
+                return {
+                    images: new this.makeImages(null),
+                    price: this.price,
+                    quantityPerSource: this.quantityPerSource
+                }
+            }.bind(this);
 
             this.initAttributeListener();
 

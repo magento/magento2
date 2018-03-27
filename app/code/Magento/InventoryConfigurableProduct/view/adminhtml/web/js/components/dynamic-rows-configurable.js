@@ -9,11 +9,15 @@ define([
     'use strict';
 
     return dynamicRowsConfigurable.extend({
+        defaults: {
+            quantityFieldName: 'quantity_per_source'
+        },
+
         /** @inheritdoc */
         getProductData: function (row) {
             var product = this._super(row);
 
-            product['quantity_per_source'] = row.quantityPerSource;
+            product[this.quantityFieldName] = row.quantityPerSource;
 
             return product;
         }
