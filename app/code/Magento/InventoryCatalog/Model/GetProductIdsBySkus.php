@@ -37,7 +37,7 @@ class GetProductIdsBySkus implements GetProductIdsBySkusInterface
         $idsBySkus = $this->productResource->getProductsIdsBySkus($skus);
         $notFoundedSkus = array_diff($skus, array_keys($idsBySkus));
 
-        if (!empty($notFoundedProducts)) {
+        if (!empty($notFoundedSkus)) {
             throw new InputException(
                 __('Following products with requested skus were not found: %1', implode($notFoundedSkus, ', '))
             );

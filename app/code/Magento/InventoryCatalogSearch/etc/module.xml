@@ -9,7 +9,7 @@
     <module name="Magento_InventoryCatalogSearch" setup_version="1.0.0">
         <sequence>
             <module name="Magento_CatalogSearch"/>
-            <module name="Magento_Inventory"/>
+            <module name="Magento_InventoryCatalog"/>
         </sequence>
     </module>
 </config>

@@ -42,7 +42,7 @@ class GetSkusByProductIds implements GetSkusByProductIdsInterface
         );
         $notFoundedIds = array_diff($productIds, array_keys($skuByIds));
 
-        if (!empty($notFoundedProducts)) {
+        if (!empty($notFoundedIds)) {
             throw new InputException(
                 __('Following products with requested ids were not found: %1', implode($notFoundedIds, ', '))
             );
