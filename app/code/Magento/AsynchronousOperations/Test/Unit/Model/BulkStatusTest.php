@@ -57,7 +57,22 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $bulkDetailedFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bulkShortFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $entityMetadataMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -81,6 +96,15 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql::class
         );
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->bulkDetailedFactory = $this->createPartialMock(
+            \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory ::class,
+            ['create']
+        );
+        $this->bulkShortFactory = $this->createPartialMock(
+            \Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory::class,
+            ['create']
+        );
+        $this->entityManager = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
 
         $this->entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
@@ -90,7 +114,10 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             $this->operationCollectionFactory,
             $this->resourceConnectionMock,
             $this->calculatedStatusSqlMock,
-            $this->metadataPoolMock
+            $this->metadataPoolMock,
+            $this->bulkDetailedFactory,
+            $this->bulkShortFactory,
+            $this->entityManager
         );
     }
 
@@ -151,12 +178,13 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [1, [1]],
-            [null,
+            [
+                null,
                 [
                     OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
-                    OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED
-                ]
-            ]
+                    OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
+                ],
+            ],
         ];
     }
 

@@ -57,7 +57,6 @@ class Config implements ConfigInterface
      */
     public function getServices()
     {
-
         if (null === $this->asyncServices) {
             $services = $this->cache->load(self::CACHE_ID);
             if ($services && is_string($services)) {

@@ -10,8 +10,11 @@
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationInterface" type="Magento\AsynchronousOperations\Model\Operation" />
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationListInterface" type="Magento\AsynchronousOperations\Model\OperationList" />
     <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
-    <preference for="Magento\Framework\Bulk\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
+    <preference for="Magento\AsynchronousOperations\Api\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
     <preference for="Magento\Framework\Bulk\OperationManagementInterface" type="Magento\AsynchronousOperations\Model\OperationManagement" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationStatusInterface" type="Magento\AsynchronousOperations\Model\OperationStatus" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Detailed" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Short" />
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
@@ -74,6 +77,29 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
-                 type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+    <virtualType
+            name="Magento\AsynchronousOperations\Ui\Component\DataProvider"
+            type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"/>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                    <item name="db" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\AsynchronousOperations\Model\VirtualType\BulkManagement" type="Magento\AsynchronousOperations\Model\BulkManagement">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\PublisherPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <arguments>
+            <argument name="bulkManagement" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\BulkManagement</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface" type="Magento\AsynchronousOperations\Model\AsyncResponse" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\ItemStatusInterface" type="Magento\AsynchronousOperations\Model\ItemStatus" />
 </config>

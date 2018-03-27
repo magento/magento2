@@ -81,6 +81,22 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
     /**
      * @inheritDoc
      */
+    public function getResultSerializedData()
+    {
+        return $this->getData(self::RESULT_SERIALIZED_DATA);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setResultSerializedData($resultSerializedData)
+    {
+        return $this->setData(self::RESULT_SERIALIZED_DATA, $resultSerializedData);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getStatus()
     {
         return $this->getData(self::STATUS);
