@@ -2,8 +2,19 @@
 # See COPYING.txt for license details.
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface {
-    configurable_product_links: [SimpleProduct] @doc(description: "An array of linked simple products")
-    configurable_product_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items")
+    variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
+    configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
+}
+
+type ConfigurableVariant {
+    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes")
+    product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+}
+
+type ConfigurableAttributeOption {
+    label: String
+    code: String
+    value_index: Int
 }
 
 type ConfigurableProductOptions {
@@ -19,4 +30,8 @@ type ConfigurableProductOptions {
 
 type ConfigurableProductOptionsValues {
     value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+    label: String
+    default_label: String
+    store_label: String
+    use_default_value: Boolean
 }

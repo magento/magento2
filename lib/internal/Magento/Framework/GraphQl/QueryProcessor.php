@@ -7,6 +7,8 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl;
 
+use GraphQL\Validator\DocumentValidator;
+use GraphQL\Validator\Rules\QueryDepth;
 use Magento\Framework\GraphQl\Type\Schema;
 
 /**
@@ -46,6 +48,8 @@ class QueryProcessor
         $variableValues = null,
         $operationName = null
     ) {
+        $rule = new QueryDepth(10);
+        DocumentValidator::addRule($rule);
         return \GraphQL\GraphQL::executeQuery(
             $schema,
             $source,

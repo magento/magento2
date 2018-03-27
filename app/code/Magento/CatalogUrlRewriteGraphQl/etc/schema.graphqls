@@ -15,3 +15,8 @@ input ProductSortInput {
     url_key: SortEnum @doc(description: "The part of the URL that identifies the product")
     url_path: SortEnum @doc(description: "The part of the URL that precedes the `url_key`")
 }
+
+enum UrlRewriteEntityTypeEnum {
+    PRODUCT
+    CATEGORY
+}

@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
@@ -21,11 +20,6 @@ class Product
      * @var ProductDataProvider
      */
     private $productDataProvider;
-
-    /**
-     * @var FormatterInterface
-     */
-    private $formatter;
 
     /**
      * @var SearchCriteriaBuilder
@@ -43,17 +37,19 @@ class Product
     private $productList = [];
 
     /**
+     * @var string[]
+     */
+    private $attributeCodes = [];
+
+    /**
      * @param ProductDataProvider $productDataProvider
-     * @param FormatterInterface $formatter
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
-        FormatterInterface $formatter,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->productDataProvider = $productDataProvider;
-        $this->formatter = $formatter;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
@@ -65,7 +61,10 @@ class Product
      */
     public function addProductSku(string $sku) : void
     {
-        if (!in_array($sku, $this->productSkus)) {
+        if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
+            $this->productList = [];
+            $this->productSkus[] = $sku;
+        } elseif (!in_array($sku, $this->productSkus)) {
             $this->productSkus[] = $sku;
         }
     }
@@ -79,12 +78,24 @@ class Product
     public function addProductSkus(array $skus) : void
     {
         foreach ($skus as $sku) {
-            if (in_array($sku, $this->productSkus)) {
-                continue;
+            if (!in_array($sku, $this->productSkus) && !empty($this->productList)) {
+                $this->productList = [];
+                $this->productSkus[] = $sku;
+            } elseif (!in_array($sku, $this->productSkus)) {
+                $this->productSkus[] = $sku;
             }
-
-            $this->productSkus[] = $sku;
         }
+    }
+
+    /**
+     * Add attributes to collection filter
+     *
+     * @param array $attributeCodes
+     * @return void
+     */
+    public function addEavAttributes(array $attributeCodes) : void
+    {
+        $this->attributeCodes = array_replace($this->attributeCodes, $attributeCodes);
     }
 
     /**
@@ -116,11 +127,11 @@ class Product
         }
 
         $this->searchCriteriaBuilder->addFilter(ProductInterface::SKU, $this->productSkus, 'in');
-        $result = $this->productDataProvider->getList($this->searchCriteriaBuilder->create());
+        $result = $this->productDataProvider->getList($this->searchCriteriaBuilder->create(), $this->attributeCodes);
 
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($result->getItems() as $product) {
-            $this->productList[$product->getSku()] = $this->formatter->format($product);
+            $this->productList[$product->getSku()] = ['model' => $product];
         }
 
         return $this->productList;

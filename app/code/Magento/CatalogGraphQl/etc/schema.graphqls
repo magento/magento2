@@ -247,7 +247,7 @@ type ProductTierPrices {
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
-    id: Int @doc(description: "The ID number assigned to the product")
+    id: Int @doc(description: "The ID number assigned to the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
     description: String @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
@@ -262,8 +262,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     image: String @doc(description: "The relative path to the main image on the product page")
     small_image: String @doc(description: "The relative path to the small image, which is used on catalog pages")
     thumbnail: String @doc(description: "The relative path to the product's thumbnail image")
-    new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product")
-    new_to_date: String @doc(description: "The end date for new product listings")
+    new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
+    new_to_date: String @doc(description: "The end date for new product listings") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached")
     custom_design: String @doc(description: "A theme that can be applied to the product page")
     custom_design_from: String @doc(description: "The beginning date when a theme is applied to the product page")
@@ -281,11 +281,11 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     country_of_manufacture: String @doc(description: "The product's country of origin")
     type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable")
     website_ids: [Int] @doc(description: "An array of website IDs in which the product is available")
-    category_links: [ProductCategoryLinks] @doc(description: "An array of ProductCategoryLinks objects")
-    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects")
-    media_gallery_entries: [MediaGalleryEntry] @doc(description: "An array of MediaGalleryEntry objects")
-    tier_prices: [ProductTierPrices] @doc(description: "An array of ProductTierPrices objects")
-    price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item")
+    category_links: [ProductCategoryLinks] @doc(description: "An array of ProductCategoryLinks objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CategoryLinks")
+    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
+    media_gallery_entries: [MediaGalleryEntry] @doc(description: "An array of MediaGalleryEntry objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
+    tier_prices: [ProductTierPrices] @doc(description: "An array of ProductTierPrices objects") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\TierPrices")
+    price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer")
 }
@@ -364,7 +364,7 @@ interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGrap
 }
 
 interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") {
-    options: [CustomizableOptionInterface] @doc(description: "")
+    options: [CustomizableOptionInterface] @doc(description: "") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Options")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface {

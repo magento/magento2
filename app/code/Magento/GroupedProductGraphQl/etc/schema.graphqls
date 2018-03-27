@@ -2,11 +2,11 @@
 # See COPYING.txt for license details.
 
 type GroupedProduct implements ProductInterface, PhysicalProductInterface {
-    items: [GroupedProductItem] @doc(description: "An array containing grouped product items")
+    items: [GroupedProductItem] @doc(description: "An array containing grouped product items") @resolver(class: "Magento\\GroupedProductGraphQl\\Model\\Resolver\\GroupedItems")
 }
 
 type GroupedProductItem {
     qty: Float @doc(description: "The quantity of this grouped product item")
     position: Int @doc(description: "The relative position of this item compared to the other group items")
-    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about this product option")
+    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about this product option") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
 }

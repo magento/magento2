@@ -58,34 +58,39 @@ class Product
     }
 
     /**
-     * Gets list of product data with full data set
+     * Gets list of product data with full data set. Adds eav attributes to result set from passed in array
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param string[] $attributes
      * @return SearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
 
+//        foreach ($attributes as $attributeCode) {
+//            $collection->addAttributeToSelect($attributeCode);
+//        }
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
-
-        $collection->load();
-
-        $collection->addCategoryIds();
-        $collection->addFinalPrice();
-        $collection->addMediaGalleryData();
-        $collection->addMinimalPrice();
-        $collection->addPriceData();
+        $count = $collection->getSelectCountSql()->query();
         $collection->addWebsiteNamesToResult();
-        $collection->addOptionsToResult();
         $collection->addTaxPercents();
         $collection->addWebsiteNamesToResult();
+        $sql = $collection->getSelect()->assemble();
+        $collection->load();
+
+        // Methods that perform extra fetches
+        $collection->addPriceData();
+        $collection->addCategoryIds();
+        $collection->addMediaGalleryData();
+        $collection->addOptionsToResult();
+
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());

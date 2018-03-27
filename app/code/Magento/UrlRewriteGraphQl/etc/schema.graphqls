@@ -12,6 +12,4 @@ type Query {
 }
 
 enum UrlRewriteEntityTypeEnum {
-    PRODUCT
-    CATEGORY
 }

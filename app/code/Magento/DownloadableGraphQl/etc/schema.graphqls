@@ -2,8 +2,8 @@
 # See COPYING.txt for license details.
 
 type DownloadableProduct implements ProductInterface, CustomizableProductInterface {
-    downloadable_product_samples: [DownloadableProductSamples] @doc(description: "An array containing information about samples of this downloadable product.")
-    downloadable_product_links: [DownloadableProductLinks] @doc(description: "An array containing information about the links for this downloadable product")
+    downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about samples of this downloadable product.")
+    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about the links for this downloadable product")
     links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
     links_title: String @doc(description: "The heading above the list of downloadable products")
 }

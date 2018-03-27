@@ -33,6 +33,11 @@ class SchemaProvider
     private $scalarTypes;
 
     /**
+     * @var OutputType[]
+     */
+    private $typeObjects;
+
+    /**
      * SchemaProvider constructor.
      * @param ConfigInterface $config
      * @param OutputMapper $outputMapper
@@ -55,24 +60,18 @@ class SchemaProvider
      */
     public function getTypes() : array
     {
-        $types = [];
+        if ($this->typeObjects !== null) {
+            return $this->typeObjects;
+        }
+
+        $this->typeObjects = [];
         foreach ($this->config->getDeclaredTypeNames() as $typeName) {
             if ($this->scalarTypes->isScalarType($typeName)) {
-                $types[$typeName] = $this->scalarTypes->getScalarTypeInstance($typeName);
+                $this->typeObjects[$typeName] = $this->scalarTypes->getScalarTypeInstance($typeName);
             } else {
-                $types[$typeName] = $this->outputMapper->getTypeObject($typeName);
+                $this->typeObjects[$typeName] = $this->outputMapper->getOutputType($typeName);
             }
         }
-        return $types;
-    }
-
-    /**
-     * Retrieve the top-level Query type object containing all described queries for a client to consume.
-     *
-     * @return OutputType
-     */
-    public function getQuery() : OutputType
-    {
-        return $this->outputMapper->getTypeObject('Query');
+        return $this->typeObjects;
     }
 }
