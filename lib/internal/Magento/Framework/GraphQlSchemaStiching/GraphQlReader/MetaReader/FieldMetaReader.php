@@ -69,6 +69,9 @@ class FieldMetaReader
             $result['arguments'][$argumentName] = [
                 'name' => $argumentName,
             ];
+            if ($argumentMeta->defaultValue !== null) {
+                $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
+            }
             $typeMeta = $argumentMeta->getType();
             $result['arguments'][$argumentName] = array_merge(
                 $result['arguments'][$argumentName],
