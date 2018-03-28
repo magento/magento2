@@ -159,11 +159,11 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             $connection->getCheckSql(
                 $specialFrom . ' IS NULL',
                 '1',
-                $connection->getCheckSql($specialFrom . ' <= ' . $curentDate, '1', '0')
+                $connection->getCheckSql($specialFrom . ' >= ' . $curentDate, '1', '0')
             ) . " > 0 AND " . $connection->getCheckSql(
                 $specialTo . ' IS NULL',
                 '1',
-                $connection->getCheckSql($specialTo . ' >= ' . $curentDate, '1', '0')
+                $connection->getCheckSql($specialTo . ' <= ' . $curentDate, '1', '0')
             ) . " > 0 AND {$specialPrice} > 0 AND {$specialPrice} < 100 ",
             $specialPrice,
             '0'
@@ -249,14 +249,17 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             ['i' => $this->_getBundleSelectionTable()],
             ['entity_id', 'customer_group_id', 'website_id', 'option_id']
         )->group(
-            ['entity_id', 'customer_group_id', 'website_id', 'option_id', 'is_required', 'group_type']
-        )->columns(
+            ['entity_id', 'customer_group_id', 'website_id', 'option_id']
+        );
+        $minPrice = $connection->getCheckSql('i.is_required = 1', 'i.price', '0');
+        $tierPrice = $connection->getCheckSql('i.is_required = 1', 'i.tier_price', '0');
+        $select->columns(
             [
-                'min_price' => $connection->getCheckSql('i.is_required = 1', 'MIN(i.price)', '0'),
-                'alt_price' => $connection->getCheckSql('i.is_required = 0', 'MIN(i.price)', '0'),
-                'max_price' => $connection->getCheckSql('i.group_type = 1', 'SUM(i.price)', 'MAX(i.price)'),
-                'tier_price' => $connection->getCheckSql('i.is_required = 1', 'MIN(i.tier_price)', '0'),
-                'alt_tier_price' => $connection->getCheckSql('i.is_required = 0', 'MIN(i.tier_price)', '0'),
+                'min_price' => new \Zend_Db_Expr('MIN(' . $minPrice . ')'),
+                'alt_price' => new \Zend_Db_Expr('NULL'),
+                'max_price' => new \Zend_Db_Expr('SUM(i.price)'),
+                'tier_price' => new \Zend_Db_Expr('MIN(' . $tierPrice . ')'),
+                'alt_tier_price' => new \Zend_Db_Expr('NULL'),
             ]
         );
 
@@ -264,45 +267,8 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $connection->query($query);
 
         $this->_prepareDefaultFinalPriceTable();
-
-        $minPrice = new \Zend_Db_Expr(
-            $connection->getCheckSql('SUM(io.min_price) = 0', 'MIN(io.alt_price)', 'SUM(io.min_price)') . ' + i.price'
-        );
-        $maxPrice = new \Zend_Db_Expr("SUM(io.max_price) + i.price");
-        $tierPrice = $connection->getCheckSql(
-            'MIN(i.tier_percent) IS NOT NULL',
-            $connection->getCheckSql(
-                'SUM(io.tier_price) = 0',
-                'SUM(io.alt_tier_price)',
-                'SUM(io.tier_price)'
-            ) . ' + MIN(i.tier_price)',
-            'NULL'
-        );
-
-        $select = $connection->select()->from(
-            ['io' => $this->_getBundleOptionTable()],
-            ['entity_id', 'customer_group_id', 'website_id']
-        )->join(
-            ['i' => $this->_getBundlePriceTable()],
-            'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
-            ' AND i.website_id = io.website_id',
-            []
-        )->group(
-            ['io.entity_id', 'io.customer_group_id', 'io.website_id', 'i.tax_class_id', 'i.orig_price', 'i.price']
-        )->columns(
-            [
-                'i.tax_class_id',
-                'orig_price' => 'i.orig_price',
-                'price' => 'i.price',
-                'min_price' => $minPrice,
-                'max_price' => $maxPrice,
-                'tier_price' => $tierPrice,
-                'base_tier' => 'MIN(i.base_tier)',
-            ]
-        );
-
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable());
-        $connection->query($query);
+        $this->applyBundlePrice();
+        $this->applyBundleOptionPrice();
 
         return $this;
     }
@@ -507,5 +473,63 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $connection->query($query);
 
         return $this;
+    }
+
+    private function applyBundlePrice()
+    {
+        $select = $this->getConnection()->select();
+        $select->from(
+            $this->_getBundlePriceTable(),
+            [
+                'entity_id',
+                'customer_group_id',
+                'website_id',
+                'tax_class_id',
+                'orig_price',
+                'price',
+                'min_price',
+                'max_price',
+                'tier_price',
+                'base_tier',
+            ]
+        );
+
+        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable());
+        $this->getConnection()->query($query);
+    }
+
+    private function applyBundleOptionPrice()
+    {
+        $connection = $this->getConnection();
+
+        $subSelect = $connection->select()->from(
+            $this->_getBundleOptionTable(),
+            [
+                'entity_id',
+                'customer_group_id',
+                'website_id',
+                'min_price' => new \Zend_Db_Expr('SUM(min_price)'),
+                'max_price' => new \Zend_Db_Expr('SUM(max_price)'),
+                'tier_price' => new \Zend_Db_Expr('SUM(tier_price)'),
+            ]
+        )->group(
+            ['entity_id', 'customer_group_id', 'website_id']
+        );
+
+        $select = $connection->select()->join(
+            ['io' => $subSelect],
+            'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
+            ' AND i.website_id = io.website_id',
+            []
+        )->columns(
+            [
+                'min_price' => new \Zend_Db_Expr('io.min_price + i.min_price'),
+                'max_price' => new \Zend_Db_Expr('io.max_price + i.max_price'),
+                'tier_price' => new \Zend_Db_Expr('io.tier_price + i.tier_price'),
+            ]
+        );
+
+        $query = $select->crossUpdateFromSelect(['i' => $this->_getDefaultFinalPriceTable()]);
+        $connection->query($query);
     }
 }

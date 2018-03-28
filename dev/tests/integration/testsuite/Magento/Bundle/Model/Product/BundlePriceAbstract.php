@@ -34,6 +34,13 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productCollectionFactory =
             $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class);
+
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            true,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
