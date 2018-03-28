@@ -14,12 +14,14 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
@@ -1082,8 +1084,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $this->assertProductRequestPath('default', 'category-defaultstore/product-default.html');
-        $this->assertProductRequestPath('fixturestore', 'category-fixturestore/product-fixture.html');
+        
+        $this->assertProductRequestPath('default', 'product-default.html');
+        $this->assertProductRequestPath('fixturestore', 'product-fixture.html');
+        
+        $this->assertProductRequestPathWithCategory('default', 555, 'category-defaultstore/product-default.html');
+        $this->assertProductRequestPathWithCategory('fixturestore', 555, 'category-fixturestore/product-fixture.html');
     }
 
     /**
@@ -1096,14 +1102,49 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     private function assertProductRequestPath($storeCode, $expected)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         /** @var Store $storeCode */
         $store = $objectManager->get(Store::class);
         $storeId = $store->load($storeCode)->getId();
 
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+        $id = $product->getIdBySku('product');
+        $product->setStoreId($storeId);
+        $product->load($id);
+        $product->getProductUrl();
+
+        self::assertEquals($expected, $product->getRequestPath());
+    }
+
+    /**
+     * Check product request path considering store scope as current category.
+     *
+     * @param string $storeCode
+     * @param int    $currentCategoryId
+     * @param string $expected
+     * @return void
+     */
+    private function assertProductRequestPathWithCategory($storeCode, $currentCategoryId, $expected)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var Store $storeCode */
+        $store = $objectManager->get(Store::class);
+        $storeId = $store->load($storeCode)->getId();
+
+        /** @var WriterInterface $configWriter */
+        $configWriter = $objectManager->get(WriterInterface::class);
+        $configWriter->save('catalog/seo/product_use_categories', 1, 'stores', $storeId);
+        $cacheManager = $objectManager->get(CacheInterface::class);
+        $cacheManager->clean([\Magento\Framework\App\Config::CACHE_TAG]);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+        $appConfig = $objectManager->get(\Magento\Framework\App\Config::class);
+        $appConfig->clean();
+
         /** @var Category $category */
         $category = $objectManager->get(Category::class);
         $category->setStoreId($storeId);
-        $category->load(555);
+        $category->load($currentCategoryId);
 
         /** @var Registry $registry */
         $registry = $objectManager->get(Registry::class);
@@ -1115,8 +1156,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product->setStoreId($storeId);
         $product->load($id);
         $product->getProductUrl();
-        self::assertEquals($expected, $product->getRequestPath());
+        
+        $configWriter->delete('catalog/seo/product_use_categories', 'stores', $storeId);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+        $appConfig = $objectManager->get(\Magento\Framework\App\Config::class);
+        $appConfig->clean();
         $registry->unregister('current_category');
+
+        self::assertEquals($expected, $product->getRequestPath());
     }
 
     /**

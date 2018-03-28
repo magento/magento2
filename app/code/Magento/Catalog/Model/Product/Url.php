@@ -5,6 +5,12 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\UrlFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -19,46 +25,53 @@ class Url extends \Magento\Framework\DataObject
     /**
      * URL instance
      *
-     * @var \Magento\Framework\UrlFactory
+     * @var UrlFactory
      */
     protected $urlFactory;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filter;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
+     * @var SidResolverInterface
      */
     protected $sidResolver;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
 
     /**
-     * @param \Magento\Framework\UrlFactory $urlFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Filter\FilterManager $filter
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param UrlFinderInterface $urlFinder
-     * @param array $data
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @param UrlFactory            $urlFactory
+     * @param StoreManagerInterface $storeManager
+     * @param FilterManager         $filter
+     * @param SidResolverInterface  $sidResolver
+     * @param UrlFinderInterface    $urlFinder
+     * @param ScopeConfigInterface  $scopeConfig
+     * @param array                 $data
      */
     public function __construct(
-        \Magento\Framework\UrlFactory $urlFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        UrlFactory $urlFactory,
+        StoreManagerInterface $storeManager,
+        FilterManager $filter,
+        SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
+        ScopeConfigInterface $scopeConfig,
         array $data = []
     ) {
         parent::__construct($data);
@@ -67,6 +80,7 @@ class Url extends \Magento\Framework\DataObject
         $this->filter = $filter;
         $this->sidResolver = $sidResolver;
         $this->urlFinder = $urlFinder;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -142,7 +156,16 @@ class Url extends \Magento\Framework\DataObject
 
         $categoryId = null;
 
-        if (!isset($params['_ignore_category']) && $product->getCategoryId() && !$product->getDoNotUseCategoryId()) {
+        $useCategoryInUrl = $this->scopeConfig->getValue(
+            \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY,
+            ScopeInterface::SCOPE_STORES,
+            $storeId
+        );
+
+        if (!isset($params['_ignore_category'])
+            && !$product->getDoNotUseCategoryId()
+            && $product->getCategoryId()
+            && $useCategoryInUrl) {
             $categoryId = $product->getCategoryId();
         }
 

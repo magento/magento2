@@ -39,6 +39,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $sidResolver;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfig;
+
     protected function setUp()
     {
         $this->filter = $this->getMockBuilder(
@@ -58,6 +63,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         )->getMock();
 
         $this->sidResolver = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -79,6 +85,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $storeManager,
                 'urlFactory' => $urlFactory,
                 'sidResolver' => $this->sidResolver,
+                'urlFinder' => $this->urlFinder,
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
@@ -116,6 +124,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param $routeParamsUrl
      * @param $productId
      * @param $productUrlKey
+     * @param $categoryInUrlAllowed
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testGetUrl(
@@ -127,7 +136,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $routeParams,
         $routeParamsUrl,
         $productId,
-        $productUrlKey
+        $productUrlKey,
+        $categoryInUrlAllowed
     ) {
         $product = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
@@ -150,6 +160,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->with($routePath, $routeParamsUrl)
             ->will($this->returnValue($requestPathProduct));
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue(false));
+        $this->scopeConfig->expects($this->any())->method('getValue')->with(
+            'catalog/seo/product_use_categories',
+            'stores',
+            1
+        )->will($this->returnValue($categoryInUrlAllowed ? 1 : 0));
 
         switch ($getUrlMethod) {
             case 'getUrl':
@@ -182,6 +197,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ['_scope' => 1, '_direct' => '/product/url/path', '_query' => []],
                 null,
                 null,
+                false,
             ], [
                 'getUrl',
                 'catalog/product/view',
@@ -189,9 +205,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 1,
                 1,
                 ['_scope' => 1],
-                ['_scope' => 1, '_query' => [], 'id' => 1, 's' => 'urlKey', 'category' => 1],
+                ['_scope' => 1, '_query' => [], 'id' => 1, 's' => 'urlKey'],
                 1,
                 'urlKey',
+                false,
             ], [
                 'getUrlInStore',
                 '',
@@ -202,6 +219,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ['_scope' => 1, '_direct' => '/product/url/path', '_query' => [], '_scope_to_url' => true],
                 null,
                 null,
+                false,
             ], [
                 'getProductUrl',
                 '',
@@ -212,6 +230,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 ['_direct' => '/product/url/path', '_query' => []],
                 null,
                 null,
+                false,
+            ], [
+                'getUrl',
+                'catalog/product/view',
+                false,
+                1,
+                1,
+                ['_scope' => 1],
+                ['_scope' => 1, '_query' => [], 'id' => 1, 's' => 'urlKey', 'category' => 1],
+                1,
+                'urlKey',
+                true,
             ]
         ];
     }
