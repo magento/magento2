@@ -14,6 +14,7 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
      * Test that the rest controller returns the correct async schema response.
      *
      * @param string $path
+     * @magentoAppArea webapi_rest
      * @dataProvider schemaRequestProvider
      */
     public function testSchemaRequest($path)
@@ -25,7 +26,20 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
         $this->assertRegExp('/202 Accepted/', $schema);
 
         // Make sure that the async interface definition is included in the response.
-        $this->assertRegExp('/webapi-async-data-async-response-interface/', $schema);
+        $this->assertRegExp('/asynchronous-operations-data-async-response-interface/', $schema);
+    }
+
+    /**
+     * Response getter
+     *
+     * @return \Magento\Framework\App\ResponseInterface
+     */
+    public function getResponse()
+    {
+        if (!$this->_response) {
+            $this->_response = $this->_objectManager->get(\Magento\Framework\Webapi\Rest\Response::class);
+        }
+        return $this->_response;
     }
 
     /**

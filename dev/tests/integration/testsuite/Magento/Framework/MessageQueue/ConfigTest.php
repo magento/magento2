@@ -170,7 +170,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ]
         );
         return $objectManager->create(
-            \Magento\Framework\MessageQueue\ConfigInterface::class,
+            \Magento\Framework\MessageQueue\Config::class,
             ['queueConfigData' => $configData]
         );
     }
