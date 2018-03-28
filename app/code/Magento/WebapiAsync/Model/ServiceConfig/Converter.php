@@ -62,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod] = array_merge(
             $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod],
             [
-                self::KEY_SYNCHRONOUS_INVOCATION_ONLY => $this->getSynchronousMethodInvocationOnly($service)
+                self::KEY_SYNCHRONOUS_INVOCATION_ONLY => $this->isSynchronousMethodInvocationOnly($service)
             ]
         );
     }
@@ -132,7 +132,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMElement $serviceNode
      * @return bool
      */
-    private function getSynchronousMethodInvocationOnly(\DOMElement $serviceNode)
+    private function isSynchronousMethodInvocationOnly(\DOMElement $serviceNode)
     {
         $synchronousInvocationOnlyNodes = $serviceNode->getElementsByTagName('synchronousInvocationOnly');
 
