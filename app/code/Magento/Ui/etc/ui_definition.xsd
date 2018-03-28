@@ -76,6 +76,7 @@
             <xs:element name="textarea" type="componentTextarea"/>
             <xs:element name="wysiwyg" type="componentWysiwyg"/>
             <xs:element name="inlineEditing" type="componentInlineEditing"/>
+            <xs:element name="urlInput" type="componentUrlInput"/>
         </xs:choice>
     </xs:complexType>
 </xs:schema>

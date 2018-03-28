@@ -971,6 +971,12 @@ define([
                 return tinycolor(value).isValid();
             },
             $.mage.__('Wrong color format.')
+        ],
+        'blacklist-url': [
+            function (value, param) {
+                return new RegExp(param).test(value);
+            },
+            $.mage.__('This link is not allowed.')
         ]
     }, function (data) {
         return {

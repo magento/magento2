@@ -29,6 +29,7 @@
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/email.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/exportButton.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/field.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/urlInput.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/fieldset.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/file.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/fileUploader.xsd"/>
