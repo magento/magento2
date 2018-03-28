@@ -13,7 +13,9 @@
     <div class="admin__field-control"
          css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
 
-        <input type="hidden" colorPicker="colorPickerConfig" ko-value="value" style="display: none"/>
-        <input type="text" ko-value="value"/>
+        <input type="hidden" id="colorPicker-spectrum" colorPicker="colorPickerConfig" ko-value="value" style="display: none"/>
+        <input type="text" id="colorPicker-input" ko-value="value" data-bind="event: { focus: showColorPicker, mouseout: setInputValue }"/>
+
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
     </div>
 </div>

@@ -22,10 +22,10 @@ class FullMode implements ModeInterface
     {
         return [
             'showInput' => true,
-            'allowEmpty' => false,
+            'allowEmpty' => true,
             'showInitial' => false,
             'showPalette' => true,
-            'showAlpha' => false,
+            'showAlpha' => true,
             'showSelectionPalette' => true
         ];
     }

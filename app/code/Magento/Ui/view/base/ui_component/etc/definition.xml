@@ -151,7 +151,6 @@
     </imageUploader>
     <colorPicker class="Magento\Ui\Component\Form\Element\ColorPicker" component="Magento_Ui/js/form/element/colorPicker" template="ui/form/element/colorPicker">
         <settings>
-            <initialColor>rgb(0,0,0)</initialColor>
             <colorFormat>rgb</colorFormat>
             <colorPickerMode>full</colorPickerMode>
         </settings>

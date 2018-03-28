@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * @api
- * @since 100.0.2
  */
 class ColorPicker extends AbstractElement
 {
@@ -46,7 +45,7 @@ class ColorPicker extends AbstractElement
      *
      * @return string
      */
-    public function getComponentName()
+    public function getComponentName(): string
     {
         return static::NAME;
     }

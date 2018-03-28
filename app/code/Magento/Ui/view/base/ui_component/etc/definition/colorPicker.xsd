@@ -25,18 +25,11 @@
     <xs:group name="componentColorPickerSettings">
         <xs:choice>
             <xs:group ref="abstractSettings"/>
-            <xs:element name="initialColor" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>
-                        Defines the initial color that appears in the color selection dropdown and input field.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="colorFormat" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         Defines the color format that is displayed in selection tool as well as in input field.
-                        Valid formats: hex, rgb, hsl, hsv
+                        Valid formats: hex, rgb, hsl, name, none
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

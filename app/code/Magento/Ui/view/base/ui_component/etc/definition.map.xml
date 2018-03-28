@@ -107,7 +107,6 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="initialColor" type="string" xsi:type="xpath">settings/initialColor</item>
                     <item name="colorPickerMode" type="string" xsi:type="xpath">settings/colorPickerMode</item>
                     <item name="colorFormat" type="string" xsi:type="xpath">settings/colorFormat</item>
                 </item>

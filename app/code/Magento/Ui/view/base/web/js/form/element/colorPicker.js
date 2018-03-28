@@ -8,8 +8,9 @@ define([
     'uiLayout',
     'mage/translate',
     'Magento_Ui/js/form/element/abstract',
-    'spectrum'
-], function ($, _, layout, $t, Abstract, spectrum) {
+    'spectrum',
+    'tinycolor'
+], function ($, _, layout, $t, Abstract, spectrum, tinycolor) {
     'use strict';
 
     var defaultColorPalette = [
@@ -27,10 +28,12 @@ define([
 
         defaults: {
             colorPickerConfig: {
-                chooseText: "Apply",
-                cancelText: "Cancel",
+                chooseText: $t('Apply'),
+                cancelText: $t('Cancel'),
                 maxSelectionSize: 8,
                 clickoutFiresChange: true,
+                allowEmpty: true,
+                localStorageKey: "magento.spectrum",
                 palette: defaultColorPalette
             }
         },
@@ -61,6 +64,19 @@ define([
             this._super();
 
             return this;
+        },
+
+        showColorPicker: function () {
+            jQuery('#colorPicker-spectrum').spectrum("show");
+        },
+
+        setInputValue: function() {
+            var inputValue = jQuery('#colorPicker-input').val(),
+                inputColor = tinycolor(inputValue);
+
+            if (inputColor.isValid()) {
+                jQuery('#colorPicker-spectrum').spectrum("set", inputValue);
+            }
         }
 
     });
