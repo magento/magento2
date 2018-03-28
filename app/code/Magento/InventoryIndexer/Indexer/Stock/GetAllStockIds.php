@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryIndexer\Indexer\Stock;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 
 /**
- * Returns all assigned stock ids
+ * Returns all stock ids.
  */
-class GetAllAssignedStockIds
+class GetAllStockIds
 {
     /**
      * @var ResourceConnection
@@ -35,17 +35,13 @@ class GetAllAssignedStockIds
     public function execute(): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceStockLinkTable = $this->resourceConnection->getTableName(
-            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
-        );
+        $stockTable = $this->resourceConnection->getTableName(StockResourceModel::TABLE_NAME_STOCK);
 
-        $select = $connection
-            ->select()
-            ->from($sourceStockLinkTable, StockSourceLink::STOCK_ID)
-            ->group(StockSourceLink::STOCK_ID);
+        $select = $connection->select()->from($stockTable, StockSourceLink::STOCK_ID);
 
         $stockIds = $connection->fetchCol($select);
         $stockIds = array_map('intval', $stockIds);
+
         return $stockIds;
     }
 }
