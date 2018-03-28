@@ -104,32 +104,21 @@ class StockIndexer
     public function executeList(array $stockIds)
     {
         foreach ($stockIds as $stockId) {
-            $replicaIndexName = $this->indexNameBuilder
-                ->setIndexId(InventoryIndexer::INDEXER_ID)
-                ->addDimension('stock_', (string)$stockId)
-                ->setAlias(Alias::ALIAS_REPLICA)
-                ->build();
-
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(InventoryIndexer::INDEXER_ID)
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
-            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-
             if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             }
 
             $this->indexHandler->saveIndex(
-                $replicaIndexName,
+                $mainIndexName,
                 $this->indexDataByStockIdProvider->execute((int)$stockId),
                 ResourceConnection::DEFAULT_CONNECTION
             );
-            $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
     }
 }
