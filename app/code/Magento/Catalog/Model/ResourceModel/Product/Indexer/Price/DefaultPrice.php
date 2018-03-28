@@ -457,6 +457,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection = $this->getConnection();
         $coaTable = $this->_getCustomOptionAggregateTable();
         $copTable = $this->_getCustomOptionPriceTable();
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $this->_prepareCustomOptionAggregateTable();
         $this->_prepareCustomOptionPriceTable();
@@ -464,6 +465,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
+        )->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.entity_id = i.entity_id',
+            []
         )->join(
             ['cw' => $this->getTable('store_website')],
             'cw.website_id = i.website_id',
@@ -478,7 +483,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             []
         )->join(
             ['o' => $this->getTable('catalog_product_option')],
-            'o.product_id = i.entity_id',
+            'o.product_id = e.' . $metadata->getLinkField(),
             ['option_id']
         )->join(
             ['ot' => $this->getTable('catalog_product_option_type_value')],
@@ -532,6 +537,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             ['i' => $this->_getDefaultFinalPriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.entity_id = i.entity_id',
+            []
+        )->join(
             ['cw' => $this->getTable('store_website')],
             'cw.website_id = i.website_id',
             []
@@ -545,7 +554,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             []
         )->join(
             ['o' => $this->getTable('catalog_product_option')],
-            'o.product_id = i.entity_id',
+            'o.product_id = e.' . $metadata->getLinkField(),
             ['option_id']
         )->join(
             ['opd' => $this->getTable('catalog_product_option_price')],
@@ -562,13 +571,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
         $minPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
         $priceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $minPriceRound);
-        $minPrice = $connection->getCheckSql("{$priceExpr} > 0 AND o.is_require > 1", $priceExpr, 0);
+        $minPrice = $connection->getCheckSql("{$priceExpr} > 0 AND o.is_require = 1", $priceExpr, 0);
 
         $maxPrice = $priceExpr;
 
         $tierPriceRound = new \Zend_Db_Expr("ROUND(i.base_tier * ({$optPriceValue} / 100), 4)");
         $tierPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $tierPriceRound);
-        $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require > 0", $tierPriceExpr, 0);
+        $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require = 1", $tierPriceExpr, 0);
         $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
 
         $select->columns(
