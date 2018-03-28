@@ -69,6 +69,7 @@ class ServiceMetadata
      * @param \Magento\Webapi\Model\ServiceMetadata $subject
      * @param array $result
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterGetServicesConfig(\Magento\Webapi\Model\ServiceMetadata $subject, array $result)
     {
@@ -154,6 +155,7 @@ class ServiceMetadata
      *
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function getSynchronousOnlyRoutesAsServiceMethods(
         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata

@@ -43,12 +43,10 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileResolver->expects($this->once())
             ->method('get')
-            ->with('webapi_async.xml', 'global')->willReturn(
-            [
+            ->with('webapi_async.xml', 'global')->willReturn([
                 file_get_contents(__DIR__ . '/_files/Reader/webapi_async_1.xml'),
                 file_get_contents(__DIR__ . '/_files/Reader/webapi_async_2.xml'),
-            ]
-        );
+            ]);
 
         $mergedConfiguration = include __DIR__ . '/_files/Reader/webapi_async.php';
         $readConfiguration = $this->reader->read();

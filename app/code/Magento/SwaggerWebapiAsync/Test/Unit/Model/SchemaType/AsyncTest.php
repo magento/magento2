@@ -40,7 +40,7 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getSchemaUrlPathProvider
      */
-    public function testGetSchemaUrlPath($store = null, $expected)
+    public function testGetSchemaUrlPath($expected, $store = null)
     {
         $this->assertEquals($expected, $this->async->getSchemaUrlPath($store));
     }
@@ -52,12 +52,12 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                null,
-                '/rest/all/async/schema?services=all'
+                '/rest/all/async/schema?services=all',
+                null
             ],
             [
-                'test',
-                '/rest/test/async/schema?services=all'
+                '/rest/test/async/schema?services=all',
+                'test'
             ]
         ];
     }

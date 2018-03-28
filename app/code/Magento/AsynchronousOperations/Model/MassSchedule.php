@@ -24,6 +24,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassSchedule
 {
@@ -90,6 +92,7 @@ class MassSchedule
      * @param MessageValidator $messageValidator
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,

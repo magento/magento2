@@ -93,7 +93,8 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function checkLogsExists($expectedLinesCount) {
+    public function checkLogsExists($expectedLinesCount)
+    {
         $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
         return $expectedLinesCount === $actualCount;
     }
