@@ -16,7 +16,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setStockData(['qty' => 100, 'is_in_stock' => 1])
+    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
     ->save();
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
@@ -35,6 +35,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setStockData(['qty' => 100, 'is_in_stock' => 1])
+    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
     ->setProductLinks([$productLink])
     ->save();

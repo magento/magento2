@@ -202,6 +202,8 @@
     <preference for="Magento\Framework\MessageQueue\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
+    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcher" />
+    <preference for="Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1522,6 +1524,11 @@
                 <item name="date" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DateDefinition</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MultiDimensionalIndexer\IndexNameResolver">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
     <virtualType name="\Magento\Framework\Setup\Patch\SchemaPatchReader" type="\Magento\Framework\Setup\Patch\PatchReader">
