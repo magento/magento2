@@ -10,9 +10,9 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
-1. Choose an attribute for configurable options or create it and set attribute properties to
-2. is_filterable = Filterable (with results)
-3. is_filterable_in_search = Yes
+ * 1. Choose an attribute for configurable options or create it and set attribute properties to
+ * 2. is_filterable = Filterable (with results)
+ * 3. is_filterable_in_search = Yes
  *
  * Steps:
  * 1. Log in to Admin.
