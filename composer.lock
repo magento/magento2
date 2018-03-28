@@ -5935,7 +5935,7 @@
             "name": "symfony/polyfill-php54",
             "version": "v1.7.0",
             "source": {
-                "type": "git",x
+                "type": "git",
                 "url": "https://github.com/symfony/polyfill-php54.git",
                 "reference": "84e2b616c197ef400c6d0556a0606cee7c9e21d5"
             },
