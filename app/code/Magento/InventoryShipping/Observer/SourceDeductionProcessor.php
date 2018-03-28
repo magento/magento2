@@ -49,6 +49,7 @@ class SourceDeductionProcessor implements ObserverInterface
      */
     private $getSkusByProductIds;
 
+
     /**
      * SourceDeductionProcessor constructor.
      * @param ReservationBuilderInterface $reservationBuilder
@@ -76,11 +77,18 @@ class SourceDeductionProcessor implements ObserverInterface
 
     /**
      * @param EventObserver $observer
-     * @return void
+     * @return SourceDeductionProcessor
      * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function execute(EventObserver $observer)
     {
+        //Need to rewrite this observer
+       // return $this;
+
+
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $observer->getEvent()->getShipment();
         if ($shipment->getOrigData('entity_id')) {
@@ -89,46 +97,48 @@ class SourceDeductionProcessor implements ObserverInterface
 
         $order = $shipment->getOrder();
 
-        // I'm not sure about websiteId
         $websiteId = $order->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
+        $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
+
+        $sourceItemToSave = [];
+        $reservationsToBuild = [];
 
         foreach ($shipment->getItems() as $item) {
-            $sources = $item->getSources();
-            if (!$sources) {
+            $qty = $item->getQty();
+
+            // TODO: Need to add logic for configurable/bundle/grouped product
+            // This functionality should work only with simple products
+            if (!$qty) {
                 continue;
             }
-            $sourceItemToSave = [];
-            $reservationsToBuild = [];
-            foreach ($sources as $source) {
-                $sourceCode = $source['sourceCode'];
-                $qty = $source['qtyToDeduct'];
-                $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
-                    [$item->getProductId()]
-                )[$item->getProductId()];
-                $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $itemSku);
-                //TODO: need to implement additional checks
-                // with backorder+when source disabled or product OutOfStock
-                if (($sourceItem->getQuantity() - $qty) >= 0) {
-                    $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
-                    $sourceItemToSave[] = $sourceItem;
-                    $reservationsToBuild[$itemSku] = ($reservationsToBuild[$itemSku] ?? 0) + $qty;
-                    //TODO: add data to history order_item_id|source_code|qty
-                } else {
-                    throw new LocalizedException(__('Negative quantity is not allowed.'));
-                }
-            }
+            $itemSku = $item->getSku() ?: $this->getSkusByProductIds->execute(
+                [$item->getProductId()]
+            )[$item->getProductId()];
+            $sourceItem = $this->getSourceItemBySourceCodeAndSku->execute($sourceCode, $itemSku);
 
-            $reservationToSave = [];
-            foreach ($reservationsToBuild as $sku => $reservationQty) {
-                $reservationToSave[] = $this->reservationBuilder
-                    ->setSku($sku)
-                    ->setQuantity($reservationQty)
-                    ->setStockId($stockId)
-                    ->build();
+            if (empty($sourceItem)) {
+                continue;
             }
-            $this->sourceItemsSave->execute($sourceItemToSave);
-            $this->appendReservations->execute($reservationToSave);
+            //TODO: need to implement additional checks
+            // when source disabled or product OutOfStock etc + manage stock
+            if (($sourceItem->getQuantity() - $qty) >= 0) {
+                $sourceItem->setQuantity($sourceItem->getQuantity() - $qty);
+                $sourceItemToSave[] = $sourceItem;
+                $reservationsToBuild[$itemSku] = ($reservationsToBuild[$itemSku] ?? 0) + $qty;
+            } else {
+                throw new LocalizedException(__('Negative quantity is not allowed.'));
+            }
         }
+        $reservationToSave = [];
+        foreach ($reservationsToBuild as $sku => $reservationQty) {
+            $reservationToSave[] = $this->reservationBuilder
+                ->setSku($sku)
+                ->setQuantity($reservationQty)
+                ->setStockId($stockId)
+                ->build();
+        }
+        $this->sourceItemsSave->execute($sourceItemToSave);
+        $this->appendReservations->execute($reservationToSave);
     }
 }

@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\InventoryShipping\Block\Adminhtml\SourceSelection\Items\DefaultRenderer $block */
+?>
+
+<?php $item = $block->getItem() ?>
+<tr class="data-row">
+    <td class="col-product">
+        <div class="data-grid-cell-content"><?= $block->getColumnHtml($item, 'name') ?></div
+    </td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($item, 'qty') ?></td>
+    <td class="col-qty">
+        <table class="data-grid">
+            <thead>
+                <tr>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Source Code')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Available Qty')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Qty to Deduct')) ?></th>
+                </tr>
+            </thead>
+            <tbody id="sources_<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>">
+            <?php foreach ($block->getSourcesForItem($item) as $sourceSelectionItem): ?>
+                <?php $orderItemId = $item->getOrderItemId(); ?>
+                <?php
+                // TEST SOLUTION
+                $block->registerSource($sourceSelectionItem->getSourceCode())
+                ?>
+                <tr>
+                    <td><?= $block->escapeHtml($sourceSelectionItem->getSourceCode()) ?></td>
+                    <td><?= $block->escapeHtml($sourceSelectionItem->getQtyAvailable()) ?></td>
+                    <td>
+                        <input class="input-text admin__control-text"
+                               type="text"
+                               source_code = "<?= /* @escapeNotVerified */ $sourceSelectionItem->getSourceCode() ?>"
+                               name="shipment[items][<?= /* @escapeNotVerified */ $orderItemId ?>]"
+                               value="<?= /* @escapeNotVerified */ $sourceSelectionItem->getQtyToDeduct() ?>"/>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </td>
+
+    <!-- TODO: Add validation for canShipPartiallyItem() -->
+    <?php if (!$block->canShipPartiallyItem()): ?>
+    <td class="col-ship last">
+        <input type="hidden" name="shipment[items][<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>]" value="0" />
+        <input type="checkbox" name="shipment[items][<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>]" value="<?= /* @escapeNotVerified */ $item->getQty() * 1 ?>" checked />
+    </td>
+    <?php endif; ?>
+</tr>
+<script>
+    require([
+        "Magento_InventoryShipping/js/storage"
+    ], function(storage) {
+        storage.setItem(<?= /* @escapeNotVerified */ $item->getOrderItemId() ?>, {
+            sku: '<?= $block->escapeHtml($item->getSku()) ?>',
+            qty: '<?= /* @escapeNotVerified */ $item->getQty() ?>'
+        });
+    });
+</script>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\InventoryShipping\Block\Adminhtml\SourceSelection\AlgorithmSelectionButton" name="source_selection_algorithm_selection_button" />
+            <block class="Magento\InventoryShipping\Block\Adminhtml\SourceSelection\View" name="source_selection_view_container">
+                <block class="Magento\InventoryShipping\Block\Adminhtml\SourceSelection\Form" name="form" template="sourceSelection/form.phtml">
+                    <block class="Magento\Shipping\Block\Adminhtml\Create\Items" name="order_items" template="Magento_InventoryShipping::sourceSelection/items.phtml">
+                        <block class="Magento\InventoryShipping\Block\Adminhtml\SourceSelection\Items\DefaultRenderer" name="default" as="default" template="sourceSelection/items/renderer/default.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_InventoryShipping::sourceSelection/items/column/qty.phtml" group="column"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,117 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\InventoryShipping\Block\Adminhtml\SourceSelection\Form $block */
+?>
+
+<form id="edit_form" method="post" action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>">
+    <?= $block->getBlockHtml('formkey') ?>
+    <div id="ship_items_container">
+        <?= $block->getItemsHtml() ?>
+    </div>
+    <div class="admin__field field">
+        <label class="label admin__field-label" for="sales_report_report_type">
+            <span><?= $block->escapeHtml(__('Select Source')) ?></span>
+        </label>
+        <div class="admin__field-control control">
+            <select id="sales_report_report_type" required="required" name="source_code" class="select admin__control-select">
+                <option value=""></option>
+                <?php foreach ($block->getSourcesList() as $sourceCode => $name): ?>
+                <option value="<?= /* @escapeNotVerified */ $sourceCode ?>"><?= /* @escapeNotVerified */ $name ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+</form>
+<script>
+require([
+    "jquery",
+    "mage/mage"
+], function($) {
+    $('#edit_form').mage('form').mage('validation');
+
+    $('#edit_form').submit(function() {
+        var sourceCode = $('[name=source_code]').val();
+        if (sourceCode) {
+            $.each($('input[source_code]'), function(index, field) {
+                if ($(field).attr('source_code') != sourceCode) {
+                    $(field).prop('disabled', true);
+                }
+            });
+        }
+    });
+
+});
+</script>
+
+<script>
+    require([
+        'jquery',
+        'mage/template',
+        'Magento_InventoryShipping/js/storage'
+    ], function ($, mageTemplate, storage) {
+
+        processAlgorithm = function(code) {
+            var requestData = storage.getRequestData();
+            if (requestData.length > 0) {
+                sendRequest(requestData, code);
+            }
+        };
+
+        sendRequest = function (requestData, code) {
+            var websiteId = <?= /* @escapeNotVerified */ $block->getWebsiteId() ?>;
+            $.ajax({
+                url: "<?= $block->escapeUrl($block->getUrl('inventoryshipping/Algorithm/GetSources')) ?>",
+                type: 'POST',
+                dataType: 'json',
+                showLoader: true,
+                data: {
+                    websiteId: websiteId,
+                    algorithmCode: code,
+                    requestData: requestData
+                },
+                context: this,
+                success: function (response) {
+                    processData(response);
+                }
+            });
+        };
+
+        processData = function (response) {
+            $.each(response, function(orderItemId, sources) {
+                $('#sources_'+orderItemId).empty();
+                $.each(sources, function(index, source) {
+                    source['index'] = index;
+                    source['orderItemId'] = orderItemId;
+                    addRow(source);
+                });
+            });
+        };
+
+        addRow = function (data) {
+            var template = mageTemplate('#source_row_template');
+            var newField = template({
+                data: data
+            });
+            $('#sources_'+data['orderItemId']).append(newField);
+        };
+    });
+</script>
+<script id="source_row_template" type="text/x-magento-template">
+    <tr>
+        <td><%- data.sourceCode %></td>
+        <td><%- data.qtyAvailable %></td>
+        <td>
+            <input class="input-text admin__control-text"
+                   type="text"
+                   source_code = "<%- data.sourceCode %>"
+                   name="shipment[items][<%- data.orderItemId %>]"
+                   value="<%- data.qtyToDeduct %>"/>
+        </td>
+    </tr>
+</script>

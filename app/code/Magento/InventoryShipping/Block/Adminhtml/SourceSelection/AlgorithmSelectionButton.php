@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryShipping\Block\Adminhtml\Shipment;
+namespace Magento\InventoryShipping\Block\Adminhtml\SourceSelection;
 
 use Magento\Backend\Block\Widget\Button\SplitButton;
 use Magento\Backend\Block\Widget\Container;
@@ -14,7 +14,7 @@ use Magento\InventorySourceSelectionApi\Api\GetSourceSelectionAlgorithmListInter
 use Magento\Framework\Registry;
 
 /**
- * Class AlgorithmSelectionButton | used ONLY for TEST.
+ * Class AlgorithmSelectionButton
  *
  * @api
  */
@@ -52,14 +52,15 @@ class AlgorithmSelectionButton extends Container
      */
     protected function _prepareLayout()
     {
-        if (!empty($this->_getAlgorithmsListOptions())) {
+        //TODO: Add priority algorithm as default
+        if (!empty($this->getAlgorithmsListOptions())) {
             $addButtonProps = [
                 'id' => 'algorithm_action_list',
                 'label' => __('Source Selection Algorithm'),
                 'class' => 'add',
                 'button_class' => '',
                 'class_name' => SplitButton::class,
-                'options' => $this->_getAlgorithmsListOptions(),
+                'options' => $this->getAlgorithmsListOptions(),
             ];
 
             $this->buttonList->add('algorithm_action_list', $addButtonProps);
@@ -72,7 +73,7 @@ class AlgorithmSelectionButton extends Container
      *
      * @return array
      */
-    protected function _getAlgorithmsListOptions()
+    protected function getAlgorithmsListOptions()
     {
         $algorithmsList = $this->getSourceSelectionAlgorithmList->execute();
         $splitButtonOptions = [];
@@ -83,18 +84,5 @@ class AlgorithmSelectionButton extends Container
             ];
         }
         return $splitButtonOptions;
-    }
-
-    /**
-     * Retrieve websiteId for current order
-     *
-     * @return int
-     */
-    public function getWebsiteId()
-    {
-        if ($shipment = $this->registry->registry('current_shipment')) {
-            return $shipment->getOrder()->getStore()->getWebsiteId();
-        }
-        return 1;
     }
 }
