@@ -9,7 +9,6 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
  * Data object converter
@@ -86,7 +85,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     /**
      * Convert associative array into proper data object.
      *
-     * @param array $data
+     * @param mixed $data
      * @param string $type
      * @return array|object
      */
@@ -95,13 +94,13 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
         if (is_array($data)) {
             $result = [];
             $arrayElementType = substr($type, 0, -2);
-            foreach ($data as $datum) {
+            foreach ($data as $index => $datum) {
                 if (is_object($datum)) {
                     $datum = $this->processDataObject(
                         $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
                     );
                 }
-                $result[] = $datum;
+                $result[$index] = $datum;
             }
             return $result;
         } elseif (is_object($data)) {
