@@ -104,7 +104,7 @@ class ApplyNameAttributeJoin
         $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::NAME)->getAttributeId();
         $connection = $this->resourceConnection->getConnection();
 
-        return $condition = implode(
+        return implode(
             [
                 $alias . '.entity_id = product.' . $linkField,
                 $connection->prepareSqlCondition($alias . '.store_id', $storeId),

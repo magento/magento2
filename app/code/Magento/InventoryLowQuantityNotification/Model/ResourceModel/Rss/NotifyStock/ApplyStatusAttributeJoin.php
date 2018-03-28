@@ -117,7 +117,7 @@ class ApplyStatusAttributeJoin
             ['in' => $this->productStatus->getVisibleStatusIds()]
         );
 
-        return $condition = implode(
+        return implode(
             [
                 $alias . '.entity_id = product.' . $linkField,
                 $statusVisibilityCondition,
