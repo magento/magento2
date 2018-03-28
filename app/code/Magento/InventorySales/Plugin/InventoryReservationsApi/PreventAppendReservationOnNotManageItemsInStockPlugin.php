@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Plugin\InventoryReservations;
+namespace Magento\InventorySales\Plugin\InventoryReservationsApi;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryConfigurationApi\Api\GetStockItemConfigurationInterface;
@@ -15,7 +15,7 @@ use Magento\InventoryReservationsApi\Api\Data\ReservationInterface;
 /**
  * Prevent append reservation if use_config_manage_stock is set to 0
  */
-class PreventAppendReservationOnUseConfigManageStockSetToZeroPlugin
+class PreventAppendReservationOnNotManageItemsInStockPlugin
 {
     /**
      * @var GetStockItemConfigurationInterface

@@ -34,7 +34,7 @@
         <plugin name="suggest_qty" type="Magento\InventorySales\Plugin\StockState\SuggestQtyPlugin"/>
     </type>
     <type name="Magento\InventoryReservationsApi\Api\AppendReservationsInterface">
-        <plugin name="prevent_append_reservarion_on_use_config_manage_stock_set_to_zero" type="Magento\InventorySales\Plugin\InventoryReservations\PreventAppendReservationOnUseConfigManageStockSetToZeroPlugin"/>
+        <plugin name="prevent_append_reservation_on_not_manage_items_in_stock" type="Magento\InventorySales\Plugin\InventoryReservationsApi\PreventAppendReservationOnNotManageItemsInStockPlugin"/>
     </type>
     <!-- Query interfaces -->
     <preference for="Magento\InventorySalesApi\Api\GetProductSalableQtyInterface" type="Magento\InventorySales\Model\GetProductSalableQty"/>
