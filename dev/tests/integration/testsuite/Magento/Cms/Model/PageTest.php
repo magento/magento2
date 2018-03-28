@@ -78,6 +78,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateTime()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/754');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Cms\Model\Page $page */
         $page = $objectManager->create(\Magento\Cms\Model\Page::class);
