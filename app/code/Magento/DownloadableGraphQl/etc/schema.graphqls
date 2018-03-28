@@ -1,19 +1,19 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-type DownloadableProduct implements ProductInterface, CustomizableProductInterface {
+type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
     downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about samples of this downloadable product.")
     downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about the links for this downloadable product")
     links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
     links_title: String @doc(description: "The heading above the list of downloadable products")
 }
 
-enum DownloadableFileTypeEnum {
+enum DownloadableFileTypeEnum @doc(description: "This enumeration specifies whether a link or sample is a file or URL") {
     FILE
     URL
 }
 
-type DownloadableProductLinks {
+type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
     id: Int @doc(description: "The unique ID for the link to the downloadable product")
     title: String @doc(description: "The display name of the link")
     sort_order: Int @doc(description: "A number indicating the sort order")
@@ -26,7 +26,7 @@ type DownloadableProductLinks {
     sample_url: String @doc(description: "The relative URL to the downloadable sample")
 }
 
-type DownloadableProductSamples {
+type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
     id: Int @doc(description: "The unique ID for the downloadable product sample")
     title: String @doc(description: "The display name of the sample")
     sort_order: Int @doc(description: "A number indicating the sort order")
