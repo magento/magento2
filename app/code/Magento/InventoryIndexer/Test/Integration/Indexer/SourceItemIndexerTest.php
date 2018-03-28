@@ -49,7 +49,6 @@ class SourceItemIndexerTest extends TestCase
      */
     private $searchCriteriaBuilder;
 
-
     protected function setUp()
     {
         $this->sourceItemIndexer = Bootstrap::getObjectManager()->get(SourceItemIndexer::class);
