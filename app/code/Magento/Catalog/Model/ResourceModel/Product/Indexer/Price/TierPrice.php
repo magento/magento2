@@ -72,6 +72,7 @@ class TierPrice extends AbstractDb
      */
     public function reindexEntity(array $entityIds = [])
     {
+        //separate by variations for increase performance
         $tierPriceVariations = [
             [true, true], //all websites; all customer groups
             [true, false], //all websites; specific customer group
@@ -96,16 +97,14 @@ class TierPrice extends AbstractDb
      */
     private function joinWebsites(Select $select, bool $isAllWebsites)
     {
+        $websiteTable = ['website' => $this->getTable('store_website')];
         if ($isAllWebsites) {
-            $select->joinCross(['sw' => $this->getTable('store_website')], [])
-                ->where('sw.website_id > ?', 0)
-                ->where('tp.website_id = ?', 0);
+            $select->joinCross($websiteTable, [])
+                ->where('website.website_id > ?', 0)
+                ->where('tier_price.website_id = ?', 0);
         } else {
-            $select->join(
-                ['sw' => $this->getTable('store_website')],
-                'sw.website_id = tp.website_id',
-                []
-            )->where('tp.website_id > 0');
+            $select->join($websiteTable, 'website.website_id = tier_price.website_id', [])
+                ->where('tier_price.website_id > 0');
         }
     }
 
@@ -119,16 +118,14 @@ class TierPrice extends AbstractDb
      */
     private function joinCustomerGroups(Select $select, bool $isAllCustomerGroups)
     {
+        $customerGroupTable = ['customer_group' => $this->getTable('customer_group')];
         if ($isAllCustomerGroups) {
-            $select->joinCross(['cg' => $this->getTable('customer_group')], [])
-                ->where('tp.all_groups = ?', 1)
-                ->where('tp.customer_group_id = ?', 0);
+            $select->joinCross($customerGroupTable, [])
+                ->where('tier_price.all_groups = ?', 1)
+                ->where('tier_price.customer_group_id = ?', 0);
         } else {
-            $select->join(
-                ['cg' => $this->getTable('customer_group')],
-                'cg.customer_group_id = tp.customer_group_id',
-                []
-            )->where('tp.all_groups = ?', 0);
+            $select->join($customerGroupTable, 'customer_group.customer_group_id = tier_price.customer_group_id', [])
+                ->where('tier_price.all_groups = ?', 0);
         }
     }
 
@@ -144,24 +141,28 @@ class TierPrice extends AbstractDb
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
         $priceAttribute = $this->attributeRepository->get('price');
         $select->joinLeft(
-            ['ep0' => $priceAttribute->getBackend()->getTable()],
-            'ep0.' . $linkField . ' = cpe.' . $linkField
-            . ' AND ep0.attribute_id = '.$priceAttribute->getAttributeId()
-            . ' AND ep0.store_id = 0',
+            ['entity_price_default' => $priceAttribute->getBackend()->getTable()],
+            'entity_price_default.' . $linkField . ' = entity.' . $linkField
+            . ' AND entity_price_default.attribute_id = ' . $priceAttribute->getAttributeId()
+            . ' AND entity_price_default.store_id = 0',
             []
         );
-        $priceValue = 'ep0.value';
+        $priceValue = 'entity_price_default.value';
 
         if (!$priceAttribute->isScopeGlobal()) {
-            $select->joinLeft(['sg' => $this->getTable('store_group')], 'sg.group_id = sw.default_group_id', [])
-                ->joinLeft(
-                    ['eps' => $priceAttribute->getBackend()->getTable()],
-                    'eps.' . $linkField . ' = cpe.' . $linkField
-                    . ' AND eps.attribute_id = '.$priceAttribute->getAttributeId()
-                    . ' AND eps.store_id = sg.default_store_id',
-                    []
-                );
-            $priceValue = $this->getConnection()->getIfNullSql('eps.value', 'ep0.value');
+            $select->joinLeft(
+                ['store_group' => $this->getTable('store_group')],
+                'store_group.group_id = website.default_group_id',
+                []
+            )->joinLeft(
+                ['entity_price_store' => $priceAttribute->getBackend()->getTable()],
+                'entity_price_store.' . $linkField . ' = entity.' . $linkField
+                . ' AND entity_price_store.attribute_id = ' . $priceAttribute->getAttributeId()
+                . ' AND entity_price_store.store_id = store_group.default_store_id',
+                []
+            );
+            $priceValue = $this->getConnection()
+                ->getIfNullSql('entity_price_store.value', 'entity_price_default.value');
         }
 
         return (string) $priceValue;
@@ -181,23 +182,23 @@ class TierPrice extends AbstractDb
         $linkField = $entityMetadata->getLinkField();
 
         $select = $this->getConnection()->select();
-        $select->from(['tp' => $this->tierPriceResourceModel->getMainTable()], [])
-            ->where('tp.qty = ?', 1);
+        $select->from(['tier_price' => $this->tierPriceResourceModel->getMainTable()], [])
+            ->where('tier_price.qty = ?', 1);
 
         $select->join(
-            ['cpe' => $this->getTable('catalog_product_entity')],
-            "cpe.{$linkField} = tp.{$linkField}",
+            ['entity' => $this->getTable('catalog_product_entity')],
+            "entity.{$linkField} = tier_price.{$linkField}",
             []
         );
         if (!empty($entityIds)) {
-            $select->where('cpe.entity_id IN (?)', $entityIds);
+            $select->where('entity.entity_id IN (?)', $entityIds);
         }
         $this->joinWebsites($select, $isAllWebsites);
         $this->joinCustomerGroups($select, $isAllCustomerGroups);
 
         $priceValue = $this->joinPrice($select, $linkField);
-        $tierPriceValue = 'tp.value';
-        $tierPricePercentageValue = 'tp.percentage_value';
+        $tierPriceValue = 'tier_price.value';
+        $tierPricePercentageValue = 'tier_price.percentage_value';
         $tierPriceValueExpr = $this->getConnection()->getCheckSql(
             $tierPriceValue,
             $tierPriceValue,
@@ -205,9 +206,9 @@ class TierPrice extends AbstractDb
         );
         $select->columns(
             [
-                'cpe.entity_id',
-                'cg.customer_group_id',
-                'sw.website_id',
+                'entity.entity_id',
+                'customer_group.customer_group_id',
+                'website.website_id',
                 'tier_price' => $tierPriceValueExpr,
             ]
         );
