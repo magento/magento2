@@ -199,12 +199,12 @@ type PriceAdjustment @doc(description: "The PricedAdjustment object defines the 
 enum PriceAdjustmentCodesEnum @doc(description: "Note: This enumeration contains values defined in modules other than the Catalog module.") {
 }
 
-enum PriceAdjustmentDescriptionEnum @doc(description: "This enumeration states whether a price adjustment is included or excluded. ") {
+enum PriceAdjustmentDescriptionEnum @doc(description: "This enumeration states whether a price adjustment is included or excluded.") {
     INCLUDED
     EXCLUDED
 }
 
-enum PriceTypeEnum @doc(description: "This enumeration the price type. ") {
+enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     FIXED
     PERCENT
     DYNAMIC
@@ -226,7 +226,7 @@ type ProductCategoryLinks @doc(description: "The ProductCategoryLinks object def
     category_id: String @doc(description: "The unique identifier for the category")
 }
 
-type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface. ") {
+type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
 }
 
 interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"ProductLinks contains information about linked products, including the link type and product type of each item.") {
@@ -237,7 +237,7 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     position: Int @doc(description: "The position within the list of product links")
 }
 
-type ProductTierPrices @doc(description: "The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group. ") {
+type ProductTierPrices @doc(description: "The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
     customer_group_id: String @doc(description: "The ID of the customer group")
     qty: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing")
     value: Float @doc(description: "The price of the fixed price item")
@@ -355,7 +355,7 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     image_size_y: Int @doc(description: "The maximum height of an image")
 }
 
-interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options. ") {
+interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
     title: String @doc(description: "The display name for this option")
     required: Boolean @doc(description: "Indicates whether the option is required")
     sort_order: Int @doc(description: "The order in which the option is displayed")
@@ -446,7 +446,7 @@ type ProductMediaGalleryEntriesVideoContent @doc(description: "ProductMediaGalle
     video_metadata: String @doc(description: "Optional data about the video")
 }
 
-input ProductSortInput  @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order ") {
+input ProductSortInput  @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order") {
     name: SortEnum @doc(description: "The product name. Customers use this name to identify the product.")
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
