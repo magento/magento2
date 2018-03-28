@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model\MessageQueue;
+namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;

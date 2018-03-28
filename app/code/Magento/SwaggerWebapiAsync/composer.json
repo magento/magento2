@@ -7,7 +7,6 @@
     "require": {
         "magento/framework": "100.3.*",
         "magento/module-swagger": "100.3.*",
-        "magento/module-webapi-async": "100.3.*",
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "suggest": {
