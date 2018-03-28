@@ -9,7 +9,6 @@ use Magento\Cron\Model\Schedule;
 use Magento\Cron\Observer\ProcessCronQueueObserver as ProcessCronQueueObserver;
 use Magento\Framework\App\State;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
-use Magento\Framework\Profiler\Driver\Standard\Stat;
 
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
@@ -217,15 +216,21 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         );
 
         $schedule = $this->createPartialMock(\Magento\Cron\Model\Schedule::class, ['getJobCode', '__wakeup']);
-        $schedule->expects($this->atLeastOnce())->method('getJobCode')->will($this->returnValue('not_existed_job_code'));
+        $schedule->expects($this->atLeastOnce())
+            ->method('getJobCode')
+            ->will($this->returnValue('not_existed_job_code'));
 
         $this->_collection->addItem($schedule);
 
         $scheduleMock = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
         )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->atLeastOnce())->method('getCollection')->will($this->returnValue($this->_collection));
-        $this->_scheduleFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($scheduleMock));
+        $scheduleMock->expects($this->atLeastOnce())
+            ->method('getCollection')
+            ->will($this->returnValue($this->_collection));
+        $this->_scheduleFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($scheduleMock));
 
         $this->_observer->execute($this->observer);
     }
@@ -268,7 +273,9 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
         $scheduleMock->expects($this->any())->method('getResource')->will($this->returnValue($this->scheduleResource));
-        $this->_scheduleFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($scheduleMock));
+        $this->_scheduleFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($scheduleMock));
 
         $this->_observer->execute($this->observer);
     }
@@ -602,6 +609,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(['test_group' => []])
         );
+        $this->_config->expects($this->at(2))->method('getJobs')->will($this->returnValue($jobConfig));
+        $this->_config->expects($this->at(3))->method('getJobs')->will($this->returnValue($jobConfig));
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_cache->expects(
             $this->at(0)
@@ -671,6 +680,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_config->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
         $this->_config->expects($this->at(1))->method('getJobs')->willReturn($jobs);
+        $this->_config->expects($this->at(2))->method('getJobs')->willReturn($jobs);
+        $this->_config->expects($this->at(3))->method('getJobs')->willReturn($jobs);
         $this->_request->expects($this->any())->method('getParam')->willReturn('default');
         $this->_cache->expects(
             $this->at(0)
@@ -747,7 +758,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_collection->addItem($schedule);
 
-        $this->_config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
+        $this->_config->expects($this->atLeastOnce())->method('getJobs')->will($this->returnValue($jobConfig));
 
         $this->_cache->expects($this->at(0))->method('load')->will($this->returnValue($this->time + 10000000));
         $this->_cache->expects($this->at(1))->method('load')->will($this->returnValue($this->time - 10000000));
@@ -798,7 +809,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->_cache->expects($this->at(2))->method('load')->will($this->returnValue($this->time + 10000000));
         $this->_scheduleFactory->expects($this->at(2))->method('create')->will($this->returnValue($scheduleMock));
 
-        $this->_config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
+        $this->_config->expects($this->atLeastOnce())->method('getJobs')->will($this->returnValue($jobConfig));
 
         $this->_scopeConfig->expects($this->any())->method('getValue')
             ->willReturnMap([
