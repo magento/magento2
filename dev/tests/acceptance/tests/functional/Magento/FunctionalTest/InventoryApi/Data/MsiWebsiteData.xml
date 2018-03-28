@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../../../../magento-pangolins/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="persistedStore" type="website">
+        <requiredEntity type="store">BasicMsiWebsite</requiredEntity>
+        <data key="store_action">add</data>
+        <data key="store_type">website</data>
+    </entity>
+    <entity name="BasicMsiWebsite" type="website">
+        <data key="name" unique="suffix">Basic MSI Website </data>
+        <data key="code" unique="suffix">basic_msi_website_</data>
+        <data key="sort_order">0</data>
+    </entity>
+</entities>

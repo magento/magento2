@@ -20,10 +20,10 @@
         </annotations>
 
         <before>
-            <createData entity="TestStock1" stepKey="createStock1"/>
-            <createData entity="TestStock2" stepKey="createStock2"/>
-            <createData entity="TestStock1" stepKey="createStock3"/>
-            <createData entity="TestStock2" stepKey="createStock4"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock2"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock3"/>
+            <createData entity="BasicMsiStock2" stepKey="createStock4"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{ManageStock.url}}" stepKey="amOnTheStocksListPage"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>

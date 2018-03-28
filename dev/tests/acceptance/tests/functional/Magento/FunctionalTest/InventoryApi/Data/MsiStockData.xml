@@ -12,10 +12,10 @@
         <data key="name" unique="suffix">Default Stock </data>
         <data key="websites">Main Website</data>
     </entity>
-    <entity name="TestStock1" type="stock">
-        <data key="name" unique="suffix">Test Stock 1 </data>
+    <entity name="BasicMsiStock1" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 1 </data>
     </entity>
-    <entity name="TestStock2" type="stock">
-        <data key="name" unique="suffix">Test Stock 2 </data>
+    <entity name="BasicMsiStock2" type="stock">
+        <data key="name" unique="suffix">Basic MSI Stock 2 </data>
     </entity>
 </entities>

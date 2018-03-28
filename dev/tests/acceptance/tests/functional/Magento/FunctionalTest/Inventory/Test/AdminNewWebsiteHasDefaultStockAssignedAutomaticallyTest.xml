@@ -28,8 +28,8 @@
         </after>
 
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAddNewWebsite"/>
-        <fillField selector="#website_name" userInput="{{BasicWebsite.name}}" stepKey="enterWebsiteName"/>
-        <fillField selector="#website_code" userInput="{{BasicWebsite.code}}" stepKey="enterWebsiteCode"/>
+        <fillField selector="#website_name" userInput="{{BasicMsiWebsite.name}}" stepKey="enterWebsiteName"/>
+        <fillField selector="#website_code" userInput="{{BasicMsiWebsite.code}}" stepKey="enterWebsiteCode"/>
         <click selector="#save" stepKey="clickOnSaveWebSite"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
@@ -39,6 +39,6 @@
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminManageSourcesGridFilterControls.dropDown}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicWebsite.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{BasicMsiWebsite.name}}" stepKey="seeTheNewWebsiteAssignedToDefaultSource"/>
     </test>
 </tests>

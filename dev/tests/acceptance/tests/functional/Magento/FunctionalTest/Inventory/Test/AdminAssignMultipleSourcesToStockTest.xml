@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <createData entity="TestStock1" stepKey="createStock1"/>
+            <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
             <createData entity="FullSource1" stepKey="createSource3"/>

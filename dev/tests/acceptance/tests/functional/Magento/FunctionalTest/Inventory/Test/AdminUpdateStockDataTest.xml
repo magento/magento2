@@ -30,17 +30,17 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickOnAdd"/>
 
-        <fillField userInput="{{TestStock1.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName1"/>
+        <fillField userInput="{{BasicMsiStock1.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName1"/>
         <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="openSaveDropDown"/>
 
-        <fillField userInput="{{TestStock2.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName2"/>
+        <fillField userInput="{{BasicMsiStock2.name}}" selector="{{AdminEditStockGeneralSection.name}}" stepKey="fillName2"/>
 
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword">
-            <argument name="keyword" value="TestStock2.name"/>
+            <argument name="keyword" value="BasicMsiStock2.name"/>
         </actionGroup>
 
-        <see userInput="{{TestStock2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
+        <see userInput="{{BasicMsiStock2.name}}" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
     </test>
 </tests>
