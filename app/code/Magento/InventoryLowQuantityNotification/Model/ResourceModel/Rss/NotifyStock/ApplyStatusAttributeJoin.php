@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -42,21 +43,29 @@ class ApplyStatusAttributeJoin
     private $storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param Status $productStatus
      * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Status $productStatus,
         ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool
     ) {
         $this->productStatus = $productStatus;
         $this->resourceConnection = $resourceConnection;
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -99,6 +108,8 @@ class ApplyStatusAttributeJoin
      */
     private function getConditionByAliasAndStoreId(int $storeId, string $alias): string
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::STATUS)->getAttributeId();
         $connection = $this->resourceConnection->getConnection();
         $statusVisibilityCondition = $connection->prepareSqlCondition(
@@ -108,7 +119,7 @@ class ApplyStatusAttributeJoin
 
         return $condition = implode(
             [
-                $alias . '.entity_id = product.entity_id',
+                $alias . '.entity_id = product.' . $linkField,
                 $statusVisibilityCondition,
                 $connection->prepareSqlCondition($alias . '.store_id', $storeId),
                 $connection->prepareSqlCondition($alias . '.attribute_id', $attributeId),

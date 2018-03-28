@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -36,18 +37,26 @@ class ApplyNameAttributeJoin
     private $storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -90,12 +99,14 @@ class ApplyNameAttributeJoin
      */
     private function getConditionByAliasAndStoreId(int $storeId, string $alias): string
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, ProductInterface::NAME)->getAttributeId();
         $connection = $this->resourceConnection->getConnection();
 
         return $condition = implode(
             [
-                $alias . '.entity_id = product.entity_id',
+                $alias . '.entity_id = product.' . $linkField,
                 $connection->prepareSqlCondition($alias . '.store_id', $storeId),
                 $connection->prepareSqlCondition($alias . '.attribute_id', $attributeId),
             ],
