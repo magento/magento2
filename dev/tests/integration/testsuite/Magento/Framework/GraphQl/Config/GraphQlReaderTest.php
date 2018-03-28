@@ -63,17 +63,13 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\GraphQl\Config\Config::class,
             ['data' => $data]
         );
-        $graphQlSchemaProvider = $this->objectManager->create(
-            \Magento\Framework\GraphQl\SchemaProvider::class,
-            ['config' =>$this->configModel]
+        $outputMapper = $this->objectManager->create(
+            \Magento\Framework\GraphQl\Type\Output\OutputMapper::class,
+            ['config' => $this->configModel]
         );
-        $typeGenerator = $this->objectManager->create(
-            \Magento\GraphQl\Model\Type\Generator::class,
-            ['schemaProvider' => $graphQlSchemaProvider]
-    );
         $schemaGenerator = $this->objectManager->create(
             SchemaGenerator::class,
-            ['typeGenerator' => $typeGenerator]
+            ['outputMapper' => $outputMapper]
         );
         $this->graphQlController = $this->objectManager->create(
              GraphQl::class,
@@ -183,11 +179,17 @@ QUERY;
         $request->setHeaders($headers);
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $expectedOutput = require __DIR__ . '/../_files/schema_with_description_sdl.php';
+        $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
+
         $schemaResponseFields = $output['data']['__schema']['types'];
+        $schemaResponseFieldsFirstHalf = array_slice($schemaResponseFields,0,25);
+        $schemaResponseFieldsSecondHalf = array_slice($schemaResponseFields, -21, 21);
+        $mergedSchemaResponseFields = array_merge($schemaResponseFieldsFirstHalf, $schemaResponseFieldsSecondHalf);
+
         foreach ($expectedOutput as $searchTerm) {
+
             $this->assertTrue(
-                (in_array($searchTerm, $schemaResponseFields)),
+                (in_array($searchTerm, $mergedSchemaResponseFields)),
                 'Missing type in the response'
             );
         }
@@ -207,6 +209,14 @@ QUERY;
             ),
             $expectedOutput
         )
+        );
+        $this->assertTrue(array_key_exists(
+            array_search(
+                'Comment for SearchResultPageInfo',
+                array_column($expectedOutput, 'description')
+                ),
+            $expectedOutput
+            )
         );
     }
 }
