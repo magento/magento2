@@ -64,7 +64,7 @@ class Gallery
             $result[] = [
                 'mediaType' => $image->getMediaType(),
                 'videoUrl' => $image->getVideoUrl(),
-				'video' => $image->getVideoUrl(),
+                'video' => $image->getVideoUrl(),
                 'isBase' => $product->getImage() == $image->getFile(),
             ];
         }
