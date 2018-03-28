@@ -1623,7 +1623,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addFilterByRequiredOptions()
     {
-        $this->addAttributeToFilter('required_options', [['neq' => 1], ['null' => true]], 'left');
+        $this->addAttributeToFilter('required_options', [['neq' => 1]], 'left');
         return $this;
     }
 
@@ -2218,6 +2218,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addMediaGalleryData()
     {
@@ -2229,34 +2230,36 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $attribute = $this->getAttribute('media_gallery');
-        $select = $this->getMediaGalleryResource()->createBatchBaseSelect(
-            $this->getStoreId(),
-            $attribute->getAttributeId()
-        );
+        $items = $this->getItems();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
+
+        $select = $this->getMediaGalleryResource()
+            ->createBatchBaseSelect(
+                $this->getStoreId(),
+                $this->getAttribute('media_gallery')->getAttributeId()
+            )->reset(
+                Select::ORDER // we don't care what order is in current scenario
+            )->where(
+                'entity.' . $linkField . ' IN (?)',
+                array_map(
+                    function ($item) use ($linkField) {
+                        return (int) $item->getOrigData($linkField);
+                    },
+                    $items
+                )
+            );
 
         $mediaGalleries = [];
-        $linkField = $this->getProductEntityMetadata()->getLinkField();
-        $items = $this->getItems();
-
-        $select->where(
-            'entity.' . $linkField . ' IN (?)',
-            array_map(
-                function ($item) use ($linkField) {
-                    return $item->getData($linkField);
-                },
-                $items
-            )
-        );
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
         foreach ($items as $item) {
-            $mediaEntries = isset($mediaGalleries[$item->getData($linkField)]) ?
-                $mediaGalleries[$item->getData($linkField)] : [];
-            $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
+            $this->getGalleryReadHandler()
+                ->addMediaDataToProduct(
+                    $item,
+                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
+                );
         }
 
         $this->setFlag('media_gallery_added', true);

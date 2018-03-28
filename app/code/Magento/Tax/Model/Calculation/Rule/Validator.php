@@ -6,7 +6,6 @@
 
 namespace Magento\Tax\Model\Calculation\Rule;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
