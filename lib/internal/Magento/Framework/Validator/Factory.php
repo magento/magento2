@@ -58,8 +58,7 @@ class Factory
 
     /**
      * Initialize dependencies
-     * 
-     * Factory constructor.
+     *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FrontendInterface $cache
