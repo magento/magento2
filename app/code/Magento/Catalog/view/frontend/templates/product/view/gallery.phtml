@@ -12,7 +12,7 @@
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
+<div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder" style="min-height: <?= /* @escapeNotVerified */ $block->getImageAttribute('product_page_image_medium', 'height') ?>">
     <div data-role="loader" class="loading-mask">
         <div class="loader">
             <img src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>"
