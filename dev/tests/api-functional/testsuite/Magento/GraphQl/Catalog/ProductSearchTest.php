@@ -6,6 +6,8 @@
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -446,6 +448,51 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     */
+    public function testFilteringForProductInMultipleCategories()
+    {
+        $productSku = 'simple333';
+        $query
+            = <<<QUERY
+{
+   products(filter:{sku:{eq:"{$productSku}"}})
+ {
+   items{
+     id
+     sku
+     name
+     attribute_set_id
+     category_ids
+   }
+ }
+}
+
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get('simple333');
+        $categoryIds  = $product->getCategoryIds();
+        foreach ($categoryIds as $index => $value) {
+            $categoryIds[$index] = (int)$value;
+        }
+        $this->assertNotEmpty($response['products']['items'][0]['category_ids'], "Category_ids must not be empty");
+        $this->assertNotNull($response['products']['items'][0]['category_ids'], "categoy_ids must not be null");
+        $this->assertEquals($categoryIds, $response['products']['items'][0]['category_ids']);
+        $assertionMap = [
+
+            ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'sku', 'expected_value' => $product->getSku()],
+            ['response_field' => 'name', 'expected_value' => $product->getName()],
+            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()]
+         ];
+        $this->assertResponseFields($response['products']['items'][0], $assertionMap);
+    }
+
+    /**
      * Sorting by price in the DESC order from the filtered items with default pageSize
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -517,6 +564,52 @@ QUERY;
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(20, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
+    }
+
+    /**
+    * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+    */
+    public function testProductQueryUsingFromAndToFilterInput(){
+        $query
+            = <<<QUERY
+{
+  products(filter: { price:{from:"5" to:"20"} }) {
+    total_count
+    items{
+     	  attribute_set_id
+     	  sku
+      	  name
+      price{
+        minimalPrice{
+          amount{
+            value
+            currency
+          }
+        }
+         maximalPrice{
+          amount{
+            value
+            currency
+          }
+        }
+      }
+      type_id
+      ...on PhysicalProductInterface{
+        weight
+      }
+     }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple1');
+        $product2 = $productRepository->get('simple2');
+        $filteredProducts = [$product1, $product2];
+        $this->assertProductItemsWithMaximalAndMinimalPriceCheck($filteredProducts, $response);
     }
 
     /**
@@ -694,6 +787,38 @@ QUERY;
                      'minimalPrice' => [
                          'amount' => [
                              'value' => $filteredProducts[$itemIndex]->getFinalPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ]
+                 ],
+                 'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
+                 'weight' => $filteredProducts[$itemIndex]->getWeight()
+                ]
+            );
+        }
+    }
+
+    private function assertProductItemsWithMaximalAndMinimalPriceCheck(array $filteredProducts, array $actualResponse)
+    {
+        $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
+
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
+                 'sku' => $filteredProducts[$itemIndex]->getSku(),
+                 'name' => $filteredProducts[$itemIndex]->getName(),
+                 'price' => [
+                     'minimalPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                             'currency' => 'USD'
+                         ]
+                     ],
+                     'maximalPrice' => [
+                         'amount' => [
+                             'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                              'currency' => 'USD'
                          ]
                      ]

@@ -37,10 +37,10 @@ class Operator
     private $value;
 
     /**
-     * @param string $value
+     * @param string|null $value
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
      */
-    public function __construct($value = self::AND)
+    public function __construct(string $value = null)
     {
         if (!$value) {
             $value = self::AND;

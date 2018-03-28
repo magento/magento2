@@ -7,6 +7,9 @@ declare(strict_types = 1);
 
 namespace Magento\Framework\GraphQl;
 
+use GraphQL\Validator\DocumentValidator;
+use GraphQL\Validator\Rules\DisableIntrospection;
+use GraphQL\Validator\Rules\QueryDepth;
 use Magento\Framework\GraphQl\Type\Schema;
 
 /**
@@ -46,6 +49,10 @@ class QueryProcessor
         $variableValues = null,
         $operationName = null
     ) {
+        if (!$this->exceptionFormatter->shouldShowDetail()) {
+            DocumentValidator::addRule(new QueryDepth(10));
+            DocumentValidator::addRule(new DisableIntrospection());
+        }
         return \GraphQL\GraphQL::executeQuery(
             $schema,
             $source,

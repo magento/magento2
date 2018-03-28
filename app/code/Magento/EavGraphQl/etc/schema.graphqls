@@ -1,0 +1,21 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
+}
+
+type CustomAttributeMetadata {
+    items: [Attribute] @doc(description: "An array of attributes")
+}
+
+type Attribute {
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
+    attribute_type: String @doc(description: "The data type of the attribute")
+}
+
+input AttributeInput {
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    entity_type: String @doc(description: "The type of entity that defines the attribute")
+}

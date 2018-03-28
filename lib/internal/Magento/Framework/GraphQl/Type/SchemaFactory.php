@@ -18,7 +18,7 @@ class SchemaFactory
      * @param array $config
      * @return Schema
      */
-    public function create($config) : Schema
+    public function create(array $config) : Schema
     {
         return new Schema($config);
     }

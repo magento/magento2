@@ -144,20 +144,9 @@ class Collection
             $childCollection->setProductFilter($product);
         }
 
-        $childIds = [];
-        foreach ($childCollection->getItems() as $childProduct) {
-            $childIds[] = (int)$childProduct->getData($linkField);
-        }
-
-        $this->searchCriteriaBuilder->addFilter($linkField, $childIds, 'in');
-        $childProducts = $this->productDataProvider->getList(
-            $this->searchCriteriaBuilder->create(),
-            $this->attributeCodes
-        );
-
         /** @var Product $childProduct */
-        foreach ($childProducts->getItems() as $childProduct) {
-            $formattedChild = ['model' => $childProduct];
+        foreach ($childCollection->getItems() as $childProduct) {
+            $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
             $parentId = (int)$childProduct->getParentId();
             if (!isset($this->childrenMap[$parentId])) {
                 $this->childrenMap[$parentId] = [];

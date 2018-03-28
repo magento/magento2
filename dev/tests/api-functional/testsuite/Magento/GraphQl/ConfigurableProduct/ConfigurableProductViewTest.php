@@ -8,6 +8,9 @@ namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -222,11 +225,28 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
+        /** @var \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory */
+        $priceInfoFactory = ObjectManager::getInstance()->get(\Magento\Framework\Pricing\PriceInfo\Factory::class);
+        $priceInfo = $priceInfoFactory->create($product);
+        /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
+        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
+        $minimalPriceAmount =  $finalPrice->getMinimalPrice();
+        $maximalPriceAmount =  $finalPrice->getMaximalPrice();
+        $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
-            ['response_field' => 'id', 'expected_value' => $product->getId()],
+            [
+                'response_field' => 'id',
+                'expected_value' => $product->getData(
+                    $metadataPool->getMetadata(
+                        ProductInterface::class
+                    )->getLinkField()
+                )
+            ],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
@@ -237,21 +257,21 @@ QUERY;
                 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
-                            'value' => $product->getFinalPrice(),
+                            'value' => $minimalPriceAmount->getValue(),
                             'currency' => 'USD'
                         ],
                         'adjustments' => []
                     ],
                     'regularPrice' => [
                         'amount' => [
-                            'value' => $product->getFinalPrice(),
+                            'value' => $maximalPriceAmount->getValue(),
                             'currency' => 'USD'
                         ],
                         'adjustments' => []
                     ],
                     'maximalPrice' => [
                         'amount' => [
-                            'value' => $product->getFinalPrice(),
+                            'value' => $regularPriceAmount->getValue(),
                             'currency' => 'USD'
                         ],
                         'adjustments' => []
@@ -282,7 +302,7 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
-            $indexValue = $variantArray['product']['id'];
+            $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
             $this->assertTrue(
                 isset($variantArray['product']['category_ids']),
@@ -294,7 +314,8 @@ QUERY;
             );
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $childProduct */
-            $childProduct = $productRepository->getById($indexValue);
+            $childProduct = $productRepository->get($indexValue);
+            var_dump($childProduct->getSku());
 
             /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
             $links = $childProduct->getExtensionAttributes()->getCategoryLinks();

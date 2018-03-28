@@ -116,7 +116,7 @@ class Collection
             $formattedLink = [
                 'price' => $link->getSelectionPriceValue(),
                 'position' => $link->getPosition(),
-                'id' => $link->getId(),
+                'id' => $link->getSelectionId(),
                 'qty' => (int)$link->getSelectionQty(),
                 'is_default' => (bool)$link->getIsDefault(),
                 'price_type' => $this->enumLookup->getEnumValueFromField(

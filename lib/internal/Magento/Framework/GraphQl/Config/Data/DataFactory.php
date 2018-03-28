@@ -50,8 +50,9 @@ class DataFactory
                 'type' => $fieldData['type'],
                 'required' => isset($fieldData['required']) ? $fieldData['required'] : false,
                 'isList' => isset($fieldData['itemType']),
-                'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : "",
-                'description' => isset($fieldData['description']) ? $fieldData['description'] : "",
+                'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
+                'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
+                'description' => isset($fieldData['description']) ? $fieldData['description'] : '',
                 'arguments' => $arguments
             ]
         );
@@ -74,12 +75,13 @@ class DataFactory
             [
                 'name' => $argumentData['name'],
                 'type' => isset($argumentData['itemType']) ? $argumentData['itemType'] : $argumentData['type'],
-                'baseType' => isset($argumentData['baseType']) ? $argumentData['baseType'] : "",
-                'description' => isset($argumentData['description']) ? $argumentData['description'] : "",
+                'baseType' => isset($argumentData['baseType']) ? $argumentData['baseType'] : '',
+                'description' => isset($argumentData['description']) ? $argumentData['description'] : '',
                 'required' => isset($argumentData['required']) ? $argumentData['required'] : false,
                 'isList' => isset($argumentData['itemType']),
+                'itemType' => isset($argumentData['itemType']) ? $argumentData['itemType'] : '',
                 'itemsRequired' => isset($argumentData['itemsRequired']) ? $argumentData['itemsRequired'] : false,
-                'default' => isset($argumentData['default']) ? $argumentData['default'] : null
+                'defaultType' => isset($argumentData['defaultType']) ? $argumentData['defaultType'] : null
             ]
         );
     }
@@ -104,7 +106,7 @@ class DataFactory
                 'name' => $typeData['name'],
                 'fields' => $fields,
                 'interfaces' => isset($typeData['implements']) ? $typeData['implements'] : [],
-                'description' => isset($typeData['description']) ? $typeData['description'] : ""
+                'description' => isset($typeData['description']) ? $typeData['description'] : ''
             ]
         );
     }
@@ -130,7 +132,7 @@ class DataFactory
                 'name' => $interfaceData['name'],
                 'typeResolver' => $interfaceData['typeResolver'],
                 'fields' => $fields,
-                'description' => isset($interfaceData['description']) ? $interfaceData['description'] : ""
+                'description' => isset($interfaceData['description']) ? $interfaceData['description'] : ''
             ]
         );
     }
@@ -140,15 +142,17 @@ class DataFactory
      *
      * @param string $name
      * @param string $value
+     * @param string $description
      * @return Value
      */
-    public function createValue(string $name, string $value): Value
+    public function createValue(string $name, string $value, string $description = ''): Value
     {
         return $this->objectManager->create(
             Value::class,
             [
                 'name' => $name,
-                'value' => $value
+                'value' => $value,
+                'description' => $description
             ]
         );
     }
@@ -160,15 +164,17 @@ class DataFactory
      *
      * @param string $name
      * @param array $values
+     * @param string $description
      * @return Enum
      */
-    public function createEnum(string $name, array $values): Enum
+    public function createEnum(string $name, array $values, string $description = ''): Enum
     {
         return $this->objectManager->create(
             Enum::class,
             [
                 'name' => $name,
-                'values' => $values
+                'values' => $values,
+                'description' => $description
             ]
         );
     }

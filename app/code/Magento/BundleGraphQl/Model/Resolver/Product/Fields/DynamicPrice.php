@@ -45,7 +45,7 @@ class DynamicPrice implements ResolverInterface
     ): ?Value {
         $result = null;
         if ($value['type_id'] === Bundle::TYPE_CODE) {
-            $result = isset($value['price_type']) ? $value['price_type'] : null;
+            $result = isset($value['price_type']) ? !$value['price_type'] : null;
         }
 
         return $this->valueFactory->create(

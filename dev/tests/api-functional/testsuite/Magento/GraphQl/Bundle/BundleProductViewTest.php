@@ -6,9 +6,11 @@
 
 namespace Magento\GraphQl\Bundle;
 
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -16,6 +18,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
+
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      */
@@ -77,7 +80,12 @@ QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
+        $bundleProduct->setId(
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
@@ -126,8 +134,9 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle_product_items' must not be empty"
+            "Precondition failed: 'bundle product items' must not be empty"
         );
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         /** @var OptionList $optionList */
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($product);
@@ -137,6 +146,10 @@ QUERY;
         $childProductSku = $bundleProductLink->getSku();
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct = $productRepository->get($childProductSku);
+        /** @var MetadataPool $metadataPool */
+        $childProduct->setId(
+            $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
             $actualResponse['items'][0],
@@ -185,6 +198,11 @@ QUERY;
                 ? $assertionData['expected_value']
                 : $assertionData;
             $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
+            if ($responseField == 'id' && $expectedValue == null) {
+                var_dump($expectedValue);
+                var_dump($assertionData);
+                var_dump($assertionMap);
+            }
             $this->assertNotNull(
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"

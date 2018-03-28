@@ -1,0 +1,15 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type EntityUrl {
+    id: Int @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
+    canonical_url: String @doc(description: "The internal relative URL. If the specified  url is a redirect, the query returns the redirected URL, not the original.")
+    type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
+}
+
+type Query {
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite")
+}
+
+enum UrlRewriteEntityTypeEnum {
+}
