@@ -14,7 +14,6 @@
             <argument name="product"/>
         </arguments>
         <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
-        <!--<seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>-->
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
