@@ -26,6 +26,19 @@ class SchemaRequestProcessorTest extends AbstractController
     }
 
     /**
+     * Response getter
+     *
+     * @return \Magento\Framework\App\ResponseInterface
+     */
+    public function getResponse()
+    {
+        if (!$this->_response) {
+            $this->_response = $this->_objectManager->get(\Magento\Framework\Webapi\Rest\Response::class);
+        }
+        return $this->_response;
+    }
+
+    /**
      * @return array
      */
     public function schemaRequestProvider()
