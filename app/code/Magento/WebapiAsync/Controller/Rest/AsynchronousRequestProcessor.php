@@ -11,7 +11,7 @@ use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\WebapiAsync\Controller\Rest\Async\InputParamsResolver;
 use Magento\AsynchronousOperations\Model\MassSchedule;
-use Magento\WebapiAsync\Model\ConfigInterface as WebApiAsyncConfig;
+use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
@@ -36,7 +36,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     private $asyncBulkPublisher;
 
     /**
-     * @var \Magento\WebapiAsync\Model\ConfigInterface
+     * @var WebApiAsyncConfig
      */
     private $webapiAsyncConfig;
 

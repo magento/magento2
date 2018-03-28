@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\WebapiAsync\Model;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\AsynchronousOperations\Model\MassConsumer;
 
 /**
  * Class for accessing to Webapi_Async configuration.

@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 use Magento\Framework\MessageQueue\Bulk\ExchangeRepository;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
-use Magento\WebapiAsync\Model\ConfigInterface as AsyncConfig;
+use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\MessageIdGeneratorInterface;
 

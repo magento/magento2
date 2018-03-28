@@ -34,13 +34,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if (!$this->canConvertXmlNode($service)) {
                 continue;
             }
-
             $serviceClass = $this->getServiceClass($service);
             $serviceMethod = $this->getServiceMethod($service);
 
             // Define the service method's key if this hasn't yet been defined
             $this->initServiceMethodsKey($result, $serviceClass, $serviceMethod);
-
             $this->mergeSynchronousInvocationMethodsData($service, $result, $serviceClass, $serviceMethod);
         }
 
@@ -145,7 +143,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMElement $synchronousInvocationOnlyNode
      * @return bool|mixed
      */
-    private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode)
+    private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode = null)
     {
         if ($synchronousInvocationOnlyNode === null) {
             return false;

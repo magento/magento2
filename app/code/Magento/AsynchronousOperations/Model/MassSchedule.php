@@ -128,7 +128,7 @@ class MassSchedule
      */
     public function publishMass($topicName, array $entitiesArray, $groupId = null, $userId = null)
     {
-        $bulkDescription = __('Topic %s', $topicName);
+        $bulkDescription = __('Topic %1', $topicName);
 
         if ($groupId == null) {
             $groupId = $this->identityService->generateId();

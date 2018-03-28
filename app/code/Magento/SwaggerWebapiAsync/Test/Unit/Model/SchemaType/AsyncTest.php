@@ -25,7 +25,7 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\SwaggerWebapi\Model\SchemaType\Async::getCode()
+     * @covers \Magento\SwaggerWebapiAsync\Model\SchemaType\Async::getCode()
      */
     public function testGetCode()
     {
@@ -33,7 +33,7 @@ class AsyncTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\SwaggerWebapi\Model\SchemaType\Async::getSchemaUrlPathProvider
+     * @covers \Magento\SwaggerWebapiAsync\Model\SchemaType\Async::getSchemaUrlPathProvider
      *
      * @param null|string $store
      * @param $expected
