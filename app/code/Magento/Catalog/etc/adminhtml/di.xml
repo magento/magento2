@@ -205,4 +205,11 @@
             <argument name="path" xsi:type="string">web/default_layouts/default_category_layout</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Ui\Model\UrlInput\LinksConfigProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Ui\Component\UrlInput\Product</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

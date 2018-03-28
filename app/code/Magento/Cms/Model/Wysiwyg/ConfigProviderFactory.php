@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Framework\Data\Wysiwyg\ConfigProviderInterface as WysiwygConfigInterface;
+
 /**
  * Class ConfigProviderFactory to create config provider object by class name
  */
@@ -36,20 +38,8 @@ class ConfigProviderFactory
      * @return \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      * @throws \InvalidArgumentException
      */
-    public function create($instance, array $arguments = [])
+    public function create(string $instance, array $arguments = []): WysiwygConfigInterface
     {
-        if (!is_subclass_of(
-            $instance,
-            \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface::class
-        )
-        ) {
-            throw new \InvalidArgumentException(
-                $instance .
-                ' does not implement ' .
-                \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface::class
-            );
-        }
-
         return $this->objectManager->create($instance, $arguments);
     }
 }

@@ -26,4 +26,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Search">
+        <arguments>
+            <argument name="filterStrategies" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
