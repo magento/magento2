@@ -27,7 +27,7 @@
             <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
         </before>
         <after>
-            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
@@ -56,7 +56,7 @@
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
-            <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="SimpleMsiProduct.sku"/>
         </actionGroup>
 

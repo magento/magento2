@@ -37,7 +37,7 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults1">
-            <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
         <click selector="{{AdminGridRow.editByValue($$simpleProduct1.product[name]$$)}}" stepKey="clickOnTheCheckboxForSource2"/>
@@ -77,7 +77,7 @@
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
 
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults4">
-            <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$simpleProduct1.product[sku]$$"/>
         </actionGroup>
 

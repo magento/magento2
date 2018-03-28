@@ -29,7 +29,7 @@
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSearchResults">
-                <argument name="selector" value="AdminProductGridFilterControls.sku"/>
+                <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
                 <argument name="value" value="SimpleProduct.sku"/>
             </actionGroup>
 
@@ -37,7 +37,7 @@
             <waitForPageLoad stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
         </after>

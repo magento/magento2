@@ -25,7 +25,7 @@
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         </before>
         <after>
-            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickOnColumns"/>

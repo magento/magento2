@@ -25,14 +25,14 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="LogoutOfAdmin" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{ManageSources.url}}" stepKey="amOnTheSourcesListPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
-        <actionGroup ref="AdminGridSearchByKeyword" stepKey="searchByKeyword">
-            <argument name="value" value="$$createSource2.source[name]$$"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchByKeyword">
+            <argument name="keyword" value="$$createSource2.source[name]$$"/>
         </actionGroup>
 
         <see userInput="$$createSource2.source[source_code]$$" selector="{{AdminGridRow.rowOne}}" stepKey="seeCodeInRow1"/>
