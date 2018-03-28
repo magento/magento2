@@ -963,6 +963,12 @@ define([
                 return moment.utc(value, params.dateFormat).unix() <= maxValue;
             },
             $.mage.__('The date is not within the specified range.')
+        ],
+        'blacklist-url': [
+            function (value, param) {
+                return new RegExp(param).test(value);
+            },
+            $.mage.__('This link is not allowed.')
         ]
     }, function (data) {
         return {
