@@ -13,7 +13,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Webapi\Model\Config\Converter;
 
-class Config implements ConfigInterface
+class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
 {
     /**
      * @var \Magento\Webapi\Model\Cache\Type\Webapi
