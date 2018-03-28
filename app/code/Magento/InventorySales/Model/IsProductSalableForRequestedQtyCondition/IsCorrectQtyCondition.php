@@ -108,7 +108,10 @@ class IsCorrectQtyCondition implements IsProductSalableForRequestedQtyInterface
         if ($this->isQuantityIncrementCheckFailed($stockItemConfiguration, $requestedQty)) {
             return $this->createErrorResult(
                 'is_correct_qty-qty_increment',
-                __('The requested qty is not a valid increment')
+                __(
+                    'You can buy this product only in quantities of %1 at a time.',
+                    $stockItemConfiguration->getQtyIncrements()
+                )
             );
         }
 

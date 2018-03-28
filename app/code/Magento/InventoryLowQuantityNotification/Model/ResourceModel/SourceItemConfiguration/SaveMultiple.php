@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
@@ -42,7 +41,7 @@ class SaveMultiple
         }
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection
-            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+            ->getTableName('inventory_low_stock_notification_configuration');
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemConfigurationInterface::SOURCE_CODE,

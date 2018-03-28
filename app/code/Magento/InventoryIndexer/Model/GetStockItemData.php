@@ -58,7 +58,11 @@ class GetStockItemData implements GetStockItemDataInterface
             ->where(IndexStructure::SKU . ' = ?', $sku);
 
         try {
-            return $connection->fetchRow($select) ?: null;
+            if ($connection->isTableExists($stockItemTableName)) {
+                return $connection->fetchRow($select) ?: null;
+            }
+
+            return null;
         } catch (\Exception $e) {
             throw new LocalizedException(__(
                 'Could not receive Stock Item data'

@@ -62,7 +62,7 @@ class GetQuantityInformationPerSource
 
             $sourceItemsInformation[] = [
                 SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
-                SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
+                'quantity_per_source' => $sourceItem->getQuantity(),
                 'source' => $source->getName(),
             ];
         }

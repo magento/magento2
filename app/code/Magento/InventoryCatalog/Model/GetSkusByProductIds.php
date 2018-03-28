@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
+use Magento\Framework\Exception\InputException;
 
 /**
  * @inheritdoc
@@ -34,11 +35,19 @@ class GetSkusByProductIds implements GetSkusByProductIdsInterface
      */
     public function execute(array $productIds): array
     {
-        $productsSku = array_column(
+        $skuByIds = array_column(
             $this->productResource->getProductsSku($productIds),
             ProductInterface::SKU,
             'entity_id'
         );
-        return $productsSku;
+        $notFoundedIds = array_diff($productIds, array_keys($skuByIds));
+
+        if (!empty($notFoundedIds)) {
+            throw new InputException(
+                __('Following products with requested ids were not found: %1', implode($notFoundedIds, ', '))
+            );
+        }
+
+        return $skuByIds;
     }
 }
