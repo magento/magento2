@@ -17,7 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory as BulkStatusShortFactory;
 use Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory as BulkStatusDetailedFactory;
-use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterfaceFactory;
 use Magento\AsynchronousOperations\Api\BulkStatusInterface;
 
 /**
@@ -62,7 +61,7 @@ class BulkStatus implements BulkStatusInterface
     private $bulkDetailedFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\BulkStatus\ShortInterfaceFactory
+     * @var \Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory
      */
     private $bulkShortFactory;
 
