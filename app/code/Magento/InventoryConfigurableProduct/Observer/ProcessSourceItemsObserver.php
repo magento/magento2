@@ -51,13 +51,13 @@ class ProcessSourceItemsObserver implements ObserverInterface
         $controller = $observer->getEvent()->getController();
         $configurableMatrix = $controller->getRequest()->getParam('configurable-matrix-serialized', '');
 
-        if ($configurableMatrix != "") {
+        if ($configurableMatrix != '') {
             $productsData = json_decode($configurableMatrix, true);
             foreach ($productsData as $productData) {
-                $sku = $productData[ProductInterface::SKU];
-                $sourceItems = $productData['qty_per_source'] ?? [];
-
-                $this->processSourceItems($sourceItems, $sku);
+                if (isset($productData['quantity_per_source']) && is_array($productData['quantity_per_source'])) {
+                    $sku = $productData[ProductInterface::SKU];
+                    $this->processSourceItems($productData['quantity_per_source'], $sku);
+                }
             }
         }
     }
@@ -72,8 +72,9 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         foreach ($sourceItems as $key => $sourceItem) {
             if (!isset($sourceItem[SourceItemInterface::STATUS])) {
-                $sourceItems[$key][SourceItemInterface::STATUS] =
-                    $sourceItems[$key][SourceItemInterface::QUANTITY] > 0 ? 1 : 0;
+                $sourceItems[$key][SourceItemInterface::QUANTITY] = $sourceItems[$key]['quantity_per_source'];
+                $sourceItems[$key][SourceItemInterface::STATUS]
+                    = $sourceItems[$key][SourceItemInterface::QUANTITY] > 0 ? 1 : 0;
             }
         }
 

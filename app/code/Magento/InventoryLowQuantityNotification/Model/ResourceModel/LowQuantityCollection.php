@@ -13,6 +13,7 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -22,8 +23,8 @@ use Magento\Inventory\Model\SourceItem as SourceItemModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
-use Magento\InventoryLowQuantityNotification\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,6 +48,16 @@ class LowQuantityCollection extends AbstractCollection
     private $attributeRepository;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var int
+     */
+    private $filterStoreId;
+
+    /**
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -54,8 +65,11 @@ class LowQuantityCollection extends AbstractCollection
      * @param AttributeRepositoryInterface $attributeRepository
      * @param StockConfigurationInterface $stockConfiguration
      * @param GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems
+     * @param MetadataPool $metadataPool
      * @param AdapterInterface|null $connection
      * @param AbstractDb|null $resource
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -65,14 +79,10 @@ class LowQuantityCollection extends AbstractCollection
         AttributeRepositoryInterface $attributeRepository,
         StockConfigurationInterface $stockConfiguration,
         GetAllowedProductTypesForSourceItemsInterface $getAllowedProductTypesForSourceItems,
+        MetadataPool $metadataPool,
         AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
-        // should be before parent constructor call
-        $this->attributeRepository = $attributeRepository;
-        $this->stockConfiguration = $stockConfiguration;
-        $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
-
         parent::__construct(
             $entityFactory,
             $logger,
@@ -81,6 +91,10 @@ class LowQuantityCollection extends AbstractCollection
             $connection,
             $resource
         );
+        $this->attributeRepository = $attributeRepository;
+        $this->stockConfiguration = $stockConfiguration;
+        $this->getAllowedProductTypesForSourceItems = $getAllowedProductTypesForSourceItems;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -92,11 +106,20 @@ class LowQuantityCollection extends AbstractCollection
     }
 
     /**
+     * @param int $storeId
+     * @return void
+     */
+    public function addStoreFilter(int $storeId)
+    {
+        $this->filterStoreId = $storeId;
+    }
+
+    /**
      * @inheritdoc
      */
-    protected function _initSelect()
+    protected function _beforeLoad()
     {
-        parent::_initSelect();
+        parent::_beforeLoad();
 
         $this->addFilterToMap('source_code', 'main_table.source_code');
         $this->addFilterToMap('sku', 'main_table.sku');
@@ -110,11 +133,10 @@ class LowQuantityCollection extends AbstractCollection
         $this->addProductTypeFilter();
         $this->addNotifyStockQtyFilter();
         $this->addEnabledSourceFilter();
+        $this->addSourceItemInStockFilter();
 
-        $this->setOrder(
-            SourceItemInterface::QUANTITY,
-            self::SORT_ORDER_ASC
-        );
+        $this->setOrder(SourceItemInterface::QUANTITY, self::SORT_ORDER_ASC);
+
         return $this;
     }
 
@@ -127,6 +149,9 @@ class LowQuantityCollection extends AbstractCollection
         $productEavVarcharTable = $this->getTable('catalog_product_entity_varchar');
         $nameAttribute = $this->attributeRepository->get('catalog_product', 'name');
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $this->getSelect()->joinInner(
             ['product_entity' => $productEntityTable],
             'main_table.' . SourceItemInterface::SKU . ' = product_entity.' . ProductInterface::SKU,
@@ -135,10 +160,28 @@ class LowQuantityCollection extends AbstractCollection
 
         $this->getSelect()->joinInner(
             ['product_entity_varchar' => $productEavVarcharTable],
-            'product_entity_varchar.entity_id = product_entity.entity_id AND product_entity_varchar.attribute_id = '
-                . $nameAttribute->getAttributeId(),
-            ['product_name' => 'value']
+            'product_entity_varchar.' . $linkField . ' = product_entity.' . $linkField . ' ' .
+            'AND product_entity_varchar.store_id = ' . Store::DEFAULT_STORE_ID. ' ' .
+            'AND product_entity_varchar.attribute_id = ' . (int)$nameAttribute->getAttributeId(),
+            []
         );
+
+        if (null !== $this->filterStoreId) {
+            $this->getSelect()->joinLeft(
+                ['product_entity_varchar_store' => $productEavVarcharTable],
+                'product_entity_varchar_store.' . $linkField . ' = product_entity.' . $linkField . ' ' .
+                'AND product_entity_varchar_store.store_id = ' . (int)$this->filterStoreId . ' ' .
+                'AND product_entity_varchar_store.attribute_id = ' . (int)$nameAttribute->getAttributeId(),
+                [
+                    'product_name' => $this->getConnection()->getIfNullSql(
+                        'product_entity_varchar_store.value',
+                        'product_entity_varchar.value'
+                    )
+                ]
+            );
+        } else {
+            $this->getSelect()->columns(['product_name' => 'product_entity_varchar.value']);
+        }
     }
 
     /**
@@ -146,9 +189,7 @@ class LowQuantityCollection extends AbstractCollection
      */
     private function joinInventoryConfiguration()
     {
-        $sourceItemConfigurationTable = $this->getTable(
-            CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION
-        );
+        $sourceItemConfigurationTable = $this->getTable('inventory_low_stock_notification_configuration');
 
         $this->getSelect()->joinInner(
             ['notification_configuration' => $sourceItemConfigurationTable],
@@ -202,5 +243,13 @@ class LowQuantityCollection extends AbstractCollection
             ),
             []
         );
+    }
+
+    /**
+     * @return void
+     */
+    private function addSourceItemInStockFilter()
+    {
+        $this->addFieldToFilter('main_table.status', SourceItemInterface::STATUS_IN_STOCK);
     }
 }
