@@ -608,6 +608,12 @@ abstract class AbstractAction
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY]
         );
 
+        $temporaryTable->addIndex(
+            'child_id',
+            ['child_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
+        );
+
         // Drop the temporary table in case it already exists on this (persistent?) connection.
         $this->connection->dropTemporaryTable($temporaryName);
         $this->connection->createTemporaryTable($temporaryTable);
