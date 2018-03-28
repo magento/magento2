@@ -78,6 +78,8 @@ class ConfigurableProductsIndexerTest extends TestCase
     // @codingStandardsIgnoreEnd
     public function testOneSimpleChangesToOutOfStockInOneSource()
     {
+        $this->changeStockStatusForSku('simple_11', 'eu-1', SourceItemInterface::STATUS_IN_STOCK);
+
         $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
 
         // EU-Stock
@@ -109,6 +111,8 @@ class ConfigurableProductsIndexerTest extends TestCase
     // @codingStandardsIgnoreEnd
     public function testAllSimplesChangesToOutOfStockInOneSource()
     {
+        $this->changeStockStatusForSku('simple_11', 'eu-1', SourceItemInterface::STATUS_IN_STOCK);
+
         $this->changeStockStatusForSku('simple_11', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
         $this->changeStockStatusForSku('simple_21', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);
         $this->changeStockStatusForSku('simple_31', 'us-1', SourceItemInterface::STATUS_OUT_OF_STOCK);

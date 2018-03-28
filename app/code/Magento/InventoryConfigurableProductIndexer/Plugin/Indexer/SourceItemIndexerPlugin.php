@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurableProductIndexer\Plugin\Indexer;
 
-use Magento\InventoryConfigurableProductIndexer\Indexer\SourceItemIndexer as ConfigurableProductsSourceItemIndexer;
+use Magento\Framework\Exception\StateException;
+use Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SourceItemIndexer as ConfigurableProductsSourceItemIndexer;
 use Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer;
 
 class SourceItemIndexerPlugin
@@ -33,6 +34,7 @@ class SourceItemIndexerPlugin
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws StateException
      */
     public function afterExecuteList(
         SourceItemIndexer $subject,
@@ -40,21 +42,5 @@ class SourceItemIndexerPlugin
         array $sourceItemIds
     ) {
         $this->configurableProductsSourceItemIndexer->executeList($sourceItemIds);
-    }
-
-    /**
-     * @param SourceItemIndexer $subject
-     * @param void $result
-     * @param int $sourceItemId
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterExecuteRow(
-        SourceItemIndexer $subject,
-        $result,
-        int $sourceItemId
-    ) {
-        $this->configurableProductsSourceItemIndexer->executeList([$sourceItemId]);
     }
 }

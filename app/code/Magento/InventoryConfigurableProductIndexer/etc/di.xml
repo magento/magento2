@@ -10,9 +10,19 @@
     <type name="Magento\InventoryIndexer\Indexer\SourceItem\SourceItemIndexer">
         <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\Indexer\SourceItemIndexerPlugin" />
     </type>
-    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItemIndexer">
+    <type name="Magento\InventoryIndexer\Indexer\Stock\StockIndexer">
+        <plugin name="configurable_product_index" type="Magento\InventoryConfigurableProductIndexer\Plugin\Indexer\StockIndexerPlugin" />
+    </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SourceItemIndexer">
         <arguments>
             <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\Stock\StockIndexer">
+        <arguments>
+            <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
+            <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
         </arguments>
     </type>
 </config>
