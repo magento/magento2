@@ -22,7 +22,7 @@ class SchemaRequestProcessorTest extends AbstractController
         $schema = $this->getResponse()->getBody();
 
         // Check that an HTTP 200 response status is visible in the schema.
-        $this->assertRegExp('/200 Accepted/', $schema);
+        $this->assertRegExp('/200 Success/', $schema);
     }
 
     /**
