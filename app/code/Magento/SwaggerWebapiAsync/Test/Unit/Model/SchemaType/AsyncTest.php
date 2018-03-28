@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
+namespace Magento\SwaggerWebapiAsync\Test\Unit\Model\SchemaType;
 
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapiAsync\Model\SchemaType\Async;
