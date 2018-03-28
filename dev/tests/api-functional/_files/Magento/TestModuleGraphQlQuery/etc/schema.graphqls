@@ -4,6 +4,7 @@
 type Query {
     testItem(id: Int!) : Item @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
 }
+
 type Item {
     item_id: Int
     name: String

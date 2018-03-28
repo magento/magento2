@@ -221,7 +221,7 @@ class GraphQlReader implements ReaderInterface
                         $annotationString.= "\"{$interfaceName}\", ";
                     }
                     $annotationString = rtrim($annotationString, ', ');
-                    $annotationString .= '])';
+                    $annotationString .= ']) ';
                     $graphQlSchemaContent = str_replace($implementsString, $annotationString, $graphQlSchemaContent);
                 }
 
