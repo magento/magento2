@@ -57,9 +57,11 @@ class Factory
     private $fileIteratorFactory;
 
     /**
+     * Initialize dependencies
+     * 
      * Factory constructor.
-     * @param ObjectManagerInterface $objectManager
-     * @param Reader $moduleReader
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param FrontendInterface $cache
      * @param DirectoryList $directoryList
      * @param FileIteratorFactory $fileIteratorFactory
