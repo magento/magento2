@@ -68,7 +68,6 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => 0777,
         'file_name_prefix' => 'mage',
     ];
 
