@@ -211,10 +211,6 @@
         <field xsi:type="ObjectOutputField" name="maximalPrice" type="Price" description="Used for composite (bundle, configurable, grouped) products. This is the highest possible final price for all the options defined within a composite product. If you're specifying a price range, this would be the 'to' value."/>
         <field xsi:type="ObjectOutputField" name="regularPrice" type="Price" description="The base price of a product."/>
     </type>
-    <type xsi:type="OutputType" name="ProductCategoryLinks">
-        <field xsi:type="ScalarOutputField" name="position" type="Int" description="The position of the category in the category tree"/>
-        <field xsi:type="ScalarOutputField" name="category_id" type="String" description="The unique identifier for the category"/>
-    </type>
     <type xsi:type="OutputInterface" name="ProductLinksInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductLinkTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="sku" type="String" description="The identifier of the linked product"/>
         <field xsi:type="ScalarOutputField" name="link_type" type="String" description="One of 'related', 'associated', 'upsell', or 'crosssell'."/>
@@ -258,7 +254,6 @@
         <field xsi:type="ScalarOutputField" name="custom_layout_update" type="String" description="XML code that is applied as a layout update to the product page."/>
         <field xsi:type="ScalarOutputField" name="custom_layout" type="String" description="The name of a custom layout."/>
         <field xsi:type="ScalarOutputField" name="page_layout" type="String" description="The page layout of the product page. Values include '1column-center', '2columns-left', '2columns-right', and '3columns'."/>
-        <field xsi:type="ScalarArrayOutputField" name="category_ids" itemType="Int" description="An array of category IDs the product belongs to."/>
         <field xsi:type="ScalarOutputField" name="options_container" type="String" description="If the product has multiple options, determines where they appear on the product page."/>
         <field xsi:type="ScalarOutputField" name="image_label" type="String" description="The label assigned to a product image."/>
         <field xsi:type="ScalarOutputField" name="small_image_label" type="String" description="The label assigned to a product's small image."/>
@@ -268,13 +263,12 @@
         <field xsi:type="ScalarOutputField" name="country_of_manufacture" type="String" description="The product's country of origin"/>
         <field xsi:type="ScalarOutputField" name="type_id" type="String" description="One of 'simple', 'virtual', 'bundle', 'downloadable','grouped', or 'configurable'"/>
         <field xsi:type="ScalarArrayOutputField" name="website_ids" itemType="Int" description="An array of website IDs in which the product is available."/>
-        <field xsi:type="ObjectArrayOutputField" name="category_links" itemType="ProductCategoryLinks" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\CategoryLinks" description="An array that contains links to categories the product is assigned to."/>
         <field xsi:type="ObjectArrayOutputField" name="product_links" itemType="ProductLinksInterface" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\ProductLinks" description="An array that contains information about products that are related to the current product."/>
         <field xsi:type="ObjectArrayOutputField" name="media_gallery_entries" itemType="MediaGalleryEntry" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" description="An array that contains information about the images and video assigned to this product."/>
         <field xsi:type="ObjectArrayOutputField" name="tier_prices" itemType="ProductTierPrices" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\TierPrices" description="An array that defines tier prices for the item."/>
         <field xsi:type="ObjectOutputField" name="price" type="ProductPrices" resolver="Magento\CatalogGraphQl\Model\Resolver\Product\Price" description="The price of the item, including the value and the currency code."/>
         <field xsi:type="ScalarOutputField" name="gift_message_available" type="String" description="Indicates whether a gift message is available."/>
-        <field xsi:type="ObjectArrayOutputField" name="category" itemType="CategoryInterface" description="Current category of a product" resolver="\Magento\CatalogGraphQl\Model\Resolver\Category"/>
+        <field xsi:type="ObjectArrayOutputField" name="categories" itemType="CategoryInterface" description="Categories of a product" resolver="\Magento\CatalogGraphQl\Model\Resolver\Category"/>
     </type>
     <type xsi:type="OutputType" name="CategoryTree">
         <implements interface="CategoryInterface" copyFields="true" />
@@ -294,6 +288,7 @@
         <field xsi:type="ScalarOutputField" name="created_at" type="String" description="Category Level" />
         <field xsi:type="ScalarOutputField" name="updated_at" type="String" description="Category Level" />
         <field xsi:type="ScalarOutputField" name="product_count" type="Int" description="Count of products in category" />
+        <field xsi:type="ScalarOutputField" name="default_sort_by" type="String" description="Default sort by for category" />
     </type>
     <type xsi:type="OutputInterface" name="PhysicalProductInterface" typeResolver="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <field xsi:type="ScalarOutputField" name="weight" type="Float" description="The weight of a physical product"/>

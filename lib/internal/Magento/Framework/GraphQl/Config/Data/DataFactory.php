@@ -43,13 +43,16 @@ class DataFactory
         array $fieldData,
         array $arguments = []
     ) : Field {
+        $arraySign = '/^.*(\[\])$/';
+        $isList = preg_match($arraySign, $fieldData['type']);
+        $fieldData['type'] = str_replace('[]', '', $fieldData['type']);
         return $this->objectManager->create(
             Field::class,
             [
                 'name' => $fieldData['name'],
                 'type' => $fieldData['type'],
                 'required' => isset($fieldData['required']) ? $fieldData['required'] : false,
-                'isList' => isset($fieldData['itemType']),
+                'isList' => isset($fieldData['itemType']) || $isList,
                 'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : "",
                 'description' => isset($fieldData['description']) ? $fieldData['description'] : "",
                 'arguments' => $arguments

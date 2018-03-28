@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
@@ -83,7 +84,7 @@ class CategoryTree
      * @param int $rootCategoryId
      * @return array
      */
-    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId)
+    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
     {
         $categoryQuery = $resolveInfo->fieldASTs[0];
         $collection = $this->collectionFactory->create();
@@ -102,7 +103,7 @@ class CategoryTree
      * @param \Iterator $iterator
      * @return array
      */
-    private function processTree(\Iterator $iterator)
+    private function processTree(\Iterator $iterator) : array
     {
         $tree = [];
         while ($iterator->valid()) {
@@ -125,13 +126,14 @@ class CategoryTree
      * @param CategoryInterface $category
      * @return array
      */
-    private function hydrateCategory(CategoryInterface $category)
+    private function hydrateCategory(CategoryInterface $category) : array
     {
         $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
         $categoryData['id'] = $category->getId();
         $categoryData['product_count'] = $category->getProductCount();
         $categoryData['all_children'] = $category->getAllChildren();
         $categoryData['children'] = [];
+        $categoryData['available_sort_by'] = $category->getAvailableSortBy();
         return $this->customAttributesFlatternizer->flaternize($categoryData);
     }
 

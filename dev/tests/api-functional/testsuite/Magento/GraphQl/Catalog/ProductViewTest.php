@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -40,12 +41,6 @@ class ProductViewTest extends GraphQlAbstract
     {
         items {
             attribute_set_id
-            category_ids
-            category_links
-            {
-                category_id
-                position
-            }
             country_of_manufacture
             created_at
             custom_design
@@ -56,6 +51,13 @@ class ProductViewTest extends GraphQlAbstract
             description
             gift_message_available
             id
+            categories {
+               name
+               is_active
+               url_path
+               available_sort_by
+               level
+            }
             image
             image_label
             meta_description
@@ -249,7 +251,7 @@ QUERY;
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-
+        $responseObject = new DataObject($response);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
@@ -264,9 +266,16 @@ QUERY;
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
-        $this->assertCategoryIds($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
         $this->assertTierPrices($product, $response['products']['items'][0]);
+        self::assertEquals(
+            'Movable Position 2',
+            $responseObject->getData('products/items/0/categories/1/name')
+        );
+        self::assertEquals(
+            'Filter category',
+            $responseObject->getData('products/items/0/categories/2/name')
+        );
     }
 
     /**
@@ -284,12 +293,6 @@ QUERY;
     {
         items{
             attribute_set_id
-            category_ids
-            category_links
-            {
-                category_id
-                position
-            }
             country_of_manufacture
             created_at
             custom_design
@@ -685,18 +688,6 @@ QUERY;
                 'video_url' => $videoContent->getVideoUrl(),
             ]
         );
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertCategoryIds($product, $actualResponse)
-    {
-        $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
-        $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
-        $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-        $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
     /**

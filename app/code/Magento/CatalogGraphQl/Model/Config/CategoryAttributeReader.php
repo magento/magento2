@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Config;
 
@@ -34,7 +35,8 @@ class CategoryAttributeReader implements ReaderInterface
         'position',
         'is_active',
         'children',
-        'level'
+        'level',
+        'default_sort_by'
     ];
 
     /**
@@ -70,7 +72,7 @@ class CategoryAttributeReader implements ReaderInterface
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function read($scope = null)
+    public function read($scope = null) : array
     {
         $config =[];
         $data = [];

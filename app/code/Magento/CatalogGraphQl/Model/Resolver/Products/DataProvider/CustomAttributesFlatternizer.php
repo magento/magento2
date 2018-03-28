@@ -3,19 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
-
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\CategoryProduct;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\SearchResultInterface;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 
 /**
  * Flaternize custom attributes
@@ -28,7 +18,7 @@ class CustomAttributesFlatternizer
      * @param array $categoryData
      * @return array
      */
-    public function flaternize(array $categoryData)
+    public function flaternize(array $categoryData) : array
     {
         if (!isset($categoryData['custom_attributes'])) {
             return $categoryData;

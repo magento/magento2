@@ -84,10 +84,10 @@ class Fields implements FormatterInterface
     public function format(TypeInterface $typeStructure, OutputType $outputType): array
     {
         $typeConfig = [
-        'fields' => function () use ($typeStructure, $outputType) {
+            'fields' => function () use ($typeStructure, $outputType) {
                 $fieldsConfig = [];
-        foreach ($typeStructure->getFields() as $field) {
-            $fieldsConfig[$field->getName()] = $this->getFieldConfig($typeStructure, $outputType, $field);
+                foreach ($typeStructure->getFields() as $field) {
+                    $fieldsConfig[$field->getName()] = $this->getFieldConfig($typeStructure, $outputType, $field);
                 }
                 return $fieldsConfig;
             }
@@ -102,40 +102,39 @@ class Fields implements FormatterInterface
      * @param TypeInterface $typeStructure
      * @param OutputType $outputType
      * @param Field $field
-     * @return OutputType
+     * @return TypeInterface
      */
     private function getFieldType(TypeInterface $typeStructure, OutputType $outputType, Field $field)
-    {if ($this->scalarTypes->isScalarType($field->getTypeName())) {
-                $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
+    {
+        if ($this->scalarTypes->isScalarType($field->getTypeName())) {
+            $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
+        } else {
+            if ($typeStructure->getName() == $field->getTypeName()) {
+                $type = $outputType;
             } else {
-                if ($typeStructure->getName() == $field->getTypeName()) {
-                    $type = $outputType;
-                $type = $this->wrappedTypeProcessor->processWrappedType( $field,
-                        $type );
-                    } else {
-                        $type = $this->outputMapper->getOutputType($field->getTypeName());
-
-
-                    $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
-                }
+                $type = $this->outputMapper->getOutputType($field->getTypeName());
             }
-            return $type;
+
+            $type = $this->wrappedTypeProcessor->processWrappedType($field, $type);
+        }
+        return $type;
     }
 
     /**
-     * Generate fieldconfig.
+     * Generate field config.
      *
      * @param TypeInterface $typeStructure
      * @param OutputType $outputType
-     * @param Field$field* @return array
+     * @param Field $field
+     * @return array
      */
     private function getFieldConfig(TypeInterface $typeStructure, OutputType $outputType, Field $field): array
     {
         $type = $this->getFieldType($typeStructure, $outputType, $field);
         $fieldConfig = [
-                'name' => $field->getName(),
-                'type' => $type,
-            ];
+            'name' => $field->getName(),
+            'type' => $type,
+        ];
 
         if (!empty($field->getDescription())) {
             $fieldConfig['description'] = $field->getDescription();
@@ -150,7 +149,6 @@ class Fields implements FormatterInterface
                     return $resolver->resolve($field, $value, $args, $context, $info);
                 };
         }
-
         return $this->formatArguments($field, $fieldConfig);
     }
 
@@ -161,7 +159,7 @@ class Fields implements FormatterInterface
      * @param array $config
      * @return array
      */
-    private function formatArguments(Field $field, array $config)
+    private function formatArguments(Field $field, array $config) : array
     {
         foreach ($field->getArguments() as $argument) {
             $inputType = $this->inputMapper->getRepresentation($argument);

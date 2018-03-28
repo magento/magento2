@@ -13,9 +13,35 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
+$category->isObjectNew(true);
+$category->setId(10)
+    ->setName('Movable Position 2')
+    ->setParentId(2)
+    ->setPath('1/2/10')
+    ->setLevel(2)
+    ->setAvailableSortBy(['name', 'price'])
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setPosition(6)
+    ->save();
+
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
+$category->isObjectNew(true);
+$category->setId(1151)
+    ->setName('Filter category')
+    ->setParentId(10)
+    ->setPath('1/2/10/1151')
+    ->setLevel(3)
+    ->setAvailableSortBy(['name', 'price'])
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setPosition(0)
+    ->save();
+
 $product = $productRepository->get('simple', true);
 $eavAttributeValues = [
-    'category_ids' => [2],
+    'category_ids' => [10],
     'cost' => 2.234,
     'country_of_manufacture' => 'US',
     'msrp' => 10.48,
@@ -37,3 +63,11 @@ foreach ($eavAttributeValues as $attributeCode => $attributeValue) {
 }
 
 $productRepository->save($product);
+
+/** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
+$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2, 10, 1151]
+);
