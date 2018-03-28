@@ -25,7 +25,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\SwaggerWebapi\Model\SchemaType\Rest::getSchemaUrlPathProvider
+     * @covers \Magento\SwaggerWebapi\Model\SchemaType\Rest::getSchemaUrlPath
      *
      * @param $expected
      * @param null|string $store
