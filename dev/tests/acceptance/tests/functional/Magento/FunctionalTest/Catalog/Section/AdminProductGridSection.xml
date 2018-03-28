@@ -25,7 +25,4 @@
         <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
         <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
     </section>
-    <section name="AdminProductGridFilterControls">
-        <element name="sku" type="input" selector=".admin__data-grid-filters-wrap input[name='sku']"/>
-    </section>
 </sections>
