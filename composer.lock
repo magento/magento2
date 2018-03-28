@@ -714,16 +714,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "21e4019f051513be041f5611fab717af63b5451e"
+                "reference": "15a4eb8460b7e7c805b2740c3a0dd0cee521a83e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/21e4019f051513be041f5611fab717af63b5451e",
-                "reference": "21e4019f051513be041f5611fab717af63b5451e",
+                "url": "https://api.github.com/repos/magento/composer/zipball/15a4eb8460b7e7c805b2740c3a0dd0cee521a83e",
+                "reference": "15a4eb8460b7e7c805b2740c3a0dd0cee521a83e",
                 "shasum": ""
             },
             "require": {
-                "composer/composer": "~1.6.0",
+                "composer/composer": "^1.6",
                 "php": "~7.1.3|~7.2.0",
                 "symfony/console": "~4.0.0"
             },
@@ -742,7 +742,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2018-02-23T15:57:04+00:00"
+            "time": "2018-03-26T16:16:06+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
