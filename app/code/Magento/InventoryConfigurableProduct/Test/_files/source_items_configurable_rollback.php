@@ -20,14 +20,14 @@ $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilde
 
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     SourceItemInterface::SKU,
-    ['configurable_out_of_stock', 'configurable', 'simple_10', 'simple_20', 'simple_30', 'simple_40'],
+    ['simple_10', 'simple_20'],
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
 
 /**
  * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
- * In that case there is "if" which checks that SKU1, SKU2 and SKU3 still exists in database.
+ * In that case there is "if" which checks that simple_10 and simple_20 still exists in database.
  */
 if (!empty($sourceItems)) {
     $sourceItemsDelete->execute($sourceItems);
