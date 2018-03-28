@@ -120,6 +120,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory
+     */
+    protected $frontendLabelFactory;
+
+    /**
      * Serializer Instance.
      *
      * @var Json
@@ -154,6 +159,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -173,6 +179,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory $frontendLabelFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -194,6 +201,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->frontendLabelFactory = $frontendLabelFactory;
     }
 
     /**
@@ -786,6 +794,35 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         }
 
         return $this->_getFlatColumnsDdlDefinition();
+    }
+
+    /**
+     * Processing object after load data
+     *
+     * @return $this
+     */
+    public function _afterLoad()
+    {
+        parent::_afterLoad();
+
+        $this->_addFrontendLabels();
+
+        return $this;
+    }
+
+    /**
+     * Add Frontend Labels information
+     *
+     * @throws LocalizedException
+     */
+    public function _addFrontendLabels()
+    {
+        $labels = [];
+        foreach($this->_getResource()->getStoreLabelsByAttributeId($this->getId()) as $storeId => $label){
+            $labels[] = $this->frontendLabelFactory->create(['data' => ['store_id' => $storeId, 'label' => $label]]);
+        }
+
+        $this->setFrontendLabels($labels);
     }
 
     /**
