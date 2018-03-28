@@ -106,6 +106,7 @@ class BulkScheduleTest extends WebapiAbstract
      */
     public function testAsyncScheduleBulk($product)
     {
+        $this->_markTestAsRestOnly();
         $response = $this->saveProductAsync($product);
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
@@ -186,6 +187,7 @@ class BulkScheduleTest extends WebapiAbstract
      */
     public function testGetProductAsync($sku, $storeCode = null)
     {
+        $this->_markTestAsRestOnly();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::ASYNC_RESOURCE_PATH . '/' . $sku,
