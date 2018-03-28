@@ -48,10 +48,10 @@ class GetStockItemDataTest extends TestCase
         self::assertEquals($expectedData, $stockItemData);
     }
 
-    public function testGetStockItemDataReturnNullWhenTableDoesNotExists()
+    public function testGetStockItemDataReturnNullWhenTableDoesNotExist()
     {
         $stockItemData = $this->getStockItemData->execute('SKU-1', 10);
-        self::assertEquals(null, $stockItemData);
+        self::assertNull($stockItemData);
     }
 
     /**
