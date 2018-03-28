@@ -12,9 +12,9 @@ use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Get SourceItem id by product SKU and Source Code
+ * Get SourceItem ids from array of SourceItems
  */
-class GetSourceItemId
+class GetSourceItemIds
 {
     /**
      * @var ResourceConnection
@@ -30,22 +30,26 @@ class GetSourceItemId
     }
 
     /**
-     * @param string $sku
-     * @param string $sourceCode
-     *
-     * @return int
+     * @param SourceItemInterface[] $sourceItems
+     * @return array
      */
-    public function execute(string $sku, string $sourceCode): int
+    public function execute(array $sourceItems): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from(
                 $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM),
                 [SourceItemResourceModel::ID_FIELD_NAME]
-            )
-            ->where(SourceItemInterface::SKU . ' = ?', $sku)
-            ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $sourceCode);
+            );
+        foreach ($sourceItems as $sourceItem) {
+            $sku = $connection->quote($sourceItem->getSku());
+            $sourceCode = $connection->quote($sourceItem->getSourceCode());
+            $select->orWhere(
+                SourceItemInterface::SKU . " = {$sku} AND " .
+                SourceItemInterface::SOURCE_CODE ." = {$sourceCode}"
+            );
+        }
 
-        return (int)$connection->fetchOne($select);
+        return $connection->fetchCol($select, SourceItemResourceModel::ID_FIELD_NAME);
     }
 }
