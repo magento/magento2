@@ -70,7 +70,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         // Ensure that the response type has been replaced with the async version.
         $this->assertEquals(
-            '#/definitions/webapi-async-data-async-response-interface',
+            '#/definitions/asynchronous-operations-data-async-response-interface',
             $schema['paths']['/V1/customers']['post']['responses']['202']['schema']['$ref']
         );
 

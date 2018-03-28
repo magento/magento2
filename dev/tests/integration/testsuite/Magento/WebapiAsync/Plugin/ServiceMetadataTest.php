@@ -60,7 +60,7 @@ class ServiceMetadataTest extends \PHPUnit\Framework\TestCase
                         'out' => [
                             'parameters' => [
                                 'result' => [
-                                    'type' => 'WebapiAsyncDataAsyncResponseInterface',
+                                    'type' => 'AsynchronousOperationsDataAsyncResponseInterface',
                                     'required' => true,
                                     'documentation' => 'Returns response information for the asynchronous request.',
                                     'response_codes' => [

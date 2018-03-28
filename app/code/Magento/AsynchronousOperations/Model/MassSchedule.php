@@ -200,11 +200,11 @@ class MassSchedule
         $asyncResponse->setRequestItems($requestItems);
 
         if ($bulkException->wasErrorAdded()) {
-            $asyncResponse->setIsErrors(true);
+            $asyncResponse->setErrors(true);
             $bulkException->addData($asyncResponse);
             throw $bulkException;
         } else {
-            $asyncResponse->setIsErrors(false);
+            $asyncResponse->setErrors(false);
         }
 
         return $asyncResponse;
