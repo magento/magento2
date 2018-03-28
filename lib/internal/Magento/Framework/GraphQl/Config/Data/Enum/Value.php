@@ -23,13 +23,20 @@ class Value
     private $value;
 
     /**
+     * @var string
+     */
+    private $description;
+
+    /**
      * @param string $name
      * @param string $value
+     * @param string $description
      */
-    public function __construct(string $name, string $value)
+    public function __construct(string $name, string $value, string $description = '')
     {
         $this->name = $name;
         $this->value = $value;
+        $this->description = $description;
     }
 
     /**
@@ -50,5 +57,15 @@ class Value
     public function getValue() : string
     {
         return $this->value;
+    }
+
+    /**
+     * Get the enum value's description.
+     *
+     * @return string
+     */
+    public function getDescription() : string
+    {
+        return $this->description;
     }
 }

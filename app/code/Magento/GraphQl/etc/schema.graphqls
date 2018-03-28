@@ -1,0 +1,33 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+}
+
+input FilterTypeInput {
+    eq: String
+    finset: [String]
+    from: String
+    gt: String
+    gteq: String
+    in: [String]
+    like: String
+    lt: String
+    lteq: String
+    moreq: String
+    neq: String
+    notnull: String
+    null: String
+    to: String
+    nin: [String]
+}
+
+type SearchResultPageInfo {
+    page_size: Int
+    current_page: Int
+}
+
+enum SortEnum {
+    ASC
+    DESC
+}

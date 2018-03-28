@@ -86,7 +86,8 @@ class InputObjectType extends \Magento\Framework\GraphQl\Type\Definition\InputOb
 
             $config['fields'][$field->getName()] = [
                 'name' => $field->getName(),
-                'type' => $type
+                'type' => $type,
+                'description'=> $field->getDescription()
             ];
         }
         parent::__construct($config);
