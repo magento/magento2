@@ -279,9 +279,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     public function testDispatchExceptionTooLate()
     {
         $exceptionMessage = 'Cron Job test_job1 is missed at 2017-07-30 15:00:00';
-        $scheduleId = 42;
         $jobCode = 'test_job1';
-        $exception = $exceptionMessage . ' Schedule Id: ' . $scheduleId . ' Job Code: ' . $jobCode;
 
         $lastRun = $this->time + 10000000;
         $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);

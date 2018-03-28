@@ -139,11 +139,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $invalid = [];
 
     /**
-     * @var array
-     */
-    private $jobs;
-
-    /**
      * @var Stat
      */
     private $statProfiler;
@@ -389,7 +384,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function getPendingSchedules($groupId)
     {
-        $jobs = $this->getJobs();
+        $jobs = $this->_config->getJobs();
         $pendingJobs = $this->_scheduleFactory->create()->getCollection();
         $pendingJobs->addFieldToFilter('status', Schedule::STATUS_PENDING);
         $pendingJobs->addFieldToFilter('job_code', ['in' => array_keys($jobs[$groupId])]);
@@ -437,7 +432,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         /**
          * generate global crontab jobs
          */
-        $jobs = $this->getJobs();
+        $jobs = $this->_config->getJobs();
         $this->invalid = [];
         $this->_generateJobs($jobs[$groupId], $exists, $groupId);
         $this->cleanupScheduleMismatches();
@@ -500,11 +495,11 @@ class ProcessCronQueueObserver implements ObserverInterface
             Schedule::STATUS_PENDING => max($historyFailure, $historySuccess) * self::SECONDS_IN_MINUTE,
         ];
 
-        $jobs = $this->getJobs()[$groupId];
+        $jobs = $this->_config->getJobs()[$groupId];
         $scheduleResource = $this->_scheduleFactory->create()->getResource();
         $connection = $scheduleResource->getConnection();
         $count = 0;
-        foreach ($historyLifetimes as $status => $time) {
+        foreach ($historyLifetimes as $time) {
             $count += $connection->delete(
                 $scheduleResource->getMainTable(),
                 [
@@ -605,7 +600,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function cleanupDisabledJobs($groupId)
     {
-        $jobs = $this->getJobs();
+        $jobs = $this->_config->getJobs();
         $jobsToCleanup = [];
         foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
             if (!$this->getCronExpression($jobConfig)) {
@@ -668,17 +663,6 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * @return array
-     */
-    private function getJobs()
-    {
-        if ($this->jobs === null) {
-            $this->jobs = $this->_config->getJobs();
-        }
-        return $this->jobs;
-    }
-
-    /**
      * Get CronGroup Configuration Value
      *
      * @param $groupId
@@ -690,7 +674,6 @@ class ProcessCronQueueObserver implements ObserverInterface
             'system/cron/' . $groupId . '/' . $path,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return $scheduleLifetime;
     }
 
     /**
@@ -737,20 +720,30 @@ class ProcessCronQueueObserver implements ObserverInterface
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                 }
             } catch (\Exception $e) {
-                $schedule->setMessages($e->getMessage());
-                if ($schedule->getStatus() === Schedule::STATUS_ERROR) {
-                    $this->logger->critical($e);
-                }
-                if ($schedule->getStatus() === Schedule::STATUS_MISSED
-                    && $this->state->getMode() === State::MODE_DEVELOPER
-                ) {
-                    $this->logger->info($schedule->getMessages());
-                }
+                $this->processError($schedule, $e);
             }
             if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
                 $procesedJobs[$schedule->getJobCode()] = true;
             }
             $schedule->save();
+        }
+    }
+
+    /**
+     * @param Schedule $schedule
+     * @param \Exception $exception
+     * @return void
+     */
+    private function processError(\Magento\Cron\Model\Schedule $schedule, \Exception $exception)
+    {
+        $schedule->setMessages($exception->getMessage());
+        if ($schedule->getStatus() === Schedule::STATUS_ERROR) {
+            $this->logger->critical($exception);
+        }
+        if ($schedule->getStatus() === Schedule::STATUS_MISSED
+            && $this->state->getMode() === State::MODE_DEVELOPER
+        ) {
+            $this->logger->info($schedule->getMessages());
         }
     }
 }
