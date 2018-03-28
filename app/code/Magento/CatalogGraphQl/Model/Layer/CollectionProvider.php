@@ -53,6 +53,7 @@ class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionP
             /** @var CollectionProcessor $collectionProcessor */
             $this->collectionProcessor->process($searchCriteria, $collection);
             $ids = $collection->getAllIds();
+            // layered navigation filter can work only with IDs
             $this->collection->addIdFilter($ids);
         }
         return $this->collection;
