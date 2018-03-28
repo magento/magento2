@@ -45,16 +45,7 @@ class CollectionProvider implements \Magento\Catalog\Model\Layer\ItemCollectionP
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {
         if (!$this->collection) {
-            $collection = $this->collectionFactory->create();
-            $this->collection = clone $collection;
-            /** @var Registry $registry */
-            $registry = \Magento\Framework\App\ObjectManager::getInstance()->get(Registry::class);
-            $searchCriteria = $registry->registry('graphql_search_criteria');
-            /** @var CollectionProcessor $collectionProcessor */
-            $this->collectionProcessor->process($searchCriteria, $collection);
-            $ids = $collection->getAllIds();
-            // layered navigation filter can work only with IDs
-            $this->collection->addIdFilter($ids);
+            $this->collection = $this->collectionFactory->create();
         }
         return $this->collection;
     }
