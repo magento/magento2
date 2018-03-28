@@ -24,6 +24,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassScheduleTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -86,13 +89,10 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
-            );
+            $this->fail($e->getMessage());
         }
 
         parent::setUp();
-
     }
 
     /**
@@ -102,7 +102,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      * @dataProvider productDataProvider
      * @param ProductInterface[] $products
      */
-    public function testScheduleMass($products) {
+    public function testScheduleMass($products)
+    {
         try {
             $this->sendBulk($products);
         } catch (BulkException $bulkException) {
@@ -112,7 +113,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         //assert all products are created
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
-                [$this, 'assertProductExists'], [$this->skus, count($this->skus)]
+                [$this, 'assertProductExists'],
+                [$this->skus, count($this->skus)]
             );
         } catch (PreconditionFailedException $e) {
             $this->fail("Not all products were created");
@@ -130,7 +132,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         $result = $this->massSchedule->publishMass('async.V1.products.POST', $products);
 
         //assert bulk accepted with no errors
-        $this->assertFalse($result->getIsErrors());
+        $this->assertFalse($result->isErrors());
 
         //assert number of products sent to queue
         $this->assertCount(count($this->skus), $result->getRequestItems());
@@ -199,7 +201,6 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         } catch (BulkException $e) {
             $this->assertCount(1, $e->getErrors());
 
-
             $errors = $e->getErrors();
             $this->assertInstanceOf(\Magento\Framework\Exception\LocalizedException::class, $errors[0]);
 
@@ -207,7 +208,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
             $reasonException = $errors[0]->getPrevious();
 
-            $expectedErrorMessage = "Data item corresponding to \"product\" must be specified in the message with topic " .
+            $expectedErrorMessage = "Data item corresponding to \"product\" " .
+                "must be specified in the message with topic " .
                 "\"async.V1.products.POST\".";
             $this->assertEquals(
                 $expectedErrorMessage,
@@ -216,7 +218,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
             /** @var \Magento\WebapiAsync\Model\AsyncResponse $bulkStatus */
             $bulkStatus = $e->getData();
-            $this->assertTrue($bulkStatus->getIsErrors());
+            $this->assertTrue($bulkStatus->isErrors());
 
             /** @var ItemStatus[] $items */
             $items = $bulkStatus->getRequestItems();
@@ -233,7 +235,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         //assert one products is created
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
-                [$this, 'assertProductExists'], [$this->skus, count($this->skus)]
+                [$this, 'assertProductExists'],
+                [$this->skus, count($this->skus)]
             );
         } catch (PreconditionFailedException $e) {
             $this->fail("Not all products were created");

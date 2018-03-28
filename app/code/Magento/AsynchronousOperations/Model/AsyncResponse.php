@@ -47,17 +47,17 @@ class AsyncResponse extends DataObject implements AsyncResponseInterface, Extens
     /**
      * @inheritdoc
      */
-    public function setIsErrors($isErrors = false)
+    public function setErrors($isErrors = false)
     {
-        return $this->setData(self::IS_ERRORS, $isErrors);
+        return $this->setData(self::ERRORS, $isErrors);
     }
 
     /**
      * @inheritdoc
      */
-    public function getIsErrors()
+    public function isErrors()
     {
-        return $this->getData(self::IS_ERRORS);
+        return $this->getData(self::ERRORS);
     }
 
     /**

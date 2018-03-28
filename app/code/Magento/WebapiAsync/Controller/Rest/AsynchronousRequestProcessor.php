@@ -89,7 +89,6 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
 
         $entitiesParamsArray = $this->inputParamsResolver->resolve();
         $topicName = $this->getTopicName($request);
-        $requestItemsList = null;
 
         try {
             $asyncResponse = $this->asyncBulkPublisher->publishMass(

@@ -16,7 +16,7 @@ interface AsyncResponseInterface
 {
     const BULK_UUID = 'bulk_uuid';
     const REQUEST_ITEMS = 'request_items';
-    const IS_ERRORS = 'is_errors';
+    const ERRORS = 'errors';
 
     /**
      * Gets the bulk uuid.
@@ -52,14 +52,14 @@ interface AsyncResponseInterface
      * @param bool $isErrors
      * @return $this
      */
-    public function setIsErrors($isErrors = false);
+    public function setErrors($isErrors = false);
 
     /**
      * Is there errors during processing bulk
      *
      * @return boolean
      */
-    public function getIsErrors();
+    public function isErrors();
 
     /**
      * Retrieve existing extension attributes object.
