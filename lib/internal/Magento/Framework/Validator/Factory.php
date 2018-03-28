@@ -100,7 +100,7 @@ class Factory
      * @param $serializedFilePaths
      * @return array
      */
-    protected function buildAbsolutePathsForConfigFiles($serializedFilePaths)
+    private function buildAbsolutePathsForConfigFiles($serializedFilePaths)
     {
         $absolutePaths = [];
         /** @var array $serializedFilePaths */
@@ -128,7 +128,7 @@ class Factory
      *
      * @return void
      */
-    private function _initializeDefaultTranslator()
+    protected function _initializeDefaultTranslator()
     {
         if (!$this->isDefaultTranslatorInitialized) {
             // Pass translations to \Magento\Framework\TranslateInterface from validators
