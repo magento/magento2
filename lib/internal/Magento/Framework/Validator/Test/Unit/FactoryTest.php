@@ -37,12 +37,24 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $_defaultTranslator = null;
 
     /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
+    protected $_directoryList;
+
+    /**
+     * @var \Magento\Framework\Config\FileIteratorFactory
+     */
+    protected $_fileIterator;
+
+    /**
      * Save default translator
      */
     protected function setUp()
     {
         $this->_defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList');
+        $this->_fileIterator = $this->getMock('Magento\Framework\Config\FileIteratorFactory');
         $this->_validatorConfig = $this->getMockBuilder(
             'Magento\Framework\Validator\Config'
         )->setMethods(
@@ -112,7 +124,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->cache
+            $this->cache,
+            $this->_directoryList,
+            $this->_fileIterator
         );
         $actualConfig = $factory->getValidatorConfig();
         $this->assertInstanceOf(
@@ -152,7 +166,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->cache
+            $this->cache,
+            $this->_directoryList,
+            $this->_fileIterator
         );
         $this->assertInstanceOf(
             'Magento\Framework\Validator\Builder',
@@ -179,7 +195,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->cache
+            $this->cache,
+            $this->_directoryList,
+            $this->_fileIterator
         );
         $this->assertInstanceOf('Magento\Framework\Validator', $factory->createValidator('test', 'class', []));
     }
