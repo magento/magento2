@@ -29,7 +29,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\Bulk\OperationManagementInterface;
-use Magento\WebapiAsync\Model\ConfigInterface as AsyncConfig;
+use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
 
 /**
  * Class Consumer used to process OperationInterface messages.

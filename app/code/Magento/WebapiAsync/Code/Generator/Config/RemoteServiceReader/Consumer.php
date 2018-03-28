@@ -6,7 +6,7 @@
 
 namespace Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader;
 
-use Magento\WebapiAsync\Model\ConfigInterface as WebApiAsyncConfig;
+use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 
 /**
  * Remote service reader with auto generated configuration for queue_consumer.xml
@@ -14,14 +14,14 @@ use Magento\WebapiAsync\Model\ConfigInterface as WebApiAsyncConfig;
 class Consumer implements \Magento\Framework\Config\ReaderInterface
 {
     /**
-     * @var \Magento\WebapiAsync\Model\ConfigInterface
+     * @var WebApiAsyncConfig
      */
     private $webapiAsyncConfig;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\WebapiAsync\Model\ConfigInterface $webapiAsyncConfig
+     * @param WebApiAsyncConfig $webapiAsyncConfig
      */
     public function __construct(
         WebApiAsyncConfig $webapiAsyncConfig

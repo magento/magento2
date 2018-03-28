@@ -6,7 +6,7 @@
 
 namespace Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader;
 
-use Magento\WebapiAsync\Model\ConfigInterface as WebApiAsyncConfig;
+use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
 
 /**
@@ -16,7 +16,7 @@ class Topology implements \Magento\Framework\Config\ReaderInterface
 {
 
     /**
-     * @var \Magento\WebapiAsync\Model\ConfigInterface
+     * @var WebApiAsyncConfig
      */
     private $webapiAsyncConfig;
 
@@ -26,9 +26,10 @@ class Topology implements \Magento\Framework\Config\ReaderInterface
     private $reflectionGenerator;
 
     /**
-     * Initialize dependencies.
+     * Topology constructor.
      *
-     * @param \Magento\WebapiAsync\Model\ConfigInterface $webapiAsyncConfig
+     * @param WebApiAsyncConfig $webapiAsyncConfig
+     * @param ReflectionGenerator $reflectionGenerator
      */
     public function __construct(
         WebApiAsyncConfig $webapiAsyncConfig,
