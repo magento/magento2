@@ -11,11 +11,8 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\Phrase;
 
 class Factory
 {
@@ -23,7 +20,7 @@ class Factory
     const CACHE_KEY = __CLASS__;
 
     /**
-     * @var ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -40,7 +37,7 @@ class Factory
     private $isDefaultTranslatorInitialized = false;
 
     /**
-     * @var Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     private $moduleReader;
 
@@ -60,8 +57,7 @@ class Factory
     private $fileIteratorFactory;
 
     /**
-     * Initialize dependencies
-     *
+     * Factory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param Reader $moduleReader
      * @param FrontendInterface $cache
@@ -69,8 +65,8 @@ class Factory
      * @param FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        Reader $moduleReader,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
         FrontendInterface $cache,
         DirectoryList $directoryList,
         FileIteratorFactory $fileIteratorFactory
@@ -117,12 +113,12 @@ class Factory
     /**
      * @return array
      */
-    protected function getRelativeFilePathsForConfigFiles()
+    private function getRelativeFilePathsForConfigFiles()
     {
         $relativeFilePaths = [];
-        $applicationRootLength = \strlen($this->applicationRoot);
+        $appRootLength = \strlen($this->applicationRoot);
         foreach ($this->_configFiles as $configFile => $fileContent) {
-            $relativeFilePaths[] = strpos($configFile, $this->applicationRoot) === 0 ? substr($configFile, $applicationRootLength) : $configFile;
+            $relativeFilePaths[] = strpos($configFile, $this->applicationRoot) === 0 ? substr($configFile, $appRootLength) : $configFile;
         }
         return $relativeFilePaths;
     }
@@ -132,18 +128,18 @@ class Factory
      *
      * @return void
      */
-    protected function _initializeDefaultTranslator()
+    private function _initializeDefaultTranslator()
     {
         if (!$this->isDefaultTranslatorInitialized) {
             // Pass translations to \Magento\Framework\TranslateInterface from validators
             $translatorCallback = function () {
                 $argc = func_get_args();
-                return (string)new Phrase(array_shift($argc), $argc);
+                return (string)new \Magento\Framework\Phrase(array_shift($argc), $argc);
             };
             /** @var \Magento\Framework\Translate\Adapter $translator */
             $translator = $this->_objectManager->create('Magento\Framework\Translate\Adapter');
             $translator->setOptions(['translator' => $translatorCallback]);
-            AbstractValidator::setDefaultTranslator($translator);
+            \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
             $this->isDefaultTranslatorInitialized = true;
         }
     }
@@ -169,7 +165,6 @@ class Factory
      * @param string $groupName
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator\Builder
-     * @throws \InvalidArgumentException
      */
     public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
     {
