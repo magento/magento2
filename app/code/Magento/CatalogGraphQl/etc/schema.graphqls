@@ -391,6 +391,7 @@ type Products {
     items: [ProductInterface] @doc(description: "An array of products that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
+    filters: [LayerFilter] @doc(description: "")
 }
 
 input ProductFilterInput {
@@ -497,4 +498,17 @@ type MediaGalleryEntry {
     file: String @doc(description: "The path of the image on the server")
     content: ProductMediaGalleryEntriesContent @doc(description: "Contains a ProductMediaGalleryEntriesContent object")
     video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object")
+}
+
+type LayerFilter {
+    name: String @doc(description: "")
+    request_var: String @doc(description: "")
+    filter_items_count: Int @doc(description: "")
+    filter_items: [LayerFilterItem] @doc(description: "")
+}
+
+type LayerFilterItem {
+    label: String @doc(description: "")
+    value_string: String @doc(description: "")
+    items_count: Int @doc(description: "")
 }
