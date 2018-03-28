@@ -2115,4 +2115,76 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 : self::assertSame('0', $image['disabled']);
         }
     }
+
+    /**
+     * Test import product into multistore system when media is disabled.
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductsWithMultipleStoresWhenMediaIsDisabled()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/product_with_custom_store_media_disabled.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $this->assertTrue($this->_model->importData());
+    }
+
+    /**
+     * Test that imported product stock status with backorders functionality enabled can be set to 'out of stock'.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithBackordersEnabled()
+    {
+        $this->importFile('products_to_import_with_backorders_enabled_and_0_qty.csv');
+        $product = $this->getProductBySku('simple_new');
+        $this->assertFalse($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
+    }
+
+    /**
+     * Import file by providing import filename in parameters
+     *
+     * @param string $fileName
+     */
+    private function importFile(string $fileName)
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/' . $fileName,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product',
+                \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE => 1
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+    }
 }

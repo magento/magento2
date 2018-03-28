@@ -1298,7 +1298,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->model->setData($colorAttributeCode, "blue");
+        $this->model->setCustomAttribute($colorAttributeCode, "blue");
         $this->assertEquals(1, count($this->model->getCustomAttributes()));
         $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
         $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
@@ -1450,29 +1450,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetOptionByIdForProductWithoutOptions()
     {
         $this->assertNull($this->model->getOptionById(100));
-    }
-
-    /**
-     * @dataProvider cleanCacheDataProvider
-     */
-    public function testCleanCache($id, $method)
-    {
-        $this->model->setId($id);
-        $this->cacheInterfaceMock
-            ->expects($this->$method())
-            ->method('clean');
-        $this->model->cleanCache();
-    }
-
-    /**
-     * @return array
-     */
-    public function cleanCacheDataProvider()
-    {
-        return [
-            [null, 'never'],
-            ['1', 'once'],
-        ];
     }
 
     public function testGetCacheTags()
