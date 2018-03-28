@@ -9,19 +9,14 @@ namespace Magento\GraphQl\Model;
 
 use Magento\Framework\GraphQl\Type\SchemaFactory;
 use Magento\Framework\GraphQl\Type\Schema;
-use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
+use Magento\Framework\GraphQl\Config\ConfigInterface;
 
 /**
  * Generate a query field and concrete types for GraphQL schema
  */
 class SchemaGenerator implements SchemaGeneratorInterface
 {
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
     /**
      * @var SchemaFactory
      */
@@ -33,18 +28,23 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $outputMapper;
 
     /**
-     * @param TypeFactory $typeFactory
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * @param SchemaFactory $schemaFactory
      * @param OutputMapper $outputMapper
+     * @param ConfigInterface $config
      */
     public function __construct(
-        TypeFactory $typeFactory,
         SchemaFactory $schemaFactory,
-        OutputMapper $outputMapper
+        OutputMapper $outputMapper,
+        ConfigInterface $config
     ) {
-        $this->typeFactory = $typeFactory;
         $this->schemaFactory = $schemaFactory;
         $this->outputMapper = $outputMapper;
+        $this->config = $config;
     }
 
     /**
@@ -57,6 +57,14 @@ class SchemaGenerator implements SchemaGeneratorInterface
                 'query' => $this->outputMapper->getOutputType('Query'),
                 'typeLoader' => function ($name) {
                     return $this->outputMapper->getOutputType($name);
+                },
+                'types' => function () {
+                    //all types should be generated only on introspection
+                    $typesImplementors = [];
+                    foreach ($this->config->getDeclaredTypeNames() as $name) {
+                        $typesImplementors [] = $this->outputMapper->getOutputType($name);
+                    }
+                    return $typesImplementors;
                 }
             ]
         );
