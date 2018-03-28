@@ -82,7 +82,7 @@ define([
                     images: new this.makeImages(null),
                     price: this.price,
                     quantity: this.quantity
-                }
+                };
             }.bind(this);
 
             /**

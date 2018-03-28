@@ -47,7 +47,7 @@ define([
                     images: new this.makeImages(null),
                     price: this.price,
                     quantityPerSource: this.quantityPerSource
-                }
+                };
             }.bind(this);
 
             this.initAttributeListener();
