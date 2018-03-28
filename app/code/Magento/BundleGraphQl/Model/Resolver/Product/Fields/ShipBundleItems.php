@@ -52,7 +52,7 @@ class ShipBundleItems implements ResolverInterface
         ResolveInfo $info
     ): ?Value {
         if ($value['type_id'] === Bundle::TYPE_CODE) {
-            $result = isset($value['price_view'])
+            $result = isset($value['shipment_type'])
                 ? $this->enumLookup->getEnumValueFromField('ShipBundleItemsEnum', $value['shipment_type']) : null;
             return $this->valueFactory->create(
                 function () use ($result) {

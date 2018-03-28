@@ -26,4 +26,12 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\GraphQl\Query\FieldTranslator">
+        <arguments>
+            <argument name="translationMap" xsi:type="array">
+                <item name="new_from_date" xsi:type="string">news_from_date</item>
+                <item name="new_to_date" xsi:type="string">news_to_date</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

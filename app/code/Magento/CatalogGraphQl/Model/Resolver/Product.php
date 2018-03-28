@@ -11,10 +11,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\FieldTranslator;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 
 /**
  * {@inheritdoc}
@@ -32,23 +32,23 @@ class Product implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var Collection
+     * @var FieldTranslator
      */
-    private $collection;
+    private $fieldTranslator;
 
     /**
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
-     * @param Collection $collection
+     * @param FieldTranslator $fieldTranslator
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
-        Collection $collection
+        FieldTranslator $fieldTranslator
     ) {
         $this->productDataProvider = $productDataProvider;
         $this->valueFactory = $valueFactory;
-        $this->collection = $collection;
+        $this->fieldTranslator = $fieldTranslator;
     }
 
     /**
@@ -61,8 +61,7 @@ class Product implements ResolverInterface
         }
         $this->productDataProvider->addProductSku($value['sku']);
         $fields = $this->getProductFields($info);
-        $matchedFields = $this->collection->getRequestAttributes($fields);
-        $this->productDataProvider->addEavAttributes($matchedFields);
+        $this->productDataProvider->addEavAttributes($fields);
 
         $result = function () use ($value) {
             $data = $this->productDataProvider->getProductBySku($value['sku']);
@@ -98,7 +97,21 @@ class Product implements ResolverInterface
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {
-            $fieldNames[] = $node->name->value;
+            if ($node->name->value !== 'product') {
+                continue;
+            }
+            foreach ($node->selectionSet->selections as $selectionNode) {
+                if ($selectionNode->kind === 'InlineFragment') {
+                    foreach ($selectionNode->selectionSet->selections as $inlineSelection) {
+                        if ($inlineSelection->kind === 'InlineFragment') {
+                            continue;
+                        }
+                        $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
+                    }
+                    continue;
+                }
+                $fieldNames[] = $this->fieldTranslator->translate($selectionNode->name->value);
+            }
         }
 
         return $fieldNames;
