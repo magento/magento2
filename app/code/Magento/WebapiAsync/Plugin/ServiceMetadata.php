@@ -7,7 +7,7 @@
 namespace Magento\WebapiAsync\Plugin;
 
 use Magento\Webapi\Model\Config\Converter as WebapiConverter;
-use Magento\WebapiAsync\Api\Data\AsyncResponseInterface;
+use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor;
 use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 
