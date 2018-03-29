@@ -112,8 +112,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForCartCategory2loaded" after="cartClickCategory2"/>
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="cartAssertCategory1ForConfigurableProduct" after="waitForCartCategory2loaded">
             <argument name="category" value="$$createCategory$$"/>
-            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
-            <argument name="productCount" value="CONST.three"/>
+            <argument name="productCount" value="3"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="cartAssertConfigProduct" after="cartAssertCategory1ForConfigurableProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
