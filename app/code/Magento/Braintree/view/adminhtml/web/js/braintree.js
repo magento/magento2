@@ -116,7 +116,7 @@ define([
         },
 
         /**
-         * Setup Braintree SDK
+         * Retrieves client token and setup Braintree SDK
          */
         initBraintree: function () {
             var self = this;
@@ -124,40 +124,57 @@ define([
             try {
                 $('body').trigger('processStart');
 
-                self.braintree.setup(self.clientToken, 'custom', {
-                    id: self.selector,
-                    hostedFields: self.getHostedFields(),
+                $.getJSON(self.clientTokenUrl).done(function (response) {
+                    self.clientToken = response.clientToken;
+                    self._initBraintree();
+                }).fail(function (response) {
+                    var failed = JSON.parse(response.responseText);
 
-                    /**
-                     * Triggered when sdk was loaded
-                     */
-                    onReady: function () {
-                        $('body').trigger('processStop');
-                    },
-
-                    /**
-                     * Callback for success response
-                     * @param {Object} response
-                     */
-                    onPaymentMethodReceived: function (response) {
-                        if (self.validateCardType()) {
-                            self.setPaymentDetails(response.nonce);
-                            self.placeOrder();
-                        }
-                    },
-
-                    /**
-                     * Error callback
-                     * @param {Object} response
-                     */
-                    onError: function (response) {
-                        self.error(response.message);
-                    }
+                    $('body').trigger('processStop');
+                    self.error(failed.message);
                 });
             } catch (e) {
                 $('body').trigger('processStop');
                 self.error(e.message);
             }
+        },
+
+        /**
+         * Setup Braintree SDK
+         */
+        _initBraintree: function () {
+            var self = this;
+
+            self.braintree.setup(self.clientToken, 'custom', {
+                id: self.selector,
+                hostedFields: self.getHostedFields(),
+
+                /**
+                 * Triggered when sdk was loaded
+                 */
+                onReady: function () {
+                    $('body').trigger('processStop');
+                },
+
+                /**
+                 * Callback for success response
+                 * @param {Object} response
+                 */
+                onPaymentMethodReceived: function (response) {
+                    if (self.validateCardType()) {
+                        self.setPaymentDetails(response.nonce);
+                        self.placeOrder();
+                    }
+                },
+
+                /**
+                 * Error callback
+                 * @param {Object} response
+                 */
+                onError: function (response) {
+                    self.error(response.message);
+                }
+            });
         },
 
         /**
@@ -211,6 +228,7 @@ define([
             }
 
             if (event.type !== 'fieldStateChange') {
+
                 return false;
             }
 

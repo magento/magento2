@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
- * Set data to legacy catalocinventory_stock_item table via plain MySql query
+ * Set data to legacy cataloginventory_stock_item table via plain MySql query
  */
 class SetDataToLegacyStockItem
 {

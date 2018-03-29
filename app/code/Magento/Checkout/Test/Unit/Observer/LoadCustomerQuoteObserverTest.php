@@ -40,7 +40,7 @@ class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->willThrowException(
             new \Magento\Framework\Exception\LocalizedException(__('Message'))
         );
-        $this->messageManager->expects($this->once())->method('addError')->with('Message');
+        $this->messageManager->expects($this->once())->method('addErrorMessage')->with('Message');
 
         $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
@@ -55,7 +55,7 @@ class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->will(
             $this->throwException($exception)
         );
-        $this->messageManager->expects($this->once())->method('addException')
+        $this->messageManager->expects($this->once())->method('addExceptionMessage')
             ->with($exception, 'Load customer quote error');
 
         $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
