@@ -92,7 +92,7 @@ class OperationProcessor
      * @param string $encodedMessage
      * @return void
      */
-    public function process(string $encodedMessage): void
+    public function process(string $encodedMessage)
     {
         $operation = $this->messageEncoder->decode(AsyncConfig::SYSTEM_TOPIC_NAME, $encodedMessage);
         $this->messageValidator->validate(AsyncConfig::SYSTEM_TOPIC_NAME, $operation);
