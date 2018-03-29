@@ -20,10 +20,11 @@ use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\MessageQueue\LockInterface;
 use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\AsynchronousOperations\Model\OperationProcessorFactory;
 
 /**
  * Class Consumer used to process OperationInterface messages.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassConsumer implements ConsumerInterface
 {
