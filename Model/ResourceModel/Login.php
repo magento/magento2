@@ -23,5 +23,4 @@ class Login extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_init('magefan_login_as_customer', 'login_id');
     }
-
 }

@@ -89,5 +89,4 @@ abstract class AbstractColumn extends  \Magento\Ui\Component\Listing\Columns\Col
 
         return $dataSource;
     }
-
 }

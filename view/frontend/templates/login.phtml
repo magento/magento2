@@ -5,18 +5,15 @@
  *
  * Glory to Ukraine! Glory to the heroes!
  */
+/** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<p><?php /* @escapeNotVerified */ echo __('You have logged in and will go to customer account in 5 seconds.') ?></p>
-<form id="loginascustomer" method="post" action="<?php echo $block->getUrl('*/*/post') ?>">
-    <button style="display: none;" id="loginascustomer-button" type="submit" class="action save primary" title=""><span> >> </span></button>
-</form>
-<script>
-require([
-	"jquery",
-	"domReady!"
-], function($){
-	setTimeout(function(){
-		$('#loginascustomer-button').click();
-	}, 5000);
-});
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magefan_LoginAsCustomer/js/login": {
+            "redirectUrl": "<?= $block->getUrl('customer/account/index') ?>"
+        }
+    }
+}
 </script>

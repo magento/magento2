@@ -166,5 +166,4 @@ class AdminNotificationFeed extends \Magento\AdminNotification\Model\Feed
         $this->_cacheManager->save(time(), 'magefan_admin_notifications_lastcheck');
         return $this;
     }
-
 }

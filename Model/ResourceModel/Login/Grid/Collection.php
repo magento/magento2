@@ -45,5 +45,4 @@ class Collection extends \Magefan\LoginAsCustomer\Model\ResourceModel\Login\Coll
             );
         return $this;
     }
-
 }

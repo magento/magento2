@@ -7,6 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_WebsiteRestriction:etc/webrestrictions.xsd">
     <action path="loginascustomer_login_index" type="generic" />
-    <action path="loginascustomer_login_post" type="generic" />
     <action path="loginascustomer_login_proceed" type="generic" />
 </config>

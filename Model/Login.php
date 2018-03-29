@@ -220,5 +220,4 @@ class Login extends \Magento\Framework\Model\AbstractModel
             'created_at' => $this->_dateTime->gmtTimestamp(),
         ])->save();
     }
-
 }

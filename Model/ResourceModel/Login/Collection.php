@@ -24,5 +24,4 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         parent::_construct();
         $this->_init('Magefan\LoginAsCustomer\Model\Login', 'Magefan\LoginAsCustomer\Model\ResourceModel\Login');
     }
-
 }
