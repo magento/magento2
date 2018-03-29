@@ -10,49 +10,27 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\TemporaryStateExceptionInterface;
-use Magento\Framework\DB\Adapter\ConnectionException;
-use Magento\Framework\DB\Adapter\DeadlockException;
-use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\MessageQueue\MessageLockException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\CallbackInvoker;
-use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\MessageQueue\LockInterface;
 use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\Bulk\OperationManagementInterface;
-use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
+use Magento\AsynchronousOperations\Model\OperationProcessorFactory;
 
 /**
  * Class Consumer used to process OperationInterface messages.
  */
 class MassConsumer implements ConsumerInterface
 {
-
     /**
      * @var \Magento\Framework\MessageQueue\CallbackInvoker
      */
     private $invoker;
-
-    /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder
-     */
-    private $messageEncoder;
-
-    /**
-     * @var \Magento\Framework\MessageQueue\MessageValidator
-     */
-    private $messageValidator;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
@@ -65,16 +43,6 @@ class MassConsumer implements ConsumerInterface
     private $configuration;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $jsonHelper;
-
-    /**
-     * @var \Magento\Framework\Bulk\OperationManagementInterface
-     */
-    private $operationManagement;
-
-    /**
      * @var \Magento\Framework\MessageQueue\MessageController
      */
     private $messageController;
@@ -85,38 +53,36 @@ class MassConsumer implements ConsumerInterface
     private $logger;
 
     /**
+     * @var OperationProcessor
+     */
+    private $operationProcessor;
+
+    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\MessageQueue\CallbackInvoker $invoker
-     * @param \Magento\Framework\MessageQueue\MessageValidator $messageValidator
-     * @param \Magento\Framework\MessageQueue\MessageEncoder $messageEncoder
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\MessageQueue\ConsumerConfigurationInterface $configuration
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonHelper
-     * @param \Magento\Framework\Bulk\OperationManagementInterface $operationManagement
-     * @param \Magento\Framework\MessageQueue\MessageController $messageController
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param CallbackInvoker $invoker
+     * @param ResourceConnection $resource
+     * @param MessageController $messageController
+     * @param ConsumerConfigurationInterface $configuration
+     * @param OperationProcessorFactory $operationProcessorFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CallbackInvoker $invoker,
-        MessageValidator $messageValidator,
-        MessageEncoder $messageEncoder,
         ResourceConnection $resource,
-        ConsumerConfigurationInterface $configuration,
-        Json $jsonHelper,
-        OperationManagementInterface $operationManagement,
         MessageController $messageController,
-        LoggerInterface $logger = null
+        ConsumerConfigurationInterface $configuration,
+        OperationProcessorFactory $operationProcessorFactory,
+        LoggerInterface $logger
     ) {
         $this->invoker = $invoker;
-        $this->messageValidator = $messageValidator;
-        $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
-        $this->configuration = $configuration;
-        $this->jsonHelper = $jsonHelper;
-        $this->operationManagement = $operationManagement;
         $this->messageController = $messageController;
-        $this->logger = $logger ? : \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->configuration = $configuration;
+        $this->operationProcessor = $operationProcessorFactory->create([
+            'configuration' => $configuration
+        ]);
+        $this->logger = $logger;
     }
 
     /**
@@ -150,12 +116,11 @@ class MassConsumer implements ConsumerInterface
 
                 $allowedTopics = $this->configuration->getTopicNames();
                 if (in_array($topicName, $allowedTopics)) {
-                    $this->dispatchMessage($message);
+                    $this->operationProcessor->process($message->getBody());
                 } else {
                     $queue->reject($message);
                     return;
                 }
-
                 $queue->acknowledge($message);
             } catch (MessageLockException $exception) {
                 $queue->acknowledge($message);
@@ -175,106 +140,5 @@ class MassConsumer implements ConsumerInterface
                 }
             }
         };
-    }
-
-    /**
-     * Decode OperationInterface message and process them.
-     * Invokes service contract handler with the input params.
-     * Updates the status of the mass operation.
-     *
-     * @param EnvelopeInterface $message
-     * @throws LocalizedException
-     */
-    private function dispatchMessage(EnvelopeInterface $message)
-    {
-        $operation = $this->messageEncoder->decode(AsyncConfig::SYSTEM_TOPIC_NAME, $message->getBody());
-        $this->messageValidator->validate(AsyncConfig::SYSTEM_TOPIC_NAME, $operation);
-
-        $status = OperationInterface::STATUS_TYPE_COMPLETE;
-        $errorCode = null;
-        $messages = [];
-        $topicName = $operation->getTopicName();
-        $handlers = $this->configuration->getHandlers($topicName);
-        try {
-            $data = $this->jsonHelper->unserialize($operation->getSerializedData());
-            $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
-            $this->messageValidator->validate($topicName, $entityParams);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $errorCode = $e->getCode();
-            $messages[] = $e->getMessage();
-        }
-
-        if ($errorCode === null) {
-            foreach ($handlers as $callback) {
-                $result = $this->executeHandler($callback, $entityParams);
-                $status = $result['status'];
-                $errorCode = $result['error_code'];
-                $messages = array_merge($messages, $result['messages']);
-            }
-        }
-
-        $serializedData = (isset($errorCode)) ? $operation->getSerializedData() : null;
-        $this->operationManagement->changeOperationStatus(
-            $operation->getId(),
-            $status,
-            $errorCode,
-            implode('; ', $messages),
-            $serializedData
-        );
-    }
-
-    /**
-     * Execute topic handler
-     *
-     * @param $callback
-     * @param $entityParams
-     * @return array
-     */
-    private function executeHandler($callback, $entityParams)
-    {
-        $result = [
-            'status' => OperationInterface::STATUS_TYPE_COMPLETE,
-            'error_code' => null,
-            'messages' => []
-        ];
-        try {
-            call_user_func_array($callback, $entityParams);
-            $messages[] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
-        } catch (\Zend_Db_Adapter_Exception  $e) {
-            $this->logger->critical($e->getMessage());
-            if ($e instanceof LockWaitException
-                || $e instanceof DeadlockException
-                || $e instanceof ConnectionException
-            ) {
-                $result['status'] = OperationInterface::STATUS_TYPE_RETRIABLY_FAILED;
-                $result['error_code'] = $e->getCode();
-                $result['messages'][] = __($e->getMessage());
-            } else {
-                $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-                $result['error_code'] = $e->getCode();
-                $result['messages'][] =
-                    __('Sorry, something went wrong during product prices update. Please see log for details.');
-            }
-        } catch (NoSuchEntityException $e) {
-            $this->logger->error($e->getMessage());
-            $result['status'] = ($e instanceof TemporaryStateExceptionInterface) ?
-                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED :
-                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $result['error_code'] = $e->getCode();
-            $result['messages'][] = $e->getMessage();
-        } catch (LocalizedException $e) {
-            $this->logger->error($e->getMessage());
-            $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $result['error_code'] = $e->getCode();
-            $result['messages'][] = $e->getMessage();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $result['error_code'] = $e->getCode();
-            $result['messages'][] = $e->getMessage();
-        }
-        return $result;
     }
 }
