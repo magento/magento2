@@ -13,13 +13,11 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class FormTest
+ * Tests \Magento\Braintree\Block\Form.
  */
 class FormTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,36 +43,35 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Quote|MockObject
      */
-    private $sessionQuote;
+    private $sessionQuoteMock;
 
     /**
      * @var Config|MockObject
      */
-    private $gatewayConfig;
+    private $gatewayConfigMock;
 
     /**
      * @var CcType|MockObject
      */
-    private $ccType;
-
-    /**
-     * @var StoreManagerInterface|MockObject
-     */
-    private $storeManager;
+    private $ccTypeMock;
 
     /**
      * @var Data|MockObject
      */
-    private $paymentDataHelper;
+    private $paymentDataHelperMock;
+
+    /**
+     * @var string
+     */
+    private $storeId = '1';
 
     protected function setUp()
     {
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
-        
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
+
+        $this->paymentDataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethodInstance'])
             ->getMock();
@@ -82,13 +79,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
             'paymentConfig' => $managerHelper->getObject(Config::class),
-            'sessionQuote' => $this->sessionQuote,
-            'gatewayConfig' => $this->gatewayConfig,
-            'ccType' => $this->ccType,
-            'storeManager' => $this->storeManager
+            'sessionQuote' => $this->sessionQuoteMock,
+            'gatewayConfig' => $this->gatewayConfigMock,
+            'ccType' => $this->ccTypeMock,
+            'paymentDataHelper' =>$this->paymentDataHelperMock,
         ]);
-
-        $managerHelper->setBackwardCompatibleProperty($this->block, 'paymentDataHelper', $this->paymentDataHelper);
     }
 
     /**
@@ -100,17 +95,18 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCcAvailableTypes($countryId, array $availableTypes, array $expected)
     {
-        $this->sessionQuote->expects(static::once())
+        $this->sessionQuoteMock->expects(static::once())
             ->method('getCountryId')
             ->willReturn($countryId);
 
-        $this->gatewayConfig->expects(static::once())
+        $this->gatewayConfigMock->expects(static::once())
             ->method('getAvailableCardTypes')
+            ->with($this->storeId)
             ->willReturn(self::$configCardTypes);
 
-        $this->gatewayConfig->expects(static::once())
+        $this->gatewayConfigMock->expects(static::once())
             ->method('getCountryAvailableCardTypes')
-            ->with($countryId)
+            ->with($countryId, $this->storeId)
             ->willReturn($availableTypes);
 
         $result = $this->block->getCcAvailableTypes();
@@ -127,7 +123,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ['US', ['AE', 'VI'], ['American Express', 'Visa']],
             ['UK', ['VI'], ['Visa']],
             ['CA', ['MC'], ['MasterCard']],
-            ['UA', [], ['American Express', 'Visa', 'MasterCard', 'Discover', 'JBC']]
+            ['UA', [], ['American Express', 'Visa', 'MasterCard', 'Discover', 'JBC']],
         ];
     }
 
@@ -136,25 +132,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsVaultEnabled()
     {
-        $storeId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManager->expects(static::once())
-            ->method('getStore')
-            ->willReturn($store);
-        
-        $store->expects(static::once())
-            ->method('getId')
-            ->willReturn($storeId);
-
         $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->paymentDataHelper->expects(static::once())
+        $this->paymentDataHelperMock->expects(static::once())
             ->method('getMethodInstance')
             ->with(ConfigProvider::CC_VAULT_CODE)
             ->willReturn($vaultPayment);
 
         $vaultPayment->expects(static::once())
             ->method('isActive')
-            ->with($storeId)
+            ->with($this->storeId)
             ->willReturn(true);
 
         static::assertTrue($this->block->isVaultEnabled());
@@ -165,12 +151,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private function initCcTypeMock()
     {
-        $this->ccType = $this->getMockBuilder(CcType::class)
+        $this->ccTypeMock = $this->getMockBuilder(CcType::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
-        $this->ccType->expects(static::any())
+        $this->ccTypeMock->expects(static::any())
             ->method('getCcTypeLabelMap')
             ->willReturn(self::$baseCardTypes);
     }
@@ -180,17 +166,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private function initSessionQuoteMock()
     {
-        $this->sessionQuote = $this->getMockBuilder(Quote::class)
+        $this->sessionQuoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup'])
+            ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup', 'getStoreId'])
             ->getMock();
 
-        $this->sessionQuote->expects(static::any())
+        $this->sessionQuoteMock->expects(static::any())
             ->method('getQuote')
             ->willReturnSelf();
-        $this->sessionQuote->expects(static::any())
+        $this->sessionQuoteMock->expects(static::any())
             ->method('getBillingAddress')
             ->willReturnSelf();
+        $this->sessionQuoteMock->expects(static::any())
+            ->method('getStoreId')
+            ->willReturn($this->storeId);
     }
 
     /**
@@ -198,7 +187,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private function initGatewayConfigMock()
     {
-        $this->gatewayConfig = $this->getMockBuilder(GatewayConfig::class)
+        $this->gatewayConfigMock = $this->getMockBuilder(GatewayConfig::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCountryAvailableCardTypes', 'getAvailableCardTypes'])
             ->getMock();
