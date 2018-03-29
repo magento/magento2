@@ -70,6 +70,7 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param State $state
      */
     public function __construct(
         Filesystem $filesystem,
