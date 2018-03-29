@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurableProduct\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -20,19 +21,26 @@ use Magento\InventoryCatalog\Observer\SourceItemsProcessor;
  */
 class ProcessSourceItemsObserver implements ObserverInterface
 {
-
     /**
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param SourceItemsProcessor $sourceItemsProcessor
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        SourceItemsProcessor $sourceItemsProcessor
+        SourceItemsProcessor $sourceItemsProcessor,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->sourceItemsProcessor = $sourceItemsProcessor;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -44,7 +52,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     {
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
-        if ($product->getTypeId() !== Configurable::TYPE_CODE) {
+            if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return;
         }
         /** @var Save $controller */
@@ -53,10 +61,17 @@ class ProcessSourceItemsObserver implements ObserverInterface
 
         if ($configurableMatrix != '') {
             $productsData = json_decode($configurableMatrix, true);
-            foreach ($productsData as $productData) {
-                if (isset($productData['quantity_per_source']) && is_array($productData['quantity_per_source'])) {
-                    $sku = $productData[ProductInterface::SKU];
-                    $this->processSourceItems($productData['quantity_per_source'], $sku);
+            foreach ($productsData as $key => $productData) {
+                if (isset($productData['quantity_per_source'])) {
+                    $quantityPerSource = is_array($productData['quantity_per_source'])
+                        ? $productData['quantity_per_source']
+                        : [];
+
+                    // get sku by child id, because child sku can be changed if product with such sku already exists.
+                    $childProductId = $product->getExtensionAttributes()->getConfigurableProductLinks()[$key];
+                    $childProduct = $this->productRepository->getById($childProductId);
+
+                    $this->processSourceItems($quantityPerSource, $childProduct->getSku());
                 }
             }
         }
