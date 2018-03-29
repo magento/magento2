@@ -12,6 +12,11 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
+/**
+ * Display selected source on shipment creation page
+ *
+ * @api
+ */
 class Inventory extends Template
 {
     /**

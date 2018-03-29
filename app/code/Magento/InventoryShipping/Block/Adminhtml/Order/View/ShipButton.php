@@ -17,6 +17,8 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
  * Update order_ship button to redirect to Source Selection page
+ *
+ * @api
  */
 class ShipButton extends Container
 {

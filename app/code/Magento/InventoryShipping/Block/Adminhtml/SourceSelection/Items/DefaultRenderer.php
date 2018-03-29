@@ -21,6 +21,11 @@ use Magento\InventorySourceSelectionApi\Api\Data\InventoryRequestInterfaceFactor
 use Magento\InventorySourceSelectionApi\Api\SourceSelectionServiceInterface;
 use Magento\InventoryShipping\Model\SourceSelection\GetDefaultSourceSelectionAlgorithmCodeInterface;
 
+/**
+ * Class DefaultRenderer
+ *
+ * @api
+ */
 class DefaultRenderer extends AbstractItems
 {
     /**

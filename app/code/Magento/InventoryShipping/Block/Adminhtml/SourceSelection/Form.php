@@ -11,6 +11,11 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget;
 use Magento\Framework\Registry;
 
+/**
+ * Class Form
+ *
+ * @api
+ */
 class Form extends Widget
 {
     /**

@@ -37,8 +37,8 @@ define([
             _.each(this._data, function (data, orderItemId) {
                 requestData.push({
                     orderItem: orderItemId,
-                    sku: data['sku'],
-                    qty: data['qty']
+                    sku: data.sku,
+                    qty: data.qty
                 });
             });
             return requestData;

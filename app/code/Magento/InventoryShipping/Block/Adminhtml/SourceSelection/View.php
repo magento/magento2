@@ -12,6 +12,11 @@ use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Shipment;
 
+/**
+ * Class View
+ *
+ * @api
+ */
 class View extends Container
 {
     /**

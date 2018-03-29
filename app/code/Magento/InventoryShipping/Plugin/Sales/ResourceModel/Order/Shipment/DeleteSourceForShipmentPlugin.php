@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\DeleteShipmentSource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\Sales\Model\Order\Shipment;
 
 class DeleteSourceForShipmentPlugin
 {
@@ -30,14 +30,14 @@ class DeleteSourceForShipmentPlugin
     /**
      * @param ShipmentResource $subject
      * @param ShipmentResource $result
-     * @param Shipment $shipment
+     * @param AbstractModel $shipment
      * @return ShipmentResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
         ShipmentResource $subject,
         ShipmentResource $result,
-        Shipment $shipment
+        AbstractModel $shipment
     ) {
         $this->deleteShipmentSource->execute((int)$shipment->getId());
 

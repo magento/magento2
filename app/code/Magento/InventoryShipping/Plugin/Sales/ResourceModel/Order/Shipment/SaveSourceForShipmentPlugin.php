@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\SaveShipmentSource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\Sales\Model\Order\Shipment;
 
 class SaveSourceForShipmentPlugin
 {
@@ -30,16 +30,17 @@ class SaveSourceForShipmentPlugin
     /**
      * @param ShipmentResource $subject
      * @param ShipmentResource $result
-     * @param Shipment $shipment
+     * @param AbstractModel $shipment
      * @return ShipmentResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
         ShipmentResource $subject,
         ShipmentResource $result,
-        Shipment $shipment
+        AbstractModel $shipment
     ) {
-        if ($shipment->getExtensionAttributes() && $shipment->getExtensionAttributes()->getSourceCode()) {
+        if (!empty($shipment->getExtensionAttributes())
+            && $shipment->getExtensionAttributes()->getSourceCode()) {
             $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
             $this->saveShipmentSource->execute((int)$shipment->getId(), $sourceCode);
         }

@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Plugin\Sales\ResourceModel\Order\Shipment;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryShipping\Model\ResourceModel\ShipmentSource\GetSourceCodeByShipmentId;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Api\Data\ShipmentExtensionFactory;
 
 class LoadSourceForShipmentPlugin
@@ -39,22 +39,23 @@ class LoadSourceForShipmentPlugin
     /**
      * @param ShipmentResource $subject
      * @param ShipmentResource $result
-     * @param Shipment $shipment
+     * @param AbstractModel $shipment
      * @return ShipmentResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoad(
         ShipmentResource $subject,
         ShipmentResource $result,
-        Shipment $shipment
+        AbstractModel $shipment
     ) {
-        if (empty($shipment->getExtensionAttributes())) {
+        $shipmentExtension = $shipment->getExtensionAttributes();
+        if (empty($shipmentExtension)) {
             $shipmentExtension = $this->shipmentExtensionFactory->create();
-            $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
-            if (!empty($sourceCode)) {
-                $shipmentExtension->setSourceCode($sourceCode);
-                $shipment->setExtensionAttributes($shipmentExtension);
-            }
+        }
+        $sourceCode = $this->getSourceCodeByShipmentId->execute((int)$shipment->getId());
+        if (!empty($sourceCode)) {
+            $shipmentExtension->setSourceCode($sourceCode);
+            $shipment->setExtensionAttributes($shipmentExtension);
         }
         return $result;
     }

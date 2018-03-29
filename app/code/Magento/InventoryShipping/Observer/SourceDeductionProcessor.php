@@ -85,10 +85,6 @@ class SourceDeductionProcessor implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        //Need to rewrite this observer
-       // return $this;
-
-
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $observer->getEvent()->getShipment();
         if ($shipment->getOrigData('entity_id')) {
@@ -99,7 +95,7 @@ class SourceDeductionProcessor implements ObserverInterface
 
         $websiteId = $order->getStore()->getWebsiteId();
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
-        $sourceCode = $shipment->getExtensionAttributes()->getSourceCode();
+        $sourceCode = (string)$shipment->getExtensionAttributes()->getSourceCode();
 
         $sourceItemToSave = [];
         $reservationsToBuild = [];
