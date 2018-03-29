@@ -14,7 +14,6 @@ use Magento\Framework\MultiDimensionalIndexer\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock;
 
 class SourceItemIndexer
 {
@@ -44,9 +43,9 @@ class SourceItemIndexer
     private $indexStructure;
 
     /**
-     * @var GetSkuListInStock
+     * @var SiblingSkuListInStockProvider
      */
-    private $getSkuListInStock;
+    private $siblingSkuListInStockProvider;
 
     /**
      * @param ResourceConnection $resourceConnection
@@ -54,7 +53,7 @@ class SourceItemIndexer
      * @param IndexHandlerInterface $indexHandler
      * @param IndexStructureInterface $indexStructure
      * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
-     * @param GetSkuListInStock $getSkuListInStock
+     * @param SiblingSkuListInStockProvider $siblingSkuListInStockProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -62,14 +61,14 @@ class SourceItemIndexer
         IndexHandlerInterface $indexHandler,
         IndexStructureInterface $indexStructure,
         IndexDataBySkuListProvider $indexDataBySkuListProvider,
-        GetSkuListInStock $getSkuListInStock
+        SiblingSkuListInStockProvider $siblingSkuListInStockProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexHandler = $indexHandler;
         $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
         $this->indexStructure = $indexStructure;
-        $this->getSkuListInStock = $getSkuListInStock;
+        $this->siblingSkuListInStockProvider = $siblingSkuListInStockProvider;
     }
 
     /**
@@ -78,7 +77,7 @@ class SourceItemIndexer
      */
     public function executeList(array $sourceItemIds)
     {
-        $skuListInStockList = $this->getSkuListInStock->execute($sourceItemIds);
+        $skuListInStockList = $this->siblingSkuListInStockProvider->execute($sourceItemIds);
 
         foreach ($skuListInStockList as $skuListInStock) {
             $stockId = $skuListInStock->getStockId();

@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\MultiDimensionalIndexer\Alias;
 use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameResolverInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
@@ -34,18 +35,26 @@ class SelectBuilder
     private $indexNameBuilder;
 
     /**
+     * @var IndexNameResolverInterface
+     */
+    private $indexNameResolver;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
      * @param IndexNameBuilder $indexNameBuilder
+     * @param IndexNameResolverInterface $indexNameResolver
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition,
-        IndexNameBuilder $indexNameBuilder
+        IndexNameBuilder $indexNameBuilder,
+        IndexNameResolverInterface $indexNameResolver
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getIsStockItemSalableCondition = $getIsStockItemSalableCondition;
         $this->indexNameBuilder = $indexNameBuilder;
+        $this->indexNameResolver = $indexNameResolver;
     }
 
     /**
@@ -58,11 +67,13 @@ class SelectBuilder
     {
         $connection = $this->resourceConnection->getConnection();
 
-        $stockTableName = $this->indexNameBuilder
+        $indexTableName = $this->indexNameBuilder
             ->setIndexId(InventoryIndexer::INDEXER_ID)
             ->addDimension('stock_', (string)$stockId)
             ->setAlias(Alias::ALIAS_MAIN)
             ->build();
+
+        $stockTableName = $this->indexNameResolver->resolveName($indexTableName);
 
         $select = $connection->select();
         $select->joinInner(

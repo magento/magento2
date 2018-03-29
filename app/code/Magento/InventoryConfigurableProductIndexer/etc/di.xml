@@ -25,4 +25,9 @@
             <argument name="indexStructure" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexStructure</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SiblingSkuListInStockProvider">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
 </config>

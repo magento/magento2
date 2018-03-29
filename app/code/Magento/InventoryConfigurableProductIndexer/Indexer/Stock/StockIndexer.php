@@ -113,9 +113,17 @@ class StockIndexer
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             }
 
+            $indexData = $this->indexDataByStockIdProvider->execute((int)$stockId);
+
+            $this->indexHandler->cleanIndex(
+                $mainIndexName,
+                $indexData,
+                ResourceConnection::DEFAULT_CONNECTION
+            );
+
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataByStockIdProvider->execute((int)$stockId),
+                $indexData,
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }
