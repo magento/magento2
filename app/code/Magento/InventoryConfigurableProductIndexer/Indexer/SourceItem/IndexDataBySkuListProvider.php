@@ -49,7 +49,7 @@ class IndexDataBySkuListProvider
         $select = $this->selectBuilder->execute($stockId);
 
         if (count($skuList)) {
-            $select->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
+            $select->where('stock.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
         }
 
         $connection = $this->resourceConnection->getConnection();

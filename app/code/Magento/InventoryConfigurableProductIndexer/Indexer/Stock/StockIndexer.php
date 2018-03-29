@@ -15,15 +15,14 @@ use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndexer\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndexer\IndexTableSwitcherInterface;
 use Magento\InventoryIndexer\Indexer\InventoryIndexer;
-use Magento\InventoryIndexer\Indexer\Stock\GetAllAssignedStockIds;
-use Magento\InventoryConfigurableProductIndexer\Indexer\Stock\IndexDataByStockIdProvider;
+use Magento\InventoryIndexer\Indexer\Stock\GetAllStockIds;
 
 class StockIndexer
 {
     /**
-     * @var GetAllAssignedStockIds
+     * @var GetAllStockIds
      */
-    private $getAllAssignedStockIds;
+    private $getAllStockIds;
 
     /**
      * @var IndexStructureInterface
@@ -53,7 +52,7 @@ class StockIndexer
     /**
      * $indexStructure is reserved name for construct variable in index internal mechanism
      *
-     * @param GetAllAssignedStockIds $getAllAssignedStockIds
+     * @param GetAllStockIds $getAllStockIds
      * @param IndexStructureInterface $indexStructure
      * @param IndexHandlerInterface $indexHandler
      * @param IndexNameBuilder $indexNameBuilder
@@ -61,14 +60,14 @@ class StockIndexer
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
     public function __construct(
-        GetAllAssignedStockIds $getAllAssignedStockIds,
+        GetAllStockIds $getAllStockIds,
         IndexStructureInterface $indexStructure,
         IndexHandlerInterface $indexHandler,
         IndexNameBuilder $indexNameBuilder,
         IndexDataByStockIdProvider $indexDataByStockIdProvider,
         IndexTableSwitcherInterface $indexTableSwitcher
     ) {
-        $this->getAllAssignedStockIds = $getAllAssignedStockIds;
+        $this->getAllStockIds = $getAllStockIds;
         $this->indexStructure = $indexStructure;
         $this->indexHandler = $indexHandler;
         $this->indexNameBuilder = $indexNameBuilder;
@@ -82,7 +81,7 @@ class StockIndexer
      */
     public function executeFull()
     {
-        $stockIds = $this->getAllAssignedStockIds->execute();
+        $stockIds = $this->getAllStockIds->execute();
         $this->executeList($stockIds);
     }
 

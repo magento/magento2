@@ -9,13 +9,11 @@ namespace Magento\InventoryConfigurableProductIndexer\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\Inventory\Model\StockSourceLink;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Framework\MultiDimensionalIndexer\Alias;
+use Magento\Framework\MultiDimensionalIndexer\IndexNameBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryIndexer\Indexer\IndexStructure;
+use Magento\InventoryIndexer\Indexer\InventoryIndexer;
 use Magento\InventorySales\Model\ResourceModel\IsStockItemSalableCondition\GetIsStockItemSalableConditionInterface;
 
 class SelectBuilder
@@ -31,15 +29,23 @@ class SelectBuilder
     private $getIsStockItemSalableCondition;
 
     /**
+     * @var IndexNameBuilder
+     */
+    private $indexNameBuilder;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
+     * @param IndexNameBuilder $indexNameBuilder
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition
+        GetIsStockItemSalableConditionInterface $getIsStockItemSalableCondition,
+        IndexNameBuilder $indexNameBuilder
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->getIsStockItemSalableCondition = $getIsStockItemSalableCondition;
+        $this->indexNameBuilder = $indexNameBuilder;
     }
 
     /**
@@ -51,23 +57,17 @@ class SelectBuilder
     public function execute(int $stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
-        $quantityExpression = (string)$this->resourceConnection->getConnection()->getCheckSql(
-            'source_item.' . SourceItemInterface::STATUS . ' = ' . SourceItemInterface::STATUS_OUT_OF_STOCK,
-            0,
-            SourceItemInterface::QUANTITY
-        );
-        $sourceCodes = $this->getSourceCodes($stockId);
+        $stockTableName = $this->indexNameBuilder
+            ->setIndexId(InventoryIndexer::INDEXER_ID)
+            ->addDimension('stock_', (string)$stockId)
+            ->setAlias(Alias::ALIAS_MAIN)
+            ->build();
 
         $select = $connection->select();
         $select->joinInner(
             ['product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
-            'product_entity.sku = source_item.sku',
-            []
-        )->joinInner(
-            ['legacy_stock_item' => $this->resourceConnection->getTableName('cataloginventory_stock_item')],
-            'product_entity.entity_id = legacy_stock_item.product_id',
+            'product_entity.sku = stock.sku',
             []
         )->joinInner(
             ['parent_link' => $this->resourceConnection->getTableName('catalog_product_super_link')],
@@ -80,44 +80,15 @@ class SelectBuilder
         );
 
         $select->from(
-            ['source_item' => $sourceItemTable],
+            ['stock' => $stockTableName],
             [
                 SourceItemInterface::SKU => 'parent_product_entity.sku',
-                IndexStructure::QUANTITY => 'SUM(' . $quantityExpression . ')',
-                IndexStructure::IS_SALABLE => $this->getIsStockItemSalableCondition->execute($select),
+                IndexStructure::QUANTITY => 'SUM(stock.quantity)',
+                IndexStructure::IS_SALABLE => 'MAX(stock.is_salable)',
             ]
         )
-            ->where('source_item.' . SourceItemInterface::SOURCE_CODE . ' IN (?)', $sourceCodes)
-            ->group([SourceItemInterface::SKU]);
+            ->group(['parent_product_entity.sku']);
 
         return $select;
-    }
-
-    /**
-     * Get all enabled sources related to stock
-     *
-     * @param int $stockId
-     * @return array
-     */
-    private function getSourceCodes(int $stockId): array
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
-        $sourceStockLinkTable = $this->resourceConnection->getTableName(
-            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
-        );
-
-        $select = $connection->select()
-            ->from(['source' => $sourceTable], [SourceInterface::SOURCE_CODE])
-            ->joinInner(
-                ['stock_source_link' => $sourceStockLinkTable],
-                'source.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
-                []
-            )
-            ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where(SourceInterface::ENABLED . ' = ?', 1);
-
-        $sourceCodes = $connection->fetchCol($select);
-        return $sourceCodes;
     }
 }
