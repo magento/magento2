@@ -83,6 +83,8 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param LocatorInterface $locator
      * @param array $data
      * @param ProductMatrixProvider|null $productMatrixProvider
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
