@@ -5,14 +5,14 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedOperationStatusInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class Operation
  */
-class Operation extends DataObject implements OperationInterface, ExtensibleDataInterface
+class Operation extends DataObject implements DetailedOperationStatusInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc

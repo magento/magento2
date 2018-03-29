@@ -10,8 +10,8 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory as BulkStatusShortFactory;
-use Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory as BulkStatusDetailedFactory;
+use Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterfaceFactory as BulkStatusShortFactory;
+use Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterfaceFactory as BulkStatusDetailedFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationDetailsInterfaceFactory;
 use Magento\AsynchronousOperations\Api\BulkStatusInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
@@ -42,7 +42,7 @@ class BulkOperationsStatus implements BulkStatusInterface
     private $bulkStatus;
 
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory
+     * @var CollectionFactory
      */
     private $operationCollectionFactory;
 
@@ -108,7 +108,7 @@ class BulkOperationsStatus implements BulkStatusInterface
     {
         $bulkSummary = $this->bulkDetailedFactory->create();
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface $bulk */
+        /** @var \Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface $bulk */
         $bulk = $this->entityManager->load($bulkSummary, $bulkUuid);
 
         if ($bulk->getBulkId() === null) {
@@ -132,7 +132,7 @@ class BulkOperationsStatus implements BulkStatusInterface
     {
         $bulkSummary = $this->bulkShortFactory->create();
 
-        /** @var \Magento\AsynchronousOperations\Api\Data\BulkStatusInterface $bulk */
+        /** @var \Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface $bulk */
         $bulk = $this->entityManager->load($bulkSummary, $bulkUuid);
         if ($bulk->getBulkId() === null) {
             throw new NoSuchEntityException(
