@@ -391,7 +391,7 @@ type Products {
     items: [ProductInterface] @doc(description: "An array of products that match the specified search criteria")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query")
     total_count: Int @doc(description: "The number of products returned")
-    filters: [LayerFilter] @doc(description: "")
+    filters: [LayerFilter] @doc(description: "Layered navigation filters array")
 }
 
 input ProductFilterInput {
@@ -501,14 +501,14 @@ type MediaGalleryEntry {
 }
 
 type LayerFilter {
-    name: String @doc(description: "")
-    request_var: String @doc(description: "")
-    filter_items_count: Int @doc(description: "")
-    filter_items: [LayerFilterItem] @doc(description: "")
+    name: String @doc(description: "Layered navigation filter name")
+    request_var: String @doc(description: "Request variable name for filter query")
+    filter_items_count: Int @doc(description: "Count of filter items in filter group")
+    filter_items: [LayerFilterItem] @doc(description: "Array of filter items")
 }
 
 type LayerFilterItem {
-    label: String @doc(description: "")
-    value_string: String @doc(description: "")
-    items_count: Int @doc(description: "")
+    label: String @doc(description: "Filter label")
+    value_string: String @doc(description: "Value for filter request variable to be used in query")
+    items_count: Int @doc(description: "Count of items by filter")
 }

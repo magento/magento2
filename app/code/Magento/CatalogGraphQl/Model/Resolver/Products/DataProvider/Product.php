@@ -49,6 +49,7 @@ class Product
      * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterface
      */
     private $searchResult;
+
     /**
      * @var \Magento\Catalog\Model\ProductRepository
      */
@@ -86,47 +87,6 @@ class Product
     public function getList(SearchCriteriaInterface $searchCriteria, array $attributes = []) : SearchResultsInterface
     {
         if (!$this->searchResult) {
-
-//            /** @var \Magento\CatalogSearch\Model\Advanced $advancedSearch */
-//            $advancedSearch = ObjectManager::getInstance()->get(\Magento\CatalogSearch\Model\Advanced::class);
-//            /** @var \Magento\Framework\Api\Search\FilterGroup $filterGroup */
-//            foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-//                /** @var \Magento\Framework\Api\Filter $filter */
-//                foreach ($filterGroup as $filter) {
-//                    $advancedSearch->addFilters(
-//                        [
-//                            \Magento\Framework\Api\Filter::KEY_FIELD
-//                        ]
-//                    );
-//                }
-//            }
-
-
-//            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-//            $collection = $this->layerResolver->get()->getProductCollection();
-//            $this->joinProcessor->process($collection);
-//
-//            $collection->addAttributeToSelect('*');
-//            $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-//            $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
-//
-//            $this->collectionProcessor->process($searchCriteria, $collection);
-//
-//            $collection->load();
-//
-//            $collection->addCategoryIds();
-//            $collection->addFinalPrice();
-//            $collection->addMediaGalleryData();
-//            $collection->addMinimalPrice();
-//            $collection->addPriceData();
-//            $collection->addWebsiteNamesToResult();
-//            $collection->addOptionsToResult();
-//            $collection->addTaxPercents();
-//            $collection->addWebsiteNamesToResult();
-//            $this->searchResult = $this->searchResultsFactory->create();
-//            $this->searchResult->setSearchCriteria($searchCriteria);
-//            $this->searchResult->setItems($collection->getItems());
-//            $this->searchResult->setTotalCount($collection->getSize());
             $this->searchResult = $this->productRepository->getList($searchCriteria);
         }
         return $this->searchResult;
