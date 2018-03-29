@@ -11,9 +11,8 @@
     <test name="DeleteCategoriesTest">
         <annotations>
             <features value="Delete categories"/>
-            <stories value="Delete categories"/>
             <title value="Delete categories."/>
-            <description value="Delete categories."/>
+            <description value="Delete Default Root Category and subcategories and vefify after products on storefront."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46344"/>
             <group value="testNotIsolated"/>
@@ -37,6 +36,9 @@
         </before>
         <after>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
@@ -44,7 +46,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>
         <waitForPageLoad stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent"/>
-         <!--Move categories from Default Category to NewRootCategory. -->
+        <!--Move categories from Default Category to NewRootCategory. -->
         <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryBToNewRootCategory">
             <argument name="childCategory" value="$$createCategoryC.name$$"/>
             <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
@@ -71,7 +73,7 @@
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageAdminStoresGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
 
-        <!--&lt;!&ndash; @TODO: Uncomment commented below code after MQE-903 is fixed &ndash;&gt;-->
+        <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!-- Perform cli reindex. -->
         <!--<magentoCLI command="indexer:reindex" stepKey="magentoCli"/>-->
 
@@ -89,7 +91,7 @@
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
         <waitForPageLoad stepKey="homeWaitForPageLoad"/>
 
-        <!--&lt;!&ndash; @TODO: Uncomment commented below code after MQE-903 is fixed &ndash;&gt;-->
+        <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!--<click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryC.name$$)}}" stepKey="browseClickCategoryC"/>-->
         <!--<actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategoryC">-->
             <!--<argument name="category" value="$$createCategoryC$$"/>-->
@@ -110,7 +112,7 @@
             <argument name="product" value="$$createProduct2$$"/>
         </actionGroup>
 
-        <!--&lt;!&ndash; @TODO: Uncomment commented below code after MQE-903 is fixed &ndash;&gt;-->
+        <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!--<actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="browseAssertCategoryB">-->
             <!--<argument name="category" value="$$createCategoryB$$"/>-->
             <!--<argument name="productCount" value="1"/>-->
