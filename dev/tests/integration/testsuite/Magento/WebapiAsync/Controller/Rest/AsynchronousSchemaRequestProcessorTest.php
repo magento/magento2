@@ -19,7 +19,9 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
      */
     public function testSchemaRequest($path)
     {
+        ob_start();
         $this->dispatch($path);
+        ob_end_clean();
         $schema = $this->getResponse()->getBody();
 
         // Check that an HTTP 202 response is visible for what is normally an HTTP 200.
