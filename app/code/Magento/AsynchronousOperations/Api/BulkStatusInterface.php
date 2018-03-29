@@ -20,7 +20,7 @@ interface BulkStatusInterface extends \Magento\Framework\Bulk\BulkStatusInterfac
      * Get Bulk summary data with list of operations items full data.
      *
      * @param string $bulkUuid
-     * @return \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface
+     * @return \Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBulkDetailedStatus($bulkUuid);
@@ -29,7 +29,7 @@ interface BulkStatusInterface extends \Magento\Framework\Bulk\BulkStatusInterfac
      * Get Bulk summary data with list of operations items short data.
      *
      * @param string $bulkUuid
-     * @return \Magento\AsynchronousOperations\Api\Data\BulkStatusInterface
+     * @return \Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBulkShortStatus($bulkUuid);

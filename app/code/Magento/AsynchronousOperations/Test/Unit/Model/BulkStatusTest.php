@@ -97,11 +97,11 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         );
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->bulkDetailedFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterfaceFactory ::class,
+            \Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterfaceFactory ::class,
             ['create']
         );
         $this->bulkShortFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkStatusInterfaceFactory::class,
+            \Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterfaceFactory::class,
             ['create']
         );
         $this->entityManager = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);

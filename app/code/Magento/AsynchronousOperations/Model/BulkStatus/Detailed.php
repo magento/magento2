@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model\BulkStatus;
 
-use Magento\AsynchronousOperations\Api\Data\DetailedBulkStatusInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface;
 use Magento\AsynchronousOperations\Model\BulkSummary;
 
-class Detailed extends BulkSummary implements DetailedBulkStatusInterface
+class Detailed extends BulkSummary implements DetailedBulkOperationsStatusInterface
 {
     /**
      * @inheritDoc

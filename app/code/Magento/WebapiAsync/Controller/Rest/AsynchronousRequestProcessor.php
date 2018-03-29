@@ -11,7 +11,7 @@ namespace Magento\WebapiAsync\Controller\Rest;
 use Magento\Framework\Exception\BulkException;
 use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
-use Magento\WebapiAsync\Controller\Rest\Async\InputParamsResolver;
+use Magento\Webapi\Controller\Rest\InputParamsResolver;
 use Magento\AsynchronousOperations\Model\MassSchedule;
 use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -28,7 +28,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     private $response;
 
     /**
-     * @var \Magento\WebapiAsync\Controller\Rest\Async\InputParamsResolver
+     * @var InputParamsResolver
      */
     private $inputParamsResolver;
 
@@ -89,7 +89,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
             $path
         );
 
-        $entitiesParamsArray = $this->inputParamsResolver->resolve();
+        $entitiesParamsArray = [$this->inputParamsResolver->resolve()];
         $topicName = $this->getTopicName($request);
 
         try {

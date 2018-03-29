@@ -15,9 +15,8 @@ namespace Magento\AsynchronousOperations\Api\Data;
  * without serialized_data and result_serialized_data
  *
  * @api
- * @see \Magento\AsynchronousOperations\Api\Data\OperationInterface
  */
-interface OperationStatusInterface
+interface SummaryOperationStatusInterface
 {
     /**
      * Operation id
