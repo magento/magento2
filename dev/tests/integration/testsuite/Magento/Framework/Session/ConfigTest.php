@@ -317,8 +317,7 @@ namespace Magento\Framework\Session {
             $expectedSavePath,
             $givenSaveHandler,
             $expectedSaveHandler
-        )
-        {
+        ) {
             global $mockPHPFunctions;
             $mockPHPFunctions = $mockPHPFunctionNum;
 

@@ -12,7 +12,6 @@ namespace Magento\Framework\Session {
 
     use Magento\Framework\App\DeploymentConfig;
     use Magento\Framework\App\State;
-    use Magento\Framework\Session\Config\ConfigInterface;
 
     // @codingStandardsIgnoreEnd
 
@@ -124,21 +123,6 @@ namespace Magento\Framework\Session {
             ini_set('session.name', $this->sessionName);
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
-            $deploymentConfigMock->method('get')
-                ->willReturnCallback(function ($configPath) {
-                    switch ($configPath) {
-                        case Config::PARAM_SESSION_SAVE_METHOD:
-                            return 'db';
-                        case Config::PARAM_SESSION_CACHE_LIMITER:
-                            return 'private_no_expire';
-                        case Config::PARAM_SESSION_SAVE_PATH:
-                            return 'explicit_save_path';
-                        default:
-                            return null;
-                    }
-                });
-            $this->objectManager->addSharedInstance($deploymentConfigMock, DeploymentConfig::class);
 
             /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
             $this->appState = $this->getMockBuilder(State::class)
@@ -167,7 +151,6 @@ namespace Magento\Framework\Session {
                 $this->model->destroy();
                 $this->model = null;
             }
-            $this->objectManager->removeSharedInstance(DeploymentConfig::class);
         }
 
         public function testSessionNameFromIni()
@@ -321,13 +304,32 @@ namespace Magento\Framework\Session {
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = true;
+
+            $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+            $deploymentConfigMock->method('get')
+                ->willReturnCallback(function ($configPath) {
+                    switch ($configPath) {
+                        case Config::PARAM_SESSION_SAVE_METHOD:
+                            return 'db';
+                        case Config::PARAM_SESSION_CACHE_LIMITER:
+                            return 'private_no_expire';
+                        case Config::PARAM_SESSION_SAVE_PATH:
+                            return 'explicit_save_path';
+                        default:
+                            return null;
+                    }
+                });
+            $sessionConfig = $this->objectManager->create(Config::class, ['deploymentConfig' => $deploymentConfigMock]);
+            $saveHandler = $this->objectManager->create(SaveHandler::class, ['sessionConfig' => $sessionConfig]);
+
             $this->model = $this->objectManager->create(
                 \Magento\Framework\Session\SessionManager::class,
                 [
-                    'sidResolver' => $this->sidResolver
+                    'sidResolver' => $this->sidResolver,
+                    'saveHandler' => $saveHandler,
+                    'sessionConfig' => $sessionConfig,
                 ]
             );
-            $sessionConfig = $this->objectManager->get(ConfigInterface::class);
             $this->assertEquals('db', $sessionConfig->getOption('session.save_handler'));
             $this->assertEquals('private_no_expire', $sessionConfig->getOption('session.cache_limiter'));
             $this->assertEquals('explicit_save_path', $sessionConfig->getOption('session.save_path'));
