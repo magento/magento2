@@ -443,7 +443,7 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['configurable_options'],
-            "Precondition failed: 'configurable_product_options' must not be empty"
+            "Precondition failed: 'configurable_options' must not be empty"
         );
         $configurableAttributeOptions = $this->getConfigurableOptions();
         $configurableAttributeOption = array_shift($configurableAttributeOptions);

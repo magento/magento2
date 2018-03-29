@@ -5,10 +5,10 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\Framework\GraphQlSchemaStiching;
+namespace Magento\Framework\GraphQlSchemaStitching;
 
 use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphqlSchemaStiching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
