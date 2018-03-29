@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\ResourceModel\Product;
+namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\GetProductTypeBySkuInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\InventoryCatalog\Api\GetProductTypeBySkuInterface;
 
 /**
  * @inheritdoc

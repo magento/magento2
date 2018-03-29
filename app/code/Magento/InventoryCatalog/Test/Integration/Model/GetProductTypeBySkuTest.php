@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\ResourceModel\Product;
+namespace Magento\InventoryCatalog\Test\Integration\Model;
 
+use Magento\InventoryCatalog\Model\GetProductTypeBySku;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -34,7 +35,7 @@ class GetProductTypeBySkuTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $skus
      * @param array $expectedTypes
-     * @magentoDataFixture Magento/Catalog/_files/products_all_types.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/products_all_types.php
      * @dataProvider productTypesDataProvider
      */
     public function testProductTypes(array $skus, array $expectedTypes)
