@@ -10,17 +10,12 @@ namespace Magento\InventoryBundleIndexer\Plugin\InventoryIndexer\Indexer\SourceI
 use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\InventoryBundleIndexer\Indexer\SourceItem\ByBundleSkuAndChildrenSourceItemsIdsIndexer;
 use Magento\InventoryBundleIndexer\Indexer\SourceItem\SourceItemsIdsByChildrenProductsIdsProvider;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 class AddBundleDataToIndexByBundleIds
 {
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-
     /**
      * @var ByBundleSkuAndChildrenSourceItemsIdsIndexer
      */
@@ -32,18 +27,23 @@ class AddBundleDataToIndexByBundleIds
     private $sourceItemsIdsByChildrenProductsIdsProvider;
 
     /**
-     * @param ProductRepository $productRepository
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
+
+    /**
      * @param ByBundleSkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer
      * @param SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
-        ProductRepository $productRepository,
         ByBundleSkuAndChildrenSourceItemsIdsIndexer $bundleBySkuAndChildrenSourceItemsIdsIndexer,
-        SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider
+        SourceItemsIdsByChildrenProductsIdsProvider $sourceItemsIdsByChildrenProductsIdsProvider,
+        GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
-        $this->productRepository = $productRepository;
         $this->bundleBySkuAndChildrenSourceItemsIdsIndexer = $bundleBySkuAndChildrenSourceItemsIdsIndexer;
         $this->sourceItemsIdsByChildrenProductsIdsProvider = $sourceItemsIdsByChildrenProductsIdsProvider;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
@@ -83,7 +83,8 @@ class AddBundleDataToIndexByBundleIds
         foreach ($productLinks as $productLink) {
             $productId = $productLink->getProductId();
             if (null === $productId) {
-                $productId = $this->productRepository->get($productLink->getSku())->getId();
+                $sku = $productLink->getSku();
+                $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
             }
             $productIds[] = $productId;
         }

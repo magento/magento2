@@ -6,6 +6,7 @@
         "magento/module-inventory-indexer": "100.0.*",
         "magento/module-inventory": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
+        "magento/module-inventory-catalog": "100.0.*",
         "magento/module-catalog": "100.3.*",
         "magento/framework": "100.3.*"
     },
