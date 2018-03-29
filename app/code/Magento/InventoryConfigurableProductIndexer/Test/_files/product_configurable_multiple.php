@@ -153,4 +153,3 @@ foreach ($configurableIds as $configurableId) {
         [2]
     );
 }
-
