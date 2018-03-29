@@ -32,4 +32,7 @@
         <data key="is_active">true</data>
         <var key="parent_id" entityType="category" entityKey="id" />
     </entity>
+    <entity name="DefaultRootCategoryGetter" type="category">
+        <var key="category" entityKey="category" entityType="category"/>
+    </entity>
 </entities>
