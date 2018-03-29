@@ -107,25 +107,17 @@ class BulkScheduleTest extends WebapiAbstract
     public function testAsyncScheduleBulk($product)
     {
         $this->_markTestAsRestOnly();
+        $this->skus[] = $product['product'][ProductInterface::SKU];
+        $this->clearProducts();
+
         $response = $this->saveProductAsync($product);
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
 
-        if (count($product) <= 1) {
-            $this->skus[] = $product['product'][ProductInterface::SKU];
-            $this->assertCount(1, $response['request_items']);
-            $this->assertEquals('accepted', $response['request_items'][0]['status']);
-            $this->assertFalse($response['errors']);
-        } else {
-            $this->assertCount(count($product), $response['request_items']);
-            foreach ($product as $productItem) {
-                $this->skus[] = $productItem['product'][ProductInterface::SKU];
-            }
-            foreach ($response['request_items'] as $status) {
-                $this->assertEquals('accepted', $status['status']);
-            }
-            $this->assertFalse($response['errors']);
-        }
+        $this->assertCount(1, $response['request_items']);
+        $this->assertEquals('accepted', $response['request_items'][0]['status']);
+        $this->assertFalse($response['errors']);
+
         //assert one products is created
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
@@ -224,16 +216,6 @@ class BulkScheduleTest extends WebapiAbstract
             [['product' => $productBuilder([
                 ProductInterface::TYPE_ID => 'virtual',
                 ProductInterface::SKU => 'psku-test-2'])
-            ]],
-            [[
-                ['product' => $productBuilder([
-                    ProductInterface::TYPE_ID => 'simple',
-                    ProductInterface::SKU => 'psku-test-1'
-                ])],
-                ['product' => $productBuilder([
-                    ProductInterface::TYPE_ID => 'virtual',
-                    ProductInterface::SKU => 'psku-test-2'
-                ])]
             ]]
         ];
     }
