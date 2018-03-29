@@ -22,7 +22,7 @@ class Rest implements SchemaTypeInterface
      *
      * @param string $code
      */
-    public function __construct(string $code)
+    public function __construct(string $code = 'rest')
     {
         $this->code = $code;
     }
