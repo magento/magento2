@@ -12,7 +12,7 @@
     <actionGroup name="StorefrontCheckCategoryActionGroup">
         <arguments>
             <argument name="category"/>
-            <argument name="productCount"/>
+            <argument name="productCount" type="string"/>
         </arguments>
         <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
