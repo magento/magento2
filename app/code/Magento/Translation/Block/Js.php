@@ -8,6 +8,8 @@ namespace Magento\Translation\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 
 /**
  * @api
@@ -26,20 +28,28 @@ class Js extends Template
     private $fileManager;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Template\Context $context
      * @param Config $config
      * @param \Magento\Translation\Model\FileManager $fileManager
      * @param array $data
+     * @param Escaper $escaper
      */
     public function __construct(
         Template\Context $context,
         Config $config,
         \Magento\Translation\Model\FileManager $fileManager,
-        array $data = []
+        array $data = [],
+        Escaper $escaper = null
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->fileManager = $fileManager;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper);
     }
 
     /**

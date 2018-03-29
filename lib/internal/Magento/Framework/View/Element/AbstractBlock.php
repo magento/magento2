@@ -892,18 +892,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape string for the JavaScript context
-     *
-     * @param string $string
-     * @return string
-     * @since 100.2.0
-     */
-    public function escapeJs($string)
-    {
-        return $this->_escaper->escapeJs($string);
-    }
-
-    /**
      * Escape a string for the HTML attribute context
      *
      * @param string $string
@@ -965,34 +953,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function escapeXssInUrl($data)
     {
         return $this->_escaper->escapeXssInUrl($data);
-    }
-
-    /**
-     * Escape quotes inside html attributes
-     *
-     * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
-     *
-     * @param  string $data
-     * @param  bool $addSlashes
-     * @return string
-     * @deprecated 100.2.0
-     */
-    public function escapeQuote($data, $addSlashes = false)
-    {
-        return $this->_escaper->escapeQuote($data, $addSlashes);
-    }
-
-    /**
-     * Escape quotes in java scripts
-     *
-     * @param string|array $data
-     * @param string $quote
-     * @return string|array
-     * @deprecated 100.2.0
-     */
-    public function escapeJsQuote($data, $quote = '\'')
-    {
-        return $this->_escaper->escapeJsQuote($data, $quote);
     }
 
     /**
