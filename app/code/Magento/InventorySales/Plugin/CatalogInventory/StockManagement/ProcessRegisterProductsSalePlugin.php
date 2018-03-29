@@ -10,11 +10,11 @@ namespace Magento\InventorySales\Plugin\CatalogInventory\StockManagement;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
-use Magento\InventoryConfiguration\Model\IsSourceItemsAllowedForProductTypeInterface;
+use Magento\InventoryCatalog\Model\GetProductTypesBySkus;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
+use Magento\InventoryConfiguration\Model\GetAllowedProductTypesForSourceItemsInterface;
 use Magento\InventoryReservations\Model\ReservationBuilderInterface;
 use Magento\InventoryReservationsApi\Api\AppendReservationsInterface;
-use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 use Magento\InventorySalesApi\Api\IsProductSalableForRequestedQtyInterface;
 
@@ -44,45 +44,46 @@ class ProcessRegisterProductsSalePlugin
     private $appendReservations;
 
     /**
-     * @var IsSourceItemsAllowedForProductTypeInterface
-     */
-    private $isSourceItemsAllowedForProductType;
-
-    /**
-     * @var GetProductTypesBySkusInterface
-     */
-    private $getProductTypesBySkus;
-
-    /**
      * @var IsProductSalableForRequestedQtyInterface
      */
     private $isProductSalableForRequestedQty;
+
+    /**
+     * @var GetAllowedProductTypesForSourceItemsInterface
+     */
+    private $allowedProductTypesForSourceItems;
+
+    /**
+     * @var GetProductTypesBySkus
+     */
+    private $getProductTypesBySkus;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ReservationBuilderInterface $reservationBuilder
      * @param AppendReservationsInterface $appendReservations
-     * @param IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType
-     * @param GetProductTypesBySkusInterface $getProductTypesBySkus
      * @param IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+     * @param GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems
+     * @param GetProductTypesBySkus $getProductTypesBySkus
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
         AppendReservationsInterface $appendReservations,
-        IsSourceItemsAllowedForProductTypeInterface $isSourceItemsAllowedForProductType,
-        GetProductTypesBySkusInterface $getProductTypesBySkus,
-        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty
+        IsProductSalableForRequestedQtyInterface $isProductSalableForRequestedQty,
+        GetAllowedProductTypesForSourceItemsInterface $allowedProductTypesForSourceItems,
+        GetProductTypesBySkus $getProductTypesBySkus
+
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
         $this->appendReservations = $appendReservations;
-        $this->isSourceItemsAllowedForProductType = $isSourceItemsAllowedForProductType;
-        $this->getProductTypesBySkus = $getProductTypesBySkus;
         $this->isProductSalableForRequestedQty = $isProductSalableForRequestedQty;
+        $this->allowedProductTypesForSourceItems = $allowedProductTypesForSourceItems;
+        $this->getProductTypesBySkus = $getProductTypesBySkus;
     }
 
     /**
@@ -99,21 +100,20 @@ class ProcessRegisterProductsSalePlugin
         if (empty($items)) {
             return [];
         }
+        $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
+        $excludedItems = $this->getExcludedItems($items, $productSkus);
+        if (!empty($excludedItems)) {
+            $proceed($excludedItems, $websiteId);
+        }
         if (null === $websiteId) {
             //TODO: Do we need to throw exception?
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
-
         $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$websiteId)->getStockId();
         $productSkus = $this->getSkusByProductIds->execute(array_keys($items));
         $this->checkItemsQuantity($items, $productSkus, $stockId);
-
-        $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
-            if (!$this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
-                continue;
-            }
             $reservations[] = $this->reservationBuilder
                 ->setSku($sku)
                 ->setQuantity(-(float)$items[$productId])
@@ -147,5 +147,32 @@ class ProcessRegisterProductsSalePlugin
                 );
             }
         }
+    }
+
+    /**
+     * Build list of items connected to products with unsupported types.
+     *
+     * Remove items connected to products with unsupported product types and put them into separate array,
+     * in order to process them with standard behavior.
+     *
+     * @param array $items
+     * @param array $productSkus
+     * @return array
+     */
+    private function getExcludedItems(array &$items, array &$productSkus): array
+    {
+        $excludedItems = [];
+        $incomingProductTypes = $this->getProductTypesBySkus->execute($productSkus);
+        $allowedProductTypes = $this->allowedProductTypesForSourceItems->execute();
+        foreach ($incomingProductTypes as $sku => $type) {
+            if (!in_array($type, $allowedProductTypes, true)) {
+                $excludedProductId = array_search($sku, $productSkus, true);
+                $excludedItems[$excludedProductId] = $items[$excludedProductId];
+                //Exclude unsupported product types from new behavior process.
+                unset($productSkus[$excludedProductId], $items[$excludedProductId]);
+            }
+        }
+
+        return $excludedItems;
     }
 }
