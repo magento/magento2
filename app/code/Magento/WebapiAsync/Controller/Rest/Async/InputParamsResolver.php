@@ -89,18 +89,9 @@ class InputParamsResolver
     {
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
-        $inputData = $this->request->getRequestData();
 
-        //simple check if async request have single or bulk entities
-        if (array_key_exists(0, $inputData)) {
-            foreach ($inputData as $key => $singleEntityParams) {
-                if (is_integer($key)) {
-                    $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams);
-                }
-            }
-        } else {//single item request
-            $webapiResolvedParams[] = $this->inputParamsResolver->resolve();
-        }
+        ///single item request
+        $webapiResolvedParams[] = $this->inputParamsResolver->resolve();
 
         return $webapiResolvedParams;
     }
@@ -111,27 +102,5 @@ class InputParamsResolver
     public function getRoute()
     {
         return $this->inputParamsResolver->getRoute();
-    }
-
-    /**
-     * Convert the input array from key-value format to a list of parameters
-     * suitable for the specified class / method.
-     *
-     * Instead of \Magento\Webapi\Controller\Rest\InputParamsResolver
-     * we don't need to merge body params with url params and use only body params
-     *
-     * @param array $inputData data to send to method in key-value format
-     * @return array list of parameters that can be used to call the service method
-     * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
-     * @throws \Magento\Framework\Webapi\Exception
-     */
-    private function resolveBulkItemParams($inputData)
-    {
-        $route = $this->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-        $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
-
-        return $inputParams;
     }
 }
