@@ -50,6 +50,7 @@
         <dontSee selector="{{AdminGridHeaders.headerByName('Street')}}" userInput="Street" stepKey="dontSeeStreetColumnHeader1"/>
         <dontSee selector="{{AdminGridHeaders.headerByName('Fax')}}" userInput="Fax" stepKey="dontSeeFaxColumnHeader1"/>
 
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders1"/>
         <click selector="{{AdminGridColumnsControls.columnName('Latitude')}}" stepKey="enableLatitudeColumn1"/>
         <see selector="{{AdminGridHeaders.headerByName('Latitude')}}" userInput="Latitude" stepKey="seeLatitudeHeader1"/>
         <click selector="{{AdminGridColumnsControls.columnName('Street')}}" stepKey="enableStreetColumn1"/>
@@ -57,7 +58,7 @@
         <click selector="{{AdminGridColumnsControls.columnName('Phone')}}" stepKey="enablePhoneColumn1"/>
         <see selector="{{AdminGridHeaders.headerByName('Phone')}}" userInput="Phone" stepKey="seePhoneHeader1"/>
 
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders2"/>
         <see selector="{{AdminGridHeaders.headerByName('Code')}}" userInput="Code" stepKey="seeCodeHeader2"/>
         <see selector="{{AdminGridHeaders.headerByName('Is Enabled')}}" userInput="Is Enabled" stepKey="seeIsEnabledHeader2"/>
         <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeActionHeader2"/>

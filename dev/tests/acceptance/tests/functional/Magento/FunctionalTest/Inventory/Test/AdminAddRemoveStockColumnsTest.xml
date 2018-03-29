@@ -37,6 +37,7 @@
         <see selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="seeTheHeaderSalesChannel1"/>
         <see selector="{{AdminGridHeaders.headerByName('Action')}}" userInput="Action" stepKey="seeTheHeaderAction1"/>
 
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders1"/>
         <click selector="{{AdminGridColumnsControls.columnName('ID')}}" stepKey="disableIdColumn1"/>
         <click selector="{{AdminGridColumnsControls.columnName('Name')}}" stepKey="disableNameColumn1"/>
         <click selector="{{AdminGridColumnsControls.columnName('Sales Channel')}}" stepKey="disableSalesChannelColumn1"/>
@@ -45,7 +46,7 @@
         <dontSee selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="dontSeeNameColumn1"/>
         <dontSee selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="dontSeeSalesChannelColumn1"/>
 
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders"/>
+        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetColumnReaders2"/>
         <see selector="{{AdminGridHeaders.headerByName('ID')}}" userInput="ID" stepKey="seeTheHeaderId2"/>
         <see selector="{{AdminGridHeaders.headerByName('Name')}}" userInput="Name" stepKey="seeTheHeaderName2"/>
         <see selector="{{AdminGridHeaders.headerByName('Sales Channel')}}" userInput="Sales Channel" stepKey="seeTheHeaderSalesChannel2"/>

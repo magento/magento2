@@ -12,7 +12,8 @@
         <annotations>
             <features value="Multi-Source Inventory"/>
             <stories value="Add Multiple Sources to a Product"/>
-            <title value="You should be able to add Multiple Sources to a Product."/>
+            <title value="Add Multiple Sources to a Product"/>
+            <description value="You should be able to add Multiple Sources to a Product."/>
             <testCaseId value="630"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
