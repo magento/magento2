@@ -42,6 +42,11 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $productCollection;
 
+    /**
+     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogConfig;
+
     protected function setUp()
     {
         $this->connection = $this
@@ -68,6 +73,11 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
+        $this->catalogConfig = $this
+            ->getMockBuilder(\Magento\Catalog\Model\Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttributesUsedForPriceRules'])
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -76,6 +86,7 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
                 'resourceConnection' => $this->resourceConnection,
                 'linkedProductSelectBuilder' => $this->linkedProductSelectBuilder,
                 'collectionFactory' => $this->collectionFactory,
+                'catalogConfig' => $this->catalogConfig
             ]
         );
     }
@@ -84,13 +95,22 @@ class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
     {
         $productId = 1;
         $linkedProducts = ['some', 'linked', 'products', 'dataobjects'];
+        $priceAttributes = ['price_attribute_rule'];
         $product = $this->getMockBuilder(ProductInterface::class)->disableOriginalConstructor()->getMock();
         $product->expects($this->any())->method('getId')->willReturn($productId);
         $this->linkedProductSelectBuilder->expects($this->any())->method('build')->with($productId)->willReturn([]);
-        $this->productCollection
+        $this->catalogConfig
             ->expects($this->once())
+            ->method('getAttributesUsedForPriceRules')
+            ->willReturn(array_fill_keys($priceAttributes, null));
+
+        $this->productCollection
+            ->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->with(['price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id'])
+            ->withConsecutive(
+                [$priceAttributes],
+                [['price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']]
+            )
             ->willReturnSelf();
         $this->productCollection->expects($this->once())->method('addIdFilter')->willReturnSelf();
         $this->productCollection->expects($this->once())->method('getItems')->willReturn($linkedProducts);

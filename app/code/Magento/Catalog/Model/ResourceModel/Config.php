@@ -137,6 +137,35 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Retrieve Product Attributes Used for Price Rule Calculation
+     *
+     * @return array
+     */
+    public function getAttributesUsedForPriceRules()
+    {
+        $connection = $this->getConnection();
+        $storeLabelExpr = $connection->getCheckSql('al.value IS NOT NULL', 'al.value', 'main_table.frontend_label');
+
+        $select = $connection->select()->from(
+            ['main_table' => $this->getTable('eav_attribute')]
+        )->join(
+            ['additional_table' => $this->getTable('catalog_eav_attribute')],
+            'main_table.attribute_id = additional_table.attribute_id'
+        )->joinLeft(
+            ['al' => $this->getTable('eav_attribute_label')],
+            'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int)$this->getStoreId(),
+            ['store_label' => $storeLabelExpr]
+        )->where(
+            'main_table.entity_type_id = ?',
+            $this->getEntityTypeId()
+        )->where(
+            'additional_table.is_used_for_price_rules = ?',
+            1
+        );
+        return $connection->fetchAll($select);
+    }
+
+    /**
      * Retrieve Used Product Attributes for Catalog Product Listing Sort By
      *
      * @return array
