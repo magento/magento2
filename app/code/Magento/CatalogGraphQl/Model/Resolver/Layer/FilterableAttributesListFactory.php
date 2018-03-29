@@ -20,7 +20,7 @@ class FilterableAttributesListFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    private $objectManager = null;
 
     /**
      * Factory constructor
@@ -29,7 +29,7 @@ class FilterableAttributesListFactory
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -42,9 +42,9 @@ class FilterableAttributesListFactory
     public function create($type, array $data = array())
     {
         if ($type === Resolver::CATALOG_LAYER_CATEGORY) {
-            return $this->_objectManager->create(CategoryFilterableAttributeList::class, $data);
+            return $this->objectManager->create(CategoryFilterableAttributeList::class, $data);
         } elseif ($type === Resolver::CATALOG_LAYER_SEARCH) {
-            return $this->_objectManager->create(FilterableAttributeList::class, $data);
+            return $this->objectManager->create(FilterableAttributeList::class, $data);
         }
         throw new \InvalidArgumentException('Unknown filterable attribtues list type: ' . $type);
     }
