@@ -35,9 +35,6 @@ use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
 
 /**
  * Class Consumer used to process OperationInterface messages.
- * This could be used for both synchronous and asynchronous processing, depending on topic.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassConsumer implements ConsumerInterface
 {
@@ -119,7 +116,6 @@ class MassConsumer implements ConsumerInterface
         $this->jsonHelper = $jsonHelper;
         $this->operationManagement = $operationManagement;
         $this->messageController = $messageController;
-
         $this->logger = $logger ? : \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
@@ -188,7 +184,6 @@ class MassConsumer implements ConsumerInterface
      *
      * @param EnvelopeInterface $message
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function dispatchMessage(EnvelopeInterface $message)
     {
@@ -213,42 +208,10 @@ class MassConsumer implements ConsumerInterface
 
         if ($errorCode === null) {
             foreach ($handlers as $callback) {
-                try {
-                    call_user_func_array($callback, $entityParams);
-                    $messages[] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
-                } catch (\Zend_Db_Adapter_Exception  $e) {
-                    $this->logger->critical($e->getMessage());
-                    if ($e instanceof LockWaitException
-                        || $e instanceof DeadlockException
-                        || $e instanceof ConnectionException
-                    ) {
-                        $status = OperationInterface::STATUS_TYPE_RETRIABLY_FAILED;
-                        $errorCode = $e->getCode();
-                        $messages[] = __($e->getMessage());
-                    } else {
-                        $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-                        $errorCode = $e->getCode();
-                        $messages[] =
-                            __('Sorry, something went wrong during product prices update. Please see log for details.');
-                    }
-                } catch (NoSuchEntityException $e) {
-                    $this->logger->error($e->getMessage());
-                    $status = ($e instanceof TemporaryStateExceptionInterface) ?
-                        OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED :
-                        OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-                    $errorCode = $e->getCode();
-                    $messages[] = $e->getMessage();
-                } catch (LocalizedException $e) {
-                    $this->logger->error($e->getMessage());
-                    $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-                    $errorCode = $e->getCode();
-                    $messages[] = $e->getMessage();
-                } catch (\Exception $e) {
-                    $this->logger->error($e->getMessage());
-                    $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-                    $errorCode = $e->getCode();
-                    $messages[] = $e->getMessage();
-                }
+                $result = $this->executeHandler($callback, $entityParams);
+                $status = $result['status'];
+                $errorCode = $result['error_code'];
+                $messages = array_merge($messages, $result['messages']);
             }
         }
 
@@ -260,5 +223,58 @@ class MassConsumer implements ConsumerInterface
             implode('; ', $messages),
             $serializedData
         );
+    }
+
+    /**
+     * Execute topic handler
+     *
+     * @param $callback
+     * @param $entityParams
+     * @return array
+     */
+    private function executeHandler($callback, $entityParams)
+    {
+        $result = [
+            'status' => OperationInterface::STATUS_TYPE_COMPLETE,
+            'error_code' => null,
+            'messages' => []
+        ];
+        try {
+            call_user_func_array($callback, $entityParams);
+            $messages[] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
+        } catch (\Zend_Db_Adapter_Exception  $e) {
+            $this->logger->critical($e->getMessage());
+            if ($e instanceof LockWaitException
+                || $e instanceof DeadlockException
+                || $e instanceof ConnectionException
+            ) {
+                $result['status'] = OperationInterface::STATUS_TYPE_RETRIABLY_FAILED;
+                $result['error_code'] = $e->getCode();
+                $result['messages'][] = __($e->getMessage());
+            } else {
+                $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+                $result['error_code'] = $e->getCode();
+                $result['messages'][] =
+                    __('Sorry, something went wrong during product prices update. Please see log for details.');
+            }
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error($e->getMessage());
+            $result['status'] = ($e instanceof TemporaryStateExceptionInterface) ?
+                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED :
+                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $result['error_code'] = $e->getCode();
+            $result['messages'][] = $e->getMessage();
+        } catch (LocalizedException $e) {
+            $this->logger->error($e->getMessage());
+            $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $result['error_code'] = $e->getCode();
+            $result['messages'][] = $e->getMessage();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $result['error_code'] = $e->getCode();
+            $result['messages'][] = $e->getMessage();
+        }
+        return $result;
     }
 }

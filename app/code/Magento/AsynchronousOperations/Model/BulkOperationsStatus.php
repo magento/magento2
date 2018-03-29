@@ -18,7 +18,6 @@ use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFacto
 
 /**
  * Class BulkStatus
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BulkOperationsStatus implements BulkStatusInterface
 {
