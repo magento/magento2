@@ -100,7 +100,6 @@ class ProcessRegisterProductsSalePlugin
             return [];
         }
         if (null === $websiteId) {
-            //TODO: Do we need to throw exception?
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
 
@@ -111,7 +110,7 @@ class ProcessRegisterProductsSalePlugin
         $productTypes = $this->getProductTypesBySkus->execute(array_values($productSkus));
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
-            if (!$this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
                 continue;
             }
             $reservations[] = $this->reservationBuilder
@@ -141,7 +140,7 @@ class ProcessRegisterProductsSalePlugin
         foreach ($productSkus as $productId => $sku) {
             $qty = (float)$items[$productId];
             $isSalable = $this->isProductSalableForRequestedQty->execute($sku, $stockId, $qty)->isSalable();
-            if (!$isSalable) {
+            if (false === $isSalable) {
                 throw new LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );

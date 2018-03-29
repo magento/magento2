@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryCatalog\Model\GetProductTypesBySkusInterface;
@@ -71,9 +72,9 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
      * @param ItemResourceModel $subject
      * @param callable $proceed
      * @param AbstractModel $legacyStockItem
-     *
      * @return ItemResourceModel
      * @throws \Exception
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(ItemResourceModel $subject, callable $proceed, AbstractModel $legacyStockItem)
@@ -99,11 +100,10 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
     }
 
     /**
-     * @param AbstractModel $legacyStockItem
-     *
+     * @param Item $legacyStockItem
      * @return string
      */
-    private function getTypeId(AbstractModel $legacyStockItem): string
+    private function getTypeId(Item $legacyStockItem): string
     {
         $typeId = $legacyStockItem->getTypeId();
         if ($typeId === null) {

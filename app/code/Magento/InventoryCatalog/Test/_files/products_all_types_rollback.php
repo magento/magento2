@@ -23,7 +23,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 $productTypes = [
     Bundle::TYPE_CODE,
@@ -36,8 +36,8 @@ $productTypes = [
 
 foreach ($productTypes as $productType) {
     try {
-        $firstProduct = $productRepository->get($productType . '_sku', false, null, true);
-        $firstProduct->delete();
+        $product = $productRepository->get($productType . '_sku', false, null, true);
+        $productRepository->delete($product);
     } catch (NoSuchEntityException $exception) {
         //Product already removed
     }
