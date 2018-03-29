@@ -91,7 +91,6 @@ class ProcessRevertProductsSalePlugin
             return [];
         }
         if (null === $websiteId) {
-            //TODO: Do we need to throw exception?
             throw new LocalizedException(__('$websiteId parameter is required'));
         }
 
@@ -101,7 +100,7 @@ class ProcessRevertProductsSalePlugin
 
         $reservations = [];
         foreach ($productSkus as $productId => $sku) {
-            if (!$this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
+            if (false === $this->isSourceItemsAllowedForProductType->execute($productTypes[$sku])) {
                 continue;
             }
             $reservations[] = $this->reservationBuilder

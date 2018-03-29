@@ -83,19 +83,19 @@ class ProcessBackItemQtyPlugin
      * @param int|null $scopeId
      * @return bool
      * @throws LocalizedException
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundBackItemQty(StockManagement $subject, callable $proceed, $productId, $qty, $scopeId = null)
     {
         if (null === $scopeId) {
-            // TODO: Do we need to throw exception?
             throw new LocalizedException(__('$scopeId is required'));
         }
 
         $productSku = $this->getSkusByProductIds->execute([$productId])[$productId];
         $productType = $this->getProductTypesBySkus->execute([$productSku])[$productSku];
 
-        if ($this->isSourceItemsAllowedForProductType->execute($productType)) {
+        if (true === $this->isSourceItemsAllowedForProductType->execute($productType)) {
             $stockId = (int)$this->stockByWebsiteIdResolver->get((int)$scopeId)->getStockId();
             $reservation = $this->reservationBuilder
                 ->setSku($productSku)
