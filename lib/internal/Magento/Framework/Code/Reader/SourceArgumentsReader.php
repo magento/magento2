@@ -56,7 +56,7 @@ class SourceArgumentsReader
         $source = '<?php ' . trim(implode('', $fileContent));
 
         // Remove parameter default value.
-        $source = preg_replace("/ = (.*)/", ',)', $source);
+        $source = preg_replace("/(\s*)=([^\,\)]*)/", '', $source);
 
         $methodTokenized = token_get_all($source);
         $argumentsStart = array_search('(', $methodTokenized) + 1;
@@ -85,6 +85,9 @@ class SourceArgumentsReader
         foreach ($arguments as $key => &$argument) {
             $argument = $this->removeToken($argument, '=');
             $argument = $this->removeToken($argument, '&');
+            if (mb_strpos($argument, '?') === 0) {
+                $argument = mb_substr($argument, 1);
+            }
             $argument = $this->namespaceResolver->resolveNamespace($argument, $availableNamespaces);
         }
         unset($argument);

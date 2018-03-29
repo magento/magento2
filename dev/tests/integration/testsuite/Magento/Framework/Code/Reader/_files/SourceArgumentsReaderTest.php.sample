@@ -19,6 +19,8 @@ class AnotherSimpleClass
         ClassName\Under\Test $itemFive,
         ClassName $itemSix,
         Test $itemSeven,
+        ?\Exception $optionalException,
+        ?ClassName $optionalWithDefaultValue = null,
         array $itemEight = [],
         $itemNine = 'test'
     ) {
