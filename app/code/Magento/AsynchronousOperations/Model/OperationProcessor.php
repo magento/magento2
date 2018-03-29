@@ -23,6 +23,11 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 
+/**
+ * Class OperationProcessor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OperationProcessor
 {
     /**
