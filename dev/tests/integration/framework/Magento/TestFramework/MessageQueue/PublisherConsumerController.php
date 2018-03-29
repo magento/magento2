@@ -89,7 +89,6 @@ class PublisherConsumerController
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
             }
-
         }
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
