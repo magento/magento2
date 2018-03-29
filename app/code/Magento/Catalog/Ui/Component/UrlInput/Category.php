@@ -35,7 +35,7 @@ class Category implements ConfigInterface
     {
         return [
             'label' => __('Category'),
-            'component' => 'Magento_Catalog/js/components/new-category',
+            'component' => 'Magento_Catalog/js/components/category-select',
             'template' => 'ui/grid/filters/elements/ui-select',
             'formElement' => 'select',
             'disableLabel' => true,
