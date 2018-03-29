@@ -84,9 +84,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
+        try {
+            $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
+        } catch (\Exception $e) {
+            // no directories matched white list
+            return [];
+        }
         $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
-
         return $targetFiles;
     }
 
@@ -244,7 +248,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private function getFullWhitelist()
     {
-        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        try {
+            return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        } catch (\Exception $e) {
+            // nothing is whitelisted
+            return [];
+        }
     }
 
     public function testCodeStyle()
@@ -327,10 +336,18 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $componentRegistrar = new ComponentRegistrar();
         $directoriesToCheck = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        try {
+            $blackList = Files::init()->readLists(
+                self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
+            );
+        } catch (\Exception $e) {
+            // nothing matched black list
+            $blackList = [];
+        }
 
         $toBeTestedFiles = array_diff(
             self::filterFiles($changedFiles, ['php'], $directoriesToCheck),
-            Files::init()->readLists(self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt')
+            $blackList
         );
 
         $filesMissingStrictTyping = [];
