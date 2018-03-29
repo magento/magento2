@@ -51,7 +51,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 ),
                 'data' => [
                     'schema_types' => [
-                        'rest' => (new ObjectManager($this))->getObject(Rest::class)
+                        'test' => $this->schemaTypeMock
                     ]
                 ]
             ]
