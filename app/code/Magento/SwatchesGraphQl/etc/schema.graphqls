@@ -12,3 +12,18 @@ input ProductFilterInput {
 input ProductSortInput {
     swatch_image: SortEnum @doc(description: "The file name of a swatch image")
 }
+
+interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchFilterItem")
+{
+    swatch_data: SwatchData @doc(description: "")
+}
+
+type SwatchLayerFilterItem implements SwatchLayerFilterItemInterface, LayerFilterItemInterface
+{
+
+}
+
+type SwatchData {
+    type: String @doc(description: "")
+    value: String @doc(description: "")
+}

@@ -6,9 +6,7 @@
 namespace Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
-use Magento\Catalog\Model\Layer\FilterListFactory;
-use Magento\Catalog\Model\Layer\Resolver;
-use Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
 
 /**
  * Layered navigation filters data provider.
@@ -18,28 +16,18 @@ use Magento\CatalogGraphQl\Model\Resolver\Layer\FilterableAttributesListFactory;
 class Filters
 {
     /**
-     * @var Resolver
+     * @var FiltersProvider
      */
-    private $layerResolver;
+    private $filtersProvider;
 
     /**
-     * @var FilterableAttributesListFactory
+     * Filters constructor.
+     * @param FiltersProvider $filtersProvider
      */
-    private $filterableAttributesListFactory;
-
-    /**
-     * @var FilterListFactory
-     */
-    private $filterListFactory;
-
     public function __construct(
-        Resolver $layerResolver,
-        FilterableAttributesListFactory $filterableAttributesListFactory,
-        FilterListFactory $filterListFactory
+        FiltersProvider $filtersProvider
     ) {
-        $this->layerResolver = $layerResolver;
-        $this->filterableAttributesListFactory = $filterableAttributesListFactory;
-        $this->filterListFactory = $filterListFactory;
+        $this->filtersProvider = $filtersProvider;
     }
 
     /**
@@ -50,19 +38,9 @@ class Filters
      */
     public function getData(string $layerType)
     {
-        $filterableAttributesList = $this->filterableAttributesListFactory->create(
-            $layerType
-        );
-        $filterList = $this->filterListFactory->create(
-            [
-                'filterableAttributes' => $filterableAttributesList
-            ]
-        );
-
-        $filters = $filterList->getFilters($this->layerResolver->get());
         $filtersData = [];
         /** @var AbstractFilter $filter */
-        foreach ($filters as $filter) {
+        foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
             if ($filter->getItemsCount()) {
                 $filterGroup = [
                     'name' => (string)$filter->getName(),
