@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Api\Data;
 
 /**
  * Interface BulkStatusInterface
+ *
  * Bulk summary data with list of operations items full data.
  *
  * @api
