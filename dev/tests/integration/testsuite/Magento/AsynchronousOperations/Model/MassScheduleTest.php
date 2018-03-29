@@ -96,9 +96,6 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      * @dataProvider productDataProvider
      * @param ProductInterface[] $products
      */
@@ -129,6 +126,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
                 $this->skus[] = $data['product']->getSku();
             }
         }
+        $this->clearProducts();
+
         $result = $this->massSchedule->publishMass('async.V1.products.POST', $products);
 
         //assert bulk accepted with no errors
@@ -188,9 +187,6 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      * @dataProvider productExceptionDataProvider
      * @param ProductInterface[] $products
      */
@@ -272,7 +268,11 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             ],
             'multiple_products' => [
                 [
-                    ['product' => $this->getProduct()],
+                    ['product' => $this->getProduct()
+                        ->setName('Simple Product 3')
+                        ->setSku('unique-simple-product3')
+                        ->setMetaTitle('meta title 3')
+                    ],
                     ['product' => $this->getProduct()
                         ->setName('Simple Product 2')
                         ->setSku('unique-simple-product2')
