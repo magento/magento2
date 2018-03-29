@@ -198,6 +198,81 @@ return [
                               'copyFields' => true,
                           ],
                   ],
-               'description' => 'ProductLinks is an implementation of ProductLinksInterface.'
-          ]
+                  'description' => 'ProductLinks is an implementation of ProductLinksInterface.'
+          ],
+          'ProductLinksInterface' =>
+         [
+          'name' => 'ProductLinksInterface',
+          'fields' =>
+              [
+                  'sku' =>
+                      [
+                          'name' => 'sku',
+                          'type' => 'String',
+
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The identifier of the linked product',
+
+                      ],
+                  'link_type' =>
+                      [
+                          'name' => 'link_type',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => '',
+
+                      ],
+                  'linked_product_sku' =>
+                      [
+                          'name' => 'linked_product_sku',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The SKU of the linked product',
+
+                      ],
+                  'linked_product_type' =>
+                      [
+                          'name' => 'linked_product_type',
+                          'type' => 'String',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => '',
+
+                      ],
+                  'position' =>
+                      [
+                          'name' => 'position',
+                          'type' => 'Int',
+                          'arguments' =>
+                              [
+                              ],
+                          'required' => false,
+                          'isList'  => false,
+                          'resolver' => '',
+                          'description' => 'The position within the list of product links',
+
+                      ]
+              ],
+              'typeResolver' =>'Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite',
+              'description' => 'description for ProductLinksInterface'
+      ]
 ];

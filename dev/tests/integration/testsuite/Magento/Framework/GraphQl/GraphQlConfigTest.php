@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Config\Data\Field;
 use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\Framework\GraphQl\Config\Element\EnumValue;
+use Magento\Framework\GraphQl\Config\Element\InterfaceType;
 use Magento\Framework\GraphQl\Config\Element\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -135,7 +136,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests Structured data object for configured GraphQL type that implements an interface.
      */
-    public function testGraphQlInterfaceStructure()
+    public function testGraphQlTypeThatImplementsInterface()
     {
         $typeThatImplements = 'ProductLinks';
         /** @var \Magento\Framework\GraphQl\Config\Element\Type $outputInterface */
@@ -174,6 +175,16 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             );
             $this->assertEmpty($outputInterfaceFields[$outputInterfaceField]->getArguments());
         }
+    }
+
+    public function testGraphQlInterfaceConfigElement() {
+        $interfaceType ='ProductLinksInterface';
+        /** @var InterfaceType $outputConfigElement */
+        $outputConfigElement = $this->model->getConfigElement($interfaceType);
+        $expectedOutput = require __DIR__ . '/_files/query_array_output_1.php';
+        $this->assertEquals($outputConfigElement->getName(), $expectedOutput['ProductLinksInterface']['name']);
+        $this->assertEquals($outputConfigElement->getTypeResolver(), $expectedOutput['ProductLinksInterface']['typeResolver']);
+        $this->assertEquals($outputConfigElement->getDescription(), $expectedOutput['ProductLinksInterface']['description']);
     }
 
     /**

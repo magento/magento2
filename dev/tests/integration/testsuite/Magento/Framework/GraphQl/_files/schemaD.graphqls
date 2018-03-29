@@ -65,7 +65,7 @@ type ProductLinks implements ProductLinksInterface @doc(description: "ProductLin
 
 }
 
-interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") {
+interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description: "description for ProductLinksInterface") {
     sku: String @doc(description:"The identifier of the linked product")
     link_type: String
     linked_product_sku: String @doc(description:"The SKU of the linked product")
