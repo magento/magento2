@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
