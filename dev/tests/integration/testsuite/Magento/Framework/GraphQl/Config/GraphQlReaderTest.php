@@ -7,10 +7,10 @@ namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Cache;
 use Magento\Framework\GraphQl\Config;
+use Magento\Framework\GraphQl\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Controller\GraphQl;
-use Magento\GraphQl\Model\SchemaGenerator;
 
 /**
  * Tests the entire process of generating a schema from a given SDL and processing a request/query

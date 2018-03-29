@@ -5,12 +5,11 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\GraphQl\Model;
+namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\GraphQl\Type\SchemaFactory;
-use Magento\Framework\GraphQl\Type\Schema;
 use Magento\Framework\GraphQl\Type\Output\OutputMapper;
-use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Type\Schema;
+use Magento\Framework\GraphQl\Type\SchemaFactory;
 
 /**
  * Generate a query field and concrete types for GraphQL schema

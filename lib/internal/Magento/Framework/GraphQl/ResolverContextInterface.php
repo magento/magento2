@@ -5,14 +5,14 @@
  */
 declare(strict_types = 1);
 
-namespace Magento\GraphQl\Model;
+namespace Magento\Framework\GraphQl;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Resolver Context is used as a shared data extensible object in all resolvers that implement @see ResolverInterface.
  *
- * GraphQL will pass the same instance of this interface in each field resolver for, so these resolvers could have
+ * GraphQL will pass the same instance of this interface to each field resolver, so these resolvers could have
  * shared access to the same data for ease of implementation purposes.
  */
 interface ResolverContextInterface extends ExtensibleDataInterface
@@ -54,17 +54,17 @@ interface ResolverContextInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface|null
+     * @return \Magento\Framework\GraphQl\ResolverContextExtensionInterface|null
      */
     public function getExtensionAttributes() : ?\Magento\GraphQl\Model\ResolverContextExtensionInterface;
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
+     * @param \Magento\Framework\GraphQl\ResolverContextExtensionInterface $extensionAttributes
      * @return ResolverContextInterface
      */
     public function setExtensionAttributes(
-        \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
+        \Magento\Framework\GraphQl\ResolverContextExtensionInterface $extensionAttributes
     ) : ResolverContextInterface;
 }

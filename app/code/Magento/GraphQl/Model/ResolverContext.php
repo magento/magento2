@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Model;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\GraphQl\ResolverContextInterface;
 
 /**
  * Concrete implementation for @see ResolverContextInterface
@@ -22,7 +23,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**#@+
      * Constants defined for type of context
      */
-    const USER_TYPE_ID   = 'user_type';
+    const USER_TYPE_ID  = 'user_type';
     const USER_ID = 'user_id';
     /**#@-*/
 
@@ -65,7 +66,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface||null
+     * @return \Magento\Framework\GraphQl\ResolverContextExtensionInterface||null
      */
     public function getExtensionAttributes() : ?\Magento\GraphQl\Model\ResolverContextExtensionInterface
     {
@@ -75,11 +76,11 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
+     * @param \Magento\Framework\GraphQl\ResolverContextExtensionInterface $extensionAttributes
      * @return ResolverContextInterface
      */
     public function setExtensionAttributes(
-        \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
+        \Magento\Framework\GraphQl\ResolverContextExtensionInterface $extensionAttributes
     ) : ResolverContextInterface {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

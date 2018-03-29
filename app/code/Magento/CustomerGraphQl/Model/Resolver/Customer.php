@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Resolver\ResolverInterface;
 use Magento\Framework\GraphQl\Resolver\Value;
 use Magento\Framework\GraphQl\Resolver\ValueFactory;
-use Magento\GraphQl\Model\ResolverContextInterface;
+use Magento\Framework\GraphQl\ResolverContextInterface;
 
 /**
  * Customers field resolver, used for GraphQL request processing.

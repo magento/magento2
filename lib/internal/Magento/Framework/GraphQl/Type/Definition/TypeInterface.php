@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Marker interface for all GraphQl types
+ * Marker interface for all types compatible with GraphQL schema generator.
  */
 interface TypeInterface
 {
