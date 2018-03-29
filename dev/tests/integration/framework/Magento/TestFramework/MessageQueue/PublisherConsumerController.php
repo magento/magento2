@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TestFramework\MessageQueue;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\OsInfo;
+use Magento\TestFramework\Helper\Amqp;
 
 class PublisherConsumerController
 {
@@ -40,9 +44,15 @@ class PublisherConsumerController
      */
     private $appInitParams;
 
+    /**
+     * @var Amqp
+     */
+    private $amqpHelper;
+
     public function __construct(
         PublisherInterface $publisher,
         OsInfo $osInfo,
+        Amqp $amqpHelper,
         $logFilePath,
         $consumers,
         $appInitParams,
@@ -54,6 +64,7 @@ class PublisherConsumerController
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
         $this->appInitParams = $appInitParams;
+        $this->amqpHelper = $amqpHelper;
     }
 
     /**
@@ -69,10 +80,16 @@ class PublisherConsumerController
                 "This test relies on *nix shell and should be skipped in Windows environment."
             );
         }
+        $connections = $this->amqpHelper->getConnections();
+        foreach ($connections as $connectionName => $connectionData) {
+            $this->amqpHelper->deleteConnection($connectionName);
+        }
+        $this->amqpHelper->clearQueue("async.operations.all");
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
             }
+
         }
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
