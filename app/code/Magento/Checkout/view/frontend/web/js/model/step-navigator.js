@@ -144,7 +144,7 @@ define([
          */
         navigateTo: function (code, scrollToElementId) {
             var sortedItems = steps().sort(this.sortItems),
-                bodyElem = $.browser.safari || $.browser.chrome ? $('body') : $('html');
+                bodyElem = $('body');
 
             scrollToElementId = scrollToElementId || null;
 

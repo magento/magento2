@@ -41,11 +41,7 @@ class StockItemImporter implements StockItemImporterInterface
     }
 
     /**
-     * Handle Import of Stock Item Data
-     *
-     * @param array $stockData
-     * @return void
-     * @throws CouldNotSaveException
+     * @inheritdoc
      */
     public function import(array $stockData)
     {

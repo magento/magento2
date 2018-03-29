@@ -7,6 +7,7 @@
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
@@ -110,30 +111,74 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private static function getChangedFilesList($changedFilesBaseDir)
     {
-        $changedFiles = [];
+        return self::getFilesFromListFile(
+            $changedFilesBaseDir,
+            'changed_files*',
+            function () {
+                // if no list files, probably, this is the dev environment
+                @exec('git diff --name-only', $changedFiles);
+                @exec('git diff --cached --name-only', $addedFiles);
+                $changedFiles = array_unique(array_merge($changedFiles, $addedFiles));
+                return $changedFiles;
+            }
+        );
+    }
 
-        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
+    /**
+     * This method loads list of added files.
+     *
+     * @param string $changedFilesBaseDir
+     * @return string[]
+     */
+    private static function getAddedFilesList($changedFilesBaseDir)
+    {
+        return self::getFilesFromListFile(
+            $changedFilesBaseDir,
+            'changed_files*.added.*',
+            function () {
+                // if no list files, probably, this is the dev environment
+                @exec('git diff --cached --name-only', $addedFiles);
+                return $addedFiles;
+            }
+        );
+    }
+
+    /**
+     * Read files from generated lists.
+     *
+     * @param string $listsBaseDir
+     * @param string $listFilePattern
+     * @param callable $noListCallback
+     * @return string[]
+     */
+    private static function getFilesFromListFile($listsBaseDir, $listFilePattern, $noListCallback)
+    {
+        $filesDefinedInList = [];
+
+        $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
+            . '/_files/' . $listFilePattern;
         $listFiles = glob($globFilesListPattern);
         if (count($listFiles)) {
             foreach ($listFiles as $listFile) {
-                $changedFiles = array_merge(
-                    $changedFiles,
+                $filesDefinedInList = array_merge(
+                    $filesDefinedInList,
                     file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
                 );
             }
         } else {
-            // if no list files, probably, this is the dev environment
-            @exec('git diff --name-only', $changedFiles);
+            $filesDefinedInList = call_user_func($noListCallback);
         }
 
         array_walk(
-            $changedFiles,
+            $filesDefinedInList,
             function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
 
-        return $changedFiles;
+        $filesDefinedInList = array_values(array_unique($filesDefinedInList));
+
+        return $filesDefinedInList;
     }
 
     /**
@@ -287,12 +332,10 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
-        $whiteList = self::getWhitelist(
-            ['php'],
-            '',
-            '',
-            '/_files/whitelist/strict_type.txt'
-        );
+        $changedFiles = self::getAddedFilesList('');
+
+        $componentRegistrar = new ComponentRegistrar();
+        $directoriesToCheck = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         try {
             $blackList = Files::init()->readLists(
                 self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
@@ -301,7 +344,11 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             // nothing matched black list
             $blackList = [];
         }
-        $toBeTestedFiles = array_diff($whiteList, $blackList);
+
+        $toBeTestedFiles = array_diff(
+            self::filterFiles($changedFiles, ['php'], $directoriesToCheck),
+            $blackList
+        );
 
         $filesMissingStrictTyping = [];
         foreach ($toBeTestedFiles as $fileName) {
@@ -310,12 +357,13 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
                 $filesMissingStrictTyping[] = $fileName;
             }
         }
-        $filesMissingStrictTypingString = implode(PHP_EOL, $filesMissingStrictTyping);
 
         $this->assertEquals(
             0,
             count($filesMissingStrictTyping),
-            "Following files are missing strict type declaration:" . PHP_EOL . $filesMissingStrictTypingString
+            "Following files are missing strict type declaration:"
+            . PHP_EOL
+            . implode(PHP_EOL, $filesMissingStrictTyping)
         );
     }
 }
