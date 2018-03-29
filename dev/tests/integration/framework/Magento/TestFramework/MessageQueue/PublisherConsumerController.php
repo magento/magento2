@@ -81,7 +81,7 @@ class PublisherConsumerController
             );
         }
         $connections = $this->amqpHelper->getConnections();
-        foreach ($connections as $connectionName => $connectionData) {
+        foreach (array_keys($connections) as $connectionName) {
             $this->amqpHelper->deleteConnection($connectionName);
         }
         $this->amqpHelper->clearQueue("async.operations.all");
